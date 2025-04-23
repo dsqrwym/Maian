@@ -14,7 +14,9 @@ export class SupabaseService implements OnModuleInit {
             {
                 auth: {
                     persistSession: false, // 不持久化会话(没有必要)
-                    autoRefreshToken: false // 不自动刷新令牌(我自己控制用户token的刷新)
+                    autoRefreshToken: false, // 不自动刷新令牌(我自己控制用户token的刷新)
+                    detectSessionInUrl: false, // 不检测 URL 中的会话， 服务器根本没有URL OAuth 自动重定向
+                    debug: true // 调试模式
                 }
             }
         );
