@@ -1,5 +1,5 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory } from '@nestjs/core'; // NestFactory 是 NestJS 提供的一个工厂类，用于创建 Nest 应用程序实例。它负责初始化应用程序的各个部分，包括模块、控制器和服务等。
+import { AppModule } from './app.module'; // 它NestJS 应用的根模块，通常在 app.module.ts 文件中定义。它是应用程序的起点，包含了所有其他模块、控制器和服务的引用。
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'; // Import FastifyAdapter 使用Fastify
 
 async function bootstrap() {
