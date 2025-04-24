@@ -1,16 +1,21 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 
 @Injectable() //表明这是可以注入的服务
 export class SupabaseService implements OnModuleInit {
     private supabaseClient: SupabaseClient; //客户端
+    constructor(private config: ConfigService) { }
 
     onModuleInit() {
+        // 读取环境变量中的 Supabase URL 和 Service Role Key
+        const supabaseUrl = this.config.get<string>('SUPABASE_URL')!; // ! 表示非空，避免 TypeScript 报错
+        const supabaseKey = this.config.get<string>('SUPABASE_SERVICE_ROLE_KEY')!;
         // 初始化创建 Supabase 客户端
         this.supabaseClient = createClient(
-            process.env.SUPABASE_URL!, // ! 表示非空，避免 TypeScript 报错
-            process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            supabaseUrl,
+            supabaseKey,
             {
                 auth: {
                     persistSession: false, // 不持久化会话(没有必要)
@@ -31,7 +36,7 @@ export class SupabaseService implements OnModuleInit {
      * 使用其 Auth 系统 进行用户管理
      */
 
-    async createUser(){
+    async createUser() {
         this.supabaseClient.auth.admin.createUser({
 
         });
