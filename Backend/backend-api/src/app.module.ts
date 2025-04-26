@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config'; // 用于加载和管理应用程
 // 我自己的模块 : 
 //  邮件模块
 import { MailService } from './mail/mail.service';
+import { DateFormatService } from './common/services/date-format.service';
 
 
 
@@ -17,7 +18,7 @@ import { MailService } from './mail/mail.service';
     ), // 加载环境变量配置文件，默认加载 .env 文件中的变量
   ],
   controllers: [AppController],
-  providers: [AppService, MailService], // 所有可以注入的服务
+  providers: [AppService, MailService, DateFormatService], // 所有可以注入的服务
   exports: [MailService], // 导出模块 以便在其他模块中使用
 })
 export class AppModule { }
