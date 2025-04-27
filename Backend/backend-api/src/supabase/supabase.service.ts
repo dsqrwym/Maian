@@ -1,6 +1,20 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { AdminUserAttributes, createClient, SupabaseClient } from '@supabase/supabase-js';
+
+function mapErrorCodeToHttpStatus(code?: string): number {
+    switch (code) {
+        case 'auth/email-already-exists':
+            return HttpStatus.CONFLICT; // 409
+        case 'auth/invalid-password':
+        case 'auth/invalid-email':
+            return HttpStatus.BAD_REQUEST; // 400
+        case 'auth/user-not-found':
+            return HttpStatus.NOT_FOUND; // 404
+        default:
+            return HttpStatus.INTERNAL_SERVER_ERROR; // 500
+    }
+}
 
 
 @Injectable() //表明这是可以注入的服务
@@ -34,11 +48,46 @@ export class SupabaseService implements OnModuleInit {
     /**
      * 用Supabase 的 Admin API 进行数据库操作
      * 使用其 Auth 系统 进行用户管理
+     * 只进行最基本的，实际上用户管理是通过我自己表格来进行的
      */
 
-    async createUser() {
-        this.supabaseClient.auth.admin.createUser({
 
+
+    async createUser(email: string, password_hash: string) {
+        const { data, error } = await this.supabaseClient.auth.admin.createUser({
+            email: email,
+            password_hash: password_hash
         });
+        if (error) {
+            throw new HttpException(`${error.message} \n Supabase error code: ${error.code}`, error.status || mapErrorCodeToHttpStatus(error.code)
+            ); // 如果发生错误，抛出 HTTP 异常
+        }
+        return data; // 返回创建的用户数据;
+    }
+
+    async getUserById(id: string) {
+        const { data, error } = await this.supabaseClient.auth.admin.getUserById(id);
+        if (error) {
+            throw new HttpException(`${error.message} \n Supabase error code: ${error.code}`, error.status || mapErrorCodeToHttpStatus(error.code)
+            ); // 如果发生错误，抛出 HTTP 异常
+        }
+        return data; // 返回用户数据
+    }
+
+    async updateUserbyId(id: string, attributes: AdminUserAttributes) {
+        const { data, error } = await this.supabaseClient.auth.admin.updateUserById(id, attributes);
+        if (error) {
+            throw new HttpException(`${error.message} \n Supabase error code: ${error.code}`, error.status || mapErrorCodeToHttpStatus(error.code)
+            ); // 如果发生错误，抛出 HTTP 异常
+        }
+        return data;
+    }
+    async deleteUser(id: string) {
+        const { data, error } = await this.supabaseClient.auth.admin.deleteUser(id);
+        if (error) {
+            throw new HttpException(`${error.message} \n Supabase error code: ${error.code}`, error.status || mapErrorCodeToHttpStatus(error.code)
+            ); // 如果发生错误，抛出 HTTP 异常
+        }
+        return data;
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'; // 用于定义可注入的服务
 import { ConfigService } from '@nestjs/config'; // 用于加载和管理应用程序的配置
-import nodemailer from 'nodemailer'; // 引入 nodemailer 库，用于发送电子邮件
+import * as nodemailer from 'nodemailer'; // 引入 nodemailer 库，用于发送电子邮件
 
 import { DateFormatService } from 'src/common/services/date-format.service';
 import { VerificationContent } from './templates/verification-content'; // 引入邮件模板 内容
