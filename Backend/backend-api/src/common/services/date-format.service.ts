@@ -20,7 +20,7 @@ export class DateFormatService {
         });
     }
 
-    createFormatter(lang: string, withTime: boolean = false, timeZone?:string): Intl.DateTimeFormat {
+    createFormatter(lang: string, withTime: boolean = false, timeZone?: string): Intl.DateTimeFormat {
         const option: Intl.DateTimeFormatOptions = {
             year: 'numeric',
             month: 'long',
@@ -36,14 +36,30 @@ export class DateFormatService {
 
 
     formatDate(date: Date, lang: string = 'en', timeZone: string = 'UTC'): string {
-        const hasTime = date.getHours() !== 0 || date.getMinutes() !== 0;
+        // 通过给定时区格式化日期，获取该时区的时间
+        const options: Intl.DateTimeFormatOptions = {
+            timeZone: timeZone || 'UTC',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        };
+
+        // 获取该时区的时间
+        const formattedDate = new Intl.DateTimeFormat(lang, options).format(date);
+
+        // 分析时间部分：提取小时和分钟
+        const [hour, minute] = formattedDate.split(':').map(Number);
+
+        // 判断时间部分是否有效（小时和分钟是否都为 00）
+        const hasTime = !(hour === 0 && minute === 0);
+
 
         const cacheKey = `${lang}_${timeZone}_${hasTime ? 'datetime' : 'date'}`;
 
         if (!this.formatterCache.has(cacheKey)) {
             this.formatterCache.set(cacheKey, this.createFormatter(lang, hasTime, timeZone));
         }
-        
+
         return this.formatterCache.get(cacheKey)!.format(date);
     }
 

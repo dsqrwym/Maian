@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common'; // 用于定义可注入的服务
+import { Inject, Injectable } from '@nestjs/common'; // 用于定义可注入的服务
 import { ConfigService } from '@nestjs/config'; // 用于加载和管理应用程序的配置
 import * as nodemailer from 'nodemailer'; // 引入 nodemailer 库，用于发送电子邮件
+
+import { REQUEST } from '@nestjs/core'; // 用于获取当前请求对象
+import { FastifyRequest } from 'fastify'; // 引入 FastifyRequest 类型
 
 import { DateFormatService } from 'src/common/services/date-format.service';
 import { VerificationContent } from './templates/verification-content'; // 引入邮件模板 内容
@@ -10,7 +13,11 @@ import { getVerificationEmailHtml } from './templates/verification.templates'; /
 export class MailService {
     private transporter: nodemailer.Transporter; // 定义一个 transporter 属性，用于发送邮件
 
-    constructor(private config: ConfigService, private dateFormatService: DateFormatService) {
+    constructor(
+        private config: ConfigService,
+        private dateFormatService: DateFormatService,
+        @Inject(REQUEST) private readonly request: FastifyRequest
+    ) { // 注入当前请求对象) {
         // 使用 ConfigService 获取环境变量中的 SMTP 配置
         this.transporter = nodemailer.createTransport({
             host: this.config.get<string>('SMTP_HOST')!,
@@ -25,7 +32,10 @@ export class MailService {
 
     // 发送验证邮件
     async sendVerificationEmail(to: string, token: string, lang: string = 'en', timezone: string = 'UTC', registerDate: Date) {
-        const link = 'prueba';
+        const protocol = this.request.protocol; // 获取请求的协议（http 或 https）
+        const host = this.request.hostname; // 获取请求的主机名（如：localhost:3000 或 yourdomain.com）
+      
+        const link = `${protocol}://${host}/api/auth/verify-email?token=${token}`; // 构建验证链接
         const verificationContent = VerificationContent(this.dateFormatService, lang, timezone, registerDate); // 获取邮件内容
         const html = getVerificationEmailHtml({
             title: verificationContent.title,

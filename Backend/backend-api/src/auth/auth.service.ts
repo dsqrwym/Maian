@@ -59,6 +59,16 @@ export class AuthService {
             }
         });
 
+        const now = new Date();
+        const utcYear = now.getUTCFullYear();
+        const utcMonth = now.getUTCMonth();  // 月份从 0 开始
+        const utcDate = now.getUTCDate();
+        const utcHours = now.getUTCHours();
+        const utcMinutes = now.getUTCMinutes();
+        const utcSeconds = now.getUTCSeconds();
+        
+        const currentUtcDate = new Date(Date.UTC(utcYear, utcMonth, utcDate, utcHours, utcMinutes, utcSeconds));
+
         const mailJWTPayload = {
             id: data.user.id
         }
@@ -68,6 +78,8 @@ export class AuthService {
         }); // 生成 JWT token
         // 5. 发送验证邮件
 
+        this.mailService.sendVerificationEmail(email, mailToken, dto.language, dto.timezone, currentUtcDate); // 发送验证邮件
+
     }
 
 
@@ -76,13 +88,15 @@ export class AuthService {
             secret: this.configService.get<string>('MAIL_JWT_SECRET'), // 从配置服务中获取 JWT 密钥
         });
         const userId = payload.id; // 获取用户 ID
+        
+        if (!userId) {
+            throw new BadRequestException('Invalid token'); // 如果没有用户 ID，抛出异常
+        }
 
         // 6. 更新用户的邮箱验证状态
         await this.prismaService.public_users.update({
             where: { id: userId },
             data: { status: 1 }, // 1 激活
         });
-
-        return { message: 'Email verified successfully' };
     }
 }
