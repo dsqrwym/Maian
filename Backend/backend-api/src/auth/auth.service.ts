@@ -6,6 +6,7 @@ import { SupabaseService } from 'src/supabase/supabase.service';
 import { RegisterDto } from './dto/register.dto';
 import { HashService } from 'src/common/services/hash.service';
 import { ConfigService } from '@nestjs/config';
+import { LoginDto } from './dto/login.dto';
 
 
 
@@ -46,7 +47,7 @@ export class AuthService {
         const hashedPassword = await this.hashService.hashString(password); // 使用 bcrypt 哈希密码
         const data = await this.supabaseService.createUser(email, hashedPassword);
 
-        this.prismaService.public_users.create({
+        const user = await this.prismaService.public_users.create({
             data: {
                 id: data.user.id,
                 email: data.user.email || email,
@@ -59,16 +60,6 @@ export class AuthService {
             }
         });
 
-        const now = new Date();
-        const utcYear = now.getUTCFullYear();
-        const utcMonth = now.getUTCMonth();  // 月份从 0 开始
-        const utcDate = now.getUTCDate();
-        const utcHours = now.getUTCHours();
-        const utcMinutes = now.getUTCMinutes();
-        const utcSeconds = now.getUTCSeconds();
-        
-        const currentUtcDate = new Date(Date.UTC(utcYear, utcMonth, utcDate, utcHours, utcMinutes, utcSeconds));
-
         const mailJWTPayload = {
             id: data.user.id
         }
@@ -78,7 +69,7 @@ export class AuthService {
         }); // 生成 JWT token
         // 5. 发送验证邮件
 
-        this.mailService.sendVerificationEmail(email, mailToken, dto.language, dto.timezone, currentUtcDate); // 发送验证邮件
+        this.mailService.sendVerificationEmail(email, mailToken, dto.language, dto.timezone, user.created_at); // 发送验证邮件
 
     }
 
@@ -88,7 +79,7 @@ export class AuthService {
             secret: this.configService.get<string>('MAIL_JWT_SECRET'), // 从配置服务中获取 JWT 密钥
         });
         const userId = payload.id; // 获取用户 ID
-        
+
         if (!userId) {
             throw new BadRequestException('Invalid token'); // 如果没有用户 ID，抛出异常
         }
@@ -99,4 +90,35 @@ export class AuthService {
             data: { status: 1 }, // 1 激活
         });
     }
+
+
+    async login(dto: LoginDto) {
+        const { email, username } = dto
+
+        if (!email && !username) {
+            throw new BadRequestException("email o username d'ont exist!");
+        }
+
+        const user = await this.prismaService.public_users.findUnique({ where: { username } }) || await this.prismaService.public_users.findUnique({ where: { email } });
+
+        if(!user){
+            throw new BadRequestException('User do not exist!');
+        }
+
+        if(!await this.hashService.compareString(dto.password, user.password)){
+            throw new BadRequestException('Incorrect password');
+        }
+
+        const payload = {
+            userId: user.id
+        }
+        const refreshToken = await this.jwtService.signAsync(payload, {
+            secret: this.configService.get<string>('SUPABASE_JWT_SECRET'),
+            expiresIn: '3 days'
+        });
+
+    }
+
+
+    async getRefreshToken(){}
 }
