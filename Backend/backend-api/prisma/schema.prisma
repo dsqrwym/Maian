@@ -644,14 +644,14 @@ model public_users {
   user_id                            String?
   first_name                         String?                 @db.VarChar(50)
   last_name                          String?                 @db.VarChar(60)
-  username                           String                  @unique @db.VarChar(30)
+  username                           String?                 @unique @db.VarChar(30)
   password                           String
   email                              String?                 @unique @db.VarChar(255)
   telephone                          String?                 @unique @db.VarChar(15)
   status                             Int                     @default(0) @db.SmallInt
   profile                            Json?
   created_at                         DateTime                @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  updated_at                         DateTime                @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  updated_at                         DateTime?               @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   role                               Int                     @db.SmallInt
   carts                              carts[]
   categories                         categories[]

@@ -45249,14 +45249,14 @@ export namespace Prisma {
     user_id: string | null
     first_name: string | null
     last_name: string | null
-    username: string
+    username: string | null
     password: string
     email: string | null
     telephone: string | null
     status: number
     profile: JsonValue | null
     created_at: Date
-    updated_at: Date
+    updated_at: Date | null
     role: number
     _count: Public_usersCountAggregateOutputType | null
     _avg: Public_usersAvgAggregateOutputType | null
@@ -45408,14 +45408,14 @@ export namespace Prisma {
       user_id: string | null
       first_name: string | null
       last_name: string | null
-      username: string
+      username: string | null
       password: string
       email: string | null
       telephone: string | null
       status: number
       profile: Prisma.JsonValue | null
       created_at: Date
-      updated_at: Date
+      updated_at: Date | null
       role: number
     }, ExtArgs["result"]["public_users"]>
     composites: {}
@@ -51247,14 +51247,14 @@ export namespace Prisma {
     user_id?: StringNullableFilter<"public_users"> | string | null
     first_name?: StringNullableFilter<"public_users"> | string | null
     last_name?: StringNullableFilter<"public_users"> | string | null
-    username?: StringFilter<"public_users"> | string
+    username?: StringNullableFilter<"public_users"> | string | null
     password?: StringFilter<"public_users"> | string
     email?: StringNullableFilter<"public_users"> | string | null
     telephone?: StringNullableFilter<"public_users"> | string | null
     status?: IntFilter<"public_users"> | number
     profile?: JsonNullableFilter<"public_users">
     created_at?: DateTimeFilter<"public_users"> | Date | string
-    updated_at?: DateTimeFilter<"public_users"> | Date | string
+    updated_at?: DateTimeNullableFilter<"public_users"> | Date | string | null
     role?: IntFilter<"public_users"> | number
     carts?: CartsListRelationFilter
     categories?: CategoriesListRelationFilter
@@ -51277,14 +51277,14 @@ export namespace Prisma {
     user_id?: SortOrderInput | SortOrder
     first_name?: SortOrderInput | SortOrder
     last_name?: SortOrderInput | SortOrder
-    username?: SortOrder
+    username?: SortOrderInput | SortOrder
     password?: SortOrder
     email?: SortOrderInput | SortOrder
     telephone?: SortOrderInput | SortOrder
     status?: SortOrder
     profile?: SortOrderInput | SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
+    updated_at?: SortOrderInput | SortOrder
     role?: SortOrder
     carts?: cartsOrderByRelationAggregateInput
     categories?: categoriesOrderByRelationAggregateInput
@@ -51317,7 +51317,7 @@ export namespace Prisma {
     status?: IntFilter<"public_users"> | number
     profile?: JsonNullableFilter<"public_users">
     created_at?: DateTimeFilter<"public_users"> | Date | string
-    updated_at?: DateTimeFilter<"public_users"> | Date | string
+    updated_at?: DateTimeNullableFilter<"public_users"> | Date | string | null
     role?: IntFilter<"public_users"> | number
     carts?: CartsListRelationFilter
     categories?: CategoriesListRelationFilter
@@ -51340,14 +51340,14 @@ export namespace Prisma {
     user_id?: SortOrderInput | SortOrder
     first_name?: SortOrderInput | SortOrder
     last_name?: SortOrderInput | SortOrder
-    username?: SortOrder
+    username?: SortOrderInput | SortOrder
     password?: SortOrder
     email?: SortOrderInput | SortOrder
     telephone?: SortOrderInput | SortOrder
     status?: SortOrder
     profile?: SortOrderInput | SortOrder
     created_at?: SortOrder
-    updated_at?: SortOrder
+    updated_at?: SortOrderInput | SortOrder
     role?: SortOrder
     _count?: public_usersCountOrderByAggregateInput
     _avg?: public_usersAvgOrderByAggregateInput
@@ -51364,14 +51364,14 @@ export namespace Prisma {
     user_id?: StringNullableWithAggregatesFilter<"public_users"> | string | null
     first_name?: StringNullableWithAggregatesFilter<"public_users"> | string | null
     last_name?: StringNullableWithAggregatesFilter<"public_users"> | string | null
-    username?: StringWithAggregatesFilter<"public_users"> | string
+    username?: StringNullableWithAggregatesFilter<"public_users"> | string | null
     password?: StringWithAggregatesFilter<"public_users"> | string
     email?: StringNullableWithAggregatesFilter<"public_users"> | string | null
     telephone?: StringNullableWithAggregatesFilter<"public_users"> | string | null
     status?: IntWithAggregatesFilter<"public_users"> | number
     profile?: JsonNullableWithAggregatesFilter<"public_users">
     created_at?: DateTimeWithAggregatesFilter<"public_users"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"public_users"> | Date | string
+    updated_at?: DateTimeNullableWithAggregatesFilter<"public_users"> | Date | string | null
     role?: IntWithAggregatesFilter<"public_users"> | number
   }
 
@@ -54258,14 +54258,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -54288,14 +54288,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -54316,14 +54316,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -54346,14 +54346,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -54375,14 +54375,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
   }
 
@@ -54390,14 +54390,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
   }
 
@@ -54406,14 +54406,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
   }
 
@@ -61697,14 +61697,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -61725,14 +61725,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -61896,14 +61896,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -61924,14 +61924,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -62096,14 +62096,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -62125,14 +62125,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -62195,14 +62195,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -62224,14 +62224,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -62306,14 +62306,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -62335,14 +62335,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -62475,14 +62475,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -62504,14 +62504,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -62688,14 +62688,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -62717,14 +62717,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -62785,14 +62785,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -62814,14 +62814,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -62841,14 +62841,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -62870,14 +62870,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -62913,14 +62913,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -62942,14 +62942,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -62969,14 +62969,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -62998,14 +62998,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -63069,14 +63069,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -63098,14 +63098,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -63226,14 +63226,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -63255,14 +63255,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -63344,14 +63344,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -63373,14 +63373,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -63437,14 +63437,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -63466,14 +63466,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -63509,14 +63509,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -63538,14 +63538,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -63889,14 +63889,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -63918,14 +63918,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -64051,14 +64051,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -64080,14 +64080,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -64107,14 +64107,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -64136,14 +64136,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -64179,14 +64179,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -64208,14 +64208,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -64441,14 +64441,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -64470,14 +64470,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -64535,14 +64535,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -64564,14 +64564,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -64641,14 +64641,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -64670,14 +64670,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -64747,14 +64747,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -64776,14 +64776,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -64828,14 +64828,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -64857,14 +64857,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -64995,14 +64995,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -65024,14 +65024,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
@@ -65241,14 +65241,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
@@ -65270,14 +65270,14 @@ export namespace Prisma {
     user_id?: string | null
     first_name?: string | null
     last_name?: string | null
-    username: string
+    username?: string | null
     password: string
     email?: string | null
     telephone?: string | null
     status?: number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: Date | string
-    updated_at?: Date | string
+    updated_at?: Date | string | null
     role: number
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
@@ -65313,14 +65313,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
@@ -65342,14 +65342,14 @@ export namespace Prisma {
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     first_name?: NullableStringFieldUpdateOperationsInput | string | null
     last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
     password?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telephone?: NullableStringFieldUpdateOperationsInput | string | null
     status?: IntFieldUpdateOperationsInput | number
     profile?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput

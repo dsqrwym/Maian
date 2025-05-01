@@ -11,16 +11,16 @@ export class Bcp47LanguageValidator implements ValidatorConstraintInterface {
     async validate(value: string, args: ValidationArguments): Promise<boolean> {
         if (typeof value !== 'string') return false;
 
-        const cacheKey = `bcp47_language_${value}`;
+        const cacheKey = `validation:bcp47:${value}`; ;
 
-        const cachedResult = await this.cacheManager.get<boolean>(cacheKey);
-        if (cachedResult !== null) {
+        const cachedResult = await this.cacheManager.get<boolean | undefined>(cacheKey);
+        if (cachedResult !== undefined && cachedResult !== null) {
             return cachedResult;
         }
 
         try {
             new Intl.DateTimeFormat(value);
-            await this.cacheManager.set(cacheKey, true, 3600); // 缓存1小时
+            await this.cacheManager.set(cacheKey, true, 604800); // 缓存7天
             return true;
         } catch {
             await this.cacheManager.set(cacheKey, false, 3600);

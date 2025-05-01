@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -16,7 +16,8 @@ import { MailModule } from './mail/mail.module';
 //  认证模块
 import { AuthModule } from './auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
-
+import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import { Reflector } from '@nestjs/core';
 
 
 @Module({
@@ -34,6 +35,12 @@ import { CacheModule } from '@nestjs/cache-manager';
     AuthModule, // 认证模块
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
-  providers: [AppService], // 可以注入的服务
+  providers: [AppService,
+    {
+      provide: ResponseInterceptor,
+      useFactory: (reflector: Reflector) => new ResponseInterceptor(reflector), // 通过工厂函数创建 ResponseInterceptor 实例
+      inject: [Reflector], // 注入 Reflector 依赖项
+    }
+  ], // 可以注入的服务
 })
 export class AppModule { }

@@ -3,6 +3,9 @@ import { AppModule } from './app.module'; // 它NestJS 应用的根模块，通�
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'; // Import FastifyAdapter 使用Fastify
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>( //<NestFastifyApplication>: 是 TypeScript 的泛型，指定了应用实例类型。NestFastifyApplication 表示希望 NestJS 使用 Fastify 作为底层 HTTP 框架，而不是默认的 Express。
@@ -13,14 +16,23 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
 
+  app.setGlobalPrefix('api'); // 设置全局前缀为 /api，所有路由都将以 /api 开头
+
   const config = new DocumentBuilder() // 创建 Swagger 文档配置
     .setTitle('Plataforma de gestión y distribución mayorista NestJS Backend API') // 设置 API 标题
     .setDescription('NestJS API description') // 设置 API 描述
     .setVersion('1.0') // 设置 API 版本
     .addTag('nestjs') // 添加标签
+    .addBearerAuth() // 添加 Bearer Token 认证
     .build(); // 构建 Swagger 文档配置
   const documentFactory = SwaggerModule.createDocument(app, config); // 创建 Swagger 文档
-  SwaggerModule.setup('api', app, documentFactory); // 设置 Swagger 文档的访问路径为 /api
+  SwaggerModule.setup('api-docs', app, documentFactory); // 设置 Swagger 文档的访问路径为 /api
+
+  // 统一响应格式
+  app.useGlobalInterceptors(app.get(ResponseInterceptor));// 全局拦截器，统一响应格式
+
+  app.useGlobalFilters(new PrismaExceptionFilter()); // 全局异常过滤器，处理未捕获的异常
+  app.useGlobalFilters(new HttpExceptionFilter()); // 全局异常过滤器，处理 HTTP 异常
 
   app.useGlobalPipes(new ValidationPipe({ // 全局管道，验证请求数据
     transform: true,

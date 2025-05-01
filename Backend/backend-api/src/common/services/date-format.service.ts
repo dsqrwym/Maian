@@ -1,71 +1,105 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
+import { LRUCache } from 'lru-cache';
+
 
 @Injectable()
 export class DateFormatService {
-    private formatterCache = new Map<string, Intl.DateTimeFormat>();
+    // 使用 LRU 缓存替代原生 Map
+    private formatterCache = new LRUCache<string, Intl.DateTimeFormat>({
+        max: 1000, // 最多缓存 1000 个格式化实例
+        ttl: 86400000, // 24 小时缓存
+        allowStale: false // 严格过期策略
+    });
 
     constructor() {
-        this.preloadLanguages(['en', 'es', 'zh-CN']);
+        this.preloadCommonFormats();
     }
 
-    preloadLanguages(languages: string[]) {
-        languages.forEach(lang => {
-            this.formatterCache.set(lang, new Intl.DateTimeFormat(lang, {
-                year: 'numeric',
-                month: 'long',
-                weekday: 'long',
-                day: 'numeric',
-                hour12: false,
-            }));
+    // 预加载常见格式组合
+    private preloadCommonFormats() {
+        const commonCombinations = [
+            { lang: "en", timeZone: "UTC" },
+            { lang: "zh-CN", timeZone: "Asia/Shanghai" },
+            { lang: "es", timeZone: "Europe/Madrid" }
+        ];
+
+        commonCombinations.forEach(({ lang, timeZone }) => {
+            const key = this.generateCacheKey(lang, timeZone);
+            if (!this.formatterCache.has(key)) {
+                this.formatterCache.set(
+                    key,
+                    this.createFormatter(lang, timeZone)
+                );
+            }
         });
     }
 
-    createFormatter(lang: string, withTime: boolean = false, timeZone?: string): Intl.DateTimeFormat {
-        const option: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: 'long',
-            weekday: 'long',
-            day: 'numeric',
-            ...(withTime ? { hour: '2-digit', minute: '2-digit' } : {}),
-            hour12: false,
-            timeZone: timeZone || 'UTC', // 默认时区为 UTC
+    // 统一格式化方法（始终包含时间）
+    formatDate(
+        date: Date,
+        lang: string = "en",
+        timeZone: string = "UTC"
+    ): string {
+        try {
+            const formatter = this.getFormatter(lang, timeZone);
+            return formatter.format(date);
+        } catch (e) {
+            console.error(`Formatting failed: ${e.message}`);
+            // 降级处理：返回 ISO 格式
+            return date.toISOString();
         }
-
-        return new Intl.DateTimeFormat(lang, option);
     }
 
+    // 获取或创建格式化器
+    private getFormatter(lang: string, timeZone: string): Intl.DateTimeFormat {
+        const cacheKey = this.generateCacheKey(lang, timeZone);
 
-    formatDate(date: Date, lang: string = 'en', timeZone: string = 'UTC'): string {
-        // 通过给定时区格式化日期，获取该时区的时间
+        // 缓存命中直接返回
+        const cachedFormatter = this.formatterCache.get(cacheKey);
+        if (cachedFormatter) {
+            return cachedFormatter;
+        }
+
+        // 缓存未命中创建新实例
+        const newFormatter = this.createFormatter(lang, timeZone);
+        this.formatterCache.set(cacheKey, newFormatter);
+        return newFormatter;
+    }
+
+    // 创建格式化器（统一包含时间）
+    private createFormatter(
+        lang: string,
+        timeZone: string
+    ): Intl.DateTimeFormat {
         const options: Intl.DateTimeFormatOptions = {
-            timeZone: timeZone || 'UTC',
-            hour: '2-digit',
-            minute: '2-digit',
+            year: "numeric",
+            month: "long",
+            weekday: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
             hour12: false,
+            timeZone
         };
 
-        // 获取该时区的时间
-        const formattedDate = new Intl.DateTimeFormat(lang, options).format(date);
-
-        // 分析时间部分：提取小时和分钟
-        const [hour, minute] = formattedDate.split(':').map(Number);
-
-        // 判断时间部分是否有效（小时和分钟是否都为 00）
-        const hasTime = !(hour === 0 && minute === 0);
-
-
-        const cacheKey = `${lang}_${timeZone}_${hasTime ? 'datetime' : 'date'}`;
-
-        if (!this.formatterCache.has(cacheKey)) {
-            this.formatterCache.set(cacheKey, this.createFormatter(lang, hasTime, timeZone));
-        }
-
-        return this.formatterCache.get(cacheKey)!.format(date);
+        return new Intl.DateTimeFormat(lang, options);
     }
 
+    // 生成唯一缓存键
+    private generateCacheKey(lang: string, timeZone: string): string {
+        return `${lang.toLowerCase()}_${timeZone.toLowerCase()}`;
+    }
+
+    // 增强的日期计算方法
     addDays(date: Date, days: number): Date {
-        const result = new Date(date); //我的数据库日期但是UTC时间
+        const result = new Date(date);
         result.setUTCDate(result.getUTCDate() + days);
+
+        // 处理夏令时边界情况
+        if (result.getUTCHours() !== date.getUTCHours()) {
+            result.setUTCHours(date.getUTCHours());
+        }
+
         return result;
     }
 }
