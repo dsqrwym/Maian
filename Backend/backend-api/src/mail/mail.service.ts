@@ -8,6 +8,7 @@ import { FastifyRequest } from 'fastify'; // 引入 FastifyRequest 类型
 import { DateFormatService } from 'src/common/services/date-format.service';
 import { VerificationContent } from './templates/verification-content'; // 引入邮件模板 内容
 import { getVerificationEmailHtml } from './templates/verification.templates'; // 引入邮件模板 HTML 
+import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class MailService {
@@ -16,6 +17,7 @@ export class MailService {
     private readonly deleyTime: number; // 单位为毫秒
 
     constructor(
+        private readonly logger: PinoLogger,
         private config: ConfigService,
         private dateFormatService: DateFormatService,
         @Inject(REQUEST) private readonly request: FastifyRequest
@@ -61,21 +63,31 @@ export class MailService {
         let attempts = 0; // 初始化尝试次数
         while (attempts < this.retries) { // 循环直到达到最大重试次数
             try {
+                // 记录邮件发送尝试
+                this.logger.info(`Attempt ${attempts + 1} to send verification email to ${to}`);
+
                 const info = await this.transporter.sendMail({
                     from: this.config.get<string>('SMTP_USER')!, // 发件人地址
                     to, // 收件人地址
                     subject: verificationContent.title, // 邮件主题
                     html: html, // 邮件正文（HTML）
                 });
+
+                this.logger.info(`Email sent successfully to ${to} with info: ${JSON.stringify(info)}`);
+
                 return info; // 返回发送邮件的信息
             } catch (error) {
                 attempts++; // 增加尝试次数
+                // 记录错误信息并处理重试
+                this.logger.error(`Attempt ${attempts} to send email failed: ${error.message}`);
+
                 if (attempts >= this.retries) { // 如果达到最大重试次数，抛出错误
+                    this.logger.error(`Failed to send email after ${this.retries} attempts`);
                     throw new InternalServerErrorException(`Failed to send email after ${this.retries} attempts: ${error}`);
                 } else {
                     await this.delay(this.deleyTime); // 等待 60 秒后重试
                 }
-                console.error(`Attempt ${attempts} failed: ${error}`); // 打印错误信息
+                this.logger.error(`Attempt ${attempts} failed: ${error}`); // 打印错误信息
             }
         }
     }

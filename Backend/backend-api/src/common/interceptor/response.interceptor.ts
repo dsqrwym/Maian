@@ -5,8 +5,9 @@ import {
     NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { PinoLogger } from 'nestjs-pino';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 export interface Response<T> {
     code: number;
@@ -16,7 +17,7 @@ export interface Response<T> {
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
-    constructor(private reflector: Reflector) { }
+    constructor(private readonly reflector: Reflector, private readonly logger: PinoLogger) { }
 
     intercept(
         context: ExecutionContext,
@@ -26,6 +27,8 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
             'responseMessage',
             context.getHandler(),
         );
+        const request = context.switchToHttp().getRequest();
+        const now = Date.now();
 
         return next.handle().pipe(
             map((data) => ({
@@ -33,6 +36,14 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
                 message: defaultMessage || 'success',
                 data: this.serializeData(data),
             })),
+            tap((response) => {
+                this.logger.debug({
+                    path: request.url,
+                    method: request.method,
+                    responseTime: `${Date.now() - now}ms`,
+                    response,
+                }, 'Response sent');
+            }),
         );
     }
 

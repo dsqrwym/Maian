@@ -11,6 +11,7 @@ import { FastifyReply } from 'fastify';
 
 import { getVerificationResponseContent } from 'src/mail/templates/varification-response-content';
 import { getVerificationResponseHtml } from 'src/mail/templates/verification-response.tmplates';
+import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class AuthService {
@@ -21,11 +22,13 @@ export class AuthService {
         private readonly prismaService: PrismaService,
         private readonly jwtService: JwtService,
         private readonly hashService: HashService,
+        private readonly logger: Logger
     ) { }
 
     // 注册用户
     async register(dto: RegisterDto) {
-        const { email, password, username, firstName, lastName, phone, role, language, timezone } = dto;
+        const { email, password, username } = dto;
+        this.logger.debug(`Attempting to register user: ${email}`);
         // 1. 检查用户是否已经存在
         const [existingMail, existingUsername] = await Promise.all([
             this.prismaService.public_users.findUnique({ where: { email } }),
@@ -33,16 +36,20 @@ export class AuthService {
         ]);
 
         if (existingMail) {
+            this.logger.warn(`Registration failed: Email already exists -> ${email}`);
             throw new BadRequestException('Email already exists');
         }
 
         if (existingUsername) {
+            this.logger.warn(`Registration failed: Username already exists -> ${username}`);
             throw new BadRequestException('Username already exists');
         }
 
         // 3. 创建用户
         const hashedPassword = await this.hashService.hashWithBcrypt(password); // 使用 bcrypt 哈希密码
         const data = await this.supabaseService.createUser(email, hashedPassword);
+
+        this.logger.debug(`Created user in Supabase with ID: ${data.user?.id}`);
 
         const user = await this.prismaService.public_users.create({
             data: {
@@ -62,8 +69,18 @@ export class AuthService {
             expiresIn: '3 days'
         }); // 生成 JWT token
         // 5. 发送验证邮件
-
+        this.logger.debug(`Sending verification email to: ${email}`);
         this.mailService.sendVerificationEmail(email, mailToken, dto.language, dto.timezone, user.created_at); // 发送验证邮件
+        
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            telephone: user.telephone,
+            role: user.role,
+        };
     }
 
 
@@ -82,7 +99,8 @@ export class AuthService {
             if (!userId) return sendHtml('invalid');
 
             const user = await this.prismaService.public_users.findUnique({
-                where: { id: userId }
+                where: { id: userId },
+                select: { status: true }
             });
 
             if (!user) return sendHtml('invalid');

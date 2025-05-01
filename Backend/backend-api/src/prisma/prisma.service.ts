@@ -1,20 +1,21 @@
 import { Injectable, OnModuleInit, BeforeApplicationShutdown } from '@nestjs/common';
 import { PrismaClient } from '../../prisma/generated/prisma';
+import { PinoLogger } from 'nestjs-pino';
 
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, BeforeApplicationShutdown {
-    constructor() {
+    constructor(private readonly logger: PinoLogger) {
         super();
     }
 
     async onModuleInit() {
         await this.$connect();
-        console.log('Prisma connected to database');
+        this.logger.debug('Prisma connected to database');
     }
 
     async beforeApplicationShutdown() {
         await this.$disconnect();
-        console.log('Prisma disconnected from database');
+        this.logger.debug('Prisma disconnected from database');
     }
 }
