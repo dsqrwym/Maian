@@ -1,9 +1,28 @@
 //DTO -> data transfer object
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsString, IsEmail, MinLength, IsOptional, MaxLength, IsPhoneNumber, IsNumber, IsStrongPassword, Validator, Validate, Max, ValidateNested, IsIn, Matches, IsLatitude, IsLongitude, Min } from 'class-validator'; // 用于验证类属性的装饰器
+import { IsString, IsEmail, MinLength, IsOptional, MaxLength, IsPhoneNumber, IsNumber, IsStrongPassword, Validator, Validate, Max, ValidateNested, IsIn, Matches, IsLatitude, IsLongitude, Min, IsArray, IsEnum, ValidateIf } from 'class-validator'; // 用于验证类属性的装饰器
 import { IsBCP47Language } from 'src/common/validators/decorator/is-bcp47-language.decorator';
 import { IsIANA } from 'src/common/validators/decorator/is-iana.decorator';
+
+// 地址类型枚举
+export enum AddressType {
+    SHIPPING = 0,  // 收货地址
+    BILLING = 1,   // 账单地址
+    COMPANY = 2    // 公司地址
+}
+
+// 西班牙公司类型枚举
+export enum SpanishCompanyType {
+    SA = 0,        // Sociedad Anónima
+    AUTONOMO = 1,  // Autónomo (个体)
+    SL = 2,        // Sociedad Limitada
+    SLNE = 3,      // Nueva Empresa
+    SC = 4,        // Sociedad Civil
+    CB = 5,        // Comunidad de Bienes
+    COOP = 6,      // Cooperativa
+    ASOCIACION = 7 // Asociación / Fundación
+}
 
 class ProfileDto {
     // 批发商和零售商的个人资料设置
@@ -11,34 +30,31 @@ class ProfileDto {
     @IsString()
     @MaxLength(100)
     @Transform(({ value }) => value?.toUpperCase())
-    @IsOptional()
     companyName: string;
 
-    @ApiProperty({ description: 'Company type (e.g. 0=SA, 1=AUTONOMO, 2=SL, 3=SLNE, 4=SC, 5=CB, 6=COOP, 7=ASOCIACION)', example: 1 })
-    /*
-    SpanishCompanyType {
-        SA = 0,       // Sociedad Anónima
-        AUTONOMO = 1, // Autónomo (个体)
-        SL = 2,       // Sociedad Limitada
-        SLNE = 3,     // Nueva Empresa
-        SC = 4,       // Sociedad Civil
-        CB = 5,       // Comunidad de Bienes
-        COOP = 6,     // Cooperativa
-        ASOCIACION = 7, // Asociación / Fundación
-    }*/
-    @IsNumber()
-    @Min(0)
-    @Max(7)
-    @IsOptional()
-    companyType: number;
+    @ApiProperty({
+        description: 'Spanish legal entity type',
+        enum: SpanishCompanyType,
+        example: SpanishCompanyType.SL,
+        required: false
+    })
+    @IsEnum(SpanishCompanyType)
+    companyType: SpanishCompanyType;
 
     @IsString()
     @IsOptional()
-    licence: string // 储存营业执照的文件id
+    licence?: string // 储存营业执照的文件id
 
     // 批发商的个人资料设置
-    @ApiProperty({ description: 'Company description', required: false })
+    @ApiProperty({
+        description: 'Company description (max 500 characters)',
+        example: 'we are ...',
+        maxLength: 500,
+        required: false
+    })
+    @ValidateIf(o => o.role === 0)
     @IsString()
+    @MaxLength(500)
     @IsOptional()
     companyDescription: string;
 
@@ -47,9 +63,8 @@ class ProfileDto {
 
 class DirectionDto {
     @ApiProperty({ description: 'Direction type: 0=Shipping, 1=Billing, 2=Company', example: 0 })
-    @IsNumber()
-    @IsIn([0, 1, 2])
-    type: number;
+    @IsEnum(AddressType)
+    type: AddressType;
 
     @ApiProperty({ description: 'Street address', maxLength: 200, example: 'Calle de Example, 123' })
     @IsString()
@@ -73,17 +88,22 @@ class DirectionDto {
     @MaxLength(10)
     zip_code: string;
 
-    @ApiProperty({ description: 'Latitude', example: 40.4168 })
+    @ApiProperty({ description: 'Latitude', example: 40.4168, minimum: -90, maximum: 90 })
     @IsNumber()
     @IsLatitude()
+    @Min(-90)
+    @Max(90)
     latitude: number;
 
-    @ApiProperty({ description: 'Longitude', example: -3.7038 })
+    @ApiProperty({ description: 'Longitude', example: -3.7038, minimum: -180, maximum: 180 })
     @IsNumber()
     @IsLongitude()
+    @Min(-180)
+    @Max(180)
     longitude: number;
 }
 
+@ApiExtraModels(ProfileDto, DirectionDto)
 export class RegisterDto {
     @ApiProperty({
         description: 'Valid email address',
@@ -178,8 +198,7 @@ export class RegisterDto {
     @ApiProperty({
         description: 'Business type (0=Wholesaler ,1=Retailer)',
         example: 1,
-        required: false,
-        maximum: 9
+        required: false
     })
     @IsNumber() // 验证为数字
     @IsOptional() // 可选属性
@@ -215,9 +234,12 @@ export class RegisterDto {
 
     @ApiProperty({
         description: 'List of user addresses (shipping, billing, company)',
-        type: [DirectionDto],
+        type: 'array',
+        items: { $ref: getSchemaPath(DirectionDto) },
+        minItems: 1,
         required: false
     })
+    @IsArray()
     @ValidateNested({ each: true })
     @Type(() => DirectionDto)
     @IsOptional()

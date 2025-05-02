@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, IsStrongPassword, IsOptional, MaxLength } from "class-validator";
+import { IsEmail, IsString, MinLength, IsStrongPassword, IsOptional, MaxLength, ValidateIf } from "class-validator";
 export class LoginDto {
 
     @IsString() // 验证为字符串
@@ -12,11 +12,11 @@ export class LoginDto {
     }) // 强密码验证，要求至少包含一个数字、一个大写字母和一个小写字母
     password: string; // 密码
 
-    @IsOptional()
+    @ValidateIf((o) => !o.username)
     @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
     email: string; // 邮箱地址
     
-    @IsOptional() // 可选属性
+    @ValidateIf((o) => !o.email)
     @IsString() // 验证为字符串
     @MinLength(3) // 最小长度为3
     @MaxLength(30) // 最大长度为30

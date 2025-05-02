@@ -12,6 +12,7 @@ import { FastifyReply } from 'fastify';
 import { getVerificationResponseContent } from 'src/mail/templates/varification-response-content';
 import { getVerificationResponseHtml } from 'src/mail/templates/verification-response.tmplates';
 import { Logger } from 'nestjs-pino';
+import { Prisma } from 'prisma/generated/prisma';
 
 @Injectable()
 export class AuthService {
@@ -25,62 +26,126 @@ export class AuthService {
         private readonly logger: Logger
     ) { }
 
+    private async generateUniqueUsername(base: string): Promise<string> {
+        const maxLength = 30;
+        const maxTries = 3;
+
+        const trimBase = (str: string) => str.slice(0, maxLength - 5); // 留出 5 位后缀
+        const suffix = () => Math.floor(10000 + Math.random() * 90000); // 生成 10000~99999 的 5 位数
+
+        base = trimBase(base);
+        let tries = 0;
+        let username: string;
+
+        do {
+            if (tries >= maxTries) {
+                // fallback：使用 uuid 前缀，保证唯一且短
+                return crypto.randomUUID().replace(/-/g, '').slice(0, maxLength);
+            }
+
+            username = `${base}${suffix()}`;
+            tries++;
+        } while (await this.prismaService.public_users.findUnique({ where: { username }, select: { id: true } }));
+
+        return username;
+    }
+
+
     // 注册用户
     async register(dto: RegisterDto) {
-        const { email, password, username } = dto;
-        this.logger.debug(`Attempting to register user: ${email}`);
+        const { email, password, username, firstName, lastName, phone, role, profile, address, language, timezone } = dto;
+        this.logger.debug(`[Registration] Starting registration for: ${email}`);
         // 1. 检查用户是否已经存在
         const [existingMail, existingUsername] = await Promise.all([
-            this.prismaService.public_users.findUnique({ where: { email } }),
-            username ? this.prismaService.public_users.findUnique({ where: { username } }) : null,
+            this.prismaService.public_users.findUnique({
+                where: { email },
+                select: { id: true }
+            }),
+            username ? this.prismaService.public_users.findUnique({
+                where: { username },
+                select: { id: true }
+            }) : Promise.resolve(null)
         ]);
 
         if (existingMail) {
-            this.logger.warn(`Registration failed: Email already exists -> ${email}`);
+            this.logger.warn(`[Registration] Email conflict: ${email}`);
             throw new BadRequestException('Email already exists');
         }
 
         if (existingUsername) {
-            this.logger.warn(`Registration failed: Username already exists -> ${username}`);
+            this.logger.warn(`[Registration] Username conflict: ${username}`);
             throw new BadRequestException('Username already exists');
         }
 
         // 3. 创建用户
         const hashedPassword = await this.hashService.hashWithBcrypt(password); // 使用 bcrypt 哈希密码
-        const data = await this.supabaseService.createUser(email, hashedPassword);
+        return await this.prismaService.$transaction(async () => {
+            const data = await this.supabaseService.createUser(email, hashedPassword);
 
-        this.logger.debug(`Created user in Supabase with ID: ${data.user?.id}`);
+            if (!data.user) return;
 
-        const user = await this.prismaService.public_users.create({
-            data: {
-                id: data.user.id,
-                email: data.user.email || email,
-                username: dto.username || email.split('@')[0], // 默认使用邮箱前缀作为用户名
-                password: hashedPassword,
-                first_name: dto.firstName || null,
-                last_name: dto.lastName || null,
-                telephone: dto.phone || null,
-                role: dto.role || 1, // 默认角色为 1 零售商
+            const finalUsername = username || await this.generateUniqueUsername(email.split('@')[0]);
+
+            const user = await this.prismaService.public_users.create({
+                data: {
+                    id: data.user.id,
+                    email: data.user.email || email,
+                    username: finalUsername,
+                    password: hashedPassword,
+                    first_name: firstName || null,
+                    last_name: lastName || null,
+                    telephone: phone || null,
+                    role: role || 1, // 默认角色为 1 零售商
+                    profile: profile ? JSON.stringify(profile) : Prisma.JsonNull,
+
+                    direcction: address ? {
+                        createMany: {
+                            data: address.map((a) => ({
+                                type: a.type,
+                                direction: a.direction,
+                                city: a.city,
+                                province: a.province,
+                                zip_code: a.zip_code,
+                                latitude: a.latitude,
+                                longitude: a.longitude,
+                            })),
+                        },
+                    } : undefined,
+                },
+                include: { direcction: true }
+            });
+
+            this.logger.debug(`[Registration] User created: ${user.id}`);
+
+            const mailToken = await this.jwtService.signAsync({ id: data.user.id }, {
+                secret: this.configService.get<string>('MAIL_JWT_SECRET'), // 从配置服务中获取 JWT 密钥
+                expiresIn: '3 days'
+            }); // 生成 JWT token
+            // 发送验证邮件
+            this.logger.debug(`Sending verification email to: ${email}`);
+            this.mailService.sendVerificationEmail(email, mailToken, language, timezone, user.created_at).catch(e =>
+                this.logger.error(`[Registration] Failed to send email: ${e.message}`)
+            ); // 发送验证邮件
+
+            if (profile && profile.licence) {
+                delete profile.licence;
             }
-        });
 
-        const mailToken = await this.jwtService.signAsync({ id: data.user.id }, {
-            secret: this.configService.get<string>('MAIL_JWT_SECRET'), // 从配置服务中获取 JWT 密钥
-            expiresIn: '3 days'
-        }); // 生成 JWT token
-        // 5. 发送验证邮件
-        this.logger.debug(`Sending verification email to: ${email}`);
-        this.mailService.sendVerificationEmail(email, mailToken, dto.language, dto.timezone, user.created_at); // 发送验证邮件
-        
-        return {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            telephone: user.telephone,
-            role: user.role,
-        };
+            return {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                telephone: user.telephone,
+                role: user.role,
+                profile: profile
+            };
+        },
+            {
+                maxWait: Number(this.configService.get<number>('PRISMA_MAX_WAIT')) || 5000,
+                timeout: Number(this.configService.get<number>('PRISMA_TIMEOUT')) || 10000
+            });
     }
 
 
