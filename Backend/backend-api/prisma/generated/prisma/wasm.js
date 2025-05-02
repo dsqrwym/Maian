@@ -494,17 +494,6 @@ exports.Prisma.Products_filesScalarFieldEnum = {
   sort: 'sort'
 };
 
-exports.Prisma.Public_refresh_tokensScalarFieldEnum = {
-  token_id: 'token_id',
-  user_id: 'user_id',
-  device_name: 'device_name',
-  ip_address: 'ip_address',
-  user_agent: 'user_agent',
-  created_at: 'created_at',
-  edited_at: 'edited_at',
-  revoked: 'revoked'
-};
-
 exports.Prisma.Public_usersScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -518,7 +507,8 @@ exports.Prisma.Public_usersScalarFieldEnum = {
   profile: 'profile',
   created_at: 'created_at',
   updated_at: 'updated_at',
-  role: 'role'
+  role: 'role',
+  cif: 'cif'
 };
 
 exports.Prisma.Variant_productsScalarFieldEnum = {
@@ -534,6 +524,20 @@ exports.Prisma.Variant_productsScalarFieldEnum = {
   status: 'status',
   iva: 'iva',
   product_code: 'product_code'
+};
+
+exports.Prisma.User_sessionsScalarFieldEnum = {
+  token_id: 'token_id',
+  user_id: 'user_id',
+  device_name: 'device_name',
+  device_finger: 'device_finger',
+  user_agent: 'user_agent',
+  revoked: 'revoked',
+  last_ip: 'last_ip',
+  access_token: 'access_token',
+  refresh_token: 'refresh_token',
+  created_at: 'created_at',
+  last_active: 'last_active'
 };
 
 exports.Prisma.SortOrder = {
@@ -631,9 +635,9 @@ exports.Prisma.ModelName = {
   orders: 'orders',
   products: 'products',
   products_files: 'products_files',
-  public_refresh_tokens: 'public_refresh_tokens',
   public_users: 'public_users',
-  variant_products: 'variant_products'
+  variant_products: 'variant_products',
+  user_sessions: 'user_sessions'
 };
 
 /**

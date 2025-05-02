@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/mail/mail.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -14,6 +14,13 @@ import { getVerificationResponseHtml } from 'src/mail/templates/verification-res
 import { Logger } from 'nestjs-pino';
 import { Prisma } from 'prisma/generated/prisma';
 
+
+interface LoginTokenPayload {
+    userId: string,
+    userRole: number,
+    deviceFinger: string
+}
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -25,77 +32,57 @@ export class AuthService {
         private readonly hashService: HashService,
         private readonly logger: Logger
     ) { }
-
-    private async generateUniqueUsername(base: string): Promise<string> {
-        const maxLength = 30;
-        const maxTries = 3;
-
-        const trimBase = (str: string) => str.slice(0, maxLength - 5); // 留出 5 位后缀
-        const suffix = () => Math.floor(10000 + Math.random() * 90000); // 生成 10000~99999 的 5 位数
-
-        base = trimBase(base);
-        let tries = 0;
-        let username: string;
-
-        do {
-            if (tries >= maxTries) {
-                // fallback：使用 uuid 前缀，保证唯一且短
-                return crypto.randomUUID().replace(/-/g, '').slice(0, maxLength);
-            }
-
-            username = `${base}${suffix()}`;
-            tries++;
-        } while (await this.prismaService.public_users.findUnique({ where: { username }, select: { id: true } }));
-
-        return username;
-    }
-
+    // 生成Auth Token
+    generateToken = async (payload: LoginTokenPayload, expiresIn: string) => {
+        return this.jwtService.signAsync(payload, {
+            secret: this.configService.get<string>('SUPABASE_JWT_SECRET'),
+            expiresIn,
+        });
+    };
 
     // 注册用户
     async register(dto: RegisterDto) {
-        const { email, password, username, firstName, lastName, phone, role, profile, address, language, timezone } = dto;
+        const { email, password, username, firstName, lastName, phone, cif, role, profile, address, language, timezone } = dto;
         this.logger.debug(`[Registration] Starting registration for: ${email}`);
         // 1. 检查用户是否已经存在
-        const [existingMail, existingUsername] = await Promise.all([
-            this.prismaService.public_users.findUnique({
-                where: { email },
-                select: { id: true }
-            }),
-            username ? this.prismaService.public_users.findUnique({
-                where: { username },
-                select: { id: true }
-            }) : Promise.resolve(null)
-        ]);
+        const existingUser = await this.prismaService.public_users.findFirst({
+            where: {
+                OR: [{ email }, { username }],
+            },
+            select: { email: true, username: true },
+        });
 
-        if (existingMail) {
-            this.logger.warn(`[Registration] Email conflict: ${email}`);
-            throw new BadRequestException('Email already exists');
+        if (existingUser) {
+            if (existingUser.email === email) {
+                this.logger.warn(`[Registration] Email conflict: ${email}`);
+                throw new BadRequestException('Email already exists');
+            }
+            if (existingUser.username === username) {
+                this.logger.warn(`[Registration] Username conflict: ${username}`);
+                throw new BadRequestException('Username already exists');
+            }
         }
 
-        if (existingUsername) {
-            this.logger.warn(`[Registration] Username conflict: ${username}`);
-            throw new BadRequestException('Username already exists');
-        }
-
-        // 3. 创建用户
+        // 2. 哈希密码
         const hashedPassword = await this.hashService.hashWithBcrypt(password); // 使用 bcrypt 哈希密码
+
+        // 3. 开始事务
         return await this.prismaService.$transaction(async () => {
             const data = await this.supabaseService.createUser(email, hashedPassword);
 
             if (!data.user) return;
 
-            const finalUsername = username || await this.generateUniqueUsername(email.split('@')[0]);
-
             const user = await this.prismaService.public_users.create({
                 data: {
                     id: data.user.id,
                     email: data.user.email || email,
-                    username: finalUsername,
+                    username: username || null,
                     password: hashedPassword,
                     first_name: firstName || null,
                     last_name: lastName || null,
                     telephone: phone || null,
                     role: role || 1, // 默认角色为 1 零售商
+                    cif: cif || null,
                     profile: profile ? JSON.stringify(profile) : Prisma.JsonNull,
 
                     direcction: address ? {
@@ -185,33 +172,124 @@ export class AuthService {
 
 
     async login(dto: LoginDto) {
-        const { email, username } = dto
+        const { email, username, deviceName, ipAddress, userAgent } = dto;
 
         if (!email && !username) {
-            throw new BadRequestException("email o username d'ont exist!");
+            throw new BadRequestException("email or username doesn't exist!");
         }
 
-        const user = await this.prismaService.public_users.findUnique({ where: { username } }) || await this.prismaService.public_users.findUnique({ where: { email } });
+        // 查找用户
+        const user = await this.prismaService.public_users.findFirst({
+            where: {
+                OR: [{ username }, { email }],
+            },
+        });
 
         if (!user) {
-            throw new BadRequestException('User do not exist!');
+            throw new BadRequestException('User does not exist!');
         }
 
+        // 验证密码
         if (!await this.hashService.compareWithBcrypt(dto.password, user.password)) {
             throw new BadRequestException('Incorrect password');
         }
 
-        const payload = {
+        // 生成设备哈希
+        const deviceHash = (await this.hashService.hashWithCrypto(deviceName + userAgent));
+
+        // 生成 token payload
+        const payload: LoginTokenPayload = {
             userId: user.id,
-            userRole: user.role
-        }
-        const refreshToken = await this.jwtService.signAsync(payload, {
-            secret: this.configService.get<string>('SUPABASE_JWT_SECRET'),
-            expiresIn: '3 days'
+            userRole: user.role,
+            deviceFinger: deviceHash
+        };
+
+        // 查找是否已存在相同设备的登录记录
+        const existingSession = await this.prismaService.user_sessions.findUnique({
+            where: { user_id_device_finger: { user_id: user.id, device_finger: deviceHash } },
+            select: { token_id: true }
         });
 
+        const refreshToken = await this.generateToken(payload, '7 days');
+        const accessToken = await this.generateToken(payload, '1h');
+
+        if (!existingSession) {
+            // 如果是新设备登录，保存会话记录
+            await this.prismaService.user_sessions.create({
+                data: {
+                    user_id: user.id,
+                    device_name: deviceName,
+                    device_finger: deviceHash,
+                    user_agent: userAgent,
+                    last_ip: ipAddress,
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                },
+            });
+        } else {
+            // 更新会话记录
+            await this.prismaService.user_sessions.update({
+                where: { user_id_device_finger: { user_id: user.id, device_finger: deviceHash } },
+                data: {
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                    last_ip: ipAddress,
+                    last_active: new Date(),
+                },
+            });
+        }
+
+        return {
+            accessToken,
+            refreshToken,
+        };
     }
 
+    async getAccessToken(refreshToken: string) {
+        try {
+            const payload: LoginTokenPayload = await this.jwtService.verifyAsync(refreshToken, {
+                secret: this.configService.get<string>('SUPABASE_JWT_SECRET'),
+            });
 
-    async getRefreshToken() { }
+            const session = await this.prismaService.user_sessions.findUnique({
+                where: {
+                    user_id_device_finger: {
+                        user_id: payload.userId,
+                        device_finger: payload.deviceFinger,
+                    },
+                },
+                select: {
+                    refresh_token: true,
+                    revoked: true
+                }
+            });
+
+            if (!session || session.revoked || session.refresh_token !== refreshToken) {
+                throw new UnauthorizedException('Session invalid or revoked');
+            }
+
+            const newAccessToken = await this.generateToken(payload, '1h');
+
+            // 更新 last_active
+            await this.prismaService.user_sessions.update({
+                where: {
+                    user_id_device_finger: {
+                        user_id: payload.userId,
+                        device_finger: payload.deviceFinger,
+                    },
+                },
+                data: {
+                    last_active: new Date(),
+                    access_token: newAccessToken,
+                },
+            });
+
+            return {
+                accessToken: newAccessToken,
+            };
+
+        } catch (err) {
+            throw new UnauthorizedException('Invalid or expired refresh token : ' + err);
+        }
+    }
 }

@@ -217,12 +217,6 @@ export type products = $Result.DefaultSelection<Prisma.$productsPayload>
  */
 export type products_files = $Result.DefaultSelection<Prisma.$products_filesPayload>
 /**
- * Model public_refresh_tokens
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
- */
-export type public_refresh_tokens = $Result.DefaultSelection<Prisma.$public_refresh_tokensPayload>
-/**
  * Model public_users
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -233,6 +227,11 @@ export type public_users = $Result.DefaultSelection<Prisma.$public_usersPayload>
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  */
 export type variant_products = $Result.DefaultSelection<Prisma.$variant_productsPayload>
+/**
+ * Model user_sessions
+ * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+ */
+export type user_sessions = $Result.DefaultSelection<Prisma.$user_sessionsPayload>
 
 /**
  * Enums
@@ -771,16 +770,6 @@ export class PrismaClient<
   get products_files(): Prisma.products_filesDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.public_refresh_tokens`: Exposes CRUD operations for the **public_refresh_tokens** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Public_refresh_tokens
-    * const public_refresh_tokens = await prisma.public_refresh_tokens.findMany()
-    * ```
-    */
-  get public_refresh_tokens(): Prisma.public_refresh_tokensDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.public_users`: Exposes CRUD operations for the **public_users** model.
     * Example usage:
     * ```ts
@@ -799,6 +788,16 @@ export class PrismaClient<
     * ```
     */
   get variant_products(): Prisma.variant_productsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.user_sessions`: Exposes CRUD operations for the **user_sessions** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more User_sessions
+    * const user_sessions = await prisma.user_sessions.findMany()
+    * ```
+    */
+  get user_sessions(): Prisma.user_sessionsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1273,9 +1272,9 @@ export namespace Prisma {
     orders: 'orders',
     products: 'products',
     products_files: 'products_files',
-    public_refresh_tokens: 'public_refresh_tokens',
     public_users: 'public_users',
-    variant_products: 'variant_products'
+    variant_products: 'variant_products',
+    user_sessions: 'user_sessions'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1294,7 +1293,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "one_time_tokens" | "auth_refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "auth_users" | "cart_details" | "carts" | "categories" | "chat_panels" | "chat_participants" | "configurations" | "deliveries" | "delivery_timeline" | "direcction" | "discounts" | "files" | "message_files" | "messages" | "notifications" | "order_details" | "orders" | "products" | "products_files" | "public_refresh_tokens" | "public_users" | "variant_products"
+      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "one_time_tokens" | "auth_refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "auth_users" | "cart_details" | "carts" | "categories" | "chat_panels" | "chat_participants" | "configurations" | "deliveries" | "delivery_timeline" | "direcction" | "discounts" | "files" | "message_files" | "messages" | "notifications" | "order_details" | "orders" | "products" | "products_files" | "public_users" | "variant_products" | "user_sessions"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3814,80 +3813,6 @@ export namespace Prisma {
           }
         }
       }
-      public_refresh_tokens: {
-        payload: Prisma.$public_refresh_tokensPayload<ExtArgs>
-        fields: Prisma.public_refresh_tokensFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.public_refresh_tokensFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.public_refresh_tokensFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>
-          }
-          findFirst: {
-            args: Prisma.public_refresh_tokensFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.public_refresh_tokensFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>
-          }
-          findMany: {
-            args: Prisma.public_refresh_tokensFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>[]
-          }
-          create: {
-            args: Prisma.public_refresh_tokensCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>
-          }
-          createMany: {
-            args: Prisma.public_refresh_tokensCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.public_refresh_tokensCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>[]
-          }
-          delete: {
-            args: Prisma.public_refresh_tokensDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>
-          }
-          update: {
-            args: Prisma.public_refresh_tokensUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>
-          }
-          deleteMany: {
-            args: Prisma.public_refresh_tokensDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.public_refresh_tokensUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.public_refresh_tokensUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>[]
-          }
-          upsert: {
-            args: Prisma.public_refresh_tokensUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$public_refresh_tokensPayload>
-          }
-          aggregate: {
-            args: Prisma.Public_refresh_tokensAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePublic_refresh_tokens>
-          }
-          groupBy: {
-            args: Prisma.public_refresh_tokensGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Public_refresh_tokensGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.public_refresh_tokensCountArgs<ExtArgs>
-            result: $Utils.Optional<Public_refresh_tokensCountAggregateOutputType> | number
-          }
-        }
-      }
       public_users: {
         payload: Prisma.$public_usersPayload<ExtArgs>
         fields: Prisma.public_usersFieldRefs
@@ -4036,6 +3961,80 @@ export namespace Prisma {
           }
         }
       }
+      user_sessions: {
+        payload: Prisma.$user_sessionsPayload<ExtArgs>
+        fields: Prisma.user_sessionsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.user_sessionsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.user_sessionsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>
+          }
+          findFirst: {
+            args: Prisma.user_sessionsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.user_sessionsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>
+          }
+          findMany: {
+            args: Prisma.user_sessionsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>[]
+          }
+          create: {
+            args: Prisma.user_sessionsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>
+          }
+          createMany: {
+            args: Prisma.user_sessionsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.user_sessionsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>[]
+          }
+          delete: {
+            args: Prisma.user_sessionsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>
+          }
+          update: {
+            args: Prisma.user_sessionsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>
+          }
+          deleteMany: {
+            args: Prisma.user_sessionsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.user_sessionsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.user_sessionsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>[]
+          }
+          upsert: {
+            args: Prisma.user_sessionsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$user_sessionsPayload>
+          }
+          aggregate: {
+            args: Prisma.User_sessionsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUser_sessions>
+          }
+          groupBy: {
+            args: Prisma.user_sessionsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<User_sessionsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.user_sessionsCountArgs<ExtArgs>
+            result: $Utils.Optional<User_sessionsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4154,9 +4153,9 @@ export namespace Prisma {
     orders?: ordersOmit
     products?: productsOmit
     products_files?: products_filesOmit
-    public_refresh_tokens?: public_refresh_tokensOmit
     public_users?: public_usersOmit
     variant_products?: variant_productsOmit
+    user_sessions?: user_sessionsOmit
   }
 
   /* Types for Logging */
@@ -4796,7 +4795,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers: number
     orders_orders_wholesaler_idTousers: number
     products: number
-    refresh_tokens: number
+    user_sessions: number
   }
 
   export type Public_usersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4812,7 +4811,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: boolean | Public_usersCountOutputTypeCountOrders_orders_retailer_idTousersArgs
     orders_orders_wholesaler_idTousers?: boolean | Public_usersCountOutputTypeCountOrders_orders_wholesaler_idTousersArgs
     products?: boolean | Public_usersCountOutputTypeCountProductsArgs
-    refresh_tokens?: boolean | Public_usersCountOutputTypeCountRefresh_tokensArgs
+    user_sessions?: boolean | Public_usersCountOutputTypeCountUser_sessionsArgs
   }
 
   // Custom InputTypes
@@ -4913,8 +4912,8 @@ export namespace Prisma {
   /**
    * Public_usersCountOutputType without action
    */
-  export type Public_usersCountOutputTypeCountRefresh_tokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: public_refresh_tokensWhereInput
+  export type Public_usersCountOutputTypeCountUser_sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: user_sessionsWhereInput
   }
 
 
@@ -43901,1137 +43900,6 @@ export namespace Prisma {
 
 
   /**
-   * Model public_refresh_tokens
-   */
-
-  export type AggregatePublic_refresh_tokens = {
-    _count: Public_refresh_tokensCountAggregateOutputType | null
-    _avg: Public_refresh_tokensAvgAggregateOutputType | null
-    _sum: Public_refresh_tokensSumAggregateOutputType | null
-    _min: Public_refresh_tokensMinAggregateOutputType | null
-    _max: Public_refresh_tokensMaxAggregateOutputType | null
-  }
-
-  export type Public_refresh_tokensAvgAggregateOutputType = {
-    token_id: number | null
-  }
-
-  export type Public_refresh_tokensSumAggregateOutputType = {
-    token_id: bigint | null
-  }
-
-  export type Public_refresh_tokensMinAggregateOutputType = {
-    token_id: bigint | null
-    user_id: string | null
-    device_name: string | null
-    ip_address: string | null
-    user_agent: string | null
-    created_at: Date | null
-    edited_at: Date | null
-    revoked: boolean | null
-  }
-
-  export type Public_refresh_tokensMaxAggregateOutputType = {
-    token_id: bigint | null
-    user_id: string | null
-    device_name: string | null
-    ip_address: string | null
-    user_agent: string | null
-    created_at: Date | null
-    edited_at: Date | null
-    revoked: boolean | null
-  }
-
-  export type Public_refresh_tokensCountAggregateOutputType = {
-    token_id: number
-    user_id: number
-    device_name: number
-    ip_address: number
-    user_agent: number
-    created_at: number
-    edited_at: number
-    revoked: number
-    _all: number
-  }
-
-
-  export type Public_refresh_tokensAvgAggregateInputType = {
-    token_id?: true
-  }
-
-  export type Public_refresh_tokensSumAggregateInputType = {
-    token_id?: true
-  }
-
-  export type Public_refresh_tokensMinAggregateInputType = {
-    token_id?: true
-    user_id?: true
-    device_name?: true
-    ip_address?: true
-    user_agent?: true
-    created_at?: true
-    edited_at?: true
-    revoked?: true
-  }
-
-  export type Public_refresh_tokensMaxAggregateInputType = {
-    token_id?: true
-    user_id?: true
-    device_name?: true
-    ip_address?: true
-    user_agent?: true
-    created_at?: true
-    edited_at?: true
-    revoked?: true
-  }
-
-  export type Public_refresh_tokensCountAggregateInputType = {
-    token_id?: true
-    user_id?: true
-    device_name?: true
-    ip_address?: true
-    user_agent?: true
-    created_at?: true
-    edited_at?: true
-    revoked?: true
-    _all?: true
-  }
-
-  export type Public_refresh_tokensAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which public_refresh_tokens to aggregate.
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of public_refresh_tokens to fetch.
-     */
-    orderBy?: public_refresh_tokensOrderByWithRelationInput | public_refresh_tokensOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: public_refresh_tokensWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` public_refresh_tokens from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` public_refresh_tokens.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned public_refresh_tokens
-    **/
-    _count?: true | Public_refresh_tokensCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Public_refresh_tokensAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Public_refresh_tokensSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Public_refresh_tokensMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Public_refresh_tokensMaxAggregateInputType
-  }
-
-  export type GetPublic_refresh_tokensAggregateType<T extends Public_refresh_tokensAggregateArgs> = {
-        [P in keyof T & keyof AggregatePublic_refresh_tokens]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePublic_refresh_tokens[P]>
-      : GetScalarType<T[P], AggregatePublic_refresh_tokens[P]>
-  }
-
-
-
-
-  export type public_refresh_tokensGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: public_refresh_tokensWhereInput
-    orderBy?: public_refresh_tokensOrderByWithAggregationInput | public_refresh_tokensOrderByWithAggregationInput[]
-    by: Public_refresh_tokensScalarFieldEnum[] | Public_refresh_tokensScalarFieldEnum
-    having?: public_refresh_tokensScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Public_refresh_tokensCountAggregateInputType | true
-    _avg?: Public_refresh_tokensAvgAggregateInputType
-    _sum?: Public_refresh_tokensSumAggregateInputType
-    _min?: Public_refresh_tokensMinAggregateInputType
-    _max?: Public_refresh_tokensMaxAggregateInputType
-  }
-
-  export type Public_refresh_tokensGroupByOutputType = {
-    token_id: bigint
-    user_id: string
-    device_name: string | null
-    ip_address: string | null
-    user_agent: string | null
-    created_at: Date
-    edited_at: Date
-    revoked: boolean
-    _count: Public_refresh_tokensCountAggregateOutputType | null
-    _avg: Public_refresh_tokensAvgAggregateOutputType | null
-    _sum: Public_refresh_tokensSumAggregateOutputType | null
-    _min: Public_refresh_tokensMinAggregateOutputType | null
-    _max: Public_refresh_tokensMaxAggregateOutputType | null
-  }
-
-  type GetPublic_refresh_tokensGroupByPayload<T extends public_refresh_tokensGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Public_refresh_tokensGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Public_refresh_tokensGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Public_refresh_tokensGroupByOutputType[P]>
-            : GetScalarType<T[P], Public_refresh_tokensGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type public_refresh_tokensSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    token_id?: boolean
-    user_id?: boolean
-    device_name?: boolean
-    ip_address?: boolean
-    user_agent?: boolean
-    created_at?: boolean
-    edited_at?: boolean
-    revoked?: boolean
-    users?: boolean | public_usersDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["public_refresh_tokens"]>
-
-  export type public_refresh_tokensSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    token_id?: boolean
-    user_id?: boolean
-    device_name?: boolean
-    ip_address?: boolean
-    user_agent?: boolean
-    created_at?: boolean
-    edited_at?: boolean
-    revoked?: boolean
-    users?: boolean | public_usersDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["public_refresh_tokens"]>
-
-  export type public_refresh_tokensSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    token_id?: boolean
-    user_id?: boolean
-    device_name?: boolean
-    ip_address?: boolean
-    user_agent?: boolean
-    created_at?: boolean
-    edited_at?: boolean
-    revoked?: boolean
-    users?: boolean | public_usersDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["public_refresh_tokens"]>
-
-  export type public_refresh_tokensSelectScalar = {
-    token_id?: boolean
-    user_id?: boolean
-    device_name?: boolean
-    ip_address?: boolean
-    user_agent?: boolean
-    created_at?: boolean
-    edited_at?: boolean
-    revoked?: boolean
-  }
-
-  export type public_refresh_tokensOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"token_id" | "user_id" | "device_name" | "ip_address" | "user_agent" | "created_at" | "edited_at" | "revoked", ExtArgs["result"]["public_refresh_tokens"]>
-  export type public_refresh_tokensInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | public_usersDefaultArgs<ExtArgs>
-  }
-  export type public_refresh_tokensIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | public_usersDefaultArgs<ExtArgs>
-  }
-  export type public_refresh_tokensIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | public_usersDefaultArgs<ExtArgs>
-  }
-
-  export type $public_refresh_tokensPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "public_refresh_tokens"
-    objects: {
-      users: Prisma.$public_usersPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      token_id: bigint
-      user_id: string
-      device_name: string | null
-      ip_address: string | null
-      user_agent: string | null
-      created_at: Date
-      edited_at: Date
-      revoked: boolean
-    }, ExtArgs["result"]["public_refresh_tokens"]>
-    composites: {}
-  }
-
-  type public_refresh_tokensGetPayload<S extends boolean | null | undefined | public_refresh_tokensDefaultArgs> = $Result.GetResult<Prisma.$public_refresh_tokensPayload, S>
-
-  type public_refresh_tokensCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<public_refresh_tokensFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Public_refresh_tokensCountAggregateInputType | true
-    }
-
-  export interface public_refresh_tokensDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['public_refresh_tokens'], meta: { name: 'public_refresh_tokens' } }
-    /**
-     * Find zero or one Public_refresh_tokens that matches the filter.
-     * @param {public_refresh_tokensFindUniqueArgs} args - Arguments to find a Public_refresh_tokens
-     * @example
-     * // Get one Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends public_refresh_tokensFindUniqueArgs>(args: SelectSubset<T, public_refresh_tokensFindUniqueArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Public_refresh_tokens that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {public_refresh_tokensFindUniqueOrThrowArgs} args - Arguments to find a Public_refresh_tokens
-     * @example
-     * // Get one Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends public_refresh_tokensFindUniqueOrThrowArgs>(args: SelectSubset<T, public_refresh_tokensFindUniqueOrThrowArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Public_refresh_tokens that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {public_refresh_tokensFindFirstArgs} args - Arguments to find a Public_refresh_tokens
-     * @example
-     * // Get one Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends public_refresh_tokensFindFirstArgs>(args?: SelectSubset<T, public_refresh_tokensFindFirstArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Public_refresh_tokens that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {public_refresh_tokensFindFirstOrThrowArgs} args - Arguments to find a Public_refresh_tokens
-     * @example
-     * // Get one Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends public_refresh_tokensFindFirstOrThrowArgs>(args?: SelectSubset<T, public_refresh_tokensFindFirstOrThrowArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Public_refresh_tokens that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {public_refresh_tokensFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.findMany()
-     * 
-     * // Get first 10 Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.findMany({ take: 10 })
-     * 
-     * // Only select the `token_id`
-     * const public_refresh_tokensWithToken_idOnly = await prisma.public_refresh_tokens.findMany({ select: { token_id: true } })
-     * 
-     */
-    findMany<T extends public_refresh_tokensFindManyArgs>(args?: SelectSubset<T, public_refresh_tokensFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Public_refresh_tokens.
-     * @param {public_refresh_tokensCreateArgs} args - Arguments to create a Public_refresh_tokens.
-     * @example
-     * // Create one Public_refresh_tokens
-     * const Public_refresh_tokens = await prisma.public_refresh_tokens.create({
-     *   data: {
-     *     // ... data to create a Public_refresh_tokens
-     *   }
-     * })
-     * 
-     */
-    create<T extends public_refresh_tokensCreateArgs>(args: SelectSubset<T, public_refresh_tokensCreateArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Public_refresh_tokens.
-     * @param {public_refresh_tokensCreateManyArgs} args - Arguments to create many Public_refresh_tokens.
-     * @example
-     * // Create many Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends public_refresh_tokensCreateManyArgs>(args?: SelectSubset<T, public_refresh_tokensCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Public_refresh_tokens and returns the data saved in the database.
-     * @param {public_refresh_tokensCreateManyAndReturnArgs} args - Arguments to create many Public_refresh_tokens.
-     * @example
-     * // Create many Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Public_refresh_tokens and only return the `token_id`
-     * const public_refresh_tokensWithToken_idOnly = await prisma.public_refresh_tokens.createManyAndReturn({
-     *   select: { token_id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends public_refresh_tokensCreateManyAndReturnArgs>(args?: SelectSubset<T, public_refresh_tokensCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Public_refresh_tokens.
-     * @param {public_refresh_tokensDeleteArgs} args - Arguments to delete one Public_refresh_tokens.
-     * @example
-     * // Delete one Public_refresh_tokens
-     * const Public_refresh_tokens = await prisma.public_refresh_tokens.delete({
-     *   where: {
-     *     // ... filter to delete one Public_refresh_tokens
-     *   }
-     * })
-     * 
-     */
-    delete<T extends public_refresh_tokensDeleteArgs>(args: SelectSubset<T, public_refresh_tokensDeleteArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Public_refresh_tokens.
-     * @param {public_refresh_tokensUpdateArgs} args - Arguments to update one Public_refresh_tokens.
-     * @example
-     * // Update one Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends public_refresh_tokensUpdateArgs>(args: SelectSubset<T, public_refresh_tokensUpdateArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Public_refresh_tokens.
-     * @param {public_refresh_tokensDeleteManyArgs} args - Arguments to filter Public_refresh_tokens to delete.
-     * @example
-     * // Delete a few Public_refresh_tokens
-     * const { count } = await prisma.public_refresh_tokens.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends public_refresh_tokensDeleteManyArgs>(args?: SelectSubset<T, public_refresh_tokensDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Public_refresh_tokens.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {public_refresh_tokensUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends public_refresh_tokensUpdateManyArgs>(args: SelectSubset<T, public_refresh_tokensUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Public_refresh_tokens and returns the data updated in the database.
-     * @param {public_refresh_tokensUpdateManyAndReturnArgs} args - Arguments to update many Public_refresh_tokens.
-     * @example
-     * // Update many Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Public_refresh_tokens and only return the `token_id`
-     * const public_refresh_tokensWithToken_idOnly = await prisma.public_refresh_tokens.updateManyAndReturn({
-     *   select: { token_id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends public_refresh_tokensUpdateManyAndReturnArgs>(args: SelectSubset<T, public_refresh_tokensUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Public_refresh_tokens.
-     * @param {public_refresh_tokensUpsertArgs} args - Arguments to update or create a Public_refresh_tokens.
-     * @example
-     * // Update or create a Public_refresh_tokens
-     * const public_refresh_tokens = await prisma.public_refresh_tokens.upsert({
-     *   create: {
-     *     // ... data to create a Public_refresh_tokens
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Public_refresh_tokens we want to update
-     *   }
-     * })
-     */
-    upsert<T extends public_refresh_tokensUpsertArgs>(args: SelectSubset<T, public_refresh_tokensUpsertArgs<ExtArgs>>): Prisma__public_refresh_tokensClient<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Public_refresh_tokens.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {public_refresh_tokensCountArgs} args - Arguments to filter Public_refresh_tokens to count.
-     * @example
-     * // Count the number of Public_refresh_tokens
-     * const count = await prisma.public_refresh_tokens.count({
-     *   where: {
-     *     // ... the filter for the Public_refresh_tokens we want to count
-     *   }
-     * })
-    **/
-    count<T extends public_refresh_tokensCountArgs>(
-      args?: Subset<T, public_refresh_tokensCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Public_refresh_tokensCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Public_refresh_tokens.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Public_refresh_tokensAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Public_refresh_tokensAggregateArgs>(args: Subset<T, Public_refresh_tokensAggregateArgs>): Prisma.PrismaPromise<GetPublic_refresh_tokensAggregateType<T>>
-
-    /**
-     * Group by Public_refresh_tokens.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {public_refresh_tokensGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends public_refresh_tokensGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: public_refresh_tokensGroupByArgs['orderBy'] }
-        : { orderBy?: public_refresh_tokensGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, public_refresh_tokensGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPublic_refresh_tokensGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the public_refresh_tokens model
-   */
-  readonly fields: public_refresh_tokensFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for public_refresh_tokens.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__public_refresh_tokensClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    users<T extends public_usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, public_usersDefaultArgs<ExtArgs>>): Prisma__public_usersClient<$Result.GetResult<Prisma.$public_usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the public_refresh_tokens model
-   */
-  interface public_refresh_tokensFieldRefs {
-    readonly token_id: FieldRef<"public_refresh_tokens", 'BigInt'>
-    readonly user_id: FieldRef<"public_refresh_tokens", 'String'>
-    readonly device_name: FieldRef<"public_refresh_tokens", 'String'>
-    readonly ip_address: FieldRef<"public_refresh_tokens", 'String'>
-    readonly user_agent: FieldRef<"public_refresh_tokens", 'String'>
-    readonly created_at: FieldRef<"public_refresh_tokens", 'DateTime'>
-    readonly edited_at: FieldRef<"public_refresh_tokens", 'DateTime'>
-    readonly revoked: FieldRef<"public_refresh_tokens", 'Boolean'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * public_refresh_tokens findUnique
-   */
-  export type public_refresh_tokensFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * Filter, which public_refresh_tokens to fetch.
-     */
-    where: public_refresh_tokensWhereUniqueInput
-  }
-
-  /**
-   * public_refresh_tokens findUniqueOrThrow
-   */
-  export type public_refresh_tokensFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * Filter, which public_refresh_tokens to fetch.
-     */
-    where: public_refresh_tokensWhereUniqueInput
-  }
-
-  /**
-   * public_refresh_tokens findFirst
-   */
-  export type public_refresh_tokensFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * Filter, which public_refresh_tokens to fetch.
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of public_refresh_tokens to fetch.
-     */
-    orderBy?: public_refresh_tokensOrderByWithRelationInput | public_refresh_tokensOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for public_refresh_tokens.
-     */
-    cursor?: public_refresh_tokensWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` public_refresh_tokens from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` public_refresh_tokens.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of public_refresh_tokens.
-     */
-    distinct?: Public_refresh_tokensScalarFieldEnum | Public_refresh_tokensScalarFieldEnum[]
-  }
-
-  /**
-   * public_refresh_tokens findFirstOrThrow
-   */
-  export type public_refresh_tokensFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * Filter, which public_refresh_tokens to fetch.
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of public_refresh_tokens to fetch.
-     */
-    orderBy?: public_refresh_tokensOrderByWithRelationInput | public_refresh_tokensOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for public_refresh_tokens.
-     */
-    cursor?: public_refresh_tokensWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` public_refresh_tokens from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` public_refresh_tokens.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of public_refresh_tokens.
-     */
-    distinct?: Public_refresh_tokensScalarFieldEnum | Public_refresh_tokensScalarFieldEnum[]
-  }
-
-  /**
-   * public_refresh_tokens findMany
-   */
-  export type public_refresh_tokensFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * Filter, which public_refresh_tokens to fetch.
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of public_refresh_tokens to fetch.
-     */
-    orderBy?: public_refresh_tokensOrderByWithRelationInput | public_refresh_tokensOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing public_refresh_tokens.
-     */
-    cursor?: public_refresh_tokensWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` public_refresh_tokens from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` public_refresh_tokens.
-     */
-    skip?: number
-    distinct?: Public_refresh_tokensScalarFieldEnum | Public_refresh_tokensScalarFieldEnum[]
-  }
-
-  /**
-   * public_refresh_tokens create
-   */
-  export type public_refresh_tokensCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * The data needed to create a public_refresh_tokens.
-     */
-    data: XOR<public_refresh_tokensCreateInput, public_refresh_tokensUncheckedCreateInput>
-  }
-
-  /**
-   * public_refresh_tokens createMany
-   */
-  export type public_refresh_tokensCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many public_refresh_tokens.
-     */
-    data: public_refresh_tokensCreateManyInput | public_refresh_tokensCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * public_refresh_tokens createManyAndReturn
-   */
-  export type public_refresh_tokensCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * The data used to create many public_refresh_tokens.
-     */
-    data: public_refresh_tokensCreateManyInput | public_refresh_tokensCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * public_refresh_tokens update
-   */
-  export type public_refresh_tokensUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * The data needed to update a public_refresh_tokens.
-     */
-    data: XOR<public_refresh_tokensUpdateInput, public_refresh_tokensUncheckedUpdateInput>
-    /**
-     * Choose, which public_refresh_tokens to update.
-     */
-    where: public_refresh_tokensWhereUniqueInput
-  }
-
-  /**
-   * public_refresh_tokens updateMany
-   */
-  export type public_refresh_tokensUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update public_refresh_tokens.
-     */
-    data: XOR<public_refresh_tokensUpdateManyMutationInput, public_refresh_tokensUncheckedUpdateManyInput>
-    /**
-     * Filter which public_refresh_tokens to update
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * Limit how many public_refresh_tokens to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * public_refresh_tokens updateManyAndReturn
-   */
-  export type public_refresh_tokensUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * The data used to update public_refresh_tokens.
-     */
-    data: XOR<public_refresh_tokensUpdateManyMutationInput, public_refresh_tokensUncheckedUpdateManyInput>
-    /**
-     * Filter which public_refresh_tokens to update
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * Limit how many public_refresh_tokens to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * public_refresh_tokens upsert
-   */
-  export type public_refresh_tokensUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * The filter to search for the public_refresh_tokens to update in case it exists.
-     */
-    where: public_refresh_tokensWhereUniqueInput
-    /**
-     * In case the public_refresh_tokens found by the `where` argument doesn't exist, create a new public_refresh_tokens with this data.
-     */
-    create: XOR<public_refresh_tokensCreateInput, public_refresh_tokensUncheckedCreateInput>
-    /**
-     * In case the public_refresh_tokens was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<public_refresh_tokensUpdateInput, public_refresh_tokensUncheckedUpdateInput>
-  }
-
-  /**
-   * public_refresh_tokens delete
-   */
-  export type public_refresh_tokensDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    /**
-     * Filter which public_refresh_tokens to delete.
-     */
-    where: public_refresh_tokensWhereUniqueInput
-  }
-
-  /**
-   * public_refresh_tokens deleteMany
-   */
-  export type public_refresh_tokensDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which public_refresh_tokens to delete
-     */
-    where?: public_refresh_tokensWhereInput
-    /**
-     * Limit how many public_refresh_tokens to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * public_refresh_tokens without action
-   */
-  export type public_refresh_tokensDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the public_refresh_tokens
-     */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the public_refresh_tokens
-     */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model public_users
    */
 
@@ -45066,6 +43934,7 @@ export namespace Prisma {
     created_at: Date | null
     updated_at: Date | null
     role: number | null
+    cif: string | null
   }
 
   export type Public_usersMaxAggregateOutputType = {
@@ -45081,6 +43950,7 @@ export namespace Prisma {
     created_at: Date | null
     updated_at: Date | null
     role: number | null
+    cif: string | null
   }
 
   export type Public_usersCountAggregateOutputType = {
@@ -45097,6 +43967,7 @@ export namespace Prisma {
     created_at: number
     updated_at: number
     role: number
+    cif: number
     _all: number
   }
 
@@ -45124,6 +43995,7 @@ export namespace Prisma {
     created_at?: true
     updated_at?: true
     role?: true
+    cif?: true
   }
 
   export type Public_usersMaxAggregateInputType = {
@@ -45139,6 +44011,7 @@ export namespace Prisma {
     created_at?: true
     updated_at?: true
     role?: true
+    cif?: true
   }
 
   export type Public_usersCountAggregateInputType = {
@@ -45155,6 +44028,7 @@ export namespace Prisma {
     created_at?: true
     updated_at?: true
     role?: true
+    cif?: true
     _all?: true
   }
 
@@ -45258,6 +44132,7 @@ export namespace Prisma {
     created_at: Date
     updated_at: Date | null
     role: number
+    cif: string | null
     _count: Public_usersCountAggregateOutputType | null
     _avg: Public_usersAvgAggregateOutputType | null
     _sum: Public_usersSumAggregateOutputType | null
@@ -45293,6 +44168,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     role?: boolean
+    cif?: boolean
     carts?: boolean | public_users$cartsArgs<ExtArgs>
     categories?: boolean | public_users$categoriesArgs<ExtArgs>
     chat_participants?: boolean | public_users$chat_participantsArgs<ExtArgs>
@@ -45305,7 +44181,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: boolean | public_users$orders_orders_retailer_idTousersArgs<ExtArgs>
     orders_orders_wholesaler_idTousers?: boolean | public_users$orders_orders_wholesaler_idTousersArgs<ExtArgs>
     products?: boolean | public_users$productsArgs<ExtArgs>
-    refresh_tokens?: boolean | public_users$refresh_tokensArgs<ExtArgs>
+    user_sessions?: boolean | public_users$user_sessionsArgs<ExtArgs>
     users?: boolean | auth_usersDefaultArgs<ExtArgs>
     _count?: boolean | Public_usersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["public_users"]>
@@ -45324,6 +44200,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     role?: boolean
+    cif?: boolean
     users?: boolean | auth_usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["public_users"]>
 
@@ -45341,6 +44218,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     role?: boolean
+    cif?: boolean
     users?: boolean | auth_usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["public_users"]>
 
@@ -45358,9 +44236,10 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     role?: boolean
+    cif?: boolean
   }
 
-  export type public_usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "first_name" | "last_name" | "username" | "password" | "email" | "telephone" | "status" | "profile" | "created_at" | "updated_at" | "role", ExtArgs["result"]["public_users"]>
+  export type public_usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "first_name" | "last_name" | "username" | "password" | "email" | "telephone" | "status" | "profile" | "created_at" | "updated_at" | "role" | "cif", ExtArgs["result"]["public_users"]>
   export type public_usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     carts?: boolean | public_users$cartsArgs<ExtArgs>
     categories?: boolean | public_users$categoriesArgs<ExtArgs>
@@ -45374,7 +44253,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: boolean | public_users$orders_orders_retailer_idTousersArgs<ExtArgs>
     orders_orders_wholesaler_idTousers?: boolean | public_users$orders_orders_wholesaler_idTousersArgs<ExtArgs>
     products?: boolean | public_users$productsArgs<ExtArgs>
-    refresh_tokens?: boolean | public_users$refresh_tokensArgs<ExtArgs>
+    user_sessions?: boolean | public_users$user_sessionsArgs<ExtArgs>
     users?: boolean | auth_usersDefaultArgs<ExtArgs>
     _count?: boolean | Public_usersCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -45400,7 +44279,7 @@ export namespace Prisma {
       orders_orders_retailer_idTousers: Prisma.$ordersPayload<ExtArgs>[]
       orders_orders_wholesaler_idTousers: Prisma.$ordersPayload<ExtArgs>[]
       products: Prisma.$productsPayload<ExtArgs>[]
-      refresh_tokens: Prisma.$public_refresh_tokensPayload<ExtArgs>[]
+      user_sessions: Prisma.$user_sessionsPayload<ExtArgs>[]
       users: Prisma.$auth_usersPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -45417,6 +44296,7 @@ export namespace Prisma {
       created_at: Date
       updated_at: Date | null
       role: number
+      cif: string | null
     }, ExtArgs["result"]["public_users"]>
     composites: {}
   }
@@ -45823,7 +44703,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers<T extends public_users$orders_orders_retailer_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, public_users$orders_orders_retailer_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orders_orders_wholesaler_idTousers<T extends public_users$orders_orders_wholesaler_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, public_users$orders_orders_wholesaler_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     products<T extends public_users$productsArgs<ExtArgs> = {}>(args?: Subset<T, public_users$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    refresh_tokens<T extends public_users$refresh_tokensArgs<ExtArgs> = {}>(args?: Subset<T, public_users$refresh_tokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$public_refresh_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user_sessions<T extends public_users$user_sessionsArgs<ExtArgs> = {}>(args?: Subset<T, public_users$user_sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends auth_usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, auth_usersDefaultArgs<ExtArgs>>): Prisma__auth_usersClient<$Result.GetResult<Prisma.$auth_usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -45867,6 +44747,7 @@ export namespace Prisma {
     readonly created_at: FieldRef<"public_users", 'DateTime'>
     readonly updated_at: FieldRef<"public_users", 'DateTime'>
     readonly role: FieldRef<"public_users", 'Int'>
+    readonly cif: FieldRef<"public_users", 'String'>
   }
     
 
@@ -46551,27 +45432,27 @@ export namespace Prisma {
   }
 
   /**
-   * public_users.refresh_tokens
+   * public_users.user_sessions
    */
-  export type public_users$refresh_tokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type public_users$user_sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the public_refresh_tokens
+     * Select specific fields to fetch from the user_sessions
      */
-    select?: public_refresh_tokensSelect<ExtArgs> | null
+    select?: user_sessionsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the public_refresh_tokens
+     * Omit specific fields from the user_sessions
      */
-    omit?: public_refresh_tokensOmit<ExtArgs> | null
+    omit?: user_sessionsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: public_refresh_tokensInclude<ExtArgs> | null
-    where?: public_refresh_tokensWhereInput
-    orderBy?: public_refresh_tokensOrderByWithRelationInput | public_refresh_tokensOrderByWithRelationInput[]
-    cursor?: public_refresh_tokensWhereUniqueInput
+    include?: user_sessionsInclude<ExtArgs> | null
+    where?: user_sessionsWhereInput
+    orderBy?: user_sessionsOrderByWithRelationInput | user_sessionsOrderByWithRelationInput[]
+    cursor?: user_sessionsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Public_refresh_tokensScalarFieldEnum | Public_refresh_tokensScalarFieldEnum[]
+    distinct?: User_sessionsScalarFieldEnum | User_sessionsScalarFieldEnum[]
   }
 
   /**
@@ -47863,6 +46744,1142 @@ export namespace Prisma {
 
 
   /**
+   * Model user_sessions
+   */
+
+  export type AggregateUser_sessions = {
+    _count: User_sessionsCountAggregateOutputType | null
+    _min: User_sessionsMinAggregateOutputType | null
+    _max: User_sessionsMaxAggregateOutputType | null
+  }
+
+  export type User_sessionsMinAggregateOutputType = {
+    token_id: string | null
+    user_id: string | null
+    device_name: string | null
+    device_finger: string | null
+    user_agent: string | null
+    revoked: boolean | null
+    last_ip: string | null
+    access_token: string | null
+    refresh_token: string | null
+    created_at: Date | null
+    last_active: Date | null
+  }
+
+  export type User_sessionsMaxAggregateOutputType = {
+    token_id: string | null
+    user_id: string | null
+    device_name: string | null
+    device_finger: string | null
+    user_agent: string | null
+    revoked: boolean | null
+    last_ip: string | null
+    access_token: string | null
+    refresh_token: string | null
+    created_at: Date | null
+    last_active: Date | null
+  }
+
+  export type User_sessionsCountAggregateOutputType = {
+    token_id: number
+    user_id: number
+    device_name: number
+    device_finger: number
+    user_agent: number
+    revoked: number
+    last_ip: number
+    access_token: number
+    refresh_token: number
+    created_at: number
+    last_active: number
+    _all: number
+  }
+
+
+  export type User_sessionsMinAggregateInputType = {
+    token_id?: true
+    user_id?: true
+    device_name?: true
+    device_finger?: true
+    user_agent?: true
+    revoked?: true
+    last_ip?: true
+    access_token?: true
+    refresh_token?: true
+    created_at?: true
+    last_active?: true
+  }
+
+  export type User_sessionsMaxAggregateInputType = {
+    token_id?: true
+    user_id?: true
+    device_name?: true
+    device_finger?: true
+    user_agent?: true
+    revoked?: true
+    last_ip?: true
+    access_token?: true
+    refresh_token?: true
+    created_at?: true
+    last_active?: true
+  }
+
+  export type User_sessionsCountAggregateInputType = {
+    token_id?: true
+    user_id?: true
+    device_name?: true
+    device_finger?: true
+    user_agent?: true
+    revoked?: true
+    last_ip?: true
+    access_token?: true
+    refresh_token?: true
+    created_at?: true
+    last_active?: true
+    _all?: true
+  }
+
+  export type User_sessionsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which user_sessions to aggregate.
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of user_sessions to fetch.
+     */
+    orderBy?: user_sessionsOrderByWithRelationInput | user_sessionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: user_sessionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` user_sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` user_sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned user_sessions
+    **/
+    _count?: true | User_sessionsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: User_sessionsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: User_sessionsMaxAggregateInputType
+  }
+
+  export type GetUser_sessionsAggregateType<T extends User_sessionsAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser_sessions]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUser_sessions[P]>
+      : GetScalarType<T[P], AggregateUser_sessions[P]>
+  }
+
+
+
+
+  export type user_sessionsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: user_sessionsWhereInput
+    orderBy?: user_sessionsOrderByWithAggregationInput | user_sessionsOrderByWithAggregationInput[]
+    by: User_sessionsScalarFieldEnum[] | User_sessionsScalarFieldEnum
+    having?: user_sessionsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: User_sessionsCountAggregateInputType | true
+    _min?: User_sessionsMinAggregateInputType
+    _max?: User_sessionsMaxAggregateInputType
+  }
+
+  export type User_sessionsGroupByOutputType = {
+    token_id: string
+    user_id: string
+    device_name: string
+    device_finger: string
+    user_agent: string
+    revoked: boolean
+    last_ip: string
+    access_token: string
+    refresh_token: string
+    created_at: Date
+    last_active: Date
+    _count: User_sessionsCountAggregateOutputType | null
+    _min: User_sessionsMinAggregateOutputType | null
+    _max: User_sessionsMaxAggregateOutputType | null
+  }
+
+  type GetUser_sessionsGroupByPayload<T extends user_sessionsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<User_sessionsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof User_sessionsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], User_sessionsGroupByOutputType[P]>
+            : GetScalarType<T[P], User_sessionsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type user_sessionsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    token_id?: boolean
+    user_id?: boolean
+    device_name?: boolean
+    device_finger?: boolean
+    user_agent?: boolean
+    revoked?: boolean
+    last_ip?: boolean
+    access_token?: boolean
+    refresh_token?: boolean
+    created_at?: boolean
+    last_active?: boolean
+    users?: boolean | public_usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user_sessions"]>
+
+  export type user_sessionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    token_id?: boolean
+    user_id?: boolean
+    device_name?: boolean
+    device_finger?: boolean
+    user_agent?: boolean
+    revoked?: boolean
+    last_ip?: boolean
+    access_token?: boolean
+    refresh_token?: boolean
+    created_at?: boolean
+    last_active?: boolean
+    users?: boolean | public_usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user_sessions"]>
+
+  export type user_sessionsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    token_id?: boolean
+    user_id?: boolean
+    device_name?: boolean
+    device_finger?: boolean
+    user_agent?: boolean
+    revoked?: boolean
+    last_ip?: boolean
+    access_token?: boolean
+    refresh_token?: boolean
+    created_at?: boolean
+    last_active?: boolean
+    users?: boolean | public_usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user_sessions"]>
+
+  export type user_sessionsSelectScalar = {
+    token_id?: boolean
+    user_id?: boolean
+    device_name?: boolean
+    device_finger?: boolean
+    user_agent?: boolean
+    revoked?: boolean
+    last_ip?: boolean
+    access_token?: boolean
+    refresh_token?: boolean
+    created_at?: boolean
+    last_active?: boolean
+  }
+
+  export type user_sessionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"token_id" | "user_id" | "device_name" | "device_finger" | "user_agent" | "revoked" | "last_ip" | "access_token" | "refresh_token" | "created_at" | "last_active", ExtArgs["result"]["user_sessions"]>
+  export type user_sessionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | public_usersDefaultArgs<ExtArgs>
+  }
+  export type user_sessionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | public_usersDefaultArgs<ExtArgs>
+  }
+  export type user_sessionsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | public_usersDefaultArgs<ExtArgs>
+  }
+
+  export type $user_sessionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "user_sessions"
+    objects: {
+      users: Prisma.$public_usersPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      token_id: string
+      user_id: string
+      device_name: string
+      device_finger: string
+      user_agent: string
+      revoked: boolean
+      last_ip: string
+      access_token: string
+      refresh_token: string
+      created_at: Date
+      last_active: Date
+    }, ExtArgs["result"]["user_sessions"]>
+    composites: {}
+  }
+
+  type user_sessionsGetPayload<S extends boolean | null | undefined | user_sessionsDefaultArgs> = $Result.GetResult<Prisma.$user_sessionsPayload, S>
+
+  type user_sessionsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<user_sessionsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: User_sessionsCountAggregateInputType | true
+    }
+
+  export interface user_sessionsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['user_sessions'], meta: { name: 'user_sessions' } }
+    /**
+     * Find zero or one User_sessions that matches the filter.
+     * @param {user_sessionsFindUniqueArgs} args - Arguments to find a User_sessions
+     * @example
+     * // Get one User_sessions
+     * const user_sessions = await prisma.user_sessions.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends user_sessionsFindUniqueArgs>(args: SelectSubset<T, user_sessionsFindUniqueArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one User_sessions that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {user_sessionsFindUniqueOrThrowArgs} args - Arguments to find a User_sessions
+     * @example
+     * // Get one User_sessions
+     * const user_sessions = await prisma.user_sessions.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends user_sessionsFindUniqueOrThrowArgs>(args: SelectSubset<T, user_sessionsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first User_sessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {user_sessionsFindFirstArgs} args - Arguments to find a User_sessions
+     * @example
+     * // Get one User_sessions
+     * const user_sessions = await prisma.user_sessions.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends user_sessionsFindFirstArgs>(args?: SelectSubset<T, user_sessionsFindFirstArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first User_sessions that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {user_sessionsFindFirstOrThrowArgs} args - Arguments to find a User_sessions
+     * @example
+     * // Get one User_sessions
+     * const user_sessions = await prisma.user_sessions.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends user_sessionsFindFirstOrThrowArgs>(args?: SelectSubset<T, user_sessionsFindFirstOrThrowArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more User_sessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {user_sessionsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all User_sessions
+     * const user_sessions = await prisma.user_sessions.findMany()
+     * 
+     * // Get first 10 User_sessions
+     * const user_sessions = await prisma.user_sessions.findMany({ take: 10 })
+     * 
+     * // Only select the `token_id`
+     * const user_sessionsWithToken_idOnly = await prisma.user_sessions.findMany({ select: { token_id: true } })
+     * 
+     */
+    findMany<T extends user_sessionsFindManyArgs>(args?: SelectSubset<T, user_sessionsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a User_sessions.
+     * @param {user_sessionsCreateArgs} args - Arguments to create a User_sessions.
+     * @example
+     * // Create one User_sessions
+     * const User_sessions = await prisma.user_sessions.create({
+     *   data: {
+     *     // ... data to create a User_sessions
+     *   }
+     * })
+     * 
+     */
+    create<T extends user_sessionsCreateArgs>(args: SelectSubset<T, user_sessionsCreateArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many User_sessions.
+     * @param {user_sessionsCreateManyArgs} args - Arguments to create many User_sessions.
+     * @example
+     * // Create many User_sessions
+     * const user_sessions = await prisma.user_sessions.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends user_sessionsCreateManyArgs>(args?: SelectSubset<T, user_sessionsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many User_sessions and returns the data saved in the database.
+     * @param {user_sessionsCreateManyAndReturnArgs} args - Arguments to create many User_sessions.
+     * @example
+     * // Create many User_sessions
+     * const user_sessions = await prisma.user_sessions.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many User_sessions and only return the `token_id`
+     * const user_sessionsWithToken_idOnly = await prisma.user_sessions.createManyAndReturn({
+     *   select: { token_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends user_sessionsCreateManyAndReturnArgs>(args?: SelectSubset<T, user_sessionsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a User_sessions.
+     * @param {user_sessionsDeleteArgs} args - Arguments to delete one User_sessions.
+     * @example
+     * // Delete one User_sessions
+     * const User_sessions = await prisma.user_sessions.delete({
+     *   where: {
+     *     // ... filter to delete one User_sessions
+     *   }
+     * })
+     * 
+     */
+    delete<T extends user_sessionsDeleteArgs>(args: SelectSubset<T, user_sessionsDeleteArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one User_sessions.
+     * @param {user_sessionsUpdateArgs} args - Arguments to update one User_sessions.
+     * @example
+     * // Update one User_sessions
+     * const user_sessions = await prisma.user_sessions.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends user_sessionsUpdateArgs>(args: SelectSubset<T, user_sessionsUpdateArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more User_sessions.
+     * @param {user_sessionsDeleteManyArgs} args - Arguments to filter User_sessions to delete.
+     * @example
+     * // Delete a few User_sessions
+     * const { count } = await prisma.user_sessions.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends user_sessionsDeleteManyArgs>(args?: SelectSubset<T, user_sessionsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more User_sessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {user_sessionsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many User_sessions
+     * const user_sessions = await prisma.user_sessions.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends user_sessionsUpdateManyArgs>(args: SelectSubset<T, user_sessionsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more User_sessions and returns the data updated in the database.
+     * @param {user_sessionsUpdateManyAndReturnArgs} args - Arguments to update many User_sessions.
+     * @example
+     * // Update many User_sessions
+     * const user_sessions = await prisma.user_sessions.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more User_sessions and only return the `token_id`
+     * const user_sessionsWithToken_idOnly = await prisma.user_sessions.updateManyAndReturn({
+     *   select: { token_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends user_sessionsUpdateManyAndReturnArgs>(args: SelectSubset<T, user_sessionsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one User_sessions.
+     * @param {user_sessionsUpsertArgs} args - Arguments to update or create a User_sessions.
+     * @example
+     * // Update or create a User_sessions
+     * const user_sessions = await prisma.user_sessions.upsert({
+     *   create: {
+     *     // ... data to create a User_sessions
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the User_sessions we want to update
+     *   }
+     * })
+     */
+    upsert<T extends user_sessionsUpsertArgs>(args: SelectSubset<T, user_sessionsUpsertArgs<ExtArgs>>): Prisma__user_sessionsClient<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of User_sessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {user_sessionsCountArgs} args - Arguments to filter User_sessions to count.
+     * @example
+     * // Count the number of User_sessions
+     * const count = await prisma.user_sessions.count({
+     *   where: {
+     *     // ... the filter for the User_sessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends user_sessionsCountArgs>(
+      args?: Subset<T, user_sessionsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], User_sessionsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a User_sessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {User_sessionsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends User_sessionsAggregateArgs>(args: Subset<T, User_sessionsAggregateArgs>): Prisma.PrismaPromise<GetUser_sessionsAggregateType<T>>
+
+    /**
+     * Group by User_sessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {user_sessionsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends user_sessionsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: user_sessionsGroupByArgs['orderBy'] }
+        : { orderBy?: user_sessionsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, user_sessionsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUser_sessionsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the user_sessions model
+   */
+  readonly fields: user_sessionsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for user_sessions.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__user_sessionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    users<T extends public_usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, public_usersDefaultArgs<ExtArgs>>): Prisma__public_usersClient<$Result.GetResult<Prisma.$public_usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the user_sessions model
+   */
+  interface user_sessionsFieldRefs {
+    readonly token_id: FieldRef<"user_sessions", 'String'>
+    readonly user_id: FieldRef<"user_sessions", 'String'>
+    readonly device_name: FieldRef<"user_sessions", 'String'>
+    readonly device_finger: FieldRef<"user_sessions", 'String'>
+    readonly user_agent: FieldRef<"user_sessions", 'String'>
+    readonly revoked: FieldRef<"user_sessions", 'Boolean'>
+    readonly last_ip: FieldRef<"user_sessions", 'String'>
+    readonly access_token: FieldRef<"user_sessions", 'String'>
+    readonly refresh_token: FieldRef<"user_sessions", 'String'>
+    readonly created_at: FieldRef<"user_sessions", 'DateTime'>
+    readonly last_active: FieldRef<"user_sessions", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * user_sessions findUnique
+   */
+  export type user_sessionsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * Filter, which user_sessions to fetch.
+     */
+    where: user_sessionsWhereUniqueInput
+  }
+
+  /**
+   * user_sessions findUniqueOrThrow
+   */
+  export type user_sessionsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * Filter, which user_sessions to fetch.
+     */
+    where: user_sessionsWhereUniqueInput
+  }
+
+  /**
+   * user_sessions findFirst
+   */
+  export type user_sessionsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * Filter, which user_sessions to fetch.
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of user_sessions to fetch.
+     */
+    orderBy?: user_sessionsOrderByWithRelationInput | user_sessionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for user_sessions.
+     */
+    cursor?: user_sessionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` user_sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` user_sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of user_sessions.
+     */
+    distinct?: User_sessionsScalarFieldEnum | User_sessionsScalarFieldEnum[]
+  }
+
+  /**
+   * user_sessions findFirstOrThrow
+   */
+  export type user_sessionsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * Filter, which user_sessions to fetch.
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of user_sessions to fetch.
+     */
+    orderBy?: user_sessionsOrderByWithRelationInput | user_sessionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for user_sessions.
+     */
+    cursor?: user_sessionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` user_sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` user_sessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of user_sessions.
+     */
+    distinct?: User_sessionsScalarFieldEnum | User_sessionsScalarFieldEnum[]
+  }
+
+  /**
+   * user_sessions findMany
+   */
+  export type user_sessionsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * Filter, which user_sessions to fetch.
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of user_sessions to fetch.
+     */
+    orderBy?: user_sessionsOrderByWithRelationInput | user_sessionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing user_sessions.
+     */
+    cursor?: user_sessionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` user_sessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` user_sessions.
+     */
+    skip?: number
+    distinct?: User_sessionsScalarFieldEnum | User_sessionsScalarFieldEnum[]
+  }
+
+  /**
+   * user_sessions create
+   */
+  export type user_sessionsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a user_sessions.
+     */
+    data: XOR<user_sessionsCreateInput, user_sessionsUncheckedCreateInput>
+  }
+
+  /**
+   * user_sessions createMany
+   */
+  export type user_sessionsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many user_sessions.
+     */
+    data: user_sessionsCreateManyInput | user_sessionsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * user_sessions createManyAndReturn
+   */
+  export type user_sessionsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * The data used to create many user_sessions.
+     */
+    data: user_sessionsCreateManyInput | user_sessionsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * user_sessions update
+   */
+  export type user_sessionsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a user_sessions.
+     */
+    data: XOR<user_sessionsUpdateInput, user_sessionsUncheckedUpdateInput>
+    /**
+     * Choose, which user_sessions to update.
+     */
+    where: user_sessionsWhereUniqueInput
+  }
+
+  /**
+   * user_sessions updateMany
+   */
+  export type user_sessionsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update user_sessions.
+     */
+    data: XOR<user_sessionsUpdateManyMutationInput, user_sessionsUncheckedUpdateManyInput>
+    /**
+     * Filter which user_sessions to update
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * Limit how many user_sessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * user_sessions updateManyAndReturn
+   */
+  export type user_sessionsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * The data used to update user_sessions.
+     */
+    data: XOR<user_sessionsUpdateManyMutationInput, user_sessionsUncheckedUpdateManyInput>
+    /**
+     * Filter which user_sessions to update
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * Limit how many user_sessions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * user_sessions upsert
+   */
+  export type user_sessionsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the user_sessions to update in case it exists.
+     */
+    where: user_sessionsWhereUniqueInput
+    /**
+     * In case the user_sessions found by the `where` argument doesn't exist, create a new user_sessions with this data.
+     */
+    create: XOR<user_sessionsCreateInput, user_sessionsUncheckedCreateInput>
+    /**
+     * In case the user_sessions was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<user_sessionsUpdateInput, user_sessionsUncheckedUpdateInput>
+  }
+
+  /**
+   * user_sessions delete
+   */
+  export type user_sessionsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+    /**
+     * Filter which user_sessions to delete.
+     */
+    where: user_sessionsWhereUniqueInput
+  }
+
+  /**
+   * user_sessions deleteMany
+   */
+  export type user_sessionsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which user_sessions to delete
+     */
+    where?: user_sessionsWhereInput
+    /**
+     * Limit how many user_sessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * user_sessions without action
+   */
+  export type user_sessionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_sessions
+     */
+    select?: user_sessionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_sessions
+     */
+    omit?: user_sessionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_sessionsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -48355,20 +48372,6 @@ export namespace Prisma {
   export type Products_filesScalarFieldEnum = (typeof Products_filesScalarFieldEnum)[keyof typeof Products_filesScalarFieldEnum]
 
 
-  export const Public_refresh_tokensScalarFieldEnum: {
-    token_id: 'token_id',
-    user_id: 'user_id',
-    device_name: 'device_name',
-    ip_address: 'ip_address',
-    user_agent: 'user_agent',
-    created_at: 'created_at',
-    edited_at: 'edited_at',
-    revoked: 'revoked'
-  };
-
-  export type Public_refresh_tokensScalarFieldEnum = (typeof Public_refresh_tokensScalarFieldEnum)[keyof typeof Public_refresh_tokensScalarFieldEnum]
-
-
   export const Public_usersScalarFieldEnum: {
     id: 'id',
     user_id: 'user_id',
@@ -48382,7 +48385,8 @@ export namespace Prisma {
     profile: 'profile',
     created_at: 'created_at',
     updated_at: 'updated_at',
-    role: 'role'
+    role: 'role',
+    cif: 'cif'
   };
 
   export type Public_usersScalarFieldEnum = (typeof Public_usersScalarFieldEnum)[keyof typeof Public_usersScalarFieldEnum]
@@ -48404,6 +48408,23 @@ export namespace Prisma {
   };
 
   export type Variant_productsScalarFieldEnum = (typeof Variant_productsScalarFieldEnum)[keyof typeof Variant_productsScalarFieldEnum]
+
+
+  export const User_sessionsScalarFieldEnum: {
+    token_id: 'token_id',
+    user_id: 'user_id',
+    device_name: 'device_name',
+    device_finger: 'device_finger',
+    user_agent: 'user_agent',
+    revoked: 'revoked',
+    last_ip: 'last_ip',
+    access_token: 'access_token',
+    refresh_token: 'refresh_token',
+    created_at: 'created_at',
+    last_active: 'last_active'
+  };
+
+  export type User_sessionsScalarFieldEnum = (typeof User_sessionsScalarFieldEnum)[keyof typeof User_sessionsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -51167,78 +51188,6 @@ export namespace Prisma {
     sort?: IntWithAggregatesFilter<"products_files"> | number
   }
 
-  export type public_refresh_tokensWhereInput = {
-    AND?: public_refresh_tokensWhereInput | public_refresh_tokensWhereInput[]
-    OR?: public_refresh_tokensWhereInput[]
-    NOT?: public_refresh_tokensWhereInput | public_refresh_tokensWhereInput[]
-    token_id?: BigIntFilter<"public_refresh_tokens"> | bigint | number
-    user_id?: UuidFilter<"public_refresh_tokens"> | string
-    device_name?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    ip_address?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    user_agent?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    created_at?: DateTimeFilter<"public_refresh_tokens"> | Date | string
-    edited_at?: DateTimeFilter<"public_refresh_tokens"> | Date | string
-    revoked?: BoolFilter<"public_refresh_tokens"> | boolean
-    users?: XOR<Public_usersScalarRelationFilter, public_usersWhereInput>
-  }
-
-  export type public_refresh_tokensOrderByWithRelationInput = {
-    token_id?: SortOrder
-    user_id?: SortOrder
-    device_name?: SortOrderInput | SortOrder
-    ip_address?: SortOrderInput | SortOrder
-    user_agent?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    edited_at?: SortOrder
-    revoked?: SortOrder
-    users?: public_usersOrderByWithRelationInput
-  }
-
-  export type public_refresh_tokensWhereUniqueInput = Prisma.AtLeast<{
-    token_id?: bigint | number
-    AND?: public_refresh_tokensWhereInput | public_refresh_tokensWhereInput[]
-    OR?: public_refresh_tokensWhereInput[]
-    NOT?: public_refresh_tokensWhereInput | public_refresh_tokensWhereInput[]
-    user_id?: UuidFilter<"public_refresh_tokens"> | string
-    device_name?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    ip_address?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    user_agent?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    created_at?: DateTimeFilter<"public_refresh_tokens"> | Date | string
-    edited_at?: DateTimeFilter<"public_refresh_tokens"> | Date | string
-    revoked?: BoolFilter<"public_refresh_tokens"> | boolean
-    users?: XOR<Public_usersScalarRelationFilter, public_usersWhereInput>
-  }, "token_id">
-
-  export type public_refresh_tokensOrderByWithAggregationInput = {
-    token_id?: SortOrder
-    user_id?: SortOrder
-    device_name?: SortOrderInput | SortOrder
-    ip_address?: SortOrderInput | SortOrder
-    user_agent?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    edited_at?: SortOrder
-    revoked?: SortOrder
-    _count?: public_refresh_tokensCountOrderByAggregateInput
-    _avg?: public_refresh_tokensAvgOrderByAggregateInput
-    _max?: public_refresh_tokensMaxOrderByAggregateInput
-    _min?: public_refresh_tokensMinOrderByAggregateInput
-    _sum?: public_refresh_tokensSumOrderByAggregateInput
-  }
-
-  export type public_refresh_tokensScalarWhereWithAggregatesInput = {
-    AND?: public_refresh_tokensScalarWhereWithAggregatesInput | public_refresh_tokensScalarWhereWithAggregatesInput[]
-    OR?: public_refresh_tokensScalarWhereWithAggregatesInput[]
-    NOT?: public_refresh_tokensScalarWhereWithAggregatesInput | public_refresh_tokensScalarWhereWithAggregatesInput[]
-    token_id?: BigIntWithAggregatesFilter<"public_refresh_tokens"> | bigint | number
-    user_id?: UuidWithAggregatesFilter<"public_refresh_tokens"> | string
-    device_name?: StringNullableWithAggregatesFilter<"public_refresh_tokens"> | string | null
-    ip_address?: StringNullableWithAggregatesFilter<"public_refresh_tokens"> | string | null
-    user_agent?: StringNullableWithAggregatesFilter<"public_refresh_tokens"> | string | null
-    created_at?: DateTimeWithAggregatesFilter<"public_refresh_tokens"> | Date | string
-    edited_at?: DateTimeWithAggregatesFilter<"public_refresh_tokens"> | Date | string
-    revoked?: BoolWithAggregatesFilter<"public_refresh_tokens"> | boolean
-  }
-
   export type public_usersWhereInput = {
     AND?: public_usersWhereInput | public_usersWhereInput[]
     OR?: public_usersWhereInput[]
@@ -51256,6 +51205,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"public_users"> | Date | string
     updated_at?: DateTimeNullableFilter<"public_users"> | Date | string | null
     role?: IntFilter<"public_users"> | number
+    cif?: StringNullableFilter<"public_users"> | string | null
     carts?: CartsListRelationFilter
     categories?: CategoriesListRelationFilter
     chat_participants?: Chat_participantsListRelationFilter
@@ -51268,7 +51218,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: OrdersListRelationFilter
     orders_orders_wholesaler_idTousers?: OrdersListRelationFilter
     products?: ProductsListRelationFilter
-    refresh_tokens?: Public_refresh_tokensListRelationFilter
+    user_sessions?: User_sessionsListRelationFilter
     users?: XOR<Auth_usersScalarRelationFilter, auth_usersWhereInput>
   }
 
@@ -51286,6 +51236,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     role?: SortOrder
+    cif?: SortOrderInput | SortOrder
     carts?: cartsOrderByRelationAggregateInput
     categories?: categoriesOrderByRelationAggregateInput
     chat_participants?: chat_participantsOrderByRelationAggregateInput
@@ -51298,7 +51249,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersOrderByRelationAggregateInput
     orders_orders_wholesaler_idTousers?: ordersOrderByRelationAggregateInput
     products?: productsOrderByRelationAggregateInput
-    refresh_tokens?: public_refresh_tokensOrderByRelationAggregateInput
+    user_sessions?: user_sessionsOrderByRelationAggregateInput
     users?: auth_usersOrderByWithRelationInput
   }
 
@@ -51319,6 +51270,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"public_users"> | Date | string
     updated_at?: DateTimeNullableFilter<"public_users"> | Date | string | null
     role?: IntFilter<"public_users"> | number
+    cif?: StringNullableFilter<"public_users"> | string | null
     carts?: CartsListRelationFilter
     categories?: CategoriesListRelationFilter
     chat_participants?: Chat_participantsListRelationFilter
@@ -51331,7 +51283,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: OrdersListRelationFilter
     orders_orders_wholesaler_idTousers?: OrdersListRelationFilter
     products?: ProductsListRelationFilter
-    refresh_tokens?: Public_refresh_tokensListRelationFilter
+    user_sessions?: User_sessionsListRelationFilter
     users?: XOR<Auth_usersScalarRelationFilter, auth_usersWhereInput>
   }, "id" | "username" | "email" | "telephone">
 
@@ -51349,6 +51301,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrderInput | SortOrder
     role?: SortOrder
+    cif?: SortOrderInput | SortOrder
     _count?: public_usersCountOrderByAggregateInput
     _avg?: public_usersAvgOrderByAggregateInput
     _max?: public_usersMaxOrderByAggregateInput
@@ -51373,6 +51326,7 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"public_users"> | Date | string
     updated_at?: DateTimeNullableWithAggregatesFilter<"public_users"> | Date | string | null
     role?: IntWithAggregatesFilter<"public_users"> | number
+    cif?: StringNullableWithAggregatesFilter<"public_users"> | string | null
   }
 
   export type variant_productsWhereInput = {
@@ -51471,6 +51425,92 @@ export namespace Prisma {
     status?: IntWithAggregatesFilter<"variant_products"> | number
     iva?: DecimalWithAggregatesFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     product_code?: StringWithAggregatesFilter<"variant_products"> | string
+  }
+
+  export type user_sessionsWhereInput = {
+    AND?: user_sessionsWhereInput | user_sessionsWhereInput[]
+    OR?: user_sessionsWhereInput[]
+    NOT?: user_sessionsWhereInput | user_sessionsWhereInput[]
+    token_id?: UuidFilter<"user_sessions"> | string
+    user_id?: UuidFilter<"user_sessions"> | string
+    device_name?: StringFilter<"user_sessions"> | string
+    device_finger?: StringFilter<"user_sessions"> | string
+    user_agent?: StringFilter<"user_sessions"> | string
+    revoked?: BoolFilter<"user_sessions"> | boolean
+    last_ip?: StringFilter<"user_sessions"> | string
+    access_token?: StringFilter<"user_sessions"> | string
+    refresh_token?: StringFilter<"user_sessions"> | string
+    created_at?: DateTimeFilter<"user_sessions"> | Date | string
+    last_active?: DateTimeFilter<"user_sessions"> | Date | string
+    users?: XOR<Public_usersScalarRelationFilter, public_usersWhereInput>
+  }
+
+  export type user_sessionsOrderByWithRelationInput = {
+    token_id?: SortOrder
+    user_id?: SortOrder
+    device_name?: SortOrder
+    device_finger?: SortOrder
+    user_agent?: SortOrder
+    revoked?: SortOrder
+    last_ip?: SortOrder
+    access_token?: SortOrder
+    refresh_token?: SortOrder
+    created_at?: SortOrder
+    last_active?: SortOrder
+    users?: public_usersOrderByWithRelationInput
+  }
+
+  export type user_sessionsWhereUniqueInput = Prisma.AtLeast<{
+    token_id?: string
+    user_id_device_finger?: user_sessionsUser_idDevice_fingerCompoundUniqueInput
+    AND?: user_sessionsWhereInput | user_sessionsWhereInput[]
+    OR?: user_sessionsWhereInput[]
+    NOT?: user_sessionsWhereInput | user_sessionsWhereInput[]
+    user_id?: UuidFilter<"user_sessions"> | string
+    device_name?: StringFilter<"user_sessions"> | string
+    device_finger?: StringFilter<"user_sessions"> | string
+    user_agent?: StringFilter<"user_sessions"> | string
+    revoked?: BoolFilter<"user_sessions"> | boolean
+    last_ip?: StringFilter<"user_sessions"> | string
+    access_token?: StringFilter<"user_sessions"> | string
+    refresh_token?: StringFilter<"user_sessions"> | string
+    created_at?: DateTimeFilter<"user_sessions"> | Date | string
+    last_active?: DateTimeFilter<"user_sessions"> | Date | string
+    users?: XOR<Public_usersScalarRelationFilter, public_usersWhereInput>
+  }, "token_id" | "user_id_device_finger">
+
+  export type user_sessionsOrderByWithAggregationInput = {
+    token_id?: SortOrder
+    user_id?: SortOrder
+    device_name?: SortOrder
+    device_finger?: SortOrder
+    user_agent?: SortOrder
+    revoked?: SortOrder
+    last_ip?: SortOrder
+    access_token?: SortOrder
+    refresh_token?: SortOrder
+    created_at?: SortOrder
+    last_active?: SortOrder
+    _count?: user_sessionsCountOrderByAggregateInput
+    _max?: user_sessionsMaxOrderByAggregateInput
+    _min?: user_sessionsMinOrderByAggregateInput
+  }
+
+  export type user_sessionsScalarWhereWithAggregatesInput = {
+    AND?: user_sessionsScalarWhereWithAggregatesInput | user_sessionsScalarWhereWithAggregatesInput[]
+    OR?: user_sessionsScalarWhereWithAggregatesInput[]
+    NOT?: user_sessionsScalarWhereWithAggregatesInput | user_sessionsScalarWhereWithAggregatesInput[]
+    token_id?: UuidWithAggregatesFilter<"user_sessions"> | string
+    user_id?: UuidWithAggregatesFilter<"user_sessions"> | string
+    device_name?: StringWithAggregatesFilter<"user_sessions"> | string
+    device_finger?: StringWithAggregatesFilter<"user_sessions"> | string
+    user_agent?: StringWithAggregatesFilter<"user_sessions"> | string
+    revoked?: BoolWithAggregatesFilter<"user_sessions"> | boolean
+    last_ip?: StringWithAggregatesFilter<"user_sessions"> | string
+    access_token?: StringWithAggregatesFilter<"user_sessions"> | string
+    refresh_token?: StringWithAggregatesFilter<"user_sessions"> | string
+    created_at?: DateTimeWithAggregatesFilter<"user_sessions"> | Date | string
+    last_active?: DateTimeWithAggregatesFilter<"user_sessions"> | Date | string
   }
 
   export type audit_log_entriesCreateInput = {
@@ -54178,82 +54218,6 @@ export namespace Prisma {
     sort?: IntFieldUpdateOperationsInput | number
   }
 
-  export type public_refresh_tokensCreateInput = {
-    token_id?: bigint | number
-    device_name?: string | null
-    ip_address?: string | null
-    user_agent?: string | null
-    created_at?: Date | string
-    edited_at?: Date | string
-    revoked?: boolean
-    users: public_usersCreateNestedOneWithoutRefresh_tokensInput
-  }
-
-  export type public_refresh_tokensUncheckedCreateInput = {
-    token_id?: bigint | number
-    user_id: string
-    device_name?: string | null
-    ip_address?: string | null
-    user_agent?: string | null
-    created_at?: Date | string
-    edited_at?: Date | string
-    revoked?: boolean
-  }
-
-  export type public_refresh_tokensUpdateInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
-    users?: public_usersUpdateOneRequiredWithoutRefresh_tokensNestedInput
-  }
-
-  export type public_refresh_tokensUncheckedUpdateInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type public_refresh_tokensCreateManyInput = {
-    token_id?: bigint | number
-    user_id: string
-    device_name?: string | null
-    ip_address?: string | null
-    user_agent?: string | null
-    created_at?: Date | string
-    edited_at?: Date | string
-    revoked?: boolean
-  }
-
-  export type public_refresh_tokensUpdateManyMutationInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type public_refresh_tokensUncheckedUpdateManyInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    revoked?: BoolFieldUpdateOperationsInput | boolean
-  }
-
   export type public_usersCreateInput = {
     user_id?: string | null
     first_name?: string | null
@@ -54267,6 +54231,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -54279,7 +54244,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -54297,6 +54262,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -54309,7 +54275,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersUpdateInput = {
@@ -54325,6 +54291,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -54337,7 +54304,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -54355,6 +54322,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -54367,7 +54335,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type public_usersCreateManyInput = {
@@ -54384,6 +54352,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
   }
 
   export type public_usersUpdateManyMutationInput = {
@@ -54399,6 +54368,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type public_usersUncheckedUpdateManyInput = {
@@ -54415,6 +54385,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type variant_productsCreateInput = {
@@ -54527,6 +54498,103 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type user_sessionsCreateInput = {
+    token_id?: string
+    device_name: string
+    device_finger: string
+    user_agent: string
+    revoked?: boolean
+    last_ip: string
+    access_token: string
+    refresh_token: string
+    created_at?: Date | string
+    last_active?: Date | string
+    users: public_usersCreateNestedOneWithoutUser_sessionsInput
+  }
+
+  export type user_sessionsUncheckedCreateInput = {
+    token_id?: string
+    user_id: string
+    device_name: string
+    device_finger: string
+    user_agent: string
+    revoked?: boolean
+    last_ip: string
+    access_token: string
+    refresh_token: string
+    created_at?: Date | string
+    last_active?: Date | string
+  }
+
+  export type user_sessionsUpdateInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: public_usersUpdateOneRequiredWithoutUser_sessionsNestedInput
+  }
+
+  export type user_sessionsUncheckedUpdateInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type user_sessionsCreateManyInput = {
+    token_id?: string
+    user_id: string
+    device_name: string
+    device_finger: string
+    user_agent: string
+    revoked?: boolean
+    last_ip: string
+    access_token: string
+    refresh_token: string
+    created_at?: Date | string
+    last_active?: Date | string
+  }
+
+  export type user_sessionsUpdateManyMutationInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type user_sessionsUncheckedUpdateManyInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
+    revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UuidNullableFilter<$PrismaModel = never> = {
@@ -56805,47 +56873,6 @@ export namespace Prisma {
     sort?: SortOrder
   }
 
-  export type public_refresh_tokensCountOrderByAggregateInput = {
-    token_id?: SortOrder
-    user_id?: SortOrder
-    device_name?: SortOrder
-    ip_address?: SortOrder
-    user_agent?: SortOrder
-    created_at?: SortOrder
-    edited_at?: SortOrder
-    revoked?: SortOrder
-  }
-
-  export type public_refresh_tokensAvgOrderByAggregateInput = {
-    token_id?: SortOrder
-  }
-
-  export type public_refresh_tokensMaxOrderByAggregateInput = {
-    token_id?: SortOrder
-    user_id?: SortOrder
-    device_name?: SortOrder
-    ip_address?: SortOrder
-    user_agent?: SortOrder
-    created_at?: SortOrder
-    edited_at?: SortOrder
-    revoked?: SortOrder
-  }
-
-  export type public_refresh_tokensMinOrderByAggregateInput = {
-    token_id?: SortOrder
-    user_id?: SortOrder
-    device_name?: SortOrder
-    ip_address?: SortOrder
-    user_agent?: SortOrder
-    created_at?: SortOrder
-    edited_at?: SortOrder
-    revoked?: SortOrder
-  }
-
-  export type public_refresh_tokensSumOrderByAggregateInput = {
-    token_id?: SortOrder
-  }
-
   export type CartsListRelationFilter = {
     every?: cartsWhereInput
     some?: cartsWhereInput
@@ -56882,10 +56909,10 @@ export namespace Prisma {
     none?: notificationsWhereInput
   }
 
-  export type Public_refresh_tokensListRelationFilter = {
-    every?: public_refresh_tokensWhereInput
-    some?: public_refresh_tokensWhereInput
-    none?: public_refresh_tokensWhereInput
+  export type User_sessionsListRelationFilter = {
+    every?: user_sessionsWhereInput
+    some?: user_sessionsWhereInput
+    none?: user_sessionsWhereInput
   }
 
   export type cartsOrderByRelationAggregateInput = {
@@ -56912,7 +56939,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type public_refresh_tokensOrderByRelationAggregateInput = {
+  export type user_sessionsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -56930,6 +56957,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     role?: SortOrder
+    cif?: SortOrder
   }
 
   export type public_usersAvgOrderByAggregateInput = {
@@ -56950,6 +56978,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     role?: SortOrder
+    cif?: SortOrder
   }
 
   export type public_usersMinOrderByAggregateInput = {
@@ -56965,6 +56994,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     role?: SortOrder
+    cif?: SortOrder
   }
 
   export type public_usersSumOrderByAggregateInput = {
@@ -57037,6 +57067,53 @@ export namespace Prisma {
     sort?: SortOrder
     status?: SortOrder
     iva?: SortOrder
+  }
+
+  export type user_sessionsUser_idDevice_fingerCompoundUniqueInput = {
+    user_id: string
+    device_finger: string
+  }
+
+  export type user_sessionsCountOrderByAggregateInput = {
+    token_id?: SortOrder
+    user_id?: SortOrder
+    device_name?: SortOrder
+    device_finger?: SortOrder
+    user_agent?: SortOrder
+    revoked?: SortOrder
+    last_ip?: SortOrder
+    access_token?: SortOrder
+    refresh_token?: SortOrder
+    created_at?: SortOrder
+    last_active?: SortOrder
+  }
+
+  export type user_sessionsMaxOrderByAggregateInput = {
+    token_id?: SortOrder
+    user_id?: SortOrder
+    device_name?: SortOrder
+    device_finger?: SortOrder
+    user_agent?: SortOrder
+    revoked?: SortOrder
+    last_ip?: SortOrder
+    access_token?: SortOrder
+    refresh_token?: SortOrder
+    created_at?: SortOrder
+    last_active?: SortOrder
+  }
+
+  export type user_sessionsMinOrderByAggregateInput = {
+    token_id?: SortOrder
+    user_id?: SortOrder
+    device_name?: SortOrder
+    device_finger?: SortOrder
+    user_agent?: SortOrder
+    revoked?: SortOrder
+    last_ip?: SortOrder
+    access_token?: SortOrder
+    refresh_token?: SortOrder
+    created_at?: SortOrder
+    last_active?: SortOrder
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -58775,20 +58852,6 @@ export namespace Prisma {
     update?: XOR<XOR<productsUpdateToOneWithWhereWithoutProducts_filesInput, productsUpdateWithoutProducts_filesInput>, productsUncheckedUpdateWithoutProducts_filesInput>
   }
 
-  export type public_usersCreateNestedOneWithoutRefresh_tokensInput = {
-    create?: XOR<public_usersCreateWithoutRefresh_tokensInput, public_usersUncheckedCreateWithoutRefresh_tokensInput>
-    connectOrCreate?: public_usersCreateOrConnectWithoutRefresh_tokensInput
-    connect?: public_usersWhereUniqueInput
-  }
-
-  export type public_usersUpdateOneRequiredWithoutRefresh_tokensNestedInput = {
-    create?: XOR<public_usersCreateWithoutRefresh_tokensInput, public_usersUncheckedCreateWithoutRefresh_tokensInput>
-    connectOrCreate?: public_usersCreateOrConnectWithoutRefresh_tokensInput
-    upsert?: public_usersUpsertWithoutRefresh_tokensInput
-    connect?: public_usersWhereUniqueInput
-    update?: XOR<XOR<public_usersUpdateToOneWithWhereWithoutRefresh_tokensInput, public_usersUpdateWithoutRefresh_tokensInput>, public_usersUncheckedUpdateWithoutRefresh_tokensInput>
-  }
-
   export type cartsCreateNestedManyWithoutUsersInput = {
     create?: XOR<cartsCreateWithoutUsersInput, cartsUncheckedCreateWithoutUsersInput> | cartsCreateWithoutUsersInput[] | cartsUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: cartsCreateOrConnectWithoutUsersInput | cartsCreateOrConnectWithoutUsersInput[]
@@ -58873,11 +58936,11 @@ export namespace Prisma {
     connect?: productsWhereUniqueInput | productsWhereUniqueInput[]
   }
 
-  export type public_refresh_tokensCreateNestedManyWithoutUsersInput = {
-    create?: XOR<public_refresh_tokensCreateWithoutUsersInput, public_refresh_tokensUncheckedCreateWithoutUsersInput> | public_refresh_tokensCreateWithoutUsersInput[] | public_refresh_tokensUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: public_refresh_tokensCreateOrConnectWithoutUsersInput | public_refresh_tokensCreateOrConnectWithoutUsersInput[]
-    createMany?: public_refresh_tokensCreateManyUsersInputEnvelope
-    connect?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
+  export type user_sessionsCreateNestedManyWithoutUsersInput = {
+    create?: XOR<user_sessionsCreateWithoutUsersInput, user_sessionsUncheckedCreateWithoutUsersInput> | user_sessionsCreateWithoutUsersInput[] | user_sessionsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: user_sessionsCreateOrConnectWithoutUsersInput | user_sessionsCreateOrConnectWithoutUsersInput[]
+    createMany?: user_sessionsCreateManyUsersInputEnvelope
+    connect?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
   }
 
   export type auth_usersCreateNestedOneWithoutUsersInput = {
@@ -58970,11 +59033,11 @@ export namespace Prisma {
     connect?: productsWhereUniqueInput | productsWhereUniqueInput[]
   }
 
-  export type public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<public_refresh_tokensCreateWithoutUsersInput, public_refresh_tokensUncheckedCreateWithoutUsersInput> | public_refresh_tokensCreateWithoutUsersInput[] | public_refresh_tokensUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: public_refresh_tokensCreateOrConnectWithoutUsersInput | public_refresh_tokensCreateOrConnectWithoutUsersInput[]
-    createMany?: public_refresh_tokensCreateManyUsersInputEnvelope
-    connect?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
+  export type user_sessionsUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: XOR<user_sessionsCreateWithoutUsersInput, user_sessionsUncheckedCreateWithoutUsersInput> | user_sessionsCreateWithoutUsersInput[] | user_sessionsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: user_sessionsCreateOrConnectWithoutUsersInput | user_sessionsCreateOrConnectWithoutUsersInput[]
+    createMany?: user_sessionsCreateManyUsersInputEnvelope
+    connect?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
   }
 
   export type cartsUpdateManyWithoutUsersNestedInput = {
@@ -59145,18 +59208,18 @@ export namespace Prisma {
     deleteMany?: productsScalarWhereInput | productsScalarWhereInput[]
   }
 
-  export type public_refresh_tokensUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<public_refresh_tokensCreateWithoutUsersInput, public_refresh_tokensUncheckedCreateWithoutUsersInput> | public_refresh_tokensCreateWithoutUsersInput[] | public_refresh_tokensUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: public_refresh_tokensCreateOrConnectWithoutUsersInput | public_refresh_tokensCreateOrConnectWithoutUsersInput[]
-    upsert?: public_refresh_tokensUpsertWithWhereUniqueWithoutUsersInput | public_refresh_tokensUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: public_refresh_tokensCreateManyUsersInputEnvelope
-    set?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    disconnect?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    delete?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    connect?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    update?: public_refresh_tokensUpdateWithWhereUniqueWithoutUsersInput | public_refresh_tokensUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: public_refresh_tokensUpdateManyWithWhereWithoutUsersInput | public_refresh_tokensUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: public_refresh_tokensScalarWhereInput | public_refresh_tokensScalarWhereInput[]
+  export type user_sessionsUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<user_sessionsCreateWithoutUsersInput, user_sessionsUncheckedCreateWithoutUsersInput> | user_sessionsCreateWithoutUsersInput[] | user_sessionsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: user_sessionsCreateOrConnectWithoutUsersInput | user_sessionsCreateOrConnectWithoutUsersInput[]
+    upsert?: user_sessionsUpsertWithWhereUniqueWithoutUsersInput | user_sessionsUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: user_sessionsCreateManyUsersInputEnvelope
+    set?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    disconnect?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    delete?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    connect?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    update?: user_sessionsUpdateWithWhereUniqueWithoutUsersInput | user_sessionsUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: user_sessionsUpdateManyWithWhereWithoutUsersInput | user_sessionsUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: user_sessionsScalarWhereInput | user_sessionsScalarWhereInput[]
   }
 
   export type auth_usersUpdateOneRequiredWithoutUsersNestedInput = {
@@ -59335,18 +59398,18 @@ export namespace Prisma {
     deleteMany?: productsScalarWhereInput | productsScalarWhereInput[]
   }
 
-  export type public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<public_refresh_tokensCreateWithoutUsersInput, public_refresh_tokensUncheckedCreateWithoutUsersInput> | public_refresh_tokensCreateWithoutUsersInput[] | public_refresh_tokensUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: public_refresh_tokensCreateOrConnectWithoutUsersInput | public_refresh_tokensCreateOrConnectWithoutUsersInput[]
-    upsert?: public_refresh_tokensUpsertWithWhereUniqueWithoutUsersInput | public_refresh_tokensUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: public_refresh_tokensCreateManyUsersInputEnvelope
-    set?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    disconnect?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    delete?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    connect?: public_refresh_tokensWhereUniqueInput | public_refresh_tokensWhereUniqueInput[]
-    update?: public_refresh_tokensUpdateWithWhereUniqueWithoutUsersInput | public_refresh_tokensUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: public_refresh_tokensUpdateManyWithWhereWithoutUsersInput | public_refresh_tokensUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: public_refresh_tokensScalarWhereInput | public_refresh_tokensScalarWhereInput[]
+  export type user_sessionsUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<user_sessionsCreateWithoutUsersInput, user_sessionsUncheckedCreateWithoutUsersInput> | user_sessionsCreateWithoutUsersInput[] | user_sessionsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: user_sessionsCreateOrConnectWithoutUsersInput | user_sessionsCreateOrConnectWithoutUsersInput[]
+    upsert?: user_sessionsUpsertWithWhereUniqueWithoutUsersInput | user_sessionsUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: user_sessionsCreateManyUsersInputEnvelope
+    set?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    disconnect?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    delete?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    connect?: user_sessionsWhereUniqueInput | user_sessionsWhereUniqueInput[]
+    update?: user_sessionsUpdateWithWhereUniqueWithoutUsersInput | user_sessionsUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: user_sessionsUpdateManyWithWhereWithoutUsersInput | user_sessionsUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: user_sessionsScalarWhereInput | user_sessionsScalarWhereInput[]
   }
 
   export type cart_detailsCreateNestedManyWithoutVariant_productsInput = {
@@ -59445,6 +59508,20 @@ export namespace Prisma {
     update?: order_detailsUpdateWithWhereUniqueWithoutVariant_productsInput | order_detailsUpdateWithWhereUniqueWithoutVariant_productsInput[]
     updateMany?: order_detailsUpdateManyWithWhereWithoutVariant_productsInput | order_detailsUpdateManyWithWhereWithoutVariant_productsInput[]
     deleteMany?: order_detailsScalarWhereInput | order_detailsScalarWhereInput[]
+  }
+
+  export type public_usersCreateNestedOneWithoutUser_sessionsInput = {
+    create?: XOR<public_usersCreateWithoutUser_sessionsInput, public_usersUncheckedCreateWithoutUser_sessionsInput>
+    connectOrCreate?: public_usersCreateOrConnectWithoutUser_sessionsInput
+    connect?: public_usersWhereUniqueInput
+  }
+
+  export type public_usersUpdateOneRequiredWithoutUser_sessionsNestedInput = {
+    create?: XOR<public_usersCreateWithoutUser_sessionsInput, public_usersUncheckedCreateWithoutUser_sessionsInput>
+    connectOrCreate?: public_usersCreateOrConnectWithoutUser_sessionsInput
+    upsert?: public_usersUpsertWithoutUser_sessionsInput
+    connect?: public_usersWhereUniqueInput
+    update?: XOR<XOR<public_usersUpdateToOneWithWhereWithoutUser_sessionsInput, public_usersUpdateWithoutUser_sessionsInput>, public_usersUncheckedUpdateWithoutUser_sessionsInput>
   }
 
   export type NestedUuidNullableFilter<$PrismaModel = never> = {
@@ -61706,6 +61783,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -61718,7 +61796,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersUncheckedCreateWithoutUsersInput = {
@@ -61734,6 +61812,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -61746,7 +61825,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutUsersInput = {
@@ -61905,6 +61984,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -61917,7 +61997,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
 
   export type public_usersUncheckedUpdateWithoutUsersInput = {
@@ -61933,6 +62013,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -61945,7 +62026,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type cartsCreateWithoutCart_detailsInput = {
@@ -62105,6 +62186,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
     configurations?: configurationsCreateNestedManyWithoutUsersInput
@@ -62116,7 +62198,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -62134,6 +62216,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
     configurations?: configurationsUncheckedCreateNestedManyWithoutUsersInput
@@ -62145,7 +62228,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutCartsInput = {
@@ -62204,6 +62287,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
     configurations?: configurationsUpdateManyWithoutUsersNestedInput
@@ -62215,7 +62299,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -62233,6 +62317,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
     configurations?: configurationsUncheckedUpdateManyWithoutUsersNestedInput
@@ -62244,7 +62329,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type categoriesCreateWithoutOther_categoriesInput = {
@@ -62315,6 +62400,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
     configurations?: configurationsCreateNestedManyWithoutUsersInput
@@ -62326,7 +62412,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -62344,6 +62430,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
     configurations?: configurationsUncheckedCreateNestedManyWithoutUsersInput
@@ -62355,7 +62442,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutCategoriesInput = {
@@ -62484,6 +62571,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
     configurations?: configurationsUpdateManyWithoutUsersNestedInput
@@ -62495,7 +62583,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -62513,6 +62601,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
     configurations?: configurationsUncheckedUpdateManyWithoutUsersNestedInput
@@ -62524,7 +62613,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type productsUpsertWithWhereUniqueWithoutCategoriesInput = {
@@ -62697,6 +62786,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     configurations?: configurationsCreateNestedManyWithoutUsersInput
@@ -62708,7 +62798,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -62726,6 +62816,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     configurations?: configurationsUncheckedCreateNestedManyWithoutUsersInput
@@ -62737,7 +62828,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutChat_participantsInput = {
@@ -62794,6 +62885,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     configurations?: configurationsUpdateManyWithoutUsersNestedInput
@@ -62805,7 +62897,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -62823,6 +62915,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     configurations?: configurationsUncheckedUpdateManyWithoutUsersNestedInput
@@ -62834,7 +62927,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type public_usersCreateWithoutConfigurationsInput = {
@@ -62850,6 +62943,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -62861,7 +62955,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -62879,6 +62973,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -62890,7 +62985,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutConfigurationsInput = {
@@ -62922,6 +63017,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -62933,7 +63029,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -62951,6 +63047,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -62962,7 +63059,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type public_usersCreateWithoutDeliveriesInput = {
@@ -62978,6 +63075,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -62989,7 +63087,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -63007,6 +63105,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -63018,7 +63117,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutDeliveriesInput = {
@@ -63078,6 +63177,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -63089,7 +63189,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -63107,6 +63207,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -63118,7 +63219,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type delivery_timelineUpsertWithWhereUniqueWithoutDeliveriesInput = {
@@ -63235,6 +63336,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -63246,7 +63348,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -63264,6 +63366,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -63275,7 +63378,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutDirecctionInput = {
@@ -63353,6 +63456,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -63364,7 +63468,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -63382,6 +63486,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -63393,7 +63498,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type ordersUpsertWithWhereUniqueWithoutDirecctionInput = {
@@ -63446,6 +63551,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -63457,7 +63563,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -63475,6 +63581,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -63486,7 +63593,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutDiscountsInput = {
@@ -63518,6 +63625,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -63529,7 +63637,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -63547,6 +63655,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -63558,7 +63667,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type message_filesCreateWithoutFilesInput = {
@@ -63898,6 +64007,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -63909,7 +64019,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -63927,6 +64037,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -63938,7 +64049,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutMessagesInput = {
@@ -64060,6 +64171,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -64071,7 +64183,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -64089,6 +64201,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -64100,7 +64213,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type public_usersCreateWithoutNotificationsInput = {
@@ -64116,6 +64229,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -64127,7 +64241,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -64145,6 +64259,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -64156,7 +64271,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutNotificationsInput = {
@@ -64188,6 +64303,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -64199,7 +64315,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -64217,6 +64333,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -64228,7 +64345,7 @@ export namespace Prisma {
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type ordersCreateWithoutOrder_detailsInput = {
@@ -64450,6 +64567,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -64461,7 +64579,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -64479,6 +64597,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -64490,7 +64609,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutOrders_orders_retailer_idTousersInput = {
@@ -64544,6 +64663,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -64555,7 +64675,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     products?: productsCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -64573,6 +64693,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -64584,7 +64705,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutOrders_orders_wholesaler_idTousersInput = {
@@ -64650,6 +64771,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -64661,7 +64783,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -64679,6 +64801,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -64690,7 +64813,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type direcctionUpsertWithoutOrdersInput = {
@@ -64756,6 +64879,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -64767,7 +64891,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -64785,6 +64909,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -64796,7 +64921,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type categoriesCreateWithoutProductsInput = {
@@ -64837,6 +64962,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsCreateNestedManyWithoutUsersInput
     categories?: categoriesCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
@@ -64848,7 +64974,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
-    refresh_tokens?: public_refresh_tokensCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
     users: auth_usersCreateNestedOneWithoutUsersInput
   }
 
@@ -64866,6 +64992,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     role: number
+    cif?: string | null
     carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
     categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
     chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
@@ -64877,7 +65004,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
-    refresh_tokens?: public_refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type public_usersCreateOrConnectWithoutProductsInput = {
@@ -65004,6 +65131,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUpdateManyWithoutUsersNestedInput
     categories?: categoriesUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
@@ -65015,7 +65143,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
-    refresh_tokens?: public_refresh_tokensUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
     users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
   }
 
@@ -65033,6 +65161,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
     carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
     categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
     chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
@@ -65044,7 +65173,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
-    refresh_tokens?: public_refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type products_filesUpsertWithWhereUniqueWithoutProductsInput = {
@@ -65235,134 +65364,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
     variant_products?: variant_productsUncheckedUpdateManyWithoutProductsNestedInput
-  }
-
-  export type public_usersCreateWithoutRefresh_tokensInput = {
-    user_id?: string | null
-    first_name?: string | null
-    last_name?: string | null
-    username?: string | null
-    password: string
-    email?: string | null
-    telephone?: string | null
-    status?: number
-    profile?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    role: number
-    carts?: cartsCreateNestedManyWithoutUsersInput
-    categories?: categoriesCreateNestedManyWithoutUsersInput
-    chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
-    configurations?: configurationsCreateNestedManyWithoutUsersInput
-    deliveries?: deliveriesCreateNestedManyWithoutUsersInput
-    direcction?: direcctionCreateNestedManyWithoutUsersInput
-    discounts?: discountsCreateNestedManyWithoutUsersInput
-    messages?: messagesCreateNestedManyWithoutUsersInput
-    notifications?: notificationsCreateNestedManyWithoutUsersInput
-    orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
-    orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
-    products?: productsCreateNestedManyWithoutUsersInput
-    users: auth_usersCreateNestedOneWithoutUsersInput
-  }
-
-  export type public_usersUncheckedCreateWithoutRefresh_tokensInput = {
-    id: string
-    user_id?: string | null
-    first_name?: string | null
-    last_name?: string | null
-    username?: string | null
-    password: string
-    email?: string | null
-    telephone?: string | null
-    status?: number
-    profile?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    role: number
-    carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
-    categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
-    chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
-    configurations?: configurationsUncheckedCreateNestedManyWithoutUsersInput
-    deliveries?: deliveriesUncheckedCreateNestedManyWithoutUsersInput
-    direcction?: direcctionUncheckedCreateNestedManyWithoutUsersInput
-    discounts?: discountsUncheckedCreateNestedManyWithoutUsersInput
-    messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
-    orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
-    orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
-    products?: productsUncheckedCreateNestedManyWithoutUsersInput
-  }
-
-  export type public_usersCreateOrConnectWithoutRefresh_tokensInput = {
-    where: public_usersWhereUniqueInput
-    create: XOR<public_usersCreateWithoutRefresh_tokensInput, public_usersUncheckedCreateWithoutRefresh_tokensInput>
-  }
-
-  export type public_usersUpsertWithoutRefresh_tokensInput = {
-    update: XOR<public_usersUpdateWithoutRefresh_tokensInput, public_usersUncheckedUpdateWithoutRefresh_tokensInput>
-    create: XOR<public_usersCreateWithoutRefresh_tokensInput, public_usersUncheckedCreateWithoutRefresh_tokensInput>
-    where?: public_usersWhereInput
-  }
-
-  export type public_usersUpdateToOneWithWhereWithoutRefresh_tokensInput = {
-    where?: public_usersWhereInput
-    data: XOR<public_usersUpdateWithoutRefresh_tokensInput, public_usersUncheckedUpdateWithoutRefresh_tokensInput>
-  }
-
-  export type public_usersUpdateWithoutRefresh_tokensInput = {
-    user_id?: NullableStringFieldUpdateOperationsInput | string | null
-    first_name?: NullableStringFieldUpdateOperationsInput | string | null
-    last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    telephone?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: IntFieldUpdateOperationsInput | number
-    profile?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: IntFieldUpdateOperationsInput | number
-    carts?: cartsUpdateManyWithoutUsersNestedInput
-    categories?: categoriesUpdateManyWithoutUsersNestedInput
-    chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
-    configurations?: configurationsUpdateManyWithoutUsersNestedInput
-    deliveries?: deliveriesUpdateManyWithoutUsersNestedInput
-    direcction?: direcctionUpdateManyWithoutUsersNestedInput
-    discounts?: discountsUpdateManyWithoutUsersNestedInput
-    messages?: messagesUpdateManyWithoutUsersNestedInput
-    notifications?: notificationsUpdateManyWithoutUsersNestedInput
-    orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
-    orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
-    products?: productsUpdateManyWithoutUsersNestedInput
-    users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
-  }
-
-  export type public_usersUncheckedUpdateWithoutRefresh_tokensInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    user_id?: NullableStringFieldUpdateOperationsInput | string | null
-    first_name?: NullableStringFieldUpdateOperationsInput | string | null
-    last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    telephone?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: IntFieldUpdateOperationsInput | number
-    profile?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: IntFieldUpdateOperationsInput | number
-    carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
-    categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
-    chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
-    configurations?: configurationsUncheckedUpdateManyWithoutUsersNestedInput
-    deliveries?: deliveriesUncheckedUpdateManyWithoutUsersNestedInput
-    direcction?: direcctionUncheckedUpdateManyWithoutUsersNestedInput
-    discounts?: discountsUncheckedUpdateManyWithoutUsersNestedInput
-    messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
-    orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
-    orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
-    products?: productsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type cartsCreateWithoutUsersInput = {
@@ -65759,33 +65760,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type public_refresh_tokensCreateWithoutUsersInput = {
-    token_id?: bigint | number
-    device_name?: string | null
-    ip_address?: string | null
-    user_agent?: string | null
-    created_at?: Date | string
-    edited_at?: Date | string
+  export type user_sessionsCreateWithoutUsersInput = {
+    token_id?: string
+    device_name: string
+    device_finger: string
+    user_agent: string
     revoked?: boolean
-  }
-
-  export type public_refresh_tokensUncheckedCreateWithoutUsersInput = {
-    token_id?: bigint | number
-    device_name?: string | null
-    ip_address?: string | null
-    user_agent?: string | null
+    last_ip: string
+    access_token: string
+    refresh_token: string
     created_at?: Date | string
-    edited_at?: Date | string
+    last_active?: Date | string
+  }
+
+  export type user_sessionsUncheckedCreateWithoutUsersInput = {
+    token_id?: string
+    device_name: string
+    device_finger: string
+    user_agent: string
     revoked?: boolean
+    last_ip: string
+    access_token: string
+    refresh_token: string
+    created_at?: Date | string
+    last_active?: Date | string
   }
 
-  export type public_refresh_tokensCreateOrConnectWithoutUsersInput = {
-    where: public_refresh_tokensWhereUniqueInput
-    create: XOR<public_refresh_tokensCreateWithoutUsersInput, public_refresh_tokensUncheckedCreateWithoutUsersInput>
+  export type user_sessionsCreateOrConnectWithoutUsersInput = {
+    where: user_sessionsWhereUniqueInput
+    create: XOR<user_sessionsCreateWithoutUsersInput, user_sessionsUncheckedCreateWithoutUsersInput>
   }
 
-  export type public_refresh_tokensCreateManyUsersInputEnvelope = {
-    data: public_refresh_tokensCreateManyUsersInput | public_refresh_tokensCreateManyUsersInput[]
+  export type user_sessionsCreateManyUsersInputEnvelope = {
+    data: user_sessionsCreateManyUsersInput | user_sessionsCreateManyUsersInput[]
     skipDuplicates?: boolean
   }
 
@@ -66152,34 +66159,37 @@ export namespace Prisma {
     data: XOR<productsUpdateManyMutationInput, productsUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type public_refresh_tokensUpsertWithWhereUniqueWithoutUsersInput = {
-    where: public_refresh_tokensWhereUniqueInput
-    update: XOR<public_refresh_tokensUpdateWithoutUsersInput, public_refresh_tokensUncheckedUpdateWithoutUsersInput>
-    create: XOR<public_refresh_tokensCreateWithoutUsersInput, public_refresh_tokensUncheckedCreateWithoutUsersInput>
+  export type user_sessionsUpsertWithWhereUniqueWithoutUsersInput = {
+    where: user_sessionsWhereUniqueInput
+    update: XOR<user_sessionsUpdateWithoutUsersInput, user_sessionsUncheckedUpdateWithoutUsersInput>
+    create: XOR<user_sessionsCreateWithoutUsersInput, user_sessionsUncheckedCreateWithoutUsersInput>
   }
 
-  export type public_refresh_tokensUpdateWithWhereUniqueWithoutUsersInput = {
-    where: public_refresh_tokensWhereUniqueInput
-    data: XOR<public_refresh_tokensUpdateWithoutUsersInput, public_refresh_tokensUncheckedUpdateWithoutUsersInput>
+  export type user_sessionsUpdateWithWhereUniqueWithoutUsersInput = {
+    where: user_sessionsWhereUniqueInput
+    data: XOR<user_sessionsUpdateWithoutUsersInput, user_sessionsUncheckedUpdateWithoutUsersInput>
   }
 
-  export type public_refresh_tokensUpdateManyWithWhereWithoutUsersInput = {
-    where: public_refresh_tokensScalarWhereInput
-    data: XOR<public_refresh_tokensUpdateManyMutationInput, public_refresh_tokensUncheckedUpdateManyWithoutUsersInput>
+  export type user_sessionsUpdateManyWithWhereWithoutUsersInput = {
+    where: user_sessionsScalarWhereInput
+    data: XOR<user_sessionsUpdateManyMutationInput, user_sessionsUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type public_refresh_tokensScalarWhereInput = {
-    AND?: public_refresh_tokensScalarWhereInput | public_refresh_tokensScalarWhereInput[]
-    OR?: public_refresh_tokensScalarWhereInput[]
-    NOT?: public_refresh_tokensScalarWhereInput | public_refresh_tokensScalarWhereInput[]
-    token_id?: BigIntFilter<"public_refresh_tokens"> | bigint | number
-    user_id?: UuidFilter<"public_refresh_tokens"> | string
-    device_name?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    ip_address?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    user_agent?: StringNullableFilter<"public_refresh_tokens"> | string | null
-    created_at?: DateTimeFilter<"public_refresh_tokens"> | Date | string
-    edited_at?: DateTimeFilter<"public_refresh_tokens"> | Date | string
-    revoked?: BoolFilter<"public_refresh_tokens"> | boolean
+  export type user_sessionsScalarWhereInput = {
+    AND?: user_sessionsScalarWhereInput | user_sessionsScalarWhereInput[]
+    OR?: user_sessionsScalarWhereInput[]
+    NOT?: user_sessionsScalarWhereInput | user_sessionsScalarWhereInput[]
+    token_id?: UuidFilter<"user_sessions"> | string
+    user_id?: UuidFilter<"user_sessions"> | string
+    device_name?: StringFilter<"user_sessions"> | string
+    device_finger?: StringFilter<"user_sessions"> | string
+    user_agent?: StringFilter<"user_sessions"> | string
+    revoked?: BoolFilter<"user_sessions"> | boolean
+    last_ip?: StringFilter<"user_sessions"> | string
+    access_token?: StringFilter<"user_sessions"> | string
+    refresh_token?: StringFilter<"user_sessions"> | string
+    created_at?: DateTimeFilter<"user_sessions"> | Date | string
+    last_active?: DateTimeFilter<"user_sessions"> | Date | string
   }
 
   export type auth_usersUpsertWithoutUsersInput = {
@@ -66441,6 +66451,138 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
     products_files?: products_filesUncheckedUpdateManyWithoutProductsNestedInput
+  }
+
+  export type public_usersCreateWithoutUser_sessionsInput = {
+    user_id?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    username?: string | null
+    password: string
+    email?: string | null
+    telephone?: string | null
+    status?: number
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    role: number
+    cif?: string | null
+    carts?: cartsCreateNestedManyWithoutUsersInput
+    categories?: categoriesCreateNestedManyWithoutUsersInput
+    chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
+    configurations?: configurationsCreateNestedManyWithoutUsersInput
+    deliveries?: deliveriesCreateNestedManyWithoutUsersInput
+    direcction?: direcctionCreateNestedManyWithoutUsersInput
+    discounts?: discountsCreateNestedManyWithoutUsersInput
+    messages?: messagesCreateNestedManyWithoutUsersInput
+    notifications?: notificationsCreateNestedManyWithoutUsersInput
+    orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    products?: productsCreateNestedManyWithoutUsersInput
+    users: auth_usersCreateNestedOneWithoutUsersInput
+  }
+
+  export type public_usersUncheckedCreateWithoutUser_sessionsInput = {
+    id: string
+    user_id?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    username?: string | null
+    password: string
+    email?: string | null
+    telephone?: string | null
+    status?: number
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    role: number
+    cif?: string | null
+    carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
+    categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
+    chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
+    configurations?: configurationsUncheckedCreateNestedManyWithoutUsersInput
+    deliveries?: deliveriesUncheckedCreateNestedManyWithoutUsersInput
+    direcction?: direcctionUncheckedCreateNestedManyWithoutUsersInput
+    discounts?: discountsUncheckedCreateNestedManyWithoutUsersInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
+    orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    products?: productsUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type public_usersCreateOrConnectWithoutUser_sessionsInput = {
+    where: public_usersWhereUniqueInput
+    create: XOR<public_usersCreateWithoutUser_sessionsInput, public_usersUncheckedCreateWithoutUser_sessionsInput>
+  }
+
+  export type public_usersUpsertWithoutUser_sessionsInput = {
+    update: XOR<public_usersUpdateWithoutUser_sessionsInput, public_usersUncheckedUpdateWithoutUser_sessionsInput>
+    create: XOR<public_usersCreateWithoutUser_sessionsInput, public_usersUncheckedCreateWithoutUser_sessionsInput>
+    where?: public_usersWhereInput
+  }
+
+  export type public_usersUpdateToOneWithWhereWithoutUser_sessionsInput = {
+    where?: public_usersWhereInput
+    data: XOR<public_usersUpdateWithoutUser_sessionsInput, public_usersUncheckedUpdateWithoutUser_sessionsInput>
+  }
+
+  export type public_usersUpdateWithoutUser_sessionsInput = {
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: IntFieldUpdateOperationsInput | number
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
+    carts?: cartsUpdateManyWithoutUsersNestedInput
+    categories?: categoriesUpdateManyWithoutUsersNestedInput
+    chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
+    configurations?: configurationsUpdateManyWithoutUsersNestedInput
+    deliveries?: deliveriesUpdateManyWithoutUsersNestedInput
+    direcction?: direcctionUpdateManyWithoutUsersNestedInput
+    discounts?: discountsUpdateManyWithoutUsersNestedInput
+    messages?: messagesUpdateManyWithoutUsersNestedInput
+    notifications?: notificationsUpdateManyWithoutUsersNestedInput
+    orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    products?: productsUpdateManyWithoutUsersNestedInput
+    users?: auth_usersUpdateOneRequiredWithoutUsersNestedInput
+  }
+
+  export type public_usersUncheckedUpdateWithoutUser_sessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: IntFieldUpdateOperationsInput | number
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: IntFieldUpdateOperationsInput | number
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
+    carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
+    categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
+    chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
+    configurations?: configurationsUncheckedUpdateManyWithoutUsersNestedInput
+    deliveries?: deliveriesUncheckedUpdateManyWithoutUsersNestedInput
+    direcction?: direcctionUncheckedUpdateManyWithoutUsersNestedInput
+    discounts?: discountsUncheckedUpdateManyWithoutUsersNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
+    orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    products?: productsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type saml_relay_statesCreateManyFlow_stateInput = {
@@ -67557,14 +67699,17 @@ export namespace Prisma {
     product_code: string
   }
 
-  export type public_refresh_tokensCreateManyUsersInput = {
-    token_id?: bigint | number
-    device_name?: string | null
-    ip_address?: string | null
-    user_agent?: string | null
-    created_at?: Date | string
-    edited_at?: Date | string
+  export type user_sessionsCreateManyUsersInput = {
+    token_id?: string
+    device_name: string
+    device_finger: string
+    user_agent: string
     revoked?: boolean
+    last_ip: string
+    access_token: string
+    refresh_token: string
+    created_at?: Date | string
+    last_active?: Date | string
   }
 
   export type cartsUpdateWithoutUsersInput = {
@@ -67967,34 +68112,43 @@ export namespace Prisma {
     product_code?: StringFieldUpdateOperationsInput | string
   }
 
-  export type public_refresh_tokensUpdateWithoutUsersInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type user_sessionsUpdateWithoutUsersInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type public_refresh_tokensUncheckedUpdateWithoutUsersInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type user_sessionsUncheckedUpdateWithoutUsersInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type public_refresh_tokensUncheckedUpdateManyWithoutUsersInput = {
-    token_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    device_name?: NullableStringFieldUpdateOperationsInput | string | null
-    ip_address?: NullableStringFieldUpdateOperationsInput | string | null
-    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    edited_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type user_sessionsUncheckedUpdateManyWithoutUsersInput = {
+    token_id?: StringFieldUpdateOperationsInput | string
+    device_name?: StringFieldUpdateOperationsInput | string
+    device_finger?: StringFieldUpdateOperationsInput | string
+    user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
+    last_ip?: StringFieldUpdateOperationsInput | string
+    access_token?: StringFieldUpdateOperationsInput | string
+    refresh_token?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    last_active?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type cart_detailsCreateManyVariant_productsInput = {
