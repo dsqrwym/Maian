@@ -8,13 +8,7 @@ workflows:
         BUNDLE_ID: "org.dsqrwym.pgdm"
         APP_NAME: "PGDM"
     scripts:
-      - name: Install dependencies
-        working_directory: "Front/Plataforma Gestio-n Distribucio-n  Mayorista"
-        script: |
-          chmod +x ./gradlew
-          brew install cocoapods || true
-          pod install --project-directory=iosApp
-
+    
       - name: Build iOS framework from shared module
         working_directory: "Front/Plataforma Gestio-n Distribucio-n  Mayorista"
         script: |
