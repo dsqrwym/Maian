@@ -20,7 +20,7 @@ export const HashWorkerPoolProvider: Provider = {
   useFactory: (config: ConfigService) => {
     return new Piscina({
       filename: path.resolve(__dirname, '../worker/hash-worker.js'),
-      maxThreads: config.get<number>('WORKER_POOL_MAX_THREADS') || WORKER_POOL_MAX_THREADS,
+      maxThreads: Number(config.get<number>('WORKER_POOL_MAX_THREADS')) || WORKER_POOL_MAX_THREADS,
       idleTimeout: Number(config.get<number>('WORKER_POOL_IDLE_TIMEOUT')) || 60000,
       concurrentTasksPerWorker: Number(config.get<number>('WORKER_POOL_CONCURRENT_TASKS')) || 1,
     });

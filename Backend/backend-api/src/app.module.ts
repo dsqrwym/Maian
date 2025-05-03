@@ -19,7 +19,6 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { Reflector } from '@nestjs/core';
 import { LoggerModule, PinoLogger } from 'nestjs-pino';
-import { Prisma } from '@prisma/client';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
