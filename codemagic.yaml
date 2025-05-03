@@ -13,6 +13,7 @@ workflows:
           xcodebuild -list -project "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/iosApp.xcodeproj"
       - name: Build iOS framework from shared module
         script: |
+          chmod +x "Front/Plataforma Gestio-n Distribucio-n  Mayorista/gradlew"
           "Front/Plataforma Gestio-n Distribucio-n  Mayorista/gradlew" :shared:syncFramework
       - name: Build iOS app
         script: |
