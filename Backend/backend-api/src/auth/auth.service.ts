@@ -33,12 +33,29 @@ export class AuthService {
         private readonly logger: Logger
     ) { }
     // 生成Auth Token
-    generateToken = async (payload: LoginTokenPayload, expiresIn: string) => {
+    private generateToken = async (payload: LoginTokenPayload, expiresIn: string) => {
         return this.jwtService.signAsync(payload, {
             secret: this.configService.get<string>('SUPABASE_JWT_SECRET'),
             expiresIn,
         });
     };
+
+    private verifyToken = async (token: string): Promise<LoginTokenPayload> => {
+        return await this.jwtService.verifyAsync(token, {
+            secret: this.configService.get<string>('SUPABASE_JWT_SECRET')
+        })
+    }
+
+    private getSession = async (userId: string, deviceFinger: string) => {
+        return await this.prismaService.user_sessions.findUnique({
+            where: { user_id_device_finger: { user_id: userId, device_finger: deviceFinger } },
+            select: {
+                refresh_token: true,
+                revoked: true
+            }
+        });
+    }
+
 
     // 注册用户
     async register(dto: RegisterDto) {
@@ -174,7 +191,10 @@ export class AuthService {
     async login(dto: LoginDto) {
         const { email, username, deviceName, ipAddress, userAgent } = dto;
 
+        this.logger.debug(`[Login] Attempting login for email: ${email || 'N/A'}, username: ${username || 'N/A'}`);
+
         if (!email && !username) {
+            this.logger.warn(`[Login] Missing email or username`);
             throw new BadRequestException("email or username doesn't exist!");
         }
 
@@ -186,16 +206,22 @@ export class AuthService {
         });
 
         if (!user) {
+            this.logger.warn(`[Login] User not found for email: ${email || 'N/A'}, username: ${username || 'N/A'}`);
             throw new BadRequestException('User does not exist!');
         }
 
         // 验证密码
         if (!await this.hashService.compareWithBcrypt(dto.password, user.password)) {
+            this.logger.warn(`[Login] Incorrect password for userId: ${user.id}`);
             throw new BadRequestException('Incorrect password');
         }
 
+        this.logger.debug(`[Login] Password validated for userId: ${user.id}`);
+
         // 生成设备哈希
         const deviceHash = (await this.hashService.hashWithCrypto(deviceName + userAgent));
+
+        this.logger.debug(`[Login] Generated device hash for userId: ${user.id}, deviceName: ${deviceName}`);
 
         // 生成 token payload
         const payload: LoginTokenPayload = {
@@ -205,15 +231,17 @@ export class AuthService {
         };
 
         // 查找是否已存在相同设备的登录记录
-        const existingSession = await this.prismaService.user_sessions.findUnique({
-            where: { user_id_device_finger: { user_id: user.id, device_finger: deviceHash } },
-            select: { token_id: true }
-        });
+        const existingSession = await this.getSession(user.id, deviceHash);
 
         const refreshToken = await this.generateToken(payload, '7 days');
         const accessToken = await this.generateToken(payload, '1h');
 
+        const hashedRefreshToken = await this.hashService.hashWithCrypto(refreshToken);
+        const hashedAccessToken = await this.hashService.hashWithCrypto(accessToken);
+
         if (!existingSession) {
+            this.logger.debug(`[Login] No existing session found for userId: ${user.id}, creating a new session`);
+
             // 如果是新设备登录，保存会话记录
             await this.prismaService.user_sessions.create({
                 data: {
@@ -222,23 +250,29 @@ export class AuthService {
                     device_finger: deviceHash,
                     user_agent: userAgent,
                     last_ip: ipAddress,
-                    access_token: accessToken,
-                    refresh_token: refreshToken,
+                    access_token: hashedAccessToken,
+                    refresh_token: hashedRefreshToken,
                 },
             });
+            this.logger.debug(`[Login] New session created for userId: ${user.id}`);
         } else {
+            this.logger.debug(`[Login] Existing session found for userId: ${user.id}, updating session`);
+
             // 更新会话记录
             await this.prismaService.user_sessions.update({
                 where: { user_id_device_finger: { user_id: user.id, device_finger: deviceHash } },
                 data: {
-                    access_token: accessToken,
-                    refresh_token: refreshToken,
+                    access_token: hashedAccessToken,
+                    refresh_token: hashedRefreshToken,
+                    revoked: false,
                     last_ip: ipAddress,
                     last_active: new Date(),
                 },
             });
+            this.logger.debug(`[Login] Session updated for userId: ${user.id}`);
         }
 
+        this.logger.debug(`[Login] Login successful for userId: ${user.id}`);
         return {
             accessToken,
             refreshToken,
@@ -246,50 +280,92 @@ export class AuthService {
     }
 
     async getAccessToken(refreshToken: string) {
-        try {
-            const payload: LoginTokenPayload = await this.jwtService.verifyAsync(refreshToken, {
-                secret: this.configService.get<string>('SUPABASE_JWT_SECRET'),
-            });
+        this.logger.debug(`[getAccessToken] Verifying refresh token`);
 
-            const session = await this.prismaService.user_sessions.findUnique({
-                where: {
-                    user_id_device_finger: {
-                        user_id: payload.userId,
-                        device_finger: payload.deviceFinger,
-                    },
-                },
-                select: {
-                    refresh_token: true,
-                    revoked: true
-                }
-            });
+        const payload: LoginTokenPayload = await this.verifyToken(refreshToken);
 
-            if (!session || session.revoked || session.refresh_token !== refreshToken) {
-                throw new UnauthorizedException('Session invalid or revoked');
-            }
+        const session = await this.getSession(payload.userId, payload.deviceFinger);
 
-            const newAccessToken = await this.generateToken(payload, '1h');
-
-            // 更新 last_active
-            await this.prismaService.user_sessions.update({
-                where: {
-                    user_id_device_finger: {
-                        user_id: payload.userId,
-                        device_finger: payload.deviceFinger,
-                    },
-                },
-                data: {
-                    last_active: new Date(),
-                    access_token: newAccessToken,
-                },
-            });
-
-            return {
-                accessToken: newAccessToken,
-            };
-
-        } catch (err) {
-            throw new UnauthorizedException('Invalid or expired refresh token : ' + err);
+        if (!session) {
+            this.logger.warn(`[getAccessToken] Session not found for userId: ${payload.userId}`);
+            throw new UnauthorizedException('Session not found');
         }
+
+        if (session.revoked) {
+            this.logger.warn(`[getAccessToken] Session revoked for userId: ${payload.userId}`);
+            throw new UnauthorizedException('Session has been revoked');
+        }
+
+        if (!await this.hashService.compareCrypto(refreshToken, session.refresh_token)) {
+            this.logger.warn(`[getAccessToken] Refresh token mismatch for userId: ${payload.userId}`);
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
+        const newAccessToken = await this.generateToken(payload, '1h');
+        const newHashedAccessToken = await this.hashService.hashWithCrypto(newAccessToken);
+        this.logger.debug(`[getAccessToken] New access token generated for userId: ${payload.userId}`);
+
+        // 更新 last_active
+        await this.prismaService.user_sessions.update({
+            where: {
+                user_id_device_finger: {
+                    user_id: payload.userId,
+                    device_finger: payload.deviceFinger
+                },
+            },
+            data: {
+                last_active: new Date(),
+                access_token: newHashedAccessToken,
+            },
+        });
+        this.logger.debug(`[getAccessToken] Access token refreshed for userId: ${payload.userId}`);
+        return {
+            accessToken: newAccessToken,
+        };
+    }
+
+    async logoutSession(token: string) {
+        this.logger.debug(`[logoutSession] Verifying token for logout`);
+
+        const sessionData: LoginTokenPayload = await this.verifyToken(token);
+
+        // 查找会话，并注销
+        const result = await this.prismaService.user_sessions.updateMany({
+            where: {
+                user_id: sessionData.userId,
+                device_finger: sessionData.deviceFinger,
+                revoked: false, // 限制只更新未撤销的会话
+            },
+            data: {
+                revoked: true,
+                last_active: new Date(),
+            },
+        });
+
+        if (result.count === 0) {
+            this.logger.warn(`[Logout] No active session to revoke for userId: ${sessionData.userId}`);
+            throw new UnauthorizedException('Session not found or already revoked');
+        }
+
+        this.logger.debug(`[logoutSession] Session successfully revoked for userId: ${sessionData.userId}`);
+        return { message: 'Session successfully revoked' };
+    }
+
+    async deleteSession(token: string) {
+        this.logger.debug(`[deleteSession] Verifying token for delete`)
+        const sessionData: LoginTokenPayload = await this.verifyToken(token);
+
+        const result = await this.prismaService.user_sessions.deleteMany({
+            where: {
+                user_id: sessionData.userId,
+                device_finger: sessionData.deviceFinger
+            }
+        });
+
+        if (result.count === 1) {
+            this.logger.warn(`[deleteSession] No found session to delete`)
+        }
+
+        return { message: 'Session succesfully deleted' };
     }
 }

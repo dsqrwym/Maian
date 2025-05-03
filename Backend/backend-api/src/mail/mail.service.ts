@@ -91,4 +91,8 @@ export class MailService {
             }
         }
     }
+
+    async sendNotifyEmail(to: string, sesion: any, loginDate: Date){
+        
+    }
 }
