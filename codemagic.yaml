@@ -21,7 +21,7 @@ workflows:
       - name: Build iOS app
         script: |
           xcodebuild -project "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/iosApp.xcodeproj" \
-            -scheme [替换为你的Scheme名称] \
+            -scheme iosApp \
             -sdk iphoneos -configuration release archive \
             -archivePath $HOME/build/$APP_NAME.xcarchive
       - name: Export IPA
