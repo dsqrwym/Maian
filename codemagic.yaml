@@ -6,18 +6,30 @@ workflows:
       cocoapods: default
       vars:
         BUNDLE_ID: "org.dsqrwym.pgdm"
-        APP_NAME: "MyKMPApp"
+        APP_NAME: "Plataforma Gestio-n Distribucio-n  Mayorista"
     scripts:
+      - name: List Xcode schemes
+        script: |
+        xcodebuild -list -project "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/iosApp.xcodeproj"
+
       - name: Install dependencies
         script: |
           brew install cocoapods || true
-          pod install --project-directory=iosApp
+          pod install --project-directory="Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp"
+      - name: Build iOS framework from shared module
+        script: |
+          "Front/Plataforma Gestio-n Distribucio-n  Mayorista/gradlew" :shared:syncFramework
       - name: Build iOS app
         script: |
-          ./gradlew :shared:syncFramework
-          xcodebuild -workspace iosApp/iosApp.xcworkspace -scheme iosApp -sdk iphoneos -configuration release archive -archivePath $HOME/build/$APP_NAME.xcarchive
+          xcodebuild -project "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/iosApp.xcodeproj" \
+            -scheme [替换为你的Scheme名称] \
+            -sdk iphoneos -configuration release archive \
+            -archivePath $HOME/build/$APP_NAME.xcarchive
       - name: Export IPA
         script: |
-          xcodebuild -exportArchive -archivePath $HOME/build/$APP_NAME.xcarchive -exportOptionsPlist iosApp/exportOptions.plist -exportPath $HOME/build/IPA
+          xcodebuild -exportArchive \
+            -archivePath $HOME/build/$APP_NAME.xcarchive \
+            -exportOptionsPlist "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/exportOptions.plist" \
+            -exportPath $HOME/build/IPA
     artifacts:
       - build/IPA/*.ipa
