@@ -1,0 +1,23 @@
+workflows:
+  ios-kmp:
+    name: Build iOS KMP App
+    environment:
+      xcode: latest
+      cocoapods: default
+      vars:
+        BUNDLE_ID: "org.dsqrwym.pgdm"
+        APP_NAME: "MyKMPApp"
+    scripts:
+      - name: Install dependencies
+        script: |
+          brew install cocoapods || true
+          pod install --project-directory=iosApp
+      - name: Build iOS app
+        script: |
+          ./gradlew :shared:syncFramework
+          xcodebuild -workspace iosApp/iosApp.xcworkspace -scheme iosApp -sdk iphoneos -configuration release archive -archivePath $HOME/build/$APP_NAME.xcarchive
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive -archivePath $HOME/build/$APP_NAME.xcarchive -exportOptionsPlist iosApp/exportOptions.plist -exportPath $HOME/build/IPA
+    artifacts:
+      - build/IPA/*.ipa
