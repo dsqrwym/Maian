@@ -94,12 +94,12 @@ export class DateFormatService {
     addDays(date: Date, days: number): Date {
         const result = new Date(date);
         result.setUTCDate(result.getUTCDate() + days);
+        return result;
+    }
 
-        // 处理夏令时边界情况
-        if (result.getUTCHours() !== date.getUTCHours()) {
-            result.setUTCHours(date.getUTCHours());
-        }
-
+    reduceDay(date: Date, days: number): Date{
+        const result = new Date(date);
+        result.setUTCDate(result.getUTCDate() - days);
         return result;
     }
 }

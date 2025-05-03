@@ -28,6 +28,7 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-fastify": "^11.1.0",
+    "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^11.1.5",
     "@prisma/client": "^6.6.0",
     "@supabase/supabase-js": "^2.49.4",

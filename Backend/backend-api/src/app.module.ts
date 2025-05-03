@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { ConfigModule } from '@nestjs/config'; // 用于加载和管理应用程序的配置 比Node.js 自带的 process.env 更加安全和方便维护
+import { LoggerModule, PinoLogger } from 'nestjs-pino';
+import { ScheduleModule } from '@nestjs/schedule';
 
 // 我自己的模块 : 
 //  公共模块
@@ -18,9 +20,9 @@ import { AuthModule } from './auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { Reflector } from '@nestjs/core';
-import { LoggerModule, PinoLogger } from 'nestjs-pino';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { TaskModule } from './tasks/task.module';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
         level: process.env.NODE_ENV === 'production' ? 'error' : 'debug', // 设置日志级别
       }
     }),
+    ScheduleModule.forRoot(), // 负责任务调度的 NestJS  cron 包集成模块
+
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
     SupabaseModule, // 全局的模块
@@ -62,6 +66,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     },
     PrismaExceptionFilter, // 全局异常过滤器，处理未捕获的异常
     HttpExceptionFilter, // 全局异常过滤器，处理 HTTP 异常
+    TaskModule // 开启定时任务
   ], // 可以注入的服务
 })
 export class AppModule { }
