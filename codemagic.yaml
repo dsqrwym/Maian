@@ -10,8 +10,7 @@ workflows:
     scripts:
       - name: List Xcode schemes
         script: |
-        xcodebuild -list -project "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/iosApp.xcodeproj"
-
+          xcodebuild -list -project "Front/Plataforma Gestio-n Distribucio-n  Mayorista/iosApp/iosApp.xcodeproj"
       - name: Install dependencies
         script: |
           brew install cocoapods || true
