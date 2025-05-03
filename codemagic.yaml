@@ -53,15 +53,15 @@ workflows:
       - name: "[3/3] 模拟器构建"
         script: |
           xcodebuild clean build \
-            -project "iosApp.xcodeproj" \
-            -scheme "$XCODE_SCHEME" \
-            -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=$SIMULATOR_DEVICE,OS=$SIMULATOR_OS" \
-            CODE_SIGNING_REQUIRED=NO \          # 禁用代码签名
-            CODE_SIGN_IDENTITY="" \              # 清空签名标识
-            CODE_SIGN_ENTITLEMENTS="" \          # 清空授权文件
-            CODE_SIGNING_ALLOWED="NO" \          # 完全禁止签名
-            | xcpretty  # 优化输出格式
+          -project "iosApp.xcodeproj" \
+          -scheme "$XCODE_SCHEME" \
+          -sdk iphonesimulator \
+          -destination "platform=iOS Simulator,name=$SIMULATOR_DEVICE,OS=$SIMULATOR_OS" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGN_ENTITLEMENTS="" \
+          CODE_SIGNING_ALLOWED="NO" \
+          | xcpretty
 
 ###############################################################################
 # 产物配置
