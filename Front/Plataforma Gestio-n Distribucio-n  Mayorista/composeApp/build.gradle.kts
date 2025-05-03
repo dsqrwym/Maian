@@ -68,10 +68,17 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            // 根据KMP官网教程 添加处理日期的跨平台库
+            implementation(libs.kotlinx.datetime)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+        }
+        // 根据KMP官网教程 在网页端添加处理日期的跨平台库
+        wasmJsMain.dependencies {
+            implementation(npm("@js-joda/timezone", "2.3.0")) //项中包含对必要 npm 包的引用
         }
     }
 }
