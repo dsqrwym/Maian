@@ -167,9 +167,9 @@ model auth_refresh_tokens {
 
   @@index([instance_id])
   @@index([instance_id, user_id])
+  @@index([updated_at(sort: Desc)])
   @@index([parent])
   @@index([session_id, revoked])
-  @@index([updated_at(sort: Desc)])
   @@map("refresh_tokens")
   @@schema("auth")
 }
