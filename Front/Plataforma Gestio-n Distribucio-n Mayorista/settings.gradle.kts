@@ -32,4 +32,4 @@ plugins {// 插件定义
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0" // 自动配置JDK toolchain
 }
 
-include(":shared", ":standard") // 包含的模块
+include(":shared", ":standard", ":enterprise") // 包含的模块
