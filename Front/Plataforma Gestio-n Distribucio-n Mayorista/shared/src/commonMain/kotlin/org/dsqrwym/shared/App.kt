@@ -22,9 +22,10 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
+
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.compose_multiplatform
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.image_vertical_background
 
 @Composable
 @Preview
@@ -50,6 +51,7 @@ fun App() {
                 val greeting = remember { Greeting().greet() }
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
+                    Image(painterResource(Res.drawable.image_vertical_background), null)
                     Text("Compose: $greeting")
                 }
             }

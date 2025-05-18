@@ -2,7 +2,6 @@ package org.dsqrwym.standard
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import org.dsqrwym.shared.App
 
 fun main() = application {
     Window(

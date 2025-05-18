@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import org.dsqrwym.shared.drawable.getImageMobileBackground
+import org.dsqrwym.shared.ui.component.BackgroundImage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,13 +15,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            org.dsqrwym.standard.App()
+            App()
         }
     }
 }
 
-@Preview
+@Composable
+fun LoginScreen() {
+   BackgroundImage(getImageMobileBackground(), "Login Screen Background")
+}
+
+
+@Preview(widthDp = 860, heightDp = 360)
 @Composable
 fun AppAndroidPreview() {
-    org.dsqrwym.standard.App()
+    LoginScreen()
+}
+
+@Preview(widthDp = 360, heightDp = 860)
+@Composable
+fun AppAndroidVerticalPreview() {
+    LoginScreen()
 }
