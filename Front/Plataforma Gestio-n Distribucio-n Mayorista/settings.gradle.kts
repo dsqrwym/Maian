@@ -33,3 +33,4 @@ plugins {// 插件定义
 }
 
 include(":shared", ":standard", ":enterprise") // 包含的模块
+include(":localization-processor")

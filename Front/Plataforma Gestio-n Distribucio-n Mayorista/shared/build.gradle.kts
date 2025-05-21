@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)    // Compose跨平台UI框架
     alias(libs.plugins.composeCompiler)         // Compose编译器集成
     //alias(libs.plugins.composeHotReload)        // 热重载， 但是应该没用
+    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    kotlin("plugin.serialization") version "2.1.21"
 }
 
 // ---------------------------
@@ -66,26 +68,33 @@ kotlin {
         }
 
         // 公共主源码集（跨平台共享）
-        commonMain.dependencies {
-            // Compose基础库
-            implementation(compose.runtime)         // 运行时核心
-            implementation(compose.foundation)      // 基础布局组件
-            implementation(compose.material3)       // Material3设计
-            implementation(compose.ui)              // UI组件工具集
+        val commonMain by getting {
+            dependencies {
+                // Compose基础库
+                implementation(compose.runtime)         // 运行时核心
+                implementation(compose.foundation)      // 基础布局组件
+                implementation(compose.material3)       // Material3设计
+                implementation(compose.ui)              // UI组件工具集
 
-            // 资源管理
-            implementation(compose.components.resources)        // 跨平台资源支持
-            implementation(compose.components.uiToolingPreview) // 预览工具
+                // 资源管理
+                implementation(compose.components.resources)        // 跨平台资源支持
+                implementation(compose.components.uiToolingPreview) // 预览工具
 
-            // Android生命周期组件（跨平台）
-            implementation(libs.androidx.lifecycle.viewmodel)       // ViewModel
-            implementation(libs.androidx.lifecycle.runtimeCompose)  // 生命周期与Compose集成
+                // Android生命周期组件（跨平台）
+                implementation(libs.androidx.lifecycle.viewmodel)       // ViewModel
+                implementation(libs.androidx.lifecycle.runtimeCompose)  // 生命周期与Compose集成
 
-            // 根据KMP官网教程 添加处理日期的跨平台库
-            implementation(libs.kotlinx.datetime)
+                // 根据KMP官网教程 添加处理日期的跨平台库
+                implementation(libs.kotlinx.datetime)
 
-            // Material图标扩展
-            implementation(libs.material.icons.core)
+                // Material图标扩展
+                implementation(libs.material.icons.core)
+
+                // JSON处理
+                implementation(libs.kotlinx.serialization.json)
+            }
+            kotlin.srcDir("src/commonGenerated/kotlin")
+            resources.srcDir("src/commonMain/composeResources")
         }
 
         // 公共测试源码集
@@ -96,7 +105,7 @@ kotlin {
         // 桌面平台依赖
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)        // 桌面原生集成
-        implementation(libs.kotlinx.coroutinesSwing)         // 协程Swing支持
+            implementation(libs.kotlinx.coroutinesSwing)         // 协程Swing支持
         }
 
         // 根据KMP官网教程 在网页端添加处理日期的跨平台库
@@ -146,4 +155,48 @@ android {
 // ---------------------------
 dependencies {
     debugImplementation(compose.uiTooling) // Compose UI调试工具
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(project(":localization-processor"))
+    ksp(project(":localization-processor"))
+}
+
+ksp {
+    arg(
+        "localization.json.path",
+        project.file("src/commonMain/kotlin/org/dsqrwym/shared/localization").absolutePath
+    )
+    arg("baseLocaleFile", "zh-CN.json")
+    arg("localization.output.package", "org.dsqrwym.shared.localization")
+    arg("localization.output.file", "SharedLanguage")
+    arg("localization.manage.package", "org.dsqrwym.shared.localization.LocalizationManager")
+}
+
+
+val copyGeneratedLanguageByKspToCommon by tasks.registering(Copy::class) {
+    val destinationDir = layout.projectDirectory.dir("src/commonGenerated/kotlin/org/dsqrwym/shared/language")
+
+    from(layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")) {
+        include("SharedLanguage.kt")  // 只拷贝这个文件
+        val firstLineReplaced = mutableListOf(false)
+        // Kotlin 不允许在 lambda 内修改外部 var 所以用这个mutable对象
+        // 使用 filter 修改内容
+        filter { line ->
+            // 这里用一个标志控制只替换第一行
+            if (!firstLineReplaced[0]) {
+                firstLineReplaced[0] = true
+                "package org.dsqrwym.shared.language"
+            } else {
+                line
+            }
+        }
+    }
+    into(destinationDir)
+
+    doFirst {
+        println("Copying and modifying SharedLanguage.kt to $destinationDir")
+    }
+}
+
+tasks.named("compileKotlinMetadata") {
+    finalizedBy(copyGeneratedLanguageByKspToCommon)
 }

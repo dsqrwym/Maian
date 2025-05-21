@@ -4,9 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
 import org.dsqrwym.shared.drawable.getImageMobileBackground
+import org.dsqrwym.shared.localization.LocalizationManager
+import org.dsqrwym.shared.localization.SharedLanguage
 import org.dsqrwym.shared.ui.component.BackgroundImage
 
 class MainActivity : ComponentActivity() {
@@ -14,15 +18,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+
         setContent {
             App()
+            Text(org.dsqrwym.shared.language.SharedLanguage.login.background.content_description.get())
+            Text(SharedLanguage.login.background.content_description.get())
         }
     }
 }
 
 @Composable
 fun LoginScreen() {
-   BackgroundImage(getImageMobileBackground(), "Login Screen Background")
+   BackgroundImage(getImageMobileBackground())
+
 }
 
 

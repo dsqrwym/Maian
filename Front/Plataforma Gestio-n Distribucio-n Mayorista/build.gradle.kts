@@ -6,4 +6,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    id("dev.icerock.mobile.multiplatform-resources") version "0.24.5"
+    kotlin("jvm") version "2.1.21" apply false
+}
+
+buildscript {
+    dependencies {
+        classpath(kotlin("gradle-plugin", version = "2.1.21"))
+    }
 }

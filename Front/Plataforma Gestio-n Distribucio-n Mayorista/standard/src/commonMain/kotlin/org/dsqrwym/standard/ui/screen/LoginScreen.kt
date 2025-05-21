@@ -6,5 +6,5 @@ import org.dsqrwym.shared.ui.component.BackgroundImage
 
 @Composable
 fun LoginScreen() {
-    BackgroundImage(getImageMobileBackground(), "Login Screen Background")
+    BackgroundImage(getImageMobileBackground())
 }
