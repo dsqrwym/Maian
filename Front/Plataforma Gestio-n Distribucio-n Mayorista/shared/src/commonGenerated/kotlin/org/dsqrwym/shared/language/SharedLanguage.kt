@@ -10,10 +10,7 @@ object SharedLanguage {
                 const val KEY = "login.background.content_description"
                 fun get() = LocalizationManager.getString(KEY)
             }
-
         }
-
     }
-
 }
 
