@@ -165,18 +165,18 @@ ksp {
         "localization.json.path",
         project.file("src/commonMain/kotlin/org/dsqrwym/shared/localization").absolutePath
     )
-    arg("baseLocaleFile", "zh-CN.json")
+    arg("localization.base.locale", "zh-CN")
     arg("localization.output.package", "org.dsqrwym.shared.localization")
     arg("localization.output.file", "SharedLanguage")
-    arg("localization.manage.package", "org.dsqrwym.shared.localization.LocalizationManager")
 }
 
 
 val copyGeneratedLanguageByKspToCommon by tasks.registering(Copy::class) {
+    val sourceDir = layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")
     val destinationDir = layout.projectDirectory.dir("src/commonGenerated/kotlin/org/dsqrwym/shared/language")
-
+    /*
     from(layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")) {
-        include("SharedLanguage.kt")  // 只拷贝这个文件
+        include("*.kt")
         val firstLineReplaced = mutableListOf(false)
         // Kotlin 不允许在 lambda 内修改外部 var 所以用这个mutable对象
         // 使用 filter 修改内容
@@ -190,6 +190,27 @@ val copyGeneratedLanguageByKspToCommon by tasks.registering(Copy::class) {
             }
         }
     }
+    */
+
+    from(sourceDir) {
+        include("**/*.kt")
+        filteringCharset = "UTF-8"
+
+        // 针对每个文件执行
+        eachFile {
+            val originalLines = file.readLines()
+            val modifiedLines = originalLines.toMutableList()
+
+            // 替换第一行为目标 package
+            if (modifiedLines.isNotEmpty()) {
+                modifiedLines[0] = "package org.dsqrwym.shared.language"
+            }
+
+            // 重写文件内容
+            file.writeText(modifiedLines.joinToString("\n"))
+        }
+    }
+
     into(destinationDir)
 
     doFirst {

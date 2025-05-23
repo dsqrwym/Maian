@@ -9,7 +9,8 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import org.dsqrwym.shared.language.SharedLanguage
+import org.dsqrwym.shared.language.SharedLanguageMap
+
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -23,7 +24,7 @@ fun BackgroundImage(backgroundImage: DrawableResource) {
 
         Image(
             painter = painterResource(backgroundImage),
-            contentDescription = SharedLanguage.login.background.content_description.get(),
+            contentDescription = SharedLanguageMap.currentStrings.value.login_background_content_description,
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
