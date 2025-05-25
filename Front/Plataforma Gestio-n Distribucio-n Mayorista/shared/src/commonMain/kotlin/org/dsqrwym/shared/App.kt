@@ -2,6 +2,7 @@ package org.dsqrwym.shared
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.dsqrwym.shared.theme.DarkAppColorScheme
+import org.dsqrwym.shared.theme.LightAppColorScheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
@@ -49,7 +52,10 @@ fun App() {
             }
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
                     Image(painterResource(Res.drawable.image_vertical_background), null)
                     Text("Compose: $greeting")
@@ -59,11 +65,22 @@ fun App() {
     }
 }
 
-fun todayDate(): String{
+@Composable
+@Preview
+fun AppMain(content: @Composable () -> Unit) {
+    val isDarkTheme = isSystemInDarkTheme()
+    MaterialTheme (
+        colorScheme = if (isDarkTheme) DarkAppColorScheme else LightAppColorScheme
+    ) {
+        content()
+    }
+}
+
+fun todayDate(): String {
     fun LocalDateTime.format() = toString()
 
     val now = Clock.System.now()
-    val zone =  TimeZone.currentSystemDefault()
+    val zone = TimeZone.currentSystemDefault()
 
-    return  now.toLocalDateTime(zone).format().replace("T","")
+    return now.toLocalDateTime(zone).format().replace("T", "")
 }

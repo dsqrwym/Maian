@@ -2,11 +2,14 @@ package org.dsqrwym.standard
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import kotlinx.browser.document
+import org.dsqrwym.shared.AppMain
+import org.dsqrwym.standard.ui.screen.LoginScreen
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    ComposeViewport(document.body!!) {
-        App()
+    ComposeViewport(viewportContainerId = "compose-root") {
+        AppMain {
+            LoginScreen()
+        }
     }
 }
