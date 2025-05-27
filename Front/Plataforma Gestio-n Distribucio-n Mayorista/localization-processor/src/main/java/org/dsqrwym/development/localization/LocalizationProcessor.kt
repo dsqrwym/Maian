@@ -212,7 +212,7 @@ class LocalizationProcessor(
             writer.appendLine("import androidx.compose.runtime.derivedStateOf")
             writer.appendLine()
             writer.appendLine("/** Provides a map of generated language implementations. Do not edit manually. */")
-            writer.appendLine("internal object $fileName {") // internal 限制其使用范围
+            writer.appendLine("object $fileName {") // internal 限制其使用范围
             // 添加默认语言常量
             writer.appendLine("    private const val DEFAULT_LANGUAGE = \"zh-CN\"")
             // 添加状态管理

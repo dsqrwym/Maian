@@ -1,7 +1,10 @@
 {
   "login": {
     "background": {
-      "content_description": "Login Screen Background"
+      "content_description": "登录界面的背景"
+    },
+    "button": {
+      "back_button_content_description": "返回按钮"
     }
   }
 }

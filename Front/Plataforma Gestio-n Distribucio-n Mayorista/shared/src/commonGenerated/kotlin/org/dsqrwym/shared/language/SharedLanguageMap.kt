@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.derivedStateOf
 
 /** Provides a map of generated language implementations. Do not edit manually. */
-internal object SharedLanguageMap {
+object SharedLanguageMap {
     private const val DEFAULT_LANGUAGE = "zh-CN"
     private val _currentLanguage = mutableStateOf(DEFAULT_LANGUAGE)
 

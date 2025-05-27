@@ -70,6 +70,10 @@ kotlin {
                 implementation(compose.components.uiToolingPreview)
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
+
+                // Material图标扩展
+                implementation(libs.material.icons.core)
+
                 implementation(project(":shared"))
             }
         }
