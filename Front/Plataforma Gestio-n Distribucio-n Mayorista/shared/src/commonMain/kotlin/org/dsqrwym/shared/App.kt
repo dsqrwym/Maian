@@ -3,14 +3,16 @@ package org.dsqrwym.shared
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -69,12 +71,18 @@ fun App() {
 
 @Composable
 @Preview
-fun AppMain(content: @Composable () -> Unit) {
+fun AppRoot(content: @Composable () -> Unit) {
     val isDarkTheme = isSystemInDarkTheme()
     MaterialTheme (
         colorScheme = if (isDarkTheme) DarkAppColorScheme else LightAppColorScheme
     ) {
-        content()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.systemBars)
+        ) {
+            content()
+        }
     }
 }
 

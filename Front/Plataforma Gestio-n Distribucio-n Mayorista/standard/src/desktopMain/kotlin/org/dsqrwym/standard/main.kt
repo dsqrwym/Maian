@@ -2,7 +2,7 @@ package org.dsqrwym.standard
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import org.dsqrwym.shared.AppMain
+import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.standard.ui.screen.LoginScreen
 
 fun main() = application {
@@ -10,7 +10,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Plataforma Gestio-n Distribucio-n Mayorista",
     ) {
-        AppMain {
+        AppRoot {
             LoginScreen()
         }
     }
