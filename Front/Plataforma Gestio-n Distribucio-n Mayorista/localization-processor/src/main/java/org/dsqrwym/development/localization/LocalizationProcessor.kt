@@ -113,7 +113,6 @@ class LocalizationProcessor(
                 return@forEach // continue to next file
             }
 
-
             val langClassName = generateLangObject(
                 localeNameFromFile,
                 interfaceProperties, // 使用从基础区域设置获取的属性列表

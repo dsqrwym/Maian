@@ -90,6 +90,8 @@ kotlin {
                 // Material图标扩展
                 implementation(libs.material.icons.core)
 
+                // Haze 核心库 利用各个平台API实现毛玻璃效果
+                implementation(libs.haze)
                 // JSON处理
                 implementation(libs.kotlinx.serialization.json)
             }
@@ -156,8 +158,9 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling) // Compose UI调试工具
     implementation(kotlin("stdlib-jdk8"))
-    implementation(project(":localization-processor"))
-    ksp(project(":localization-processor"))
+    // implementation(project(":localization-processor"))
+    // ksp(project(":localization-processor"))
+    kspCommonMainMetadata(project(":localization-processor"))
 }
 
 ksp {
