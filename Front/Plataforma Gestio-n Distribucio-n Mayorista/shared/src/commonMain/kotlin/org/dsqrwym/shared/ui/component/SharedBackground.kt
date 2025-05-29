@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -19,11 +17,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.hazeChild
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import dev.chrisbanes.haze.rememberHazeState
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -34,8 +29,9 @@ fun BackgroundImage(
     backgroundImage: DrawableResource,
     blurRadius: Dp = 0.dp,
     glassShape: RoundedCornerShape = RoundedCornerShape(0.dp), // 磨砂玻璃层的形状
-    glassTintColor: Color = Color.Gray.copy(alpha = 0.2f), // 磨砂玻璃层的自定义颜色和透明度
-    content: @Composable () -> Unit) {
+    glassTintColor: Color = Color.Gray.copy(alpha = 0.3f), // 磨砂玻璃层的自定义颜色和透明度
+    content: @Composable () -> Unit
+) {
     val hazeState = remember { HazeState(initialBlurEnabled = true) }
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -43,9 +39,9 @@ fun BackgroundImage(
         val originalWidth = if (isLandscape) maxHeight else maxWidth
         val originalHeight = if (isLandscape) maxWidth else maxHeight
         val scaleYFactor =
-            if (isLandscape && originalWidth > 0.dp) maxWidth / originalWidth * 1.08f else 1.08f
+            if (isLandscape && originalWidth > 0.dp) maxWidth / originalWidth * 1.1f else 1.1f
         val scaleXFactor =
-            if (!isLandscape && originalHeight > 0.dp) maxHeight / originalHeight * 1.08f else 1.08f
+            if (!isLandscape && originalHeight > 0.dp) maxHeight / originalHeight * 1.1f else 1.1f
 
         val modifier = Modifier
             .fillMaxSize()
@@ -60,14 +56,13 @@ fun BackgroundImage(
                 state = hazeState
             )
         }
-
+        // 背景图片
         Image(
             painter = painterResource(backgroundImage),
             contentDescription = SharedLanguageMap.currentStrings.value.login_background_content_description,
             modifier = modifier,
             contentScale = if (isLandscape) ContentScale.FillBounds else ContentScale.Crop
         )
-
         // 磨砂玻璃层：应用 hazeChild，并在其上方放置传入的内容
         if (blurRadius > 0.dp) {
             Box(
@@ -82,12 +77,9 @@ fun BackgroundImage(
                             backgroundColor = glassTintColor
                         )
                     }
-            ) {
-                // 将传入的内容绘制到磨砂玻璃层上方
-                content()
-            }
-        }else{
-            content()
+            )
         }
+        // 前景内容
+        content()
     }
 }
