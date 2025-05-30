@@ -4,7 +4,21 @@
       "content_description": "登录界面的背景"
     },
     "button": {
-      "back_button_content_description": "返回按钮"
+      "back_button_content_description": "返回按钮",
+      "login": "登录",
+      "forget_password": "忘记密码",
+      "other_login_methods": "其他登录方式"
+    },
+    "title": "登录",
+    "subtitle": "请先登录以继续使用",
+    "field": {
+      "username_or_email_label": "用户名或者邮箱",
+      "username_or_email_placeholder": "请输入用户名或者邮箱",
+      "password_label": "密码",
+      "password_placeholder": "请输入密码"
+    },
+    "password": {
+      "toggle_visibility": "切换密码可见性"
     }
   }
 }

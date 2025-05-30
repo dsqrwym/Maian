@@ -28,6 +28,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.dsqrwym.shared.theme.DarkAppColorScheme
 import org.dsqrwym.shared.theme.LightAppColorScheme
+import org.dsqrwym.shared.theme.MiSansNormalTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
@@ -75,7 +76,8 @@ fun App() {
 fun AppRoot(content: @Composable () -> Unit) {
     val isDarkTheme = isSystemInDarkTheme()
     MaterialTheme (
-        colorScheme = if (isDarkTheme) DarkAppColorScheme else LightAppColorScheme
+        colorScheme = if (isDarkTheme) DarkAppColorScheme else LightAppColorScheme,
+        typography = MiSansNormalTypography()
     ) {
         Box(
             modifier = Modifier

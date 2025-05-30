@@ -19,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +39,7 @@ import org.dsqrwym.shared.drawable.getImageMobileBackground
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.component.BackgroundImage
 import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
+import org.dsqrwym.shared.ui.component.SharedTextButton
 
 @Composable
 fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () -> Unit = {}) {
@@ -69,6 +69,7 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 Modifier.fillMaxSize()
             }
 
+            // 主体内容
             Column(
                 modifier = contentModifier
                     .padding(26.dp)
@@ -90,7 +91,7 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 }
                 // 标题
                 Text(
-                    text = "登录",
+                    text = SharedLanguageMap.currentStrings.value.login_title, // 登录
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 39.sp,
                     fontWeight = FontWeight.W800,
@@ -98,15 +99,15 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 )
                 // 副标题
                 Text(
-                    text = "请先登录以继续使用",
+                    text = SharedLanguageMap.currentStrings.value.login_subtitle, // 请先登录以继续使用
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
-                Spacer(modifier = Modifier.weight(0.3f))
+                Spacer(modifier = Modifier.weight(0.68f))
 
                 OutlinedTextField(
-                    label = { Text("用户名或者邮箱", color = MaterialTheme.colorScheme.onBackground) },
-                    placeholder = { Text("请输入用户名或者邮箱", color = MaterialTheme.colorScheme.surfaceVariant) },
+                    label = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_label /*用户名或者邮箱*/, color = MaterialTheme.colorScheme.onBackground) },
+                    placeholder = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder /*"请输入用户名或者邮箱"*/, color = MaterialTheme.colorScheme.surfaceVariant) },
                     value = usernameOrEmail,
                     onValueChange = { usernameOrEmail = it },
                     modifier = Modifier.fillMaxWidth()
@@ -116,8 +117,8 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
 
                 // 密码输入框（可显示/隐藏密码）
                 OutlinedTextField(
-                    label = { Text("密码", color = MaterialTheme.colorScheme.onBackground) },
-                    placeholder = { Text("请输入密码", color = MaterialTheme.colorScheme.surfaceVariant) },
+                    label = { Text(SharedLanguageMap.currentStrings.value.login_field_password_label/*"密码"*/, color = MaterialTheme.colorScheme.onBackground) },
+                    placeholder = { Text(SharedLanguageMap.currentStrings.value.login_field_password_placeholder/*"请输入密码"*/, color = MaterialTheme.colorScheme.surfaceVariant) },
                     value = password,
                     onValueChange = { password = it },
                     singleLine = true,
@@ -125,7 +126,11 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(imageVector = if(passwordVisible) Visibility else VisibilityOff, contentDescription = "切换密码可见性")
+                            Icon(
+                                imageVector = if(passwordVisible) Visibility else VisibilityOff,
+                                contentDescription = SharedLanguageMap.currentStrings.value.login_password_toggle_visibility/*"切换密码可见性"*/,
+                                tint = if (passwordVisible) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline
+                            )
                         }
                     }
                 )
@@ -133,14 +138,8 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 Spacer(modifier = Modifier.padding(vertical = 13.dp))
 
                 // 忘记密码
-                TextButton(
-                    modifier = Modifier.align(Alignment.End),
-                    onClick = onForgetPasswordClick
-                ) {
-                    Text(
-                        text = "忘记密码？",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                SharedTextButton(Modifier.align(Alignment.End),SharedLanguageMap.currentStrings.value.login_button_forget_password/*"忘记密码"*/) {
+                    onForgetPasswordClick()
                 }
 
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
@@ -151,17 +150,19 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     onClick = {}
                 ) {
                     Text(
-                        text = "登录",
+                        text = SharedLanguageMap.currentStrings.value.login_button_login/*"登录"*/,
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 18.5.sp
                     )
                 }
 
                 //分割线， 其他登录方式
-                SharedHorizontalDivider("其他登录方式")
+                SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods/*"其他登录方式"*/)
 
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(0.32f))
 
+                //底部留白
+                Spacer(modifier = Modifier.padding(vertical = 10.dp))
             }
         }
     }
