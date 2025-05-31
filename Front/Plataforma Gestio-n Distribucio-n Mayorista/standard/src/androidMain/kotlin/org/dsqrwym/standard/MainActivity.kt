@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,7 +48,9 @@ import org.dsqrwym.shared.drawable.Visibility
 import org.dsqrwym.shared.drawable.VisibilityOff
 import org.dsqrwym.shared.drawable.getImageMobileBackground
 import org.dsqrwym.shared.language.SharedLanguageMap
+import org.dsqrwym.shared.theme.DarkAppColorScheme
 import org.dsqrwym.shared.ui.component.BackgroundImage
+import org.dsqrwym.shared.ui.component.GoogleSignInButton
 import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
 import org.dsqrwym.shared.ui.component.SharedTextButton
 
@@ -76,7 +82,7 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
             val contentModifier = if (notMobile) {
                 Modifier
                     .widthIn(max = 600.dp)
-                    .heightIn(max = 700.dp)
+                    .heightIn(max = 720.dp)
                     .graphicsLayer { // 加alpha保证不会和shadow一样出现边缘更透的情况
                         shadowElevation = 20.dp.toPx()
                         shape = RoundedCornerShape(16.dp)
@@ -123,7 +129,7 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
-                Spacer(modifier = Modifier.weight(0.68f))
+                Spacer(modifier = Modifier.weight(1f))
 
                 OutlinedTextField(
                     label = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_label /*用户名或者邮箱*/, color = MaterialTheme.colorScheme.onBackground) },
@@ -179,10 +185,12 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 //分割线， 其他登录方式
                 SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods/*"其他登录方式"*/)
 
-                Spacer(modifier = Modifier.weight(0.32f))
+                Column(modifier = Modifier.weight(1f)){
+                    GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme)
+                }
 
                 //底部留白
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
             }
         }
     }
