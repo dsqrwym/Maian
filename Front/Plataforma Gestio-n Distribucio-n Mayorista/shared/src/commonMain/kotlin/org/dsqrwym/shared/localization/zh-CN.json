@@ -7,7 +7,9 @@
       "back_button_content_description": "返回按钮",
       "login": "登录",
       "forget_password": "忘记密码",
-      "other_login_methods": "其他登录方式"
+      "other_login_methods": "其他登录方式",
+      "google_login": "Sign in with Google",
+      "google_logo_content_description": "Google 标志"
     },
     "title": "登录",
     "subtitle": "请先登录以继续使用",

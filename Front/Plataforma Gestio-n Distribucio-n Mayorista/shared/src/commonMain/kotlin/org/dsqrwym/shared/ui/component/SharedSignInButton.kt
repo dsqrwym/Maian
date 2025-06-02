@@ -2,125 +2,127 @@ package org.dsqrwym.shared.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.dsqrwym.shared.Greeting
+import org.dsqrwym.shared.PlatformType
 import org.dsqrwym.shared.drawable.GoogleLogo
+import org.dsqrwym.shared.language.SharedLanguageMap
+import org.jetbrains.compose.resources.Font
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Roboto_Regular
 /*
 @Composable
-fun GoogleSignInButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+fun GoogleSignInButtonIconOnly(
+    modifier: Modifier = Modifier.size(44.dp),
+    isDarkTheme: Boolean = false,
+    shape: Shape = ButtonDefaults.shape,
+    onClick: () -> Unit,
 ) {
-    val buttonColors = ButtonDefaults.outlinedButtonColors(
-        containerColor = Color.White,
-        contentColor = Color(0xFF1F1F1F)
-    )
+    val buttonColor = getButtonColor(isDarkTheme)
+    val borderStroke = getBorderStroke(isDarkTheme)
 
-    OutlinedButton(
+    Button(
+        modifier = modifier.size(if (isAndroidPlatform()) 40.dp else 44.dp),
+        contentPadding = PaddingValues(0.dp),
         onClick = onClick,
-        modifier = modifier
-            .height(40.dp)
-            .defaultMinSize(minWidth = 64.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .border(
-                BorderStroke(1.dp, Color(0xFF747775)),
-                shape = RoundedCornerShape(20.dp)
-            ),
-        colors = buttonColors,
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+        shape = shape,
+        colors = buttonColor,
+        border = borderStroke,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Google 图标
-            Image(
-                imageVector = GoogleLogo,
-                contentDescription = "Google 图标",
-                modifier = Modifier
-                    .size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-
-            // 文字
-            Text(
-                "Sign in with Google",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        GoogleIcon()
     }
 }
- */
+*/
 @Composable
 fun GoogleSignInButton(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.height(44.dp),
     isDarkTheme: Boolean = false,
-    onClick: () -> Unit = {}
+    text: String = SharedLanguageMap.currentStrings.value.login_button_google_login,
+    shape: Shape = ButtonDefaults.shape,
+    fontSize: TextUnit = 14.sp,
+    onClick: () -> Unit,
 ) {
-    val backgroundColor = if (isDarkTheme) Color(0xFF131314) else Color.White
-    val contentColor = if (isDarkTheme) Color(0xFFE3E3E3) else Color(0xFF1F1F1F)
-    val borderColor = if (isDarkTheme) Color(0xFF8E918F) else Color(0xFF747775)
 
-    Surface(
+
+    val buttonColor = getButtonColor(isDarkTheme)
+    val borderStroke = getBorderStroke(isDarkTheme)
+
+    val horizontalPadding = if (isAndroidPlatform()) 12.dp else 16.dp
+    val iconTextPadding = if (isAndroidPlatform()) 10.dp else 12.dp
+    Button(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = horizontalPadding),
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor,
-        border = BorderStroke(1.dp, borderColor),
-        modifier = modifier
-            .height(40.dp)
-            .defaultMinSize(minWidth = 64.dp),
-        shadowElevation = if (isDarkTheme) 1.dp else 0.dp,
-        tonalElevation = 0.dp
+        shape = shape,
+        colors = buttonColor,
+        border = borderStroke,
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Icon(
-                imageVector = GoogleLogo,
-                contentDescription = "Google logo",
-                modifier = Modifier.size(20.dp),
-                tint = Color.Unspecified
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            GoogleIcon()
+            Spacer(modifier = Modifier.width(iconTextPadding))
             Text(
-                text = "Sign in with Google",
-                color = contentColor,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
+                text = text,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                fontSize = fontSize,
+                fontFamily = FontFamily(
+                    Font(resource = Res.font.Roboto_Regular),
+                    Font(resource = Res.font.MiSansVF)
+                )
             )
         }
+
     }
+}
+
+fun isAndroidPlatform(): Boolean {
+    return Greeting().getPlatformType() == PlatformType.Android
+}
+
+
+@Composable
+private fun GoogleIcon() {
+    Image(
+        modifier = Modifier.size(20.dp),
+        imageVector = GoogleLogo,
+        contentDescription = SharedLanguageMap.currentStrings.value.login_button_google_logo_content_description
+    )
+}
+
+
+private fun getBorderStroke(isDarkTheme: Boolean): BorderStroke {
+    val borderStroke = if (isDarkTheme) BorderStroke(
+        width = 1.dp,
+        color = Color(0xFF8E918F)
+    ) else BorderStroke(
+        width = 1.dp,
+        color = Color(0xFF747775),
+    )
+    return borderStroke
+}
+
+@Composable
+private fun getButtonColor(isDarkTheme: Boolean): ButtonColors {
+    val containerColor = if (isDarkTheme) Color(0xFF131314) else Color(0xFFFFFFFF)
+    val contentColor = if (isDarkTheme) Color(0xFFE3E3E3) else Color(0xFF1F1F1F)
+
+    return ButtonDefaults.buttonColors(containerColor = containerColor, contentColor = contentColor)
 }

@@ -4,6 +4,10 @@ class Greeting {
     private val platform = getPlatform()
 
     fun greet(): String {
-        return "Hello, ${platform.name}!"
+        return "Hello, ${platform.type.name}!"
+    }
+
+    fun getPlatformType(): PlatformType {
+        return platform.type
     }
 }

@@ -1,7 +1,7 @@
 package org.dsqrwym.shared
 
 class WasmPlatform: Platform {
-    override val name: String = "Web with Kotlin/Wasm"
+    override val type = PlatformType.Web
 }
 
 actual fun getPlatform(): Platform = WasmPlatform()

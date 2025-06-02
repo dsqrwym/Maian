@@ -162,7 +162,7 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods/*"其他登录方式"*/)
 
                 Column(modifier = Modifier.weight(1f)){
-                    GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme)
+                    GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme){}
                 }
 
                 //底部留白
