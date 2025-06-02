@@ -110,7 +110,9 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                         Icon(
                             Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                             SharedLanguageMap.currentStrings.value.login_button_back_button_content_description,
-                            modifier = Modifier.fillMaxSize().scale(1.3f),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .scale(1.3f),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
@@ -121,7 +123,9 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 39.sp,
                     fontWeight = FontWeight.W800,
-                    modifier = Modifier.align(Alignment.Start).padding(vertical = 26.dp)
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(vertical = 26.dp)
                 )
                 // 副标题
                 Text(
@@ -132,10 +136,25 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 Spacer(modifier = Modifier.weight(1f))
 
                 OutlinedTextField(
-                    label = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_label /*用户名或者邮箱*/, color = MaterialTheme.colorScheme.onBackground) },
-                    placeholder = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder /*"请输入用户名或者邮箱"*/, color = MaterialTheme.colorScheme.surfaceVariant) },
+                    label = {
+                        Text(
+                            SharedLanguageMap.currentStrings.value.login_field_username_or_email_label /*用户名或者邮箱*/,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder /*"请输入用户名或者邮箱"*/,
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    },
                     value = usernameOrEmail,
-                    onValueChange = { usernameOrEmail = it },
+                    onValueChange = {
+                        if (it.length <= 50 && !it.contains("\n")) {
+                            usernameOrEmail = it
+                        }
+                    },
+                    singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -143,8 +162,18 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
 
                 // 密码输入框（可显示/隐藏密码）
                 OutlinedTextField(
-                    label = { Text(SharedLanguageMap.currentStrings.value.login_field_password_label/*"密码"*/, color = MaterialTheme.colorScheme.onBackground) },
-                    placeholder = { Text(SharedLanguageMap.currentStrings.value.login_field_password_placeholder/*"请输入密码"*/, color = MaterialTheme.colorScheme.surfaceVariant) },
+                    label = {
+                        Text(
+                            SharedLanguageMap.currentStrings.value.login_field_password_label/*"密码"*/,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            SharedLanguageMap.currentStrings.value.login_field_password_placeholder/*"请输入密码"*/,
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    },
                     value = password,
                     onValueChange = { password = it },
                     singleLine = true,
@@ -153,7 +182,7 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(
-                                imageVector = if(passwordVisible) Visibility else VisibilityOff,
+                                imageVector = if (passwordVisible) Visibility else VisibilityOff,
                                 contentDescription = SharedLanguageMap.currentStrings.value.login_password_toggle_visibility/*"切换密码可见性"*/,
                                 tint = if (passwordVisible) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline
                             )
@@ -164,7 +193,10 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 Spacer(modifier = Modifier.padding(vertical = 13.dp))
 
                 // 忘记密码
-                SharedTextButton(Modifier.align(Alignment.End),SharedLanguageMap.currentStrings.value.login_button_forget_password/*"忘记密码"*/) {
+                SharedTextButton(
+                    Modifier.align(Alignment.End),
+                    SharedLanguageMap.currentStrings.value.login_button_forget_password/*"忘记密码"*/
+                ) {
                     onForgetPasswordClick()
                 }
 
@@ -185,8 +217,8 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                 //分割线， 其他登录方式
                 SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods/*"其他登录方式"*/)
 
-                Column(modifier = Modifier.weight(1f)){
-                    GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme){
+                Column(modifier = Modifier.weight(1f)) {
+                    GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme) {
 
                     }
                 }
@@ -205,6 +237,7 @@ fun AppAndroidDarkPreview() {
         LoginScreen()
     }
 }
+
 @Preview(widthDp = 850, heightDp = 390)
 @Composable
 fun AppAndroidPreview() {

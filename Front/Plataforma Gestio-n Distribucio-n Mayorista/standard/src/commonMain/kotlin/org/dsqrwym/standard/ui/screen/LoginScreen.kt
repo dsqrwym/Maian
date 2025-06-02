@@ -111,7 +111,12 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     label = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_label /*用户名或者邮箱*/, color = MaterialTheme.colorScheme.onBackground) },
                     placeholder = { Text(SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder /*"请输入用户名或者邮箱"*/, color = MaterialTheme.colorScheme.surfaceVariant) },
                     value = usernameOrEmail,
-                    onValueChange = { usernameOrEmail = it },
+                    onValueChange = {
+                        if (it.length <= 50 && !it.contains("\n")) {
+                            usernameOrEmail = it
+                        }
+                    },
+                    singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
 
