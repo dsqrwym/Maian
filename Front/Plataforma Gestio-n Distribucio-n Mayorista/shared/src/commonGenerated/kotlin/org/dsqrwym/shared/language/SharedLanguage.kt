@@ -16,4 +16,12 @@ interface SharedLanguage {
     val login_password_toggle_visibility: String
     val login_subtitle: String
     val login_title: String
+    val login_validation_email_domain_not_supported: String
+    val login_validation_password_empty: String
+    val login_validation_password_missing_digit: String
+    val login_validation_password_missing_lowercase: String
+    val login_validation_password_missing_uppercase: String
+    val login_validation_password_too_short: String
+    val login_validation_username_length_invalid: String
+    val login_validation_username_or_email_empty: String
 }

@@ -21,6 +21,16 @@
     },
     "password": {
       "toggle_visibility": "切换密码可见性"
+    },
+    "validation": {
+      "username_or_email_empty": "用户名或邮箱不能为空",
+      "username_length_invalid": "用户名长度应在3到30个字符之间",
+      "email_domain_not_supported": "不支持 example.com 邮箱",
+      "password_empty": "密码不能为空",
+      "password_too_short": "密码长度至少为6个字符",
+      "password_missing_uppercase": "密码必须包含至少一个大写字母",
+      "password_missing_lowercase": "密码必须包含至少一个小写字母",
+      "password_missing_digit": "密码必须包含至少一个数字"
     }
   }
 }

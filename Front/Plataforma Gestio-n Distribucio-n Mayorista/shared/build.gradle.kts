@@ -65,6 +65,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)     // Compose预览支持
             implementation(libs.androidx.activity.compose)  // AndroidX兼容
+            implementation(libs.jmail) // 邮箱验证
         }
 
         // 公共主源码集（跨平台共享）
@@ -108,6 +109,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)        // 桌面原生集成
             implementation(libs.kotlinx.coroutinesSwing)         // 协程Swing支持
+            implementation(libs.jmail) // 邮箱验证
         }
 
         // 根据KMP官网教程 在网页端添加处理日期的跨平台库

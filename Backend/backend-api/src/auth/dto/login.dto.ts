@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsEmail, IsString, MinLength, IsStrongPassword, IsOptional, MaxLength, ValidateIf } from "class-validator";
+import { IsEmail, IsString, MinLength, IsStrongPassword, MaxLength, ValidateIf } from "class-validator";
 export class LoginDto {
     @ApiProperty({
         description: 'The user\'s password. Must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, and one number.',
