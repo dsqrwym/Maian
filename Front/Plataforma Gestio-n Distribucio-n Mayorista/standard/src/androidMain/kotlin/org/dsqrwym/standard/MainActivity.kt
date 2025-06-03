@@ -200,8 +200,6 @@ fun LoginContent(
         Column(modifier = Modifier.weight(1f)) {
             GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme) {}
         }
-
-        Spacer(modifier = Modifier.padding(vertical = 8.dp))
     }
 }
 

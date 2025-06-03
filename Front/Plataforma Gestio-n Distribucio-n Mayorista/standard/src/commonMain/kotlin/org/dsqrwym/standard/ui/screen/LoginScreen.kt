@@ -1,7 +1,6 @@
 package org.dsqrwym.standard.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -183,8 +182,6 @@ fun LoginContent(
         Column(modifier = Modifier.weight(1f)) {
             GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme) {}
         }
-
-        Spacer(modifier = Modifier.padding(vertical = 8.dp))
     }
 }
 
