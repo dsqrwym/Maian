@@ -1,0 +1,41 @@
+{
+  "login": {
+    "background": {
+      "content_description": "Fondo de la pantalla de inicio de sesión"
+    },
+    "button": {
+      "back_button_content_description": "Botón de retroceso",
+      "login": "Iniciar sesión",
+      "forget_password": "¿Olvidaste tu contraseña?",
+      "other_login_methods": "Otros métodos de inicio de sesión",
+      "google_login": "Iniciar sesión con Google",
+      "google_logo_content_description": "Logo de Google"
+    },
+    "title": "Iniciar sesión",
+    "subtitle": "Por favor inicia sesión para continuar",
+    "field": {
+      "username_or_email_label": "Nombre de usuario o correo",
+      "username_or_email_placeholder": "Ingresa tu nombre de usuario o correo",
+      "password_label": "Contraseña",
+      "password_placeholder": "Ingresa tu contraseña"
+    },
+    "password": {
+      "toggle_visibility": "Mostrar u ocultar contraseña"
+    },
+    "icon_content_description": {
+      "email": "Icono de correo",
+      "person": "Icono de usuario",
+      "lock": "Icono de contraseña"
+    },
+    "validation": {
+      "username_or_email_empty": "El nombre de usuario o correo no puede estar vacío",
+      "username_length_invalid": "El nombre de usuario debe tener entre 3 y 30 caracteres",
+      "email_domain_not_supported": "No se admite el correo example.com",
+      "password_empty": "La contraseña no puede estar vacía",
+      "password_too_short": "La contraseña debe tener al menos 6 caracteres",
+      "password_missing_uppercase": "La contraseña debe contener al menos una letra mayúscula",
+      "password_missing_lowercase": "La contraseña debe contener al menos una letra minúscula",
+      "password_missing_digit": "La contraseña debe contener al menos un número"
+    }
+  }
+}

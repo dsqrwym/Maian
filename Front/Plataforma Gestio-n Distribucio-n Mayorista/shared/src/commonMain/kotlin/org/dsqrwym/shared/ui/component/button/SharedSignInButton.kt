@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component
+package org.dsqrwym.shared.ui.component.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -103,7 +104,8 @@ private fun GoogleIcon() {
     Image(
         modifier = Modifier.size(20.dp),
         imageVector = GoogleLogo,
-        contentDescription = SharedLanguageMap.currentStrings.value.login_button_google_logo_content_description
+        contentDescription = SharedLanguageMap.currentStrings.value.login_button_google_logo_content_description,
+        contentScale = ContentScale.Inside
     )
 }
 

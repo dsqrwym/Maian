@@ -11,6 +11,8 @@ object SharedLanguageMap {
     private val _currentLanguage = mutableStateOf(DEFAULT_LANGUAGE)
 
     private val map = mapOf(
+        "en" to LangEn,
+        "es" to LangEs,
         "zh-CN" to LangZhCn,
     )
 

@@ -1,0 +1,41 @@
+{
+  "login": {
+    "background": {
+      "content_description": "Login screen background"
+    },
+    "button": {
+      "back_button_content_description": "Back button",
+      "login": "Log In",
+      "forget_password": "Forgot Password",
+      "other_login_methods": "Other login methods",
+      "google_login": "Sign in with Google",
+      "google_logo_content_description": "Google logo"
+    },
+    "title": "Log In",
+    "subtitle": "Please log in to continue",
+    "field": {
+      "username_or_email_label": "Username or Email",
+      "username_or_email_placeholder": "Enter your username or email",
+      "password_label": "Password",
+      "password_placeholder": "Enter your password"
+    },
+    "password": {
+      "toggle_visibility": "Toggle password visibility"
+    },
+    "icon_content_description": {
+      "email": "Email icon",
+      "person": "User icon",
+      "lock": "Password icon"
+    },
+    "validation": {
+      "username_or_email_empty": "Username or email cannot be empty",
+      "username_length_invalid": "Username must be between 3 and 30 characters",
+      "email_domain_not_supported": "example.com emails are not supported",
+      "password_empty": "Password cannot be empty",
+      "password_too_short": "Password must be at least 6 characters",
+      "password_missing_uppercase": "Password must contain at least one uppercase letter",
+      "password_missing_lowercase": "Password must contain at least one lowercase letter",
+      "password_missing_digit": "Password must contain at least one number"
+    }
+  }
+}

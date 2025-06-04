@@ -1,43 +1,25 @@
 package org.dsqrwym.standard.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.drawable.Visibility
@@ -46,9 +28,12 @@ import org.dsqrwym.shared.drawable.getImageMobileBackground
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.theme.DarkAppColorScheme
 import org.dsqrwym.shared.ui.component.BackgroundImage
-import org.dsqrwym.shared.ui.component.GoogleSignInButton
 import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
-import org.dsqrwym.shared.ui.component.SharedTextButton
+import org.dsqrwym.shared.ui.component.button.GoogleSignInButton
+import org.dsqrwym.shared.ui.component.button.SharedLoginButton
+import org.dsqrwym.shared.ui.component.button.SharedTextButton
+import org.dsqrwym.shared.ui.component.outlinetextfield.SharedOutlinedTextField
+import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 
@@ -57,7 +42,6 @@ import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () -> Unit = {}) {
     var usernameOrEmail by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
 
     // Validation states
     var usernameOrEmailError by remember { mutableStateOf<String?>(null) }
@@ -108,15 +92,13 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
                     password = it
                     passwordError = validatePassword(it)
                 },
-                passwordVisible = passwordVisible,
-                onPasswordVisibilityToggle = { passwordVisible = !passwordVisible },
                 usernameOrEmailError = usernameOrEmailError,
                 passwordError = passwordError,
                 loginEnabled = loginEnabled.value,
                 passwordFocusRequester = passwordFocusRequester,
                 onBackButtonClick = onBackButtonClick,
                 onForgetPasswordClick = onForgetPasswordClick
-            ){
+            ) {
 
             }
         }
@@ -132,8 +114,6 @@ fun LoginContent(
     password: String,
     onPasswordChange: (String) -> Unit,
     passwordError: String?,
-    passwordVisible: Boolean,
-    onPasswordVisibilityToggle: () -> Unit,
     loginEnabled: Boolean,
     passwordFocusRequester: FocusRequester,
     onBackButtonClick: () -> Unit,
@@ -162,20 +142,29 @@ fun LoginContent(
             usernameOrEmailError,
             passwordFocusRequester
         )
-        Spacer(modifier = Modifier.padding(vertical = 13.dp))
+
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
         PasswordField(
             password,
             onPasswordChange,
             passwordError,
-            passwordVisible,
-            onPasswordVisibilityToggle,
             passwordFocusRequester,
             onLoginClick
         )
 
-        Spacer(modifier = Modifier.padding(vertical = 13.dp))
+        SharedTextButton(
+            modifier = Modifier.align(Alignment.End),
+            text = SharedLanguageMap.currentStrings.value.login_button_forget_password,
+            onClick = onForgetPasswordClick
+        )
 
-        LoginActions(onForgetPasswordClick, loginEnabled, onLoginClick)
+        Spacer(modifier = Modifier.padding(vertical = 26.dp))
+
+        SharedLoginButton(
+            loginEnabled = loginEnabled,
+            onLoginClick = onLoginClick
+        )
 
         SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods)
 
@@ -195,7 +184,7 @@ fun LoginTitleSection() {
             fontWeight = FontWeight.W800,
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(vertical = 26.dp)
+                .padding(vertical = 16.dp)
         )
         Text(
             text = SharedLanguageMap.currentStrings.value.login_subtitle,
@@ -211,46 +200,24 @@ fun UsernameOrEmailField(
     error: String?,
     focusRequester: FocusRequester
 ) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        label = {
-            Text(
-                SharedLanguageMap.currentStrings.value.login_field_username_or_email_label /*用户名或者邮箱*/,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        },
-        placeholder = {
-            Text(
-                SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder /*"请输入用户名或者邮箱"*/,
-                color = MaterialTheme.colorScheme.surfaceVariant
-            )
-        },
+    var isEmail by remember { mutableStateOf(true) }
+
+    SharedOutlinedTextField(
         value = value,
         onValueChange = {
             if (it.length <= 255 && !it.contains("\n")) {
                 onValueChange(it)
+                isEmail = validateEmail(it)
             }
         },
-        isError = error != null,
-        supportingText = {
-            error?.let {
-                Text(
-                    text = it,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next
-        ),
-        keyboardActions = KeyboardActions(
-            onNext = {
-                focusRequester.requestFocus()
-            }
-        )
+        error = error,
+        labelText = SharedLanguageMap.currentStrings.value.login_field_username_or_email_label, // "用户名或者邮箱"
+        placeholderText = SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder, // "请输入用户名或者邮箱"
+        leadingIcon = if (isEmail) Icons.Outlined.Email else Icons.Outlined.Person,
+        leadingIconContentDescription = if (isEmail) "用户图标" else "邮箱图标",
+        imeAction = ImeAction.Next,
+        onImeAction = { focusRequester.requestFocus() },
+        focusRequester = focusRequester
     )
 }
 
@@ -259,82 +226,35 @@ fun PasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     error: String?,
-    passwordVisible: Boolean,
-    onToggleVisibility: () -> Unit,
     focusRequester: FocusRequester,
     onLoginClick: () -> Unit
 ) {
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
-        label = {
-            Text(
-                SharedLanguageMap.currentStrings.value.login_field_password_label,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        },
-        placeholder = {
-            Text(
-                SharedLanguageMap.currentStrings.value.login_field_password_placeholder,
-                color = MaterialTheme.colorScheme.surfaceVariant
-            )
-        },
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    SharedOutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        singleLine = true,
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        error = error,
+        labelText = SharedLanguageMap.currentStrings.value.login_field_password_label, // 密码
+        placeholderText = SharedLanguageMap.currentStrings.value.login_field_password_placeholder, // "请输入密码"
+        leadingIcon = Icons.Outlined.Lock,
+        leadingIconContentDescription = "密码图标",
         trailingIcon = {
-            IconButton(onClick = onToggleVisibility) {
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
                     imageVector = if (passwordVisible) Visibility else VisibilityOff,
-                    contentDescription = SharedLanguageMap.currentStrings.value.login_password_toggle_visibility,
+                    contentDescription = SharedLanguageMap.currentStrings.value.login_password_toggle_visibility, // "切换密码可见性"
                     tint = if (passwordVisible) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline
                 )
             }
         },
-        isError = error != null,
-        supportingText = {
-            error?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
+        isPassword = true,
+        passwordVisibility = passwordVisible,
+        imeAction = ImeAction.Done,
+        onImeAction = {
+            onLoginClick()
+            focusRequester.freeFocus()
         },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                onLoginClick()
-                focusRequester.freeFocus()
-            }
-        )
+        focusRequester = focusRequester
     )
-}
-
-@Composable
-fun LoginActions(
-    onForgetPasswordClick: () -> Unit,
-    loginEnabled: Boolean,
-    onLoginClick: () -> Unit
-) {
-    Column {
-        SharedTextButton(
-            modifier = Modifier.align(Alignment.End),
-            text = SharedLanguageMap.currentStrings.value.login_button_forget_password,
-            onClick = onForgetPasswordClick
-        )
-
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            enabled = loginEnabled,
-            onClick = onLoginClick
-        ) {
-            Text(
-                text = SharedLanguageMap.currentStrings.value.login_button_login,
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.5.sp
-            )
-        }
-    }
 }

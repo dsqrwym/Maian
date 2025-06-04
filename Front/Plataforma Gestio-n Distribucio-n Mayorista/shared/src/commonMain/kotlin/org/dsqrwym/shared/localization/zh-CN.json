@@ -22,6 +22,11 @@
     "password": {
       "toggle_visibility": "切换密码可见性"
     },
+    "icon_content_description": {
+      "email": "邮箱图标",
+      "person": "用户图标",
+      "lock": "密码图标"
+    },
     "validation": {
       "username_or_email_empty": "用户名或邮箱不能为空",
       "username_length_invalid": "用户名长度应在3到30个字符之间",

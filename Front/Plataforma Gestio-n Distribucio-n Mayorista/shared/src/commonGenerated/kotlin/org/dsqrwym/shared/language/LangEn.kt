@@ -1,0 +1,30 @@
+package org.dsqrwym.shared.language
+
+/** Generated language object for locale 'en'. Do not edit manually. */
+internal object LangEn : SharedLanguage {
+    override val login_background_content_description: String = "Login screen background"
+    override val login_button_back_button_content_description: String = "Back button"
+    override val login_button_forget_password: String = "Forgot Password"
+    override val login_button_google_login: String = "Sign in with Google"
+    override val login_button_google_logo_content_description: String = "Google logo"
+    override val login_button_login: String = "Log In"
+    override val login_button_other_login_methods: String = "Other login methods"
+    override val login_field_password_label: String = "Password"
+    override val login_field_password_placeholder: String = "Enter your password"
+    override val login_field_username_or_email_label: String = "Username or Email"
+    override val login_field_username_or_email_placeholder: String = "Enter your username or email"
+    override val login_icon_content_description_email: String = "Email icon"
+    override val login_icon_content_description_lock: String = "Password icon"
+    override val login_icon_content_description_person: String = "User icon"
+    override val login_password_toggle_visibility: String = "Toggle password visibility"
+    override val login_subtitle: String = "Please log in to continue"
+    override val login_title: String = "Log In"
+    override val login_validation_email_domain_not_supported: String = "example.com emails are not supported"
+    override val login_validation_password_empty: String = "Password cannot be empty"
+    override val login_validation_password_missing_digit: String = "Password must contain at least one number"
+    override val login_validation_password_missing_lowercase: String = "Password must contain at least one lowercase letter"
+    override val login_validation_password_missing_uppercase: String = "Password must contain at least one uppercase letter"
+    override val login_validation_password_too_short: String = "Password must be at least 6 characters"
+    override val login_validation_username_length_invalid: String = "Username must be between 3 and 30 characters"
+    override val login_validation_username_or_email_empty: String = "Username or email cannot be empty"
+}

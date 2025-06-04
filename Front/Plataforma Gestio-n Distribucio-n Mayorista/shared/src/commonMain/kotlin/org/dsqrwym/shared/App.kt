@@ -4,15 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,13 +18,13 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.DarkAppColorScheme
 import org.dsqrwym.shared.theme.LightAppColorScheme
 import org.dsqrwym.shared.theme.MiSansNormalTypography
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
-
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.compose_multiplatform
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.image_vertical_background
 
@@ -74,6 +66,8 @@ fun App() {
 @Composable
 @Preview
 fun AppRoot(content: @Composable () -> Unit) {
+    LanguageManager.setLocaleLanguage()
+
     val isDarkTheme = isSystemInDarkTheme()
     MaterialTheme (
         colorScheme = if (isDarkTheme) DarkAppColorScheme else LightAppColorScheme,

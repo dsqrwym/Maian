@@ -13,6 +13,9 @@ interface SharedLanguage {
     val login_field_password_placeholder: String
     val login_field_username_or_email_label: String
     val login_field_username_or_email_placeholder: String
+    val login_icon_content_description_email: String
+    val login_icon_content_description_lock: String
+    val login_icon_content_description_person: String
     val login_password_toggle_visibility: String
     val login_subtitle: String
     val login_title: String

@@ -1,0 +1,30 @@
+package org.dsqrwym.shared.language
+
+/** Generated language object for locale 'es'. Do not edit manually. */
+internal object LangEs : SharedLanguage {
+    override val login_background_content_description: String = "Fondo de la pantalla de inicio de sesión"
+    override val login_button_back_button_content_description: String = "Botón de retroceso"
+    override val login_button_forget_password: String = "¿Olvidaste tu contraseña?"
+    override val login_button_google_login: String = "Iniciar sesión con Google"
+    override val login_button_google_logo_content_description: String = "Logo de Google"
+    override val login_button_login: String = "Iniciar sesión"
+    override val login_button_other_login_methods: String = "Otros métodos de inicio de sesión"
+    override val login_field_password_label: String = "Contraseña"
+    override val login_field_password_placeholder: String = "Ingresa tu contraseña"
+    override val login_field_username_or_email_label: String = "Nombre de usuario o correo"
+    override val login_field_username_or_email_placeholder: String = "Ingresa tu nombre de usuario o correo"
+    override val login_icon_content_description_email: String = "Icono de correo"
+    override val login_icon_content_description_lock: String = "Icono de contraseña"
+    override val login_icon_content_description_person: String = "Icono de usuario"
+    override val login_password_toggle_visibility: String = "Mostrar u ocultar contraseña"
+    override val login_subtitle: String = "Por favor inicia sesión para continuar"
+    override val login_title: String = "Iniciar sesión"
+    override val login_validation_email_domain_not_supported: String = "No se admite el correo example.com"
+    override val login_validation_password_empty: String = "La contraseña no puede estar vacía"
+    override val login_validation_password_missing_digit: String = "La contraseña debe contener al menos un número"
+    override val login_validation_password_missing_lowercase: String = "La contraseña debe contener al menos una letra minúscula"
+    override val login_validation_password_missing_uppercase: String = "La contraseña debe contener al menos una letra mayúscula"
+    override val login_validation_password_too_short: String = "La contraseña debe tener al menos 6 caracteres"
+    override val login_validation_username_length_invalid: String = "El nombre de usuario debe tener entre 3 y 30 caracteres"
+    override val login_validation_username_or_email_empty: String = "El nombre de usuario o correo no puede estar vacío"
+}
