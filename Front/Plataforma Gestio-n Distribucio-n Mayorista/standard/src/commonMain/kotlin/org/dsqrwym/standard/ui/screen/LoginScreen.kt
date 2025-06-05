@@ -7,7 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +32,7 @@ import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
 import org.dsqrwym.shared.ui.component.button.GoogleSignInButton
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
+import org.dsqrwym.shared.ui.component.button.WechatSignInButton
 import org.dsqrwym.shared.ui.component.outlinetextfield.SharedOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
@@ -60,17 +61,18 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
 
     BoxWithConstraints {
         val notMobile = maxWidth > 600.dp
-        val blurRadius = if (notMobile) 30.dp else 0.dp
+        val blurRadius = if (notMobile) 12.dp else 0.dp
         BackgroundImage(getImageMobileBackground(), blurRadius) {
             // 居中内容，宽度限制仅非手机端
             val transparency = 0.85f
             val contentModifier = if (notMobile) {
                 Modifier
                     .widthIn(max = 600.dp)
-                    .heightIn(max = 720.dp)
+                    .heightIn(min = 720.dp, max = 820.dp)
+                    .fillMaxHeight(0.8f)
                     .graphicsLayer { // 加alpha保证不会和shadow一样出现边缘更透的情况
                         shadowElevation = 20.dp.toPx()
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(18.dp)
                         clip = true
                         alpha = transparency // 保证不会边缘更透的情况
                     }
@@ -168,8 +170,16 @@ fun LoginContent(
 
         SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods)
 
-        Column(modifier = Modifier.weight(1f)) {
-            GoogleSignInButton(isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme) {}
+        FlowRow (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            itemVerticalAlignment = Alignment.CenterVertically,
+        ){
+            val isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme
+            GoogleSignInButton(isDarkTheme = isDarkTheme) {}
+
+            WechatSignInButton(isDarkTheme = isDarkTheme) {}
         }
     }
 }
@@ -213,8 +223,8 @@ fun UsernameOrEmailField(
         error = error,
         labelText = SharedLanguageMap.currentStrings.value.login_field_username_or_email_label, // "用户名或者邮箱"
         placeholderText = SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder, // "请输入用户名或者邮箱"
-        leadingIcon = if (isEmail) Icons.Outlined.Email else Icons.Outlined.Person,
-        leadingIconContentDescription = if (isEmail) "用户图标" else "邮箱图标",
+        leadingIcon = if (isEmail) Icons.Outlined.Email else Icons.Rounded.Person,
+        leadingIconContentDescription = if (isEmail) SharedLanguageMap.currentStrings.value.login_icon_content_description_email /*"邮箱图标"*/ else SharedLanguageMap.currentStrings.value.login_icon_content_description_person /*"用户图标"*/,
         imeAction = ImeAction.Next,
         onImeAction = { focusRequester.requestFocus() },
         focusRequester = focusRequester
@@ -238,7 +248,7 @@ fun PasswordField(
         labelText = SharedLanguageMap.currentStrings.value.login_field_password_label, // 密码
         placeholderText = SharedLanguageMap.currentStrings.value.login_field_password_placeholder, // "请输入密码"
         leadingIcon = Icons.Outlined.Lock,
-        leadingIconContentDescription = "密码图标",
+        leadingIconContentDescription = SharedLanguageMap.currentStrings.value.login_icon_content_description_lock, //"密码图标",
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(

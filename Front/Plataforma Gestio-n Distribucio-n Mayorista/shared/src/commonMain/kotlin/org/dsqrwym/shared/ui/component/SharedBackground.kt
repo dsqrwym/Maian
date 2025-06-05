@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,7 +30,7 @@ fun BackgroundImage(
     backgroundImage: DrawableResource,
     blurRadius: Dp = 0.dp,
     glassShape: RoundedCornerShape = RoundedCornerShape(0.dp), // 磨砂玻璃层的形状
-    glassTintColor: Color = Color.Gray.copy(alpha = 0.3f), // 磨砂玻璃层的自定义颜色和透明度
+    glassTintColor: Color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f), // 磨砂玻璃层的自定义颜色和透明度
     content: @Composable () -> Unit
 ) {
     val hazeState = remember { HazeState(initialBlurEnabled = true) }
@@ -43,7 +44,7 @@ fun BackgroundImage(
         val scaleXFactor =
             if (!isLandscape && originalHeight > 0.dp) maxHeight / originalHeight * 1.1f else 1.1f
 
-        val modifier = Modifier
+        var modifier = Modifier
             .fillMaxSize()
             .rotate(if (isLandscape) 90f else 0f)
             .graphicsLayer {
@@ -52,7 +53,7 @@ fun BackgroundImage(
             }
 
         if (blurRadius > 0.dp) {
-            modifier.hazeSource(
+           modifier = modifier.hazeSource(
                 state = hazeState
             )
         }

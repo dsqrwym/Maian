@@ -15,7 +15,7 @@ import org.dsqrwym.shared.language.SharedLanguageMap
 fun SharedLoginButton(loginEnabled: Boolean, onLoginClick: () -> Unit) {
     Button(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(18.dp),
         enabled = loginEnabled,
         onClick = onLoginClick
     ) {

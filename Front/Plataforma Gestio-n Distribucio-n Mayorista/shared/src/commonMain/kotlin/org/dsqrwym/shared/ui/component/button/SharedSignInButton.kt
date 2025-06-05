@@ -2,16 +2,8 @@ package org.dsqrwym.shared.ui.component.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,35 +16,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.Greeting
 import org.dsqrwym.shared.PlatformType
-import org.dsqrwym.shared.drawable.GoogleLogo
+import org.dsqrwym.shared.drawable.brand.GoogleLogo
+import org.dsqrwym.shared.drawable.brand.WechatLogo
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.jetbrains.compose.resources.Font
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Roboto_Regular
-/*
-@Composable
-fun GoogleSignInButtonIconOnly(
-    modifier: Modifier = Modifier.size(44.dp),
-    isDarkTheme: Boolean = false,
-    shape: Shape = ButtonDefaults.shape,
-    onClick: () -> Unit,
-) {
-    val buttonColor = getButtonColor(isDarkTheme)
-    val borderStroke = getBorderStroke(isDarkTheme)
 
-    Button(
-        modifier = modifier.size(if (isAndroidPlatform()) 40.dp else 44.dp),
-        contentPadding = PaddingValues(0.dp),
-        onClick = onClick,
-        shape = shape,
-        colors = buttonColor,
-        border = borderStroke,
-    ) {
-        GoogleIcon()
-    }
-}
-*/
 @Composable
 fun GoogleSignInButton(
     modifier: Modifier = Modifier.height(44.dp),
@@ -127,4 +98,58 @@ private fun getButtonColor(isDarkTheme: Boolean): ButtonColors {
     val contentColor = if (isDarkTheme) Color(0xFFE3E3E3) else Color(0xFF1F1F1F)
 
     return ButtonDefaults.buttonColors(containerColor = containerColor, contentColor = contentColor)
+}
+
+
+@Composable
+fun WechatSignInButton(
+    modifier: Modifier = Modifier.height(44.dp),
+    isDarkTheme: Boolean = false,
+    isInstalled: Boolean = true, // iOS需要传入检测结果，Android默认true
+    text: String = "微信登录",
+    shape: Shape = ButtonDefaults.shape,
+    fontSize: TextUnit = 14.sp,
+    onClick: () -> Unit,
+) {
+    // 未安装时不显示（iOS规范）
+    if (!isInstalled) return
+
+    // 微信品牌绿色：正常模式 #07C160，深色模式 #05A84E
+    val brandColor = if (isDarkTheme) Color(0xFF05A84E) else Color(0xFF07C160)
+
+    Button(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = if (isAndroidPlatform()) 12.dp else 16.dp),
+        onClick = onClick,
+        shape = shape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = brandColor,
+            contentColor = Color.White
+        ),
+        border = null // 微信按钮无边框
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            WechatIcon()
+            Spacer(modifier = Modifier.width(if (isAndroidPlatform()) 10.dp else 12.dp))
+            Text(
+                text = text,
+                maxLines = 1,
+                fontSize = fontSize,
+                fontFamily = FontFamily(
+                    Font(resource = Res.font.Roboto_Regular),
+                    Font(resource = Res.font.MiSansVF)
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun WechatIcon() {
+    Icon(
+        imageVector = WechatLogo,
+        modifier = Modifier.size(24.dp),
+        contentDescription = "微信图标",
+        tint = MaterialTheme.colorScheme.background
+    )
 }
