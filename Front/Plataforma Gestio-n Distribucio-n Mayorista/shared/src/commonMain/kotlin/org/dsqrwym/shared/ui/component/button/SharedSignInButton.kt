@@ -106,7 +106,7 @@ fun WechatSignInButton(
     modifier: Modifier = Modifier.height(44.dp),
     isDarkTheme: Boolean = false,
     isInstalled: Boolean = true, // iOS需要传入检测结果，Android默认true
-    text: String = "微信登录",
+    text: String = SharedLanguageMap.currentStrings.value.login_button_wechat_login/*"微信登录"*/,
     shape: Shape = ButtonDefaults.shape,
     fontSize: TextUnit = 14.sp,
     onClick: () -> Unit,
@@ -149,7 +149,7 @@ private fun WechatIcon() {
     Icon(
         imageVector = WechatLogo,
         modifier = Modifier.size(24.dp),
-        contentDescription = "微信图标",
+        contentDescription = SharedLanguageMap.currentStrings.value.login_button_wechat_logo_content_description, // "微信图标",
         tint = Color.White
     )
 }

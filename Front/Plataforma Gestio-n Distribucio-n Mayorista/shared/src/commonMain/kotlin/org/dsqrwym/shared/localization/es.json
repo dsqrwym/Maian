@@ -9,15 +9,17 @@
       "forget_password": "¿Olvidaste tu contraseña?",
       "other_login_methods": "Otros métodos de inicio de sesión",
       "google_login": "Iniciar sesión con Google",
-      "google_logo_content_description": "Logo de Google"
+      "google_logo_content_description": "Icono de Google",
+      "wechat_login": "Iniciar sesión con WeChat",
+      "wechat_logo_content_description": "Icono de WeChat"
     },
     "title": "Iniciar sesión",
     "subtitle": "Por favor inicia sesión para continuar",
     "field": {
-      "username_or_email_label": "Nombre de usuario o correo",
-      "username_or_email_placeholder": "Ingresa tu nombre de usuario o correo",
+      "username_or_email_label": "Nombre de usuario o correo electrónico",
+      "username_or_email_placeholder": "Ingresa tu nombre de usuario o correo electrónico",
       "password_label": "Contraseña",
-      "password_placeholder": "Ingresa tu contraseña"
+      "password_placeholder": "Introduce tu contraseña"
     },
     "password": {
       "toggle_visibility": "Mostrar u ocultar contraseña"

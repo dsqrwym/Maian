@@ -8,8 +8,10 @@
       "login": "登录",
       "forget_password": "忘记密码",
       "other_login_methods": "其他登录方式",
-      "google_login": "Sign in with Google",
-      "google_logo_content_description": "Google 标志"
+      "google_login": "使用 Google 登录",
+      "google_logo_content_description": "Google图标",
+      "wechat_login": "使用微信登录",
+      "wechat_logo_content_description": "微信图标"
     },
     "title": "登录",
     "subtitle": "请先登录以继续使用",

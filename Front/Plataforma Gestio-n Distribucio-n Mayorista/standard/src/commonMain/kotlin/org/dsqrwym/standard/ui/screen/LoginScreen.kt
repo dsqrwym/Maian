@@ -19,10 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.drawable.Visibility
 import org.dsqrwym.shared.drawable.VisibilityOff
 import org.dsqrwym.shared.language.SharedLanguageMap
-import org.dsqrwym.shared.theme.DarkAppColorScheme
 import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
 import org.dsqrwym.shared.ui.component.button.GoogleSignInButton
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
@@ -154,10 +154,9 @@ fun LoginContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             itemVerticalAlignment = Alignment.CenterVertically,
         ){
-            val isDarkTheme = MaterialTheme.colorScheme == DarkAppColorScheme
-            GoogleSignInButton(isDarkTheme = isDarkTheme) {}
+            GoogleSignInButton(isDarkTheme = LocalIsDarkTheme.current) {}
 
-            WechatSignInButton(isDarkTheme = isDarkTheme) {}
+            WechatSignInButton(isDarkTheme = LocalIsDarkTheme.current) {}
         }
     }
 }

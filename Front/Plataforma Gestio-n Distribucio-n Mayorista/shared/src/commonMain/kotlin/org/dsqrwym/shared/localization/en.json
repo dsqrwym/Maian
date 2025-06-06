@@ -9,7 +9,9 @@
       "forget_password": "Forgot Password",
       "other_login_methods": "Other login methods",
       "google_login": "Sign in with Google",
-      "google_logo_content_description": "Google logo"
+      "google_logo_content_description": "Google icon",
+      "wechat_login": "Sign in with WeChat",
+      "wechat_logo_content_description": "WeChat icon"
     },
     "title": "Log In",
     "subtitle": "Please log in to continue",

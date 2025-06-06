@@ -9,6 +9,8 @@ interface SharedLanguage {
     val login_button_google_logo_content_description: String
     val login_button_login: String
     val login_button_other_login_methods: String
+    val login_button_wechat_login: String
+    val login_button_wechat_logo_content_description: String
     val login_field_password_label: String
     val login_field_password_placeholder: String
     val login_field_username_or_email_label: String
