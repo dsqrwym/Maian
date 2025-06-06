@@ -1,8 +1,6 @@
 package org.dsqrwym.standard.ui.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.Email
@@ -17,22 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.drawable.Visibility
 import org.dsqrwym.shared.drawable.VisibilityOff
-import org.dsqrwym.shared.drawable.getImageMobileBackground
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.theme.DarkAppColorScheme
-import org.dsqrwym.shared.ui.component.BackgroundImage
 import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
 import org.dsqrwym.shared.ui.component.button.GoogleSignInButton
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
 import org.dsqrwym.shared.ui.component.button.WechatSignInButton
+import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
 import org.dsqrwym.shared.ui.component.outlinetextfield.SharedOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
@@ -59,51 +55,29 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
     // 创建 FocusRequester 实例
     val passwordFocusRequester = remember { FocusRequester() }
 
-    BoxWithConstraints {
-        val notMobile = maxWidth > 600.dp
-        val blurRadius = if (notMobile) 12.dp else 0.dp
-        BackgroundImage(getImageMobileBackground(), blurRadius) {
-            // 居中内容，宽度限制仅非手机端
-            val transparency = 0.85f
-            val contentModifier = if (notMobile) {
-                Modifier
-                    .widthIn(max = 600.dp)
-                    .heightIn(min = 720.dp, max = 820.dp)
-                    .fillMaxHeight(0.8f)
-                    .graphicsLayer { // 加alpha保证不会和shadow一样出现边缘更透的情况
-                        shadowElevation = 20.dp.toPx()
-                        shape = RoundedCornerShape(18.dp)
-                        clip = true
-                        alpha = transparency // 保证不会边缘更透的情况
-                    }
-                    .background(MaterialTheme.colorScheme.background.copy(alpha = transparency))
-                    .align(Alignment.Center)
-            } else {
-                Modifier.fillMaxSize()
-            }
-
-            LoginContent(
-                modifier = contentModifier.padding(26.dp),
-                usernameOrEmail = usernameOrEmail,
-                onUsernameOrEmailChange = {
-                    usernameOrEmail = it
-                    usernameOrEmailError = validateUsernameOrEmail(it)
-                },
-                password = password,
-                onPasswordChange = {
-                    password = it
-                    passwordError = validatePassword(it)
-                },
-                usernameOrEmailError = usernameOrEmailError,
-                passwordError = passwordError,
-                loginEnabled = loginEnabled.value,
-                passwordFocusRequester = passwordFocusRequester,
-                onBackButtonClick = onBackButtonClick,
-                onForgetPasswordClick = onForgetPasswordClick
-            ) {
+    SharedAuthContainer {
+        LoginContent(
+            modifier = Modifier.padding(26.dp),
+            usernameOrEmail = usernameOrEmail,
+            onUsernameOrEmailChange = {
+                usernameOrEmail = it
+                usernameOrEmailError = validateUsernameOrEmail(it)
+            },
+            password = password,
+            onPasswordChange = {
+                password = it
+                passwordError = validatePassword(it)
+            },
+            usernameOrEmailError = usernameOrEmailError,
+            passwordError = passwordError,
+            loginEnabled = loginEnabled.value,
+            passwordFocusRequester = passwordFocusRequester,
+            onBackButtonClick = onBackButtonClick,
+            onForgetPasswordClick = onForgetPasswordClick,
+            onLoginClick = {
 
             }
-        }
+        )
     }
 }
 
@@ -161,7 +135,11 @@ fun LoginContent(
             onClick = onForgetPasswordClick
         )
 
-        Spacer(modifier = Modifier.padding(vertical = 26.dp))
+        Spacer(modifier = Modifier
+            .heightIn(max = 52.dp) // 先限制高度
+            .fillMaxHeight() // 再添满所有空间
+            .weight(1f, fill = false) // 保证允许占据的空间为0
+        )
 
         SharedLoginButton(
             loginEnabled = loginEnabled,

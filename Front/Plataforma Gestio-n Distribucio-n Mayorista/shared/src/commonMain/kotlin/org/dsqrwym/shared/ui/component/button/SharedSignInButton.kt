@@ -150,6 +150,6 @@ private fun WechatIcon() {
         imageVector = WechatLogo,
         modifier = Modifier.size(24.dp),
         contentDescription = "微信图标",
-        tint = MaterialTheme.colorScheme.background
+        tint = Color.White
     )
 }
