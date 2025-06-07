@@ -16,8 +16,8 @@ import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-val LocalIsDarkTheme = staticCompositionLocalOf<Boolean> {
-    error("No theme state provided")
+val LocalIsDarkTheme = staticCompositionLocalOf {
+    return@staticCompositionLocalOf true
 }
 
 @Composable

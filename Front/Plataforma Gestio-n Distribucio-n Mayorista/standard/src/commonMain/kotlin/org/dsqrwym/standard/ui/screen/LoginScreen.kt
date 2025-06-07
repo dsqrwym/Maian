@@ -150,9 +150,9 @@ fun LoginContent(
 
         FlowRow (
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            itemVerticalAlignment = Alignment.CenterVertically,
+            itemVerticalAlignment = Alignment.CenterVertically
         ){
             GoogleSignInButton(isDarkTheme = LocalIsDarkTheme.current) {}
 
@@ -170,7 +170,6 @@ fun LoginTitleSection() {
             fontSize = 39.sp,
             fontWeight = FontWeight.W800,
             modifier = Modifier
-                .align(Alignment.Start)
                 .padding(vertical = 16.dp)
         )
         Text(

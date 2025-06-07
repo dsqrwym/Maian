@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.composeCompiler)         // Compose编译器集成
     //alias(libs.plugins.composeHotReload)        // 热重载， 但是应该没用
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
-    kotlin("plugin.serialization") version "2.1.21"
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 // ---------------------------

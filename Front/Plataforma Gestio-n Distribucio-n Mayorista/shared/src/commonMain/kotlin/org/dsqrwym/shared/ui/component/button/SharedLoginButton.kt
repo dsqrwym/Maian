@@ -12,9 +12,12 @@ import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.language.SharedLanguageMap
 
 @Composable
-fun SharedLoginButton(loginEnabled: Boolean, onLoginClick: () -> Unit) {
+fun SharedLoginButton(
+    loginEnabled: Boolean = true,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    onLoginClick: () -> Unit) {
     Button(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         shape = RoundedCornerShape(18.dp),
         enabled = loginEnabled,
         onClick = onLoginClick

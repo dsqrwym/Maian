@@ -59,8 +59,8 @@ val DarkExtraColorScheme = MyAppColors(
     iconNavUnselected = DarkIconNavUnselected
 )
 
-val AppExtraColors = staticCompositionLocalOf<MyAppColors> {
-    error("No AppColors provided")
+val AppExtraColors = staticCompositionLocalOf {
+    return@staticCompositionLocalOf LightExtraColorScheme
 }
 
 // 亮色 ColorScheme
