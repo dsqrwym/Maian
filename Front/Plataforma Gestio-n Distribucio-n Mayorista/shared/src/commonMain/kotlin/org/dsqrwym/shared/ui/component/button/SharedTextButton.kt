@@ -13,7 +13,11 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun SharedTextButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+fun SharedTextButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    isEnabled: Boolean = true,
+    onClick: () -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     val interactions = interactionSource.interactions
     var isPressed by remember { mutableStateOf(false) }
@@ -29,14 +33,15 @@ fun SharedTextButton(modifier: Modifier = Modifier, text: String, onClick: () ->
     }
 
     val animatedColor by animateColorAsState(
-        targetValue = if (isPressed) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.secondary,
+        targetValue = if (isPressed || !isEnabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.secondary,
         label = "TextButtonColor",
         animationSpec = tween(durationMillis = 860, easing = LinearOutSlowInEasing)
     )
 
     TextButton(
-        modifier = modifier,
         onClick = onClick,
+        modifier = modifier,
+        enabled = isEnabled,
         interactionSource = interactionSource
     ) {
         Text(

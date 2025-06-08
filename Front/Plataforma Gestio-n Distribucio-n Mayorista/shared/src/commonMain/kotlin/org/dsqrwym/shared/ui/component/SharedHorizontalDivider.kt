@@ -1,8 +1,6 @@
 package org.dsqrwym.shared.ui.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -19,14 +17,14 @@ import androidx.compose.ui.unit.dp
 fun SharedHorizontalDivider(
     text: String,
     modifier: Modifier = Modifier,
-    paddingVertical: Dp = 30.dp,
+    maxHeight: Dp = 80.dp,
     lineThickness: Dp = 3.dp,
     lineColor: Color = DividerDefaults.color
 ) {
-    Row (
+    Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier.padding(vertical = paddingVertical)
+        modifier = modifier.heightIn(max = maxHeight).fillMaxHeight()
     ) {
         HorizontalDivider(
             modifier = Modifier.weight(1f),

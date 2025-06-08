@@ -65,7 +65,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)     // Compose预览支持
             implementation(libs.androidx.activity.compose)  // AndroidX兼容
-            implementation(libs.jmail) // 邮箱验证
+            implementation(libs.jmail) // 邮箱验证密数据
+            implementation(libs.androidx.security.crypto) //安卓安全加密
         }
 
         // 公共主源码集（跨平台共享）
@@ -95,6 +96,8 @@ kotlin {
                 implementation(libs.haze)
                 // JSON处理
                 implementation(libs.kotlinx.serialization.json)
+                // 跨平台储存，防止在commonMain写很多代码
+                implementation(libs.russhwolf.multiplatform.settings)
             }
             kotlin.srcDir("src/commonGenerated/kotlin")
             resources.srcDir("src/commonMain/composeResources")

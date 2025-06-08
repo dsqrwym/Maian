@@ -1,6 +1,8 @@
 package org.dsqrwym.standard.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.Email
@@ -96,7 +98,8 @@ fun LoginContent(
     onForgetPasswordClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
-    Column(modifier = modifier) {
+    val scrollState = rememberScrollState()
+    Column(modifier = modifier.fillMaxHeight().verticalScroll(scrollState)) {
         Row(modifier = Modifier.fillMaxWidth()) {
             IconButton(onClick = onBackButtonClick) {
                 Icon(
@@ -119,7 +122,12 @@ fun LoginContent(
             passwordFocusRequester
         )
 
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+        //Spacer(modifier = Modifier.padding(vertical = 10.dp))
+        Spacer(modifier = Modifier
+            .heightIn(max = 20.dp) // 先限制高度
+            .fillMaxHeight() // 再添满所有空间
+            .weight(1f, fill = false) // 保证允许占据的空间为0
+        )
 
         PasswordField(
             password,
@@ -149,7 +157,7 @@ fun LoginContent(
         SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods)
 
         FlowRow (
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             itemVerticalAlignment = Alignment.CenterVertically
