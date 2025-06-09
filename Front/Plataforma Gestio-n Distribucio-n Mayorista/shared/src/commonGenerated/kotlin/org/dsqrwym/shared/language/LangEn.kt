@@ -2,6 +2,13 @@ package org.dsqrwym.shared.language
 
 /** Generated language object for locale 'en'. Do not edit manually. */
 internal object LangEn : SharedLanguage {
+    override val initial_screen_agreement_section_agreement_text_template: String = "I have read and agree to the \"%s\" and \"%s\""
+    override val initial_screen_agreement_section_privacy_policy: String = "Privacy Policy"
+    override val initial_screen_agreement_section_user_agreement: String = "User Agreement"
+    override val initial_screen_agreement_warning: String = "Please agree to the User Agreement and Privacy Policy before continuing"
+    override val initial_screen_instruction: String = "Please select log in or register to continue"
+    override val initial_screen_platform_name: String = "PGDM Platform"
+    override val initial_screen_welcome: String = "Welcome to"
     override val login_background_content_description: String = "Login screen background"
     override val login_button_back_button_content_description: String = "Back button"
     override val login_button_forget_password: String = "Forgot Password"
@@ -9,6 +16,7 @@ internal object LangEn : SharedLanguage {
     override val login_button_google_logo_content_description: String = "Google icon"
     override val login_button_login: String = "Log In"
     override val login_button_other_login_methods: String = "Other login methods"
+    override val login_button_register_new_account: String = "Register New Account"
     override val login_button_wechat_login: String = "Sign in with WeChat"
     override val login_button_wechat_logo_content_description: String = "WeChat icon"
     override val login_field_password_label: String = "Password"

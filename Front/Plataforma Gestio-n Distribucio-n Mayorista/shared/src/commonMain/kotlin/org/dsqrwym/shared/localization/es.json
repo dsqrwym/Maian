@@ -11,7 +11,8 @@
       "google_login": "Iniciar sesión con Google",
       "google_logo_content_description": "Icono de Google",
       "wechat_login": "Iniciar sesión con WeChat",
-      "wechat_logo_content_description": "Icono de WeChat"
+      "wechat_logo_content_description": "Icono de WeChat",
+      "register_new_account": "Registrar nueva cuenta"
     },
     "title": "Iniciar sesión",
     "subtitle": "Por favor inicia sesión para continuar",
@@ -38,6 +39,17 @@
       "password_missing_uppercase": "La contraseña debe contener al menos una letra mayúscula",
       "password_missing_lowercase": "La contraseña debe contener al menos una letra minúscula",
       "password_missing_digit": "La contraseña debe contener al menos un número"
+    }
+  },
+  "initial_screen": {
+    "welcome": "Bienvenido a",
+    "platform_name": "Plataforma PGDM",
+    "instruction": "Por favor selecciona iniciar sesión o registrarte para continuar",
+    "agreement_warning": "Por favor acepta el acuerdo de usuario y la política de privacidad antes de continuar",
+    "agreement_section": {
+      "agreement_text_template": "He leído y acepto el «%s» y la «%s»",
+      "user_agreement": "Acuerdo de Usuario",
+      "privacy_policy": "Política de Privacidad"
     }
   }
 }

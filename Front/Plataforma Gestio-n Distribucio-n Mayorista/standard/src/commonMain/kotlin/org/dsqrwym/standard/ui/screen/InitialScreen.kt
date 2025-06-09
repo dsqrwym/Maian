@@ -12,58 +12,72 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
 import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
+import org.dsqrwym.shared.ui.component.container.SharedSnackbarScaffold
 
 @Composable
-fun InitialScreen(onLoginClick: () -> Unit = {}) {
+fun InitialScreen(
+    showAgreementWarning: Boolean = false,
+    onLoginClick: () -> Unit = {}
+) {
     var isNavEnabled by remember { mutableStateOf(UserPreferences.isUserAgreed()) }
+    var snackbarMessage: String? = null
+    // 显示提示消息
+    if (showAgreementWarning) {
+        snackbarMessage = SharedLanguageMap.currentStrings.value.initial_screen_agreement_warning /*"请先同意用户协议才能继续"*/
+    }
+
     SharedAuthContainer {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(26.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            // 标题
-            InitialTitle()
-            // 动画层
-            Spacer(Modifier.weight(1f))
+        SharedSnackbarScaffold(snackbarMessage = snackbarMessage) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(26.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                // 标题
+                InitialTitle()
+                // 动画层
+                Spacer(Modifier.weight(1f))
 
-            // 导航交互
-            SharedLoginButton(
-                loginEnabled = isNavEnabled,
-                modifier = Modifier
-                    .fillMaxWidth(0.78f)
-                    .padding(vertical = 3.dp)
-            ){
-                onLoginClick()
+                // 导航交互
+                SharedLoginButton(
+                    loginEnabled = isNavEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth(0.78f)
+                        .padding(vertical = 3.dp)
+                ) {
+                    onLoginClick()
+                }
+
+                SharedTextButton(
+                    text = SharedLanguageMap.currentStrings.value.login_button_register_new_account /*"注册新账户"*/,
+                    isEnabled = isNavEnabled,
+                ) {}
+
+                AgreementSection(
+                    isAgreed = isNavEnabled,
+                    onAgreementChange = {
+                        isNavEnabled = !isNavEnabled
+                        UserPreferences.setUserAgreed(isNavEnabled)
+                    },
+                    onUserAgreementClick = {},
+                    onPrivacyPolicyClick = {}
+                )
             }
-
-            SharedTextButton(
-                text = "注册新账户",
-                isEnabled = isNavEnabled,
-            ){}
-
-            AgreementSection(
-                isAgreed = isNavEnabled,
-                onAgreementChange = {
-                    isNavEnabled = !isNavEnabled
-                    UserPreferences.setUserAgreed(isNavEnabled)
-                },
-                onUserAgreementClick = {},
-                onPrivacyPolicyClick = {}
-            )
         }
     }
 }
+
 @Composable
 fun InitialTitle() {
     Column { // 加一层Colum免得里面的组件被外部影响布局，而colum可以被影响
         FlowRow(modifier = Modifier.padding(vertical = 16.dp)) {
             Text(
-                text = "欢迎来到",
+                text = SharedLanguageMap.currentStrings.value.initial_screen_welcome /*"欢迎来到"*/,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 39.sp,
@@ -71,7 +85,7 @@ fun InitialTitle() {
             )
             Spacer(modifier = Modifier.padding(horizontal = 5.dp))
             Text(
-                text = "PGDM平台",
+                text = SharedLanguageMap.currentStrings.value.initial_screen_platform_name /*"PGDM平台"*/,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 39.sp,
@@ -79,7 +93,7 @@ fun InitialTitle() {
             )
         }
         Text(
-            text = "请选择登录或注册以继续",
+            text = SharedLanguageMap.currentStrings.value.initial_screen_instruction /*"请选择登录或注册以继续"*/,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

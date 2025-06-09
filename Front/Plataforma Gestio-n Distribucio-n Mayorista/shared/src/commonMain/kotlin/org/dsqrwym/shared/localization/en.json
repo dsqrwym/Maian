@@ -11,7 +11,8 @@
       "google_login": "Sign in with Google",
       "google_logo_content_description": "Google icon",
       "wechat_login": "Sign in with WeChat",
-      "wechat_logo_content_description": "WeChat icon"
+      "wechat_logo_content_description": "WeChat icon",
+      "register_new_account": "Register New Account"
     },
     "title": "Log In",
     "subtitle": "Please log in to continue",
@@ -38,6 +39,17 @@
       "password_missing_uppercase": "Password must contain at least one uppercase letter",
       "password_missing_lowercase": "Password must contain at least one lowercase letter",
       "password_missing_digit": "Password must contain at least one number"
+    }
+  },
+  "initial_screen": {
+    "welcome": "Welcome to",
+    "platform_name": "PGDM Platform",
+    "instruction": "Please select log in or register to continue",
+    "agreement_warning": "Please agree to the User Agreement and Privacy Policy before continuing",
+    "agreement_section": {
+      "agreement_text_template": "I have read and agree to the \"%s\" and \"%s\"",
+      "user_agreement": "User Agreement",
+      "privacy_policy": "Privacy Policy"
     }
   }
 }

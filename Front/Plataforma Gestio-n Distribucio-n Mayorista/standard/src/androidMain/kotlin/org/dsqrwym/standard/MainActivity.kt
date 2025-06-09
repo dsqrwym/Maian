@@ -8,10 +8,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import org.dsqrwym.shared.AppRoot
+import org.dsqrwym.shared.util.settings.initSettings
 import org.dsqrwym.standard.ui.screen.LoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        initSettings(applicationContext)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {

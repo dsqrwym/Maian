@@ -2,6 +2,13 @@ package org.dsqrwym.shared.language
 
 /** Generated language object for locale 'zh-CN'. Do not edit manually. */
 internal object LangZhCn : SharedLanguage {
+    override val initial_screen_agreement_section_agreement_text_template: String = "我已阅读并同意《%s》和《%s》"
+    override val initial_screen_agreement_section_privacy_policy: String = "隐私政策"
+    override val initial_screen_agreement_section_user_agreement: String = "用户协议"
+    override val initial_screen_agreement_warning: String = "请先同意用户协议和隐私政策才能继续"
+    override val initial_screen_instruction: String = "请选择登录或注册以继续"
+    override val initial_screen_platform_name: String = "PGDM平台"
+    override val initial_screen_welcome: String = "欢迎来到"
     override val login_background_content_description: String = "登录界面的背景"
     override val login_button_back_button_content_description: String = "返回按钮"
     override val login_button_forget_password: String = "忘记密码"
@@ -9,6 +16,7 @@ internal object LangZhCn : SharedLanguage {
     override val login_button_google_logo_content_description: String = "Google图标"
     override val login_button_login: String = "登录"
     override val login_button_other_login_methods: String = "其他登录方式"
+    override val login_button_register_new_account: String = "注册新账户"
     override val login_button_wechat_login: String = "使用微信登录"
     override val login_button_wechat_logo_content_description: String = "微信图标"
     override val login_field_password_label: String = "密码"

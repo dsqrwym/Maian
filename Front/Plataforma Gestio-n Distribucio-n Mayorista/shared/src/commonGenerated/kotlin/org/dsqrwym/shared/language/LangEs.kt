@@ -2,6 +2,13 @@ package org.dsqrwym.shared.language
 
 /** Generated language object for locale 'es'. Do not edit manually. */
 internal object LangEs : SharedLanguage {
+    override val initial_screen_agreement_section_agreement_text_template: String = "He leído y acepto el «%s» y la «%s»"
+    override val initial_screen_agreement_section_privacy_policy: String = "Política de Privacidad"
+    override val initial_screen_agreement_section_user_agreement: String = "Acuerdo de Usuario"
+    override val initial_screen_agreement_warning: String = "Por favor acepta el acuerdo de usuario y la política de privacidad antes de continuar"
+    override val initial_screen_instruction: String = "Por favor selecciona iniciar sesión o registrarte para continuar"
+    override val initial_screen_platform_name: String = "Plataforma PGDM"
+    override val initial_screen_welcome: String = "Bienvenido a"
     override val login_background_content_description: String = "Fondo de la pantalla de inicio de sesión"
     override val login_button_back_button_content_description: String = "Botón de retroceso"
     override val login_button_forget_password: String = "¿Olvidaste tu contraseña?"
@@ -9,6 +16,7 @@ internal object LangEs : SharedLanguage {
     override val login_button_google_logo_content_description: String = "Icono de Google"
     override val login_button_login: String = "Iniciar sesión"
     override val login_button_other_login_methods: String = "Otros métodos de inicio de sesión"
+    override val login_button_register_new_account: String = "Registrar nueva cuenta"
     override val login_button_wechat_login: String = "Iniciar sesión con WeChat"
     override val login_button_wechat_logo_content_description: String = "Icono de WeChat"
     override val login_field_password_label: String = "Contraseña"

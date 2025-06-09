@@ -2,6 +2,13 @@ package org.dsqrwym.shared.language
 
 /** Generated base language interface. Do not edit manually. */
 interface SharedLanguage {
+    val initial_screen_agreement_section_agreement_text_template: String
+    val initial_screen_agreement_section_privacy_policy: String
+    val initial_screen_agreement_section_user_agreement: String
+    val initial_screen_agreement_warning: String
+    val initial_screen_instruction: String
+    val initial_screen_platform_name: String
+    val initial_screen_welcome: String
     val login_background_content_description: String
     val login_button_back_button_content_description: String
     val login_button_forget_password: String
@@ -9,6 +16,7 @@ interface SharedLanguage {
     val login_button_google_logo_content_description: String
     val login_button_login: String
     val login_button_other_login_methods: String
+    val login_button_register_new_account: String
     val login_button_wechat_login: String
     val login_button_wechat_logo_content_description: String
     val login_field_password_label: String

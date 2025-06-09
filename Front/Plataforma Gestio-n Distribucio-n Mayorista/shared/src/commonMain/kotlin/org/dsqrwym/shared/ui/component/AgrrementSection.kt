@@ -13,6 +13,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.util.formatter.stringFormat
 
 @Composable
@@ -32,9 +33,9 @@ fun AgreementSection(
             onCheckedChange = onAgreementChange
         )
 
-        val userAgreementText = "用户协议"
-        val privacyPolicyText = "隐私政策"
-        val fullAgreementText = stringFormat("我已阅读并同意《%s》和《%s》", userAgreementText, privacyPolicyText)
+        val userAgreementText = SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_user_agreement // "用户协议"
+        val privacyPolicyText = SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_privacy_policy // "隐私政策"
+        val fullAgreementText = stringFormat(SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_agreement_text_template /*"我已阅读并同意《%s》和《%s》"*/, userAgreementText, privacyPolicyText)
 
         val primaryColor = MaterialTheme.colorScheme.primary
         val underlineStyle = SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)
