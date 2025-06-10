@@ -25,6 +25,9 @@ dependencyResolutionManagement {// 依赖解析管理
             }
         }
         mavenCentral()
+        maven {
+            url = uri("https://jogamp.org/deployment/maven/")
+        }
     }
 }
 

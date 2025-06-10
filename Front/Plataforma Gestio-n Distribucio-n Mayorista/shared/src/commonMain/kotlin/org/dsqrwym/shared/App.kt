@@ -14,14 +14,12 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.*
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 val LocalIsDarkTheme = staticCompositionLocalOf {
     return@staticCompositionLocalOf true
 }
 
 @Composable
-@Preview
 fun AppRoot(content: @Composable () -> Unit) {
     LanguageManager.setLocaleLanguage()
 

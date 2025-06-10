@@ -1,15 +1,18 @@
+package org.dsqrwym.shared.ui.component
+
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -38,9 +41,33 @@ fun AgreementSection(
         val fullAgreementText = stringFormat(SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_agreement_text_template /*"我已阅读并同意《%s》和《%s》"*/, userAgreementText, privacyPolicyText)
 
         val primaryColor = MaterialTheme.colorScheme.primary
-        val underlineStyle = SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)
+        val secondaryColor = MaterialTheme.colorScheme.secondary
 
-        val annotatedString = remember(fullAgreementText, userAgreementText, privacyPolicyText) { // remember的key也需要包含这些动态字符串
+        var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
+
+        // 定义两个状态变量来控制点击颜色
+        var isUserAgreementPressed by remember { mutableStateOf(false) }
+        var isPrivacyPolicyPressed by remember { mutableStateOf(false) }
+
+        // 根据状态变量，动画化“用户协议”的颜色
+        val animatedUserAgreementColor by animateColorAsState(
+            targetValue = if (isUserAgreementPressed) secondaryColor else primaryColor,
+            label = "UserAgreementColorAnimation" // 动画标签，用于调试
+        )
+
+        // 根据状态变量，动画化“隐私政策”的颜色
+        val animatedPrivacyPolicyColor by animateColorAsState(
+            targetValue = if (isPrivacyPolicyPressed) secondaryColor else primaryColor,
+            label = "PrivacyPolicyColorAnimation" // 动画标签，用于调试
+        )
+
+        val annotatedString = remember(
+            fullAgreementText,
+            userAgreementText,
+            privacyPolicyText ,
+            animatedUserAgreementColor, // 将动画颜色也作为 key，确保在颜色变化时重组
+            animatedPrivacyPolicyColor
+        ) { // remember的key也需要包含这些动态字符串
             buildAnnotatedString {
                 // fullAgreementText 已经包含了所有文本，只需要找到链接的开始和结束位置
                 append(fullAgreementText)
@@ -50,7 +77,7 @@ fun AgreementSection(
                 if (userAgreementStart != -1) { // 确保找到文本
                     val userAgreementEnd = userAgreementStart + userAgreementText.length
                     addStyle(
-                        style = underlineStyle,
+                        style = SpanStyle(color = animatedUserAgreementColor, textDecoration = TextDecoration.Underline),
                         start = userAgreementStart,
                         end = userAgreementEnd
                     )
@@ -67,7 +94,7 @@ fun AgreementSection(
                 if (privacyPolicyStart != -1) { // 确保找到文本
                     val privacyPolicyEnd = privacyPolicyStart + privacyPolicyText.length
                     addStyle(
-                        style = underlineStyle,
+                        style = SpanStyle(color = animatedPrivacyPolicyColor, textDecoration = TextDecoration.Underline),
                         start = privacyPolicyStart,
                         end = privacyPolicyEnd
                     )
@@ -83,17 +110,25 @@ fun AgreementSection(
 
         Text(
             text = annotatedString,
+            onTextLayout = { result ->
+                textLayoutResult = result
+            },
             modifier = Modifier
                 .pointerInput(Unit) { // Using pointerInput for more robust click detection on specific text parts
                     detectTapGestures { offset ->
-                        annotatedString.getStringAnnotations(tag = "USER_AGREEMENT", start = offset.x.toInt(), end = offset.x.toInt())
-                            .firstOrNull()?.let {
-                                onUserAgreementClick()
-                            }
-                        annotatedString.getStringAnnotations(tag = "PRIVACY_POLICY", start = offset.x.toInt(), end = offset.x.toInt())
-                            .firstOrNull()?.let {
-                                onPrivacyPolicyClick()
-                            }
+                        textLayoutResult?.let { layoutResult ->
+                            // 将点击的屏幕坐标转换为文本字符索引
+                            val position = layoutResult.getOffsetForPosition(offset)
+
+                            annotatedString.getStringAnnotations(tag = "USER_AGREEMENT", start = position, end = position)
+                                .firstOrNull()?.let {
+                                    onUserAgreementClick()
+                                }
+                            annotatedString.getStringAnnotations(tag = "PRIVACY_POLICY", start = position, end = position)
+                                .firstOrNull()?.let {
+                                    onPrivacyPolicyClick()
+                                }
+                        }
                     }
                 },
             style = MaterialTheme.typography.bodySmall,

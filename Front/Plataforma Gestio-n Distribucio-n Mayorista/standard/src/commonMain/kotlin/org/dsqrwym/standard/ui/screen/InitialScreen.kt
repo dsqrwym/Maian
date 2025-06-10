@@ -1,6 +1,5 @@
 package org.dsqrwym.standard.ui.screen
 
-import AgreementSection
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.data.local.UserPreferences
 import org.dsqrwym.shared.language.SharedLanguageMap
+import org.dsqrwym.shared.ui.component.AgreementSection
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
 import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
@@ -21,6 +21,8 @@ import org.dsqrwym.shared.ui.component.container.SharedSnackbarScaffold
 @Composable
 fun InitialScreen(
     showAgreementWarning: Boolean = false,
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {},
     onLoginClick: () -> Unit = {}
 ) {
     var isNavEnabled by remember { mutableStateOf(UserPreferences.isUserAgreed()) }
@@ -31,7 +33,7 @@ fun InitialScreen(
     }
 
     SharedAuthContainer {
-        SharedSnackbarScaffold(snackbarMessage = snackbarMessage) {
+        SharedSnackbarScaffold(snackbarMessage = snackbarMessage, content = {
             Column(
                 Modifier
                     .fillMaxSize()
@@ -64,11 +66,11 @@ fun InitialScreen(
                         isNavEnabled = !isNavEnabled
                         UserPreferences.setUserAgreed(isNavEnabled)
                     },
-                    onUserAgreementClick = {},
-                    onPrivacyPolicyClick = {}
+                    onUserAgreementClick = { onUserAgreementClick() },
+                    onPrivacyPolicyClick = { onPrivacyPolicyClick() },
                 )
             }
-        }
+        })
     }
 }
 

@@ -10,3 +10,9 @@ data class InitialScreen(
 
 @Serializable
 object LoginScreen
+
+@Serializable
+object PrivacyPolicy
+
+@Serializable
+object UserAgreement

@@ -98,6 +98,8 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 // 跨平台储存，防止在commonMain写很多代码
                 implementation(libs.russhwolf.multiplatform.settings)
+                // 跨平台Web View 封装
+                api(libs.compose.webview.multiplatform)
             }
             kotlin.srcDir("src/commonGenerated/kotlin")
             resources.srcDir("src/commonMain/composeResources")
