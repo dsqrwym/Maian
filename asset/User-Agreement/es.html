@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="version" content="0.0.1">
+  <script src="../javascript/sentVersion.js"></script>
   <title>Acuerdo de Usuario</title>
 </head>
 <body>
@@ -28,4 +29,17 @@
 
   <p>Versión: 0.0.1</p>
 </body>
+
+<script>
+  window.addEventListener("load", function () {
+    const meta = document.querySelector('meta[name="version"]');
+    if (meta && meta.content) {
+      window.parent.postMessage(
+        { type: "version", version: meta.content },
+        "*"
+      );
+    }
+  });
+</script>
+
 </html>

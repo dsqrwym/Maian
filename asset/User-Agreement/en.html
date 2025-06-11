@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="version" content="0.0.1">
+  <script src="../javascript/sentVersion.js"></script>
   <title>User Agreement</title>
 </head>
+
 <body>
   <h1>User Agreement</h1>
   <p>Welcome to our platform, a B2B system connecting distributors and retailers.</p>
 
   <h2>Services</h2>
   <ul>
-    <li>The desktop app provides inventory, product, order, customer, promotion, and reporting management, along with automatic notifications.</li>
+    <li>The desktop app provides inventory, product, order, customer, promotion, and reporting management, along with
+      automatic notifications.</li>
     <li>The mobile app supports catalog browsing, order placement, order tracking, and geolocation.</li>
     <li>Both versions include a real-time chat system for customer service and communication.</li>
   </ul>
@@ -28,4 +32,17 @@
 
   <p>Version: 0.0.1</p>
 </body>
+
+<script>
+  window.addEventListener("load", function () {
+    const meta = document.querySelector('meta[name="version"]');
+    if (meta && meta.content) {
+      window.parent.postMessage(
+        { type: "version", version: meta.content },
+        "*"
+      );
+    }
+  });
+</script>
+
 </html>
