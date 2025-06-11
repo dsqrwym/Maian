@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('load', function () {
     const meta = document.querySelector('meta[name="version"]');
     if (meta && meta.content) {
         // 直接通过 kmpJsBridge 调用 Kotlin Native 方法
