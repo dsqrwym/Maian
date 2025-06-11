@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="version" content="0.0.1">
   <title>Privacy Policy</title>
 </head>
+
 <body>
   <h1>Privacy Policy</h1>
   <p>We respect your privacy and are committed to protecting your personal information.</p>
@@ -35,4 +37,17 @@
 
   <p>Version: 0.0.1</p>
 </body>
+
+<script>
+  window.addEventListener("load", function () {
+    const meta = document.querySelector('meta[name="version"]');
+    if (meta && meta.content) {
+      window.parent.postMessage(
+        { type: "version", version: meta.content },
+        "*"
+      );
+    }
+  });
+</script>
+
 </html>
