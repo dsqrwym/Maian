@@ -1,3 +1,4 @@
+/*
 document.addEventListener('DOMContentLoaded', function () {
     const maxAttempts = 60; // 最多尝试次数，避免死循环（比如总共30秒）
     let attempts = 0;
@@ -24,3 +25,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, 500); // 每500ms检查一次
 });
+*/
