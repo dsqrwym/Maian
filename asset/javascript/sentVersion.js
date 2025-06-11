@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
     const meta = document.querySelector('meta[name="version"]');
     if (meta && meta.content) {
         window.parent.postMessage(
