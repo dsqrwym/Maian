@@ -50,34 +50,38 @@ fun SharedSnackbarScaffold(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .graphicsLayer {
-                    translationY = parentSize.height * 0.2f // 上方
+                    translationY = parentSize.height * 0.16f // 上方
                 },
             snackbar = { data ->
                 val alpha = remember { Animatable(0f) }
-                val offsetY = remember { Animatable(0f) }
+                val offsetY = remember { Animatable(-100f) }
 
                 LaunchedEffect(data) {
-                    alpha.animateTo(1f, animationSpec = tween())
-                    offsetY.animateTo(0f, animationSpec = tween())
-                    delay(getDurationMillis(data.visuals.duration) / 8 )
-                    alpha.animateTo(0f, animationSpec = tween())
-                    offsetY.animateTo(100f, animationSpec = tween())
+                    val delay = getDurationMillis(data.visuals.duration) / 2
+                    launch { alpha.animateTo(1f, animationSpec = tween()) }
+                    launch { offsetY.animateTo(0f, animationSpec = tween()) }
+
+                    launch {
+                        delay(delay)
+                        offsetY.animateTo(100f, animationSpec = tween())
+                    }
+                    launch {
+                        delay(delay)
+                        alpha.animateTo(0f, animationSpec = tween())
+                    }
                 }
 
                 Snackbar(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .graphicsLayer {
-                        this.alpha = alpha.value
-                        this.translationY = offsetY.value
-                    },
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            this.alpha = alpha.value
+                            this.translationY = offsetY.value
+                        },
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.primary
                 ) {
-                    Text(
-                        data.visuals.message,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    Text(data.visuals.message)
                 }
             }
         )

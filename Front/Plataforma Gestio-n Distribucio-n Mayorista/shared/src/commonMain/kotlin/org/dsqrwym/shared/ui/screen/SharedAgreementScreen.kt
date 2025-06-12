@@ -1,9 +1,6 @@
 package org.dsqrwym.shared.ui.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material3.Icon
@@ -12,26 +9,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.component.SharedWebView
 import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
 import org.dsqrwym.shared.util.formatter.stringFormat
 
-class SharedAgreement{
-    companion object{
-        const val PRIVACY_POLICY_BASE_URL = "https://dsqrwym.github.io/Plataforma-Gestion-Distribucion-Mayorista/asset/Privacy-Policy/%s.html"
-        const val USER_AGREEMENT_BASE_URL = "https://dsqrwym.github.io/Plataforma-Gestion-Distribucion-Mayorista/asset/User-Agreement/%s.html"
+class SharedAgreement {
+    companion object {
+        const val PRIVACY_POLICY_BASE_URL =
+            "https://dsqrwym.github.io/Plataforma-Gestion-Distribucion-Mayorista/asset/Privacy-Policy/%s.html"
+        const val USER_AGREEMENT_BASE_URL =
+            "https://dsqrwym.github.io/Plataforma-Gestion-Distribucion-Mayorista/asset/User-Agreement/%s.html"
     }
 }
 
 @Composable
-fun SharedAgreementScreen(modifier: Modifier = Modifier, baseUrl: String, onBackButtonClick:()-> Unit = {}, onDataExtract: (String) -> Unit = {}) {
+fun SharedAgreementScreen(
+    modifier: Modifier = Modifier,
+    baseUrl: String,
+    onBackButtonClick: () -> Unit = {}
+) {
 
     val language = SharedLanguageMap.getCurrentLanguage()
     val url = stringFormat(baseUrl, language)
-
     SharedAuthContainer {
-        Column(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(26.dp)
+        ) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 IconButton(onClick = onBackButtonClick) {
                     Icon(
@@ -43,9 +50,7 @@ fun SharedAgreementScreen(modifier: Modifier = Modifier, baseUrl: String, onBack
                 }
             }
 
-            SharedWebView(url) {
-                onDataExtract(it)
-            }
+            SharedWebView(url)
         }
     }
 }

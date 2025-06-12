@@ -9,10 +9,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.ui.animation.SharedAuthAnimation.DefaultEnterTransition
+import org.dsqrwym.shared.ui.animation.SharedAuthAnimation.DefaultExitTransition
 import org.dsqrwym.shared.ui.screen.SharedAgreement.Companion.PRIVACY_POLICY_BASE_URL
 import org.dsqrwym.shared.ui.screen.SharedAgreement.Companion.USER_AGREEMENT_BASE_URL
 import org.dsqrwym.shared.ui.screen.SharedAgreementScreen
-import org.dsqrwym.shared.util.log.sharedlog
 import org.dsqrwym.standard.navigation.InitialScreen
 import org.dsqrwym.standard.navigation.LoginScreen
 import org.dsqrwym.standard.navigation.PrivacyPolicy
@@ -26,43 +27,53 @@ fun App(
 
     AppRoot {
         NavHost(navController = navController, startDestination = InitialScreen(false)) {
-            composable<InitialScreen> {navBackStackEntry ->
-                val initialScreen : InitialScreen = navBackStackEntry.toRoute()
+            composable<InitialScreen>(
+                enterTransition = { DefaultEnterTransition },
+                exitTransition = { DefaultExitTransition }
+            ) { navBackStackEntry ->
+                val initialScreen: InitialScreen = navBackStackEntry.toRoute()
                 org.dsqrwym.standard.ui.screen.InitialScreen(
                     showAgreementWarning = initialScreen.denied,
-                    onPrivacyPolicyClick = {navController.navigate(PrivacyPolicy)},
-                    onUserAgreementClick = {navController.navigate(UserAgreement)},
+                    onPrivacyPolicyClick = { navController.navigate(PrivacyPolicy) },
+                    onUserAgreementClick = { navController.navigate(UserAgreement) },
                     onLoginClick = { navController.navigate(LoginScreen) },
                 )
             }
 
-            composable<LoginScreen> {
+            composable<LoginScreen>(
+                enterTransition = { DefaultEnterTransition },
+                exitTransition = { DefaultExitTransition }
+            ) {
                 CheckIsPermitted(navController)
                 org.dsqrwym.standard.ui.screen.LoginScreen(
                     onBackButtonClick = { navController.navigate(InitialScreen(false)) }
                 )
             }
 
-            composable<PrivacyPolicy> {
+            composable<PrivacyPolicy>(
+                enterTransition = { DefaultEnterTransition },
+                exitTransition = { DefaultExitTransition }
+            ) {
                 SharedAgreementScreen(
                     baseUrl = PRIVACY_POLICY_BASE_URL,
-                    onBackButtonClick = { navController.navigate(InitialScreen(false)) },
-                ){
-                    sharedlog(message = "version$it")
+                ) {
+                    navController.navigate(InitialScreen(false))
                 }
             }
 
-            composable<UserAgreement> {
+            composable<UserAgreement>(
+                enterTransition = { DefaultEnterTransition },
+                exitTransition = { DefaultExitTransition }
+            ) {
                 SharedAgreementScreen(
                     baseUrl = USER_AGREEMENT_BASE_URL,
-                    onBackButtonClick = { navController.navigate(InitialScreen(false)) },
-                ){
-                    sharedlog(message = "version$it")
+                ) {
+                    navController.navigate(InitialScreen(false))
                 }
             }
         }
 
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             onNavHostReady(navController)
         }
     }

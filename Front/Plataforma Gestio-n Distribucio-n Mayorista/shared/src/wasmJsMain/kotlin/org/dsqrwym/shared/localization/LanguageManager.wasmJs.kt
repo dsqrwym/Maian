@@ -1,5 +1,7 @@
 package org.dsqrwym.shared.localization
 
+import org.dsqrwym.shared.util.log.sharedlog
+
 @JsFun("() => window.navigator.language")
 external fun getBrowserLanguage() : String?
 
@@ -7,6 +9,7 @@ external fun getBrowserLanguage() : String?
 external fun logLanguage(lang: String)
 actual fun getLocaleLanguage(): String {
     val lang = getBrowserLanguage() ?: "en"
-    logLanguage(lang)
+//    logLanguage(lang)
+    sharedlog(message = "Detected language: $lang")
     return lang
 }

@@ -2,6 +2,8 @@ package org.dsqrwym.shared.ui.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
@@ -36,35 +38,53 @@ fun AgreementSection(
             onCheckedChange = onAgreementChange
         )
 
-        val userAgreementText = SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_user_agreement // "用户协议"
-        val privacyPolicyText = SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_privacy_policy // "隐私政策"
-        val fullAgreementText = stringFormat(SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_agreement_text_template /*"我已阅读并同意《%s》和《%s》"*/, userAgreementText, privacyPolicyText)
+        val userAgreementText =
+            SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_user_agreement // "用户协议"
+        val privacyPolicyText =
+            SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_privacy_policy // "隐私政策"
+        val fullAgreementText = stringFormat(
+            SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_agreement_text_template /*"我已阅读并同意《%s》和《%s》"*/,
+            userAgreementText,
+            privacyPolicyText
+        )
 
         val primaryColor = MaterialTheme.colorScheme.primary
-        val secondaryColor = MaterialTheme.colorScheme.secondary
+        val tertiaryColor = MaterialTheme.colorScheme.tertiary
 
         var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
 
-        // 定义两个状态变量来控制点击颜色
-        var isUserAgreementPressed by remember { mutableStateOf(false) }
-        var isPrivacyPolicyPressed by remember { mutableStateOf(false) }
+        // InteractionSource 用于检测按压状态
+        val userAgreementInteractionSource = remember { MutableInteractionSource() }
+        val privacyPolicyInteractionSource = remember { MutableInteractionSource() }
 
-        // 根据状态变量，动画化“用户协议”的颜色
+
+        // 收集按压状态
+        val isUserAgreementPressed by userAgreementInteractionSource.collectIsPressedAsState()
+        val isPrivacyPolicyPressed by privacyPolicyInteractionSource.collectIsPressedAsState()
+
+
+        // 根据状态动画化“用户协议”的颜色
         val animatedUserAgreementColor by animateColorAsState(
-            targetValue = if (isUserAgreementPressed) secondaryColor else primaryColor,
-            label = "UserAgreementColorAnimation" // 动画标签，用于调试
+            targetValue = when {
+                isUserAgreementPressed -> tertiaryColor
+                else -> primaryColor
+            },
+            label = "UserAgreementColorAnimation"
         )
 
-        // 根据状态变量，动画化“隐私政策”的颜色
+        // 根据状态动画化“隐私政策”的颜色
         val animatedPrivacyPolicyColor by animateColorAsState(
-            targetValue = if (isPrivacyPolicyPressed) secondaryColor else primaryColor,
-            label = "PrivacyPolicyColorAnimation" // 动画标签，用于调试
+            targetValue = when {
+                isPrivacyPolicyPressed -> tertiaryColor
+                else -> primaryColor
+            },
+            label = "PrivacyPolicyColorAnimation"
         )
 
         val annotatedString = remember(
             fullAgreementText,
             userAgreementText,
-            privacyPolicyText ,
+            privacyPolicyText,
             animatedUserAgreementColor, // 将动画颜色也作为 key，确保在颜色变化时重组
             animatedPrivacyPolicyColor
         ) { // remember的key也需要包含这些动态字符串
@@ -77,7 +97,10 @@ fun AgreementSection(
                 if (userAgreementStart != -1) { // 确保找到文本
                     val userAgreementEnd = userAgreementStart + userAgreementText.length
                     addStyle(
-                        style = SpanStyle(color = animatedUserAgreementColor, textDecoration = TextDecoration.Underline),
+                        style = SpanStyle(
+                            color = animatedUserAgreementColor,
+                            textDecoration = TextDecoration.Underline
+                        ),
                         start = userAgreementStart,
                         end = userAgreementEnd
                     )
@@ -94,7 +117,10 @@ fun AgreementSection(
                 if (privacyPolicyStart != -1) { // 确保找到文本
                     val privacyPolicyEnd = privacyPolicyStart + privacyPolicyText.length
                     addStyle(
-                        style = SpanStyle(color = animatedPrivacyPolicyColor, textDecoration = TextDecoration.Underline),
+                        style = SpanStyle(
+                            color = animatedPrivacyPolicyColor,
+                            textDecoration = TextDecoration.Underline
+                        ),
                         start = privacyPolicyStart,
                         end = privacyPolicyEnd
                     )
@@ -115,21 +141,92 @@ fun AgreementSection(
             },
             modifier = Modifier
                 .pointerInput(Unit) { // Using pointerInput for more robust click detection on specific text parts
-                    detectTapGestures { offset ->
-                        textLayoutResult?.let { layoutResult ->
-                            // 将点击的屏幕坐标转换为文本字符索引
-                            val position = layoutResult.getOffsetForPosition(offset)
+                    detectTapGestures(
+                        onPress = { offset ->
+                            textLayoutResult?.let { layoutResult ->
+                                val position = layoutResult.getOffsetForPosition(offset)
+                                val userAgreementSpan = annotatedString.getStringAnnotations(
+                                    tag = "USER_AGREEMENT",
+                                    start = position,
+                                    end = position
+                                ).firstOrNull()
+                                val privacyPolicySpan = annotatedString.getStringAnnotations(
+                                    tag = "PRIVACY_POLICY",
+                                    start = position,
+                                    end = position
+                                ).firstOrNull()
 
-                            annotatedString.getStringAnnotations(tag = "USER_AGREEMENT", start = position, end = position)
-                                .firstOrNull()?.let {
-                                    onUserAgreementClick()
+                                // 记录初始的按下事件
+                                val pressInteraction = androidx.compose.foundation.interaction.PressInteraction.Press(offset)
+
+                                // 根据点击位置发送按下事件
+                                if (userAgreementSpan != null) {
+                                    userAgreementInteractionSource.tryEmit(pressInteraction)
+                                } else if (privacyPolicySpan != null) {
+                                    privacyPolicyInteractionSource.tryEmit(pressInteraction)
                                 }
-                            annotatedString.getStringAnnotations(tag = "PRIVACY_POLICY", start = position, end = position)
-                                .firstOrNull()?.let {
-                                    onPrivacyPolicyClick()
+
+                                try {
+                                    // 等待下一个交互事件（松开或取消）
+                                    awaitRelease()
+                                    if (userAgreementSpan != null) {
+                                        userAgreementInteractionSource.tryEmit(
+                                            androidx.compose.foundation.interaction.PressInteraction.Release(pressInteraction)
+                                        )
+                                        userAgreementInteractionSource.tryEmit(
+                                            androidx.compose.foundation.interaction.PressInteraction.Cancel(pressInteraction)
+                                        )
+                                    } else if (privacyPolicySpan != null) {
+                                        privacyPolicyInteractionSource.tryEmit(
+                                            androidx.compose.foundation.interaction.PressInteraction.Release(pressInteraction)
+                                        )
+                                        privacyPolicyInteractionSource.tryEmit(
+                                                androidx.compose.foundation.interaction.PressInteraction.Cancel(pressInteraction)
+                                                )
+                                    }
+                                    if (userAgreementSpan != null) {
+                                    } else if (privacyPolicySpan != null) {
+
+                                    }
+
+                                } catch (e: Exception) {
+                                    // 捕获异常，例如在等待期间发生其他手势中断
+                                    // 在这种情况下，也应该发送 Cancel 事件来清除按压状态
+                                    if (userAgreementSpan != null) {
+                                        userAgreementInteractionSource.tryEmit(
+                                            androidx.compose.foundation.interaction.PressInteraction.Cancel(pressInteraction)
+                                        )
+                                    } else if (privacyPolicySpan != null) {
+                                        privacyPolicyInteractionSource.tryEmit(
+                                            androidx.compose.foundation.interaction.PressInteraction.Cancel(pressInteraction)
+                                        )
+                                    }
                                 }
+                            }
+                        },
+                        onTap = { offset ->
+                            textLayoutResult?.let { layoutResult ->
+                                val position = layoutResult.getOffsetForPosition(offset)
+
+                                annotatedString.getStringAnnotations(
+                                    tag = "USER_AGREEMENT",
+                                    start = position,
+                                    end = position
+                                )
+                                    .firstOrNull()?.let {
+                                        onUserAgreementClick()
+                                    }
+                                annotatedString.getStringAnnotations(
+                                    tag = "PRIVACY_POLICY",
+                                    start = position,
+                                    end = position
+                                )
+                                    .firstOrNull()?.let {
+                                        onPrivacyPolicyClick()
+                                    }
+                            }
                         }
-                    }
+                    )
                 },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground

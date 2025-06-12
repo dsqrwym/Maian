@@ -1,11 +1,9 @@
 package org.dsqrwym.shared.ui.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,7 +27,6 @@ import org.jetbrains.compose.resources.painterResource
 fun BackgroundImage(
     backgroundImage: DrawableResource,
     blurRadius: Dp = 0.dp,
-    glassShape: RoundedCornerShape = RoundedCornerShape(0.dp), // 磨砂玻璃层的形状
     glassTintColor: Color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f), // 磨砂玻璃层的自定义颜色和透明度
     content: @Composable () -> Unit
 ) {
@@ -69,7 +66,6 @@ fun BackgroundImage(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(glassTintColor, glassShape) // 磨砂玻璃层的半透明背景
                     .hazeEffect( // 应用 hazeChild 到这个 Box
                         state = hazeState
                     ) {
