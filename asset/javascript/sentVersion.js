@@ -8,6 +8,9 @@ window.addEventListener("message", function (event) {
 
     let attempt = 0;
 
+    const origin = event.origin;
+    const source = event.source; // 提前缓存，避免嵌套访问触发跨域异常
+
     function trySendVersion() {
         const meta = document.querySelector('meta[name="version"]');
 
@@ -16,16 +19,17 @@ window.addEventListener("message", function (event) {
                 type: "version",
                 version: meta.content
             };
-            // 若 event.source 存在
-            if (event.source && typeof event.source.postMessage === "function") {
-                event.source.postMessage(versionMessage,event.origin || "*");
-                console.log(`Version sent to ${event.source} : ${meta.content}`);
-            } else {
-                window.postMessage(
-                    versionMessage,
-                    event.origin || "*"
-                );
-                console.log(`Version sent to window : ${meta.content}`);
+
+            try {
+                if (source && typeof source.postMessage === "function") {
+                    source.postMessage(versionMessage, origin || "*");
+                    console.log(`Version sent via event.source to ${origin}`);
+                } else {
+                    window.postMessage(versionMessage, origin);
+                    console.log(`Version sent via window.postMessage to ${origin}`);
+                }
+            } catch (e) {
+                console.error("Failed to send version via postMessage:", e);
             }
         } else {
             attempt++;
