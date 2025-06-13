@@ -7,9 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.util.settings.initSettings
-import org.dsqrwym.standard.ui.screen.LoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +30,13 @@ fun AppAndroidDarkPreview() {
 @Preview(widthDp = 1024, heightDp = 800)
 @Composable
 fun AppAndroidPreview() {
-    AppRoot {
-        LoginScreen {}
-    }
+    App()
 }
 
 @Preview(widthDp = 390, heightDp = 850, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun AppAndroidVerticalDarkPreview() {
-    AppRoot {
-        LoginScreen {}
-    }
+    App()
 }
 
 @Preview(widthDp = 350, heightDp = 850)

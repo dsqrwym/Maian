@@ -36,7 +36,7 @@ fun SharedProgressIndicatorScaffold(
                     .hazeEffect(
                         state = hazeState,
                         style = HazeStyle.Unspecified.copy(
-                            blurRadius = 38.dp,
+                            blurRadius = 238.dp,
                             backgroundColor = glassTintColor,
                         )
                     )

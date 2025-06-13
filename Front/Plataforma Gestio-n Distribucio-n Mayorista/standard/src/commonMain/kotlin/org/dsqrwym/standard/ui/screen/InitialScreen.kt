@@ -15,7 +15,6 @@ import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.component.AgreementSection
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
-import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
 import org.dsqrwym.shared.ui.component.container.SharedSnackbarScaffold
 
 @Composable
@@ -32,47 +31,46 @@ fun InitialScreen(
         snackbarMessage = SharedLanguageMap.currentStrings.value.initial_screen_agreement_warning /*"请先同意用户协议才能继续"*/
     }
 
-    SharedAuthContainer {
-        SharedSnackbarScaffold(snackbarMessage = snackbarMessage, content = {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(26.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+    SharedSnackbarScaffold(snackbarMessage = snackbarMessage, content = {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(26.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            // 标题
+            InitialTitle()
+            // 动画层
+            Spacer(Modifier.weight(1f))
+
+            // 导航交互
+            SharedLoginButton(
+                loginEnabled = isNavEnabled,
+                modifier = Modifier
+                    .fillMaxWidth(0.78f)
+                    .padding(vertical = 3.dp)
             ) {
-                // 标题
-                InitialTitle()
-                // 动画层
-                Spacer(Modifier.weight(1f))
-
-                // 导航交互
-                SharedLoginButton(
-                    loginEnabled = isNavEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth(0.78f)
-                        .padding(vertical = 3.dp)
-                ) {
-                    onLoginClick()
-                }
-
-                SharedTextButton(
-                    text = SharedLanguageMap.currentStrings.value.login_button_register_new_account /*"注册新账户"*/,
-                    isEnabled = isNavEnabled,
-                ) {}
-
-                AgreementSection(
-                    isAgreed = isNavEnabled,
-                    onAgreementChange = {
-                        isNavEnabled = !isNavEnabled
-                        UserPreferences.setUserAgreed(isNavEnabled)
-                    },
-                    onUserAgreementClick = { onUserAgreementClick() },
-                    onPrivacyPolicyClick = { onPrivacyPolicyClick() },
-                )
+                onLoginClick()
             }
-        })
-    }
+
+            SharedTextButton(
+                text = SharedLanguageMap.currentStrings.value.login_button_register_new_account, /*"注册新账户"*/
+                isEnabled = isNavEnabled,
+            ) {}
+
+            AgreementSection(
+                isAgreed = isNavEnabled,
+                onAgreementChange = {
+                    isNavEnabled = !isNavEnabled
+                    UserPreferences.setUserAgreed(isNavEnabled)
+                },
+                onUserAgreementClick = { onUserAgreementClick() },
+                onPrivacyPolicyClick = { onPrivacyPolicyClick() },
+            )
+        }
+    })
 }
+
 
 @Composable
 fun InitialTitle() {

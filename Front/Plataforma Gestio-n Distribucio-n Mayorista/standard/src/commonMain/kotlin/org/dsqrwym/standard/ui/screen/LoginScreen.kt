@@ -30,7 +30,6 @@ import org.dsqrwym.shared.ui.component.button.GoogleSignInButton
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
 import org.dsqrwym.shared.ui.component.button.WechatSignInButton
-import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
 import org.dsqrwym.shared.ui.component.outlinetextfield.SharedOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
@@ -57,30 +56,28 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
     // 创建 FocusRequester 实例
     val passwordFocusRequester = remember { FocusRequester() }
 
-    SharedAuthContainer {
-        LoginContent(
-            modifier = Modifier.padding(26.dp),
-            usernameOrEmail = usernameOrEmail,
-            onUsernameOrEmailChange = {
-                usernameOrEmail = it
-                usernameOrEmailError = validateUsernameOrEmail(it)
-            },
-            password = password,
-            onPasswordChange = {
-                password = it
-                passwordError = validatePassword(it)
-            },
-            usernameOrEmailError = usernameOrEmailError,
-            passwordError = passwordError,
-            loginEnabled = loginEnabled.value,
-            passwordFocusRequester = passwordFocusRequester,
-            onBackButtonClick = onBackButtonClick,
-            onForgetPasswordClick = onForgetPasswordClick,
-            onLoginClick = {
+    LoginContent(
+        modifier = Modifier.padding(26.dp),
+        usernameOrEmail = usernameOrEmail,
+        onUsernameOrEmailChange = {
+            usernameOrEmail = it
+            usernameOrEmailError = validateUsernameOrEmail(it)
+        },
+        password = password,
+        onPasswordChange = {
+            password = it
+            passwordError = validatePassword(it)
+        },
+        usernameOrEmailError = usernameOrEmailError,
+        passwordError = passwordError,
+        loginEnabled = loginEnabled.value,
+        passwordFocusRequester = passwordFocusRequester,
+        onBackButtonClick = onBackButtonClick,
+        onForgetPasswordClick = onForgetPasswordClick,
+        onLoginClick = {
 
-            }
-        )
-    }
+        }
+    )
 }
 
 @Composable
@@ -123,10 +120,11 @@ fun LoginContent(
         )
 
         //Spacer(modifier = Modifier.padding(vertical = 10.dp))
-        Spacer(modifier = Modifier
-            .heightIn(max = 20.dp) // 先限制高度
-            .fillMaxHeight() // 再添满所有空间
-            .weight(1f, fill = false) // 保证允许占据的空间为0
+        Spacer(
+            modifier = Modifier
+                .heightIn(max = 20.dp) // 先限制高度
+                .fillMaxHeight() // 再添满所有空间
+                .weight(1f, fill = false) // 保证允许占据的空间为0
         )
 
         PasswordField(
@@ -143,10 +141,11 @@ fun LoginContent(
             onClick = onForgetPasswordClick
         )
 
-        Spacer(modifier = Modifier
-            .heightIn(max = 52.dp) // 先限制高度
-            .fillMaxHeight() // 再添满所有空间
-            .weight(1f, fill = false) // 保证允许占据的空间为0
+        Spacer(
+            modifier = Modifier
+                .heightIn(max = 52.dp) // 先限制高度
+                .fillMaxHeight() // 再添满所有空间
+                .weight(1f, fill = false) // 保证允许占据的空间为0
         )
 
         SharedLoginButton(
@@ -156,12 +155,12 @@ fun LoginContent(
 
         SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods)
 
-        FlowRow (
+        FlowRow(
             modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             itemVerticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             GoogleSignInButton(isDarkTheme = LocalIsDarkTheme.current) {}
 
             WechatSignInButton(isDarkTheme = LocalIsDarkTheme.current) {}
