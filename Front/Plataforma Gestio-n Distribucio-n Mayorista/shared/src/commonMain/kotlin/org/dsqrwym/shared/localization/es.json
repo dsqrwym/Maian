@@ -45,6 +45,7 @@
     "welcome": "Bienvenido a",
     "platform_name": "Plataforma PGDM",
     "instruction": "Por favor selecciona iniciar sesión o registrarte para continuar",
+    "quick_login_hint": "⏫ Inicia sesión rápidamente con Google o WeChat ⏫",
     "agreement_warning": "Por favor acepta el acuerdo de usuario y la política de privacidad antes de continuar",
     "agreement_section": {
       "agreement_text_template": "He leído y acepto el «%s» y la «%s»",

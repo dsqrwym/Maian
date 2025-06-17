@@ -25,6 +25,7 @@ fun InitialScreen(
     onLoginClick: () -> Unit = {}
 ) {
     var isNavEnabled by remember { mutableStateOf(UserPreferences.isUserAgreed()) }
+//    var isNavEnabled by remember { mutableStateOf(false) }
     var snackbarMessage: String? = null
     // 显示提示消息
     if (showAgreementWarning) {
@@ -53,6 +54,12 @@ fun InitialScreen(
                 onLoginClick()
             }
 
+            Text(
+                text = SharedLanguageMap.currentStrings.value.initial_screen_quick_login_hint,/*"⏫ 支持谷歌、微信 快速登录 ⏫"*/
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+
             SharedTextButton(
                 text = SharedLanguageMap.currentStrings.value.login_button_register_new_account, /*"注册新账户"*/
                 isEnabled = isNavEnabled,
@@ -74,22 +81,28 @@ fun InitialScreen(
 
 @Composable
 fun InitialTitle() {
+    val textAlign = TextAlign.Center
+    val fontSize = 39.sp
+    val fontWeight = FontWeight.W800
+    val color = MaterialTheme.colorScheme.onBackground
     Column { // 加一层Colum免得里面的组件被外部影响布局，而colum可以被影响
         FlowRow(modifier = Modifier.padding(vertical = 16.dp)) {
             Text(
                 text = SharedLanguageMap.currentStrings.value.initial_screen_welcome /*"欢迎来到"*/,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 39.sp,
-                fontWeight = FontWeight.W800
+                textAlign = textAlign,
+                color = color,
+                fontSize = fontSize,
+                fontWeight = fontWeight,
+                lineHeight = fontSize
             )
             Spacer(modifier = Modifier.padding(horizontal = 5.dp))
             Text(
                 text = SharedLanguageMap.currentStrings.value.initial_screen_platform_name /*"PGDM平台"*/,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 39.sp,
-                fontWeight = FontWeight.W800
+                textAlign = textAlign,
+                color = color,
+                fontSize = fontSize,
+                fontWeight = fontWeight,
+                lineHeight = fontSize
             )
         }
         Text(

@@ -16,6 +16,7 @@ import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
 import org.dsqrwym.shared.ui.screen.SharedAgreement.Companion.PRIVACY_POLICY_BASE_URL
 import org.dsqrwym.shared.ui.screen.SharedAgreement.Companion.USER_AGREEMENT_BASE_URL
 import org.dsqrwym.shared.ui.screen.SharedAgreementScreen
+import org.dsqrwym.shared.util.log.sharedlog
 import org.dsqrwym.standard.navigation.InitialScreen
 import org.dsqrwym.standard.navigation.LoginScreen
 import org.dsqrwym.standard.navigation.PrivacyPolicy
@@ -54,6 +55,9 @@ fun AuthNavHost(navController: NavHostController) {
             ) {
                 SharedAgreementScreen(
                     baseUrl = PRIVACY_POLICY_BASE_URL,
+                    getVersion = {
+                        sharedlog(message = "Version: $it")
+                    }
                 ) {
                     navController.navigate(InitialScreen(false))
                 }
@@ -65,6 +69,9 @@ fun AuthNavHost(navController: NavHostController) {
             ) {
                 SharedAgreementScreen(
                     baseUrl = USER_AGREEMENT_BASE_URL,
+                    getVersion = {
+                        sharedlog(message = "Version: $it")
+                    }
                 ) {
                     navController.navigate(InitialScreen(false))
                 }

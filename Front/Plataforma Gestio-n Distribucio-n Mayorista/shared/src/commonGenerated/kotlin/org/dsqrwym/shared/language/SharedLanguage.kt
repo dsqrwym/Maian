@@ -8,6 +8,7 @@ interface SharedLanguage {
     val initial_screen_agreement_warning: String
     val initial_screen_instruction: String
     val initial_screen_platform_name: String
+    val initial_screen_quick_login_hint: String
     val initial_screen_welcome: String
     val login_background_content_description: String
     val login_button_back_button_content_description: String

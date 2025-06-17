@@ -15,6 +15,10 @@ fun stringFormat(formatString: String, vararg args: Any?): String {
     val regex = Regex("%S", RegexOption.IGNORE_CASE)
     val totalPlaceholders = regex.findAll(formatString).count()
 
+    require(totalPlaceholders == args.size) {
+        "占位符%S或%s和参数数量必须一致"
+    }
+
     return regex.replace(formatString) { match ->
         // 每找到一个 %S，就尝试从 args 中取一个参数进行替换
         if (argIndex < args.size) {

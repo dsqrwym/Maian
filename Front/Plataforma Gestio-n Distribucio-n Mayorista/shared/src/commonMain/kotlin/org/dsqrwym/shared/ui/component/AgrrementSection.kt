@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
@@ -73,14 +74,15 @@ fun DynamicRichText(
     // 将模板分割成文本片段
     val parts = template.split("%s")
 
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+    FlowRow(modifier = modifier) {
         for (i in parts.indices) {
             // 添加普通文本部分
             if (parts[i].isNotEmpty()) {
                 Text(
                     text = parts[i],
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 1
                 )
             }
 
@@ -118,6 +120,7 @@ fun AnimatedClickableText(
         text = text,
         color = color,
         style = MaterialTheme.typography.bodySmall.copy(textDecoration = TextDecoration.Underline),
+        maxLines = 1,
         modifier = modifier
             .pointerInput(Unit){
                 awaitPointerEventScope {

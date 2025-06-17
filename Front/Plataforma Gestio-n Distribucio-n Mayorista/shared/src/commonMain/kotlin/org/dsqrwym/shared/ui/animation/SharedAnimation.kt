@@ -18,7 +18,7 @@ object SharedAuthAnimation {
 
     val WebEnterTransition: EnterTransition
         get() = slideIn(initialOffset = {
-            IntOffset(it.width / 2, it.height / 2)
+            IntOffset(it.width, it.height)
         })
 
     val WebExitTransition: ExitTransition

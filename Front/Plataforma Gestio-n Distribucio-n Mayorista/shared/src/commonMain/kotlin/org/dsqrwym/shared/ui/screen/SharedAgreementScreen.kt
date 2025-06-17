@@ -27,6 +27,7 @@ class SharedAgreement {
 fun SharedAgreementScreen(
     modifier: Modifier = Modifier,
     baseUrl: String,
+    getVersion: (String) -> Unit = {},
     onBackButtonClick: () -> Unit = {}
 ) {
 
@@ -48,6 +49,8 @@ fun SharedAgreementScreen(
             }
         }
 
-        SharedWebView(url)
+        SharedWebView(url){
+            getVersion(it)
+        }
     }
 }
