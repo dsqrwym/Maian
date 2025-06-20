@@ -24,23 +24,23 @@ class MainActivity : ComponentActivity() {
 @Preview(widthDp = 1024, heightDp = 800, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun AppAndroidDarkPreview() {
-    App()
+    App(true)
 }
 
 @Preview(widthDp = 1024, heightDp = 800)
 @Composable
 fun AppAndroidPreview() {
-    App()
+    App(true)
 }
 
 @Preview(widthDp = 390, heightDp = 850, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun AppAndroidVerticalDarkPreview() {
-    App()
+    App(true)
 }
 
 @Preview(widthDp = 350, heightDp = 850)
 @Composable
 fun AppAndroidVerticalPreview() {
-    App()
+    App(true)
 }

@@ -23,7 +23,7 @@ import org.dsqrwym.standard.navigation.PrivacyPolicy
 import org.dsqrwym.standard.navigation.UserAgreement
 
 @Composable
-fun AuthNavHost(navController: NavHostController) {
+fun AuthNavHost(navController: NavHostController, dev: Boolean = false) {
     SharedAuthContainer {
         NavHost(navController = navController, startDestination = InitialScreen(false)) {
             composable<InitialScreen>(
@@ -32,6 +32,7 @@ fun AuthNavHost(navController: NavHostController) {
             ) { navBackStackEntry ->
                 val initialScreen: InitialScreen = navBackStackEntry.toRoute()
                 org.dsqrwym.standard.ui.screen.InitialScreen(
+                    dev = dev,
                     showAgreementWarning = initialScreen.denied,
                     onPrivacyPolicyClick = { navController.navigate(PrivacyPolicy) },
                     onUserAgreementClick = { navController.navigate(UserAgreement) },

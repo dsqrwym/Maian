@@ -109,7 +109,7 @@ fun AnimatedClickableText(
 
     val color by animateColorAsState(
         targetValue = when {
-            isPressed -> MaterialTheme.colorScheme.tertiary
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant
             isHovered -> MaterialTheme.colorScheme.secondary
             else -> MaterialTheme.colorScheme.primary
         },

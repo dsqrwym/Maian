@@ -13,12 +13,10 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.multiplatform.webview.util.addTempDirectoryRemovalHook
 import dev.datlag.kcef.KCEF
-import dev.datlag.kcef.KCEFBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.dsqrwym.shared.AppRoot
 import java.io.File
-import kotlin.math.max
 
 fun main() = application {
     addTempDirectoryRemovalHook()
@@ -26,63 +24,57 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "Plataforma Gestio-n Distribucio-n Mayorista",
     ) {
-        var restartRequired by remember { mutableStateOf(false) }
-        var downloading by remember { mutableStateOf(0F) }
-        var initialized by remember { mutableStateOf(false) }
-        val download: KCEFBuilder.Download = remember { KCEFBuilder.Download.Builder().github().build() }
+        var downloadProgress by remember { mutableStateOf(-1F) }
+        var initialized by remember { mutableStateOf(false) } // if true, KCEF can be used to create clients, browsers etc
+        val bundleLocation = System.getProperty("compose.application.resources.dir")?.let { File(it) } ?: File(".")
 
         LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                KCEF.init(builder = {
-                    installDir(File("kcef-bundle"))
+            withContext(Dispatchers.IO) { // IO scope recommended but not required
+                KCEF.init(
+                    builder = {
+                        installDir(File(bundleLocation, "kcef-bundle")) // recommended, but not necessary
 
-                    /*
-                      Add this code when using JDK 17.
-                      Builder().github {
-                          release("jbr-release-17.0.10b1087.23")
-                      }.buffer(download.bufferSize).build()
-                     */
-                    progress {
-                        onDownloading {
-                            downloading = max(it, 0F)
+                        progress {
+                            onDownloading {
+                                downloadProgress = it
+                                // use this if you want to display a download progress for example
+                            }
+                            onInitialized {
+                                initialized = true
+                            }
                         }
-                        onInitialized {
-                            initialized = true
-                        }
+                    },
+                    onError = {
+                        // error during initialization
+                    },
+                    onRestartRequired = {
+                        // all required CEF packages downloaded but the application needs a restart to load them (unlikely to happen)
                     }
-                    settings {
-                        cachePath = File("cache").absolutePath
-                    }
-                }, onError = {
-                    it?.printStackTrace()
-                }, onRestartRequired = {
-                    restartRequired = true
-                })
+
+                )
             }
         }
-
-        if (!restartRequired) {
-            if (initialized) {
-                App()
-            } else {
-                AppRoot {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        LinearProgressIndicator(
-                            progress = { downloading },
-                            modifier = Modifier,
-                            color = ProgressIndicatorDefaults.linearColor,
-                            trackColor = ProgressIndicatorDefaults.linearTrackColor,
-                            strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
-                        )
-                        Text(text = "Downloading $downloading%")
-                    }
+        if (initialized) {
+            App()
+        } else {
+            AppRoot {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    LinearProgressIndicator(
+                        progress = { (downloadProgress / 100f).coerceIn(0f, 1f) },
+                        modifier = Modifier,
+                        color = ProgressIndicatorDefaults.linearColor,
+                        trackColor = ProgressIndicatorDefaults.linearTrackColor,
+                        strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
+                    )
+                    Text(text = "Downloading ${"%.1f".format(downloadProgress)}%")
                 }
             }
         }
+
 
         DisposableEffect(Unit) {
             onDispose {

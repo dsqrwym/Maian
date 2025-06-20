@@ -9,6 +9,7 @@ import org.dsqrwym.standard.navigation.navhost.AuthNavHost
 
 @Composable
 fun App(
+    dev: Boolean = false,
     onNavHostReady: suspend (NavController) -> Unit = {}
 ) {
     val navController = rememberNavController()
@@ -17,6 +18,6 @@ fun App(
         LaunchedEffect(Unit) {
             onNavHostReady(navController)
         }
-        AuthNavHost(navController)
+        AuthNavHost(navController, dev)
     }
 }
