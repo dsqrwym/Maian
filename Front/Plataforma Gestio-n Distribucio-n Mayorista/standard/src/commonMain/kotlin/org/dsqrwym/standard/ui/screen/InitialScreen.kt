@@ -15,70 +15,60 @@ import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.component.AgreementSection
 import org.dsqrwym.shared.ui.component.button.SharedLoginButton
 import org.dsqrwym.shared.ui.component.button.SharedTextButton
-import org.dsqrwym.shared.ui.component.container.SharedSnackbarScaffold
 
 @Composable
 fun InitialScreen(
-    showAgreementWarning: Boolean = false,
     dev: Boolean = false,
     onUserAgreementClick: () -> Unit = {},
     onPrivacyPolicyClick: () -> Unit = {},
     onLoginClick: () -> Unit = {}
 ) {
-    var isNavEnabled by remember { mutableStateOf( if(dev) false else UserPreferences.isUserAgreed()) }
-//    var isNavEnabled by remember { mutableStateOf(false) }
-    var snackbarMessage: String? = null
-    // 显示提示消息
-    if (showAgreementWarning) {
-        snackbarMessage = SharedLanguageMap.currentStrings.value.initial_screen_agreement_warning /*"请先同意用户协议才能继续"*/
+    var isNavEnabled by remember { mutableStateOf(if (dev) false else UserPreferences.isUserAgreed()) }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(26.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        // 标题
+        InitialTitle()
+        // 动画层
+        Spacer(Modifier.weight(1f))
+
+        // 导航交互
+        SharedLoginButton(
+            loginEnabled = isNavEnabled,
+            modifier = Modifier
+                .fillMaxWidth(0.78f)
+                .padding(vertical = 3.dp),
+            onLoginClick = onLoginClick
+        )
+
+        Text(
+            text = SharedLanguageMap.currentStrings.value.initial_screen_quick_login_hint,/*"⏫ 支持谷歌、微信 快速登录 ⏫"*/
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+
+        Spacer(modifier = Modifier.padding(vertical = 2.dp))
+
+        SharedTextButton(
+            modifier = Modifier.fillMaxWidth(0.56f),
+            text = SharedLanguageMap.currentStrings.value.login_button_register_new_account, /*"注册新账户"*/
+            isEnabled = isNavEnabled,
+        ) {}
+
+        AgreementSection(
+            isAgreed = isNavEnabled,
+            onAgreementChange = {
+                isNavEnabled = !isNavEnabled
+                UserPreferences.setUserAgreed(isNavEnabled)
+            },
+            onUserAgreementClick = { onUserAgreementClick() },
+            onPrivacyPolicyClick = { onPrivacyPolicyClick() },
+        )
     }
-
-    SharedSnackbarScaffold(snackbarMessage = snackbarMessage, content = {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(26.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            // 标题
-            InitialTitle()
-            // 动画层
-            Spacer(Modifier.weight(1f))
-
-            // 导航交互
-            SharedLoginButton(
-                loginEnabled = isNavEnabled,
-                modifier = Modifier
-                    .fillMaxWidth(0.78f)
-                    .padding(vertical = 3.dp),
-                onLoginClick = onLoginClick
-            )
-
-            Text(
-                text = SharedLanguageMap.currentStrings.value.initial_screen_quick_login_hint,/*"⏫ 支持谷歌、微信 快速登录 ⏫"*/
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-            )
-
-            Spacer(modifier = Modifier.padding(vertical = 2.dp))
-
-            SharedTextButton(
-                modifier = Modifier.fillMaxWidth(0.56f),
-                text = SharedLanguageMap.currentStrings.value.login_button_register_new_account, /*"注册新账户"*/
-                isEnabled = isNavEnabled,
-            ) {}
-
-            AgreementSection(
-                isAgreed = isNavEnabled,
-                onAgreementChange = {
-                    isNavEnabled = !isNavEnabled
-                    UserPreferences.setUserAgreed(isNavEnabled)
-                },
-                onUserAgreementClick = { onUserAgreementClick() },
-                onPrivacyPolicyClick = { onPrivacyPolicyClick() },
-            )
-        }
-    })
 }
 
 

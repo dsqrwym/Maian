@@ -4,9 +4,7 @@ import kotlinx.serialization.Serializable
 
 // 起始页面
 @Serializable
-data class InitialScreen(
-    val denied : Boolean = false
-)
+object InitialScreen
 
 @Serializable
 object LoginScreen

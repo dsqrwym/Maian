@@ -100,6 +100,9 @@ kotlin {
                 implementation(libs.russhwolf.multiplatform.settings)
                 // 跨平台Web View 封装
                 api(libs.compose.webview.multiplatform)
+                // KOIN 注入
+                implementation(libs.koin.core) // 或最新版本
+                implementation(libs.koin.compose.viewmodel)
             }
             kotlin.srcDir("src/commonGenerated/kotlin")
             resources.srcDir("src/commonMain/composeResources")

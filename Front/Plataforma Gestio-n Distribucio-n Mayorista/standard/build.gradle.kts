@@ -78,6 +78,10 @@ kotlin {
             // 官方导航
             implementation(libs.kmp.navigation.compose)
 
+            // Koin
+            implementation(libs.koin.core) // 或最新版本
+            implementation(libs.koin.compose.viewmodel)
+
             implementation(project(":shared"))
         }
 
@@ -133,6 +137,16 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.dsqrwym.pgdm.standard"
             packageVersion = "1.0.0"
+
+            windows {
+                iconFile.set(project.file("src/desktopMain/resources/icons/windows/StoreLogo.ico"))
+            }
+            linux {
+                iconFile.set(project.file("src/desktopMain/resources/icons/linux/StoreLogo.png"))
+            }
+            macOS {
+                iconFile.set(project.file("src/desktopMain/resources/icons/macos/StoreLogo.png"))
+            }
         }
 
         jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")

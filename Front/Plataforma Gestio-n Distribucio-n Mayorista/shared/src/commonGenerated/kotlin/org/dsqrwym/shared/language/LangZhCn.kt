@@ -7,7 +7,7 @@ internal object LangZhCn : SharedLanguage {
     override val initial_screen_agreement_section_user_agreement: String = "用户协议"
     override val initial_screen_agreement_warning: String = "请先同意用户协议和隐私政策才能继续"
     override val initial_screen_instruction: String = "请选择登录或注册以继续"
-    override val initial_screen_platform_name: String = "PGDM平台"
+    override val initial_screen_platform_name: String = "MAIN平台"
     override val initial_screen_quick_login_hint: String = "⏫ 支持谷歌、微信 快速登录 ⏫"
     override val initial_screen_welcome: String = "欢迎来到"
     override val login_background_content_description: String = "登录界面的背景"

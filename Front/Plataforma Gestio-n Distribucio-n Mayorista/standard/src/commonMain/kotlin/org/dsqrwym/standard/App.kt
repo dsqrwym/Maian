@@ -15,9 +15,9 @@ fun App(
     val navController = rememberNavController()
 
     AppRoot {
-        LaunchedEffect(Unit) {
-            onNavHostReady(navController)
-        }
-        AuthNavHost(navController, dev)
+            LaunchedEffect(Unit) {
+                onNavHostReady(navController)
+            }
+            AuthNavHost(navController, dev)
     }
 }

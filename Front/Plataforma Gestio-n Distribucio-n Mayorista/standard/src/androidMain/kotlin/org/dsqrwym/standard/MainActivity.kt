@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import org.dsqrwym.shared.di.sharedInitKoin
 import org.dsqrwym.shared.util.settings.initSettings
 
 class MainActivity : ComponentActivity() {
@@ -14,6 +15,7 @@ class MainActivity : ComponentActivity() {
         initSettings(applicationContext)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        sharedInitKoin()
         setContent {
             App()
         }

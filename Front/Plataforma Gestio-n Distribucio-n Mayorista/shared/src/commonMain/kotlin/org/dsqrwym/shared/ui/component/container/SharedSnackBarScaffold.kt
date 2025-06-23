@@ -11,10 +11,43 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.retry
+import org.dsqrwym.shared.util.log.SharedLog
+import org.dsqrwym.shared.util.log.SharedLogLevel
+
+object SharedSnackbarController {
+    val snackbarHostState = SnackbarHostState()
+    private val snackbarMessages = MutableSharedFlow<Pair<String, SnackbarDuration>>(extraBufferCapacity = 10)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    init {
+        // 消费消息队列
+        scope.launch {
+            snackbarMessages.onEach { (message, duration) ->
+                snackbarHostState.showSnackbar(
+                    message = message,
+                    duration = duration
+                )
+            }
+                .retry { e ->
+                    SharedLog.log(SharedLogLevel.WARN, "SNACKBAR", "Failed to show snackbar: $e")
+                    true // retry forever
+                }
+                .launchIn(scope)
+        }
+    }
+
+    fun showMessage(message: String, duration: SnackbarDuration = SnackbarDuration.Short) {
+        snackbarMessages.tryEmit(message to duration)
+    }
+}
 
 @Composable
 fun SharedSnackbarScaffold(
@@ -29,9 +62,7 @@ fun SharedSnackbarScaffold(
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(
-                    it
-                )
+                snackbarHostState.showSnackbar(it)
             }
         }
     }
@@ -57,7 +88,7 @@ fun SharedSnackbarScaffold(
                 val offsetY = remember { Animatable(-100f) }
 
                 LaunchedEffect(data) {
-                    val delay = getDurationMillis(data.visuals.duration) / 2
+                    val delay = (getDurationMillis(data.visuals.duration) * 0.8).toLong()
                     launch { alpha.animateTo(1f, animationSpec = tween()) }
                     launch { offsetY.animateTo(0f, animationSpec = tween()) }
 
@@ -81,7 +112,7 @@ fun SharedSnackbarScaffold(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.primary
                 ) {
-                    Text(data.visuals.message)
+                    Text(data.visuals.message, textAlign = TextAlign.Center)
                 }
             }
         )
@@ -90,7 +121,7 @@ fun SharedSnackbarScaffold(
 
 // SnackbarDuration 映射到毫秒  SnackbarHostState.showSnackbar(it) 查看源码获取
 fun getDurationMillis(duration: SnackbarDuration): Long = when (duration) {
-    SnackbarDuration.Short -> 4000
-    SnackbarDuration.Long -> 10000
-    SnackbarDuration.Indefinite -> 60000
+    SnackbarDuration.Short -> 4000L
+    SnackbarDuration.Long -> 10000L
+    SnackbarDuration.Indefinite -> 60000L
 }
