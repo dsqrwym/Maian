@@ -43,7 +43,7 @@
   },
   "initial_screen": {
     "welcome": "Welcome to",
-    "platform_name": "MAIN Platform",
+    "platform_name": "MAIAN Platform",
     "instruction": "Please select log in or register to continue",
     "quick_login_hint": "⏫ Quick login with Google or WeChat ⏫",
     "agreement_warning": "Please agree to the User Agreement and Privacy Policy before continuing",

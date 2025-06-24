@@ -43,7 +43,7 @@
   },
   "initial_screen": {
     "welcome": "欢迎来到",
-    "platform_name": "MAIN平台",
+    "platform_name": "卖安平台",
     "instruction": "请选择登录或注册以继续",
     "quick_login_hint": "⏫ 支持谷歌、微信 快速登录 ⏫",
     "agreement_warning": "请先同意用户协议和隐私政策才能继续",

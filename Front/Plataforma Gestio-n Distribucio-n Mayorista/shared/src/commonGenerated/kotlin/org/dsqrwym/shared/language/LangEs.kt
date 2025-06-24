@@ -7,7 +7,7 @@ internal object LangEs : SharedLanguage {
     override val initial_screen_agreement_section_user_agreement: String = "Acuerdo de Usuario"
     override val initial_screen_agreement_warning: String = "Por favor acepta el acuerdo de usuario y la política de privacidad antes de continuar"
     override val initial_screen_instruction: String = "Por favor selecciona iniciar sesión o registrarte para continuar"
-    override val initial_screen_platform_name: String = "Plataforma MAIN"
+    override val initial_screen_platform_name: String = "Plataforma MAIAN"
     override val initial_screen_quick_login_hint: String = "⏫ Inicia sesión rápidamente con Google o WeChat ⏫"
     override val initial_screen_welcome: String = "Bienvenido a"
     override val login_background_content_description: String = "Fondo de la pantalla de inicio de sesión"

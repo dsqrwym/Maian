@@ -13,9 +13,9 @@ import org.dsqrwym.shared.util.settings.initSettings
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         initSettings(applicationContext)
+        sharedInitKoin()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        sharedInitKoin()
         setContent {
             App()
         }
