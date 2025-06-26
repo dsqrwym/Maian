@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.screen
+package org.dsqrwym.shared.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.language.SharedLanguageMap
-import org.dsqrwym.shared.ui.component.SharedWebView
+import org.dsqrwym.shared.ui.components.SharedWebView
 import org.dsqrwym.shared.util.formatter.stringFormat
 
 class SharedAgreement {

@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.button
+package org.dsqrwym.shared.ui.components.buttons
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape

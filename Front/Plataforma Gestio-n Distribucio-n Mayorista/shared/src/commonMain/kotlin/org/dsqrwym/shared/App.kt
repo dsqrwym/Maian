@@ -14,8 +14,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.*
-import org.dsqrwym.shared.ui.component.container.SharedSnackbarScaffold
-import org.dsqrwym.shared.ui.viewmodel.SharedSnackbarViewModel
+import org.dsqrwym.shared.ui.components.containers.SharedSnackbarScaffold
+import org.dsqrwym.shared.ui.viewmodels.SharedSnackbarViewModel
 import org.koin.compose.currentKoinScope
 
 val LocalIsDarkTheme = staticCompositionLocalOf {
@@ -23,9 +23,8 @@ val LocalIsDarkTheme = staticCompositionLocalOf {
 }
 
 @Composable
-fun AppRoot(content: @Composable () -> Unit) {
+fun AppRoot(sharedSnackbarViewModel : SharedSnackbarViewModel = currentKoinScope().get(), content: @Composable () -> Unit) {
     LanguageManager.setLocaleLanguage()
-    val sharedSnackbarViewModel : SharedSnackbarViewModel = currentKoinScope().get()
 
     val isDarkTheme = isSystemInDarkTheme()
 

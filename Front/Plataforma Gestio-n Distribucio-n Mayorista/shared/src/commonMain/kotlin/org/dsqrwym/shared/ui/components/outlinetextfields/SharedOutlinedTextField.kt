@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.outlinetextfield
+package org.dsqrwym.shared.ui.components.outlinetextfields
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState

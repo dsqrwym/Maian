@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.animation
+package org.dsqrwym.shared.ui.animations
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring

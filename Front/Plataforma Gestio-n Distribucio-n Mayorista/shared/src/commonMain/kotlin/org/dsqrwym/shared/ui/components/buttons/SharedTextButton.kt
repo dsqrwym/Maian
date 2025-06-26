@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.button
+package org.dsqrwym.shared.ui.components.buttons
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing

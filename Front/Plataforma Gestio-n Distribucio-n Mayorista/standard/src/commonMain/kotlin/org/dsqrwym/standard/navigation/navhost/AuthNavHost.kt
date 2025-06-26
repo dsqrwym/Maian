@@ -8,15 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.dsqrwym.shared.data.local.UserPreferences
 import org.dsqrwym.shared.language.SharedLanguageMap
-import org.dsqrwym.shared.ui.animation.SharedAuthAnimation.DefaultEnterTransition
-import org.dsqrwym.shared.ui.animation.SharedAuthAnimation.DefaultExitTransition
-import org.dsqrwym.shared.ui.animation.SharedAuthAnimation.WebEnterTransition
-import org.dsqrwym.shared.ui.animation.SharedAuthAnimation.WebExitTransition
-import org.dsqrwym.shared.ui.component.container.SharedAuthContainer
-import org.dsqrwym.shared.ui.screen.SharedAgreement.Companion.PRIVACY_POLICY_BASE_URL
-import org.dsqrwym.shared.ui.screen.SharedAgreement.Companion.USER_AGREEMENT_BASE_URL
-import org.dsqrwym.shared.ui.screen.SharedAgreementScreen
-import org.dsqrwym.shared.ui.viewmodel.SharedSnackbarViewModel
+import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultEnterTransition
+import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultExitTransition
+import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.WebEnterTransition
+import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.WebExitTransition
+import org.dsqrwym.shared.ui.components.containers.SharedAuthContainer
+import org.dsqrwym.shared.ui.screens.SharedAgreement.Companion.PRIVACY_POLICY_BASE_URL
+import org.dsqrwym.shared.ui.screens.SharedAgreement.Companion.USER_AGREEMENT_BASE_URL
+import org.dsqrwym.shared.ui.screens.SharedAgreementScreen
+import org.dsqrwym.shared.ui.viewmodels.SharedSnackbarViewModel
 import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.standard.navigation.InitialScreen
 import org.dsqrwym.standard.navigation.LoginScreen
@@ -25,15 +25,14 @@ import org.dsqrwym.standard.navigation.UserAgreement
 import org.koin.compose.currentKoinScope
 
 @Composable
-fun AuthNavHost(navController: NavHostController, dev: Boolean = false) {
+fun AuthNavHost(navController: NavHostController) {
     SharedAuthContainer {
         NavHost(navController = navController, startDestination = InitialScreen) {
             composable<InitialScreen>(
                 enterTransition = { DefaultEnterTransition },
                 exitTransition = { DefaultExitTransition }
             ) { navBackStackEntry ->
-                org.dsqrwym.standard.ui.screen.InitialScreen(
-                    dev = dev,
+                org.dsqrwym.standard.ui.screens.InitialScreen(
                     onPrivacyPolicyClick = { navController.navigate(PrivacyPolicy) },
                     onUserAgreementClick = { navController.navigate(UserAgreement) },
                     onLoginClick = { navController.navigate(LoginScreen) },
@@ -45,7 +44,7 @@ fun AuthNavHost(navController: NavHostController, dev: Boolean = false) {
                 exitTransition = { DefaultExitTransition }
             ) {
                 CheckIsPermitted(navController)
-                org.dsqrwym.standard.ui.screen.LoginScreen(
+                org.dsqrwym.standard.ui.screens.LoginScreen(
                     onBackButtonClick = { navController.navigate(InitialScreen) }
                 )
             }

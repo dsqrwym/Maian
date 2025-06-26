@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component
+package org.dsqrwym.shared.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import com.multiplatform.webview.web.LoadingState
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
-import org.dsqrwym.shared.ui.component.container.SharedProgressIndicatorScaffold
+import org.dsqrwym.shared.ui.components.containers.SharedProgressIndicatorScaffold
 
 @Composable
 fun SharedWebView(url: String, getVersion: (String) -> Unit = {}) {

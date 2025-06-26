@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.viewmodel
+package org.dsqrwym.shared.ui.viewmodels
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState

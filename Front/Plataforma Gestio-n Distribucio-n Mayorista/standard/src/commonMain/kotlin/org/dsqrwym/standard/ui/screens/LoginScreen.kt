@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.ui.screen
+package org.dsqrwym.standard.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -25,12 +25,12 @@ import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.drawable.Visibility
 import org.dsqrwym.shared.drawable.VisibilityOff
 import org.dsqrwym.shared.language.SharedLanguageMap
-import org.dsqrwym.shared.ui.component.SharedHorizontalDivider
-import org.dsqrwym.shared.ui.component.button.GoogleSignInButton
-import org.dsqrwym.shared.ui.component.button.SharedLoginButton
-import org.dsqrwym.shared.ui.component.button.SharedTextButton
-import org.dsqrwym.shared.ui.component.button.WechatSignInButton
-import org.dsqrwym.shared.ui.component.outlinetextfield.SharedOutlinedTextField
+import org.dsqrwym.shared.ui.components.SharedHorizontalDivider
+import org.dsqrwym.shared.ui.components.buttons.GoogleSignInButton
+import org.dsqrwym.shared.ui.components.buttons.SharedLoginButton
+import org.dsqrwym.shared.ui.components.buttons.SharedTextButton
+import org.dsqrwym.shared.ui.components.buttons.WechatSignInButton
+import org.dsqrwym.shared.ui.components.outlinetextfields.SharedOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail

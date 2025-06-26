@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.ui.screen
+package org.dsqrwym.standard.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -11,10 +11,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.drawable.imagevector.MaianLogo
 import org.dsqrwym.shared.language.SharedLanguageMap
-import org.dsqrwym.shared.ui.component.AgreementSection
-import org.dsqrwym.shared.ui.component.button.SharedLoginButton
-import org.dsqrwym.shared.ui.component.button.SharedTextButton
+import org.dsqrwym.shared.ui.animations.containers.SharedFloatingBreathingBox
+import org.dsqrwym.shared.ui.components.AgreementSection
+import org.dsqrwym.shared.ui.components.buttons.SharedLoginButton
+import org.dsqrwym.shared.ui.components.buttons.SharedTextButton
+import org.dsqrwym.shared.ui.components.graphics.SharedAnimatedImgVector
 
 @Composable
 fun InitialScreen(
@@ -34,8 +37,17 @@ fun InitialScreen(
         // 标题
         InitialTitle()
         // 动画层
-        Spacer(Modifier.weight(1f))
-
+        SharedFloatingBreathingBox (
+            modifier = Modifier.weight(1f),
+            scaleRange = Pair(0.98f, 1f),
+            alphaRange = Pair(0.6f, 0.9f),
+        ) {
+            SharedAnimatedImgVector(
+                imageVector = MaianLogo,
+                modifier = Modifier
+                    .fillMaxSize(0.8f)
+            )
+        }
         // 导航交互
         SharedLoginButton(
             loginEnabled = isNavEnabled,
@@ -70,7 +82,6 @@ fun InitialScreen(
         )
     }
 }
-
 
 @Composable
 fun InitialTitle() {

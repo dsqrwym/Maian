@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.container
+package org.dsqrwym.shared.ui.components.containers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +11,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import org.dsqrwym.shared.ui.component.progressindicator.SharedProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedProgressIndicator
 
 @Composable
 fun SharedProgressIndicatorScaffold(

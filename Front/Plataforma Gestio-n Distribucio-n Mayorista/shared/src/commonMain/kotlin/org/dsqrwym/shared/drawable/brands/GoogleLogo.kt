@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.drawable.brand
+package org.dsqrwym.shared.drawable.brands
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType

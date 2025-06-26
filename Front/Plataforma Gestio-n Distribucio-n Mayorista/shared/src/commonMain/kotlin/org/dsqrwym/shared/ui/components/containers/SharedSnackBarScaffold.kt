@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.container
+package org.dsqrwym.shared.ui.components.containers
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween

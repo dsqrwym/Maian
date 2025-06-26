@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.container
+package org.dsqrwym.shared.ui.components.containers
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.getImageMobileBackground
-import org.dsqrwym.shared.ui.component.BackgroundImage
+import org.dsqrwym.shared.ui.components.BackgroundImage
 
 @Composable
 fun SharedAuthContainer(content: @Composable () -> Unit) {

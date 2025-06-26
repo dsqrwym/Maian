@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.button
+package org.dsqrwym.shared.ui.components.buttons
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.Greeting
 import org.dsqrwym.shared.PlatformType
-import org.dsqrwym.shared.drawable.brand.GoogleLogo
-import org.dsqrwym.shared.drawable.brand.WechatLogo
+import org.dsqrwym.shared.drawable.brands.GoogleLogo
+import org.dsqrwym.shared.drawable.brands.WechatLogo
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.jetbrains.compose.resources.Font
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF

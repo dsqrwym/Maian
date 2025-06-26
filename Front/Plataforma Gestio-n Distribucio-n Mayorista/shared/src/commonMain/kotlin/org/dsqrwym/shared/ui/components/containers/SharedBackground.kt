@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component
+package org.dsqrwym.shared.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

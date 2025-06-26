@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.component.progressindicator
+package org.dsqrwym.shared.ui.components.progressindicators
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
