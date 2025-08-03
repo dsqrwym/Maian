@@ -23059,7 +23059,7 @@ export namespace Prisma {
   }
 
   export type User_sessionsMinAggregateOutputType = {
-    token_id: string | null
+    session_id: string | null
     user_id: string | null
     device_name: string | null
     device_finger: string | null
@@ -23073,7 +23073,7 @@ export namespace Prisma {
   }
 
   export type User_sessionsMaxAggregateOutputType = {
-    token_id: string | null
+    session_id: string | null
     user_id: string | null
     device_name: string | null
     device_finger: string | null
@@ -23087,7 +23087,7 @@ export namespace Prisma {
   }
 
   export type User_sessionsCountAggregateOutputType = {
-    token_id: number
+    session_id: number
     user_id: number
     device_name: number
     device_finger: number
@@ -23103,7 +23103,7 @@ export namespace Prisma {
 
 
   export type User_sessionsMinAggregateInputType = {
-    token_id?: true
+    session_id?: true
     user_id?: true
     device_name?: true
     device_finger?: true
@@ -23117,7 +23117,7 @@ export namespace Prisma {
   }
 
   export type User_sessionsMaxAggregateInputType = {
-    token_id?: true
+    session_id?: true
     user_id?: true
     device_name?: true
     device_finger?: true
@@ -23131,7 +23131,7 @@ export namespace Prisma {
   }
 
   export type User_sessionsCountAggregateInputType = {
-    token_id?: true
+    session_id?: true
     user_id?: true
     device_name?: true
     device_finger?: true
@@ -23218,7 +23218,7 @@ export namespace Prisma {
   }
 
   export type User_sessionsGroupByOutputType = {
-    token_id: string
+    session_id: string
     user_id: string
     device_name: string
     device_finger: string
@@ -23249,7 +23249,7 @@ export namespace Prisma {
 
 
   export type user_sessionsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    token_id?: boolean
+    session_id?: boolean
     user_id?: boolean
     device_name?: boolean
     device_finger?: boolean
@@ -23264,7 +23264,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["user_sessions"]>
 
   export type user_sessionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    token_id?: boolean
+    session_id?: boolean
     user_id?: boolean
     device_name?: boolean
     device_finger?: boolean
@@ -23279,7 +23279,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["user_sessions"]>
 
   export type user_sessionsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    token_id?: boolean
+    session_id?: boolean
     user_id?: boolean
     device_name?: boolean
     device_finger?: boolean
@@ -23294,7 +23294,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["user_sessions"]>
 
   export type user_sessionsSelectScalar = {
-    token_id?: boolean
+    session_id?: boolean
     user_id?: boolean
     device_name?: boolean
     device_finger?: boolean
@@ -23307,7 +23307,7 @@ export namespace Prisma {
     last_active?: boolean
   }
 
-  export type user_sessionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"token_id" | "user_id" | "device_name" | "device_finger" | "user_agent" | "revoked" | "last_ip" | "access_token" | "refresh_token" | "created_at" | "last_active", ExtArgs["result"]["user_sessions"]>
+  export type user_sessionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"session_id" | "user_id" | "device_name" | "device_finger" | "user_agent" | "revoked" | "last_ip" | "access_token" | "refresh_token" | "created_at" | "last_active", ExtArgs["result"]["user_sessions"]>
   export type user_sessionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
@@ -23324,7 +23324,7 @@ export namespace Prisma {
       users: Prisma.$usersPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      token_id: string
+      session_id: string
       user_id: string
       device_name: string
       device_finger: string
@@ -23418,8 +23418,8 @@ export namespace Prisma {
      * // Get first 10 User_sessions
      * const user_sessions = await prisma.user_sessions.findMany({ take: 10 })
      * 
-     * // Only select the `token_id`
-     * const user_sessionsWithToken_idOnly = await prisma.user_sessions.findMany({ select: { token_id: true } })
+     * // Only select the `session_id`
+     * const user_sessionsWithSession_idOnly = await prisma.user_sessions.findMany({ select: { session_id: true } })
      * 
      */
     findMany<T extends user_sessionsFindManyArgs>(args?: SelectSubset<T, user_sessionsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -23463,9 +23463,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many User_sessions and only return the `token_id`
-     * const user_sessionsWithToken_idOnly = await prisma.user_sessions.createManyAndReturn({
-     *   select: { token_id: true },
+     * // Create many User_sessions and only return the `session_id`
+     * const user_sessionsWithSession_idOnly = await prisma.user_sessions.createManyAndReturn({
+     *   select: { session_id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -23554,9 +23554,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more User_sessions and only return the `token_id`
-     * const user_sessionsWithToken_idOnly = await prisma.user_sessions.updateManyAndReturn({
-     *   select: { token_id: true },
+     * // Update zero or more User_sessions and only return the `session_id`
+     * const user_sessionsWithSession_idOnly = await prisma.user_sessions.updateManyAndReturn({
+     *   select: { session_id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -23759,7 +23759,7 @@ export namespace Prisma {
    * Fields of the user_sessions model
    */
   interface user_sessionsFieldRefs {
-    readonly token_id: FieldRef<"user_sessions", 'String'>
+    readonly session_id: FieldRef<"user_sessions", 'String'>
     readonly user_id: FieldRef<"user_sessions", 'String'>
     readonly device_name: FieldRef<"user_sessions", 'String'>
     readonly device_finger: FieldRef<"user_sessions", 'String'>
@@ -28417,7 +28417,7 @@ export namespace Prisma {
 
 
   export const User_sessionsScalarFieldEnum: {
-    token_id: 'token_id',
+    session_id: 'session_id',
     user_id: 'user_id',
     device_name: 'device_name',
     device_finger: 'device_finger',
@@ -29920,7 +29920,7 @@ export namespace Prisma {
     AND?: user_sessionsWhereInput | user_sessionsWhereInput[]
     OR?: user_sessionsWhereInput[]
     NOT?: user_sessionsWhereInput | user_sessionsWhereInput[]
-    token_id?: UuidFilter<"user_sessions"> | string
+    session_id?: UuidFilter<"user_sessions"> | string
     user_id?: UuidFilter<"user_sessions"> | string
     device_name?: StringFilter<"user_sessions"> | string
     device_finger?: StringFilter<"user_sessions"> | string
@@ -29935,7 +29935,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsOrderByWithRelationInput = {
-    token_id?: SortOrder
+    session_id?: SortOrder
     user_id?: SortOrder
     device_name?: SortOrder
     device_finger?: SortOrder
@@ -29950,7 +29950,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsWhereUniqueInput = Prisma.AtLeast<{
-    token_id?: string
+    session_id?: string
     user_id_device_finger?: user_sessionsUser_idDevice_fingerCompoundUniqueInput
     AND?: user_sessionsWhereInput | user_sessionsWhereInput[]
     OR?: user_sessionsWhereInput[]
@@ -29966,10 +29966,10 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"user_sessions"> | Date | string
     last_active?: DateTimeFilter<"user_sessions"> | Date | string
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
-  }, "token_id" | "user_id_device_finger">
+  }, "session_id" | "user_id_device_finger">
 
   export type user_sessionsOrderByWithAggregationInput = {
-    token_id?: SortOrder
+    session_id?: SortOrder
     user_id?: SortOrder
     device_name?: SortOrder
     device_finger?: SortOrder
@@ -29989,7 +29989,7 @@ export namespace Prisma {
     AND?: user_sessionsScalarWhereWithAggregatesInput | user_sessionsScalarWhereWithAggregatesInput[]
     OR?: user_sessionsScalarWhereWithAggregatesInput[]
     NOT?: user_sessionsScalarWhereWithAggregatesInput | user_sessionsScalarWhereWithAggregatesInput[]
-    token_id?: UuidWithAggregatesFilter<"user_sessions"> | string
+    session_id?: UuidWithAggregatesFilter<"user_sessions"> | string
     user_id?: UuidWithAggregatesFilter<"user_sessions"> | string
     device_name?: StringWithAggregatesFilter<"user_sessions"> | string
     device_finger?: StringWithAggregatesFilter<"user_sessions"> | string
@@ -31550,7 +31550,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsCreateInput = {
-    token_id?: string
+    session_id?: string
     device_name: string
     device_finger: string
     user_agent: string
@@ -31564,7 +31564,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUncheckedCreateInput = {
-    token_id?: string
+    session_id?: string
     user_id: string
     device_name: string
     device_finger: string
@@ -31578,7 +31578,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUpdateInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
     user_agent?: StringFieldUpdateOperationsInput | string
@@ -31592,7 +31592,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUncheckedUpdateInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
@@ -31606,7 +31606,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsCreateManyInput = {
-    token_id?: string
+    session_id?: string
     user_id: string
     device_name: string
     device_finger: string
@@ -31620,7 +31620,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUpdateManyMutationInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
     user_agent?: StringFieldUpdateOperationsInput | string
@@ -31633,7 +31633,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUncheckedUpdateManyInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
@@ -33357,7 +33357,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsCountOrderByAggregateInput = {
-    token_id?: SortOrder
+    session_id?: SortOrder
     user_id?: SortOrder
     device_name?: SortOrder
     device_finger?: SortOrder
@@ -33371,7 +33371,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsMaxOrderByAggregateInput = {
-    token_id?: SortOrder
+    session_id?: SortOrder
     user_id?: SortOrder
     device_name?: SortOrder
     device_finger?: SortOrder
@@ -33385,7 +33385,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsMinOrderByAggregateInput = {
-    token_id?: SortOrder
+    session_id?: SortOrder
     user_id?: SortOrder
     device_name?: SortOrder
     device_finger?: SortOrder
@@ -39596,7 +39596,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsCreateWithoutUsersInput = {
-    token_id?: string
+    session_id?: string
     device_name: string
     device_finger: string
     user_agent: string
@@ -39609,7 +39609,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUncheckedCreateWithoutUsersInput = {
-    token_id?: string
+    session_id?: string
     device_name: string
     device_finger: string
     user_agent: string
@@ -39946,7 +39946,7 @@ export namespace Prisma {
     AND?: user_sessionsScalarWhereInput | user_sessionsScalarWhereInput[]
     OR?: user_sessionsScalarWhereInput[]
     NOT?: user_sessionsScalarWhereInput | user_sessionsScalarWhereInput[]
-    token_id?: UuidFilter<"user_sessions"> | string
+    session_id?: UuidFilter<"user_sessions"> | string
     user_id?: UuidFilter<"user_sessions"> | string
     device_name?: StringFilter<"user_sessions"> | string
     device_finger?: StringFilter<"user_sessions"> | string
@@ -40910,7 +40910,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsCreateManyUsersInput = {
-    token_id?: string
+    session_id?: string
     device_name: string
     device_finger: string
     user_agent: string
@@ -41323,7 +41323,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUpdateWithoutUsersInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
     user_agent?: StringFieldUpdateOperationsInput | string
@@ -41336,7 +41336,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUncheckedUpdateWithoutUsersInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
     user_agent?: StringFieldUpdateOperationsInput | string
@@ -41349,7 +41349,7 @@ export namespace Prisma {
   }
 
   export type user_sessionsUncheckedUpdateManyWithoutUsersInput = {
-    token_id?: StringFieldUpdateOperationsInput | string
+    session_id?: StringFieldUpdateOperationsInput | string
     device_name?: StringFieldUpdateOperationsInput | string
     device_finger?: StringFieldUpdateOperationsInput | string
     user_agent?: StringFieldUpdateOperationsInput | string

@@ -37,13 +37,13 @@ export class AuthService {
     if ('sessionId' in options) {
       return this.prismaService.user_sessions.findUnique({
         where: {
-          token_id: options.sessionId,
+          session_id: options.sessionId,
         },
         select: {
           access_token: true,
           refresh_token: true,
           revoked: true,
-          token_id: true,
+          session_id: true,
         },
       });
     } else {
@@ -58,7 +58,7 @@ export class AuthService {
           access_token: true,
           refresh_token: true,
           revoked: true,
-          token_id: true,
+          session_id: true,
         },
       });
     }
@@ -264,14 +264,15 @@ export class AuthService {
           last_ip: ipAddress,
         },
         select: {
-          token_id: true,
+          session_id: true,
         },
       });
 
-      sessionId = newSession.token_id;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      sessionId = newSession.session_id;
 
       this.logger.debug(
-        `[Login] New session created for userId: ${user.id} with token_id: ${newSession.token_id}`,
+        `[Login] New session created for userId: ${user.id} with session_id: ${newSession.session_id}`,
       );
     } else {
       // 更新会话记录
@@ -288,10 +289,11 @@ export class AuthService {
           last_active: new Date(),
         },
         select: {
-          token_id: true,
+          session_id: true,
         },
       });
-      sessionId = updatedSession.token_id;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      sessionId = updatedSession.session_id;
     }
 
     // 生成 token payload
@@ -299,7 +301,7 @@ export class AuthService {
       userId: user.id,
       userRole: user.role,
       deviceFinger: deviceHash,
-      tokenId: sessionId,
+      sessionId: sessionId,
     };
 
     const refreshToken = await this.jwtService.signAsync(payload, {
@@ -315,7 +317,7 @@ export class AuthService {
     this.prismaService.user_sessions
       .update({
         where: {
-          token_id: sessionId,
+          session_id: sessionId,
         },
         data: {
           access_token: hashedAccessToken,
@@ -343,7 +345,7 @@ export class AuthService {
       await this.jwtService.verifyAsync(refreshToken);
 
     const session = await this.getSession({
-      sessionId: payload.tokenId,
+      sessionId: payload.sessionId,
     });
 
     if (!session) {
@@ -373,7 +375,7 @@ export class AuthService {
     }
 
     const newPayload: AuthTokenPayload = {
-      tokenId: payload.tokenId,
+      sessionId: payload.sessionId,
       userId: payload.userId,
       deviceFinger: payload.deviceFinger,
       userRole: payload.userRole,
@@ -390,7 +392,7 @@ export class AuthService {
     await this.prismaService.user_sessions
       .update({
         where: {
-          token_id: payload.tokenId,
+          session_id: payload.sessionId,
         },
         data: {
           last_active: new Date(),
@@ -412,7 +414,7 @@ export class AuthService {
     // 查找会话，并注销
     const result = await this.prismaService.user_sessions.updateMany({
       where: {
-        token_id: sessionData.tokenId,
+        session_id: sessionData.sessionId,
         revoked: false, // 限制只更新未撤销的会话
       },
       data: {
@@ -459,7 +461,7 @@ export class AuthService {
 
       await this.prismaService.user_sessions.delete({
         where: {
-          token_id: deleteSessionDto.sessionId,
+          session_id: deleteSessionDto.sessionId,
         },
       });
     });

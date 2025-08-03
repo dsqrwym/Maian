@@ -249,7 +249,7 @@ model products_files {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model user_sessions {
-  token_id      String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  session_id    String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user_id       String   @db.Uuid
   device_name   String   @db.VarChar(150)
   device_finger String   @db.VarChar(255)

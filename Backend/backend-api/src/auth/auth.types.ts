@@ -26,7 +26,7 @@ interface AuthTokenPayload {
    * 会话记录 ID（来自 user_sessions 表的主键）
    * 每次登录生成一个唯一的 tokenId，用于精确控制和撤销特定会话。
    */
-  tokenId: string;
+  sessionId: string;
 }
 
 interface AuthenticatedUser {

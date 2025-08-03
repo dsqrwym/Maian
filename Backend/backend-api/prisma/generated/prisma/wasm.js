@@ -292,7 +292,7 @@ exports.Prisma.Products_filesScalarFieldEnum = {
 };
 
 exports.Prisma.User_sessionsScalarFieldEnum = {
-  token_id: 'token_id',
+  session_id: 'session_id',
   user_id: 'user_id',
   device_name: 'device_name',
   device_finger: 'device_finger',

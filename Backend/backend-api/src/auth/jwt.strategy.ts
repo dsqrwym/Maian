@@ -38,13 +38,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
 
     const session = await this.prismaService.user_sessions.findUnique({
       where: {
-        token_id: payload.tokenId,
+        session_id: payload.sessionId,
       },
       select: {
         access_token: true,
         refresh_token: true,
         revoked: true,
-        token_id: true,
+        session_id: true,
       },
     });
 
