@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.drawable.imagevector
+package org.dsqrwym.shared.drawable
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-val MaianLogo: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
+internal val MaianLogo: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
     ImageVector.Builder(
         name = "MaianLogo",
         defaultWidth = 609.dp,

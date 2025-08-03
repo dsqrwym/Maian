@@ -8,7 +8,11 @@ import androidx.compose.ui.graphics.Color
 data class MyAppColors(
     val iconNotification : Color,
     val iconNavSelected : Color,
-    val iconNavUnselected : Color
+    val iconNavUnselected : Color,
+    val correct: Color,              // 验证正确边框/图标色
+    val onCorrect: Color,            // 验证正确内容色
+    val correctContainer: Color,     // 成功提示背景色
+    val onCorrectContainer: Color    // 成功提示文本色
 )
 
 // 亮色主题颜色
@@ -29,6 +33,12 @@ val LightIconNavUnselected = Color(0xFFB3C9F2)
 val LightIconNavSelected = Color(0xFFFFFFFF)
 val LightIconDefault = Color(0xFF5C5C5C)
 
+// 正确状态颜色
+val LightCorrect = Color(0xFF4CAF50) // Material Green 500
+val LightOnCorrect = Color.White
+val LightCorrectContainer = Color(0xFFE6F4EA)
+val LightOnCorrectContainer = Color(0xFF1B5E20)
+
 // 暗色主题颜色
 val DarkBackground = Color(0xFF242C3B)
 val DarkSecondaryBackground = Color(0xFF30394C)
@@ -47,16 +57,30 @@ val DarkIconNavUnselected = Color(0xFFABADB3)
 val DarkIconNavSelected = Color(0xFFFFFFFF)
 val DarkIconDefault = Color(0xFF5C5C5C)
 
+
+val DarkCorrect = Color(0xFF81C784) // Material Green 300
+val DarkOnCorrect = Color.Black
+val DarkCorrectContainer = Color(0xFF1B5E20)
+val DarkOnCorrectContainer = Color(0xFFC8E6C9)
+
 val LightExtraColorScheme = MyAppColors(
     iconNotification = LightIconNotification,
     iconNavSelected = LightIconNavSelected,
-    iconNavUnselected = LightIconNavUnselected
+    iconNavUnselected = LightIconNavUnselected,
+    correct = LightCorrect,
+    onCorrect = LightOnCorrect,
+    correctContainer = LightCorrectContainer,
+    onCorrectContainer = LightOnCorrectContainer
 )
 
 val DarkExtraColorScheme = MyAppColors(
     iconNotification = DarkIconNotification,
     iconNavSelected = DarkIconNavSelected,
-    iconNavUnselected = DarkIconNavUnselected
+    iconNavUnselected = DarkIconNavUnselected,
+    correct = DarkCorrect,
+    onCorrect = DarkOnCorrect,
+    correctContainer = DarkCorrectContainer,
+    onCorrectContainer = DarkOnCorrectContainer
 )
 
 val AppExtraColors = staticCompositionLocalOf {
@@ -88,7 +112,6 @@ val LightAppColorScheme = lightColorScheme(
     onSurface = LightTextBlack, // 表面上的文本/图标颜色
     surfaceVariant = LightIconDefault, // 默认图标颜色 变体表面 （如菜单背景）
     onSurfaceVariant = LightTextDescription, // 变体表面内容 文本颜色
-    // 您可以根据需要映射更多颜色
     // 禁用状态 / 边框
     outline = LightButtonDisabled, // 禁用/未选中按钮边框 标准边框
     outlineVariant = LightIconDefault.copy(alpha = 0.5f), // 变体边框

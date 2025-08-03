@@ -88,7 +88,8 @@ kotlin {
 
                 // 根据KMP官网教程 添加处理日期的跨平台库
                 implementation(libs.kotlinx.datetime)
-
+                // 官方导航
+                implementation(libs.kmp.navigation.compose)
                 // Material图标扩展
                 implementation(libs.material.icons.core)
 
@@ -185,7 +186,8 @@ ksp {
 
 
 val copyGeneratedLanguageByKspToCommon by tasks.registering(Copy::class) {
-    val sourceDir = layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")
+    val sourceDir =
+        layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")
     val destinationDir = layout.projectDirectory.dir("src/commonGenerated/kotlin/org/dsqrwym/shared/language")
     /*
     from(layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")) {

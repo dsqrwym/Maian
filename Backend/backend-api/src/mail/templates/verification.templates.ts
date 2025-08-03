@@ -1,28 +1,28 @@
 export const getVerificationEmailHtml = ({
-    title, // 验证邮箱
-    hello, // 您好
-    thankRegister, // 感谢您注册我们的账户！
-    reminderVerification, // 目前您的邮箱尚未完成验证，因此部分功能将受到限制。为了实现正常的功能并保障您的账户安全，请点击下方的“验证按钮”完成邮箱验证。
-    content, /* 根据我们的政策，如果您在
+  title, // 验证邮箱
+  hello, // 您好
+  thankRegister, // 感谢您注册我们的账户！
+  reminderVerification, // 目前您的邮箱尚未完成验证，因此部分功能将受到限制。为了实现正常的功能并保障您的账户安全，请点击下方的“验证按钮”完成邮箱验证。
+  content /* 根据我们的政策，如果您在
     <strong>2025年5月15日</strong>
     前仍未完成验证，您的登录权限将会被暂停，并在随后七天内（即
-    <strong>2025年5月22日</strong>）删除您的账户及所有相关数据。*/
-    repeatReminder, // 为了实现正常的功能，请点击验证按钮进行验证吧！
-    buttonLink,
-    buttonText, // 验证
-    support, // 如有任何问题，请随时联系我们的客服团队。
-    notReply, // 此邮件由系统自动发送，请勿回复。
-}:{
-    title: string;
-    hello: string;
-    thankRegister: string;
-    reminderVerification: string;
-    content: string;
-    repeatReminder: string;
-    buttonLink: string;
-    buttonText: string;
-    support: string;
-    notReply: string;
+    <strong>2025年5月22日</strong>）删除您的账户及所有相关数据。*/,
+  repeatReminder, // 为了实现正常的功能，请点击验证按钮进行验证吧！
+  buttonLink,
+  buttonText, // 验证
+  support, // 如有任何问题，请随时联系我们的客服团队。
+  notReply, // 此邮件由系统自动发送，请勿回复。
+}: {
+  title: string;
+  hello: string;
+  thankRegister: string;
+  reminderVerification: string;
+  content: string;
+  repeatReminder: string;
+  buttonLink: string;
+  buttonText: string;
+  support: string;
+  notReply: string;
 }) => `
 <!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">

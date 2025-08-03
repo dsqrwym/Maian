@@ -5,15 +5,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.dsqrwym.shared.di.sharedInitKoin
+import org.dsqrwym.shared.theme.DarkAppColorScheme
+import org.dsqrwym.shared.theme.LightAppColorScheme
+import org.dsqrwym.shared.theme.MiSansNormalTypography
+import org.dsqrwym.shared.ui.components.containers.SharedAuthContainer
 import org.dsqrwym.shared.util.settings.initSettings
+import org.dsqrwym.standard.di.standardInitKoin
+import org.dsqrwym.standard.ui.screens.auth.ForgotPasswordScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         initSettings(applicationContext)
-        sharedInitKoin()
+        standardInitKoin()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,6 +58,24 @@ fun AppAndroidVerticalPreview() {
 }
 
 @Composable
-fun PreviewScreen(){
+fun PreviewScreen() {
+    val isDarkTheme = isSystemInDarkTheme()
 
+    val materialColorScheme = if (isDarkTheme) DarkAppColorScheme else LightAppColorScheme
+
+    MaterialTheme(
+        colorScheme = materialColorScheme,
+        typography = MiSansNormalTypography()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .windowInsetsPadding(WindowInsets.systemBars)
+        ) {
+            SharedAuthContainer {
+                ForgotPasswordScreen { }
+            }
+        }
+    }
 }

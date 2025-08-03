@@ -16,16 +16,16 @@ import dev.datlag.kcef.KCEF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.dsqrwym.shared.AppRoot
-import org.dsqrwym.shared.di.sharedInitKoin
 import org.dsqrwym.shared.localization.getAppDisplayName
 import org.dsqrwym.shared.util.log.SharedLog
+import org.dsqrwym.standard.di.standardInitKoin
 import java.io.File
 import kotlin.math.max
 
 
 fun main() = application {
     addTempDirectoryRemovalHook()
-    sharedInitKoin()
+    standardInitKoin()
     Window(
         onCloseRequest = {
             KCEF.disposeBlocking()

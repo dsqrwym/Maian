@@ -117,6 +117,8 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+//            isMinifyEnabled = true   // 同时触发 Shrinking + Optimization + Obfuscation
+//            isShrinkResources = true   // 移除未用资源
         }
     }
     compileOptions {

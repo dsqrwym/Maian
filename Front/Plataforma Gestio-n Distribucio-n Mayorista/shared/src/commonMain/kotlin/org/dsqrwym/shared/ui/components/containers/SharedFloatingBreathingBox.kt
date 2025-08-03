@@ -19,7 +19,7 @@ fun SharedFloatingBreathingBox(
     floatRangeDp: Dp = 6.dp,                  // 上下浮动的范围
     scaleRange: Pair<Float, Float> = 0.95f to 1f, // 缩放范围
     alphaRange: Pair<Float, Float> = 0.6f to 1.0f,    // 透明度范围
-    durationMillis: Int = 1800,                // 动画周期
+    durationMillis: Int = 2500,                // 动画周期
     enlargeWhenFloatingUp: Boolean = false,     // 上浮时变大，还是下浮时变大
     content: @Composable BoxScope.() -> Unit   // 插入的内容
 ) {

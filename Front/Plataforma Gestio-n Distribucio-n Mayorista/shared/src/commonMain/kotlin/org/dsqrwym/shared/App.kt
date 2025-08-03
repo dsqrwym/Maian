@@ -51,7 +51,6 @@ fun AppRoot(sharedSnackbarViewModel : SharedSnackbarViewModel = currentKoinScope
             }
         }
     }
-
 }
 
 fun todayDate(): String {

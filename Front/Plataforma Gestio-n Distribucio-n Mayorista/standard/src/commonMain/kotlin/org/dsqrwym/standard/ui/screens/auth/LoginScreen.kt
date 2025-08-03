@@ -1,57 +1,55 @@
-package org.dsqrwym.standard.ui.screens
+package org.dsqrwym.standard.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.LocalIsDarkTheme
-import org.dsqrwym.shared.drawable.Visibility
-import org.dsqrwym.shared.drawable.VisibilityOff
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.components.SharedHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.GoogleSignInButton
 import org.dsqrwym.shared.ui.components.buttons.SharedLoginButton
 import org.dsqrwym.shared.ui.components.buttons.SharedTextButton
 import org.dsqrwym.shared.ui.components.buttons.WechatSignInButton
-import org.dsqrwym.shared.ui.components.outlinetextfields.SharedOutlinedTextField
+import org.dsqrwym.shared.ui.components.containers.SharedUiState
+import org.dsqrwym.shared.ui.components.input.outlinetextfields.SharedBasePasswordField
+import org.dsqrwym.shared.ui.components.input.outlinetextfields.SharedOutlinedTextField
+import org.dsqrwym.shared.ui.components.topbar.SharedAuthTopBar
 import org.dsqrwym.shared.util.validation.validateEmail
-import org.dsqrwym.shared.util.validation.validatePassword
-import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
+import org.dsqrwym.standard.ui.viewmodels.auth.AuthViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () -> Unit = {}) {
-    var usernameOrEmail by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(
+    authViewModel: AuthViewModel = koinViewModel<AuthViewModel>(),
+    onBackButtonClick: () -> Unit = {},
+    onForgetPasswordClick: () -> Unit = {}
+) {
+    LaunchedEffect(Unit) {
+        authViewModel.initLogin()
+    }
+
+    val usernameOrEmail = authViewModel.email
+    val password = authViewModel.password
 
     // Validation states
-    var usernameOrEmailError by remember { mutableStateOf<String?>(null) }
-    var passwordError by remember { mutableStateOf<String?>(null) }
-    val loginEnabled = remember {
-        derivedStateOf {
-            usernameOrEmail.isNotBlank() &&
-                    password.isNotBlank() &&
-                    usernameOrEmailError == null &&
-                    passwordError == null
-        }
-    }
+    val usernameOrEmailError = authViewModel.emailError
+    val passwordError = authViewModel.passwordError
+    val loginEnabled = authViewModel.loginEnabled
+    val loginUiState = authViewModel.loginUiState
 
     // 创建 FocusRequester 实例
     val passwordFocusRequester = remember { FocusRequester() }
@@ -60,22 +58,21 @@ fun LoginScreen(onBackButtonClick: () -> Unit = {}, onForgetPasswordClick: () ->
         modifier = Modifier.padding(26.dp),
         usernameOrEmail = usernameOrEmail,
         onUsernameOrEmailChange = {
-            usernameOrEmail = it
-            usernameOrEmailError = validateUsernameOrEmail(it)
+            authViewModel.updateEmail(it)
         },
         password = password,
         onPasswordChange = {
-            password = it
-            passwordError = validatePassword(it)
+            authViewModel.updatePassword(it)
         },
         usernameOrEmailError = usernameOrEmailError,
         passwordError = passwordError,
         loginEnabled = loginEnabled.value,
+        loginUiState = loginUiState,
         passwordFocusRequester = passwordFocusRequester,
         onBackButtonClick = onBackButtonClick,
         onForgetPasswordClick = onForgetPasswordClick,
         onLoginClick = {
-
+            authViewModel.login()
         }
     )
 }
@@ -90,6 +87,7 @@ fun LoginContent(
     onPasswordChange: (String) -> Unit,
     passwordError: String?,
     loginEnabled: Boolean,
+    loginUiState: SharedUiState,
     passwordFocusRequester: FocusRequester,
     onBackButtonClick: () -> Unit,
     onForgetPasswordClick: () -> Unit,
@@ -97,16 +95,7 @@ fun LoginContent(
 ) {
     val scrollState = rememberScrollState()
     Column(modifier = modifier.fillMaxHeight().verticalScroll(scrollState)) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            IconButton(onClick = onBackButtonClick) {
-                Icon(
-                    Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
-                    SharedLanguageMap.currentStrings.value.login_button_back_button_content_description,
-                    modifier = Modifier.fillMaxSize().scale(1.3f),
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
+        SharedAuthTopBar(onBackButtonClick = onBackButtonClick)
 
         LoginTitleSection()
 
@@ -148,10 +137,14 @@ fun LoginContent(
                 .weight(1f, fill = false) // 保证允许占据的空间为0
         )
 
-        SharedLoginButton(
-            loginEnabled = loginEnabled,
-            onLoginClick = onLoginClick
-        )
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            SharedLoginButton(
+                loginUiState = loginUiState,
+                loginEnabled = loginEnabled,
+                onLoginClick = onLoginClick
+            )
+        }
+
 
         SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods)
 
@@ -222,32 +215,16 @@ fun PasswordField(
     focusRequester: FocusRequester,
     onLoginClick: () -> Unit
 ) {
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    SharedOutlinedTextField(
+    SharedBasePasswordField(
+        labelText = SharedLanguageMap.currentStrings.value.login_field_password_label,
+        placeholderText = SharedLanguageMap.currentStrings.value.login_field_password_placeholder,
         value = value,
         onValueChange = onValueChange,
         error = error,
-        labelText = SharedLanguageMap.currentStrings.value.login_field_password_label, // 密码
-        placeholderText = SharedLanguageMap.currentStrings.value.login_field_password_placeholder, // "请输入密码"
-        leadingIcon = Icons.Outlined.Lock,
-        leadingIconContentDescription = SharedLanguageMap.currentStrings.value.login_icon_content_description_lock, //"密码图标",
-        trailingIcon = {
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(
-                    imageVector = if (passwordVisible) Visibility else VisibilityOff,
-                    contentDescription = SharedLanguageMap.currentStrings.value.login_password_toggle_visibility, // "切换密码可见性"
-                    tint = if (passwordVisible) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline
-                )
-            }
-        },
-        isPassword = true,
-        passwordVisibility = passwordVisible,
-        imeAction = ImeAction.Done,
+        focusRequester = focusRequester,
         onImeAction = {
-            onLoginClick()
             focusRequester.freeFocus()
-        },
-        focusRequester = focusRequester
+            onLoginClick()
+        }
     )
 }

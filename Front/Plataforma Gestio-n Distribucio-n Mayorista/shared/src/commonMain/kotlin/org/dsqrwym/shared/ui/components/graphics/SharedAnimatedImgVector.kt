@@ -4,6 +4,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -20,6 +21,10 @@ import androidx.compose.ui.graphics.vector.VectorGroup
 import androidx.compose.ui.graphics.vector.VectorPath
 import androidx.compose.ui.graphics.vector.toPath
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import org.dsqrwym.shared.util.log.SharedLog
 
 /**
@@ -28,8 +33,8 @@ import org.dsqrwym.shared.util.log.SharedLog
  *
  * @param imageVector 要绘制的 SVG 图像向量。
  * @param durationMillis 动画的总持续时间（毫秒）。
- * @param lineColor 默认的路径颜色（当 VectorPath 没有指定 stroke/fill 或禁用原色时使用）。
- * @param strokeWidth 路径描边的线宽。
+ * @param tint 默认的路径颜色（当 VectorPath 没有指定 stroke/fill 或禁用原色时使用）。
+ * @param strokeWidth 路径描边的线宽，null代表使用imageVector默认的。
  * @param useOriginalStrokeColor 是否使用原始 SVG 中定义的 stroke 或 fill 颜色来作为线条颜色。
  * @param drawFillAfter 动画结束后是否绘制原始填充色，保持与 SVG 最终外观一致。
  * @param modifier Modifier 用于 Canvas。
@@ -38,10 +43,11 @@ import org.dsqrwym.shared.util.log.SharedLog
 fun SharedAnimatedImgVector(
     imageVector: ImageVector,
     durationMillis: Int = 2000,
-    lineColor: Color = Color.Red,
-    strokeWidth: Float = 1f,
+    tint: Color = LocalContentColor.current,
+    strokeWidth: Float? = null,
     useOriginalStrokeColor: Boolean = true,
     drawFillAfter: Boolean = true,
+    contentDescription: String? = null,
     modifier: Modifier = Modifier
 ) {
     var calculatedScaleFactor by remember { mutableStateOf(1f) }
@@ -68,22 +74,34 @@ fun SharedAnimatedImgVector(
     // 创建并记住 PathMeasure 实例以提高性能
     val pathMeasure = remember { PathMeasure() }
 
-    Canvas(modifier = modifier.onSizeChanged { intSize ->
-        // 在 Canvas 的尺寸确定后，在这里计算缩放和平移
-        val canvasWidth = intSize.width.toFloat()
-        val canvasHeight = intSize.height.toFloat()
+    val semantics =
+        if (contentDescription != null) {
+            Modifier.semantics {
+                this.contentDescription = contentDescription
+                this.role = Role.Image
+            }
+        } else {
+            Modifier
+        }
 
-        val vectorIntrinsicWidth = imageVector.viewportWidth
-        val vectorIntrinsicHeight = imageVector.viewportHeight
+    Canvas(
+        modifier = modifier.onSizeChanged { intSize ->
+            // 在 Canvas 的尺寸确定后，在这里计算缩放和平移
+            val canvasWidth = intSize.width.toFloat()
+            val canvasHeight = intSize.height.toFloat()
 
-        val scaleToFit = minOf(
-            canvasWidth / vectorIntrinsicWidth,
-            canvasHeight / vectorIntrinsicHeight
-        )
-        // 更新状态，这将触发重组和重绘
-        calculatedScaleFactor = scaleToFit
-        SharedLog.log(message = "Calculated scale")
-    }.scale(calculatedScaleFactor)) {
+            val vectorIntrinsicWidth = imageVector.viewportWidth
+            val vectorIntrinsicHeight = imageVector.viewportHeight
+
+            val scaleToFit = minOf(
+                canvasWidth / vectorIntrinsicWidth,
+                canvasHeight / vectorIntrinsicHeight
+            )
+            // 更新状态，这将触发重组和重绘
+            calculatedScaleFactor = scaleToFit
+            SharedLog.log(message = "Calculated scale")
+        }.scale(calculatedScaleFactor).then(semantics)
+    ) {
         val vectorIntrinsicWidth = imageVector.viewportWidth
         val vectorIntrinsicHeight = imageVector.viewportHeight
 
@@ -100,7 +118,7 @@ fun SharedAnimatedImgVector(
                 pathMeasure = pathMeasure,
                 progress = animationProgress,
                 fillAlpha = fillProgress,
-                lineColor = lineColor,
+                tint = tint,
                 strokeWidth = strokeWidth,
                 useOriginalStrokeColor = useOriginalStrokeColor,
                 drawFillAfter = drawFillAfter
@@ -121,8 +139,8 @@ private fun DrawScope.drawVectorGroup(
     pathMeasure: PathMeasure,
     progress: Float,
     fillAlpha: Float,
-    lineColor: Color,
-    strokeWidth: Float,
+    tint: Color,
+    strokeWidth: Float?,
     useOriginalStrokeColor: Boolean = true,
     drawFillAfter: Boolean = true
 ) {
@@ -136,8 +154,9 @@ private fun DrawScope.drawVectorGroup(
                     pathMeasure = pathMeasure,
                     progress = progress,
                     fillAlpha = fillAlpha,
-                    lineColor = lineColor,
-                    strokeWidth = strokeWidth
+                    tint = tint,
+                    strokeWidth = strokeWidth,
+                    useOriginalStrokeColor = useOriginalStrokeColor
                 )
             }
 
@@ -148,7 +167,7 @@ private fun DrawScope.drawVectorGroup(
                     pathMeasure = pathMeasure,
                     progress = progress,
                     fillAlpha = fillAlpha,
-                    lineColor = lineColor,
+                    tint = tint,
                     strokeWidth = strokeWidth,
                     useOriginalStrokeColor = useOriginalStrokeColor,
                     drawFillAfter = drawFillAfter
@@ -168,8 +187,8 @@ private fun DrawScope.drawVectorPath(
     pathMeasure: PathMeasure,
     progress: Float,
     fillAlpha: Float,
-    lineColor: Color,
-    strokeWidth: Float,
+    tint: Color,
+    strokeWidth: Float?,
     useOriginalStrokeColor: Boolean = true,
     drawFillAfter: Boolean = true
 ) {
@@ -187,10 +206,10 @@ private fun DrawScope.drawVectorPath(
     val colorForStroke = if (useOriginalStrokeColor) {
         when (val brush = path.stroke ?: path.fill) {
             is SolidColor -> brush.value
-            else -> lineColor
+            else -> tint
         }
     } else {
-        lineColor
+        tint
     }
     // phase (偏移量) 从 length 变为 0
     val phase = (1f - progress) * length
@@ -200,13 +219,14 @@ private fun DrawScope.drawVectorPath(
         intervals = floatArrayOf(length, length),
         phase = phase
     )
+    val effectiveStrokeWidth = strokeWidth ?: path.strokeLineWidth
 
     // 4. 使用计算出的 PathEffect 绘制路径
     drawPath(
         path = composePath,
         color = colorForStroke,
         style = Stroke(
-            width = strokeWidth,
+            width = effectiveStrokeWidth,
             pathEffect = pathEffect
         )
     )
@@ -214,7 +234,12 @@ private fun DrawScope.drawVectorPath(
     // 当动画接近完成时，绘制原始的填充效果
     // 这样做可以确保最终图像与原始 SVG 完全一致
     if (drawFillAfter) {
-        path.fill?.let { fillBrush ->
+        val fillBrush = when {
+            !useOriginalStrokeColor -> SolidColor(tint)
+            path.fill != null -> path.fill
+            else -> null
+        }
+        fillBrush?.let { fillBrush ->
             drawPath(
                 path = composePath,
                 brush = fillBrush,

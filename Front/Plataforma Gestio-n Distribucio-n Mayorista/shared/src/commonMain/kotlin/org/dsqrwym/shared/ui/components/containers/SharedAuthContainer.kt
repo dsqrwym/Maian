@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import org.dsqrwym.shared.drawable.getImageMobileBackground
+import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.ui.components.BackgroundImage
 
 @Composable
@@ -17,7 +17,7 @@ fun SharedAuthContainer(content: @Composable () -> Unit) {
     BoxWithConstraints {
         val notMobile = maxWidth > 600.dp
         val blurRadius = if (notMobile) 12.dp else 0.dp
-        BackgroundImage(getImageMobileBackground(), blurRadius) {
+        BackgroundImage(SharedImages.background(), blurRadius) {
             // 居中内容，宽度限制仅非手机端
             val transparency = 0.85f
             val contentModifier = if (notMobile) {

@@ -6,14 +6,14 @@ import androidx.navigation.ExperimentalBrowserHistoryApi
 import androidx.navigation.bindToNavigation
 import kotlinx.browser.document
 import kotlinx.browser.window
-import org.dsqrwym.shared.di.sharedInitKoin
 import org.dsqrwym.shared.localization.getAppDisplayName
 import org.dsqrwym.shared.localization.getLocaleLanguage
 import org.dsqrwym.shared.util.log.SharedLog
+import org.dsqrwym.standard.di.standardInitKoin
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalBrowserHistoryApi::class)
 fun main() {
-    sharedInitKoin()
+    standardInitKoin()
     initializingApp()
     ComposeViewport(viewportContainerId = "compose-root") {
         App { navController ->

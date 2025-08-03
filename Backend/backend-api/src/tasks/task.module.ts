@@ -1,8 +1,7 @@
-import { Module } from "@nestjs/common";
-import { CleanupTask } from "./cleanup.task";
+import { Module } from '@nestjs/common';
+import { CleanupTask } from './cleanup.task';
 
 @Module({
-    providers: [CleanupTask]
+  providers: [CleanupTask],
 })
-
-export class TaskModule { }
+export class TaskModule {}

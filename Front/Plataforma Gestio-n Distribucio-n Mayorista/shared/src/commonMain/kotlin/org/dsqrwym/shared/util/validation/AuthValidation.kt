@@ -9,7 +9,7 @@ expect fun validateEmail(email: String): Boolean
 // 验证函数
 fun validateUsernameOrEmail(input: String): String? {
     if (input.isBlank()) {
-        return  SharedLanguageMap.currentStrings.value.login_validation_username_or_email_empty //"用户名或邮箱不能为空"
+        return SharedLanguageMap.currentStrings.value.login_validation_username_or_email_empty //"用户名或邮箱不能为空"
     }
 
     val isEmail = validateEmail(input)
@@ -43,4 +43,11 @@ fun validatePassword(password: String): String? {
     }
 
     return null
+}
+
+fun validateRepeatPassword(password: String, repeatPassword: String): String? {
+    if (password != repeatPassword) {
+        return "输入的密码与新密码不同"
+    }
+    return validatePassword(repeatPassword)
 }

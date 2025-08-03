@@ -2,8 +2,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 
 export function useSwagger(app: INestApplication) {
-    const config = new DocumentBuilder() // 创建 Swagger 文档配置
-    .setTitle('Plataforma de gestión y distribución mayorista NestJS Backend API') // 设置 API 标题
+  const config = new DocumentBuilder() // 创建 Swagger 文档配置
+    .setTitle('Maian NestJS Backend API') // 设置 API 标题
     .setDescription('NestJS API description') // 设置 API 描述
     .setVersion('1.0') // 设置 API 版本
     .addTag('nestjs') // 添加标签

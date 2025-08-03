@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.ui.screens
+package org.dsqrwym.standard.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.data.local.UserPreferences
-import org.dsqrwym.shared.drawable.imagevector.MaianLogo
+import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.animations.containers.SharedFloatingBreathingBox
 import org.dsqrwym.shared.ui.components.AgreementSection
@@ -43,7 +43,7 @@ fun InitialScreen(
             alphaRange = Pair(0.6f, 0.9f),
         ) {
             SharedAnimatedImgVector(
-                imageVector = MaianLogo,
+                imageVector = SharedIcons.MaianLogo,
                 modifier = Modifier
                     .fillMaxSize(0.8f)
             )
