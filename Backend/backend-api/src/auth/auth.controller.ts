@@ -7,6 +7,8 @@ import {
   Res,
   UseGuards,
   Req,
+  BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -21,9 +23,8 @@ import {
 } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { LoginDto } from './dto/login.dto';
-import { AuthenticatedUser, AuthTokenPayload } from './auth.types';
 import { DeleteSessionDto } from './dto/delete.session.dto';
-import { JwtAuthGuard, LocalAuthGuard } from './auth.guard';
+import { JwtAuthGuard, LocalAuthGuard } from './guard/auth.guard';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -120,7 +121,12 @@ export class AuthController {
   })
   @UseGuards(LocalAuthGuard)
   async login(@Req() req: FastifyRequest, @Body() body: LoginDto) {
-    return this.authService.login(req.user as AuthenticatedUser, body);
+    const user = req.user.authenticatedUser;
+    if (!user) {
+      throw new BadRequestException('User authentication failed');
+    }
+
+    return this.authService.login(user, body);
   }
 
   @Post('refresh-token')
@@ -157,7 +163,13 @@ export class AuthController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   async logout(@Req() req: FastifyRequest) {
-    return this.authService.logoutSession(req.user as AuthTokenPayload);
+    const payload = req.user.authTokenPayload;
+
+    if (!payload) {
+      throw new UnauthorizedException('No valid token payload found');
+    }
+
+    return this.authService.logoutSession(payload);
   }
 
   @Post('delete-session')

@@ -9,8 +9,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 // 我自己的模块 :
 //  公共模块
 import { CommonModule } from './common/common.module'; // 全局的
-//  supabase 模块
-import { SupabaseModule } from './supabase/supabase.module'; // 全局的
 //  Prisma 模块
 import { PrismaModule } from './prisma/prisma.module'; // 全局的
 //  邮件模块
@@ -55,7 +53,6 @@ import { TaskModule } from './tasks/task.module';
 
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
-    SupabaseModule, // 全局的模块
     TaskModule, // 开启定时任务
     MailModule, // 邮件模块
     AuthModule, // 认证模块

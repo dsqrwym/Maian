@@ -3,7 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { HashService } from 'src/common/hash/hash.service';
-import { AuthTokenPayload } from './auth.types';
+import { AuthTokenPayload, ReqUser } from '../auth.types';
 import { FastifyRequest } from 'fastify';
 import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -74,6 +74,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    return payload;
+    const reqUser: ReqUser = {
+      authenticatedUser: null,
+      authTokenPayload: payload,
+    };
+    return reqUser;
   }
 }

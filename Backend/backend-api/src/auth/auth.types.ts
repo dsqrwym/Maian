@@ -1,5 +1,10 @@
 import { UserRole, UserStatus } from '../../prisma/generated/prisma';
 
+interface ReqUser {
+  authenticatedUser: AuthenticatedUser | null;
+  authTokenPayload: AuthTokenPayload | null;
+}
+
 /**
  * AuthTokenPayload 是嵌入 JWT token 中的载荷（payload）结构。
  * 用于识别当前会话的用户、设备以及该次会话的唯一标识。
@@ -24,7 +29,7 @@ interface AuthTokenPayload {
 
   /**
    * 会话记录 ID（来自 user_sessions 表的主键）
-   * 每次登录生成一个唯一的 tokenId，用于精确控制和撤销特定会话。
+   * 每次登录生成一个唯一的 sessionId，用于精确控制和撤销特定会话。
    */
   sessionId: string;
 }
@@ -48,4 +53,4 @@ enum SpanishCompanyType {
   ASOCIACION = 7, // Asociación / Fundación
 }
 
-export { AuthTokenPayload, AuthenticatedUser, SpanishCompanyType };
+export { ReqUser, AuthTokenPayload, AuthenticatedUser, SpanishCompanyType };

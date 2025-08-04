@@ -268,7 +268,6 @@ export class AuthService {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       sessionId = newSession.session_id;
 
       this.logger.debug(
@@ -292,7 +291,7 @@ export class AuthService {
           session_id: true,
         },
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       sessionId = updatedSession.session_id;
     }
 

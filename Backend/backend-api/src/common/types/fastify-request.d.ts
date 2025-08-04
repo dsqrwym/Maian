@@ -1,6 +1,7 @@
-import { AuthenticatedUser, AuthTokenPayload } from '../../auth/auth.types';
+import { ReqUser } from '../../auth/auth.types';
+
 declare module 'fastify' {
   interface FastifyRequest {
-    user: AuthenticatedUser | AuthTokenPayload;
+    user: ReqUser;
   }
 }

@@ -4,8 +4,8 @@ import { Strategy } from 'passport-custom';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { HashService } from 'src/common/hash/hash.service';
 import { FastifyRequest } from 'fastify';
-import { LoginDto } from './dto/login.dto';
-import { AuthenticatedUser } from './auth.types';
+import { LoginDto } from '../dto/login.dto';
+import { AuthenticatedUser, AuthTokenPayload, ReqUser } from '../auth.types';
 import { Logger } from 'nestjs-pino';
 
 @Injectable()
@@ -54,6 +54,10 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'custom-local') {
       status: user.status,
     };
 
-    return result;
+    const reqUser: ReqUser = {
+      authTokenPayload: null,
+      authenticatedUser: result,
+    };
+    return reqUser;
   }
 }
