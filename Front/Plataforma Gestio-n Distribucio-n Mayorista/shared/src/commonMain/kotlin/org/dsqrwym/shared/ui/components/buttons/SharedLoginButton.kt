@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.components.containers.SharedStateContent
 import org.dsqrwym.shared.ui.components.containers.SharedUiState
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_button_login
 
 @Composable
 fun SharedLoginButton(
@@ -33,7 +35,7 @@ fun SharedLoginButton(
             modifier = if (loginUiState == SharedUiState.Idle) modifier.fillMaxWidth() else modifier,
         ) {
             Text(
-                text = SharedLanguageMap.currentStrings.value.login_button_login,
+                text = stringResource(SharedRes.string.login_button_login), //SharedLanguageMap.currentStrings.value.login_button_login,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.5.sp

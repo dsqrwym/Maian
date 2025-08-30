@@ -17,7 +17,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.dsqrwym.shared.language.SharedLanguageMap
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_button_back_button_content_description
 
 @Composable
 fun SharedAuthTopBar(
@@ -33,7 +35,7 @@ fun SharedAuthTopBar(
         IconButton(onClick = onBackButtonClick) {
             Icon(
                 Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
-                SharedLanguageMap.currentStrings.value.login_button_back_button_content_description,
+                stringResource(SharedRes.string.login_button_back_button_content_description),
                 modifier = Modifier.fillMaxSize().scale(1.3f),
                 tint = MaterialTheme.colorScheme.onBackground
             )

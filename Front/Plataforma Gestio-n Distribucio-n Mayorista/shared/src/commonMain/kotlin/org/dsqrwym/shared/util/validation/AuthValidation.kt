@@ -1,53 +1,54 @@
 package org.dsqrwym.shared.util.validation
 
-import org.dsqrwym.shared.language.SharedLanguageMap
+import org.jetbrains.compose.resources.StringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 
 expect fun validateEmail(email: String): Boolean
 
 
 // 验证函数
-fun validateUsernameOrEmail(input: String): String? {
+ fun validateUsernameOrEmail(input: String): StringResource? {
     if (input.isBlank()) {
-        return SharedLanguageMap.currentStrings.value.login_validation_username_or_email_empty //"用户名或邮箱不能为空"
+        return SharedRes.string.login_validation_username_or_email_empty
     }
 
     val isEmail = validateEmail(input)
 
     if (isEmail && input.endsWith("@example.com", ignoreCase = true)) {
-        return SharedLanguageMap.currentStrings.value.login_validation_email_domain_not_supported // "不支持 example.com 邮箱"
+        return SharedRes.string.login_validation_email_domain_not_supported
     }
 
     // Username length validation
-    if (!isEmail && (input.length < 3 || input.length > 30)) {
-        return SharedLanguageMap.currentStrings.value.login_validation_username_length_invalid // "用户名长度应在3到30个字符之间"
+    if (!isEmail && (input.length !in 3..30)) {
+        return SharedRes.string.login_validation_username_length_invalid
     }
     return null
 }
 
-fun validatePassword(password: String): String? {
+fun validatePassword(password: String): StringResource? {
     if (password.isBlank()) {
-        return SharedLanguageMap.currentStrings.value.login_validation_password_empty // "密码不能为空"
+        return SharedRes.string.login_validation_password_empty
     }
     if (password.length < 6) {
-        return SharedLanguageMap.currentStrings.value.login_validation_password_too_short // "密码长度至少为6个字符"
+        return SharedRes.string.login_validation_password_too_short
     }
     if (!password.any { it.isUpperCase() }) {
-        return SharedLanguageMap.currentStrings.value.login_validation_password_missing_uppercase // "密码必须包含至少一个大写字母"
+        return SharedRes.string.login_validation_password_missing_uppercase
     }
     if (!password.any { it.isLowerCase() }) {
-        return SharedLanguageMap.currentStrings.value.login_validation_password_missing_lowercase // "密码必须包含至少一个小写字母"
+        return SharedRes.string.login_validation_password_missing_lowercase
     }
     if (!password.any { it.isDigit() }) {
-        return SharedLanguageMap.currentStrings.value.login_validation_password_missing_digit // "密码必须包含至少一个数字"
+        return SharedRes.string.login_validation_password_missing_digit
     }
 
     return null
 }
 
-fun validateRepeatPassword(password: String, repeatPassword: String): String? {
+fun validateRepeatPassword(password: String, repeatPassword: String): StringResource? {
     if (password != repeatPassword) {
-        return "输入的密码与新密码不同"
+        return SharedRes.string.forgot_repeat_password_mismatch
     }
     return validatePassword(repeatPassword)
 }

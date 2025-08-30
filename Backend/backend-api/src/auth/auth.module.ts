@@ -17,7 +17,7 @@ import { PassportModule } from '@nestjs/passport';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get('AUTH_JWT_SECRET'),
-        signOptions: { expiresIn: '30m' },
+        signOptions: { expiresIn: config.get('ACCESS_TOKEN_EXPIRES_IN') },
       }),
     }),
     MailModule,

@@ -60,17 +60,6 @@ export class LoginDto {
 
   @ApiProperty({
     description:
-      'The IP address of the device used for login. Will be converted to uppercase.',
-    example: '192.168.1.1',
-  })
-  @IsString()
-  @MaxLength(39)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  @Transform(({ value }) => value?.toUpperCase()) // 将IP地址转换为大写
-  ipAddress: string; // 登录地址
-
-  @ApiProperty({
-    description:
       'The user-agent string of the device used for login. Will be converted to uppercase.',
     example: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
   })

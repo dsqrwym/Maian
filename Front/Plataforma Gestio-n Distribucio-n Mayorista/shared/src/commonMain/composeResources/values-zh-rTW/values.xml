@@ -1,0 +1,67 @@
+<resources>
+    <string name="login_background_content_description">登入介面的背景</string>
+
+    <string name="login_button_back_button_content_description">返回按鈕</string>
+
+    <string name="login_button_login">登入</string>
+    <string name="login_button_forget_password">忘記密碼</string>
+    <string name="login_button_other_login_methods">其他登入方式</string>
+
+    <string name="login_button_google_login">使用 Google 登入</string>
+    <string name="login_button_google_logo_content_description">Google 圖示</string>
+    <string name="login_button_wechat_login">使用微信登入</string>
+    <string name="login_button_wechat_logo_content_description">微信圖示</string>
+    <string name="login_button_register_new_account">註冊新帳戶</string>
+
+    <string name="login_title">登入</string>
+    <string name="login_subtitle">請先登入以繼續使用</string>
+
+    <string name="login_field_username_or_email_label">用戶名或電子郵件</string>
+    <string name="login_field_username_or_email_placeholder">請輸入用戶名或電子郵件</string>
+
+    <string name="login_field_password_label">密碼</string>
+    <string name="login_field_password_placeholder">請輸入密碼</string>
+    <string name="login_password_toggle_visibility">切換密碼可見性</string>
+
+    <string name="login_icon_content_description_email">電子郵件圖示</string>
+    <string name="login_icon_content_description_person">用戶圖示</string>
+    <string name="login_icon_content_description_lock">密碼圖示</string>
+
+    <string name="login_validation_username_or_email_empty">用戶名或電子郵件不能為空</string>
+    <string name="login_validation_username_length_invalid">用戶名長度應在 3 到 30 個字元之間</string>
+    <string name="login_validation_email_domain_not_supported">不支援 example.com 電子郵件</string>
+    <string name="login_validation_password_empty">密碼不能為空</string>
+    <string name="login_validation_password_too_short">密碼長度至少為 6 個字元</string>
+    <string name="login_validation_password_missing_uppercase">密碼必須包含至少一個大寫字母</string>
+    <string name="login_validation_password_missing_lowercase">密碼必須包含至少一個小寫字母</string>
+    <string name="login_validation_password_missing_digit">密碼必須包含至少一個數字</string>
+
+
+    <string name="initial_screen_welcome">歡迎來到</string>
+    <string name="initial_screen_platform_name">賣安平台</string>
+    <string name="initial_screen_instruction">請選擇登入或註冊以繼續</string>
+    <string name="initial_screen_quick_login_hint">⏫ 支援 Google、微信 快速登入 ⏫</string>
+
+    <string name="initial_screen_agreement_warning">請先同意用戶協議和隱私政策才能繼續</string>
+    <string name="initial_screen_agreement_section_agreement_text_template">我已閱讀並同意《%s》和《%s》</string>
+    <string name="initial_screen_agreement_section_user_agreement">用戶協議</string>
+    <string name="initial_screen_agreement_section_privacy_policy">隱私政策</string>
+
+    <string name="forgot_email_label">郵箱</string>
+    <string name="forgot_email_placeholder">請輸入你的郵箱</string>
+
+    <string name="forgot_new_password_label">新密碼</string>
+    <string name="forgot_repeat_password_label">重複新密碼</string>
+    <string name="forgot_repeat_password_placeholder">請重複新密碼</string>
+    <string name="forgot_repeat_password_mismatch">輸入的密碼與新密碼不同</string>
+
+
+    <string name="forgot_verify_email">驗證郵箱</string>
+    <string name="forgot_verify">驗證</string>
+
+    <string name="forgot_change_password">更改密碼</string>
+    <string name="forgot_unknown_error">未知錯誤</string>
+    <string name="forgot_fill_otp">請填寫驗證碼</string>
+    <string name="forgot_otp_error">驗證碼錯誤</string>
+    <string name="forgot_email_format_error">郵箱格式不正確</string>
+</resources>

@@ -16,6 +16,12 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
+/**
+ * SharedOtpInputField
+ *
+ * EN: OTP input with countdown resend button. Emits current OTP and completion boolean.
+ * ZH: 带倒计时重发按钮的验证码输入组件。向外部回传当前验证码与是否填写完成。
+ */
 fun SharedOtpInputField(
     modifier: Modifier = Modifier,
     countdownSeconds: Int = 60,
@@ -66,7 +72,7 @@ fun SharedOtpInputField(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun OtpInputFieldPreview() {
     Box(

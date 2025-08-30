@@ -15,26 +15,22 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.Greeting
-import org.dsqrwym.shared.PlatformType
+import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.drawable.brands.GoogleLogo
 import org.dsqrwym.shared.drawable.brands.WechatLogo
-import org.dsqrwym.shared.language.SharedLanguageMap
 import org.jetbrains.compose.resources.Font
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Roboto_Regular
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @Composable
 fun GoogleSignInButton(
     modifier: Modifier = Modifier.height(44.dp),
     isDarkTheme: Boolean = false,
-    text: String = SharedLanguageMap.currentStrings.value.login_button_google_login,
+    text: String = stringResource(SharedRes.string.login_button_google_login),
     shape: Shape = ButtonDefaults.shape,
     fontSize: TextUnit = 14.sp,
     onClick: () -> Unit,
 ) {
-
-
     val buttonColor = getButtonColor(isDarkTheme)
     val borderStroke = getBorderStroke(isDarkTheme)
 
@@ -56,8 +52,8 @@ fun GoogleSignInButton(
                 maxLines = 1,
                 fontSize = fontSize,
                 fontFamily = FontFamily(
-                    Font(resource = Res.font.Roboto_Regular),
-                    Font(resource = Res.font.MiSansVF)
+                    Font(resource = SharedRes.font.Roboto_Regular),
+                    Font(resource = SharedRes.font.MiSansVF)
                 )
             )
         }
@@ -75,7 +71,7 @@ private fun GoogleIcon() {
     Image(
         modifier = Modifier.size(20.dp),
         imageVector = GoogleLogo,
-        contentDescription = SharedLanguageMap.currentStrings.value.login_button_google_logo_content_description,
+        contentDescription = stringResource(SharedRes.string.login_button_google_logo_content_description),
         contentScale = ContentScale.Inside
     )
 }
@@ -106,7 +102,7 @@ fun WechatSignInButton(
     modifier: Modifier = Modifier.height(44.dp),
     isDarkTheme: Boolean = false,
     isInstalled: Boolean = true, // iOS需要传入检测结果，Android默认true
-    text: String = SharedLanguageMap.currentStrings.value.login_button_wechat_login/*"微信登录"*/,
+    text: String = stringResource(SharedRes.string.login_button_wechat_login),
     shape: Shape = ButtonDefaults.shape,
     fontSize: TextUnit = 14.sp,
     onClick: () -> Unit,
@@ -136,8 +132,8 @@ fun WechatSignInButton(
                 maxLines = 1,
                 fontSize = fontSize,
                 fontFamily = FontFamily(
-                    Font(resource = Res.font.Roboto_Regular),
-                    Font(resource = Res.font.MiSansVF)
+                    Font(resource = SharedRes.font.Roboto_Regular),
+                    Font(resource = SharedRes.font.MiSansVF)
                 )
             )
         }
@@ -149,7 +145,7 @@ private fun WechatIcon() {
     Icon(
         imageVector = WechatLogo,
         modifier = Modifier.size(24.dp),
-        contentDescription = SharedLanguageMap.currentStrings.value.login_button_wechat_logo_content_description, // "微信图标",
+        contentDescription = stringResource(SharedRes.string.login_button_wechat_logo_content_description), // "微信图标",
         tint = Color.White
     )
 }

@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedIcons
 
-val SharedIcons.Pending: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
+val SharedIcons.InProgress: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
     ImageVector.Builder(
         name = "Pending",
         defaultWidth = 24.dp,

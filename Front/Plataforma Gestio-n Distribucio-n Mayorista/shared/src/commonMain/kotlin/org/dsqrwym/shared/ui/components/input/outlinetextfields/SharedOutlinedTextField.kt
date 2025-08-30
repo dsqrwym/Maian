@@ -20,7 +20,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Visibility
 import org.dsqrwym.shared.drawable.sharedicons.VisibilityOff
-import org.dsqrwym.shared.language.SharedLanguageMap
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_icon_content_description_lock
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_password_toggle_visibility
 
 /**
  * 通用的带图标 OutlinedTextField 封装，支持密码隐藏/显示、错误提示、图标变色、IME 回车事件处理等。
@@ -122,12 +125,12 @@ fun SharedBasePasswordField(
         labelText = labelText,
         placeholderText = placeholderText,
         leadingIcon = Icons.Outlined.Lock,
-        leadingIconContentDescription = SharedLanguageMap.currentStrings.value.login_icon_content_description_lock, //"密码图标",
+        leadingIconContentDescription = stringResource(SharedRes.string.login_icon_content_description_lock), //"密码图标",
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
                     imageVector = if (passwordVisible) SharedIcons.Visibility else SharedIcons.VisibilityOff,
-                    contentDescription = SharedLanguageMap.currentStrings.value.login_password_toggle_visibility, // "切换密码可见性"
+                    contentDescription = stringResource(SharedRes.string.login_password_toggle_visibility), // "切换密码可见性"
                     tint = if (passwordVisible) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline
                 )
             }

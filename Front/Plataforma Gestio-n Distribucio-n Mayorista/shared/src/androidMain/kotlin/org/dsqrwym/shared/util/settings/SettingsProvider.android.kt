@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 
 private lateinit var appContext: Context
@@ -13,19 +12,10 @@ fun initSettings(context: Context) {
     appContext = context.applicationContext
 }
 
-actual object PlainSettingsProvider {
-    private val delegate: SharedPreferences by lazy {
-        appContext.getSharedPreferences("plain_settings", Context.MODE_PRIVATE)
-    }
+actual fun initSharedSettingsProvider() {
+    SharedSettingsProvider.plain = SharedPreferencesSettings(appContext.getSharedPreferences("plain_settings", Context.MODE_PRIVATE))
 
-    actual val settings: Settings by lazy {
-        SharedPreferencesSettings(delegate)
-    }
-}
-
-
-actual object SecureSettingsProvider {
-    private val delegate: SharedPreferences by lazy {
+    val secureDelegate: SharedPreferences by lazy {
         val masterKey = MasterKey.Builder(appContext)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
@@ -39,7 +29,5 @@ actual object SecureSettingsProvider {
         )
     }
 
-    actual val settings: Settings by lazy {
-        SharedPreferencesSettings(delegate)
-    }
+    SharedSettingsProvider.secure = SharedPreferencesSettings(secureDelegate)
 }

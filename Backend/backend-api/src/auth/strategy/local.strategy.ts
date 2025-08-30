@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { HashService } from 'src/common/hash/hash.service';
 import { FastifyRequest } from 'fastify';
 import { LoginDto } from '../dto/login.dto';
-import { AuthenticatedUser, AuthTokenPayload, ReqUser } from '../auth.types';
+import { AuthenticatedUser, ReqUser } from '../auth.types';
 import { Logger } from 'nestjs-pino';
 
 @Injectable()

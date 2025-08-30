@@ -1,7 +1,7 @@
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -35,19 +35,19 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         outputModuleName = "standardComposeApp"
-        browser {
+        browser {/*
             val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
+            val projectDirPath = project.projectDir.path*/
             commonWebpackConfig {
                 outputFileName = "standardComposeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+               /* devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside browser
                         add(rootDirPath)
                         add(projectDirPath)
                         outputPath?.let { add(it.absolutePath) }
                     }
-                }
+                }*/
             }
         }
         binaries.executable()
@@ -105,6 +105,7 @@ android {
     defaultConfig {
         applicationId = "org.dsqrwym.pgdm.standard"
         minSdk = libs.versions.android.minSdk.get().toInt()
+        //noinspection OldTargetApi
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"

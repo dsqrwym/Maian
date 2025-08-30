@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.animations.containers
+package org.dsqrwym.shared.ui.components.containers
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Box

@@ -6,11 +6,25 @@
     <title>Maian</title>
     <link type="text/css" rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
+    <script>
+        var currentLanguagesImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
+        var newLanguagesImplementation = Object.assign({}, currentLanguagesImplementation, {
+            get: function () {
+                if (window.__customLocale) {
+                    return [window.__customLocale];
+                } else {
+                    return currentLanguagesImplementation.get.apply(this);
+                }
+            }
+        });
+
+        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementation)
+    </script>
     <script type="application/javascript" src="standardComposeApp.js"></script>
 </head>
 <body>
-    <div id="compose-root">
+<div id="compose-root">
 
-    </div>
+</div>
 </body>
 </html>

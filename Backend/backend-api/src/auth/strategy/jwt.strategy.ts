@@ -1,20 +1,21 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { HashService } from 'src/common/hash/hash.service';
 import { AuthTokenPayload, ReqUser } from '../auth.types';
 import { FastifyRequest } from 'fastify';
 import { Logger } from 'nestjs-pino';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { REDIS_CACHE } from '../../redis/redis.module';
+import { HashService } from '../../common/hash/hash.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
   constructor(
-    configService: ConfigService,
-    private readonly hashService: HashService,
-    private readonly prismaService: PrismaService,
+    readonly configService: ConfigService,
+    @Inject(REDIS_CACHE) private readonly redisCache: Cache, // 注入 Redis 缓存
     private readonly logger: Logger,
+    private readonly hashService: HashService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -35,43 +36,18 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
     }
 
     const accessToken = authHeader.split(' ')[1];
+    const hashedAccessToken =
+      await this.hashService.hashWithCrypto(accessToken);
 
-    const session = await this.prismaService.user_sessions.findUnique({
-      where: {
-        session_id: payload.sessionId,
-      },
-      select: {
-        access_token: true,
-        refresh_token: true,
-        revoked: true,
-        session_id: true,
-      },
-    });
-
-    if (!session) {
+    // 检查黑名单
+    const isBlacklisted = await this.redisCache.get(
+      `blacklist:${hashedAccessToken}`,
+    );
+    if (isBlacklisted) {
       this.logger.warn(
-        `[getAccessToken] Session not found for userId: ${payload.userId}`,
+        `[JwtStrategy] Access token is blacklisted for userId: ${payload.userId}`,
       );
-      throw new UnauthorizedException('Session not found');
-    }
-
-    if (session.revoked) {
-      this.logger.warn(
-        `[getAccessToken] Session revoked for userId: ${payload.userId}`,
-      );
-      throw new UnauthorizedException('Session has been revoked');
-    }
-
-    if (
-      !(await this.hashService.compareCrypto(
-        accessToken,
-        session.access_token || '',
-      ))
-    ) {
-      this.logger.warn(
-        `[getAccessToken] Refresh token mismatch for userId: ${payload.userId}`,
-      );
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException('Access token has been revoked');
     }
 
     const reqUser: ReqUser = {

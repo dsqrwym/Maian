@@ -15,11 +15,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedIcons
+import org.dsqrwym.shared.drawable.sharedicons.InProgress
 import org.dsqrwym.shared.theme.AppExtraColors
 import org.dsqrwym.shared.ui.components.containers.SharedUiState
 import org.dsqrwym.shared.ui.components.graphics.SharedAnimatedImgVector
 
 @Composable
+/**
+ * SharedAuthStepCard
+ *
+ * EN: Card showing a step indicator for multistep auth flows (e.g., forgot password).
+ * Displays current/total steps and an animated icon for Error/Loading/Success.
+ *
+ * ZH: 用于多步骤认证流程（如忘记密码）的步骤卡片。显示当前/总步数，并以动画图标表示
+ * 错误/加载中/成功状态。
+ */
 fun SharedAuthStepCard(
     step: Int,
     currentStep: Int,

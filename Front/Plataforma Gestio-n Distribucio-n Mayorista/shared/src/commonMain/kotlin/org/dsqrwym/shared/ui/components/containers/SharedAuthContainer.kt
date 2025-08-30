@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedImages
-import org.dsqrwym.shared.ui.components.BackgroundImage
 
 @Composable
 fun SharedAuthContainer(content: @Composable () -> Unit) {

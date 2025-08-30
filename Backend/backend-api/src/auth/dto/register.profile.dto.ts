@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsOptional,
@@ -11,7 +11,11 @@ import { SpanishCompanyType } from '../auth.types';
 import { UserRole } from 'prisma/generated/prisma/client';
 
 export class RegisterProfileDto {
-  // 批发商和零售商的个人资料设置
+  @ApiProperty({
+    description: 'Company legal or trading name',
+    maxLength: 100,
+    example: 'MAIAN DISTRIBUCIONES SL',
+  })
   @IsString()
   @MaxLength(100)
   @Transform(({ value }) =>
@@ -20,14 +24,27 @@ export class RegisterProfileDto {
   )
   companyName: string;
 
+  @ApiProperty({
+    description: 'Spanish company type',
+    enum: SpanishCompanyType,
+    example: 'SL',
+  })
   @IsEnum(SpanishCompanyType)
   companyType: SpanishCompanyType;
 
+  @ApiPropertyOptional({
+    description: 'License file ID if applicable',
+    example: 'file_abc123',
+  })
   @IsString()
   @IsOptional()
   licence?: string; // 储存营业执照的文件id
 
-  // 批发商的个人资料设置
+  @ApiPropertyOptional({
+    description: 'Company description (required for wholesalers)',
+    maxLength: 500,
+    example: 'Wholesale distributor focused on fresh produce and beverages.',
+  })
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   @ValidateIf((o) => o.role === UserRole.WHOLESALER)
   @IsString()

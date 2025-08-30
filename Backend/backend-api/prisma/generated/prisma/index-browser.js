@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.13.0
- * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
+ * Prisma Client JS version: 6.15.0
+ * Query Engine version: 85179d7826409ee107a6ba334b5e305ae3fba9fb
  */
 Prisma.prismaVersion = {
-  client: "6.13.0",
-  engine: "361e86d0ea4987e9f53a565309b3eed797a6bcbd"
+  client: "6.15.0",
+  engine: "85179d7826409ee107a6ba334b5e305ae3fba9fb"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -299,7 +299,6 @@ exports.Prisma.User_sessionsScalarFieldEnum = {
   user_agent: 'user_agent',
   revoked: 'revoked',
   last_ip: 'last_ip',
-  access_token: 'access_token',
   refresh_token: 'refresh_token',
   created_at: 'created_at',
   last_active: 'last_active'
@@ -351,6 +350,15 @@ exports.Prisma.DirectionScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.Password_reset_tokensScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  token: 'token',
+  expires_at: 'expires_at',
+  is_used: 'is_used',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -389,6 +397,8 @@ exports.DeliveryStatus = exports.$Enums.DeliveryStatus = {
 exports.UserStatus = exports.$Enums.UserStatus = {
   INACTIVE: 'INACTIVE',
   ACTIVE: 'ACTIVE',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  APPROVED: 'APPROVED',
   BANNED: 'BANNED'
 };
 
@@ -397,7 +407,9 @@ exports.UserRole = exports.$Enums.UserRole = {
   RETAILER: 'RETAILER',
   SUPPORT: 'SUPPORT',
   DELIVERY: 'DELIVERY',
-  WAREHOUSE: 'WAREHOUSE'
+  WAREHOUSE: 'WAREHOUSE',
+  ADMIN: 'ADMIN',
+  SUPERADMIN: 'SUPERADMIN'
 };
 
 exports.AddressType = exports.$Enums.AddressType = {
@@ -427,7 +439,8 @@ exports.Prisma.ModelName = {
   user_sessions: 'user_sessions',
   users: 'users',
   variant_products: 'variant_products',
-  direction: 'direction'
+  direction: 'direction',
+  password_reset_tokens: 'password_reset_tokens'
 };
 
 /**

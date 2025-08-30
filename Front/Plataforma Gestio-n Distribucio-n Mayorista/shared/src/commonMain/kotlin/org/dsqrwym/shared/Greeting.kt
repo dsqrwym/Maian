@@ -1,5 +1,8 @@
 package org.dsqrwym.shared
 
+import org.dsqrwym.shared.util.platform.PlatformType
+import org.dsqrwym.shared.util.platform.getPlatform
+
 class Greeting {
     private val platform = getPlatform()
 

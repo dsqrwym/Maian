@@ -12,12 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.LocalIsDarkTheme
-import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.components.SharedHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.GoogleSignInButton
 import org.dsqrwym.shared.ui.components.buttons.SharedLoginButton
@@ -27,9 +27,12 @@ import org.dsqrwym.shared.ui.components.containers.SharedUiState
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.SharedBasePasswordField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.SharedOutlinedTextField
 import org.dsqrwym.shared.ui.components.topbar.SharedAuthTopBar
+import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.standard.ui.viewmodels.auth.AuthViewModel
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 
 @Composable
@@ -64,8 +67,8 @@ fun LoginScreen(
         onPasswordChange = {
             authViewModel.updatePassword(it)
         },
-        usernameOrEmailError = usernameOrEmailError,
-        passwordError = passwordError,
+        usernameOrEmailError = usernameOrEmailError.asString(),
+        passwordError = passwordError.asString(),
         loginEnabled = loginEnabled.value,
         loginUiState = loginUiState,
         passwordFocusRequester = passwordFocusRequester,
@@ -126,7 +129,7 @@ fun LoginContent(
 
         SharedTextButton(
             modifier = Modifier.align(Alignment.End),
-            text = SharedLanguageMap.currentStrings.value.login_button_forget_password,
+            text = stringResource(SharedRes.string.login_button_forget_password),
             onClick = onForgetPasswordClick
         )
 
@@ -146,7 +149,7 @@ fun LoginContent(
         }
 
 
-        SharedHorizontalDivider(SharedLanguageMap.currentStrings.value.login_button_other_login_methods)
+        SharedHorizontalDivider(stringResource(SharedRes.string.login_button_other_login_methods))
 
         FlowRow(
             modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
@@ -165,7 +168,7 @@ fun LoginContent(
 fun LoginTitleSection() {
     Column {
         Text(
-            text = SharedLanguageMap.currentStrings.value.login_title,
+            text = stringResource(SharedRes.string.login_title),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 39.sp,
             fontWeight = FontWeight.W800,
@@ -173,7 +176,7 @@ fun LoginTitleSection() {
                 .padding(vertical = 16.dp)
         )
         Text(
-            text = SharedLanguageMap.currentStrings.value.login_subtitle,
+            text = stringResource(SharedRes.string.login_subtitle),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -197,10 +200,12 @@ fun UsernameOrEmailField(
             }
         },
         error = error,
-        labelText = SharedLanguageMap.currentStrings.value.login_field_username_or_email_label, // "用户名或者邮箱"
-        placeholderText = SharedLanguageMap.currentStrings.value.login_field_username_or_email_placeholder, // "请输入用户名或者邮箱"
+        labelText = stringResource(SharedRes.string.login_field_username_or_email_label),
+        placeholderText = stringResource(SharedRes.string.login_field_username_or_email_placeholder),
         leadingIcon = if (isEmail) Icons.Outlined.Email else Icons.Rounded.Person,
-        leadingIconContentDescription = if (isEmail) SharedLanguageMap.currentStrings.value.login_icon_content_description_email /*"邮箱图标"*/ else SharedLanguageMap.currentStrings.value.login_icon_content_description_person /*"用户图标"*/,
+        leadingIconContentDescription = if (isEmail) stringResource(SharedRes.string.login_icon_content_description_email) else stringResource(
+            SharedRes.string.login_icon_content_description_person
+        ),
         imeAction = ImeAction.Next,
         onImeAction = { focusRequester.requestFocus() },
         focusRequester = focusRequester
@@ -215,15 +220,17 @@ fun PasswordField(
     focusRequester: FocusRequester,
     onLoginClick: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     SharedBasePasswordField(
-        labelText = SharedLanguageMap.currentStrings.value.login_field_password_label,
-        placeholderText = SharedLanguageMap.currentStrings.value.login_field_password_placeholder,
+        labelText = stringResource(SharedRes.string.login_field_password_label),
+        placeholderText = stringResource(SharedRes.string.login_field_password_placeholder),
         value = value,
         onValueChange = onValueChange,
         error = error,
         focusRequester = focusRequester,
         onImeAction = {
             focusRequester.freeFocus()
+            focusManager.clearFocus()
             onLoginClick()
         }
     )

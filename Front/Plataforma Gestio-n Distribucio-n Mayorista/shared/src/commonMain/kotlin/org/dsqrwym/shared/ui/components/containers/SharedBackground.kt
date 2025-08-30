@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.components
+package org.dsqrwym.shared.ui.components.containers
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -18,9 +18,11 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import org.dsqrwym.shared.language.SharedLanguageMap
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_background_content_description
 
 
 @Composable
@@ -57,7 +59,7 @@ fun BackgroundImage(
         // 背景图片
         Image(
             painter = painterResource(backgroundImage),
-            contentDescription = SharedLanguageMap.currentStrings.value.login_background_content_description,
+            contentDescription = stringResource(SharedRes.string.login_background_content_description),
             modifier = modifier,
             contentScale = if (isLandscape) ContentScale.FillBounds else ContentScale.Crop
         )

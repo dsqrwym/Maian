@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)    // Compose跨平台UI框架
     alias(libs.plugins.composeCompiler)         // Compose编译器集成
     //alias(libs.plugins.composeHotReload)        // 热重载， 但是应该没用
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
     alias(libs.plugins.kotlinxSerialization)
 }
 
@@ -61,52 +60,65 @@ kotlin {
         // 桌面平台专属配置
         val desktopMain by getting
 
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin) // Ktor 引擎
+        }
+
         // Android主源码集
         androidMain.dependencies {
             implementation(compose.preview)     // Compose预览支持
             implementation(libs.androidx.activity.compose)  // AndroidX兼容
             implementation(libs.jmail) // 邮箱验证密数据
             implementation(libs.androidx.security.crypto) //安卓安全加密
+            implementation(libs.ktor.client.okhttp) // Ktor 引擎
         }
 
         // 公共主源码集（跨平台共享）
         val commonMain by getting {
-            dependencies {
-                // Compose基础库
-                implementation(compose.runtime)         // 运行时核心
-                implementation(compose.foundation)      // 基础布局组件
-                implementation(compose.material3)       // Material3设计
-                implementation(compose.ui)              // UI组件工具集
-
-                // 资源管理
-                implementation(compose.components.resources)        // 跨平台资源支持
-                implementation(compose.components.uiToolingPreview) // 预览工具
-
-                // Android生命周期组件（跨平台）
-                implementation(libs.androidx.lifecycle.viewmodel)       // ViewModel
-                implementation(libs.androidx.lifecycle.runtimeCompose)  // 生命周期与Compose集成
-
-                // 根据KMP官网教程 添加处理日期的跨平台库
-                implementation(libs.kotlinx.datetime)
-                // 官方导航
-                implementation(libs.kmp.navigation.compose)
-                // Material图标扩展
-                implementation(libs.material.icons.core)
-
-                // Haze 核心库 利用各个平台API实现毛玻璃效果
-                implementation(libs.haze)
-                // JSON处理
-                implementation(libs.kotlinx.serialization.json)
-                // 跨平台储存，防止在commonMain写很多代码
-                implementation(libs.russhwolf.multiplatform.settings)
-                // 跨平台Web View 封装
-                api(libs.compose.webview.multiplatform)
-                // KOIN 注入
-                implementation(libs.koin.core) // 或最新版本
-                implementation(libs.koin.compose.viewmodel)
-            }
-            kotlin.srcDir("src/commonGenerated/kotlin")
             resources.srcDir("src/commonMain/composeResources")
+        }
+
+        commonMain.dependencies {
+            // Compose基础库
+            implementation(compose.runtime)         // 运行时核心
+            implementation(compose.foundation)      // 基础布局组件
+            implementation(compose.material3)       // Material3设计
+            implementation(compose.ui)              // UI组件工具集
+
+            // 资源管理
+            implementation(compose.components.resources)        // 跨平台资源支持
+            implementation(compose.components.uiToolingPreview) // 预览工具
+
+            // Android生命周期组件（跨平台）
+            implementation(libs.androidx.lifecycle.viewmodel)       // ViewModel
+            implementation(libs.androidx.lifecycle.runtimeCompose)  // 生命周期与Compose集成
+
+            // 根据KMP官网教程 添加处理日期的跨平台库
+            implementation(libs.kotlinx.datetime)
+            // 官方导航
+            implementation(libs.kmp.navigation.compose)
+            // Material图标扩展
+            implementation(libs.material.icons.core)
+
+            // Haze 核心库 利用各个平台API实现毛玻璃效果
+            implementation(libs.haze)
+            // JSON处理
+            implementation(libs.kotlinx.serialization.json)
+            // 跨平台储存，防止在commonMain写很多代码
+            implementation(libs.russhwolf.multiplatform.settings)
+            // 跨平台Web View 封装
+            api(libs.compose.webview.multiplatform)
+            // KOIN 注入
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
+            // Ktor-client 核心
+            api(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.serialization.kotlinx.json)
+
+            implementation(libs.sonner)
         }
 
         // 公共测试源码集
@@ -119,12 +131,14 @@ kotlin {
             implementation(compose.desktop.currentOs)        // 桌面原生集成
             implementation(libs.kotlinx.coroutinesSwing)         // 协程Swing支持
             implementation(libs.jmail) // 邮箱验证
+            implementation(libs.ktor.client.cio) // Ktor 引擎
         }
 
         // 根据KMP官网教程 在网页端添加处理日期的跨平台库
         wasmJsMain.dependencies {
             // JS-Joda时区支持
             implementation(npm("@js-joda/timezone", "2.3.0")) //项中包含对必要 npm 包的引用
+            implementation(libs.ktor.client.js) // Ktor 引擎
         }
     }
 }
@@ -167,72 +181,15 @@ android {
 // 开发调试依赖
 // ---------------------------
 dependencies {
+    implementation("io.ktor:ktor-client-auth:3.2.3")
     debugImplementation(compose.uiTooling) // Compose UI调试工具
-    implementation(kotlin("stdlib-jdk8"))
-    // implementation(project(":localization-processor"))
-    // ksp(project(":localization-processor"))
-    kspCommonMainMetadata(project(":localization-processor"))
 }
 
-ksp {
-    arg(
-        "localization.json.path",
-        project.file("src/commonMain/kotlin/org/dsqrwym/shared/localization").absolutePath
-    )
-    arg("localization.base.locale", "zh-CN")
-    arg("localization.output.package", "org.dsqrwym.shared.localization")
-    arg("localization.output.file", "SharedLanguage")
-}
-
-
-val copyGeneratedLanguageByKspToCommon by tasks.registering(Copy::class) {
-    val sourceDir =
-        layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")
-    val destinationDir = layout.projectDirectory.dir("src/commonGenerated/kotlin/org/dsqrwym/shared/language")
-    /*
-    from(layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin/org/dsqrwym/shared/localization")) {
-        include("*.kt")
-        val firstLineReplaced = mutableListOf(false)
-        // Kotlin 不允许在 lambda 内修改外部 var 所以用这个mutable对象
-        // 使用 filter 修改内容
-        filter { line ->
-            // 这里用一个标志控制只替换第一行
-            if (!firstLineReplaced[0]) {
-                firstLineReplaced[0] = true
-                "package org.dsqrwym.shared.language"
-            } else {
-                line
-            }
-        }
-    }
-    */
-
-    from(sourceDir) {
-        include("**/*.kt")
-        filteringCharset = "UTF-8"
-
-        // 针对每个文件执行
-        eachFile {
-            val originalLines = file.readLines()
-            val modifiedLines = originalLines.toMutableList()
-
-            // 替换第一行为目标 package
-            if (modifiedLines.isNotEmpty()) {
-                modifiedLines[0] = "package org.dsqrwym.shared.language"
-            }
-
-            // 重写文件内容
-            file.writeText(modifiedLines.joinToString("\n"))
-        }
-    }
-
-    into(destinationDir)
-
-    doFirst {
-        println("Copying and modifying SharedLanguage.kt to $destinationDir")
-    }
-}
-
-tasks.named("compileKotlinMetadata") {
-    finalizedBy(copyGeneratedLanguageByKspToCommon)
+// ---------------------------
+// 资源生成设置
+// ---------------------------
+compose.resources {
+    publicResClass = true
+    nameOfResClass = "SharedRes"
+    generateResClass = auto
 }

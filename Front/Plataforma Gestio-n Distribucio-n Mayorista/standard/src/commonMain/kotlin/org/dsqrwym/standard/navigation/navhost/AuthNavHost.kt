@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.dsqrwym.shared.data.local.UserPreferences
-import org.dsqrwym.shared.language.SharedLanguageMap
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultEnterTransition
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultExitTransition
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.WebEnterTransition
@@ -24,10 +23,23 @@ import org.dsqrwym.shared.util.navigation.onLeaveScreen
 import org.dsqrwym.shared.util.navigation.popBackStackWithKeyboardDismiss
 import org.dsqrwym.standard.navigation.*
 import org.dsqrwym.standard.ui.viewmodels.auth.AuthViewModel
+import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
 import org.koin.compose.viewmodel.koinViewModel
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.initial_screen_agreement_warning
 
 @Composable
+/**
+ * AuthNavHost
+ *
+ * EN: Navigation host for authentication-related screens. Sets up routes for Initial, Login,
+ * Forgot Password, and Agreement pages. Handles keyboard dismissal on navigation and provides
+ * screen transition animations. Wraps content in SharedAuthContainer to unify styling.
+ *
+ * ZH: 认证相关页面的导航容器。配置初始页、登录、忘记密码、协议等路由；在导航时处理键盘收起，
+ * 并设置页面切换动效。使用 SharedAuthContainer 包裹内容以统一样式。
+ */
 fun AuthNavHost(
     navController: NavHostController,
     focusManager: FocusManager,
@@ -121,12 +133,20 @@ fun AuthNavHost(
 
 
 @Composable
+/**
+ * CheckIsPermitted
+ *
+ * EN: Guard to ensure the user has accepted agreements before proceeding to auth screens.
+ * If not agreed, redirects to InitialScreen and shows an informational snackbar.
+ *
+ * ZH: 进入认证页面前的权限校验。若用户未同意协议，则跳转回初始页并弹出提示消息。
+ */
 fun CheckIsPermitted(navController: NavController) {
     val sharedSnackbarViewModel: SharedSnackbarViewModel = currentKoinScope().get()
     LaunchedEffect(Unit) {
         if (!UserPreferences.isUserAgreed()) {
             navController.navigate(InitialScreen)
-            sharedSnackbarViewModel.showMessage(message = SharedLanguageMap.currentStrings.value.initial_screen_agreement_warning /*"请先同意用户协议才能继续"*/)
+            sharedSnackbarViewModel.showInfo(message = getString(SharedRes.string.initial_screen_agreement_warning))
         }
     }
 }

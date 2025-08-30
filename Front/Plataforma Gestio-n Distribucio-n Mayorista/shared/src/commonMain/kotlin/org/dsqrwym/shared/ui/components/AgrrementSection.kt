@@ -17,7 +17,11 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import org.dsqrwym.shared.language.SharedLanguageMap
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.initial_screen_agreement_section_agreement_text_template
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.initial_screen_agreement_section_privacy_policy
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.initial_screen_agreement_section_user_agreement
 
 @Composable
 fun AgreementSection(
@@ -37,11 +41,11 @@ fun AgreementSection(
         )
 
         val agreementTemplate =
-            SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_agreement_text_template // "我已阅读并同意《%s》和《%s》"
+            stringResource(SharedRes.string.initial_screen_agreement_section_agreement_text_template)
         val userAgreementText =
-            SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_user_agreement // "用户协议"
+            stringResource(SharedRes.string.initial_screen_agreement_section_user_agreement)
         val privacyPolicyText =
-            SharedLanguageMap.currentStrings.value.initial_screen_agreement_section_privacy_policy // "隐私政策"
+            stringResource(SharedRes.string.initial_screen_agreement_section_privacy_policy)
 
 
         DynamicRichText(

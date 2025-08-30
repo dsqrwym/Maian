@@ -5,13 +5,13 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Res
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
 
 
 @Composable
-fun MiSansNormalTypography() : Typography {
+fun miSansNormalTypography() : Typography {
     val miSans = FontFamily(
-        org.jetbrains.compose.resources.Font(resource = Res.font.MiSansVF)
+        org.jetbrains.compose.resources.Font(resource = SharedRes.font.MiSansVF)
     )
 
     return Typography(

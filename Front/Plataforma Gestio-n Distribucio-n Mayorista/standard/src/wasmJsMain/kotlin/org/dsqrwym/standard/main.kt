@@ -3,9 +3,8 @@ package org.dsqrwym.standard
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import androidx.navigation.ExperimentalBrowserHistoryApi
-import androidx.navigation.bindToNavigation
+import androidx.navigation.bindToBrowserNavigation
 import kotlinx.browser.document
-import kotlinx.browser.window
 import org.dsqrwym.shared.localization.getAppDisplayName
 import org.dsqrwym.shared.localization.getLocaleLanguage
 import org.dsqrwym.shared.util.log.SharedLog
@@ -17,7 +16,7 @@ fun main() {
     initializingApp()
     ComposeViewport(viewportContainerId = "compose-root") {
         App { navController ->
-            window.bindToNavigation(navController)
+            navController.bindToBrowserNavigation()
         }
     }
 }

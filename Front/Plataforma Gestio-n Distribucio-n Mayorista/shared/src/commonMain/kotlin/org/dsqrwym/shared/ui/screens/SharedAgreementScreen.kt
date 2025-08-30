@@ -10,9 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
-import org.dsqrwym.shared.language.SharedLanguageMap
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.SharedWebView
 import org.dsqrwym.shared.util.formatter.stringFormat
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_button_back_button_content_description
 
 class SharedAgreement {
     companion object {
@@ -31,7 +34,7 @@ fun SharedAgreementScreen(
     onBackButtonClick: () -> Unit = {}
 ) {
 
-    val language = SharedLanguageMap.getCurrentLanguage()
+    val language = LanguageManager.getCurrentLanguage()
     val url = stringFormat(baseUrl, language)
     Column(
         modifier = modifier
@@ -42,14 +45,14 @@ fun SharedAgreementScreen(
             IconButton(onClick = onBackButtonClick) {
                 Icon(
                     Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
-                    SharedLanguageMap.currentStrings.value.login_button_back_button_content_description,
+                    stringResource(SharedRes.string.login_button_back_button_content_description),
                     modifier = Modifier.fillMaxSize().scale(1.3f),
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
 
-        SharedWebView(url){
+        SharedWebView(url) {
             getVersion(it)
         }
     }

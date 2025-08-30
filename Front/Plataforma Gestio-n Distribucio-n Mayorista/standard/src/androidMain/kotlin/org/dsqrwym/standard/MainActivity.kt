@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.dsqrwym.shared.theme.DarkAppColorScheme
 import org.dsqrwym.shared.theme.LightAppColorScheme
-import org.dsqrwym.shared.theme.MiSansNormalTypography
+import org.dsqrwym.shared.theme.miSansNormalTypography
 import org.dsqrwym.shared.ui.components.containers.SharedAuthContainer
 import org.dsqrwym.shared.util.settings.initSettings
 import org.dsqrwym.standard.di.standardInitKoin
@@ -65,7 +65,7 @@ fun PreviewScreen() {
 
     MaterialTheme(
         colorScheme = materialColorScheme,
-        typography = MiSansNormalTypography()
+        typography = miSansNormalTypography()
     ) {
         Box(
             modifier = Modifier

@@ -23,8 +23,11 @@ import org.dsqrwym.shared.ui.components.input.SharedOtpInputField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.SharedBasePasswordField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.SharedOutlinedTextField
 import org.dsqrwym.shared.ui.components.topbar.SharedAuthTopBar
+import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.standard.ui.viewmodels.auth.AuthViewModel
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -40,7 +43,6 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
     val currentStep = authViewModel.forgotStep
     val uiState = authViewModel.forgotPasswordUiState
 
-    val nextButtonText = authViewModel.forgotPasswordButtonText
     val nextButtonEnabled = authViewModel.forgotPasswordButtonEnabled
 
     val email = authViewModel.email
@@ -53,6 +55,13 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
 
     val repeatPassword = authViewModel.repeatPassword
     val repeatPasswordError = authViewModel.repeatPasswordError
+
+    val nextButtonText = when (authViewModel.forgotStep) {
+        1 -> stringResource(SharedRes.string.forgot_verify_email)
+        2 -> stringResource(SharedRes.string.forgot_verify)
+        3 -> stringResource(SharedRes.string.forgot_change_password)
+        else -> stringResource(SharedRes.string.forgot_unknown_error)
+    }
 
     Box(
         Modifier
@@ -78,11 +87,11 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
                             authViewModel.updateEmail(it)
                         }
                     },
-                    error = emailError,
-                    labelText = "邮箱",
-                    placeholderText = "请输入你的邮箱",
+                    error = emailError.asString(),
+                    labelText = stringResource(SharedRes.string.forgot_email_label),
+                    placeholderText = stringResource(SharedRes.string.forgot_email_placeholder),
                     leadingIcon = Icons.Outlined.Email,
-                    leadingIconContentDescription = "邮箱图标",
+                    leadingIconContentDescription = stringResource(SharedRes.string.login_icon_content_description_email),
                     imeAction = ImeAction.Done,
                     onImeAction = {
                         focusManager.clearFocus()
@@ -103,7 +112,7 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
                         resendOtp = {
 
                         },
-                        errorMessage = codeError
+                        errorMessage = codeError.asString()
                     ) { otp, isComplete ->
                         authViewModel.updateCode(otp)
                         if (isComplete) {
@@ -124,13 +133,13 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
                 ) {
                     SharedBasePasswordField(
                         enabled = currentStep == 3,
-                        labelText = "新密码",
-                        placeholderText = "请输入密码",
+                        labelText = stringResource(SharedRes.string.forgot_new_password_label),
+                        placeholderText = stringResource(SharedRes.string.login_field_password_placeholder),
                         value = newPassword,
                         onValueChange = {
                             authViewModel.updatePassword(it)
                         },
-                        error = newPasswordError,
+                        error = newPasswordError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
                             repeatPasswordFocusRequester.requestFocus()
@@ -138,13 +147,13 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     SharedBasePasswordField(
-                        labelText = "重复新密码",
-                        placeholderText = "请重复新密码",
+                        labelText = stringResource(SharedRes.string.forgot_repeat_password_label),
+                        placeholderText = stringResource(SharedRes.string.forgot_repeat_password_placeholder),
                         value = repeatPassword,
                         onValueChange = {
                             authViewModel.updateRepeatPassword(it)
                         },
-                        error = repeatPasswordError,
+                        error = repeatPasswordError.asString(),
                         focusRequester = repeatPasswordFocusRequester,
                         imeAction = ImeAction.Done,
                         onImeAction = {
@@ -164,7 +173,7 @@ fun ForgotPasswordScreen(authViewModel: AuthViewModel = koinViewModel<AuthViewMo
             },
             enabled = nextButtonEnabled.value
         ) {
-            Text(nextButtonText.value, Modifier.padding(horizontal = 16.dp))
+            Text(nextButtonText, Modifier.padding(horizontal = 16.dp))
         }
     }
 }

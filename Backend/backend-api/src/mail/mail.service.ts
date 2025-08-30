@@ -85,6 +85,7 @@ export class MailService {
           `Attempt ${attempts + 1} to send verification email to ${to}`,
         );
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const info = await this.transporter.sendMail({
           from: this.config.get<string>('SMTP_USER')!, // 发件人地址
           to, // 收件人地址
@@ -96,11 +97,13 @@ export class MailService {
           `Email sent successfully to ${to} with info: ${JSON.stringify(info)}`,
         );
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return info; // 返回发送邮件的信息
       } catch (error) {
         attempts++; // 增加尝试次数
         // 记录错误信息并处理重试
         this.logger.error(
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           `Attempt ${attempts} to send email failed: ${error.message}`,
         );
 

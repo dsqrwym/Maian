@@ -12,12 +12,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.data.local.UserPreferences
 import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.shared.language.SharedLanguageMap
-import org.dsqrwym.shared.ui.animations.containers.SharedFloatingBreathingBox
 import org.dsqrwym.shared.ui.components.AgreementSection
 import org.dsqrwym.shared.ui.components.buttons.SharedLoginButton
 import org.dsqrwym.shared.ui.components.buttons.SharedTextButton
+import org.dsqrwym.shared.ui.components.containers.SharedFloatingBreathingBox
 import org.dsqrwym.shared.ui.components.graphics.SharedAnimatedImgVector
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @Composable
 fun InitialScreen(
@@ -37,7 +38,7 @@ fun InitialScreen(
         // 标题
         InitialTitle()
         // 动画层
-        SharedFloatingBreathingBox (
+        SharedFloatingBreathingBox(
             modifier = Modifier.weight(1f),
             scaleRange = Pair(0.98f, 1f),
             alphaRange = Pair(0.6f, 0.9f),
@@ -58,7 +59,7 @@ fun InitialScreen(
         )
 
         Text(
-            text = SharedLanguageMap.currentStrings.value.initial_screen_quick_login_hint,/*"⏫ 支持谷歌、微信 快速登录 ⏫"*/
+            text = stringResource(SharedRes.string.initial_screen_quick_login_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
         )
@@ -67,7 +68,7 @@ fun InitialScreen(
 
         SharedTextButton(
             modifier = Modifier.fillMaxWidth(0.56f),
-            text = SharedLanguageMap.currentStrings.value.login_button_register_new_account, /*"注册新账户"*/
+            text = stringResource(SharedRes.string.login_button_register_new_account),
             isEnabled = isNavEnabled,
         ) {}
 
@@ -92,7 +93,7 @@ fun InitialTitle() {
     Column { // 加一层Colum免得里面的组件被外部影响布局，而colum可以被影响
         FlowRow(modifier = Modifier.padding(vertical = 16.dp)) {
             Text(
-                text = SharedLanguageMap.currentStrings.value.initial_screen_welcome /*"欢迎来到"*/,
+                text = stringResource(SharedRes.string.initial_screen_welcome),
                 textAlign = textAlign,
                 color = color,
                 fontSize = fontSize,
@@ -101,7 +102,7 @@ fun InitialTitle() {
             )
             Spacer(modifier = Modifier.padding(horizontal = 5.dp))
             Text(
-                text = SharedLanguageMap.currentStrings.value.initial_screen_platform_name /*"PGDM平台"*/,
+                text = stringResource(SharedRes.string.initial_screen_platform_name),
                 textAlign = textAlign,
                 color = color,
                 fontSize = fontSize,
@@ -110,7 +111,7 @@ fun InitialTitle() {
             )
         }
         Text(
-            text = SharedLanguageMap.currentStrings.value.initial_screen_instruction /*"请选择登录或注册以继续"*/,
+            text = stringResource(SharedRes.string.initial_screen_instruction),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

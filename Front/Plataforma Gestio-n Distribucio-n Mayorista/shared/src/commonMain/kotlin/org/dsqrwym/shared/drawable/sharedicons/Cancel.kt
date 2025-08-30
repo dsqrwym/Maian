@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedIcons
 
-val SharedIcons.Cancel: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
+val SharedIcons.CircleError: ImageVector by lazy(LazyThreadSafetyMode.NONE) {
     ImageVector.Builder(
         name = "Cancel",
         defaultWidth = 24.dp,

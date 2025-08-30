@@ -1,30 +1,20 @@
 package org.dsqrwym.shared.localization
 
-import org.dsqrwym.shared.language.SharedLanguageMap
-
 expect fun getLocaleLanguage(): String
 
 object LanguageManager {
-    fun setLocaleLanguage(locale: String = getLocaleLanguage()) {
-        SharedLanguageMap.setCurrentLanguage(normalizeLanguageCode(locale))
-    }
-
     fun normalizeLanguageCode(locale: String): String {
         val lower = locale.lowercase()
 
         return when {
-            // 瓦伦西亚语, valenciano
-            lower == "ca-es-valencia" -> "ca-VAL"
+            // 瓦伦西亚语
+            lower == "ca-es-valencia" -> "ca-ES"
 
-            // 繁体中文：台湾、香港、Hant 变体
-            lower.startsWith("zh")
-                    && (
-                    lower.contains("hant")
-                            || lower.contains("tw")
-                            || lower.contains("hk")
-                    ) -> "zh-hant"
+            // 繁体中文
+            lower.startsWith("zh") &&
+                    (lower.contains("hant") || lower.contains("tw") || lower.contains("hk")) -> "zh-TW"
 
-            // 简体中文：包含 Hans、新加坡、中国
+            // 简体中文
             lower.startsWith("zh") -> "zh-CN"
 
             // 西班牙语
@@ -33,8 +23,22 @@ object LanguageManager {
             // 英语
             lower.startsWith("en") -> "en"
 
-            // fallback，默认英语
+            lower.startsWith("fr") -> "fr-FR"
+
+            // fallback
             else -> "en"
         }
+    }
+
+    fun setLocaleLanguage(locale: String = getLocaleLanguage()) {
+        customAppLocale = normalizeLanguageCode(locale)
+    }
+
+    fun followSystemLanguage() {
+        customAppLocale = null
+    }
+
+    fun getCurrentLanguage() : String {
+        return customAppLocale ?: "en"
     }
 }

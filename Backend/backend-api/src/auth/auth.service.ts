@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,7 +12,7 @@ import { RegisterDto } from './dto/register.dto';
 import { HashService } from 'src/common/hash/hash.service';
 import { ConfigService } from '@nestjs/config';
 import { LoginDto } from './dto/login.dto';
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { getVerificationResponseContent } from 'src/mail/templates/varification-response-content';
 import { getVerificationResponseHtml } from 'src/mail/templates/verification-response.tmplates';
@@ -19,6 +20,8 @@ import { Logger } from 'nestjs-pino';
 import { Prisma, UserRole, UserStatus } from 'prisma/generated/prisma';
 import { AuthenticatedUser, AuthTokenPayload } from './auth.types';
 import { DeleteSessionDto } from './dto/delete.session.dto';
+import { Cache } from 'cache-manager';
+import { REDIS_CACHE } from '../redis/redis.module';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +31,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
     private readonly hashService: HashService,
+    @Inject(REDIS_CACHE) private readonly redisCache: Cache,
     private readonly logger: Logger,
   ) {}
 
@@ -40,7 +44,6 @@ export class AuthService {
           session_id: options.sessionId,
         },
         select: {
-          access_token: true,
           refresh_token: true,
           revoked: true,
           session_id: true,
@@ -55,7 +58,6 @@ export class AuthService {
           },
         },
         select: {
-          access_token: true,
           refresh_token: true,
           revoked: true,
           session_id: true,
@@ -105,8 +107,8 @@ export class AuthService {
 
     // 3. 开始事务
     return this.prismaService.$transaction(
-      async () => {
-        const user = await this.prismaService.users.create({
+      async (tx) => {
+        const user = await tx.users.create({
           data: {
             email: email,
             username: username || null,
@@ -226,15 +228,13 @@ export class AuthService {
     }
   }
 
-  async login(user: AuthenticatedUser, dto: LoginDto) {
-    const { deviceName, ipAddress, userAgent } = dto;
+  async login(req: FastifyRequest, user: AuthenticatedUser, dto: LoginDto) {
+    const { deviceName, userAgent } = dto;
 
     this.logger.debug(`[Login] Password validated for userId: ${user.id}`);
 
     // 生成设备哈希
-    const deviceHash = await this.hashService.hashWithCrypto(
-      deviceName + userAgent,
-    );
+    const deviceHash = await this.hashService.hashWithCrypto(userAgent);
 
     this.logger.debug(
       `[Login] Generated device hash for userId: ${user.id}, deviceName: ${deviceName}`,
@@ -261,7 +261,7 @@ export class AuthService {
           device_name: deviceName,
           device_finger: deviceHash,
           user_agent: userAgent,
-          last_ip: ipAddress,
+          last_ip: req.ip,
         },
         select: {
           session_id: true,
@@ -284,7 +284,7 @@ export class AuthService {
         },
         data: {
           revoked: false,
-          last_ip: ipAddress,
+          last_ip: req.ip,
           last_active: new Date(),
         },
         select: {
@@ -304,22 +304,19 @@ export class AuthService {
     };
 
     const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '7d',
+      expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES_IN'),
     });
     const accessToken = await this.jwtService.signAsync(payload);
 
     const hashedRefreshToken =
       await this.hashService.hashWithCrypto(refreshToken);
-    const hashedAccessToken =
-      await this.hashService.hashWithCrypto(accessToken);
 
-    this.prismaService.user_sessions
+    await this.prismaService.user_sessions
       .update({
         where: {
           session_id: sessionId,
         },
         data: {
-          access_token: hashedAccessToken,
           refresh_token: hashedRefreshToken,
         },
       })
@@ -381,8 +378,6 @@ export class AuthService {
     };
 
     const newAccessToken = await this.jwtService.signAsync(newPayload);
-    const newHashedAccessToken =
-      await this.hashService.hashWithCrypto(newAccessToken);
     this.logger.debug(
       `[getAccessToken] New access token generated for userId: ${payload.userId}`,
     );
@@ -395,7 +390,6 @@ export class AuthService {
         },
         data: {
           last_active: new Date(),
-          access_token: newHashedAccessToken,
         },
       })
       .then(() => {
@@ -404,12 +398,13 @@ export class AuthService {
         );
       })
       .catch((err) => this.logger.error('Update session failed', err));
+
     return {
       accessToken: newAccessToken,
     };
   }
 
-  async logoutSession(sessionData: AuthTokenPayload) {
+  async logoutSession(sessionData: AuthTokenPayload, accessToken: string) {
     // 查找会话，并注销
     const result = await this.prismaService.user_sessions.updateMany({
       where: {
@@ -429,26 +424,40 @@ export class AuthService {
       throw new UnauthorizedException('Session not found or already revoked');
     }
 
-    this.logger.debug(
-      `[logoutSession] Session successfully revoked for userId: ${sessionData.userId}`,
-    );
+    try {
+      // 生成 token hash
+      const tokenHash = await this.hashService.hashWithCrypto(accessToken);
+      // 加入 Redis 黑名单
+      await this.redisCache.set(
+        `blacklist:${tokenHash}`,
+        true,
+        this.configService.get<number>('ACCESS_TOKEN_EXPIRES_IN'),
+      );
+
+      this.logger.log(`[logoutSession] Access token added to blacklist`);
+    } catch (err) {
+      this.logger.error(
+        `[logoutSession] Failed to add access token to blacklist: ${err}`,
+      );
+    }
+
     return { message: 'Session successfully revoked' };
   }
 
   async deleteSession(deleteSessionDto: DeleteSessionDto) {
-    await this.prismaService.$transaction(async () => {
-      const userPassword = await this.prismaService.users.findUnique({
-        where: {
-          id: deleteSessionDto.sessionId,
-        },
-        select: {
-          password: true,
-        },
+    await this.prismaService.$transaction(async (tx) => {
+      const session = await tx.user_sessions.findUnique({
+        where: { session_id: deleteSessionDto.sessionId },
+        select: { users: { select: { password: true } } },
       });
-      if (!userPassword) {
+
+      if (!session) {
         this.logger.warn(`[deleteSession] No found session to delete`);
         throw new NotFoundException('Session not found');
       }
+
+      const userPassword = session.users;
+
       if (
         !(await this.hashService.compareWithBcrypt(
           deleteSessionDto.password,
@@ -458,7 +467,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid password');
       }
 
-      await this.prismaService.user_sessions.delete({
+      await tx.user_sessions.delete({
         where: {
           session_id: deleteSessionDto.sessionId,
         },

@@ -129,6 +129,11 @@ export type variant_products = $Result.DefaultSelection<Prisma.$variant_products
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
  */
 export type direction = $Result.DefaultSelection<Prisma.$directionPayload>
+/**
+ * Model password_reset_tokens
+ * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+ */
+export type password_reset_tokens = $Result.DefaultSelection<Prisma.$password_reset_tokensPayload>
 
 /**
  * Enums
@@ -157,7 +162,9 @@ export const UserRole: {
   RETAILER: 'RETAILER',
   SUPPORT: 'SUPPORT',
   DELIVERY: 'DELIVERY',
-  WAREHOUSE: 'WAREHOUSE'
+  WAREHOUSE: 'WAREHOUSE',
+  ADMIN: 'ADMIN',
+  SUPERADMIN: 'SUPERADMIN'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -166,6 +173,8 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 export const UserStatus: {
   INACTIVE: 'INACTIVE',
   ACTIVE: 'ACTIVE',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  APPROVED: 'APPROVED',
   BANNED: 'BANNED'
 };
 
@@ -237,13 +246,6 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
-
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -523,6 +525,16 @@ export class PrismaClient<
     * ```
     */
   get direction(): Prisma.directionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.password_reset_tokens`: Exposes CRUD operations for the **password_reset_tokens** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Password_reset_tokens
+    * const password_reset_tokens = await prisma.password_reset_tokens.findMany()
+    * ```
+    */
+  get password_reset_tokens(): Prisma.password_reset_tokensDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -581,8 +593,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.13.0
-   * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
+   * Prisma Client JS version: 6.15.0
+   * Query Engine version: 85179d7826409ee107a6ba334b5e305ae3fba9fb
    */
   export type PrismaVersion = {
     client: string
@@ -983,7 +995,8 @@ export namespace Prisma {
     user_sessions: 'user_sessions',
     users: 'users',
     variant_products: 'variant_products',
-    direction: 'direction'
+    direction: 'direction',
+    password_reset_tokens: 'password_reset_tokens'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1002,7 +1015,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cart_details" | "carts" | "categories" | "chat_panels" | "chat_participants" | "configurations" | "deliveries" | "delivery_timeline" | "discounts" | "files" | "message_files" | "messages" | "notifications" | "order_details" | "orders" | "products" | "products_files" | "user_sessions" | "users" | "variant_products" | "direction"
+      modelProps: "cart_details" | "carts" | "categories" | "chat_panels" | "chat_participants" | "configurations" | "deliveries" | "delivery_timeline" | "discounts" | "files" | "message_files" | "messages" | "notifications" | "order_details" | "orders" | "products" | "products_files" | "user_sessions" | "users" | "variant_products" | "direction" | "password_reset_tokens"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2560,6 +2573,80 @@ export namespace Prisma {
           }
         }
       }
+      password_reset_tokens: {
+        payload: Prisma.$password_reset_tokensPayload<ExtArgs>
+        fields: Prisma.password_reset_tokensFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.password_reset_tokensFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.password_reset_tokensFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>
+          }
+          findFirst: {
+            args: Prisma.password_reset_tokensFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.password_reset_tokensFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>
+          }
+          findMany: {
+            args: Prisma.password_reset_tokensFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>[]
+          }
+          create: {
+            args: Prisma.password_reset_tokensCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>
+          }
+          createMany: {
+            args: Prisma.password_reset_tokensCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.password_reset_tokensCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>[]
+          }
+          delete: {
+            args: Prisma.password_reset_tokensDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>
+          }
+          update: {
+            args: Prisma.password_reset_tokensUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>
+          }
+          deleteMany: {
+            args: Prisma.password_reset_tokensDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.password_reset_tokensUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.password_reset_tokensUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>[]
+          }
+          upsert: {
+            args: Prisma.password_reset_tokensUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$password_reset_tokensPayload>
+          }
+          aggregate: {
+            args: Prisma.Password_reset_tokensAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePassword_reset_tokens>
+          }
+          groupBy: {
+            args: Prisma.password_reset_tokensGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Password_reset_tokensGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.password_reset_tokensCountArgs<ExtArgs>
+            result: $Utils.Optional<Password_reset_tokensCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2673,6 +2760,7 @@ export namespace Prisma {
     users?: usersOmit
     variant_products?: variant_productsOmit
     direction?: directionOmit
+    password_reset_tokens?: password_reset_tokensOmit
   }
 
   /* Types for Logging */
@@ -2730,25 +2818,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -3076,6 +3145,7 @@ export namespace Prisma {
     notifications: number
     orders_orders_retailer_idTousers: number
     orders_orders_wholesaler_idTousers: number
+    password_reset_tokens: number
     products: number
     user_sessions: number
   }
@@ -3092,6 +3162,7 @@ export namespace Prisma {
     notifications?: boolean | UsersCountOutputTypeCountNotificationsArgs
     orders_orders_retailer_idTousers?: boolean | UsersCountOutputTypeCountOrders_orders_retailer_idTousersArgs
     orders_orders_wholesaler_idTousers?: boolean | UsersCountOutputTypeCountOrders_orders_wholesaler_idTousersArgs
+    password_reset_tokens?: boolean | UsersCountOutputTypeCountPassword_reset_tokensArgs
     products?: boolean | UsersCountOutputTypeCountProductsArgs
     user_sessions?: boolean | UsersCountOutputTypeCountUser_sessionsArgs
   }
@@ -3182,6 +3253,13 @@ export namespace Prisma {
    */
   export type UsersCountOutputTypeCountOrders_orders_wholesaler_idTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ordersWhereInput
+  }
+
+  /**
+   * UsersCountOutputType without action
+   */
+  export type UsersCountOutputTypeCountPassword_reset_tokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: password_reset_tokensWhereInput
   }
 
   /**
@@ -23066,7 +23144,6 @@ export namespace Prisma {
     user_agent: string | null
     revoked: boolean | null
     last_ip: string | null
-    access_token: string | null
     refresh_token: string | null
     created_at: Date | null
     last_active: Date | null
@@ -23080,7 +23157,6 @@ export namespace Prisma {
     user_agent: string | null
     revoked: boolean | null
     last_ip: string | null
-    access_token: string | null
     refresh_token: string | null
     created_at: Date | null
     last_active: Date | null
@@ -23094,7 +23170,6 @@ export namespace Prisma {
     user_agent: number
     revoked: number
     last_ip: number
-    access_token: number
     refresh_token: number
     created_at: number
     last_active: number
@@ -23110,7 +23185,6 @@ export namespace Prisma {
     user_agent?: true
     revoked?: true
     last_ip?: true
-    access_token?: true
     refresh_token?: true
     created_at?: true
     last_active?: true
@@ -23124,7 +23198,6 @@ export namespace Prisma {
     user_agent?: true
     revoked?: true
     last_ip?: true
-    access_token?: true
     refresh_token?: true
     created_at?: true
     last_active?: true
@@ -23138,7 +23211,6 @@ export namespace Prisma {
     user_agent?: true
     revoked?: true
     last_ip?: true
-    access_token?: true
     refresh_token?: true
     created_at?: true
     last_active?: true
@@ -23225,7 +23297,6 @@ export namespace Prisma {
     user_agent: string
     revoked: boolean
     last_ip: string
-    access_token: string | null
     refresh_token: string | null
     created_at: Date
     last_active: Date
@@ -23256,7 +23327,6 @@ export namespace Prisma {
     user_agent?: boolean
     revoked?: boolean
     last_ip?: boolean
-    access_token?: boolean
     refresh_token?: boolean
     created_at?: boolean
     last_active?: boolean
@@ -23271,7 +23341,6 @@ export namespace Prisma {
     user_agent?: boolean
     revoked?: boolean
     last_ip?: boolean
-    access_token?: boolean
     refresh_token?: boolean
     created_at?: boolean
     last_active?: boolean
@@ -23286,7 +23355,6 @@ export namespace Prisma {
     user_agent?: boolean
     revoked?: boolean
     last_ip?: boolean
-    access_token?: boolean
     refresh_token?: boolean
     created_at?: boolean
     last_active?: boolean
@@ -23301,13 +23369,12 @@ export namespace Prisma {
     user_agent?: boolean
     revoked?: boolean
     last_ip?: boolean
-    access_token?: boolean
     refresh_token?: boolean
     created_at?: boolean
     last_active?: boolean
   }
 
-  export type user_sessionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"session_id" | "user_id" | "device_name" | "device_finger" | "user_agent" | "revoked" | "last_ip" | "access_token" | "refresh_token" | "created_at" | "last_active", ExtArgs["result"]["user_sessions"]>
+  export type user_sessionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"session_id" | "user_id" | "device_name" | "device_finger" | "user_agent" | "revoked" | "last_ip" | "refresh_token" | "created_at" | "last_active", ExtArgs["result"]["user_sessions"]>
   export type user_sessionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
@@ -23331,7 +23398,6 @@ export namespace Prisma {
       user_agent: string
       revoked: boolean
       last_ip: string
-      access_token: string | null
       refresh_token: string | null
       created_at: Date
       last_active: Date
@@ -23766,7 +23832,6 @@ export namespace Prisma {
     readonly user_agent: FieldRef<"user_sessions", 'String'>
     readonly revoked: FieldRef<"user_sessions", 'Boolean'>
     readonly last_ip: FieldRef<"user_sessions", 'String'>
-    readonly access_token: FieldRef<"user_sessions", 'String'>
     readonly refresh_token: FieldRef<"user_sessions", 'String'>
     readonly created_at: FieldRef<"user_sessions", 'DateTime'>
     readonly last_active: FieldRef<"user_sessions", 'DateTime'>
@@ -24427,6 +24492,7 @@ export namespace Prisma {
     notifications?: boolean | users$notificationsArgs<ExtArgs>
     orders_orders_retailer_idTousers?: boolean | users$orders_orders_retailer_idTousersArgs<ExtArgs>
     orders_orders_wholesaler_idTousers?: boolean | users$orders_orders_wholesaler_idTousersArgs<ExtArgs>
+    password_reset_tokens?: boolean | users$password_reset_tokensArgs<ExtArgs>
     products?: boolean | users$productsArgs<ExtArgs>
     user_sessions?: boolean | users$user_sessionsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -24496,6 +24562,7 @@ export namespace Prisma {
     notifications?: boolean | users$notificationsArgs<ExtArgs>
     orders_orders_retailer_idTousers?: boolean | users$orders_orders_retailer_idTousersArgs<ExtArgs>
     orders_orders_wholesaler_idTousers?: boolean | users$orders_orders_wholesaler_idTousersArgs<ExtArgs>
+    password_reset_tokens?: boolean | users$password_reset_tokensArgs<ExtArgs>
     products?: boolean | users$productsArgs<ExtArgs>
     user_sessions?: boolean | users$user_sessionsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -24517,6 +24584,7 @@ export namespace Prisma {
       notifications: Prisma.$notificationsPayload<ExtArgs>[]
       orders_orders_retailer_idTousers: Prisma.$ordersPayload<ExtArgs>[]
       orders_orders_wholesaler_idTousers: Prisma.$ordersPayload<ExtArgs>[]
+      password_reset_tokens: Prisma.$password_reset_tokensPayload<ExtArgs>[]
       products: Prisma.$productsPayload<ExtArgs>[]
       user_sessions: Prisma.$user_sessionsPayload<ExtArgs>[]
     }
@@ -24940,6 +25008,7 @@ export namespace Prisma {
     notifications<T extends users$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, users$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orders_orders_retailer_idTousers<T extends users$orders_orders_retailer_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$orders_orders_retailer_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     orders_orders_wholesaler_idTousers<T extends users$orders_orders_wholesaler_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$orders_orders_wholesaler_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    password_reset_tokens<T extends users$password_reset_tokensArgs<ExtArgs> = {}>(args?: Subset<T, users$password_reset_tokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     products<T extends users$productsArgs<ExtArgs> = {}>(args?: Subset<T, users$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user_sessions<T extends users$user_sessionsArgs<ExtArgs> = {}>(args?: Subset<T, users$user_sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_sessionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -25634,6 +25703,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OrdersScalarFieldEnum | OrdersScalarFieldEnum[]
+  }
+
+  /**
+   * users.password_reset_tokens
+   */
+  export type users$password_reset_tokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    where?: password_reset_tokensWhereInput
+    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
+    cursor?: password_reset_tokensWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
   }
 
   /**
@@ -28181,6 +28274,1077 @@ export namespace Prisma {
 
 
   /**
+   * Model password_reset_tokens
+   */
+
+  export type AggregatePassword_reset_tokens = {
+    _count: Password_reset_tokensCountAggregateOutputType | null
+    _min: Password_reset_tokensMinAggregateOutputType | null
+    _max: Password_reset_tokensMaxAggregateOutputType | null
+  }
+
+  export type Password_reset_tokensMinAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    token: string | null
+    expires_at: Date | null
+    is_used: boolean | null
+    created_at: Date | null
+  }
+
+  export type Password_reset_tokensMaxAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    token: string | null
+    expires_at: Date | null
+    is_used: boolean | null
+    created_at: Date | null
+  }
+
+  export type Password_reset_tokensCountAggregateOutputType = {
+    id: number
+    user_id: number
+    token: number
+    expires_at: number
+    is_used: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type Password_reset_tokensMinAggregateInputType = {
+    id?: true
+    user_id?: true
+    token?: true
+    expires_at?: true
+    is_used?: true
+    created_at?: true
+  }
+
+  export type Password_reset_tokensMaxAggregateInputType = {
+    id?: true
+    user_id?: true
+    token?: true
+    expires_at?: true
+    is_used?: true
+    created_at?: true
+  }
+
+  export type Password_reset_tokensCountAggregateInputType = {
+    id?: true
+    user_id?: true
+    token?: true
+    expires_at?: true
+    is_used?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type Password_reset_tokensAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which password_reset_tokens to aggregate.
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of password_reset_tokens to fetch.
+     */
+    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: password_reset_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` password_reset_tokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` password_reset_tokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned password_reset_tokens
+    **/
+    _count?: true | Password_reset_tokensCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Password_reset_tokensMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Password_reset_tokensMaxAggregateInputType
+  }
+
+  export type GetPassword_reset_tokensAggregateType<T extends Password_reset_tokensAggregateArgs> = {
+        [P in keyof T & keyof AggregatePassword_reset_tokens]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePassword_reset_tokens[P]>
+      : GetScalarType<T[P], AggregatePassword_reset_tokens[P]>
+  }
+
+
+
+
+  export type password_reset_tokensGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: password_reset_tokensWhereInput
+    orderBy?: password_reset_tokensOrderByWithAggregationInput | password_reset_tokensOrderByWithAggregationInput[]
+    by: Password_reset_tokensScalarFieldEnum[] | Password_reset_tokensScalarFieldEnum
+    having?: password_reset_tokensScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Password_reset_tokensCountAggregateInputType | true
+    _min?: Password_reset_tokensMinAggregateInputType
+    _max?: Password_reset_tokensMaxAggregateInputType
+  }
+
+  export type Password_reset_tokensGroupByOutputType = {
+    id: string
+    user_id: string
+    token: string
+    expires_at: Date
+    is_used: boolean
+    created_at: Date
+    _count: Password_reset_tokensCountAggregateOutputType | null
+    _min: Password_reset_tokensMinAggregateOutputType | null
+    _max: Password_reset_tokensMaxAggregateOutputType | null
+  }
+
+  type GetPassword_reset_tokensGroupByPayload<T extends password_reset_tokensGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Password_reset_tokensGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Password_reset_tokensGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Password_reset_tokensGroupByOutputType[P]>
+            : GetScalarType<T[P], Password_reset_tokensGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type password_reset_tokensSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    token?: boolean
+    expires_at?: boolean
+    is_used?: boolean
+    created_at?: boolean
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["password_reset_tokens"]>
+
+  export type password_reset_tokensSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    token?: boolean
+    expires_at?: boolean
+    is_used?: boolean
+    created_at?: boolean
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["password_reset_tokens"]>
+
+  export type password_reset_tokensSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    token?: boolean
+    expires_at?: boolean
+    is_used?: boolean
+    created_at?: boolean
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["password_reset_tokens"]>
+
+  export type password_reset_tokensSelectScalar = {
+    id?: boolean
+    user_id?: boolean
+    token?: boolean
+    expires_at?: boolean
+    is_used?: boolean
+    created_at?: boolean
+  }
+
+  export type password_reset_tokensOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "token" | "expires_at" | "is_used" | "created_at", ExtArgs["result"]["password_reset_tokens"]>
+  export type password_reset_tokensInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }
+  export type password_reset_tokensIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }
+  export type password_reset_tokensIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }
+
+  export type $password_reset_tokensPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "password_reset_tokens"
+    objects: {
+      users: Prisma.$usersPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      user_id: string
+      token: string
+      expires_at: Date
+      is_used: boolean
+      created_at: Date
+    }, ExtArgs["result"]["password_reset_tokens"]>
+    composites: {}
+  }
+
+  type password_reset_tokensGetPayload<S extends boolean | null | undefined | password_reset_tokensDefaultArgs> = $Result.GetResult<Prisma.$password_reset_tokensPayload, S>
+
+  type password_reset_tokensCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<password_reset_tokensFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Password_reset_tokensCountAggregateInputType | true
+    }
+
+  export interface password_reset_tokensDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['password_reset_tokens'], meta: { name: 'password_reset_tokens' } }
+    /**
+     * Find zero or one Password_reset_tokens that matches the filter.
+     * @param {password_reset_tokensFindUniqueArgs} args - Arguments to find a Password_reset_tokens
+     * @example
+     * // Get one Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends password_reset_tokensFindUniqueArgs>(args: SelectSubset<T, password_reset_tokensFindUniqueArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Password_reset_tokens that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {password_reset_tokensFindUniqueOrThrowArgs} args - Arguments to find a Password_reset_tokens
+     * @example
+     * // Get one Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends password_reset_tokensFindUniqueOrThrowArgs>(args: SelectSubset<T, password_reset_tokensFindUniqueOrThrowArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Password_reset_tokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {password_reset_tokensFindFirstArgs} args - Arguments to find a Password_reset_tokens
+     * @example
+     * // Get one Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends password_reset_tokensFindFirstArgs>(args?: SelectSubset<T, password_reset_tokensFindFirstArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Password_reset_tokens that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {password_reset_tokensFindFirstOrThrowArgs} args - Arguments to find a Password_reset_tokens
+     * @example
+     * // Get one Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends password_reset_tokensFindFirstOrThrowArgs>(args?: SelectSubset<T, password_reset_tokensFindFirstOrThrowArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Password_reset_tokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {password_reset_tokensFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.findMany()
+     * 
+     * // Get first 10 Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const password_reset_tokensWithIdOnly = await prisma.password_reset_tokens.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends password_reset_tokensFindManyArgs>(args?: SelectSubset<T, password_reset_tokensFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Password_reset_tokens.
+     * @param {password_reset_tokensCreateArgs} args - Arguments to create a Password_reset_tokens.
+     * @example
+     * // Create one Password_reset_tokens
+     * const Password_reset_tokens = await prisma.password_reset_tokens.create({
+     *   data: {
+     *     // ... data to create a Password_reset_tokens
+     *   }
+     * })
+     * 
+     */
+    create<T extends password_reset_tokensCreateArgs>(args: SelectSubset<T, password_reset_tokensCreateArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Password_reset_tokens.
+     * @param {password_reset_tokensCreateManyArgs} args - Arguments to create many Password_reset_tokens.
+     * @example
+     * // Create many Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends password_reset_tokensCreateManyArgs>(args?: SelectSubset<T, password_reset_tokensCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Password_reset_tokens and returns the data saved in the database.
+     * @param {password_reset_tokensCreateManyAndReturnArgs} args - Arguments to create many Password_reset_tokens.
+     * @example
+     * // Create many Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Password_reset_tokens and only return the `id`
+     * const password_reset_tokensWithIdOnly = await prisma.password_reset_tokens.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends password_reset_tokensCreateManyAndReturnArgs>(args?: SelectSubset<T, password_reset_tokensCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Password_reset_tokens.
+     * @param {password_reset_tokensDeleteArgs} args - Arguments to delete one Password_reset_tokens.
+     * @example
+     * // Delete one Password_reset_tokens
+     * const Password_reset_tokens = await prisma.password_reset_tokens.delete({
+     *   where: {
+     *     // ... filter to delete one Password_reset_tokens
+     *   }
+     * })
+     * 
+     */
+    delete<T extends password_reset_tokensDeleteArgs>(args: SelectSubset<T, password_reset_tokensDeleteArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Password_reset_tokens.
+     * @param {password_reset_tokensUpdateArgs} args - Arguments to update one Password_reset_tokens.
+     * @example
+     * // Update one Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends password_reset_tokensUpdateArgs>(args: SelectSubset<T, password_reset_tokensUpdateArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Password_reset_tokens.
+     * @param {password_reset_tokensDeleteManyArgs} args - Arguments to filter Password_reset_tokens to delete.
+     * @example
+     * // Delete a few Password_reset_tokens
+     * const { count } = await prisma.password_reset_tokens.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends password_reset_tokensDeleteManyArgs>(args?: SelectSubset<T, password_reset_tokensDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Password_reset_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {password_reset_tokensUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends password_reset_tokensUpdateManyArgs>(args: SelectSubset<T, password_reset_tokensUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Password_reset_tokens and returns the data updated in the database.
+     * @param {password_reset_tokensUpdateManyAndReturnArgs} args - Arguments to update many Password_reset_tokens.
+     * @example
+     * // Update many Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Password_reset_tokens and only return the `id`
+     * const password_reset_tokensWithIdOnly = await prisma.password_reset_tokens.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends password_reset_tokensUpdateManyAndReturnArgs>(args: SelectSubset<T, password_reset_tokensUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Password_reset_tokens.
+     * @param {password_reset_tokensUpsertArgs} args - Arguments to update or create a Password_reset_tokens.
+     * @example
+     * // Update or create a Password_reset_tokens
+     * const password_reset_tokens = await prisma.password_reset_tokens.upsert({
+     *   create: {
+     *     // ... data to create a Password_reset_tokens
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Password_reset_tokens we want to update
+     *   }
+     * })
+     */
+    upsert<T extends password_reset_tokensUpsertArgs>(args: SelectSubset<T, password_reset_tokensUpsertArgs<ExtArgs>>): Prisma__password_reset_tokensClient<$Result.GetResult<Prisma.$password_reset_tokensPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Password_reset_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {password_reset_tokensCountArgs} args - Arguments to filter Password_reset_tokens to count.
+     * @example
+     * // Count the number of Password_reset_tokens
+     * const count = await prisma.password_reset_tokens.count({
+     *   where: {
+     *     // ... the filter for the Password_reset_tokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends password_reset_tokensCountArgs>(
+      args?: Subset<T, password_reset_tokensCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Password_reset_tokensCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Password_reset_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Password_reset_tokensAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Password_reset_tokensAggregateArgs>(args: Subset<T, Password_reset_tokensAggregateArgs>): Prisma.PrismaPromise<GetPassword_reset_tokensAggregateType<T>>
+
+    /**
+     * Group by Password_reset_tokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {password_reset_tokensGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends password_reset_tokensGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: password_reset_tokensGroupByArgs['orderBy'] }
+        : { orderBy?: password_reset_tokensGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, password_reset_tokensGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPassword_reset_tokensGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the password_reset_tokens model
+   */
+  readonly fields: password_reset_tokensFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for password_reset_tokens.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__password_reset_tokensClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the password_reset_tokens model
+   */
+  interface password_reset_tokensFieldRefs {
+    readonly id: FieldRef<"password_reset_tokens", 'String'>
+    readonly user_id: FieldRef<"password_reset_tokens", 'String'>
+    readonly token: FieldRef<"password_reset_tokens", 'String'>
+    readonly expires_at: FieldRef<"password_reset_tokens", 'DateTime'>
+    readonly is_used: FieldRef<"password_reset_tokens", 'Boolean'>
+    readonly created_at: FieldRef<"password_reset_tokens", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * password_reset_tokens findUnique
+   */
+  export type password_reset_tokensFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * Filter, which password_reset_tokens to fetch.
+     */
+    where: password_reset_tokensWhereUniqueInput
+  }
+
+  /**
+   * password_reset_tokens findUniqueOrThrow
+   */
+  export type password_reset_tokensFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * Filter, which password_reset_tokens to fetch.
+     */
+    where: password_reset_tokensWhereUniqueInput
+  }
+
+  /**
+   * password_reset_tokens findFirst
+   */
+  export type password_reset_tokensFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * Filter, which password_reset_tokens to fetch.
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of password_reset_tokens to fetch.
+     */
+    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for password_reset_tokens.
+     */
+    cursor?: password_reset_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` password_reset_tokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` password_reset_tokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of password_reset_tokens.
+     */
+    distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
+  }
+
+  /**
+   * password_reset_tokens findFirstOrThrow
+   */
+  export type password_reset_tokensFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * Filter, which password_reset_tokens to fetch.
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of password_reset_tokens to fetch.
+     */
+    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for password_reset_tokens.
+     */
+    cursor?: password_reset_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` password_reset_tokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` password_reset_tokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of password_reset_tokens.
+     */
+    distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
+  }
+
+  /**
+   * password_reset_tokens findMany
+   */
+  export type password_reset_tokensFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * Filter, which password_reset_tokens to fetch.
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of password_reset_tokens to fetch.
+     */
+    orderBy?: password_reset_tokensOrderByWithRelationInput | password_reset_tokensOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing password_reset_tokens.
+     */
+    cursor?: password_reset_tokensWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` password_reset_tokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` password_reset_tokens.
+     */
+    skip?: number
+    distinct?: Password_reset_tokensScalarFieldEnum | Password_reset_tokensScalarFieldEnum[]
+  }
+
+  /**
+   * password_reset_tokens create
+   */
+  export type password_reset_tokensCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * The data needed to create a password_reset_tokens.
+     */
+    data: XOR<password_reset_tokensCreateInput, password_reset_tokensUncheckedCreateInput>
+  }
+
+  /**
+   * password_reset_tokens createMany
+   */
+  export type password_reset_tokensCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many password_reset_tokens.
+     */
+    data: password_reset_tokensCreateManyInput | password_reset_tokensCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * password_reset_tokens createManyAndReturn
+   */
+  export type password_reset_tokensCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * The data used to create many password_reset_tokens.
+     */
+    data: password_reset_tokensCreateManyInput | password_reset_tokensCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * password_reset_tokens update
+   */
+  export type password_reset_tokensUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * The data needed to update a password_reset_tokens.
+     */
+    data: XOR<password_reset_tokensUpdateInput, password_reset_tokensUncheckedUpdateInput>
+    /**
+     * Choose, which password_reset_tokens to update.
+     */
+    where: password_reset_tokensWhereUniqueInput
+  }
+
+  /**
+   * password_reset_tokens updateMany
+   */
+  export type password_reset_tokensUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update password_reset_tokens.
+     */
+    data: XOR<password_reset_tokensUpdateManyMutationInput, password_reset_tokensUncheckedUpdateManyInput>
+    /**
+     * Filter which password_reset_tokens to update
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * Limit how many password_reset_tokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * password_reset_tokens updateManyAndReturn
+   */
+  export type password_reset_tokensUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * The data used to update password_reset_tokens.
+     */
+    data: XOR<password_reset_tokensUpdateManyMutationInput, password_reset_tokensUncheckedUpdateManyInput>
+    /**
+     * Filter which password_reset_tokens to update
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * Limit how many password_reset_tokens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * password_reset_tokens upsert
+   */
+  export type password_reset_tokensUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * The filter to search for the password_reset_tokens to update in case it exists.
+     */
+    where: password_reset_tokensWhereUniqueInput
+    /**
+     * In case the password_reset_tokens found by the `where` argument doesn't exist, create a new password_reset_tokens with this data.
+     */
+    create: XOR<password_reset_tokensCreateInput, password_reset_tokensUncheckedCreateInput>
+    /**
+     * In case the password_reset_tokens was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<password_reset_tokensUpdateInput, password_reset_tokensUncheckedUpdateInput>
+  }
+
+  /**
+   * password_reset_tokens delete
+   */
+  export type password_reset_tokensDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+    /**
+     * Filter which password_reset_tokens to delete.
+     */
+    where: password_reset_tokensWhereUniqueInput
+  }
+
+  /**
+   * password_reset_tokens deleteMany
+   */
+  export type password_reset_tokensDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which password_reset_tokens to delete
+     */
+    where?: password_reset_tokensWhereInput
+    /**
+     * Limit how many password_reset_tokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * password_reset_tokens without action
+   */
+  export type password_reset_tokensDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the password_reset_tokens
+     */
+    select?: password_reset_tokensSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the password_reset_tokens
+     */
+    omit?: password_reset_tokensOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: password_reset_tokensInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -28424,7 +29588,6 @@ export namespace Prisma {
     user_agent: 'user_agent',
     revoked: 'revoked',
     last_ip: 'last_ip',
-    access_token: 'access_token',
     refresh_token: 'refresh_token',
     created_at: 'created_at',
     last_active: 'last_active'
@@ -28486,6 +29649,18 @@ export namespace Prisma {
   };
 
   export type DirectionScalarFieldEnum = (typeof DirectionScalarFieldEnum)[keyof typeof DirectionScalarFieldEnum]
+
+
+  export const Password_reset_tokensScalarFieldEnum: {
+    id: 'id',
+    user_id: 'user_id',
+    token: 'token',
+    expires_at: 'expires_at',
+    is_used: 'is_used',
+    created_at: 'created_at'
+  };
+
+  export type Password_reset_tokensScalarFieldEnum = (typeof Password_reset_tokensScalarFieldEnum)[keyof typeof Password_reset_tokensScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -29927,7 +31102,6 @@ export namespace Prisma {
     user_agent?: StringFilter<"user_sessions"> | string
     revoked?: BoolFilter<"user_sessions"> | boolean
     last_ip?: StringFilter<"user_sessions"> | string
-    access_token?: StringNullableFilter<"user_sessions"> | string | null
     refresh_token?: StringNullableFilter<"user_sessions"> | string | null
     created_at?: DateTimeFilter<"user_sessions"> | Date | string
     last_active?: DateTimeFilter<"user_sessions"> | Date | string
@@ -29942,7 +31116,6 @@ export namespace Prisma {
     user_agent?: SortOrder
     revoked?: SortOrder
     last_ip?: SortOrder
-    access_token?: SortOrderInput | SortOrder
     refresh_token?: SortOrderInput | SortOrder
     created_at?: SortOrder
     last_active?: SortOrder
@@ -29961,7 +31134,6 @@ export namespace Prisma {
     user_agent?: StringFilter<"user_sessions"> | string
     revoked?: BoolFilter<"user_sessions"> | boolean
     last_ip?: StringFilter<"user_sessions"> | string
-    access_token?: StringNullableFilter<"user_sessions"> | string | null
     refresh_token?: StringNullableFilter<"user_sessions"> | string | null
     created_at?: DateTimeFilter<"user_sessions"> | Date | string
     last_active?: DateTimeFilter<"user_sessions"> | Date | string
@@ -29976,7 +31148,6 @@ export namespace Prisma {
     user_agent?: SortOrder
     revoked?: SortOrder
     last_ip?: SortOrder
-    access_token?: SortOrderInput | SortOrder
     refresh_token?: SortOrderInput | SortOrder
     created_at?: SortOrder
     last_active?: SortOrder
@@ -29996,7 +31167,6 @@ export namespace Prisma {
     user_agent?: StringWithAggregatesFilter<"user_sessions"> | string
     revoked?: BoolWithAggregatesFilter<"user_sessions"> | boolean
     last_ip?: StringWithAggregatesFilter<"user_sessions"> | string
-    access_token?: StringNullableWithAggregatesFilter<"user_sessions"> | string | null
     refresh_token?: StringNullableWithAggregatesFilter<"user_sessions"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"user_sessions"> | Date | string
     last_active?: DateTimeWithAggregatesFilter<"user_sessions"> | Date | string
@@ -30031,6 +31201,7 @@ export namespace Prisma {
     notifications?: NotificationsListRelationFilter
     orders_orders_retailer_idTousers?: OrdersListRelationFilter
     orders_orders_wholesaler_idTousers?: OrdersListRelationFilter
+    password_reset_tokens?: Password_reset_tokensListRelationFilter
     products?: ProductsListRelationFilter
     user_sessions?: User_sessionsListRelationFilter
   }
@@ -30061,6 +31232,7 @@ export namespace Prisma {
     notifications?: notificationsOrderByRelationAggregateInput
     orders_orders_retailer_idTousers?: ordersOrderByRelationAggregateInput
     orders_orders_wholesaler_idTousers?: ordersOrderByRelationAggregateInput
+    password_reset_tokens?: password_reset_tokensOrderByRelationAggregateInput
     products?: productsOrderByRelationAggregateInput
     user_sessions?: user_sessionsOrderByRelationAggregateInput
   }
@@ -30094,6 +31266,7 @@ export namespace Prisma {
     notifications?: NotificationsListRelationFilter
     orders_orders_retailer_idTousers?: OrdersListRelationFilter
     orders_orders_wholesaler_idTousers?: OrdersListRelationFilter
+    password_reset_tokens?: Password_reset_tokensListRelationFilter
     products?: ProductsListRelationFilter
     user_sessions?: User_sessionsListRelationFilter
   }, "id" | "username" | "email" | "telephone">
@@ -30324,6 +31497,66 @@ export namespace Prisma {
     longitude?: FloatWithAggregatesFilter<"direction"> | number
     created_at?: DateTimeWithAggregatesFilter<"direction"> | Date | string
     updated_at?: DateTimeNullableWithAggregatesFilter<"direction"> | Date | string | null
+  }
+
+  export type password_reset_tokensWhereInput = {
+    AND?: password_reset_tokensWhereInput | password_reset_tokensWhereInput[]
+    OR?: password_reset_tokensWhereInput[]
+    NOT?: password_reset_tokensWhereInput | password_reset_tokensWhereInput[]
+    id?: UuidFilter<"password_reset_tokens"> | string
+    user_id?: UuidFilter<"password_reset_tokens"> | string
+    token?: StringFilter<"password_reset_tokens"> | string
+    expires_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+    is_used?: BoolFilter<"password_reset_tokens"> | boolean
+    created_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+    users?: XOR<UsersScalarRelationFilter, usersWhereInput>
+  }
+
+  export type password_reset_tokensOrderByWithRelationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    token?: SortOrder
+    expires_at?: SortOrder
+    is_used?: SortOrder
+    created_at?: SortOrder
+    users?: usersOrderByWithRelationInput
+  }
+
+  export type password_reset_tokensWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: password_reset_tokensWhereInput | password_reset_tokensWhereInput[]
+    OR?: password_reset_tokensWhereInput[]
+    NOT?: password_reset_tokensWhereInput | password_reset_tokensWhereInput[]
+    user_id?: UuidFilter<"password_reset_tokens"> | string
+    token?: StringFilter<"password_reset_tokens"> | string
+    expires_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+    is_used?: BoolFilter<"password_reset_tokens"> | boolean
+    created_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+    users?: XOR<UsersScalarRelationFilter, usersWhereInput>
+  }, "id">
+
+  export type password_reset_tokensOrderByWithAggregationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    token?: SortOrder
+    expires_at?: SortOrder
+    is_used?: SortOrder
+    created_at?: SortOrder
+    _count?: password_reset_tokensCountOrderByAggregateInput
+    _max?: password_reset_tokensMaxOrderByAggregateInput
+    _min?: password_reset_tokensMinOrderByAggregateInput
+  }
+
+  export type password_reset_tokensScalarWhereWithAggregatesInput = {
+    AND?: password_reset_tokensScalarWhereWithAggregatesInput | password_reset_tokensScalarWhereWithAggregatesInput[]
+    OR?: password_reset_tokensScalarWhereWithAggregatesInput[]
+    NOT?: password_reset_tokensScalarWhereWithAggregatesInput | password_reset_tokensScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"password_reset_tokens"> | string
+    user_id?: UuidWithAggregatesFilter<"password_reset_tokens"> | string
+    token?: StringWithAggregatesFilter<"password_reset_tokens"> | string
+    expires_at?: DateTimeWithAggregatesFilter<"password_reset_tokens"> | Date | string
+    is_used?: BoolWithAggregatesFilter<"password_reset_tokens"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"password_reset_tokens"> | Date | string
   }
 
   export type cart_detailsCreateInput = {
@@ -31556,7 +32789,6 @@ export namespace Prisma {
     user_agent: string
     revoked?: boolean
     last_ip: string
-    access_token?: string | null
     refresh_token?: string | null
     created_at?: Date | string
     last_active?: Date | string
@@ -31571,7 +32803,6 @@ export namespace Prisma {
     user_agent: string
     revoked?: boolean
     last_ip: string
-    access_token?: string | null
     refresh_token?: string | null
     created_at?: Date | string
     last_active?: Date | string
@@ -31584,7 +32815,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31599,7 +32829,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31613,7 +32842,6 @@ export namespace Prisma {
     user_agent: string
     revoked?: boolean
     last_ip: string
-    access_token?: string | null
     refresh_token?: string | null
     created_at?: Date | string
     last_active?: Date | string
@@ -31626,7 +32854,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31640,7 +32867,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31672,6 +32898,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -31702,6 +32929,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -31732,6 +32960,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -31762,6 +32991,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -32028,6 +33258,68 @@ export namespace Prisma {
     longitude?: FloatFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type password_reset_tokensCreateInput = {
+    id?: string
+    token: string
+    expires_at?: Date | string
+    is_used?: boolean
+    created_at?: Date | string
+    users: usersCreateNestedOneWithoutPassword_reset_tokensInput
+  }
+
+  export type password_reset_tokensUncheckedCreateInput = {
+    id?: string
+    user_id: string
+    token: string
+    expires_at?: Date | string
+    is_used?: boolean
+    created_at?: Date | string
+  }
+
+  export type password_reset_tokensUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: usersUpdateOneRequiredWithoutPassword_reset_tokensNestedInput
+  }
+
+  export type password_reset_tokensUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensCreateManyInput = {
+    id?: string
+    user_id: string
+    token: string
+    expires_at?: Date | string
+    is_used?: boolean
+    created_at?: Date | string
+  }
+
+  export type password_reset_tokensUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BigIntFilter<$PrismaModel = never> = {
@@ -33364,7 +34656,6 @@ export namespace Prisma {
     user_agent?: SortOrder
     revoked?: SortOrder
     last_ip?: SortOrder
-    access_token?: SortOrder
     refresh_token?: SortOrder
     created_at?: SortOrder
     last_active?: SortOrder
@@ -33378,7 +34669,6 @@ export namespace Prisma {
     user_agent?: SortOrder
     revoked?: SortOrder
     last_ip?: SortOrder
-    access_token?: SortOrder
     refresh_token?: SortOrder
     created_at?: SortOrder
     last_active?: SortOrder
@@ -33392,7 +34682,6 @@ export namespace Prisma {
     user_agent?: SortOrder
     revoked?: SortOrder
     last_ip?: SortOrder
-    access_token?: SortOrder
     refresh_token?: SortOrder
     created_at?: SortOrder
     last_active?: SortOrder
@@ -33477,6 +34766,12 @@ export namespace Prisma {
     none?: ordersWhereInput
   }
 
+  export type Password_reset_tokensListRelationFilter = {
+    every?: password_reset_tokensWhereInput
+    some?: password_reset_tokensWhereInput
+    none?: password_reset_tokensWhereInput
+  }
+
   export type User_sessionsListRelationFilter = {
     every?: user_sessionsWhereInput
     some?: user_sessionsWhereInput
@@ -33508,6 +34803,10 @@ export namespace Prisma {
   }
 
   export type ordersOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type password_reset_tokensOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33746,6 +35045,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAddressTypeFilter<$PrismaModel>
     _max?: NestedEnumAddressTypeFilter<$PrismaModel>
+  }
+
+  export type password_reset_tokensCountOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    token?: SortOrder
+    expires_at?: SortOrder
+    is_used?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type password_reset_tokensMaxOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    token?: SortOrder
+    expires_at?: SortOrder
+    is_used?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type password_reset_tokensMinOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    token?: SortOrder
+    expires_at?: SortOrder
+    is_used?: SortOrder
+    created_at?: SortOrder
   }
 
   export type cartsCreateNestedOneWithoutCart_detailsInput = {
@@ -34839,6 +36165,13 @@ export namespace Prisma {
     connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
   }
 
+  export type password_reset_tokensCreateNestedManyWithoutUsersInput = {
+    create?: XOR<password_reset_tokensCreateWithoutUsersInput, password_reset_tokensUncheckedCreateWithoutUsersInput> | password_reset_tokensCreateWithoutUsersInput[] | password_reset_tokensUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUsersInput | password_reset_tokensCreateOrConnectWithoutUsersInput[]
+    createMany?: password_reset_tokensCreateManyUsersInputEnvelope
+    connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+  }
+
   export type productsCreateNestedManyWithoutUsersInput = {
     create?: XOR<productsCreateWithoutUsersInput, productsUncheckedCreateWithoutUsersInput> | productsCreateWithoutUsersInput[] | productsUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: productsCreateOrConnectWithoutUsersInput | productsCreateOrConnectWithoutUsersInput[]
@@ -34928,6 +36261,13 @@ export namespace Prisma {
     connectOrCreate?: ordersCreateOrConnectWithoutUsers_orders_wholesaler_idTousersInput | ordersCreateOrConnectWithoutUsers_orders_wholesaler_idTousersInput[]
     createMany?: ordersCreateManyUsers_orders_wholesaler_idTousersInputEnvelope
     connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+  }
+
+  export type password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: XOR<password_reset_tokensCreateWithoutUsersInput, password_reset_tokensUncheckedCreateWithoutUsersInput> | password_reset_tokensCreateWithoutUsersInput[] | password_reset_tokensUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUsersInput | password_reset_tokensCreateOrConnectWithoutUsersInput[]
+    createMany?: password_reset_tokensCreateManyUsersInputEnvelope
+    connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
   }
 
   export type productsUncheckedCreateNestedManyWithoutUsersInput = {
@@ -35104,6 +36444,20 @@ export namespace Prisma {
     update?: ordersUpdateWithWhereUniqueWithoutUsers_orders_wholesaler_idTousersInput | ordersUpdateWithWhereUniqueWithoutUsers_orders_wholesaler_idTousersInput[]
     updateMany?: ordersUpdateManyWithWhereWithoutUsers_orders_wholesaler_idTousersInput | ordersUpdateManyWithWhereWithoutUsers_orders_wholesaler_idTousersInput[]
     deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
+  }
+
+  export type password_reset_tokensUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<password_reset_tokensCreateWithoutUsersInput, password_reset_tokensUncheckedCreateWithoutUsersInput> | password_reset_tokensCreateWithoutUsersInput[] | password_reset_tokensUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUsersInput | password_reset_tokensCreateOrConnectWithoutUsersInput[]
+    upsert?: password_reset_tokensUpsertWithWhereUniqueWithoutUsersInput | password_reset_tokensUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: password_reset_tokensCreateManyUsersInputEnvelope
+    set?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    disconnect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    delete?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    update?: password_reset_tokensUpdateWithWhereUniqueWithoutUsersInput | password_reset_tokensUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: password_reset_tokensUpdateManyWithWhereWithoutUsersInput | password_reset_tokensUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
   }
 
   export type productsUpdateManyWithoutUsersNestedInput = {
@@ -35286,6 +36640,20 @@ export namespace Prisma {
     update?: ordersUpdateWithWhereUniqueWithoutUsers_orders_wholesaler_idTousersInput | ordersUpdateWithWhereUniqueWithoutUsers_orders_wholesaler_idTousersInput[]
     updateMany?: ordersUpdateManyWithWhereWithoutUsers_orders_wholesaler_idTousersInput | ordersUpdateManyWithWhereWithoutUsers_orders_wholesaler_idTousersInput[]
     deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
+  }
+
+  export type password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<password_reset_tokensCreateWithoutUsersInput, password_reset_tokensUncheckedCreateWithoutUsersInput> | password_reset_tokensCreateWithoutUsersInput[] | password_reset_tokensUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: password_reset_tokensCreateOrConnectWithoutUsersInput | password_reset_tokensCreateOrConnectWithoutUsersInput[]
+    upsert?: password_reset_tokensUpsertWithWhereUniqueWithoutUsersInput | password_reset_tokensUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: password_reset_tokensCreateManyUsersInputEnvelope
+    set?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    disconnect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    delete?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    connect?: password_reset_tokensWhereUniqueInput | password_reset_tokensWhereUniqueInput[]
+    update?: password_reset_tokensUpdateWithWhereUniqueWithoutUsersInput | password_reset_tokensUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: password_reset_tokensUpdateManyWithWhereWithoutUsersInput | password_reset_tokensUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
   }
 
   export type productsUncheckedUpdateManyWithoutUsersNestedInput = {
@@ -35472,6 +36840,20 @@ export namespace Prisma {
     update?: ordersUpdateWithWhereUniqueWithoutDirecctionInput | ordersUpdateWithWhereUniqueWithoutDirecctionInput[]
     updateMany?: ordersUpdateManyWithWhereWithoutDirecctionInput | ordersUpdateManyWithWhereWithoutDirecctionInput[]
     deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
+  }
+
+  export type usersCreateNestedOneWithoutPassword_reset_tokensInput = {
+    create?: XOR<usersCreateWithoutPassword_reset_tokensInput, usersUncheckedCreateWithoutPassword_reset_tokensInput>
+    connectOrCreate?: usersCreateOrConnectWithoutPassword_reset_tokensInput
+    connect?: usersWhereUniqueInput
+  }
+
+  export type usersUpdateOneRequiredWithoutPassword_reset_tokensNestedInput = {
+    create?: XOR<usersCreateWithoutPassword_reset_tokensInput, usersUncheckedCreateWithoutPassword_reset_tokensInput>
+    connectOrCreate?: usersCreateOrConnectWithoutPassword_reset_tokensInput
+    upsert?: usersUpsertWithoutPassword_reset_tokensInput
+    connect?: usersWhereUniqueInput
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutPassword_reset_tokensInput, usersUpdateWithoutPassword_reset_tokensInput>, usersUncheckedUpdateWithoutPassword_reset_tokensInput>
   }
 
   export type NestedBigIntFilter<$PrismaModel = never> = {
@@ -36116,6 +37498,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -36145,6 +37528,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -36217,6 +37601,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -36246,6 +37631,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -36330,6 +37716,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -36359,6 +37746,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -36501,6 +37889,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -36530,6 +37919,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -36716,6 +38106,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -36745,6 +38136,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -36815,6 +38207,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -36844,6 +38237,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -36873,6 +38267,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -36902,6 +38297,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -36947,6 +38343,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -36976,6 +38373,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -37005,6 +38403,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -37034,6 +38433,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -37107,6 +38507,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -37136,6 +38537,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -37266,6 +38668,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -37295,6 +38698,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -37340,6 +38744,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -37369,6 +38774,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -37722,6 +39128,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -37751,6 +39158,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -37886,6 +39294,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -37915,6 +39324,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -37944,6 +39354,7 @@ export namespace Prisma {
     messages?: messagesCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -37973,6 +39384,7 @@ export namespace Prisma {
     messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -38018,6 +39430,7 @@ export namespace Prisma {
     messages?: messagesUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -38047,6 +39460,7 @@ export namespace Prisma {
     messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -38282,6 +39696,7 @@ export namespace Prisma {
     messages?: messagesCreateNestedManyWithoutUsersInput
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -38311,6 +39726,7 @@ export namespace Prisma {
     messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -38378,6 +39794,7 @@ export namespace Prisma {
     messages?: messagesCreateNestedManyWithoutUsersInput
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -38407,6 +39824,7 @@ export namespace Prisma {
     messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -38486,6 +39904,7 @@ export namespace Prisma {
     messages?: messagesUpdateManyWithoutUsersNestedInput
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -38515,6 +39934,7 @@ export namespace Prisma {
     messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -38594,6 +40014,7 @@ export namespace Prisma {
     messages?: messagesUpdateManyWithoutUsersNestedInput
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -38623,6 +40044,7 @@ export namespace Prisma {
     messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -38678,6 +40100,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
 
@@ -38707,6 +40130,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
 
@@ -38847,6 +40271,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
 
@@ -38876,6 +40301,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
@@ -39095,6 +40521,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
   }
 
@@ -39124,6 +40551,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
   }
 
@@ -39169,6 +40597,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
   }
 
@@ -39198,6 +40627,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
@@ -39557,6 +40987,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type password_reset_tokensCreateWithoutUsersInput = {
+    id?: string
+    token: string
+    expires_at?: Date | string
+    is_used?: boolean
+    created_at?: Date | string
+  }
+
+  export type password_reset_tokensUncheckedCreateWithoutUsersInput = {
+    id?: string
+    token: string
+    expires_at?: Date | string
+    is_used?: boolean
+    created_at?: Date | string
+  }
+
+  export type password_reset_tokensCreateOrConnectWithoutUsersInput = {
+    where: password_reset_tokensWhereUniqueInput
+    create: XOR<password_reset_tokensCreateWithoutUsersInput, password_reset_tokensUncheckedCreateWithoutUsersInput>
+  }
+
+  export type password_reset_tokensCreateManyUsersInputEnvelope = {
+    data: password_reset_tokensCreateManyUsersInput | password_reset_tokensCreateManyUsersInput[]
+    skipDuplicates?: boolean
+  }
+
   export type productsCreateWithoutUsersInput = {
     id?: bigint | number
     name: string
@@ -39602,7 +41058,6 @@ export namespace Prisma {
     user_agent: string
     revoked?: boolean
     last_ip: string
-    access_token?: string | null
     refresh_token?: string | null
     created_at?: Date | string
     last_active?: Date | string
@@ -39615,7 +41070,6 @@ export namespace Prisma {
     user_agent: string
     revoked?: boolean
     last_ip: string
-    access_token?: string | null
     refresh_token?: string | null
     created_at?: Date | string
     last_active?: Date | string
@@ -39910,6 +41364,34 @@ export namespace Prisma {
     data: XOR<ordersUpdateManyMutationInput, ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersInput>
   }
 
+  export type password_reset_tokensUpsertWithWhereUniqueWithoutUsersInput = {
+    where: password_reset_tokensWhereUniqueInput
+    update: XOR<password_reset_tokensUpdateWithoutUsersInput, password_reset_tokensUncheckedUpdateWithoutUsersInput>
+    create: XOR<password_reset_tokensCreateWithoutUsersInput, password_reset_tokensUncheckedCreateWithoutUsersInput>
+  }
+
+  export type password_reset_tokensUpdateWithWhereUniqueWithoutUsersInput = {
+    where: password_reset_tokensWhereUniqueInput
+    data: XOR<password_reset_tokensUpdateWithoutUsersInput, password_reset_tokensUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type password_reset_tokensUpdateManyWithWhereWithoutUsersInput = {
+    where: password_reset_tokensScalarWhereInput
+    data: XOR<password_reset_tokensUpdateManyMutationInput, password_reset_tokensUncheckedUpdateManyWithoutUsersInput>
+  }
+
+  export type password_reset_tokensScalarWhereInput = {
+    AND?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
+    OR?: password_reset_tokensScalarWhereInput[]
+    NOT?: password_reset_tokensScalarWhereInput | password_reset_tokensScalarWhereInput[]
+    id?: UuidFilter<"password_reset_tokens"> | string
+    user_id?: UuidFilter<"password_reset_tokens"> | string
+    token?: StringFilter<"password_reset_tokens"> | string
+    expires_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+    is_used?: BoolFilter<"password_reset_tokens"> | boolean
+    created_at?: DateTimeFilter<"password_reset_tokens"> | Date | string
+  }
+
   export type productsUpsertWithWhereUniqueWithoutUsersInput = {
     where: productsWhereUniqueInput
     update: XOR<productsUpdateWithoutUsersInput, productsUncheckedUpdateWithoutUsersInput>
@@ -39953,7 +41435,6 @@ export namespace Prisma {
     user_agent?: StringFilter<"user_sessions"> | string
     revoked?: BoolFilter<"user_sessions"> | boolean
     last_ip?: StringFilter<"user_sessions"> | string
-    access_token?: StringNullableFilter<"user_sessions"> | string | null
     refresh_token?: StringNullableFilter<"user_sessions"> | string | null
     created_at?: DateTimeFilter<"user_sessions"> | Date | string
     last_active?: DateTimeFilter<"user_sessions"> | Date | string
@@ -40150,6 +41631,7 @@ export namespace Prisma {
     notifications?: notificationsCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensCreateNestedManyWithoutUsersInput
     products?: productsCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
   }
@@ -40179,6 +41661,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
     orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    password_reset_tokens?: password_reset_tokensUncheckedCreateNestedManyWithoutUsersInput
     products?: productsUncheckedCreateNestedManyWithoutUsersInput
     user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -40270,6 +41753,7 @@ export namespace Prisma {
     notifications?: notificationsUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUpdateManyWithoutUsersNestedInput
     products?: productsUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
   }
@@ -40299,6 +41783,7 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
     orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
     orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    password_reset_tokens?: password_reset_tokensUncheckedUpdateManyWithoutUsersNestedInput
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -40317,6 +41802,142 @@ export namespace Prisma {
   export type ordersUpdateManyWithWhereWithoutDirecctionInput = {
     where: ordersScalarWhereInput
     data: XOR<ordersUpdateManyMutationInput, ordersUncheckedUpdateManyWithoutDirecctionInput>
+  }
+
+  export type usersCreateWithoutPassword_reset_tokensInput = {
+    id?: string
+    user_id?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    username?: string | null
+    password: string
+    email?: string | null
+    telephone?: string | null
+    status?: $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    role: $Enums.UserRole
+    cif?: string | null
+    carts?: cartsCreateNestedManyWithoutUsersInput
+    categories?: categoriesCreateNestedManyWithoutUsersInput
+    chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
+    configurations?: configurationsCreateNestedManyWithoutUsersInput
+    deliveries?: deliveriesCreateNestedManyWithoutUsersInput
+    direction?: directionCreateNestedManyWithoutUsersInput
+    discounts?: discountsCreateNestedManyWithoutUsersInput
+    messages?: messagesCreateNestedManyWithoutUsersInput
+    notifications?: notificationsCreateNestedManyWithoutUsersInput
+    orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    products?: productsCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutPassword_reset_tokensInput = {
+    id?: string
+    user_id?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    username?: string | null
+    password: string
+    email?: string | null
+    telephone?: string | null
+    status?: $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    role: $Enums.UserRole
+    cif?: string | null
+    carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
+    categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
+    chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
+    configurations?: configurationsUncheckedCreateNestedManyWithoutUsersInput
+    deliveries?: deliveriesUncheckedCreateNestedManyWithoutUsersInput
+    direction?: directionUncheckedCreateNestedManyWithoutUsersInput
+    discounts?: discountsUncheckedCreateNestedManyWithoutUsersInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
+    orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    products?: productsUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutPassword_reset_tokensInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutPassword_reset_tokensInput, usersUncheckedCreateWithoutPassword_reset_tokensInput>
+  }
+
+  export type usersUpsertWithoutPassword_reset_tokensInput = {
+    update: XOR<usersUpdateWithoutPassword_reset_tokensInput, usersUncheckedUpdateWithoutPassword_reset_tokensInput>
+    create: XOR<usersCreateWithoutPassword_reset_tokensInput, usersUncheckedCreateWithoutPassword_reset_tokensInput>
+    where?: usersWhereInput
+  }
+
+  export type usersUpdateToOneWithWhereWithoutPassword_reset_tokensInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutPassword_reset_tokensInput, usersUncheckedUpdateWithoutPassword_reset_tokensInput>
+  }
+
+  export type usersUpdateWithoutPassword_reset_tokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
+    carts?: cartsUpdateManyWithoutUsersNestedInput
+    categories?: categoriesUpdateManyWithoutUsersNestedInput
+    chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
+    configurations?: configurationsUpdateManyWithoutUsersNestedInput
+    deliveries?: deliveriesUpdateManyWithoutUsersNestedInput
+    direction?: directionUpdateManyWithoutUsersNestedInput
+    discounts?: discountsUpdateManyWithoutUsersNestedInput
+    messages?: messagesUpdateManyWithoutUsersNestedInput
+    notifications?: notificationsUpdateManyWithoutUsersNestedInput
+    orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    products?: productsUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutPassword_reset_tokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
+    carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
+    categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
+    chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
+    configurations?: configurationsUncheckedUpdateManyWithoutUsersNestedInput
+    deliveries?: deliveriesUncheckedUpdateManyWithoutUsersNestedInput
+    direction?: directionUncheckedUpdateManyWithoutUsersNestedInput
+    discounts?: discountsUncheckedUpdateManyWithoutUsersNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
+    orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    products?: productsUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type cart_detailsCreateManyCartsInput = {
@@ -40897,6 +42518,14 @@ export namespace Prisma {
     updated_at?: Date | string | null
   }
 
+  export type password_reset_tokensCreateManyUsersInput = {
+    id?: string
+    token: string
+    expires_at?: Date | string
+    is_used?: boolean
+    created_at?: Date | string
+  }
+
   export type productsCreateManyUsersInput = {
     id?: bigint | number
     name: string
@@ -40916,7 +42545,6 @@ export namespace Prisma {
     user_agent: string
     revoked?: boolean
     last_ip: string
-    access_token?: string | null
     refresh_token?: string | null
     created_at?: Date | string
     last_active?: Date | string
@@ -41282,6 +42910,30 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type password_reset_tokensUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type password_reset_tokensUncheckedUpdateManyWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    is_used?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type productsUpdateWithoutUsersInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
@@ -41329,7 +42981,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41342,7 +42993,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -41355,7 +43005,6 @@ export namespace Prisma {
     user_agent?: StringFieldUpdateOperationsInput | string
     revoked?: BoolFieldUpdateOperationsInput | boolean
     last_ip?: StringFieldUpdateOperationsInput | string
-    access_token?: NullableStringFieldUpdateOperationsInput | string | null
     refresh_token?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     last_active?: DateTimeFieldUpdateOperationsInput | Date | string

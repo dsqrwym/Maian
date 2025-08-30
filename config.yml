@@ -1,0 +1,11 @@
+tunnel: 1551ecaf-485b-4da0-90af-ae188347a0c6 # 隧道的ID
+protocol: http2 # 隧道到 Cloudflare Edge 的连接方式
+metrics: 0.0.0.0:2000
+ingress:
+  # 路由规则，将 api.dsqrwym.es 的请求转发到本地的 NestJS 服务
+  - hostname: api.dsqrwym.es
+    path: /maian/*
+    service: http://host.docker.internal:3000 # 宿主机IP地址
+    noTLSVerify: true # 与本地服务通信时跳过 TLS 验证
+  # 这是回退规则，如果没有任何其他规则匹配，就返回 404
+  - service: http_status:404

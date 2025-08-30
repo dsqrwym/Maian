@@ -1,0 +1,68 @@
+<resources>
+    <string name="login_background_content_description">登录界面的背景</string>
+
+    <string name="login_button_back_button_content_description">返回按钮</string>
+
+    <string name="login_button_login">登录</string>
+    <string name="login_button_forget_password">忘记密码</string>
+    <string name="login_button_other_login_methods">其他登录方式</string>
+
+    <string name="login_button_google_login">使用 Google 登录</string>
+    <string name="login_button_google_logo_content_description">Google 图标</string>
+    <string name="login_button_wechat_login">使用微信登录</string>
+    <string name="login_button_wechat_logo_content_description">微信图标</string>
+    <string name="login_button_register_new_account">注册新账户</string>
+
+    <string name="login_title">登录</string>
+    <string name="login_subtitle">请先登录以继续使用</string>
+
+    <string name="login_field_username_or_email_label">用户名或者邮箱</string>
+    <string name="login_field_username_or_email_placeholder">请输入用户名或者邮箱</string>
+
+    <string name="login_field_password_label">密码</string>
+    <string name="login_field_password_placeholder">请输入密码</string>
+    <string name="login_password_toggle_visibility">切换密码可见性</string>
+
+    <string name="login_icon_content_description_email">邮箱图标</string>
+    <string name="login_icon_content_description_person">用户图标</string>
+    <string name="login_icon_content_description_lock">密码图标</string>
+
+    <string name="login_validation_username_or_email_empty">用户名或邮箱不能为空</string>
+    <string name="login_validation_username_length_invalid">用户名长度应在3到30个字符之间</string>
+    <string name="login_validation_email_domain_not_supported">不支持 example.com 邮箱</string>
+    <string name="login_validation_password_empty">密码不能为空</string>
+    <string name="login_validation_password_too_short">密码长度至少为6个字符</string>
+    <string name="login_validation_password_missing_uppercase">密码必须包含至少一个大写字母</string>
+    <string name="login_validation_password_missing_lowercase">密码必须包含至少一个小写字母</string>
+    <string name="login_validation_password_missing_digit">密码必须包含至少一个数字</string>
+
+
+    <string name="initial_screen_welcome">欢迎来到</string>
+    <string name="initial_screen_platform_name">卖安平台</string>
+    <string name="initial_screen_instruction">请选择登录或注册以继续</string>
+    <string name="initial_screen_quick_login_hint">⏫ 支持谷歌、微信 快速登录 ⏫</string>
+
+    <string name="initial_screen_agreement_warning">请先同意用户协议和隐私政策才能继续</string>
+    <string name="initial_screen_agreement_section_agreement_text_template">我已阅读并同意《%s》和《%s》</string>
+    <string name="initial_screen_agreement_section_user_agreement">用户协议</string>
+    <string name="initial_screen_agreement_section_privacy_policy">隐私政策</string>
+
+
+    <string name="forgot_email_label">邮箱</string>
+    <string name="forgot_email_placeholder">请输入邮箱</string>
+
+    <string name="forgot_new_password_label">新密码</string>
+    <string name="forgot_repeat_password_label">重复新密码</string>
+    <string name="forgot_repeat_password_placeholder">请重复新密码</string>
+    <string name="forgot_repeat_password_mismatch">输入的密码与新密码不同</string>
+
+
+    <string name="forgot_verify_email">验证邮箱</string>
+    <string name="forgot_verify">验证</string>
+
+    <string name="forgot_change_password">更改密码</string>
+    <string name="forgot_unknown_error">未知错误</string>
+    <string name="forgot_fill_otp">请填写验证码</string>
+    <string name="forgot_otp_error">验证码错误</string>
+    <string name="forgot_email_format_error">邮箱格式不正确</string>
+</resources>
