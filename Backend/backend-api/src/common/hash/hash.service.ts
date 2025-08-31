@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Piscina from 'piscina';
 import { HASH_PROVIDE } from './hash-worker-pool.provider';
+import { ENV } from '../../config/constants';
 
 @Injectable()
 export class HashService {
@@ -16,7 +17,7 @@ export class HashService {
       type: 'hash',
       algorithm: 'bcrypt',
       string,
-      salt: Number(this.config.get<number>('BCRYPT_SALT_ROUNDS')) || 10,
+      salt: Number(this.config.get<number>(ENV.BCRYPT_SALT_ROUNDS)) || 10,
     });
     return result as Promise<string>;
   }

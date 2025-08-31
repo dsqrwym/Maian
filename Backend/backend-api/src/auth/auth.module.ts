@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { ENV } from '../config/constants';
 
 @Module({
   imports: [
@@ -16,8 +17,8 @@ import { PassportModule } from '@nestjs/passport';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get('AUTH_JWT_SECRET'),
-        signOptions: { expiresIn: config.get('ACCESS_TOKEN_EXPIRES_IN') },
+        secret: config.get(ENV.AUTH_JWT_SECRET),
+        signOptions: { expiresIn: config.get(ENV.ACCESS_TOKEN_EXPIRES_IN) },
       }),
     }),
     MailModule,

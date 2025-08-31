@@ -31,11 +31,14 @@ import {
 } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { LoginDto } from './dto/login.dto';
+import { TokenResponseDto } from './dto/token-response.dto';
 import { DeleteSessionDto } from './dto/delete.session.dto';
 import { JwtAuthGuard, LocalAuthGuard } from './guard/auth.guard';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ConfigService } from '@nestjs/config';
-import { REFRESH_TOKEN_COOKIE_PATH } from 'src/config/constants';
+import { ENV, REFRESH_TOKEN_COOKIE_PATH } from 'src/config/constants';
+import { JwtService } from '@nestjs/jwt';
+import { CSRFPayload } from './auth.types';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -44,6 +47,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
   @Get('verify-email')
@@ -113,12 +117,7 @@ export class AuthController {
   })
   @ApiOkResponse({
     description: 'User successfully logged in',
-    schema: {
-      example: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-        refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-      },
-    },
+    type: TokenResponseDto,
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -129,7 +128,8 @@ export class AuthController {
       throw new BadRequestException('User authentication failed');
     }
 
-    return this.authService.login(req, user, body);
+    const { token } = await this.authService.login(req, user, body);
+    return token;
   }
 
   @Post('login-web')
@@ -157,12 +157,8 @@ export class AuthController {
   })
   @ApiOkResponse({
     description:
-      'User successfully logged in. Response body 含 accessToken；响应头通过 Set-Cookie 写入 refresh_token。',
-    schema: {
-      example: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-      },
-    },
+      'User successfully logged in. Web 流程中：响应体的 refreshToken 字段承载 CSRF Token；响应头通过 Set-Cookie 写入真实的 refresh_token。',
+    type: TokenResponseDto,
     headers: {
       'Set-Cookie': {
         description: `refresh_token=...; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'; Max-Age=<REFRESH_TOKEN_EXPIRES_IN>`,
@@ -184,31 +180,40 @@ export class AuthController {
       throw new BadRequestException('User authentication failed');
     }
 
-    const { accessToken, refreshToken } = await this.authService.login(
-      req,
-      user,
-      body,
-    );
+    const { token, payload } = await this.authService.login(req, user, body);
     // Web: 设置 cookie（httpOnly, secure, sameSite）
-    res.setCookie('refresh_token', refreshToken, {
+    res.setCookie('refresh_token', token.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none', // 跨域前后端分离（不同子域 / 不同域名）
       path: REFRESH_TOKEN_COOKIE_PATH,
-      maxAge: this.configService.get<number>('REFRESH_TOKEN_EXPIRES_IN'),
+      maxAge: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
     });
 
-    return {
-      accessToken,
+    const csrfTokenPayload: CSRFPayload = {
+      sessionId: payload.sessionId,
+      deviceFinger: payload.deviceFinger,
     };
+
+    const csrfToken = await this.jwtService.signAsync(csrfTokenPayload, {
+      expiresIn: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
+      secret: this.configService.get(ENV.CSRF_TOKEN_SECRET),
+    });
+
+    const result: TokenResponseDto = {
+      accessToken: token.accessToken,
+      refreshToken: csrfToken,
+    };
+
+    return result;
   }
 
   @Post('refresh-token')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Refresh access token (Cookie first, Body as fallback)',
+    summary: 'Refresh tokens with rotation (Cookie first, Body as fallback)',
     description:
-      '优先从 Cookie 名为 refresh_token 中读取 refresh token；如果没有 Cookie，则可在请求体中提供 { refreshToken }。',
+      '优先从 Cookie 名为 refresh_token 中读取 refresh token；如果没有 Cookie，则可在请求体中提供 { refreshToken }。当启用 Cookie 的 Web 场景时，会在响应头通过 Set-Cookie 写入新的 refresh_token（轮换）。',
   })
   @ApiBody({
     description:
@@ -226,29 +231,99 @@ export class AuthController {
     },
   })
   @ApiOkResponse({
-    description: 'Returns new access token',
-    schema: {
-      example: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    description:
+      'Returns new accessToken and refreshToken. 若使用 Cookie，响应头 Set-Cookie 会写入新的 refresh_token（轮换）。',
+    type: TokenResponseDto,
+    headers: {
+      'Set-Cookie': {
+        description: `当请求携带 Cookie 时，返回新的 refresh_token；HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'`,
+        schema: { type: 'string' },
       },
     },
   })
   @ApiUnauthorizedResponse({ description: 'Invalid or expired refresh token' })
   @ApiCookieAuth('refresh_token')
-  async getAccessToken(
+  async getAccessToken(@Body() body: RefreshTokenDto) {
+    const refreshToken = body?.refreshToken;
+    if (!refreshToken) {
+      throw new BadRequestException('No refresh token provided');
+    }
+
+    const result = await this.authService.getAccessToken(refreshToken);
+    return result.token;
+  }
+
+  @Post('refresh-token-web')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Web 刷新：Cookie+CSRF（Body.refreshToken）并轮换 refresh_token',
+    description:
+      '浏览器场景：从 Cookie 读取真实 refresh_token；请求体的 refreshToken 字段承载 CSRF Token（与会话绑定）。校验通过后，响应通过 Set-Cookie 写入新的 refresh_token（轮换），响应体返回新的 accessToken 与新的 CSRF（依旧在 refreshToken 字段）。',
+  })
+  @ApiBody({
+    description:
+      'Web 刷新必须在 Body.refreshToken 传入 CSRF Token。真实 refresh_token 从 Cookie 自动发送（名称：refresh_token）。',
+    type: RefreshTokenDto,
+    examples: {
+      webRefresh: {
+        summary: 'Web 刷新（Cookie 自动携带 refresh_token；Body 传 CSRF）',
+        value: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.CSRF...' },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description:
+      'Returns new accessToken and refreshToken. 若使用 Cookie，响应头 Set-Cookie 会写入新的 refresh_token（轮换）。',
+    type: TokenResponseDto,
+    headers: {
+      'Set-Cookie': {
+        description: `当请求携带 Cookie 时，返回新的 refresh_token；HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'`,
+        schema: { type: 'string' },
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid or expired refresh token' })
+  @ApiCookieAuth('refresh_token')
+  async getAccessTokenWeb(
     @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) res: FastifyReply,
     @Body() body: RefreshTokenDto,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    @Res({ passthrough: true }) _res: FastifyReply,
   ) {
     // 解析 cookie
     const cookies = req.cookies;
-    const fromCookie = cookies['refresh_token'];
+    const refreshToken = cookies['refresh_token'];
+    // 解析 csrfToken
+    const csrfToken = body.refreshToken;
 
-    const fromBody = body?.refreshToken;
+    if (!refreshToken) {
+      throw new BadRequestException('No refresh token provided');
+    }
+    const result = await this.authService.getAccessToken(
+      refreshToken,
+      csrfToken,
+    );
 
-    const refreshToken = fromCookie || fromBody;
-    return this.authService.getAccessToken(refreshToken);
+    const csrfPayload: CSRFPayload = {
+      sessionId: result.payload.sessionId,
+      deviceFinger: result.payload.deviceFinger,
+    };
+
+    // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
+
+    res.setCookie('refresh_token', result.token.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: REFRESH_TOKEN_COOKIE_PATH,
+      maxAge: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
+    });
+
+    result.token.refreshToken = await this.jwtService.signAsync(csrfPayload, {
+      expiresIn: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
+      secret: this.configService.get(ENV.CSRF_TOKEN_SECRET),
+    });
+
+    return result.token;
   }
 
   @Delete('logout')

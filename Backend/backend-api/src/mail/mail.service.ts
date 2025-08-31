@@ -13,6 +13,7 @@ import { DateFormatService } from 'src/common/formatter/date-format.service';
 import { VerificationContent } from './templates/verification-content'; // 引入邮件模板 内容
 import { getVerificationEmailHtml } from './templates/verification.templates'; // 引入邮件模板 HTML
 import { PinoLogger } from 'nestjs-pino';
+import { ENV } from '../config/constants';
 
 @Injectable()
 export class MailService {
@@ -29,16 +30,16 @@ export class MailService {
     // 注入当前请求对象) {
     // 使用 ConfigService 获取环境变量中的 SMTP 配置
     this.transporter = nodemailer.createTransport({
-      host: this.config.get<string>('SMTP_HOST')!,
-      port: Number(this.config.get<number>('SMTP_PORT')),
+      host: this.config.get<string>(ENV.SMTP_HOST)!,
+      port: Number(this.config.get<number>(ENV.SMTP_PORT)),
       secure: false, // true for 465, false for other ports Gmail 官方推荐 587 + STARTTLS（对应 secure: false）
       auth: {
-        user: this.config.get<string>('SMTP_USER')!, // SMTP 用户名
-        pass: this.config.get<string>('SMTP_PASS')!, // SMTP 密码
+        user: this.config.get<string>(ENV.SMTP_USER)!, // SMTP 用户名
+        pass: this.config.get<string>(ENV.SMTP_PASS)!, // SMTP 密码
       },
     });
-    this.retries = this.config.get<number>('SMTP_RETRIES') || 3; // 获取重试次数，默认为 3 次
-    this.deleyTime = this.config.get<number>('SMTP_DELAY_TIME') || 60000; // 获取延迟时间，默认为 1 分钟
+    this.retries = this.config.get<number>(ENV.SMTP_RETRIES) || 3; // 获取重试次数，默认为 3 次
+    this.deleyTime = this.config.get<number>(ENV.SMTP_DELAY_TIME) || 60000; // 获取延迟时间，默认为 1 分钟
   }
 
   private delay(ms: number) {

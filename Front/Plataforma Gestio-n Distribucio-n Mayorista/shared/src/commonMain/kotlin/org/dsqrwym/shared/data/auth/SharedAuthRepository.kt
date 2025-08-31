@@ -4,6 +4,8 @@ import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
 import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.toSharedResponseResult
+import org.dsqrwym.shared.util.platform.PlatformType
+import org.dsqrwym.shared.util.platform.getPlatform
 import org.dsqrwym.shared.util.platform.getPlatformDeviceInfo
 import org.dsqrwym.shared.util.validation.validateEmail
 
@@ -39,6 +41,7 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
      *         标准化的登录结果。
      */
     suspend fun login(identifier: String, password: String): SharedResponseResult<SharedLoginResponse> {
+        val platform = getPlatform().type
         // Get device information for the login request
         // 获取设备信息用于登录请求
         val deviceInfo = getPlatformDeviceInfo()
@@ -63,16 +66,11 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
 
         if (result is SharedResponseResult.Success) {
             result.data?.let { data ->
-                // Save tokens based on the response
-                // 根据响应保存令牌
-                if (data.refreshToken != null) {
-                    // Save both access and refresh tokens if refresh token is provided
-                    // 如果提供了刷新令牌，则同时保存访问令牌和刷新令牌
-                    SharedTokenStorage.save(data.accessToken, data.refreshToken)
-                } else {
-                    // Save only the access token if no refresh token is provided
-                    // 如果没有提供刷新令牌，则只保存访问令牌
+                if (platform == PlatformType.Web) {
                     SharedTokenStorage.saveAccess(data.accessToken)
+                    SharedTokenStorage.saveCsrf(data.refreshToken)
+                } else {
+                    SharedTokenStorage.save(data.accessToken, data.refreshToken)
                 }
                 return SharedResponseResult.Success(data)
             }

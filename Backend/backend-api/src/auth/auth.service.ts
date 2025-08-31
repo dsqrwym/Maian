@@ -18,10 +18,12 @@ import { getVerificationResponseContent } from 'src/mail/templates/varification-
 import { getVerificationResponseHtml } from 'src/mail/templates/verification-response.tmplates';
 import { Logger } from 'nestjs-pino';
 import { Prisma, UserRole, UserStatus } from 'prisma/generated/prisma';
-import { AuthenticatedUser, AuthTokenPayload } from './auth.types';
+import { AuthenticatedUser, AuthTokenPayload, CSRFPayload } from './auth.types';
 import { DeleteSessionDto } from './dto/delete.session.dto';
 import { Cache } from 'cache-manager';
 import { REDIS_CACHE } from '../redis/redis.module';
+import { TokenResponseDto } from './dto/token-response.dto';
+import { ENV } from '../config/constants';
 
 @Injectable()
 export class AuthService {
@@ -145,7 +147,7 @@ export class AuthService {
         const mailToken = await this.jwtService.signAsync(
           { id: user.id },
           {
-            secret: this.configService.get<string>('AUTH_JWT_SECRET'), // 从配置服务中获取 JWT 密钥
+            secret: this.configService.get<string>(ENV.AUTH_JWT_SECRET), // 从配置服务中获取 JWT 密钥
             expiresIn: '3 days',
           },
         ); // 生成 JWT token
@@ -183,9 +185,9 @@ export class AuthService {
       },
       {
         maxWait:
-          Number(this.configService.get<number>('PRISMA_MAX_WAIT')) || 5000,
+          Number(this.configService.get<number>(ENV.PRISMA_MAX_WAIT)) || 5000,
         timeout:
-          Number(this.configService.get<number>('PRISMA_TIMEOUT')) || 10000,
+          Number(this.configService.get<number>(ENV.PRISMA_TIMEOUT)) || 10000,
       },
     );
   }
@@ -199,7 +201,7 @@ export class AuthService {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>('MAIL_JWT_SECRET'),
+        secret: this.configService.get<string>(ENV.MAIL_JWT_SECRET),
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
@@ -304,7 +306,7 @@ export class AuthService {
     };
 
     const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES_IN'),
+      expiresIn: this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN),
     });
     const accessToken = await this.jwtService.signAsync(payload);
 
@@ -328,17 +330,37 @@ export class AuthService {
       );
 
     this.logger.debug(`[Login] Login successful for userId: ${user.id}`);
+
+    const result: TokenResponseDto = {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
+
     return {
-      accessToken,
-      refreshToken,
+      token: result,
+      payload: payload,
     };
   }
 
-  async getAccessToken(refreshToken: string) {
+  async getAccessToken(refreshToken: string, csrfToken: string | null = null) {
     this.logger.debug(`[getAccessToken] Verifying refresh token`);
 
     const payload: AuthTokenPayload =
       await this.jwtService.verifyAsync(refreshToken);
+
+    if (csrfToken) {
+      const csrfPayload: CSRFPayload = await this.jwtService.verifyAsync(
+        csrfToken,
+        { secret: this.configService.get(ENV.CSRF_TOKEN_SECRET) },
+      );
+
+      if (
+        payload.sessionId !== csrfPayload.sessionId ||
+        payload.deviceFinger !== csrfPayload.deviceFinger
+      ) {
+        throw new UnauthorizedException('Invalid csrf token');
+      }
+    }
 
     const session = await this.getSession({
       sessionId: payload.sessionId,
@@ -365,8 +387,20 @@ export class AuthService {
       ))
     ) {
       this.logger.warn(
-        `[getAccessToken] Refresh token mismatch for userId: ${payload.userId}`,
+        `[getAccessToken] Refresh token mismatch (possible reuse) for userId: ${payload.userId}, sessionId: ${payload.sessionId}`,
       );
+      // Revoke the session proactively to mitigate suspected token reuse
+      try {
+        await this.prismaService.user_sessions.updateMany({
+          where: { session_id: payload.sessionId, revoked: false },
+          data: { revoked: true, last_active: new Date() },
+        });
+      } catch (e) {
+        this.logger.error(
+          '[getAccessToken] Failed to revoke session on mismatch',
+          e,
+        );
+      }
       throw new UnauthorizedException('Invalid refresh token');
     }
 
@@ -378,9 +412,16 @@ export class AuthService {
     };
 
     const newAccessToken = await this.jwtService.signAsync(newPayload);
+    const newRefreshToken = await this.jwtService.signAsync(newPayload, {
+      expiresIn: this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN),
+    });
+
     this.logger.debug(
-      `[getAccessToken] New access token generated for userId: ${payload.userId}`,
+      `[getAccessToken] New access, refresh token generated for userId: ${payload.userId}`,
     );
+
+    const hashedRefreshToken =
+      await this.hashService.hashWithCrypto(newRefreshToken);
 
     // 更新 last_active
     await this.prismaService.user_sessions
@@ -389,18 +430,25 @@ export class AuthService {
           session_id: payload.sessionId,
         },
         data: {
+          refresh_token: hashedRefreshToken,
           last_active: new Date(),
         },
       })
       .then(() => {
         this.logger.debug(
-          `[getAccessToken] Access token refreshed for userId: ${payload.userId}`,
+          `[getAccessToken] token refreshed for userId: ${payload.userId}`,
         );
       })
       .catch((err) => this.logger.error('Update session failed', err));
 
-    return {
+    const result: TokenResponseDto = {
       accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
+
+    return {
+      token: result,
+      payload: payload,
     };
   }
 
@@ -431,7 +479,7 @@ export class AuthService {
       await this.redisCache.set(
         `blacklist:${tokenHash}`,
         true,
-        this.configService.get<number>('ACCESS_TOKEN_EXPIRES_IN'),
+        this.configService.get<number>(ENV.ACCESS_TOKEN_EXPIRES_IN),
       );
 
       this.logger.log(`[logoutSession] Access token added to blacklist`);

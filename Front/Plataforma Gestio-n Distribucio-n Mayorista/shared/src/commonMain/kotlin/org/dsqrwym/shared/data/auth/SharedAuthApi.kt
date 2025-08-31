@@ -53,9 +53,12 @@ class SharedAuthApi(private val client: HttpClient) {
      * @return ApiResponse<SharedRefreshTokenResponse> Raw server response.
      *         服务器原始响应。
      */
-    suspend fun refreshToken(callback: HttpRequestBuilder.() -> Unit = {}): ApiResponse<SharedRefreshTokenResponse> {
-        val refreshToken = SharedTokenStorage.getRefresh()
-        return client.post("${ApiConfig.BASE_URL}/auth/refresh-token") {
+    suspend fun refreshToken(
+        platform: PlatformType = PlatformType.Unknown,
+        callback: HttpRequestBuilder.() -> Unit = {}
+    ): ApiResponse<SharedRefreshTokenResponse> {
+        val refreshToken = SharedTokenStorage.getRefresh() // Web: CSRF; Non-web: refresh
+        return client.post("${ApiConfig.BASE_URL}/auth/refresh-token${if (platform == PlatformType.Web) "-web" else ""}") {
             callback()
             contentType(ContentType.Application.Json)
             if (refreshToken != null) {

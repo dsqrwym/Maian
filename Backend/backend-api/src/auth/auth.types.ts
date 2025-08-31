@@ -41,6 +41,10 @@ interface AuthenticatedUser {
   role: UserRole;
 }
 
+interface CSRFPayload {
+  sessionId: string;
+  deviceFinger: string;
+}
 // 西班牙公司类型枚举
 enum SpanishCompanyType {
   SA = 0, // Sociedad Anónima
@@ -53,4 +57,10 @@ enum SpanishCompanyType {
   ASOCIACION = 7, // Asociación / Fundación
 }
 
-export { ReqUser, AuthTokenPayload, AuthenticatedUser, SpanishCompanyType };
+export {
+  ReqUser,
+  AuthTokenPayload,
+  CSRFPayload,
+  AuthenticatedUser,
+  SpanishCompanyType,
+};

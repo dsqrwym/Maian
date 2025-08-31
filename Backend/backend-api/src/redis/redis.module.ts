@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
 import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ENV } from '../config/constants';
 
 export const REDIS_CACHE = 'REDIS_CACHE';
 
@@ -12,10 +13,10 @@ export const REDIS_CACHE = 'REDIS_CACHE';
     CacheModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
         store: redisStore,
-        host: configService.get<string>('REDIS_HOST') || '127.0.0.1',
-        port: configService.get<number>('REDIS_PORT') || 6379,
-        ttl: configService.get<number>('REDIS_TTL', 500),
-        password: configService.get<string>('REDIS_PASSWORD') || undefined,
+        host: configService.get<string>(ENV.REDIS_HOST) || '127.0.0.1',
+        port: configService.get<number>(ENV.REDIS_PORT) || 6379,
+        ttl: configService.get<number>(ENV.REDIS_TTL, 500),
+        password: configService.get<string>(ENV.REDIS_PASSWORD) || undefined,
       }),
       inject: [ConfigService],
     }),

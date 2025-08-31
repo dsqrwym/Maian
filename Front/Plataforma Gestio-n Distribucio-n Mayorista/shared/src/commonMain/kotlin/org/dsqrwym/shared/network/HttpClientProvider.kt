@@ -80,7 +80,7 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                     PlatformType.Web -> {
                         // Web: rely on server-managed cookies; usually no refresh token in local storage
                         // Web：依赖服务端管理的 Cookie；本地通常不保存 refresh token
-                        val resp = api.refreshToken {
+                        val resp = api.refreshToken(PlatformType.Web) {
                             // Mark this as a refresh-token request if needed by interceptors
                             // 如拦截器需要，标记为刷新令牌请求
                             markAsRefreshTokenRequest()
@@ -88,9 +88,11 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                         if (resp is SharedResponseResult.Success) {
                             resp.data?.let {
                                 val newAccess = resp.data.accessToken
+                                val newCsrf = resp.data.refreshToken
                                 // Save new access token; refresh token stays with cookies
                                 // 保存新的访问令牌；刷新令牌由 Cookie 托管
                                 SharedTokenStorage.saveAccess(newAccess)
+                                SharedTokenStorage.saveCsrf(newCsrf)
                                 BearerTokens(newAccess, null)
                             }
                         } else {
@@ -100,9 +102,6 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                     }
 
                     else -> {
-                        // Native/Desktop/etc.: refresh token is stored locally if present
-                        // 原生/桌面等平台：若存在刷新令牌，则本地存储
-                        val currentRefresh = SharedTokenStorage.getRefresh() ?: return@refreshTokens null
                         val resp = api.refreshToken {
                             // Mark this call to bypass auth interceptors if necessary
                             // 标记该调用，必要时可绕过认证拦截器
@@ -110,10 +109,11 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                         }.toSharedResponseResult()
                         if (resp is SharedResponseResult.Success && resp.data != null) {
                             val newAccess = resp.data.accessToken
+                            val newRefresh = resp.data.refreshToken
                             // Rotate only the access token; keep current refresh token
                             // 仅轮换访问令牌；保留现有刷新令牌
-                            SharedTokenStorage.saveAccess(newAccess)
-                            BearerTokens(newAccess, currentRefresh)
+                            SharedTokenStorage.save(newAccess, newRefresh)
+                            BearerTokens(newAccess, newRefresh)
                         } else {
                             SharedTokenStorage.clear()
                             null

@@ -8,6 +8,7 @@ import { FastifyRequest } from 'fastify';
 import { Logger } from 'nestjs-pino';
 import { REDIS_CACHE } from '../../redis/redis.module';
 import { HashService } from '../../common/hash/hash.service';
+import { ENV } from '../../config/constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
@@ -20,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('AUTH_JWT_SECRET') as string,
+      secretOrKey: configService.get<string>(ENV.AUTH_JWT_SECRET) as string,
       passReqToCallback: true, // 允许访问请求对象
     });
   }

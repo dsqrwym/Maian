@@ -35,7 +35,7 @@ data class SharedLoginRequest(
 @Serializable
 data class SharedLoginResponse(
     @SerialName("accessToken") val accessToken: String,
-    @SerialName("refreshToken") val refreshToken: String? = null
+    @SerialName("refreshToken") val refreshToken: String
 )
 
 /**
@@ -58,5 +58,6 @@ data class SharedRefreshTokenRequest(
  */
 @Serializable
 data class SharedRefreshTokenResponse(
-    @SerialName("accessToken") val accessToken: String
+    @SerialName("accessToken") val accessToken: String,
+    @SerialName("refreshToken") val refreshToken: String
 )

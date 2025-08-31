@@ -3,6 +3,7 @@ import { Provider } from '@nestjs/common';
 import { Piscina } from 'piscina';
 import * as path from 'path';
 import * as os from 'os';
+import { ENV } from '../../config/constants';
 
 // 定义注入标识符，方便在Nest中引用
 export const HASH_PROVIDE = 'HASH_WORKER_POOL';
@@ -25,12 +26,12 @@ export const HashWorkerPoolProvider: Provider = {
     return new Piscina({
       filename: path.resolve(__dirname, './hash-worker.js'),
       maxThreads:
-        Number(config.get<number>('WORKER_POOL_MAX_THREADS')) ||
+        Number(config.get<number>(ENV.WORKER_POOL_MAX_THREADS)) ||
         WORKER_POOL_MAX_THREADS,
       idleTimeout:
-        Number(config.get<number>('WORKER_POOL_IDLE_TIMEOUT')) || 60000,
+        Number(config.get<number>(ENV.WORKER_POOL_IDLE_TIMEOUT)) || 60000,
       concurrentTasksPerWorker:
-        Number(config.get<number>('WORKER_POOL_CONCURRENT_TASKS')) || 1,
+        Number(config.get<number>(ENV.WORKER_POOL_CONCURRENT_TASKS)) || 1,
     });
   },
 };
