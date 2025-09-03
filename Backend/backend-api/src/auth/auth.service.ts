@@ -23,7 +23,9 @@ import { DeleteSessionDto } from './dto/delete.session.dto';
 import { Cache } from 'cache-manager';
 import { REDIS_CACHE } from '../redis/redis.module';
 import { TokenResponseDto } from './dto/token-response.dto';
-import { ENV } from '../config/constants';
+import { AUTH_ERROR, ENV, REDIS_KEYS } from '../config/constants';
+import * as crypto from 'crypto';
+import PrismaClientKnownRequestError = Prisma.PrismaClientKnownRequestError;
 
 @Injectable()
 export class AuthService {
@@ -84,7 +86,7 @@ export class AuthService {
       language,
       timezone,
     } = dto;
-    this.logger.debug(`[Registration] Starting registration for: ${email}`);
+    this.logger.debug({ email }, '[Registration] Starting registration');
     // 1. 检查用户是否已经存在
     const existingUser = await this.prismaService.users.findFirst({
       where: {
@@ -95,11 +97,11 @@ export class AuthService {
 
     if (existingUser) {
       if (existingUser.email === email) {
-        this.logger.warn(`[Registration] Email conflict: ${email}`);
+        this.logger.warn({ email }, '[Registration] Email conflict');
         throw new BadRequestException('Email already exists');
       }
       if (existingUser.username === username) {
-        this.logger.warn(`[Registration] Username conflict: ${username}`);
+        this.logger.warn({ username }, '[Registration] Username conflict');
         throw new BadRequestException('Username already exists');
       }
     }
@@ -142,17 +144,19 @@ export class AuthService {
           include: { direction: true },
         });
 
-        this.logger.debug(`[Registration] User created: ${user.id}`);
+        this.logger.debug({ userId: user.id }, '[Registration] User created');
 
         const mailToken = await this.jwtService.signAsync(
           { id: user.id },
           {
-            secret: this.configService.get<string>(ENV.AUTH_JWT_SECRET), // 从配置服务中获取 JWT 密钥
             expiresIn: '3 days',
           },
         ); // 生成 JWT token
         // 发送验证邮件
-        this.logger.debug(`Sending verification email to: ${email}`);
+        this.logger.debug(
+          { email },
+          '[Registration] Sending verification email',
+        );
         this.mailService
           .sendVerificationEmail(
             email,
@@ -161,10 +165,10 @@ export class AuthService {
             timezone,
             user.created_at,
           )
-          .catch((e) =>
+          .catch((e: unknown) =>
             this.logger.error(
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              `[Registration] Failed to send email: ${e.message}`,
+              { err: e, email },
+              '[Registration] Failed to send email',
             ),
           ); // 发送验证邮件
 
@@ -200,9 +204,7 @@ export class AuthService {
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>(ENV.MAIL_JWT_SECRET),
-      });
+      const payload = await this.jwtService.verifyAsync(token);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
       const userId = payload.id;
@@ -215,17 +217,18 @@ export class AuthService {
       });
 
       if (!user) return sendHtml('invalid');
-      if (user.status === UserStatus.ACTIVE) return sendHtml('alreadyVerified');
+      if (user.status !== UserStatus.INACTIVE)
+        return sendHtml('alreadyVerified');
 
       await this.prismaService.users.update({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        where: { id: userId },
-        data: { status: UserStatus.ACTIVE },
+        where: { id: userId, status: UserStatus.INACTIVE },
+        data: { status: UserStatus.PENDING_REVIEW },
       });
 
       return sendHtml('success');
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch (error: unknown) {
       return sendHtml('invalid');
     }
   }
@@ -233,17 +236,22 @@ export class AuthService {
   async login(req: FastifyRequest, user: AuthenticatedUser, dto: LoginDto) {
     const { deviceName, userAgent } = dto;
 
-    this.logger.debug(`[Login] Password validated for userId: ${user.id}`);
+    this.logger.debug({ userId: user.id }, '[Login] Password validated');
 
     // 生成设备哈希
     const deviceHash = await this.hashService.hashWithCrypto(userAgent);
 
     this.logger.debug(
-      `[Login] Generated device hash for userId: ${user.id}, deviceName: ${deviceName}`,
+      { userId: user.id, deviceName },
+      '[Login] Generated device hash',
     );
 
     // 声明会话ID
-    let sessionId: string;
+    let sessionId: string = crypto.randomUUID();
+
+    let conflict: boolean = false;
+    const maxAttempt: number = 3;
+    let attempt: number = 0;
 
     // 查找是否已存在相同设备的登录记录
     const existingSession = await this.getSession({
@@ -251,51 +259,74 @@ export class AuthService {
       deviceFinger: deviceHash,
     });
 
-    if (!existingSession) {
-      this.logger.debug(
-        `[Login] No existing session found for userId: ${user.id}, creating a new session`,
-      );
+    do {
+      try {
+        if (!existingSession) {
+          this.logger.debug(
+            { userId: user.id },
+            '[Login] No existing session found, creating a new session',
+          );
 
-      // 如果是新设备登录，保存会话记录
-      const newSession = await this.prismaService.user_sessions.create({
-        data: {
-          user_id: user.id,
-          device_name: deviceName,
-          device_finger: deviceHash,
-          user_agent: userAgent,
-          last_ip: req.ip,
-        },
-        select: {
-          session_id: true,
-        },
-      });
+          // 如果是新设备登录，保存会话记录
+          const newSession = await this.prismaService.user_sessions.create({
+            data: {
+              session_id: sessionId,
+              user_id: user.id,
+              device_name: deviceName,
+              device_finger: deviceHash,
+              user_agent: userAgent,
+              last_ip: req.ip,
+            },
+            select: {
+              session_id: true,
+            },
+          });
 
-      sessionId = newSession.session_id;
+          this.logger.debug(
+            { userId: user.id, sessionId: newSession.session_id, ip: req.ip },
+            '[Login] New session created',
+          );
+        } else {
+          // 更新会话记录
+          const updatedSession = await this.prismaService.user_sessions.update({
+            where: {
+              user_id_device_finger: {
+                user_id: user.id,
+                device_finger: deviceHash,
+              },
+            },
+            data: {
+              session_id: sessionId,
+              revoked: false,
+              last_ip: req.ip,
+              last_active: new Date(),
+            },
+            select: {
+              session_id: true,
+            },
+          });
+          this.logger.debug(
+            {
+              userId: user.id,
+              sessionId: updatedSession.session_id,
+              ip: req.ip,
+            },
+            '[Login] Session updated (rotated sessionId)',
+          );
+        }
 
-      this.logger.debug(
-        `[Login] New session created for userId: ${user.id} with session_id: ${newSession.session_id}`,
-      );
-    } else {
-      // 更新会话记录
-      const updatedSession = await this.prismaService.user_sessions.update({
-        where: {
-          user_id_device_finger: {
-            user_id: user.id,
-            device_finger: deviceHash,
-          },
-        },
-        data: {
-          revoked: false,
-          last_ip: req.ip,
-          last_active: new Date(),
-        },
-        select: {
-          session_id: true,
-        },
-      });
-
-      sessionId = updatedSession.session_id;
-    }
+        conflict = false;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (err: unknown) {
+        sessionId = crypto.randomUUID();
+        conflict = true;
+        attempt++;
+        this.logger.warn(
+          { userId: user.id, attempt },
+          '[Login] sessionId conflict, regenerating',
+        );
+      }
+    } while (conflict && attempt < maxAttempt);
 
     // 生成 token payload
     const payload: AuthTokenPayload = {
@@ -323,13 +354,19 @@ export class AuthService {
         },
       })
       .then(() => {
-        this.logger.debug(`[Login] Session updated for userId: ${user.id}`);
+        this.logger.debug(
+          { userId: user.id, sessionId },
+          '[Login] Stored refresh token hash',
+        );
       })
-      .catch((err) =>
-        this.logger.error('Session update failed after login', err),
+      .catch((err: PrismaClientKnownRequestError) =>
+        this.logger.error(
+          { err, userId: user.id, sessionId },
+          '[Login] Failed to store refresh token hash',
+        ),
       );
 
-    this.logger.debug(`[Login] Login successful for userId: ${user.id}`);
+    this.logger.debug({ userId: user.id, sessionId }, '[Login] Successful');
 
     const result: TokenResponseDto = {
       accessToken: accessToken,
@@ -343,10 +380,16 @@ export class AuthService {
   }
 
   async getAccessToken(refreshToken: string, csrfToken: string | null = null) {
-    this.logger.debug(`[getAccessToken] Verifying refresh token`);
+    this.logger.debug('[getAccessToken] Verifying refresh token');
 
     const payload: AuthTokenPayload =
       await this.jwtService.verifyAsync(refreshToken);
+
+    if (
+      await this.redisCache.get(REDIS_KEYS.sessionRevokedKey(payload.sessionId))
+    ) {
+      throw new UnauthorizedException(AUTH_ERROR.SESSION_REVOKED);
+    }
 
     if (csrfToken) {
       const csrfPayload: CSRFPayload = await this.jwtService.verifyAsync(
@@ -354,12 +397,26 @@ export class AuthService {
         { secret: this.configService.get(ENV.CSRF_TOKEN_SECRET) },
       );
 
+      const hashedCSRFToken = await this.hashService.hashWithCrypto(csrfToken);
+
+      if (
+        await this.redisCache.get(REDIS_KEYS.csrfBlacklist(hashedCSRFToken))
+      ) {
+        throw new UnauthorizedException(AUTH_ERROR.CSRF_INVALID);
+      }
+
       if (
         payload.sessionId !== csrfPayload.sessionId ||
         payload.deviceFinger !== csrfPayload.deviceFinger
       ) {
-        throw new UnauthorizedException('Invalid csrf token');
+        throw new UnauthorizedException(AUTH_ERROR.CSRF_INVALID);
       }
+
+      await this.redisCache.set(
+        REDIS_KEYS.csrfBlacklist(hashedCSRFToken),
+        true,
+        this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN),
+      );
     }
 
     const session = await this.getSession({
@@ -368,16 +425,18 @@ export class AuthService {
 
     if (!session) {
       this.logger.warn(
-        `[getAccessToken] Session not found for userId: ${payload.userId}`,
+        { userId: payload.userId, sessionId: payload.sessionId },
+        '[getAccessToken] Session not found',
       );
-      throw new UnauthorizedException('Session not found');
+      throw new UnauthorizedException(AUTH_ERROR.SESSION_NOT_FOUND);
     }
 
     if (session.revoked) {
       this.logger.warn(
-        `[getAccessToken] Session revoked for userId: ${payload.userId}`,
+        { userId: payload.userId, sessionId: payload.sessionId },
+        '[getAccessToken] Session revoked',
       );
-      throw new UnauthorizedException('Session has been revoked');
+      throw new UnauthorizedException(AUTH_ERROR.SESSION_REVOKED);
     }
 
     if (
@@ -387,7 +446,8 @@ export class AuthService {
       ))
     ) {
       this.logger.warn(
-        `[getAccessToken] Refresh token mismatch (possible reuse) for userId: ${payload.userId}, sessionId: ${payload.sessionId}`,
+        { userId: payload.userId, sessionId: payload.sessionId },
+        '[getAccessToken] Refresh token mismatch (possible reuse)',
       );
       // Revoke the session proactively to mitigate suspected token reuse
       try {
@@ -395,10 +455,16 @@ export class AuthService {
           where: { session_id: payload.sessionId, revoked: false },
           data: { revoked: true, last_active: new Date() },
         });
-      } catch (e) {
+
+        await this.redisCache.set(
+          REDIS_KEYS.sessionRevokedKey(payload.sessionId),
+          true,
+          this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN),
+        );
+      } catch (e: unknown) {
         this.logger.error(
+          { err: e, userId: payload.userId, sessionId: payload.sessionId },
           '[getAccessToken] Failed to revoke session on mismatch',
-          e,
         );
       }
       throw new UnauthorizedException('Invalid refresh token');
@@ -417,7 +483,8 @@ export class AuthService {
     });
 
     this.logger.debug(
-      `[getAccessToken] New access, refresh token generated for userId: ${payload.userId}`,
+      { userId: payload.userId, sessionId: payload.sessionId },
+      '[getAccessToken] Issued new access & refresh tokens',
     );
 
     const hashedRefreshToken =
@@ -436,10 +503,16 @@ export class AuthService {
       })
       .then(() => {
         this.logger.debug(
-          `[getAccessToken] token refreshed for userId: ${payload.userId}`,
+          { userId: payload.userId, sessionId: payload.sessionId },
+          '[getAccessToken] Persisted new refresh token hash',
         );
       })
-      .catch((err) => this.logger.error('Update session failed', err));
+      .catch((err: unknown) =>
+        this.logger.error(
+          { err, userId: payload.userId, sessionId: payload.sessionId },
+          '[getAccessToken] Update session failed',
+        ),
+      );
 
     const result: TokenResponseDto = {
       accessToken: newAccessToken,
@@ -452,7 +525,7 @@ export class AuthService {
     };
   }
 
-  async logoutSession(sessionData: AuthTokenPayload, accessToken: string) {
+  async logoutSession(sessionData: AuthTokenPayload) {
     // 查找会话，并注销
     const result = await this.prismaService.user_sessions.updateMany({
       where: {
@@ -467,25 +540,28 @@ export class AuthService {
 
     if (result.count === 0) {
       this.logger.warn(
-        `[Logout] No active session to revoke for userId: ${sessionData.userId}`,
+        { userId: sessionData.userId, sessionId: sessionData.sessionId },
+        '[Logout] No active session to revoke',
       );
       throw new UnauthorizedException('Session not found or already revoked');
     }
 
     try {
-      // 生成 token hash
-      const tokenHash = await this.hashService.hashWithCrypto(accessToken);
       // 加入 Redis 黑名单
       await this.redisCache.set(
-        `blacklist:${tokenHash}`,
+        REDIS_KEYS.sessionRevokedKey(sessionData.sessionId),
         true,
-        this.configService.get<number>(ENV.ACCESS_TOKEN_EXPIRES_IN),
+        Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)),
       );
 
-      this.logger.log(`[logoutSession] Access token added to blacklist`);
-    } catch (err) {
+      this.logger.log(
+        { userId: sessionData.userId, sessionId: sessionData.sessionId },
+        '[logoutSession] Session marked revoked (Redis)',
+      );
+    } catch (err: unknown) {
       this.logger.error(
-        `[logoutSession] Failed to add access token to blacklist: ${err}`,
+        { err, userId: sessionData.userId, sessionId: sessionData.sessionId },
+        '[logoutSession] Failed to mark session revoked',
       );
     }
 
@@ -500,7 +576,10 @@ export class AuthService {
       });
 
       if (!session) {
-        this.logger.warn(`[deleteSession] No found session to delete`);
+        this.logger.warn(
+          { sessionId: deleteSessionDto.sessionId },
+          '[deleteSession] Session not found',
+        );
         throw new NotFoundException('Session not found');
       }
 
@@ -512,6 +591,10 @@ export class AuthService {
           userPassword.password,
         ))
       ) {
+        this.logger.warn(
+          { sessionId: deleteSessionDto.sessionId },
+          '[deleteSession] Invalid password',
+        );
         throw new UnauthorizedException('Invalid password');
       }
 
@@ -521,6 +604,12 @@ export class AuthService {
         },
       });
     });
+
+    await this.redisCache.set(
+      REDIS_KEYS.sessionRevokedKey(deleteSessionDto.sessionId),
+      true,
+      Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)),
+    );
 
     return { message: 'Session successfully deleted' };
   }

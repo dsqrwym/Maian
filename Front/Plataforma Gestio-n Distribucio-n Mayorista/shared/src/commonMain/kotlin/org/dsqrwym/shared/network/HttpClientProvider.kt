@@ -10,6 +10,8 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
+import org.dsqrwym.shared.data.auth.session.AuthEvent
+import org.dsqrwym.shared.data.auth.session.AuthEvents
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
 
@@ -96,7 +98,11 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                                 BearerTokens(newAccess, null)
                             }
                         } else {
+                            // On failure: clear local tokens and broadcast detailed reason based on backend code
+                            // 刷新失败：清理本地令牌，并根据后端错误码广播更细粒度事件
                             SharedTokenStorage.clear()
+                            val event = if (resp is SharedResponseResult.Error) mapAuthEventFromMessage(resp.message) else AuthEvent.SessionExpired
+                            AuthEvents.emit(event)
                             null
                         }
                     }
@@ -110,12 +116,14 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                         if (resp is SharedResponseResult.Success && resp.data != null) {
                             val newAccess = resp.data.accessToken
                             val newRefresh = resp.data.refreshToken
-                            // Rotate only the access token; keep current refresh token
-                            // 仅轮换访问令牌；保留现有刷新令牌
                             SharedTokenStorage.save(newAccess, newRefresh)
                             BearerTokens(newAccess, newRefresh)
                         } else {
+                            // On failure: clear local tokens and broadcast detailed reason based on backend code
+                            // 刷新失败：清理本地令牌，并根据后端错误码广播更细粒度事件
                             SharedTokenStorage.clear()
+                            val event = if (resp is SharedResponseResult.Error) mapAuthEventFromMessage(resp.message) else AuthEvent.SessionExpired
+                            AuthEvents.emit(event)
                             null
                         }
                     }
@@ -124,4 +132,19 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
 
         }
     }
+}
+
+/**
+ * Map backend auth error message to UI auth events.
+ * 将后端返回的认证错误 message 映射为前端可用的事件。
+ *
+ * Backend examples (status=401):
+ * { "message": "CSRF_INVALID" | "SESSION_NOT_FOUND" | "SESSION_REVOKED" }
+ * 其余情况视为通用的 SessionExpired。
+ */
+private fun mapAuthEventFromMessage(message: String?): AuthEvent = when (message) {
+    "CSRF_INVALID" -> AuthEvent.CsrfInvalid
+    "SESSION_NOT_FOUND" -> AuthEvent.SessionNotFound
+    "SESSION_REVOKED" -> AuthEvent.SessionRevoked
+    else -> AuthEvent.SessionExpired
 }

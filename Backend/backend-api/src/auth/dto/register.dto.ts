@@ -14,6 +14,7 @@ import {
   Matches,
   IsArray,
   IsEnum,
+  NotContains,
 } from 'class-validator'; // 用于验证类属性的装饰器
 import { IsBCP47Language } from 'src/common/validators/decorator/is-bcp47-language.decorator';
 import { IsIANA } from 'src/common/validators/decorator/is-iana.decorator';
@@ -57,6 +58,7 @@ export class RegisterDto {
   @IsString() // 验证为字符串
   @MinLength(3) // 最小长度为3
   @MaxLength(30) // 最大长度为30
+  @NotContains('@')
   @IsOptional() // 可选属性
   username: string; // 用户名
 

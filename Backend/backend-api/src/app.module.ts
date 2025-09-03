@@ -22,6 +22,7 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { Reflector } from '@nestjs/core';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { JwtExceptionFilter } from './common/filters/jwt-exception.filter';
 import { TaskModule } from './tasks/task.module';
 
 @Module({
@@ -72,6 +73,7 @@ import { TaskModule } from './tasks/task.module';
     },
     PrismaExceptionFilter, // 全局异常过滤器，处理未捕获的异常
     HttpExceptionFilter, // 全局异常过滤器，处理 HTTP 异常
+    JwtExceptionFilter, // 全局异常过滤器，处理 JWT 异常
   ], // 可以注入的服务
 })
 export class AppModule {}

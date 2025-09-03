@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.navigation
+package org.dsqrwym.shared.navigation
 
 import kotlinx.serialization.Serializable
 

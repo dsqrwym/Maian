@@ -28,6 +28,7 @@ import {
   ApiOkResponse,
   ApiUnauthorizedResponse,
   ApiCookieAuth,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { LoginDto } from './dto/login.dto';
@@ -36,7 +37,12 @@ import { DeleteSessionDto } from './dto/delete.session.dto';
 import { JwtAuthGuard, LocalAuthGuard } from './guard/auth.guard';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ConfigService } from '@nestjs/config';
-import { ENV, REFRESH_TOKEN_COOKIE_PATH } from 'src/config/constants';
+import {
+  AUTH_ERROR,
+  ENV,
+  REFRESH_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_PATH,
+} from 'src/config/constants';
 import { JwtService } from '@nestjs/jwt';
 import { CSRFPayload } from './auth.types';
 
@@ -88,7 +94,49 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: 'Register new user' })
-  @ApiBody({ type: RegisterDto })
+  @ApiBody({
+    description: 'User registration payload',
+    type: RegisterDto,
+    examples: {
+      minimal: {
+        summary: 'Minimum required fields',
+        value: {
+          email: 'new.user@domain.com',
+          password: 'SecurePass123',
+        },
+      },
+      full: {
+        summary: 'Full payload with optional fields',
+        value: {
+          email: 'retailer@domain.com',
+          password: 'SecurePass123',
+          username: 'retailer_01',
+          firstName: 'JOHN',
+          lastName: 'SMITH',
+          cif: 'X1234567L',
+          phone: '+34123456789',
+          status: 0,
+          role: 0,
+          language: 'es-ES',
+          timezone: 'Europe/Madrid',
+          address: [
+            {
+              country: 'ES',
+              state: 'MADRID',
+              city: 'MADRID',
+              street: 'Calle Mayor 1',
+              postalCode: '28013',
+            },
+          ],
+          profile: {
+            type: 'RETAILER',
+            document: 'B12345678',
+            company: 'MY SHOP SL',
+          },
+        },
+      },
+    },
+  })
   @ApiCreatedResponse({ description: 'User successfully registered' })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiConflictResponse({ description: 'Email already exists' })
@@ -108,9 +156,17 @@ export class AuthController {
         value: {
           email: 'user@example.com',
           password: 'StrongPassword123!',
-          deviceName: 'Chrome Browser',
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+      example2: {
+        summary: 'Use username instead of email',
+        value: {
+          username: 'john_doe',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
         },
       },
     },
@@ -148,9 +204,17 @@ export class AuthController {
         value: {
           email: 'user@example.com',
           password: 'StrongPassword123!',
-          deviceName: 'Chrome Browser',
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+      example2: {
+        summary: 'Use username instead of email',
+        value: {
+          username: 'john_doe',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
         },
       },
     },
@@ -182,7 +246,7 @@ export class AuthController {
 
     const { token, payload } = await this.authService.login(req, user, body);
     // Web: 设置 cookie（httpOnly, secure, sameSite）
-    res.setCookie('refresh_token', token.refreshToken, {
+    res.setCookie(REFRESH_COOKIE_NAME, token.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none', // 跨域前后端分离（不同子域 / 不同域名）
@@ -211,38 +275,69 @@ export class AuthController {
   @Post('refresh-token')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Refresh tokens with rotation (Cookie first, Body as fallback)',
+    summary: 'Refresh tokens (Body only)',
     description:
-      '优先从 Cookie 名为 refresh_token 中读取 refresh token；如果没有 Cookie，则可在请求体中提供 { refreshToken }。当启用 Cookie 的 Web 场景时，会在响应头通过 Set-Cookie 写入新的 refresh_token（轮换）。',
+      '非 Web 场景：在请求体中提供 { refreshToken } 完成刷新；不涉及 Cookie。',
   })
   @ApiBody({
-    description:
-      '非浏览器/不使用 Cookie 的客户端在 Body 中提供 refreshToken；若存在 Cookie，将优先使用 Cookie 中的 refresh_token。',
+    description: '非浏览器/不使用 Cookie 的客户端在 Body 中提供 refreshToken。',
     type: RefreshTokenDto,
     examples: {
-      cookiePreferred: {
-        summary: '使用 Cookie（推荐 Web）',
-        value: {},
-      },
-      bodyFallback: {
-        summary: '非 Web 平台通过 Body 提供 refreshToken',
+      bodyExample: {
+        summary: 'Body 传入 refreshToken',
         value: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
       },
     },
   })
   @ApiOkResponse({
-    description:
-      'Returns new accessToken and refreshToken. 若使用 Cookie，响应头 Set-Cookie 会写入新的 refresh_token（轮换）。',
+    description: 'Returns new accessToken and refreshToken。',
     type: TokenResponseDto,
-    headers: {
-      'Set-Cookie': {
-        description: `当请求携带 Cookie 时，返回新的 refresh_token；HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'`,
-        schema: { type: 'string' },
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. 可能的认证错误码详见 examples',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 401 },
+            message: {
+              type: 'string',
+              description: '错误码（用于前端区分场景）',
+              example: AUTH_ERROR.SESSION_NOT_FOUND,
+            },
+            error: { type: 'string', example: 'Unauthorized' },
+          },
+        },
+        examples: {
+          csrfInvalid: {
+            summary: 'CSRF 校验失败',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.CSRF_INVALID,
+              error: 'Unauthorized',
+            },
+          },
+          sessionNotFound: {
+            summary: '会话不存在/被踢出/过期/refresh 无效',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.SESSION_NOT_FOUND,
+              error: 'Unauthorized',
+            },
+          },
+          sessionRevoked: {
+            summary: '会话被撤销（用户主动退出）',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.SESSION_REVOKED,
+              error: 'Unauthorized',
+            },
+          },
+        },
       },
     },
   })
-  @ApiUnauthorizedResponse({ description: 'Invalid or expired refresh token' })
-  @ApiCookieAuth('refresh_token')
   async getAccessToken(@Body() body: RefreshTokenDto) {
     const refreshToken = body?.refreshToken;
     if (!refreshToken) {
@@ -282,8 +377,52 @@ export class AuthController {
       },
     },
   })
-  @ApiUnauthorizedResponse({ description: 'Invalid or expired refresh token' })
-  @ApiCookieAuth('refresh_token')
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. 可能的认证错误码详见 examples',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 401 },
+            message: {
+              type: 'string',
+              description: '错误码（用于前端区分场景）',
+              example: AUTH_ERROR.SESSION_NOT_FOUND,
+            },
+            error: { type: 'string', example: 'Unauthorized' },
+          },
+        },
+        examples: {
+          csrfInvalid: {
+            summary: 'CSRF 校验失败',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.CSRF_INVALID,
+              error: 'Unauthorized',
+            },
+          },
+          sessionNotFound: {
+            summary: '会话不存在/被踢出/过期/refresh 无效',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.SESSION_NOT_FOUND,
+              error: 'Unauthorized',
+            },
+          },
+          sessionRevoked: {
+            summary: '会话被撤销（用户主动退出）',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.SESSION_REVOKED,
+              error: 'Unauthorized',
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiCookieAuth(REFRESH_COOKIE_NAME)
   async getAccessTokenWeb(
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
@@ -291,7 +430,7 @@ export class AuthController {
   ) {
     // 解析 cookie
     const cookies = req.cookies;
-    const refreshToken = cookies['refresh_token'];
+    const refreshToken = cookies[REFRESH_COOKIE_NAME];
     // 解析 csrfToken
     const csrfToken = body.refreshToken;
 
@@ -310,7 +449,7 @@ export class AuthController {
 
     // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
 
-    res.setCookie('refresh_token', result.token.refreshToken, {
+    res.setCookie(REFRESH_COOKIE_NAME, result.token.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
@@ -329,36 +468,93 @@ export class AuthController {
   @Delete('logout')
   @ApiOperation({ summary: 'Logout current session' })
   @ApiOkResponse({ description: 'Successfully logged out' })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized. 可能的认证错误码详见 examples',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 401 },
+            message: {
+              type: 'string',
+              description: '错误码（用于前端区分场景）',
+              example: AUTH_ERROR.SESSION_REVOKED,
+            },
+            error: { type: 'string', example: 'Unauthorized' },
+          },
+        },
+        examples: {
+          revoked: {
+            summary: '会话被撤销（黑名单命中/用户主动退出后）',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.SESSION_REVOKED,
+              error: 'Unauthorized',
+            },
+          },
+        },
+      },
+    },
+  })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async logout(@Req() req: FastifyRequest) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      throw new UnauthorizedException('No access token found');
-    }
-
-    const accessToken = authHeader.split(' ')[1];
-    if (!accessToken) {
-      throw new UnauthorizedException('No access token found');
-    }
-
+  async logout(
+    @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) res: FastifyReply,
+  ) {
     const payload = req.user.authTokenPayload;
 
     if (!payload) {
       throw new UnauthorizedException('No valid token payload found');
     }
 
-    return this.authService.logoutSession(payload, accessToken);
+    const result = await this.authService.logoutSession(payload);
+
+    if (result) {
+      res.clearCookie(REFRESH_COOKIE_NAME, {
+        path: REFRESH_TOKEN_COOKIE_PATH,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+    }
+
+    return result;
   }
 
   @Post('delete-session')
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete a specific session' })
-  @ApiBody({ type: DeleteSessionDto })
+  @ApiBody({
+    description: 'Delete a session by id with password confirmation',
+    type: DeleteSessionDto,
+    examples: {
+      example1: {
+        summary: 'Valid deletion payload',
+        value: {
+          sessionId: '1e2d3c4b-5a6f-7890-abcd-ef1234567890',
+          password: 'StrongPassword123!',
+        },
+      },
+    },
+  })
   @ApiOkResponse({ description: 'Session deleted successfully' })
   @ApiBadRequestResponse({ description: 'Invalid session ID or input' })
-  async deleteSession(@Body() deleteSessionDto: DeleteSessionDto) {
-    return this.authService.deleteSession(deleteSessionDto);
+  @ApiUnauthorizedResponse({ description: 'Invalid password' })
+  @ApiNotFoundResponse({ description: 'Session not found' })
+  async deleteSession(
+    @Body() deleteSessionDto: DeleteSessionDto,
+    @Res({ passthrough: true }) res: FastifyReply,
+  ) {
+    const result = await this.authService.deleteSession(deleteSessionDto);
+    if (result) {
+      res.clearCookie(REFRESH_COOKIE_NAME, {
+        path: REFRESH_TOKEN_COOKIE_PATH,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+    }
   }
 }

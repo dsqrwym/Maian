@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
+import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.SharedUiState
 import org.dsqrwym.shared.ui.viewmodels.SharedSnackbarViewModel
@@ -42,7 +43,8 @@ enum class CurrentScreenState {
  */
 class AuthViewModel(
     private val repository: SharedAuthRepository, 
-    private val sharedSnackbarViewModel: SharedSnackbarViewModel
+    private val sharedSnackbarViewModel: SharedSnackbarViewModel,
+    private val authSessionViewModel: AuthSessionViewModel
 ) : ViewModel() {
     // Common authentication fields
     // 通用认证字段
@@ -188,6 +190,7 @@ class AuthViewModel(
                         isLoggedIn = true
                         loginUiState = SharedUiState.Success
                         sharedSnackbarViewModel.showSuccess("Login successful")
+                        authSessionViewModel.onLoggedIn()
                         delay(delayMillis)
                         loginUiState = SharedUiState.Idle
                     }

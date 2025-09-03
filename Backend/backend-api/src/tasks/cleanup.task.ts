@@ -25,23 +25,6 @@ export class CleanupTask {
     }
   }
 
-  private async setUnverifiedUsersState(now: Date) {
-    try {
-      const updated = await this.prismaService.users.updateMany({
-        where: {
-          AND: {
-            status: UserStatus.INACTIVE,
-            created_at: { lt: this.dateService.reduceDay(now, 3) },
-          },
-        },
-        data: { status: UserStatus.ACTIVE },
-      });
-      this.logger.log(`Marked ${updated.count} users as inactive.`);
-    } catch (e) {
-      this.logger.error('Failed to update user status', e);
-    }
-  }
-
   private async cleanupUnverifiedUsers(now: Date) {
     const deleted = await this.prismaService.users.deleteMany({
       where: {
@@ -59,9 +42,6 @@ export class CleanupTask {
     const now = new Date();
     // 清理 会话
     await this.cleanupSessions(now);
-
-    // 设置 用户为限制状态 -1
-    await this.setUnverifiedUsersState(now);
 
     // 删除用户
     await this.cleanupUnverifiedUsers(now);
