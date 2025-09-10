@@ -14,8 +14,6 @@ import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
-import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
-import org.koin.compose.viewmodel.koinViewModel
 
 /**
  * A button component that allows users to switch between supported languages.
@@ -86,22 +84,6 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
                     LanguageMenuItem(item, onClick = { LanguageManager.setLocaleLanguage(item.code) })
                 }
             }
-            val viewmodel : MySnackbarViewModel = koinViewModel()
-            DropdownMenuItem(text = { Text("Snackbar Test with dismiss") }, onClick = {
-                viewmodel.showInfo(message = "Test with dismiss", withDismissAction = true)
-            })
-
-            DropdownMenuItem(text = { Text("Snackbar Test, dismissPrevious") }, onClick = {
-                viewmodel.showInfo(message = "Test with dismiss", dismissPrevious = true)
-            })
-
-            DropdownMenuItem(text = { Text("change max snackbar to 3") }, onClick = {
-                viewmodel.updateMaxSnackbars(3)
-            })
-
-            DropdownMenuItem(text = { Text("change max snackbar to 1") }, onClick = {
-                viewmodel.updateMaxSnackbars(1)
-            })
         }
     }
 }
