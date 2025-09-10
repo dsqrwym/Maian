@@ -13,15 +13,25 @@ export class PrismaService
 {
   constructor(private readonly logger: PinoLogger) {
     super();
+    this.logger.setContext(PrismaService.name);
   }
 
-  async onModuleInit() {
-    await this.$connect();
-    this.logger.debug('Prisma connected to database');
+  async onModuleInit(): Promise<void> {
+    try {
+      await this.$connect();
+      this.logger.debug('Connected to database');
+    } catch (error: unknown) {
+      this.logger.error({ err: error }, 'Database connection failed');
+      throw error;
+    }
   }
 
-  async beforeApplicationShutdown() {
-    await this.$disconnect();
-    this.logger.debug('Prisma disconnected from database');
+  async beforeApplicationShutdown(): Promise<void> {
+    try {
+      await this.$disconnect();
+      this.logger.debug('Disconnected from database');
+    } catch (error: unknown) {
+      this.logger.error({ err: error }, 'Error while disconnecting database');
+    }
   }
 }

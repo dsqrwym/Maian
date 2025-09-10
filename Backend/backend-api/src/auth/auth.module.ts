@@ -17,8 +17,10 @@ import { ENV } from '../config/constants';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get(ENV.AUTH_JWT_SECRET),
-        signOptions: { expiresIn: config.get(ENV.ACCESS_TOKEN_EXPIRES_IN) },
+        secret: config.get<string>(ENV.AUTH_JWT_SECRET),
+        signOptions: {
+          expiresIn: Number(config.get<number>(ENV.ACCESS_TOKEN_EXPIRES_IN)),
+        },
       }),
     }),
     MailModule,

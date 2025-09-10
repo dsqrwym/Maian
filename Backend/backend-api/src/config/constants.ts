@@ -32,7 +32,9 @@ export const ENV = {
   REDIS_HOST: 'REDIS_HOST',
   REDIS_PORT: 'REDIS_PORT',
   REDIS_TTL: 'REDIS_TTL',
+  REDIS_USERNAME: 'REDIS_USERNAME',
   REDIS_PASSWORD: 'REDIS_PASSWORD',
+  REDIS_URL: 'REDIS_URL',
 
   // Prisma
   // Prisma 客户端相关超时/等待配置

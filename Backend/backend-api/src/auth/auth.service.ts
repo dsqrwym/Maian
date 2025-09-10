@@ -20,12 +20,12 @@ import { Logger } from 'nestjs-pino';
 import { Prisma, UserRole, UserStatus } from 'prisma/generated/prisma';
 import { AuthenticatedUser, AuthTokenPayload, CSRFPayload } from './auth.types';
 import { DeleteSessionDto } from './dto/delete.session.dto';
-import { Cache } from 'cache-manager';
-import { REDIS_CACHE } from '../redis/redis.module';
+import { REDIS_CACHE } from '../cache/redis/redis.module';
 import { TokenResponseDto } from './dto/token-response.dto';
 import { AUTH_ERROR, ENV, REDIS_KEYS } from '../config/constants';
 import * as crypto from 'crypto';
 import PrismaClientKnownRequestError = Prisma.PrismaClientKnownRequestError;
+import Keyv from 'keyv';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +35,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
     private readonly hashService: HashService,
-    @Inject(REDIS_CACHE) private readonly redisCache: Cache,
+    @Inject(REDIS_CACHE) private readonly redisCache: Keyv,
     private readonly logger: Logger,
   ) {}
 
@@ -415,7 +415,8 @@ export class AuthService {
       await this.redisCache.set(
         REDIS_KEYS.csrfBlacklist(hashedCSRFToken),
         true,
-        this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN),
+        Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)) *
+          1000,
       );
     }
 
@@ -459,7 +460,8 @@ export class AuthService {
         await this.redisCache.set(
           REDIS_KEYS.sessionRevokedKey(payload.sessionId),
           true,
-          this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN),
+          Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)) *
+            1000,
         );
       } catch (e: unknown) {
         this.logger.error(
@@ -551,7 +553,8 @@ export class AuthService {
       await this.redisCache.set(
         REDIS_KEYS.sessionRevokedKey(sessionData.sessionId),
         true,
-        Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)),
+        Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)) *
+          1000,
       );
 
       this.logger.log(
@@ -608,7 +611,8 @@ export class AuthService {
     await this.redisCache.set(
       REDIS_KEYS.sessionRevokedKey(deleteSessionDto.sessionId),
       true,
-      Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)),
+      Number(this.configService.get<number>(ENV.REFRESH_TOKEN_EXPIRES_IN)) *
+        1000,
     );
 
     return { message: 'Session successfully deleted' };

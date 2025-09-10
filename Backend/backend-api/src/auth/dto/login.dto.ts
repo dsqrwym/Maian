@@ -7,6 +7,7 @@ import {
   IsStrongPassword,
   MaxLength,
   ValidateIf,
+  NotContains,
 } from 'class-validator';
 export class LoginDto {
   @ApiProperty({
@@ -45,6 +46,7 @@ export class LoginDto {
   @IsString() // 验证为字符串
   @MinLength(3) // 最小长度为3
   @MaxLength(30) // 最大长度为30
+  @NotContains('@') // 不能包含 @
   username: string; // 用户名
 
   @ApiProperty({

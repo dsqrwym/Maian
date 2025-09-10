@@ -12,18 +12,18 @@ import { CommonModule } from './common/common.module'; // 全局的
 //  Prisma 模块
 import { PrismaModule } from './prisma/prisma.module'; // 全局的
 // Redis 模块
-import { RedisCacheModule } from './redis/redis.module'; // 全局的
+import { RedisCacheModule } from './cache/redis/redis.module'; // 全局的
 //  邮件模块
 import { MailModule } from './mail/mail.module';
 //  认证模块
 import { AuthModule } from './auth/auth.module';
-import { CacheModule } from '@nestjs/cache-manager';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { Reflector } from '@nestjs/core';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { JwtExceptionFilter } from './common/filters/jwt-exception.filter';
 import { TaskModule } from './tasks/task.module';
+import { MemoryCacheModule } from './cache/memory/memory-cache';
 
 @Module({
   imports: [
@@ -35,9 +35,7 @@ import { TaskModule } from './tasks/task.module';
       }, // isGlobal: true 表示该模块在整个应用程序中都是可用的，而不仅仅是在导入它的模块中。这样可以避免在每个模块中都需要单独导入 ConfigModule。
     ), // 加载环境变量配置文件，默认加载 .env 文件中的变量
     // 默认内存缓存
-    CacheModule.register(
-      { isGlobal: true }, // 全局缓存模块
-    ),
+    MemoryCacheModule,
     RedisCacheModule, // Redis 缓存模块
     LoggerModule.forRoot({
       pinoHttp: {

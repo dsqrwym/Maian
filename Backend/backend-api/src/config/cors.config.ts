@@ -3,6 +3,7 @@ import { NestFastifyApplication } from '@nestjs/platform-fastify';
 export function useCors(app: NestFastifyApplication) {
   app.enableCors({
     origin: [
+      'https://api.dsqrwym.es',
       'http://localhost:8081',
       'https://maian.dsqrwym.es',
       'https://www.kirehub.com',

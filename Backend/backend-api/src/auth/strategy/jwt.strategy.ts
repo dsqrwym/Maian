@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthTokenPayload, ReqUser } from '../auth.types';
 import { Logger } from 'nestjs-pino';
-import { REDIS_CACHE } from '../../redis/redis.module';
+import { REDIS_CACHE } from '../../cache/redis/redis.module';
 import { AUTH_ERROR, ENV, REDIS_KEYS } from '../../config/constants';
 
 @Injectable()

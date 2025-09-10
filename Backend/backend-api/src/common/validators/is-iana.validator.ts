@@ -5,12 +5,12 @@ import {
 } from 'class-validator';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { MEMORY_CACHE } from '../../cache/memory/memory-cache';
 
 @ValidatorConstraint({ name: 'IsIANA', async: true }) // 让Nest可以管理这个类
 @Injectable()
 export class IanaTimezoneValidator implements ValidatorConstraintInterface {
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
+  constructor(@Inject(MEMORY_CACHE) private readonly cacheManager: Cache) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async validate(value: string, _args: ValidationArguments): Promise<boolean> {

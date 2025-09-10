@@ -1,2 +1,4 @@
 .env
 docker-compose.yml
+# 忽略 Cloudflare Tunnel 凭证文件
+cloudflared/

@@ -5,12 +5,12 @@ import {
 } from 'class-validator';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { MEMORY_CACHE } from '../../cache/memory/memory-cache';
 
 @ValidatorConstraint({ name: 'IsBCP47Language', async: true })
 @Injectable()
 export class Bcp47LanguageValidator implements ValidatorConstraintInterface {
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
+  constructor(@Inject(MEMORY_CACHE) private readonly cacheManager: Cache) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async validate(value: string, _args: ValidationArguments): Promise<boolean> {
