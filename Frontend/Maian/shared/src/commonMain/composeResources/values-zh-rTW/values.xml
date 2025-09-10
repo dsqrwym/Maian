@@ -1,0 +1,85 @@
+<resources>
+    <!-- ===================== 公共描述 (Content Description) ===================== -->
+    <string name="login_background_content_description">登入畫面的背景</string>
+    <string name="button_google_logo_content_description">Google 圖示</string>
+    <string name="button_back_button_content_description">返回按鈕</string>
+    <string name="button_wechat_logo_content_description">微信圖示</string>
+    <string name="icon_content_description_email">電子郵件圖示</string>
+    <string name="icon_content_description_person">使用者圖示</string>
+    <string name="icon_content_description_lock">密碼圖示</string>
+    <string name="icon_content_description_language">語言切換按鈕</string>
+    <string name="icon_content_description_password_toggle_visibility">切換密碼可見性</string>
+
+    <!-- 狀態描述 -->
+    <string name="status_error_content_description">錯誤</string>
+    <string name="status_completed_content_description">完成</string>
+    <string name="status_in_progress_content_description">進行中</string>
+
+    <!-- ===================== 登入頁 (Login Screen) ===================== -->
+    <string name="login_title">登入</string>
+    <string name="login_subtitle">請先登入以繼續使用</string>
+
+    <string name="session_expired">登入已過期，請重新登入。</string>
+    <string name="session_revoked">帳號已在其他裝置登出或被管理員終止。</string>
+    <string name="csrf_invalid">安全驗證失效，請重新整理頁面或重新登入。</string>
+    <string name="session_not_found">登入狀態失效，請重新登入。</string>
+
+    <!-- 登入按鈕 -->
+    <string name="button_login">登入</string>
+    <string name="button_forget_password">忘記密碼</string>
+    <string name="button_other_login_methods">其他登入方式</string>
+    <string name="button_google_login">使用 Google 登入</string>
+    <string name="button_wechat_login">使用微信登入</string>
+    <string name="button_register_new_account">註冊新帳號</string>
+
+    <!-- 登入輸入框 -->
+    <string name="field_username_or_email_label">使用者名稱或電子郵件</string>
+    <string name="field_username_or_email_placeholder">請輸入使用者名稱或電子郵件</string>
+    <string name="field_password_label">密碼</string>
+    <string name="field_password_placeholder">請輸入密碼</string>
+
+    <!-- 登入驗證提示 -->
+    <string name="validation_username_or_email_empty">使用者名稱或電子郵件不可為空</string>
+    <string name="validation_username_cannot_contain_at">使用者名稱不能包含「@」字元</string>
+    <string name="validation_username_length_invalid">使用者名稱長度應為3到30個字元</string>
+    <string name="validation_email_domain_not_supported">不支援 example.com 郵箱</string>
+    <string name="validation_password_empty">密碼不可為空</string>
+    <string name="validation_password_too_short">密碼長度至少為6個字元</string>
+    <string name="validation_password_missing_uppercase">密碼必須包含至少一個大寫字母</string>
+    <string name="validation_password_missing_lowercase">密碼必須包含至少一個小寫字母</string>
+    <string name="validation_password_missing_digit">密碼必須包含至少一個數字</string>
+
+    <!-- ===================== 初始頁 (Initial Screen) ===================== -->
+    <string name="initial_screen_welcome">歡迎來到</string>
+    <string name="initial_screen_platform_name">賣安平台</string>
+    <string name="initial_screen_instruction">請選擇登入或註冊以繼續</string>
+    <string name="initial_screen_quick_login_hint">⏫ 支援 Google、微信 快速登入 ⏫</string>
+
+    <!-- 使用者協議與隱私 -->
+    <string name="agreement_warning">請先同意使用者協議及隱私政策才能繼續</string>
+    <string name="agreement_section_agreement_text_template">我已閱讀並同意《%s》和《%s》</string>
+    <string name="agreement_section_user_agreement">使用者協議</string>
+    <string name="agreement_section_privacy_policy">隱私政策</string>
+
+    <!-- ===================== 忘記密碼 (Forgot Password) ===================== -->
+    <string name="forgot_email_label">電子郵件</string>
+    <string name="forgot_email_placeholder">請輸入電子郵件</string>
+    <string name="forgot_new_password_label">新密碼</string>
+    <string name="forgot_repeat_password_label">再次輸入新密碼</string>
+    <string name="forgot_repeat_password_placeholder">請再次輸入新密碼</string>
+    <string name="forgot_repeat_password_mismatch">輸入的密碼與新密碼不同</string>
+
+    <string name="forgot_verify_email">驗證電子郵件</string>
+    <string name="forgot_verify">驗證</string>
+    <string name="forgot_change_password">更改密碼</string>
+
+    <!-- 錯誤提示 -->
+    <string name="forgot_unknown_error">未知錯誤</string>
+    <string name="forgot_fill_otp">請輸入驗證碼</string>
+    <string name="forgot_otp_error">驗證碼錯誤</string>
+    <string name="forgot_email_format_error">電子郵件格式不正確</string>
+
+    <!-- 驗證碼相關 -->
+    <string name="otp_resend">重新發送</string>
+
+</resources>

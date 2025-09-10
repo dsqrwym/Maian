@@ -1,0 +1,85 @@
+<resources>
+    <!-- ===================== Descripció de contingut ===================== -->
+    <string name="login_background_content_description">Fons de la pantalla d’inici de sessió</string>
+    <string name="button_google_logo_content_description">Icona de Google</string>
+    <string name="button_back_button_content_description">Botó de tornar</string>
+    <string name="button_wechat_logo_content_description">Icona de WeChat</string>
+    <string name="icon_content_description_email">Icona de correu electrònic</string>
+    <string name="icon_content_description_person">Icona d’usuari</string>
+    <string name="icon_content_description_lock">Icona de contrasenya</string>
+    <string name="icon_content_description_language">Botó per canviar l'idioma</string>
+    <string name="icon_content_description_password_toggle_visibility">Mostra/amaga la contrasenya</string>
+
+    <!-- Estat -->
+    <string name="status_error_content_description">Error</string>
+    <string name="status_completed_content_description">Completat</string>
+    <string name="status_in_progress_content_description">En procés</string>
+
+    <!-- ===================== Pantalla d’inici de sessió ===================== -->
+    <string name="login_title">Iniciar sessió</string>
+    <string name="login_subtitle">Si us plau, inicia sessió per continuar</string>
+
+    <string name="session_expired">La teua sessió ha caducat. Torna a iniciar sessió.</string>
+    <string name="session_revoked">El teu compte s'ha tancat en un altre dispositiu o ha sigut finalitzat per un administrador.</string>
+    <string name="csrf_invalid">La validació de seguretat ha fallat. Actualitza la pàgina o torna a iniciar sessió.</string>
+    <string name="session_not_found">Sessió no trobada. Torna a iniciar sessió.</string>
+
+    <!-- Botons d’inici de sessió -->
+    <string name="button_login">Iniciar sessió</string>
+    <string name="button_forget_password">He oblidat la contrasenya</string>
+    <string name="button_other_login_methods">Altres maneres d’iniciar sessió</string>
+    <string name="button_google_login">Inicia sessió amb Google</string>
+    <string name="button_wechat_login">Inicia sessió amb WeChat</string>
+    <string name="button_register_new_account">Registra un compte nou</string>
+
+    <!-- Camps d’inici de sessió -->
+    <string name="field_username_or_email_label">Nom d’usuari o correu electrònic</string>
+    <string name="field_username_or_email_placeholder">Introdueix el teu nom d’usuari o correu</string>
+    <string name="field_password_label">Contrasenya</string>
+    <string name="field_password_placeholder">Introdueix la teua contrasenya</string>
+
+    <!-- Missatges de validació -->
+    <string name="validation_username_or_email_empty">El nom d’usuari o correu no pot estar buit</string>
+    <string name="validation_username_cannot_contain_at">El nom d'usuari no pot contenir el caràcter "@"</string>
+    <string name="validation_username_length_invalid">El nom d’usuari ha de tindre entre 3 i 30 caràcters</string>
+    <string name="validation_email_domain_not_supported">El domini example.com no està suportat</string>
+    <string name="validation_password_empty">La contrasenya no pot estar buida</string>
+    <string name="validation_password_too_short">La contrasenya ha de tindre almenys 6 caràcters</string>
+    <string name="validation_password_missing_uppercase">La contrasenya ha de contenir almenys una lletra majúscula</string>
+    <string name="validation_password_missing_lowercase">La contrasenya ha de contenir almenys una lletra minúscula</string>
+    <string name="validation_password_missing_digit">La contrasenya ha de contenir almenys un número</string>
+
+    <!-- ===================== Pantalla inicial ===================== -->
+    <string name="initial_screen_welcome">Benvingut a</string>
+    <string name="initial_screen_platform_name">Plataforma MaiAn</string>
+    <string name="initial_screen_instruction">Si us plau, inicia sessió o registra’t per continuar</string>
+    <string name="initial_screen_quick_login_hint">⏫ Inici ràpid amb Google o WeChat ⏫</string>
+
+    <!-- Acord d’usuari i privadesa -->
+    <string name="agreement_warning">Has d’acceptar l’Acord d’Usuari i la Política de Privadesa per continuar</string>
+    <string name="agreement_section_agreement_text_template">He llegit i accepte “%s” i “%s”</string>
+    <string name="agreement_section_user_agreement">Acord d’Usuari</string>
+    <string name="agreement_section_privacy_policy">Política de Privadesa</string>
+
+    <!-- ===================== He oblidat la contrasenya ===================== -->
+    <string name="forgot_email_label">Correu electrònic</string>
+    <string name="forgot_email_placeholder">Introdueix el teu correu</string>
+    <string name="forgot_new_password_label">Nova contrasenya</string>
+    <string name="forgot_repeat_password_label">Repetir nova contrasenya</string>
+    <string name="forgot_repeat_password_placeholder">Torni a introduir la nova contrasenya</string>
+    <string name="forgot_repeat_password_mismatch">La contrasenya introduïda no coincideix amb la nova</string>
+
+    <string name="forgot_verify_email">Verificar correu</string>
+    <string name="forgot_verify">Verificar</string>
+    <string name="forgot_change_password">Canviar contrasenya</string>
+
+    <!-- Missatges d’error -->
+    <string name="forgot_unknown_error">Error desconegut</string>
+    <string name="forgot_fill_otp">Si us plau, introdueix el codi de verificació</string>
+    <string name="forgot_otp_error">Codi de verificació incorrecte</string>
+    <string name="forgot_email_format_error">Format de correu no vàlid</string>
+
+    <!-- Codi OTP -->
+    <string name="otp_resend">Reenviar</string>
+
+</resources>

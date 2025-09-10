@@ -1,0 +1,86 @@
+<resources>
+    <!-- ===================== Content Descriptions ===================== -->
+    <string name="login_background_content_description">Login screen background</string>
+    <string name="button_google_logo_content_description">Google icon</string>
+    <string name="button_back_button_content_description">Back button</string>
+    <string name="button_wechat_logo_content_description">WeChat icon</string>
+    <string name="icon_content_description_email">Email icon</string>
+    <string name="icon_content_description_person">User icon</string>
+    <string name="icon_content_description_lock">Password icon</string>
+    <string name="icon_content_description_language">Language switch button</string>
+    <string name="icon_content_description_password_toggle_visibility">Toggle password visibility</string>
+
+    <!-- Status Descriptions -->
+    <string name="status_error_content_description">Error</string>
+    <string name="status_completed_content_description">Completed</string>
+    <string name="status_in_progress_content_description">In progress</string>
+
+    <!-- ===================== Login Screen ===================== -->
+    <string name="login_title">Login</string>
+    <string name="login_subtitle">Please login to continue</string>
+
+    <string name="session_expired">Your session has expired. Please log in again.</string>
+    <string name="session_revoked">Your account has been logged out on another device or terminated by an administrator.</string>
+    <string name="csrf_invalid">Security validation failed. Please refresh the page or log in again.</string>
+    <string name="session_not_found">Session not found. Please log in again.</string>
+
+    <!-- Login Buttons -->
+    <string name="button_login">Login</string>
+    <string name="button_forget_password">Forgot Password</string>
+    <string name="button_other_login_methods">Other login methods</string>
+    <string name="button_google_login">Login with Google</string>
+    <string name="button_wechat_login">Login with WeChat</string>
+    <string name="button_register_new_account">Register new account</string>
+
+    <!-- Login Fields -->
+    <string name="field_username_or_email_label">Username or Email</string>
+    <string name="field_username_or_email_placeholder">Enter your username or email</string>
+    <string name="field_password_label">Password</string>
+    <string name="field_password_placeholder">Enter your password</string>
+
+    <!-- Validation Messages -->
+    <string name="validation_username_or_email_empty">Username or email cannot be empty</string>
+    <string name="validation_username_cannot_contain_at">Username cannot contain the "@" character</string>
+
+    <string name="validation_username_length_invalid">Username must be between 3 and 30 characters</string>
+    <string name="validation_email_domain_not_supported">example.com emails are not supported</string>
+    <string name="validation_password_empty">Password cannot be empty</string>
+    <string name="validation_password_too_short">Password must be at least 6 characters</string>
+    <string name="validation_password_missing_uppercase">Password must contain at least one uppercase letter</string>
+    <string name="validation_password_missing_lowercase">Password must contain at least one lowercase letter</string>
+    <string name="validation_password_missing_digit">Password must contain at least one number</string>
+
+    <!-- ===================== Initial Screen ===================== -->
+    <string name="initial_screen_welcome">Welcome to</string>
+    <string name="initial_screen_platform_name">MaiAn Platform</string>
+    <string name="initial_screen_instruction">Please login or register to continue</string>
+    <string name="initial_screen_quick_login_hint">⏫ Quick login with Google or WeChat ⏫</string>
+
+    <!-- User Agreement & Privacy -->
+    <string name="agreement_warning">Please agree to the user agreement and privacy policy to continue</string>
+    <string name="agreement_section_agreement_text_template">I have read and agree to "%s" and "%s"</string>
+    <string name="agreement_section_user_agreement">User Agreement</string>
+    <string name="agreement_section_privacy_policy">Privacy Policy</string>
+
+    <!-- ===================== Forgot Password ===================== -->
+    <string name="forgot_email_label">Email</string>
+    <string name="forgot_email_placeholder">Enter your email</string>
+    <string name="forgot_new_password_label">New Password</string>
+    <string name="forgot_repeat_password_label">Repeat New Password</string>
+    <string name="forgot_repeat_password_placeholder">Please repeat new password</string>
+    <string name="forgot_repeat_password_mismatch">Passwords do not match</string>
+
+    <string name="forgot_verify_email">Verify Email</string>
+    <string name="forgot_verify">Verify</string>
+    <string name="forgot_change_password">Change Password</string>
+
+    <!-- Error Messages -->
+    <string name="forgot_unknown_error">Unknown error</string>
+    <string name="forgot_fill_otp">Please enter verification code</string>
+    <string name="forgot_otp_error">Invalid verification code</string>
+    <string name="forgot_email_format_error">Invalid email format</string>
+
+    <!-- OTP Related -->
+    <string name="otp_resend">Resend</string>
+
+</resources>

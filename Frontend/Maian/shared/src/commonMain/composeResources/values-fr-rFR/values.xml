@@ -1,0 +1,85 @@
+<resources>
+    <!-- ===================== Descriptions de contenu ===================== -->
+    <string name="login_background_content_description">Arrière-plan de l'écran de connexion</string>
+    <string name="button_google_logo_content_description">Icône Google</string>
+    <string name="button_back_button_content_description">Bouton retour</string>
+    <string name="button_wechat_logo_content_description">Icône WeChat</string>
+    <string name="icon_content_description_email">Icône email</string>
+    <string name="icon_content_description_person">Icône utilisateur</string>
+    <string name="icon_content_description_lock">Icône mot de passe</string>
+    <string name="icon_content_description_language">Bouton de changement de langue</string>
+    <string name="icon_content_description_password_toggle_visibility">Afficher/masquer le mot de passe</string>
+
+    <!-- États -->
+    <string name="status_error_content_description">Erreur</string>
+    <string name="status_completed_content_description">Terminé</string>
+    <string name="status_in_progress_content_description">En cours</string>
+
+    <!-- ===================== Écran de connexion ===================== -->
+    <string name="login_title">Connexion</string>
+    <string name="login_subtitle">Veuillez vous connecter pour continuer</string>
+
+    <string name="session_expired">Votre session a expiré. Veuillez vous reconnecter.</string>
+    <string name="session_revoked">Votre compte a été déconnecté sur un autre appareil ou désactivé par un administrateur.</string>
+    <string name="csrf_invalid">La vérification de sécurité a échoué. Veuillez actualiser la page ou vous reconnecter.</string>
+    <string name="session_not_found">Session introuvable. Veuillez vous reconnecter.</string>
+
+    <!-- Boutons de connexion -->
+    <string name="button_login">Se connecter</string>
+    <string name="button_forget_password">Mot de passe oublié</string>
+    <string name="button_other_login_methods">Autres méthodes de connexion</string>
+    <string name="button_google_login">Se connecter avec Google</string>
+    <string name="button_wechat_login">Se connecter avec WeChat</string>
+    <string name="button_register_new_account">Créer un compte</string>
+
+    <!-- Champs de connexion -->
+    <string name="field_username_or_email_label">Nom d'utilisateur ou email</string>
+    <string name="field_username_or_email_placeholder">Entrez votre nom d'utilisateur ou email</string>
+    <string name="field_password_label">Mot de passe</string>
+    <string name="field_password_placeholder">Entrez votre mot de passe</string>
+
+    <!-- Messages de validation -->
+    <string name="validation_username_or_email_empty">Le nom d'utilisateur ou l'email ne peut pas être vide</string>
+    <string name="validation_username_length_invalid">Le nom d'utilisateur doit comporter entre 3 et 30 caractères</string>
+    <string name="validation_username_cannot_contain_at">Le nom d'utilisateur ne peut pas contenir le caractère "@“</string>
+    <string name="validation_email_domain_not_supported">Le domaine example.com n'est pas pris en charge</string>
+    <string name="validation_password_empty">Le mot de passe ne peut pas être vide</string>
+    <string name="validation_password_too_short">Le mot de passe doit contenir au moins 6 caractères</string>
+    <string name="validation_password_missing_uppercase">Le mot de passe doit contenir au moins une lettre majuscule</string>
+    <string name="validation_password_missing_lowercase">Le mot de passe doit contenir au moins une lettre minuscule</string>
+    <string name="validation_password_missing_digit">Le mot de passe doit contenir au moins un chiffre</string>
+
+    <!-- ===================== Écran initial ===================== -->
+    <string name="initial_screen_welcome">Bienvenue sur</string>
+    <string name="initial_screen_platform_name">Plateforme MaiAn</string>
+    <string name="initial_screen_instruction">Veuillez vous connecter ou créer un compte pour continuer</string>
+    <string name="initial_screen_quick_login_hint">⏫ Connexion rapide avec Google ou WeChat ⏫</string>
+
+    <!-- Accord utilisateur et confidentialité -->
+    <string name="agreement_warning">Veuillez accepter le contrat utilisateur et la politique de confidentialité pour continuer</string>
+    <string name="agreement_section_agreement_text_template">J'ai lu et j'accepte « %s » et « %s »</string>
+    <string name="agreement_section_user_agreement">Contrat utilisateur</string>
+    <string name="agreement_section_privacy_policy">Politique de confidentialité</string>
+
+    <!-- ===================== Mot de passe oublié ===================== -->
+    <string name="forgot_email_label">Email</string>
+    <string name="forgot_email_placeholder">Entrez votre email</string>
+    <string name="forgot_new_password_label">Nouveau mot de passe</string>
+    <string name="forgot_repeat_password_label">Répétez le mot de passe</string>
+    <string name="forgot_repeat_password_placeholder">Veuillez répéter le nouveau mot de passe</string>
+    <string name="forgot_repeat_password_mismatch">Le mot de passe entré ne correspond pas au nouveau mot de passe</string>
+
+    <string name="forgot_verify_email">Vérifier l'email</string>
+    <string name="forgot_verify">Vérifier</string>
+    <string name="forgot_change_password">Changer le mot de passe</string>
+
+    <!-- Messages d'erreur -->
+    <string name="forgot_unknown_error">Erreur inconnue</string>
+    <string name="forgot_fill_otp">Veuillez entrer le code de vérification</string>
+    <string name="forgot_otp_error">Code de vérification incorrect</string>
+    <string name="forgot_email_format_error">Format de l'email incorrect</string>
+
+    <!-- Code OTP -->
+    <string name="otp_resend">Renvoyer</string>
+
+</resources>
