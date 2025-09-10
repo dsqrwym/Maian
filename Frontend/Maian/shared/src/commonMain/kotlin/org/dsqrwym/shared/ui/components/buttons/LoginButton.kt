@@ -1,5 +1,19 @@
 package org.dsqrwym.shared.ui.components.buttons
 
+/**
+ * A reusable login button component with loading and success states.
+ * 可重用的登录按钮组件，带有加载和成功状态。
+ *
+ * @param loginEnabled Whether the button is enabled for interaction.
+ *                     按钮是否可交互。
+ * @param modifier The modifier to be applied to the button.
+ *                 应用于按钮的修饰符。
+ * @param loginUiState The current UI state of the login process.
+ *                     登录过程的当前UI状态。
+ * @param onLoginClick Callback when the button is clicked.
+ *                     点击按钮时的回调。
+ */
+
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape

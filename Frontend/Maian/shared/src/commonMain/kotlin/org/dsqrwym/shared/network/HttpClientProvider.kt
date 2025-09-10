@@ -82,11 +82,13 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                     PlatformType.Web -> {
                         // Web: rely on server-managed cookies; usually no refresh token in local storage
                         // Web：依赖服务端管理的 Cookie；本地通常不保存 refresh token
-                        val resp = api.refreshToken(PlatformType.Web) {
-                            // Mark this as a refresh-token request if needed by interceptors
-                            // 如拦截器需要，标记为刷新令牌请求
-                            markAsRefreshTokenRequest()
-                        }.toSharedResponseResult()
+                        val resp = safeApiCall {
+                            api.refreshToken(PlatformType.Web) {
+                                // Mark this as a refresh-token request if needed by interceptors
+                                // 如拦截器需要，标记为刷新令牌请求
+                                markAsRefreshTokenRequest()
+                            }
+                        }
                         if (resp is SharedResponseResult.Success) {
                             resp.data?.let {
                                 val newAccess = resp.data.accessToken
@@ -101,18 +103,21 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                             // On failure: clear local tokens and broadcast detailed reason based on backend code
                             // 刷新失败：清理本地令牌，并根据后端错误码广播更细粒度事件
                             SharedTokenStorage.clear()
-                            val event = if (resp is SharedResponseResult.Error) mapAuthEventFromMessage(resp.message) else AuthEvent.SessionExpired
+                            val event =
+                                if (resp is SharedResponseResult.Error) mapAuthEventFromMessage(resp.message) else AuthEvent.SessionExpired
                             AuthEvents.emit(event)
                             null
                         }
                     }
 
                     else -> {
-                        val resp = api.refreshToken {
-                            // Mark this call to bypass auth interceptors if necessary
-                            // 标记该调用，必要时可绕过认证拦截器
-                            markAsRefreshTokenRequest()
-                        }.toSharedResponseResult()
+                        val resp = safeApiCall {
+                            api.refreshToken {
+                                // Mark this call to bypass auth interceptors if necessary
+                                // 标记该调用，必要时可绕过认证拦截器
+                                markAsRefreshTokenRequest()
+                            }
+                        }
                         if (resp is SharedResponseResult.Success && resp.data != null) {
                             val newAccess = resp.data.accessToken
                             val newRefresh = resp.data.refreshToken
@@ -122,7 +127,8 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                             // On failure: clear local tokens and broadcast detailed reason based on backend code
                             // 刷新失败：清理本地令牌，并根据后端错误码广播更细粒度事件
                             SharedTokenStorage.clear()
-                            val event = if (resp is SharedResponseResult.Error) mapAuthEventFromMessage(resp.message) else AuthEvent.SessionExpired
+                            val event =
+                                if (resp is SharedResponseResult.Error) mapAuthEventFromMessage(resp.message) else AuthEvent.SessionExpired
                             AuthEvents.emit(event)
                             null
                         }

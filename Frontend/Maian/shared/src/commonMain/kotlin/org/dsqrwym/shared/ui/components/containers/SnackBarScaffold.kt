@@ -1,5 +1,14 @@
 package org.dsqrwym.shared.ui.components.containers
 
+/**
+ * Components for displaying snackbar notifications and toasts.
+ * 用于显示 Snackbar 通知和提示的组件。
+ *
+ * This file contains components that provide user feedback through temporary messages
+ * with different styles and animations for success, error, and information states.
+ * 该文件包含的组件通过临时消息提供用户反馈，支持成功、错误和信息等不同状态的样式和动画。
+ */
+
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.spring
@@ -7,6 +16,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,22 +35,21 @@ import org.dsqrwym.shared.drawable.sharedicons.CircleError
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
 /**
- * SnackbarScaffold
- *
  * A global scaffold wrapper that hosts a Material3 SnackbarHost with enhanced animations.
- * It optionally binds to MySnackbarViewModel so that toasts can be shown from anywhere
- * in the app, supporting Success/Error/Info variants and Top/Center/Bottom positions.
- *
  * 一个全局的脚手架容器，内置 Material3 的 SnackbarHost，并提供增强的动画效果。
- * 可选地绑定 MySnackbarViewModel，使得应用任意位置都可以显示全局提示，
- * 支持 成功/失败/信息 三种类型以及 顶部/居中/底部 三种位置。
+ *
+ * This component provides a flexible way to show toast notifications throughout the app
+ * with smooth animations and customizable positioning. It supports different message types
+ * (success, error, info) and can be positioned at the top, center, or bottom of the screen.
+ * 该组件提供了一种灵活的方式来显示应用内的提示通知，具有流畅的动画和可自定义的定位。
+ * 支持不同类型的消息（成功、错误、信息）并可以定位在屏幕的顶部、中间或底部。
  *
  * @param snackbarMessage Optional message to show when no ViewModel is provided.
  *                        未提供 ViewModel 时要显示的可选消息。
  * @param snackbarHostState The state of the SnackbarHost.
  *                          SnackbarHost 的状态。
- * @param viewModel Optional ViewModel for managing snackbar state.
- *                  用于管理 Snackbar 状态的可选 ViewModel。
+ * @param viewModel Optional ViewModel for managing snackbar state globally.
+ *                  用于全局管理 Snackbar 状态的可选 ViewModel。
  * @param content The main content of the screen.
  *                屏幕的主要内容。
  */
@@ -49,12 +58,13 @@ fun SnackbarScaffold(
     snackbarMessage: String? = null,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: MySnackbarViewModel? = null,
+    maxSnackbars: Int = 1,
     content: @Composable () -> Unit
 ) {
     // Coroutine scope for launching snackbar animations
     // 用于启动 Snackbar 动画的协程作用域
     val coroutineScope = rememberCoroutineScope()
-    
+
     // Track the size of the parent container for positioning
     // 跟踪父容器的大小以便定位
     var parentSize by remember { mutableStateOf(IntSize.Zero) }
@@ -62,7 +72,7 @@ fun SnackbarScaffold(
     // Use the ViewModel's host state if available, otherwise use the provided one
     // 如果可用则使用 ViewModel 的主机状态，否则使用提供的状态
     val hostState = viewModel?.snackbarHostState ?: snackbarHostState
-    
+
     // Collect the current snackbar event from the ViewModel
     // 从 ViewModel 收集当前的 Snackbar 事件
     val currentEvent = viewModel?.currentEvent?.collectAsState(null)?.value
@@ -101,9 +111,9 @@ fun SnackbarScaffold(
 
         // Calculate offsets for top and bottom positioned snackbars
         // 计算顶部和底部定位的 Snackbar 的偏移量
-        val baseTopOffset = parentSize.height * 0.08f
-        val baseBottomOffset = -parentSize.height * 0.08f
-        
+        val baseTopOffset = parentSize.height * 0.03f
+        val baseBottomOffset = -parentSize.height * 0.03f
+
         // Display the main content
         // 显示主要内容
         content()
@@ -126,7 +136,8 @@ fun SnackbarScaffold(
             snackbar = { data ->
                 val density = LocalDensity.current
                 val alpha = remember { Animatable(0f) }
-                val offsetY = remember { Animatable(if (currentEvent?.position == MySnackbarViewModel.ToastPosition.Bottom) 100f else -100f) }
+                val offsetY =
+                    remember { Animatable(if (currentEvent?.position == MySnackbarViewModel.ToastPosition.Bottom) 100f else -100f) }
                 val offsetX = remember { Animatable(0f) }
                 val scale = remember { Animatable(0.96f) }
                 val elevationPx = remember { Animatable(0f) }
@@ -148,6 +159,9 @@ fun SnackbarScaffold(
                     }
 
                     // Pre-exit interaction: shake for error, pulse for success
+                    // 退出前交互：错误时抖动，成功时脉动
+                    // This adds visual feedback before the snackbar disappears
+                    // 在 Snackbar 消失前添加视觉反馈
                     launch {
                         delay(delayMs - 120)
                         when (currentEvent?.type) {
@@ -166,11 +180,13 @@ fun SnackbarScaffold(
                                     }
                                 )
                             }
+
                             MySnackbarViewModel.ToastType.Success -> {
                                 // subtle pulse
                                 scale.animateTo(1.02f, animationSpec = tween(durationMillis = 90))
                                 scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.8f, stiffness = 400f))
                             }
+
                             else -> {}
                         }
                     }
@@ -205,11 +221,13 @@ fun SnackbarScaffold(
                         MaterialTheme.colorScheme.onPrimaryContainer,
                         Icons.Outlined.CheckCircle
                     )
+
                     MySnackbarViewModel.ToastType.Error -> Triple(
                         MaterialTheme.colorScheme.errorContainer,
                         MaterialTheme.colorScheme.onErrorContainer,
                         SharedIcons.CircleError // Using existing project drawable
                     )
+
                     else -> Triple(
                         MaterialTheme.colorScheme.primaryContainer,
                         MaterialTheme.colorScheme.onPrimaryContainer,
@@ -228,7 +246,23 @@ fun SnackbarScaffold(
                             this.scaleY = scale.value
                             this.shadowElevation = elevationPx.value
                         },
+                    action = {
+                        data.visuals.actionLabel?.let { actionLabel ->
+                            TextButton(onClick = { data.performAction() }) {
+                                Text(actionLabel)
+                            }
+                        }
+                    },
+                    dismissAction = {
+                        if (data.visuals.withDismissAction) {
+                            IconButton(onClick = { data.dismiss() }) {
+                                Icon(Icons.Outlined.Close, "Dismiss")
+                            }
+                        }
+                    },
                     containerColor = containerColor,
+                    dismissActionContentColor = contentColor,
+                    actionContentColor = contentColor,
                     contentColor = contentColor
                 ) {
                     Row(
@@ -253,9 +287,16 @@ fun SnackbarScaffold(
 }
 
 /**
- * EN: Map SnackbarDuration to milliseconds (approximate), referencing SnackbarHostState.showSnackbar defaults.
- * ZH: 将 SnackbarDuration 映射为大致的毫秒数，参考 SnackbarHostState.showSnackbar 的默认值。
+ * Maps SnackbarDuration to milliseconds based on Material Design specifications.
+ * 根据 Material Design 规范将 SnackbarDuration 映射为毫秒数。
+ *
+ * @param duration The duration of the snackbar.
+ *                 Snackbar 的持续时间。
+ * @return The duration in milliseconds.
+ *          以毫秒为单位的持续时间。
  */
+// EN: Map SnackbarDuration to milliseconds (approximate), referencing SnackbarHostState.showSnackbar defaults.
+// ZH: 将 SnackbarDuration 映射为大致的毫秒数，参考 SnackbarHostState.showSnackbar 的默认值。
 fun getDurationMillis(duration: SnackbarDuration): Long = when (duration) {
     SnackbarDuration.Short -> 4000L
     SnackbarDuration.Long -> 10000L

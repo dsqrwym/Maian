@@ -1,5 +1,14 @@
 package org.dsqrwym.shared.ui.components.containers
 
+/**
+ * Background components for creating visually appealing screen backgrounds.
+ * 用于创建具有视觉吸引力的屏幕背景组件。
+ *
+ * This file contains components for displaying background images with optional
+ * blur effects and glass morphism for modern UI designs.
+ * 该文件包含用于显示背景图片的组件，支持模糊效果和毛玻璃效果，适用于现代UI设计。
+ */
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -25,11 +34,24 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Share
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_background_content_description
 
 
+/**
+ * A composable that displays a background image with optional blur and glass morphism effects.
+ * 显示背景图片的可组合项，支持模糊和毛玻璃效果。
+ *
+ * @param backgroundImage The image resource to be displayed as background.
+ *                        作为背景显示的图片资源。
+ * @param blurRadius The radius of the blur effect. Set to 0.dp to disable blur.
+ *                    模糊效果的半径。设置为0.dp可禁用模糊效果。
+ * @param glassTintColor The tint color for the glass morphism effect.
+ *                        毛玻璃效果的颜色。
+ * @param content The composable content to be displayed on top of the background.
+ *                显示在背景顶部的可组合内容。
+ */
 @Composable
 fun BackgroundImage(
     backgroundImage: DrawableResource,
     blurRadius: Dp = 0.dp,
-    glassTintColor: Color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f), // 磨砂玻璃层的自定义颜色和透明度
+    glassTintColor: Color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f),
     content: @Composable () -> Unit
 ) {
     val hazeState = remember { HazeState(initialBlurEnabled = true) }
@@ -56,6 +78,7 @@ fun BackgroundImage(
                 state = hazeState
             )
         }
+        // Background image
         // 背景图片
         Image(
             painter = painterResource(backgroundImage),
@@ -63,7 +86,9 @@ fun BackgroundImage(
             modifier = modifier,
             contentScale = if (isLandscape) ContentScale.FillBounds else ContentScale.Crop
         )
-        // 磨砂玻璃层：应用 hazeChild，并在其上方放置传入的内容
+        
+        // Glass morphism layer: Apply haze effect with the specified blur radius
+        // 毛玻璃层：应用指定模糊半径的haze效果
         if (blurRadius > 0.dp) {
             Box(
                 modifier = Modifier

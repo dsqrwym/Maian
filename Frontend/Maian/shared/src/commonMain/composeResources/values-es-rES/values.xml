@@ -9,6 +9,8 @@
     <string name="icon_content_description_lock">Icono de contraseña</string>
     <string name="icon_content_description_language">Botón para cambiar el idioma</string>
     <string name="icon_content_description_password_toggle_visibility">Mostrar/ocultar contraseña</string>
+    <string name="icon_content_description_dismiss">Cerrar</string>
+
 
     <!-- Estado -->
     <string name="status_error_content_description">Error</string>
@@ -69,6 +71,11 @@
     <string name="forgot_repeat_password_placeholder">Vuelve a introducir la nueva contraseña</string>
     <string name="forgot_repeat_password_mismatch">La contraseña introducida no coincide con la nueva</string>
 
+    <string name="login_success">Inicio de sesión exitoso</string>
+    <string name="login_error_username_or_password">Usuario o contraseña incorrectos</string>
+    <string name="login_error_email_or_password">Correo electrónico o contraseña incorrectos</string>
+
+
     <string name="forgot_verify_email">Verificar correo</string>
     <string name="forgot_verify">Verificar</string>
     <string name="forgot_change_password">Cambiar contraseña</string>
@@ -78,6 +85,14 @@
     <string name="forgot_fill_otp">Por favor, introduce el código de verificación</string>
     <string name="forgot_otp_error">Código de verificación incorrecto</string>
     <string name="forgot_email_format_error">Formato de correo no válido</string>
+
+    <string name="error_no_transformation">Algo salió mal. Inténtalo de nuevo más tarde.</string>
+    <string name="error_serialization">Respuesta inesperada del servidor. Inténtalo de nuevo.</string>
+    <string name="error_connect_timeout">No se pudo conectar con el servidor. Verifica tu conexión a internet.</string>
+    <string name="error_socket_timeout">El servidor tardó demasiado en responder. Inténtalo de nuevo más tarde.</string>
+    <string name="error_io">Ocurrió un error de red. Verifica tu conexión.</string>
+    <string name="error_generic">La solicitud de red falló. Inténtalo de nuevo.</string>
+
 
     <!-- Código OTP -->
     <string name="otp_resend">Reenviar</string>

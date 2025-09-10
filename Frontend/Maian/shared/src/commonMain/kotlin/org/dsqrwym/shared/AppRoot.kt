@@ -112,6 +112,7 @@ fun AppRoot(
                 ) {
                     SnackbarScaffold(
                         snackbarHostState = mySnackbarViewModel.snackbarHostState,
+                        maxSnackbars = mySnackbarViewModel.maxSnackbars.value,
                         viewModel = mySnackbarViewModel
                     ) {
                         content(state)

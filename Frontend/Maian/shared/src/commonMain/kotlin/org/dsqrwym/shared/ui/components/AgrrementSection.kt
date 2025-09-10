@@ -23,6 +23,26 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agree
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agreement_section_privacy_policy
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agreement_section_user_agreement
 
+/**
+ * This package contains reusable UI components for the application.
+ * 此包包含应用程序的可重用UI组件。
+ */
+
+/**
+ * A section that displays terms of service and privacy policy agreement with checkboxes.
+ * 显示服务条款和隐私政策协议的同意部分，包含复选框。
+ *
+ * @param isAgreed Whether the agreement is currently checked.
+ *                 当前是否已同意协议。
+ * @param onAgreementChange Callback when the agreement checkbox state changes.
+ *                          当协议复选框状态变化时的回调。
+ * @param onUserAgreementClick Callback when user agreement text is clicked.
+ *                             当用户协议文本被点击时的回调。
+ * @param onPrivacyPolicyClick Callback when privacy policy text is clicked.
+ *                             当隐私政策文本被点击时的回调。
+ * @param modifier The modifier to be applied to the layout.
+ *                 应用于布局的修饰符。
+ */
 @Composable
 fun AgreementSection(
     isAgreed: Boolean,
@@ -126,9 +146,9 @@ fun AnimatedClickableText(
         style = MaterialTheme.typography.bodySmall.copy(textDecoration = TextDecoration.Underline),
         maxLines = 1,
         modifier = modifier
-            .pointerInput(Unit){
+            .pointerInput(Unit) {
                 awaitPointerEventScope {
-                    while(true){
+                    while (true) {
                         val event = awaitPointerEvent()
                         val type = event.type
 

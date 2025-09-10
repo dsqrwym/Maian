@@ -9,6 +9,8 @@
     <string name="icon_content_description_lock">密碼圖示</string>
     <string name="icon_content_description_language">語言切換按鈕</string>
     <string name="icon_content_description_password_toggle_visibility">切換密碼可見性</string>
+    <string name="icon_content_description_dismiss">關閉</string>
+
 
     <!-- 狀態描述 -->
     <string name="status_error_content_description">錯誤</string>
@@ -49,6 +51,11 @@
     <string name="validation_password_missing_lowercase">密碼必須包含至少一個小寫字母</string>
     <string name="validation_password_missing_digit">密碼必須包含至少一個數字</string>
 
+    <string name="login_success">登入成功</string>
+    <string name="login_error_username_or_password">使用者名稱或密碼錯誤</string>
+    <string name="login_error_email_or_password">郵箱或密碼錯誤</string>
+
+
     <!-- ===================== 初始頁 (Initial Screen) ===================== -->
     <string name="initial_screen_welcome">歡迎來到</string>
     <string name="initial_screen_platform_name">賣安平台</string>
@@ -81,5 +88,13 @@
 
     <!-- 驗證碼相關 -->
     <string name="otp_resend">重新發送</string>
+
+    <string name="error_no_transformation">發生錯誤，請稍後再試。</string>
+    <string name="error_serialization">伺服器回應異常，請再試一次。</string>
+    <string name="error_connect_timeout">無法連線至伺服器，請檢查您的網路。</string>
+    <string name="error_socket_timeout">伺服器回應逾時，請稍後再試。</string>
+    <string name="error_io">發生網路錯誤，請檢查您的連線。</string>
+    <string name="error_generic">網路請求失敗，請再試一次。</string>
+
 
 </resources>

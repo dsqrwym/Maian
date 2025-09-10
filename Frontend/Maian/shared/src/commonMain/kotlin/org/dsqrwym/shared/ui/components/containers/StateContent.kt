@@ -1,5 +1,14 @@
 package org.dsqrwym.shared.ui.components.containers
 
+/**
+ * Components for handling different UI states with smooth animations.
+ * 用于处理不同UI状态并带有平滑动画的组件。
+ *
+ * This file contains components that help manage loading, success, and error states
+ * with appropriate visual feedback and animations.
+ * 该文件包含的组件帮助管理加载、成功和错误状态，并提供适当的视觉反馈和动画。
+ */
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
@@ -42,13 +51,32 @@ enum class UiState {
  * A reusable composable that displays different UI states with smooth animations.
  * 可复用的Composable组件，用于显示带有平滑动画的不同UI状态。
  *
- * @param state The current UI state / 当前UI状态
- * @param size Size of the indicator / 指示器大小
- * @param progressStrokeWith Width of the progress indicator stroke / 进度条宽度
- * @param successIconTint Tint color for success icon / 成功图标的颜色
- * @param errorIconTint Tint color for error icon / 错误图标的颜色
- * @param modifier Modifier for the container / 容器修饰符
- * @param idleContent Content to show in idle state / 空闲状态下显示的内容
+ * This component handles four states:
+ * - Idle: Shows the provided content
+ * - Loading: Shows a circular progress indicator
+ * - Success: Shows a checkmark with bounce animation
+ * - Error: Shows an error icon with shake animation
+ *
+ * 该组件处理四种状态：
+ * - 空闲：显示提供的内容
+ * - 加载中：显示圆形进度指示器
+ * - 成功：显示带弹跳动画的勾选图标
+ * - 错误：显示带抖动动画的错误图标
+ *
+ * @param state The current UI state.
+ *               当前UI状态。
+ * @param size Size of the indicator in Dp.
+ *             指示器大小（Dp单位）。
+ * @param progressStrokeWith Width of the progress indicator stroke.
+ *                           进度条宽度。
+ * @param successIconTint Tint color for success icon.
+ *                        成功图标的颜色。
+ * @param errorIconTint Tint color for error icon.
+ *                      错误图标的颜色。
+ * @param modifier Modifier to be applied to the container.
+ *                 应用于容器的修饰符。
+ * @param idleContent Content to show in idle state.
+ *                    空闲状态下显示的内容。
  */
 @Composable
 fun StateContent(
@@ -82,8 +110,8 @@ fun StateContent(
             // Success state with a bouncing checkmark animation
             // 成功状态显示带弹跳动画的勾选图标
             UiState.Success -> {
-                // Bounce animation for success feedback
-                // 成功反馈的弹跳动画
+                // Bounce animation for success feedback using spring physics
+                // 使用弹性物理效果实现成功反馈的弹跳动画
                 val scale by animateFloatAsState(
                     targetValue = 1f,
                     animationSpec = spring(
@@ -120,8 +148,8 @@ fun StateContent(
                     label = "Error Scale"
                 )
 
-                // Infinite shake animation for error feedback
-                // 错误反馈的无限抖动动画
+                // Infinite shake animation for error feedback using infinite transition
+                // 使用无限过渡实现错误反馈的持续抖动动画
                 val infiniteTransition = rememberInfiniteTransition(label = "Error Shake")
                 val offsetX by infiniteTransition.animateFloat(
                     initialValue = -6f,

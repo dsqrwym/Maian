@@ -19,9 +19,8 @@ import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateRepeatPassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 import org.jetbrains.compose.resources.StringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.forgot_email_format_error
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.forgot_fill_otp
+import org.jetbrains.compose.resources.getString
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 /**
  * Represents the different screens in the authentication flow.
@@ -187,22 +186,34 @@ class AuthViewModel(
 
                 // Attempt to login via repository
                 // 尝试通过仓库登录
-                when (repository.login(email, password)) {
+                when (val result = repository.login(email, password)) {
                     is SharedResponseResult.Success -> {
                         // On success, update login state and show success feedback
                         // 登录成功时，更新登录状态并显示成功反馈
                         isLoggedIn = true
                         loginUiState = UiState.Success
-                        mySnackbarViewModel.showSuccess("Login successful")
-                        authSessionViewModel.onLoggedIn()
+                        mySnackbarViewModel.showSuccess(getString(SharedRes.string.login_success), dismissPrevious = true)
                         delay(delayMillis)
                         loginUiState = UiState.Idle
+                        authSessionViewModel.onLoggedIn()
                     }
 
                     is SharedResponseResult.Error -> {
                         isLoggedIn = false
                         loginUiState = UiState.Error
-                        mySnackbarViewModel.showError("Login failed")
+                        if (org.dsqrwym.shared.network.ErrorMessageMapper.shouldShowToUser(result.type)) {
+                            result.message?.let { message ->
+                                mySnackbarViewModel.showError(message)
+                            }
+                        } else {
+                            mySnackbarViewModel.showError(
+                                getString(
+                                    if (validateEmail(email)) SharedRes.string.login_error_email_or_password
+                                    else SharedRes.string.login_error_username_or_password
+                                ),
+                                dismissPrevious = true
+                            )
+                        }
                         delay(delayMillis)
                         loginUiState = UiState.Idle
                     }
@@ -230,37 +241,37 @@ class AuthViewModel(
     /** Whether the OTP code input is complete. OTP 验证码输入是否完成。 */
     var codeIsComplete by mutableStateOf(false)
 
-    /** 
-     * The OTP (One-Time Password) verification code. 
+    /**
+     * The OTP (One-Time Password) verification code.
      * OTP (一次性密码) 验证码。
      */
     var code by mutableStateOf("")
 
-    /** 
-     * Error message for OTP code input. 
+    /**
+     * Error message for OTP code input.
      * OTP 验证码输入的错误信息。
      */
     var codeError by mutableStateOf<StringResource?>(null)
-    
-    /** 
+
+    /**
      * Initial countdown time in seconds for resending OTP code.
      * 重新发送 OTP 验证码的初始倒计时时间（秒）。
      */
     private val codeResentInitLeftTime = 60
-    
-    /** 
+
+    /**
      * Job for handling the countdown timer for OTP resend functionality.
      * 用于处理 OTP 重新发送倒计时计时器的 Job。
      */
     private var resendCodeContDownJon: Job? = null
-    
-    /** 
+
+    /**
      * Indicates whether the OTP has been sent.
      * 表示 OTP 是否已发送。
      */
     var codeSend by mutableStateOf(false)
-    
-    /** 
+
+    /**
      * Remaining time in seconds for the OTP resend countdown.
      * OTP 重新发送倒计时剩余时间（秒）。
      */
@@ -314,7 +325,7 @@ class AuthViewModel(
     /**
      * Starts or resumes the countdown timer for OTP resend functionality.
      * 启动或恢复 OTP 重新发送的倒计时计时器。
-     * 
+     *
      * This function ensures that users cannot request multiple OTP codes within a short time frame
      * to prevent abuse and potential security issues. The countdown persists throughout the entire
      * authentication flow to prevent users from bypassing the cooldown by navigating away and back.
@@ -325,17 +336,17 @@ class AuthViewModel(
         // Cancel any existing countdown job to prevent multiple timers running simultaneously
         // 取消任何现有的倒计时 Job，防止多个计时器同时运行
         resendCodeContDownJon?.cancel()
-        
+
         // Mark the countdown as initialized
         // 标记倒计时已初始化
         codeSend = true
-        
+
         // Reset the countdown if it has already completed
         // 如果倒计时已完成，则重置倒计时时间
         if (codeResentLeftTime <= 0) {
             codeResentLeftTime = codeResentInitLeftTime
         }
-        
+
         // Launch a new coroutine for the countdown timer
         // 启动一个新的协程来处理倒计时
         resendCodeContDownJon = viewModelScope.launch {

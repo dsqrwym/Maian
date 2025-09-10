@@ -22,13 +22,49 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.otp_resend
 
+/**
+ * A reusable OTP (One-Time Password) input field with countdown resend functionality.
+ * 带倒计时重发按钮的验证码输入组件。
+ *
+ * This composable combines an OTP input field with a resend button that shows a countdown timer.
+ * It supports both internal and external countdown control.
+ *
+ * 该组件将OTP输入字段与显示倒计时的重发按钮结合在一起。
+ * 支持内部和外部倒计时控制。
+ *
+ * @param modifier Modifier for the root Row layout
+ *                 根行布局的修饰符
+ * @param otpTextFieldValue Current value and selection state of the OTP field
+ *                          OTP字段的当前值和选择状态
+ * @param countdownSeconds Duration of the countdown in seconds (default: 60)
+ *                         倒计时的持续时间（秒，默认：60）
+ * @param externalTimeLeft Optional external countdown control (overrides internal counter if set)
+ *                         可选的外部倒计时控制（如果设置，则覆盖内部计数器）
+ * @param otpLength Length of the OTP code (default: 6)
+ *                  OTP代码的长度（默认：6）
+ * @param enabled Whether the input is enabled
+ *                是否启用输入
+ * @param errorMessage Optional error message to display below the input
+ *                    可选的在输入下方显示的错误消息
+ * @param resendOtp Callback when the resend button is clicked
+ *                  点击重发按钮时的回调
+ * @param onOtpChange Callback when the OTP value changes, provides (otp: String, isComplete: Boolean)
+ *                    OTP值更改时的回调，提供(otp: String, isComplete: Boolean)
+ *
+ * Example usage:
+ * ```
+ * MyOtpInputField(
+ *     otpTextFieldValue = otpValue,
+ *     onOtpChange = { otp, isComplete ->
+ *         // Handle OTP change
+ *     },
+ *     resendOtp = {
+ *         // Handle resend OTP
+ *     }
+ * )
+ * ```
+ */
 @Composable
-        /**
-         * MyOtpInputField
-         *
-         * EN: OTP input with countdown resend button. Emits current OTP and completion boolean.
-         * ZH: 带倒计时重发按钮的验证码输入组件。向外部回传当前验证码与是否填写完成。
-         */
 fun MyOtpInputField(
     modifier: Modifier = Modifier,
     otpTextFieldValue: TextFieldValue = TextFieldValue(text = "", selection = TextRange(0)),
@@ -96,6 +132,10 @@ fun MyOtpInputField(
     }
 }
 
+/**
+ * Preview composable for MyOtpInputField.
+ * MyOtpInputField 的预览组件。
+ */
 @Preview
 @Composable
 fun OtpInputFieldPreview() {

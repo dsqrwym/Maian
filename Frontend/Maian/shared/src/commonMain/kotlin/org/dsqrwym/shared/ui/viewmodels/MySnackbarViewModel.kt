@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.util.log.SharedLog
@@ -38,7 +39,13 @@ class MySnackbarViewModel : ViewModel() {
         val duration: SnackbarDuration = SnackbarDuration.Short,
         val type: ToastType = ToastType.Info,
         val position: ToastPosition = ToastPosition.Top,
+        val actionLabel: String? = null,
+        val withDismissAction: Boolean = true,
+        val dismissPrevious: Boolean = false
     )
+
+    private val _maxSnackbars = MutableStateFlow(1)
+    val maxSnackbars: StateFlow<Int> = _maxSnackbars
 
     /** EN: Host state consumed by SnackbarHost. ZH: SnackbarHost 使用的宿主状态。*/
     val snackbarHostState = SnackbarHostState()
@@ -67,7 +74,8 @@ class MySnackbarViewModel : ViewModel() {
                     // EN: Show snackbar (message/duration only). ZH: 显示 snackbar（仅消息与时长）。
                     snackbarHostState.showSnackbar(
                         message = event.message,
-                        duration = event.duration
+                        duration = event.duration,
+                        withDismissAction = event.withDismissAction,
                     )
                 }
                 .retry { e ->
@@ -78,31 +86,75 @@ class MySnackbarViewModel : ViewModel() {
         }
     }
 
+    fun updateMaxSnackbars(maxSnackbars: Int) {
+        _maxSnackbars.value = maxSnackbars
+    }
+
     /**
      * EN: General API to enqueue a toast.
      * ZH: 通用的入队显示接口。
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun show(
         message: String,
         duration: SnackbarDuration = SnackbarDuration.Short,
         type: ToastType = ToastType.Info,
         position: ToastPosition = ToastPosition.Top,
+        actionLabel: String? = null,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
     ) {
-        snackbarMessages.tryEmit(ToastEvent(message, duration, type, position))
+        if (dismissPrevious) {
+            snackbarMessages.resetReplayCache()
+            _currentEvent.value = null
+            snackbarHostState.currentSnackbarData?.dismiss()
+        }
+        snackbarMessages.tryEmit(
+            ToastEvent(
+                message,
+                duration,
+                type,
+                position,
+                actionLabel,
+                withDismissAction,
+                dismissPrevious
+            )
+        )
     }
 
     /** EN: Convenience API for success toast. ZH: 便捷的成功提示接口。*/
-    fun showSuccess(message: String, duration: SnackbarDuration = SnackbarDuration.Short, position: ToastPosition = ToastPosition.Top) {
-        show(message, duration, ToastType.Success, position)
+    fun showSuccess(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        actionLabel: String? = null,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Success, position, actionLabel, withDismissAction, dismissPrevious)
     }
 
     /** EN: Convenience API for error toast. ZH: 便捷的错误提示接口。*/
-    fun showError(message: String, duration: SnackbarDuration = SnackbarDuration.Short, position: ToastPosition = ToastPosition.Top) {
-        show(message, duration, ToastType.Error, position)
+    fun showError(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        actionLabel: String? = null,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Error, position, actionLabel, withDismissAction, dismissPrevious)
     }
 
     /** EN: Convenience API for info toast. ZH: 便捷的信息提示接口。*/
-    fun showInfo(message: String, duration: SnackbarDuration = SnackbarDuration.Short, position: ToastPosition = ToastPosition.Top) {
-        show(message, duration, ToastType.Info, position)
+    fun showInfo(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        actionLabel: String? = null,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Info, position, actionLabel, withDismissAction, dismissPrevious)
     }
 }

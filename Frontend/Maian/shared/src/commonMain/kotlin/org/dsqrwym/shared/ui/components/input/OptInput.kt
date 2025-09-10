@@ -1,8 +1,21 @@
 /**
- * Modified from:
- * https://github.com/pushpalroy/ComposeOtpVerify
+ * OTP (One-Time Password) input components for secure code entry.
+ * 一次性密码输入组件，用于安全验证码输入。
  *
+ * Modified from: https://github.com/pushpalroy/ComposeOtpVerify
  * Original Author: Pushpal Roy (@pushpalroy)
+ *
+ * This package provides customizable OTP input fields with features like:
+ * - Character masking
+ * - Animated cursor
+ * - Error states
+ * - Customizable appearance
+ *
+ * 该包提供可定制的OTP输入字段，具有以下特点：
+ * - 字符掩码
+ * - 动画光标
+ * - 错误状态
+ * - 可定制外观
  */
 
 package org.dsqrwym.shared.ui.components.input
@@ -33,6 +46,7 @@ import kotlinx.coroutines.delay
 
 /**
  * A single OTP character box with support for masking, animations, and cursor.
+ * 支持掩码、动画和光标的单个OTP字符框。
  *
  * This composable displays one box in the OTP input field. It:
  * - Shows the character or masked symbol based on visual transformation
@@ -40,16 +54,32 @@ import kotlinx.coroutines.delay
  * - Optionally shows a blinking cursor
  * - Animates character appearance when switching between plain and masked
  *
+ * 此可组合项在OTP输入字段中显示一个框。它：
+ * - 根据视觉转换显示字符或掩码符号
+ * - 在获取焦点或错误时高亮边框
+ * - 可选显示闪烁的光标
+ * - 在明文和掩码之间切换时显示动画效果
+ *
  * @param index Position of the character box (0-based)
+ *             字符框的位置（从0开始）
  * @param text The full OTP input string
+ *             OTP输入字符串
  * @param mask The symbol used for masking (default: "•")
+ *             用于掩码的符号（默认："•"）
  * @param visualTransformation Visual transformation logic, defaults to password style
+ *                            视觉转换逻辑，默认为密码样式
  * @param shouldShowCursor Whether the cursor should be displayed
+ *                         是否应显示光标
  * @param isFocused Whether this specific box is focused (cursor is here)
+ *                  此特定框是否获得焦点（光标位于此处）
  * @param isTextFieldFocused Whether the parent TextField is focused
+ *                           父 TextField 是否获得焦点
  * @param hasError Whether there is an input error (affects border color)
+ *                 是否存在输入错误（影响边框颜色）
  * @param showLastCharPlain Whether to show the last character in plain text temporarily
+ *                          是否临时显示最后一个字符为明文
  * @param isEnabled Whether input is enabled
+ *                  是否启用输入
  */
 
 @Composable
@@ -137,9 +167,11 @@ internal fun CharacterContainer(
 /**
  * A composable One-Time Password (OTP) input field with masking, cursor animation,
  * error message support, and custom character rendering.
+ * 带有掩码、光标动画、错误消息支持和自定义字符渲染的可组合OTP输入字段。
  *
  * This field uses a single invisible `BasicTextField` and a custom `decorationBox`
  * to simulate a segmented OTP UI with N boxes.
+ * 该字段使用单个不可见的`BasicTextField`和自定义的`decorationBox`来模拟具有N个框的分段OTP UI。
  *
  * Features:
  * - Auto-masking of previous characters
@@ -147,15 +179,32 @@ internal fun CharacterContainer(
  * - Optional blinking cursor
  * - Optional error message display below the boxes
  *
+ * 特点：
+ * - 自动掩码之前的字符
+ * - 临时显示最后输入的字符
+ * - 可选的闪烁光标
+ * - 在框下方显示可选的错误消息
+ *
  * @param modifier Modifier for layout and styling
+ *                 用于布局和样式的修饰符
+ * @param otpTextFieldValue Current value and selection state of the text field
+ *                         文本字段的当前值和选择状态
  * @param otpLength Total number of characters to input (default: 6)
+ *                  要输入的字符总数（默认：6）
  * @param errorMessage Optional error message to show under the input field
+ *                     在输入字段下方显示的可选错误消息
  * @param enabled Whether input is enabled (disables interaction and color if false)
+ *                是否启用输入（如果为false，则禁用交互和颜色）
  * @param shouldShowCursor Whether to show a cursor in the focused box
+ *                         是否在聚焦的框中显示光标
  * @param visualTransformation Optional visual transformation (e.g., password masking)
+ *                            可选的视觉转换（例如，密码掩码）
  * @param mask Symbol used to mask characters (default: •)
+ *             用于掩码字符的符号（默认：•）
  * @param maskDelay Delay in milliseconds before the last typed character is masked again
+ *                  在最后输入的字符再次被掩码之前的延迟（毫秒）
  * @param onOtpModified Callback invoked when OTP input changes; provides the text and completion state
+ *                      当OTP输入更改时调用的回调；提供文本和完成状态
  */
 
 @Composable

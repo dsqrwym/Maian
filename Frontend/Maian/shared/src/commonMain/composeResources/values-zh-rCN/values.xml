@@ -9,6 +9,7 @@
     <string name="icon_content_description_lock">密码图标</string>
     <string name="icon_content_description_language">语言切换按钮</string>
     <string name="icon_content_description_password_toggle_visibility">切换密码可见性</string>
+    <string name="icon_content_description_dismiss">关闭</string>
 
     <!-- 状态描述 -->
     <string name="status_error_content_description">错误</string>
@@ -49,6 +50,11 @@
     <string name="validation_password_missing_lowercase">密码必须包含至少一个小写字母</string>
     <string name="validation_password_missing_digit">密码必须包含至少一个数字</string>
 
+    <!-- 登录相关提示 -->
+    <string name="login_success">登录成功</string>
+    <string name="login_error_username_or_password">用户名或者密码错误</string>
+    <string name="login_error_email_or_password">邮箱或者密码错误</string>
+
     <!-- ===================== 初始页 (Initial Screen) ===================== -->
     <string name="initial_screen_welcome">欢迎来到</string>
     <string name="initial_screen_platform_name">卖安平台</string>
@@ -78,6 +84,14 @@
     <string name="forgot_fill_otp">请填写验证码</string>
     <string name="forgot_otp_error">验证码错误</string>
     <string name="forgot_email_format_error">邮箱格式不正确</string>
+
+    <string name="error_no_transformation">发生错误，请稍后再试。</string>
+    <string name="error_serialization">服务器响应异常，请重试。</string>
+    <string name="error_connect_timeout">无法连接到服务器，请检查您的网络。</string>
+    <string name="error_socket_timeout">服务器响应超时，请稍后再试。</string>
+    <string name="error_io">发生网络错误，请检查您的连接。</string>
+    <string name="error_generic">网络请求失败，请重试。</string>
+
 
     <!-- 验证码相关 -->
     <string name="otp_resend">重新发送</string>

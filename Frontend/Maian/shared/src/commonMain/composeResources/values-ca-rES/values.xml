@@ -9,6 +9,8 @@
     <string name="icon_content_description_lock">Icona de contrasenya</string>
     <string name="icon_content_description_language">Botó per canviar l'idioma</string>
     <string name="icon_content_description_password_toggle_visibility">Mostra/amaga la contrasenya</string>
+    <string name="icon_content_description_dismiss">Tancar</string>
+
 
     <!-- Estat -->
     <string name="status_error_content_description">Error</string>
@@ -49,6 +51,11 @@
     <string name="validation_password_missing_lowercase">La contrasenya ha de contenir almenys una lletra minúscula</string>
     <string name="validation_password_missing_digit">La contrasenya ha de contenir almenys un número</string>
 
+    <string name="login_success">Inici de sessió correcte</string>
+    <string name="login_error_username_or_password">Nom d'usuari o contrasenya incorrectes</string>
+    <string name="login_error_email_or_password">Correu electrònic o contrasenya incorrectes</string>
+
+
     <!-- ===================== Pantalla inicial ===================== -->
     <string name="initial_screen_welcome">Benvingut a</string>
     <string name="initial_screen_platform_name">Plataforma MaiAn</string>
@@ -78,6 +85,14 @@
     <string name="forgot_fill_otp">Si us plau, introdueix el codi de verificació</string>
     <string name="forgot_otp_error">Codi de verificació incorrecte</string>
     <string name="forgot_email_format_error">Format de correu no vàlid</string>
+
+    <string name="error_no_transformation">Alguna cosa ha fallat. Torna-ho a intentar més tard.</string>
+    <string name="error_serialization">Resposta inesperada del servidor. Torna-ho a intentar.</string>
+    <string name="error_connect_timeout">No s’ha pogut connectar amb el servidor. Comprova la teua connexió a internet.</string>
+    <string name="error_socket_timeout">El servidor ha tardat massa a respondre. Torna-ho a intentar més tard.</string>
+    <string name="error_io">S’ha produït un error de xarxa. Comprova la teua connexió.</string>
+    <string name="error_generic">La sol·licitud de xarxa ha fallat. Torna-ho a intentar.</string>
+
 
     <!-- Codi OTP -->
     <string name="otp_resend">Reenviar</string>

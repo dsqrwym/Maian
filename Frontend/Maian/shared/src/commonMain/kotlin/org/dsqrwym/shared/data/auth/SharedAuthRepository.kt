@@ -3,7 +3,7 @@ package org.dsqrwym.shared.data.auth
 import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
 import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
 import org.dsqrwym.shared.network.SharedResponseResult
-import org.dsqrwym.shared.network.toSharedResponseResult
+import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
 import org.dsqrwym.shared.util.platform.getPlatformDeviceInfo
@@ -49,20 +49,19 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
         val isEmail = validateEmail(identifier)
         // Make the login API call
         // 发起登录API调用
-        val resp = api.login(
-            SharedLoginRequest(
-                password = password,
-                // Determine if the identifier is an email or username
-                email = if (isEmail) identifier else null,
-                username = if (!isEmail) identifier else null,
-                deviceName = deviceInfo.deviceName,
-                userAgent = deviceInfo.userAgent
+        val result = safeApiCall {
+            api.login(
+                SharedLoginRequest(
+                    password = password,
+                    // Determine if the identifier is an email or username
+                    email = if (isEmail) identifier else null,
+                    username = if (!isEmail) identifier else null,
+                    deviceName = deviceInfo.deviceName,
+                    userAgent = deviceInfo.userAgent
+                )
             )
-        )
+        }
 
-        // Handle the API response
-        // 处理API响应
-        val result = resp.toSharedResponseResult()
 
         if (result is SharedResponseResult.Success) {
             result.data?.let { data ->

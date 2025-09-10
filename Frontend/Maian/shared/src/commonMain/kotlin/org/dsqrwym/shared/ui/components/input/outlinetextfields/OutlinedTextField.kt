@@ -30,21 +30,53 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_password_toggle_visibility
 
 /**
+ * A reusable OutlinedTextField with icon support, password toggle, error states, and IME action handling.
  * 通用的带图标 OutlinedTextField 封装，支持密码隐藏/显示、错误提示、图标变色、IME 回车事件处理等。
  *
- * @param value 当前输入框中的文本内容
- * @param onValueChange 文本变化时的回调
- * @param error 错误信息文本，非 null 时显示为红色提示，并将边框标红
- * @param labelText 标签文本，显示在输入框上方
- * @param placeholderText 输入框未填写时的提示内容
- * @param leadingIcon 输入框前置图标
- * @param leadingIconContentDescription 图标的无障碍描述，可为 null
- * @param trailingIcon 可选的后置图标（如显示/隐藏密码），可传入自定义 Composable
- * @param isPassword 是否为密码输入框，控制是否启用密码隐藏逻辑
- * @param passwordVisibility 是否当前显示密码（与 isPassword 配合使用）
- * @param imeAction 设置键盘右下角行为（如 Next、Done）
- * @param onImeAction 用户点击键盘 IME 按钮后的回调
- * @param focusRequester 焦点控制器，用于手动请求焦点
+ * This composable provides a styled text field with the following features:
+ * - Leading and trailing icons with proper tinting
+ * - Password visibility toggle
+ * - Error state visualization
+ * - Custom IME actions
+ * - Focus handling
+ *
+ * 该可组合项提供具有以下功能的样式化文本字段：
+ * - 带有适当着色的前导和尾随图标
+ * - 密码可见性切换
+ * - 错误状态可视化
+ * - 自定义IME操作
+ * - 焦点处理
+ *
+ * @param enabled Controls the enabled state of the text field
+ *                控制文本字段的启用状态
+ * @param value The current text being shown in the text field
+ *              当前输入框中的文本内容
+ * @param onValueChange Callback that is triggered when the input service updates the text
+ *                      文本变化时的回调
+ * @param error Error message to be displayed below the text field
+ *              错误信息文本，非 null 时显示为红色提示，并将边框标红
+ * @param labelText The label to be displayed inside the text field container
+ *                  标签文本，显示在输入框上方
+ * @param placeholderText The placeholder text to be displayed when the text field is empty
+ *                        输入框未填写时的提示内容
+ * @param leadingIcon The icon to be displayed at the start of the text field
+ *                    输入框前置图标
+ * @param leadingIconContentDescription The content description for the accessibility service
+ *                                      图标的无障碍描述，可为 null
+ * @param trailingIcon The optional icon to be displayed at the end of the text field
+ *                     可选的后置图标（如显示/隐藏密码），可传入自定义 Composable
+ * @param isPassword Whether this field is for password input
+ *                   是否为密码输入框，控制是否启用密码隐藏逻辑
+ * @param passwordVisibility Whether the password is currently visible (only used if isPassword is true)
+ *                           是否当前显示密码（与 isPassword 配合使用）
+ * @param imeAction The IME action to be set on the text field
+ *                  设置键盘右下角行为（如 Next、Done）
+ * @param onImeAction Callback to be invoked when the IME action is performed
+ *                    用户点击键盘 IME 按钮后的回调
+ * @param semanticsPropertyReceiver Additional semantics for accessibility
+ *                                  额外的无障碍语义
+ * @param focusRequester The focus requester used for programmatic focus control
+ *                       焦点控制器，用于手动请求焦点
  */
 @Composable
 fun MyOutlinedTextField(
@@ -109,6 +141,45 @@ fun MyOutlinedTextField(
 }
 
 
+/**
+ * A pre-configured password field with visibility toggle functionality.
+ * 预配置的密码字段，带有可见性切换功能。
+ *
+ * This composable provides a complete password input solution with:
+ * - Secure text entry with optional visibility toggle
+ * - Error state visualization
+ * - IME action support
+ * - Accessibility features
+ * - Automatic content type for password managers
+ *
+ * 该可组合项提供完整的密码输入解决方案，包括：
+ * - 带有可选可见性切换的安全文本输入
+ * - 错误状态可视化
+ * - IME 操作支持
+ * - 无障碍功能
+ * - 密码管理器的自动内容类型
+ *
+ * @param enabled Controls the enabled state of the password field
+ *                控制密码字段的启用状态
+ * @param labelText The label to be displayed inside the password field container
+ *                  密码字段容器内显示的标签文本
+ * @param placeholderText The placeholder text to be displayed when the field is empty
+ *                        字段为空时显示的占位文本
+ * @param value The current password value
+ *              当前密码值
+ * @param onValueChange Callback triggered when the password changes
+ *                      密码更改时触发的回调
+ * @param error Error message to be displayed below the field
+ *              在字段下方显示的错误消息
+ * @param semanticsPropertyReceiver Additional semantics for accessibility
+ *                                  额外的无障碍语义
+ * @param focusRequester The focus requester for programmatic focus control
+ *                       用于编程控制焦点的焦点请求器
+ * @param imeAction The IME action to be set on the keyboard
+ *                  设置在键盘上的IME操作
+ * @param onImeAction Callback invoked when the IME action is performed
+ *                    执行IME操作时调用的回调
+ */
 @Composable
 fun MyPasswordField(
     enabled: Boolean = true,

@@ -11,7 +11,21 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import org.dsqrwym.shared.ui.components.containers.StateContent
 import org.dsqrwym.shared.ui.components.containers.UiState
-
+/**
+ * A customizable floating action button with built-in state management.
+ * 具有内置状态管理的可自定义浮动操作按钮。
+ *
+ * @param modifier The modifier to be applied to the button.
+ *                 应用于按钮的修饰符。
+ * @param enabled Whether the button is enabled for interaction.
+ *                按钮是否可交互。
+ * @param buttonState The current UI state of the button (Idle, Loading, Success, Error).
+ *                    按钮的当前UI状态（空闲、加载中、成功、错误）。
+ * @param onClick Callback when the button is clicked.
+ *                点击按钮时的回调。
+ * @param content The content to be displayed inside the button.
+ *                按钮内显示的内容。
+ */
 @Composable
 fun MyFloatingActionButton(
     modifier: Modifier = Modifier.animateContentSize(),
@@ -21,13 +35,13 @@ fun MyFloatingActionButton(
     content: @Composable () -> Unit
 ) {
 
-    // 颜色处理：根据 enabled 切换为 disabledContainer / contentColor
+    // Handle container color based on enabled state
+    // 根据启用状态处理容器颜色
     val containerColor = if (enabled) {
         MaterialTheme.colorScheme.primaryContainer
     } else {
         MaterialTheme.colorScheme.surfaceBright
     }
-
 
     FloatingActionButton(
         modifier = modifier.then(

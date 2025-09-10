@@ -9,6 +9,8 @@
     <string name="icon_content_description_lock">Icône mot de passe</string>
     <string name="icon_content_description_language">Bouton de changement de langue</string>
     <string name="icon_content_description_password_toggle_visibility">Afficher/masquer le mot de passe</string>
+    <string name="icon_content_description_dismiss">Fermer</string>
+
 
     <!-- États -->
     <string name="status_error_content_description">Erreur</string>
@@ -49,6 +51,11 @@
     <string name="validation_password_missing_lowercase">Le mot de passe doit contenir au moins une lettre minuscule</string>
     <string name="validation_password_missing_digit">Le mot de passe doit contenir au moins un chiffre</string>
 
+    <string name="login_success">Connexion réussie</string>
+    <string name="login_error_username_or_password">Nom d’utilisateur ou mot de passe incorrect</string>
+    <string name="login_error_email_or_password">E-mail ou mot de passe incorrect</string>
+
+
     <!-- ===================== Écran initial ===================== -->
     <string name="initial_screen_welcome">Bienvenue sur</string>
     <string name="initial_screen_platform_name">Plateforme MaiAn</string>
@@ -78,6 +85,14 @@
     <string name="forgot_fill_otp">Veuillez entrer le code de vérification</string>
     <string name="forgot_otp_error">Code de vérification incorrect</string>
     <string name="forgot_email_format_error">Format de l'email incorrect</string>
+
+    <string name="error_no_transformation">Une erreur est survenue. Veuillez réessayer plus tard.</string>
+    <string name="error_serialization">Réponse inattendue du serveur. Veuillez réessayer.</string>
+    <string name="error_connect_timeout">Impossible de se connecter au serveur. Vérifiez votre connexion internet.</string>
+    <string name="error_socket_timeout">Le serveur a mis trop de temps à répondre. Veuillez réessayer plus tard.</string>
+    <string name="error_io">Une erreur réseau est survenue. Vérifiez votre connexion.</string>
+    <string name="error_generic">La requête réseau a échoué. Veuillez réessayer.</string>
+
 
     <!-- Code OTP -->
     <string name="otp_resend">Renvoyer</string>

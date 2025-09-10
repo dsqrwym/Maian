@@ -9,6 +9,8 @@
     <string name="icon_content_description_lock">Password icon</string>
     <string name="icon_content_description_language">Language switch button</string>
     <string name="icon_content_description_password_toggle_visibility">Toggle password visibility</string>
+    <string name="icon_content_description_dismiss">Close</string>
+
 
     <!-- Status Descriptions -->
     <string name="status_error_content_description">Error</string>
@@ -50,6 +52,11 @@
     <string name="validation_password_missing_lowercase">Password must contain at least one lowercase letter</string>
     <string name="validation_password_missing_digit">Password must contain at least one number</string>
 
+    <string name="login_success">Login successful</string>
+    <string name="login_error_username_or_password">Incorrect username or password</string>
+    <string name="login_error_email_or_password">Incorrect email or password</string>
+
+
     <!-- ===================== Initial Screen ===================== -->
     <string name="initial_screen_welcome">Welcome to</string>
     <string name="initial_screen_platform_name">MaiAn Platform</string>
@@ -79,6 +86,14 @@
     <string name="forgot_fill_otp">Please enter verification code</string>
     <string name="forgot_otp_error">Invalid verification code</string>
     <string name="forgot_email_format_error">Invalid email format</string>
+
+    <string name="error_no_transformation">Something went wrong. Please try again later.</string>
+    <string name="error_serialization">Unexpected server response. Please try again.</string>
+    <string name="error_connect_timeout">Failed to connect to server. Please check your network.</string>
+    <string name="error_socket_timeout">Server response timed out. Please try again later.</string>
+    <string name="error_io">Network error occurred. Please check your connection.</string>
+    <string name="error_generic">Network request failed. Please try again.</string>
+
 
     <!-- OTP Related -->
     <string name="otp_resend">Resend</string>
