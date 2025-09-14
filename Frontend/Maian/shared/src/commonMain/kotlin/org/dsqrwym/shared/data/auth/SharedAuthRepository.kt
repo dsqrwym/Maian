@@ -1,7 +1,6 @@
 package org.dsqrwym.shared.data.auth
 
-import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
-import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
+import org.dsqrwym.shared.data.auth.dto.*
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.util.platform.PlatformType
@@ -76,6 +75,21 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
         }
 
         return result
+    }
+
+    suspend fun sendVerifyCode(sendVerificationCodeRequest: SharedSendVerificationCodeRequest): SharedResponseResult<Unit> {
+        return safeApiCall { api.sendCode(sendVerificationCodeRequest) }
+    }
+
+    suspend fun verifyCode(verifyCodeRequest: SharedVerifyCodeRequest): SharedResponseResult<SharedVerifyCodeResponse> {
+        return safeApiCall { api.verifyCode(verifyCodeRequest) }
+    }
+
+    suspend fun resetPassword(resetPasswordRequest: SharedResetPasswordRequest): SharedResponseResult<Unit> {
+        return safeApiCall { api.resetPassword(resetPasswordRequest) }
+    }
+    suspend fun logout(): SharedResponseResult<Unit> {
+        return safeApiCall { api.logout() }
     }
 }
 

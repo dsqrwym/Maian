@@ -16,6 +16,7 @@ import kotlinx.datetime.toLocalDateTime
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
+import org.dsqrwym.shared.data.local.UserPreferences
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.*
@@ -59,7 +60,6 @@ val LocalNavHostController = staticCompositionLocalOf<NavHostController> {
 fun AppRoot(
     content: @Composable (state: AuthState) -> Unit
 ) {
-    LanguageManager.followSystemLanguage()
     initSharedSettingsProvider()
 
     val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
@@ -72,6 +72,14 @@ fun AppRoot(
 
     val navController = rememberNavController()
 
+    val state by authSessionViewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        if (state is AuthState.Unauthenticated) {
+            LanguageManager.setLocaleLanguage(UserPreferences.getUserLanguage())
+        }
+    }
+
     CompositionLocalProvider(
         AppExtraColors provides appColors,
         LocalIsDarkTheme provides isDarkTheme,
@@ -83,7 +91,6 @@ fun AppRoot(
                 darkTheme = isDarkTheme,
                 typography = miSansNormalTypography()
             ) {
-                val state by authSessionViewModel.state.collectAsState()
                 LaunchedEffect(Unit) {
                     authSessionViewModel.effects.collect { event ->
                         when (event) {

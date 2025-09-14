@@ -156,7 +156,6 @@ exports.Prisma.Chat_participantsScalarFieldEnum = {
 };
 
 exports.Prisma.ConfigurationsScalarFieldEnum = {
-  id: 'id',
   user_id: 'user_id',
   language: 'language',
   timezone: 'timezone'
@@ -350,13 +349,14 @@ exports.Prisma.DirectionScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
-exports.Prisma.Password_reset_tokensScalarFieldEnum = {
+exports.Prisma.Verification_tokensScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   token: 'token',
   expires_at: 'expires_at',
   is_used: 'is_used',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  attempts: 'attempts'
 };
 
 exports.Prisma.SortOrder = {
@@ -440,7 +440,7 @@ exports.Prisma.ModelName = {
   users: 'users',
   variant_products: 'variant_products',
   direction: 'direction',
-  password_reset_tokens: 'password_reset_tokens'
+  verification_tokens: 'verification_tokens'
 };
 
 /**

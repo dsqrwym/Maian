@@ -3,7 +3,7 @@ import { Provider } from '@nestjs/common';
 import { Piscina } from 'piscina';
 import * as path from 'path';
 import * as os from 'os';
-import { ENV } from '../../config/constants';
+import { ENV } from '../../config/constants.config';
 
 // 定义注入标识符，方便在Nest中引用
 export const HASH_PROVIDE = 'HASH_WORKER_POOL';

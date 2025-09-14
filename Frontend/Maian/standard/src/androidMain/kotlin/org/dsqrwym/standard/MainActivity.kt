@@ -16,7 +16,7 @@ import org.dsqrwym.shared.theme.miSansNormalTypography
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.util.platform.AppContextProvider
 import org.dsqrwym.standard.di.standardInitKoin
-import org.dsqrwym.standard.ui.screens.auth.ForgotPasswordScreen
+import org.dsqrwym.standard.ui.screens.auth.ResetPasswordScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ fun PreviewScreen() {
                 .windowInsetsPadding(WindowInsets.systemBars)
         ) {
             AuthContainer {
-                ForgotPasswordScreen { }
+                ResetPasswordScreen { }
             }
         }
     }

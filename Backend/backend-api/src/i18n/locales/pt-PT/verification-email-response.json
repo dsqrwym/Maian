@@ -1,0 +1,5 @@
+{
+  "success": "Seu e-mail foi verificado com sucesso.",
+  "alreadyVerified": "Seu e-mail já foi verificado.",
+  "invalid": "Não é possível verificar, o link é inválido ou expirou."
+}

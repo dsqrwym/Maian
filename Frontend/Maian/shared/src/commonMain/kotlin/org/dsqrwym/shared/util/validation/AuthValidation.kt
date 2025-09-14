@@ -53,7 +53,7 @@ fun validatePassword(password: String): StringResource? {
 
 fun validateRepeatPassword(password: String, repeatPassword: String): StringResource? {
     if (password != repeatPassword) {
-        return SharedRes.string.forgot_repeat_password_mismatch
+        return SharedRes.string.reset_repeat_password_mismatch
     }
     return validatePassword(repeatPassword)
 }

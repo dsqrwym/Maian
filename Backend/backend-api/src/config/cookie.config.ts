@@ -1,7 +1,7 @@
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import fastifyCookie from '@fastify/cookie';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from './constants';
+import { ENV } from './constants.config';
 
 export async function useCookie(app: NestFastifyApplication) {
   // Prefer ConfigService (.env), fallback to process.env

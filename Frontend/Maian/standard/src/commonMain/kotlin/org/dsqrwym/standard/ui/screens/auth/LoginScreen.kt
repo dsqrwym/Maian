@@ -31,8 +31,8 @@ import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.validation.validateEmail
-import org.dsqrwym.standard.ui.viewmodels.auth.AuthViewModel
-import org.dsqrwym.standard.ui.viewmodels.auth.CurrentScreenState
+import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel
+import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel.CurrentScreenState
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
@@ -40,24 +40,24 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @Composable
 fun LoginScreen(
-    authViewModel: AuthViewModel = koinViewModel<AuthViewModel>(),
+    sharedAuthViewModel: SharedAuthViewModel = koinViewModel<SharedAuthViewModel>(),
     onBackButtonClick: () -> Unit = {},
     onForgetPasswordClick: () -> Unit = {}
 ) {
     LaunchedEffect(Unit) {
-        if (authViewModel.currentScreenState != CurrentScreenState.Login) {
-            authViewModel.initLogin()
+        if (sharedAuthViewModel.currentScreenState != CurrentScreenState.Login) {
+            sharedAuthViewModel.initLogin()
         }
     }
 
-    val usernameOrEmail = authViewModel.email
-    val password = authViewModel.password
+    val usernameOrEmail = sharedAuthViewModel.email
+    val password = sharedAuthViewModel.password
 
     // Validation states
-    val usernameOrEmailError = authViewModel.emailError
-    val passwordError = authViewModel.passwordError
-    val loginEnabled = authViewModel.loginEnabled
-    val loginUiState = authViewModel.loginUiState
+    val usernameOrEmailError = sharedAuthViewModel.emailError
+    val passwordError = sharedAuthViewModel.passwordError
+    val loginEnabled = sharedAuthViewModel.loginEnabled
+    val loginUiState = sharedAuthViewModel.loginUiState
 
     // 创建 FocusRequester 实例
     val passwordFocusRequester = remember { FocusRequester() }
@@ -66,11 +66,11 @@ fun LoginScreen(
         modifier = Modifier.padding(26.dp),
         usernameOrEmail = usernameOrEmail,
         onUsernameOrEmailChange = {
-            authViewModel.updateEmail(it)
+            sharedAuthViewModel.updateEmail(it)
         },
         password = password,
         onPasswordChange = {
-            authViewModel.updatePassword(it)
+            sharedAuthViewModel.updatePassword(it)
         },
         usernameOrEmailError = usernameOrEmailError.asString(),
         passwordError = passwordError.asString(),
@@ -80,7 +80,7 @@ fun LoginScreen(
         onBackButtonClick = onBackButtonClick,
         onForgetPasswordClick = onForgetPasswordClick,
         onLoginClick = {
-            authViewModel.login()
+            sharedAuthViewModel.login()
         }
     )
 }

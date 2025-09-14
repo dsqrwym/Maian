@@ -20,7 +20,9 @@ import org.dsqrwym.shared.ui.components.containers.FloatingBreathingBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.jetbrains.compose.resources.stringResource
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun InitialScreen(
     dev: Boolean = false,
@@ -29,7 +31,6 @@ fun InitialScreen(
     onLoginClick: () -> Unit = {}
 ) {
     var isNavEnabled by remember { mutableStateOf(if (dev) false else UserPreferences.isUserAgreed()) }
-
     Box(modifier = Modifier.fillMaxSize()) {
         LanguageSwitcherIconButton(modifier = Modifier.align(Alignment.TopEnd))
 

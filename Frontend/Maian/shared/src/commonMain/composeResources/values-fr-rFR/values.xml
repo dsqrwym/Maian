@@ -69,22 +69,22 @@
     <string name="agreement_section_privacy_policy">Politique de confidentialité</string>
 
     <!-- ===================== Mot de passe oublié ===================== -->
-    <string name="forgot_email_label">Email</string>
-    <string name="forgot_email_placeholder">Entrez votre email</string>
-    <string name="forgot_new_password_label">Nouveau mot de passe</string>
-    <string name="forgot_repeat_password_label">Répétez le mot de passe</string>
-    <string name="forgot_repeat_password_placeholder">Veuillez répéter le nouveau mot de passe</string>
-    <string name="forgot_repeat_password_mismatch">Le mot de passe entré ne correspond pas au nouveau mot de passe</string>
+    <string name="reset_email_label">Email</string>
+    <string name="reset_email_placeholder">Entrez votre email</string>
+    <string name="reset_new_password_label">Nouveau mot de passe</string>
+    <string name="reset_repeat_password_label">Répétez le mot de passe</string>
+    <string name="reset_repeat_password_placeholder">Veuillez répéter le nouveau mot de passe</string>
+    <string name="reset_repeat_password_mismatch">Le mot de passe entré ne correspond pas au nouveau mot de passe</string>
 
-    <string name="forgot_verify_email">Vérifier l'email</string>
-    <string name="forgot_verify">Vérifier</string>
-    <string name="forgot_change_password">Changer le mot de passe</string>
+    <string name="reset_verify_email">Vérifier l'email</string>
+    <string name="reset_verify">Vérifier</string>
+    <string name="reset_change_password">Changer le mot de passe</string>
 
     <!-- Messages d'erreur -->
-    <string name="forgot_unknown_error">Erreur inconnue</string>
-    <string name="forgot_fill_otp">Veuillez entrer le code de vérification</string>
-    <string name="forgot_otp_error">Code de vérification incorrect</string>
-    <string name="forgot_email_format_error">Format de l'email incorrect</string>
+    <string name="reset_unknown_error">Erreur inconnue</string>
+    <string name="reset_fill_otp">Veuillez entrer le code de vérification</string>
+    <string name="reset_otp_error">Code de vérification incorrect</string>
+    <string name="reset_email_format_error">Format de l'email incorrect</string>
 
     <string name="error_no_transformation">Une erreur est survenue. Veuillez réessayer plus tard.</string>
     <string name="error_serialization">Réponse inattendue du serveur. Veuillez réessayer.</string>
@@ -96,5 +96,27 @@
 
     <!-- Code OTP -->
     <string name="otp_resend">Renvoyer</string>
+    <string name="otp_send">Envoyer le code de vérification</string>
+
+    <!-- ===================== OTP & Réinitialisation du mot de passe ===================== -->
+    <string name="otp_code_sent">Code de vérification envoyé, veuillez vérifier votre e-mail</string>
+    <string name="otp_code_invalid_or_expired">Code invalide ou expiré</string>
+    <string name="otp_code_verified">Vérifié. Vous devez réinitialiser votre mot de passe avant le %1$s</string>
+    <plurals name="expire_seconds">
+        <item quantity="one">%1$d seconde</item>
+        <item quantity="other">%1$d secondes</item>
+    </plurals>
+    <plurals name="expire_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="expire_minutes_seconds">%1$s %2$s</string>
+    <string name="expire_prefix">dans %1$s</string>
+    <string name="expire_absolute">avant %1$s</string>
+
+    <string name="request_too_frequent">Trop de demandes, veuillez réessayer plus tard</string>
+    <string name="email_not_found">Adresse e-mail introuvable</string>
+
+    <string name="password_reset_success">Mot de passe modifié avec succès</string>
 
 </resources>

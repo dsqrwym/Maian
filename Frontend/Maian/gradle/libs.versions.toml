@@ -1,10 +1,10 @@
 [versions]
-agp = "8.11.0"
+agp = "8.11.1" #8.11.0
 android-compileSdk = "36"
 android-minSdk = "24"
 #noinspection OldTargetApi
 android-targetSdk = "35"
-androidx-activity = "1.10.1"
+androidx-activity = "1.11.0" #1.10.1
 androidx-lifecycle = "2.9.3" #2.9.1
 composeHotReload = "1.0.0-beta06" # 1.0.0-beta05
 composeMultiplatform = "1.8.2"

@@ -1,0 +1,64 @@
+// Global constants used across the application
+// 全局常量：在整个应用中复用，集中管理，避免硬编码与拼写错误
+
+// Keep trailing slash to match Nest's setGlobalPrefix current usage
+// 保持与 Nest setGlobalPrefix 的使用方式一致（路径前缀）
+export const GLOBAL_PREFIX = 'maian';
+
+// Path for the refresh-token web endpoint when used in cookies
+// 用于浏览器 Cookie 的 refresh token 接口路径
+export const REFRESH_TOKEN_COOKIE_PATH = `/${GLOBAL_PREFIX}/auth/refresh-token-web`;
+
+export const REFRESH_COOKIE_NAME = 'refresh_token';
+// Centralized environment variable keys to avoid typos
+// 统一管理环境变量键名，避免拼写错误，便于类型推断与维护
+export const ENV = {
+  // Auth
+  // 认证相关配置
+  AUTH_JWT_SECRET: 'AUTH_JWT_SECRET',
+  REFRESH_TOKEN_EXPIRES_IN: 'REFRESH_TOKEN_EXPIRES_IN',
+  ACCESS_TOKEN_EXPIRES_IN: 'ACCESS_TOKEN_EXPIRES_IN',
+  CSRF_TOKEN_SECRET: 'CSRF_TOKEN_SECRET',
+  MAX_SESSIONS_PER_USER: 'MAX_SESSIONS_PER_USER',
+
+  // Cookies
+  // Cookie 相关配置
+  COOKIE_SECRET: 'COOKIE_SECRET',
+
+  // Hash
+  // 哈希算法配置（例如 bcrypt 的盐轮次）
+  BCRYPT_SALT_ROUNDS: 'BCRYPT_SALT_ROUNDS',
+
+  // Redis
+  REDIS_CACHE_URL: 'REDIS_CACHE_URL',
+  REDIS_BULL_URL: 'REDIS_BULL_URL',
+
+  // Prisma
+  // Prisma 客户端相关超时/等待配置
+  PRISMA_MAX_WAIT: 'PRISMA_MAX_WAIT',
+  PRISMA_TIMEOUT: 'PRISMA_TIMEOUT',
+
+  // Mail
+  // 邮件服务配置
+  FROM_EMAIL: 'FROM_EMAIL',
+  MAIL_JWT_SECRET: 'MAIL_JWT_SECRET',
+  SMTP_HOST: 'SMTP_HOST',
+  SMTP_PORT: 'SMTP_PORT',
+  SMTP_USER: 'SMTP_USER',
+  SMTP_PASS: 'SMTP_PASS',
+  SMTP_RETRIES: 'SMTP_RETRIES',
+  SMTP_DELAY_TIME: 'SMTP_DELAY_TIME',
+
+  THROTTLER_TTL: 'THROTTLER_TTL',
+  THROTTLER_LIMIT: 'THROTTLER_LIMIT',
+  // Worker pool
+  // 任务线程池配置
+  WORKER_POOL_MAX_THREADS: 'WORKER_POOL_MAX_THREADS',
+  WORKER_POOL_IDLE_TIMEOUT: 'WORKER_POOL_IDLE_TIMEOUT',
+  WORKER_POOL_CONCURRENT_TASKS: 'WORKER_POOL_CONCURRENT_TASKS',
+
+  // Node process
+  // Node 进程级配置
+  NODE_ENV: 'NODE_ENV',
+  PORT: 'PORT',
+} as const;

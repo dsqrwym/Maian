@@ -1,0 +1,121 @@
+<resources>
+    <!-- ===================== Descrição comum (Content Description) ===================== -->
+    <string name="login_background_content_description">Fundo da página de login</string>
+    <string name="button_google_logo_content_description">Ícone do Google</string>
+    <string name="button_back_button_content_description">Botão de voltar</string>
+    <string name="button_wechat_logo_content_description">Ícone do WeChat</string>
+    <string name="icon_content_description_email">Ícone de e-mail</string>
+    <string name="icon_content_description_person">Ícone de utilizador</string>
+    <string name="icon_content_description_lock">Ícone de palavra-passe</string>
+    <string name="icon_content_description_language">Botão de mudança de idioma</string>
+    <string name="icon_content_description_password_toggle_visibility">Alternar visibilidade da palavra-passe</string>
+    <string name="icon_content_description_dismiss">Fechar</string>
+
+
+    <!-- Estado -->
+    <string name="status_error_content_description">Erro</string>
+    <string name="status_completed_content_description">Concluído</string>
+    <string name="status_in_progress_content_description">Em progresso</string>
+
+    <!-- ===================== Ecrã de login (Login Screen) ===================== -->
+    <string name="login_title">Iniciar sessão</string>
+    <string name="login_subtitle">Por favor, inicie sessão para continuar</string>
+
+    <string name="session_expired">A sessão expirou, por favor inicie sessão novamente</string>
+    <string name="session_revoked">A conta foi terminada noutro dispositivo ou pelo administrador</string>
+    <string name="csrf_invalid">A verificação de segurança falhou, atualize a página ou volte a iniciar sessão</string>
+    <string name="session_not_found">Sessão inválida, por favor inicie sessão novamente</string>
+
+    <!-- Botões de login -->
+    <string name="button_login">Entrar</string>
+    <string name="button_forget_password">Esqueceu-se da palavra-passe</string>
+    <string name="button_other_login_methods">Outros métodos de login</string>
+    <string name="button_google_login">Entrar com Google</string>
+    <string name="button_wechat_login">Entrar com WeChat</string>
+    <string name="button_register_new_account">Registar nova conta</string>
+
+    <!-- Campos de login -->
+    <string name="field_username_or_email_label">Nome de utilizador ou e-mail</string>
+    <string name="field_username_or_email_placeholder">Introduza o nome de utilizador ou e-mail</string>
+    <string name="field_password_label">Palavra-passe</string>
+    <string name="field_password_placeholder">Introduza a palavra-passe</string>
+
+    <!-- Validações -->
+    <string name="validation_username_or_email_empty">O nome de utilizador ou e-mail não pode estar vazio</string>
+    <string name="validation_username_cannot_contain_at">O nome de utilizador não pode conter “@”</string>
+    <string name="validation_username_length_invalid">O nome de utilizador deve ter entre 3 e 30 caracteres</string>
+    <string name="validation_email_domain_not_supported">O domínio example.com não é suportado</string>
+    <string name="validation_password_empty">A palavra-passe não pode estar vazia</string>
+    <string name="validation_password_too_short">A palavra-passe deve ter pelo menos 6 caracteres</string>
+    <string name="validation_password_missing_uppercase">A palavra-passe deve conter pelo menos uma letra maiúscula</string>
+    <string name="validation_password_missing_lowercase">A palavra-passe deve conter pelo menos uma letra minúscula</string>
+    <string name="validation_password_missing_digit">A palavra-passe deve conter pelo menos um número</string>
+
+    <!-- Mensagens de login -->
+    <string name="login_success">Sessão iniciada com sucesso</string>
+    <string name="login_error_username_or_password">Nome de utilizador ou palavra-passe incorretos</string>
+    <string name="login_error_email_or_password">E-mail ou palavra-passe incorretos</string>
+
+    <!-- ===================== Ecrã inicial (Initial Screen) ===================== -->
+    <string name="initial_screen_welcome">Bem-vindo ao</string>
+    <string name="initial_screen_platform_name">Plataforma MaiAn</string>
+    <string name="initial_screen_instruction">Por favor, escolha iniciar sessão ou registar-se para continuar</string>
+    <string name="initial_screen_quick_login_hint">⏫ Suporte para login rápido com Google e WeChat ⏫</string>
+
+    <!-- Termos & Privacidade -->
+    <string name="agreement_warning">Aceite os Termos de Utilização e a Política de Privacidade para continuar</string>
+    <string name="agreement_section_agreement_text_template">Li e concordo com os “%s” e a “%s”</string>
+    <string name="agreement_section_user_agreement">Termos de Utilização</string>
+    <string name="agreement_section_privacy_policy">Política de Privacidade</string>
+
+    <!-- ===================== Recuperar palavra-passe (Reset Password) ===================== -->
+    <string name="reset_email_label">E-mail</string>
+    <string name="reset_email_placeholder">Introduza o e-mail</string>
+    <string name="reset_new_password_label">Nova palavra-passe</string>
+    <string name="reset_repeat_password_label">Repetir nova palavra-passe</string>
+    <string name="reset_repeat_password_placeholder">Repita a nova palavra-passe</string>
+    <string name="reset_repeat_password_mismatch">As palavras-passe não coincidem</string>
+
+    <string name="reset_verify_email">Verificar e-mail</string>
+    <string name="reset_verify">Verificar</string>
+    <string name="reset_change_password">Alterar palavra-passe</string>
+
+    <!-- Mensagens de erro -->
+    <string name="reset_unknown_error">Erro desconhecido</string>
+    <string name="reset_fill_otp">Introduza o código de verificação</string>
+    <string name="reset_otp_error">Código de verificação incorreto</string>
+    <string name="reset_email_format_error">Formato de e-mail inválido</string>
+
+    <string name="error_no_transformation">Ocorreu um erro, tente novamente mais tarde.</string>
+    <string name="error_serialization">Resposta do servidor inválida, tente novamente.</string>
+    <string name="error_connect_timeout">Não foi possível ligar ao servidor, verifique a sua ligação à internet.</string>
+    <string name="error_socket_timeout">Tempo de resposta do servidor excedido, tente novamente mais tarde.</string>
+    <string name="error_io">Erro de rede, verifique a sua ligação.</string>
+    <string name="error_generic">Falha na requisição, tente novamente.</string>
+
+    <!-- Código OTP -->
+    <string name="otp_resend">Reenviar</string>
+    <string name="otp_send">Enviar código de verificação</string>
+
+    <!-- ===================== OTP & Redefinição de palavra-passe ===================== -->
+    <string name="otp_code_sent">Código de verificação enviado, verifique o seu e-mail</string>
+    <string name="otp_code_invalid_or_expired">Código inválido ou expirado</string>
+    <string name="otp_code_verified">Verificado. Precisa de redefinir a palavra-passe até %1$s</string>
+    <plurals name="expire_seconds">
+        <item quantity="one">%1$d segundo</item>
+        <item quantity="other">%1$d segundos</item>
+    </plurals>
+    <plurals name="expire_minutes">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <string name="expire_minutes_seconds">%1$s %2$s</string>
+    <string name="expire_prefix">em %1$s</string>
+    <string name="expire_absolute">antes de %1$s</string>
+
+    <string name="request_too_frequent">Muitas solicitações, tente novamente mais tarde</string>
+    <string name="email_not_found">E-mail não encontrado</string>
+
+    <string name="password_reset_success">Palavra-passe alterada com sucesso</string>
+
+</resources>

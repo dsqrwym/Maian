@@ -64,27 +64,27 @@
     <string name="agreement_section_privacy_policy">Política de Privacidad</string>
 
     <!-- ===================== Olvidé mi contraseña ===================== -->
-    <string name="forgot_email_label">Correo electrónico</string>
-    <string name="forgot_email_placeholder">Introduce tu correo</string>
-    <string name="forgot_new_password_label">Nueva contraseña</string>
-    <string name="forgot_repeat_password_label">Repetir nueva contraseña</string>
-    <string name="forgot_repeat_password_placeholder">Vuelve a introducir la nueva contraseña</string>
-    <string name="forgot_repeat_password_mismatch">La contraseña introducida no coincide con la nueva</string>
+    <string name="reset_email_label">Correo electrónico</string>
+    <string name="reset_email_placeholder">Introduce tu correo</string>
+    <string name="reset_new_password_label">Nueva contraseña</string>
+    <string name="reset_repeat_password_label">Repetir nueva contraseña</string>
+    <string name="reset_repeat_password_placeholder">Vuelve a introducir la nueva contraseña</string>
+    <string name="reset_repeat_password_mismatch">La contraseña introducida no coincide con la nueva</string>
 
     <string name="login_success">Inicio de sesión exitoso</string>
     <string name="login_error_username_or_password">Usuario o contraseña incorrectos</string>
     <string name="login_error_email_or_password">Correo electrónico o contraseña incorrectos</string>
 
 
-    <string name="forgot_verify_email">Verificar correo</string>
-    <string name="forgot_verify">Verificar</string>
-    <string name="forgot_change_password">Cambiar contraseña</string>
+    <string name="reset_verify_email">Verificar correo</string>
+    <string name="reset_verify">Verificar</string>
+    <string name="reset_change_password">Cambiar contraseña</string>
 
     <!-- Mensajes de error -->
-    <string name="forgot_unknown_error">Error desconocido</string>
-    <string name="forgot_fill_otp">Por favor, introduce el código de verificación</string>
-    <string name="forgot_otp_error">Código de verificación incorrecto</string>
-    <string name="forgot_email_format_error">Formato de correo no válido</string>
+    <string name="reset_unknown_error">Error desconocido</string>
+    <string name="reset_fill_otp">Por favor, introduce el código de verificación</string>
+    <string name="reset_otp_error">Código de verificación incorrecto</string>
+    <string name="reset_email_format_error">Formato de correo no válido</string>
 
     <string name="error_no_transformation">Algo salió mal. Inténtalo de nuevo más tarde.</string>
     <string name="error_serialization">Respuesta inesperada del servidor. Inténtalo de nuevo.</string>
@@ -96,5 +96,27 @@
 
     <!-- Código OTP -->
     <string name="otp_resend">Reenviar</string>
+    <string name="otp_send">Enviar código de verificación</string>
+
+    <!-- ===================== OTP & Restablecer contraseña ===================== -->
+    <string name="otp_code_sent">Código de verificación enviado, revisa tu correo</string>
+    <string name="otp_code_invalid_or_expired">Código inválido o caducado</string>
+    <string name="otp_code_verified">Verificado. Debes restablecer tu contraseña antes de %1$s</string>
+    <plurals name="expire_seconds">
+        <item quantity="one">%1$d segundo</item>
+        <item quantity="other">%1$d segundos</item>
+    </plurals>
+    <plurals name="expire_minutes">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <string name="expire_minutes_seconds">%1$s %2$s</string>
+    <string name="expire_prefix">%1$s</string>
+    <string name="expire_absolute">antes de %1$s</string>
+
+    <string name="request_too_frequent">Demasiadas solicitudes, inténtalo de nuevo más tarde</string>
+    <string name="email_not_found">Correo electrónico no encontrado</string>
+
+    <string name="password_reset_success">Contraseña cambiada con éxito</string>
 
 </resources>

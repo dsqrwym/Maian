@@ -11,6 +11,7 @@
     <string name="icon_content_description_password_toggle_visibility">切换密码可见性</string>
     <string name="icon_content_description_dismiss">关闭</string>
 
+
     <!-- 状态描述 -->
     <string name="status_error_content_description">错误</string>
     <string name="status_completed_content_description">完成</string>
@@ -67,23 +68,23 @@
     <string name="agreement_section_user_agreement">用户协议</string>
     <string name="agreement_section_privacy_policy">隐私政策</string>
 
-    <!-- ===================== 忘记密码 (Forgot Password) ===================== -->
-    <string name="forgot_email_label">邮箱</string>
-    <string name="forgot_email_placeholder">请输入邮箱</string>
-    <string name="forgot_new_password_label">新密码</string>
-    <string name="forgot_repeat_password_label">重复新密码</string>
-    <string name="forgot_repeat_password_placeholder">请重复新密码</string>
-    <string name="forgot_repeat_password_mismatch">输入的密码与新密码不同</string>
+    <!-- ===================== 忘记密码 (Reset Password) ===================== -->
+    <string name="reset_email_label">邮箱</string>
+    <string name="reset_email_placeholder">请输入邮箱</string>
+    <string name="reset_new_password_label">新密码</string>
+    <string name="reset_repeat_password_label">重复新密码</string>
+    <string name="reset_repeat_password_placeholder">请重复新密码</string>
+    <string name="reset_repeat_password_mismatch">输入的密码与新密码不同</string>
 
-    <string name="forgot_verify_email">验证邮箱</string>
-    <string name="forgot_verify">验证</string>
-    <string name="forgot_change_password">更改密码</string>
+    <string name="reset_verify_email">验证邮箱</string>
+    <string name="reset_verify">验证</string>
+    <string name="reset_change_password">更改密码</string>
 
     <!-- 错误提示 -->
-    <string name="forgot_unknown_error">未知错误</string>
-    <string name="forgot_fill_otp">请填写验证码</string>
-    <string name="forgot_otp_error">验证码错误</string>
-    <string name="forgot_email_format_error">邮箱格式不正确</string>
+    <string name="reset_unknown_error">未知错误</string>
+    <string name="reset_fill_otp">请填写验证码</string>
+    <string name="reset_otp_error">验证码错误</string>
+    <string name="reset_email_format_error">邮箱格式不正确</string>
 
     <string name="error_no_transformation">发生错误，请稍后再试。</string>
     <string name="error_serialization">服务器响应异常，请重试。</string>
@@ -95,5 +96,27 @@
 
     <!-- 验证码相关 -->
     <string name="otp_resend">重新发送</string>
+    <string name="otp_send">发送验证码</string>
+
+    <!-- ===================== 验证码 & 重置密码提示 ===================== -->
+    <string name="otp_code_sent">验证码已发送，请查看邮箱</string>
+    <string name="otp_code_invalid_or_expired">验证码错误或已过期</string>
+    <string name="otp_code_verified">验证通过，您需要在 %1$s 重置密码</string>
+    <plurals name="expire_seconds">
+        <item quantity="one">%1$d 秒</item>
+        <item quantity="other">%1$d 秒</item>
+    </plurals>
+    <plurals name="expire_minutes">
+        <item quantity="one">%1$d 分钟</item>
+        <item quantity="other">%1$d 分钟</item>
+    </plurals>
+    <string name="expire_minutes_seconds">%1$s %2$s</string>
+    <string name="expire_prefix">%1$s 内</string>
+    <string name="expire_absolute">%1$s 前</string>
+
+    <string name="request_too_frequent">请求过于频繁，请稍后再试</string>
+    <string name="email_not_found">该邮箱不存在</string>
+
+    <string name="password_reset_success">密码更改成功</string>
 
 </resources>

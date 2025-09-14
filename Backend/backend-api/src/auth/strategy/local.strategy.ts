@@ -32,6 +32,13 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'custom-local') {
       where: {
         OR: [{ username }, { email }],
       },
+      select: {
+        id: true,
+        user_id: true,
+        role: true,
+        status: true,
+        password: true,
+      },
     });
 
     if (!user) {

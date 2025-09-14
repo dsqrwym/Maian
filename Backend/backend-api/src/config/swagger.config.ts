@@ -27,6 +27,7 @@ export function useSwagger(app: INestApplication) {
   SwaggerModule.setup('maian/api-docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
+      withCredentials: true,
       displayRequestDuration: true,
     },
   });

@@ -5,7 +5,7 @@ import {
   HttpException,
   Injectable,
 } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
@@ -15,8 +15,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const request = ctx.getRequest();
+
+    const request: FastifyRequest = ctx.getRequest();
     const status = exception.getStatus();
 
     const exceptionResponse = exception.getResponse();
@@ -36,9 +36,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     // 记录日志
     this.logger.error(
       {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
         path: request.url,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+
         method: request.method,
         statusCode: status,
         errorResponse,

@@ -23,12 +23,12 @@ import {
   ApiResponse,
   ApiTags,
   ApiBadRequestResponse,
-  ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiUnauthorizedResponse,
   ApiCookieAuth,
   ApiNotFoundResponse,
+  ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { LoginDto } from './dto/login.dto';
@@ -38,22 +38,35 @@ import { JwtAuthGuard, LocalAuthGuard } from './guard/auth.guard';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ConfigService } from '@nestjs/config';
 import {
-  AUTH_ERROR,
   ENV,
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_PATH,
-} from 'src/config/constants';
+} from 'src/config/constants.config';
+import { AUTH_ERROR } from './auth.constants';
 import { JwtService } from '@nestjs/jwt';
 import { CSRFPayload } from './auth.types';
+import {
+  ResetPasswordDto,
+  SendVerificationCodeDto,
+  VerifyCodeDto,
+} from './dto/reset-password.dto';
+import { Logger } from 'nestjs-pino';
+import { seconds, Throttle } from '@nestjs/throttler';
+import { maskEmail } from '../common/formatter/emial-format';
+import { VerifyCodeResponseDto } from './dto/reset-password-response.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
 @ApiExtraModels(RegisterDto, LoginDto, DeleteSessionDto, RefreshTokenDto)
 export class AuthController {
+  private static ACCESS_TOKEN_TTL = Number(
+    process.env[ENV.ACCESS_TOKEN_EXPIRES_IN],
+  );
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    private readonly logger: Logger,
   ) {}
 
   @Get('verify-email')
@@ -89,6 +102,7 @@ export class AuthController {
     @Query('token') token: string,
     @Res() res: FastifyReply,
   ) {
+    this.logger.debug({ lang }, '[AuthController] verify-email request');
     return this.authService.verifyEmail(token, lang, res);
   }
 
@@ -137,10 +151,71 @@ export class AuthController {
       },
     },
   })
-  @ApiCreatedResponse({ description: 'User successfully registered' })
-  @ApiBadRequestResponse({ description: 'Invalid input data' })
-  @ApiConflictResponse({ description: 'Email already exists' })
+  @ApiCreatedResponse({
+    description: 'User successfully registered',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' },
+        email: { type: 'string', example: 'retailer@domain.com' },
+        username: { type: 'string', nullable: true, example: 'retailer_01' },
+        first_name: { type: 'string', nullable: true, example: 'JOHN' },
+        last_name: { type: 'string', nullable: true, example: 'SMITH' },
+        telephone: { type: 'string', nullable: true, example: '+34123456789' },
+        role: { type: 'number', example: 0 },
+        profile: {
+          type: 'object',
+          nullable: true,
+          example: {
+            type: 'RETAILER',
+            document: 'B12345678',
+            company: 'MY SHOP SL',
+          },
+        },
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid input data or conflicts',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 400 },
+            message: {
+              type: 'string',
+              description: 'Error code',
+            },
+            error: { type: 'string', example: 'Bad Request' },
+          },
+        },
+        examples: {
+          emailConflict: {
+            summary: 'Email already exists',
+            value: {
+              statusCode: 400,
+              message: AUTH_ERROR.EMAIL_CONFLICT,
+              error: 'Bad Request',
+            },
+          },
+          usernameConflict: {
+            summary: 'Username already exists',
+            value: {
+              statusCode: 400,
+              message: AUTH_ERROR.USERNAME_CONFLICT,
+              error: 'Bad Request',
+            },
+          },
+        },
+      },
+    },
+  })
   async register(@Body() body: RegisterDto) {
+    this.logger.debug(
+      { email: maskEmail(body.email) },
+      '[AuthController] register',
+    );
     return this.authService.register(body);
   }
 
@@ -181,9 +256,14 @@ export class AuthController {
   async login(@Req() req: FastifyRequest, @Body() body: LoginDto) {
     const user = req.user.authenticatedUser;
     if (!user) {
-      throw new BadRequestException('User authentication failed');
+      this.logger.warn({ ip: req.ip }, '[AuthController] login user missing');
+      throw new BadRequestException(AUTH_ERROR.NO_AUTH_PAYLOAD);
     }
 
+    this.logger.debug(
+      { userId: user.id, ip: req.ip, device: body.deviceName },
+      '[AuthController] login',
+    );
     const { token } = await this.authService.login(req, user, body);
     return token;
   }
@@ -193,7 +273,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Web login: returns accessToken and sets refresh_token cookie',
     description:
-      '适用于浏览器场景：返回 accessToken；通过 Set-Cookie 写入 httpOnly/secure 的 refresh_token。',
+      'For browser-based clients: returns accessToken and sets an httpOnly/secure refresh_token via Set-Cookie.',
   })
   @ApiBody({
     description: 'User login credentials',
@@ -221,7 +301,7 @@ export class AuthController {
   })
   @ApiOkResponse({
     description:
-      'User successfully logged in. Web 流程中：响应体的 refreshToken 字段承载 CSRF Token；响应头通过 Set-Cookie 写入真实的 refresh_token。',
+      'User successfully logged in. Web flow: the response body refreshToken carries the CSRF token; the response header sets the real refresh_token via Set-Cookie.',
     type: TokenResponseDto,
     headers: {
       'Set-Cookie': {
@@ -241,8 +321,17 @@ export class AuthController {
   ) {
     const user = req.user.authenticatedUser;
     if (!user) {
-      throw new BadRequestException('User authentication failed');
+      this.logger.warn(
+        { ip: req.ip },
+        '[AuthController] login-web user missing',
+      );
+      throw new BadRequestException(AUTH_ERROR.NO_AUTH_PAYLOAD);
     }
+
+    this.logger.debug(
+      { userId: user.id, ip: req.ip, device: body.deviceName },
+      '[AuthController] login-web',
+    );
 
     const { token, payload } = await this.authService.login(req, user, body);
     // Web: 设置 cookie（httpOnly, secure, sameSite）
@@ -254,10 +343,17 @@ export class AuthController {
       maxAge: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
     });
 
+    this.logger.debug(
+      { userId: user.id, sessionId: payload.sessionId },
+      '[AuthController] login-web set refresh cookie',
+    );
+
     const csrfTokenPayload: CSRFPayload = {
       sessionId: payload.sessionId,
       deviceFinger: payload.deviceFinger,
     };
+
+    // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
 
     const csrfToken = await this.jwtService.signAsync(csrfTokenPayload, {
       expiresIn: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
@@ -274,27 +370,31 @@ export class AuthController {
 
   @Post('refresh-token')
   @HttpCode(200)
+  @Throttle({
+    default: { limit: 1, ttl: seconds(AuthController.ACCESS_TOKEN_TTL) },
+  })
   @ApiOperation({
-    summary: 'Refresh tokens (Body only)',
+    summary: 'Refresh tokens (body-only)',
     description:
-      '非 Web 场景：在请求体中提供 { refreshToken } 完成刷新；不涉及 Cookie。',
+      'Non-web clients: provide { refreshToken } in the request body. Cookies are not involved.',
   })
   @ApiBody({
-    description: '非浏览器/不使用 Cookie 的客户端在 Body 中提供 refreshToken。',
+    description:
+      'For non-browser clients, provide refreshToken in the request body.',
     type: RefreshTokenDto,
     examples: {
       bodyExample: {
-        summary: 'Body 传入 refreshToken',
+        summary: 'Provide refreshToken in request body',
         value: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
       },
     },
   })
   @ApiOkResponse({
-    description: 'Returns new accessToken and refreshToken。',
+    description: 'Returns new accessToken and refreshToken.',
     type: TokenResponseDto,
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized. 可能的认证错误码详见 examples',
+    description: 'Unauthorized. See examples for possible error codes.',
     content: {
       'application/json': {
         schema: {
@@ -303,23 +403,15 @@ export class AuthController {
             statusCode: { type: 'number', example: 401 },
             message: {
               type: 'string',
-              description: '错误码（用于前端区分场景）',
+              description: 'Error code (for frontend handling)',
               example: AUTH_ERROR.SESSION_NOT_FOUND,
             },
             error: { type: 'string', example: 'Unauthorized' },
           },
         },
         examples: {
-          csrfInvalid: {
-            summary: 'CSRF 校验失败',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.CSRF_INVALID,
-              error: 'Unauthorized',
-            },
-          },
           sessionNotFound: {
-            summary: '会话不存在/被踢出/过期/refresh 无效',
+            summary: 'Session not found/kicked/expired/refresh invalid',
             value: {
               statusCode: 401,
               message: AUTH_ERROR.SESSION_NOT_FOUND,
@@ -327,10 +419,18 @@ export class AuthController {
             },
           },
           sessionRevoked: {
-            summary: '会话被撤销（用户主动退出）',
+            summary: 'Session revoked (user logout)',
             value: {
               statusCode: 401,
               message: AUTH_ERROR.SESSION_REVOKED,
+              error: 'Unauthorized',
+            },
+          },
+          invalidRefresh: {
+            summary: 'Refresh token invalid (possible reuse/mismatch)',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.INVALID_REFRESH_TOKEN,
               error: 'Unauthorized',
             },
           },
@@ -341,44 +441,51 @@ export class AuthController {
   async getAccessToken(@Body() body: RefreshTokenDto) {
     const refreshToken = body?.refreshToken;
     if (!refreshToken) {
-      throw new BadRequestException('No refresh token provided');
+      this.logger.warn({}, '[AuthController] refresh-token missing');
+      throw new BadRequestException(AUTH_ERROR.NO_REFRESH_TOKEN);
     }
 
+    this.logger.debug({}, '[AuthController] refresh-token');
     const result = await this.authService.getAccessToken(refreshToken);
     return result.token;
   }
 
   @Post('refresh-token-web')
   @HttpCode(200)
+  @Throttle({
+    default: { limit: 1, ttl: seconds(AuthController.ACCESS_TOKEN_TTL) },
+  })
   @ApiOperation({
-    summary: 'Web 刷新：Cookie+CSRF（Body.refreshToken）并轮换 refresh_token',
+    summary:
+      'Web refresh: Cookie + CSRF (Body.refreshToken) with refresh_token rotation',
     description:
-      '浏览器场景：从 Cookie 读取真实 refresh_token；请求体的 refreshToken 字段承载 CSRF Token（与会话绑定）。校验通过后，响应通过 Set-Cookie 写入新的 refresh_token（轮换），响应体返回新的 accessToken 与新的 CSRF（依旧在 refreshToken 字段）。',
+      'Browser flow: read the real refresh_token from cookies; the request body refreshToken carries the CSRF token (bound to the session). After validation, a new refresh_token is set via Set-Cookie (rotation) and the response body returns a new accessToken and new CSRF token (still in refreshToken field).',
   })
   @ApiBody({
     description:
-      'Web 刷新必须在 Body.refreshToken 传入 CSRF Token。真实 refresh_token 从 Cookie 自动发送（名称：refresh_token）。',
+      'Web refresh must pass the CSRF token in Body.refreshToken. The real refresh_token is sent automatically via Cookie (name: refresh_token).',
     type: RefreshTokenDto,
     examples: {
       webRefresh: {
-        summary: 'Web 刷新（Cookie 自动携带 refresh_token；Body 传 CSRF）',
+        summary:
+          'Web refresh (cookie carries refresh_token; body carries CSRF)',
         value: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.CSRF...' },
       },
     },
   })
   @ApiOkResponse({
     description:
-      'Returns new accessToken and refreshToken. 若使用 Cookie，响应头 Set-Cookie 会写入新的 refresh_token（轮换）。',
+      'Returns new accessToken and refreshToken. If using cookies, a rotated refresh_token is set via Set-Cookie.',
     type: TokenResponseDto,
     headers: {
       'Set-Cookie': {
-        description: `当请求携带 Cookie 时，返回新的 refresh_token；HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'`,
+        description: `When cookies are included, a new refresh_token is returned; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'`,
         schema: { type: 'string' },
       },
     },
   })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized. 可能的认证错误码详见 examples',
+    description: 'Unauthorized. See examples for possible error codes.',
     content: {
       'application/json': {
         schema: {
@@ -387,7 +494,7 @@ export class AuthController {
             statusCode: { type: 'number', example: 401 },
             message: {
               type: 'string',
-              description: '错误码（用于前端区分场景）',
+              description: 'Error code (for frontend handling)',
               example: AUTH_ERROR.SESSION_NOT_FOUND,
             },
             error: { type: 'string', example: 'Unauthorized' },
@@ -395,7 +502,7 @@ export class AuthController {
         },
         examples: {
           csrfInvalid: {
-            summary: 'CSRF 校验失败',
+            summary: 'CSRF verification failed',
             value: {
               statusCode: 401,
               message: AUTH_ERROR.CSRF_INVALID,
@@ -403,7 +510,7 @@ export class AuthController {
             },
           },
           sessionNotFound: {
-            summary: '会话不存在/被踢出/过期/refresh 无效',
+            summary: 'Session not found/kicked/expired/refresh invalid',
             value: {
               statusCode: 401,
               message: AUTH_ERROR.SESSION_NOT_FOUND,
@@ -411,10 +518,18 @@ export class AuthController {
             },
           },
           sessionRevoked: {
-            summary: '会话被撤销（用户主动退出）',
+            summary: 'Session revoked (user logout)',
             value: {
               statusCode: 401,
               message: AUTH_ERROR.SESSION_REVOKED,
+              error: 'Unauthorized',
+            },
+          },
+          invalidRefresh: {
+            summary: 'Refresh token invalid (possible reuse/mismatch)',
+            value: {
+              statusCode: 401,
+              message: AUTH_ERROR.INVALID_REFRESH_TOKEN,
               error: 'Unauthorized',
             },
           },
@@ -435,18 +550,21 @@ export class AuthController {
     const csrfToken = body.refreshToken;
 
     if (!refreshToken) {
-      throw new BadRequestException('No refresh token provided');
+      this.logger.warn(
+        { ip: req.ip },
+        '[AuthController] refresh-token-web no cookie',
+      );
+      throw new BadRequestException(AUTH_ERROR.NO_REFRESH_TOKEN);
     }
     const result = await this.authService.getAccessToken(
       refreshToken,
       csrfToken,
     );
 
-    const csrfPayload: CSRFPayload = {
-      sessionId: result.payload.sessionId,
-      deviceFinger: result.payload.deviceFinger,
-    };
-
+    this.logger.debug(
+      { sessionId: result.payload.sessionId },
+      '[AuthController] refresh-token-web rotating cookie',
+    );
     // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
 
     res.setCookie(REFRESH_COOKIE_NAME, result.token.refreshToken, {
@@ -456,6 +574,11 @@ export class AuthController {
       path: REFRESH_TOKEN_COOKIE_PATH,
       maxAge: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
     });
+
+    const csrfPayload: CSRFPayload = {
+      sessionId: result.payload.sessionId,
+      deviceFinger: result.payload.deviceFinger,
+    };
 
     result.token.refreshToken = await this.jwtService.signAsync(csrfPayload, {
       expiresIn: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
@@ -467,9 +590,20 @@ export class AuthController {
 
   @Delete('logout')
   @ApiOperation({ summary: 'Logout current session' })
-  @ApiOkResponse({ description: 'Successfully logged out' })
+  @ApiOkResponse({
+    description: 'Successfully logged out',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Session successfully revoked',
+        },
+      },
+    },
+  })
   @ApiUnauthorizedResponse({
-    description: 'Unauthorized. 可能的认证错误码详见 examples',
+    description: 'Unauthorized. See examples for possible error codes.',
     content: {
       'application/json': {
         schema: {
@@ -478,7 +612,7 @@ export class AuthController {
             statusCode: { type: 'number', example: 401 },
             message: {
               type: 'string',
-              description: '错误码（用于前端区分场景）',
+              description: 'Error code (for frontend handling)',
               example: AUTH_ERROR.SESSION_REVOKED,
             },
             error: { type: 'string', example: 'Unauthorized' },
@@ -486,7 +620,7 @@ export class AuthController {
         },
         examples: {
           revoked: {
-            summary: '会话被撤销（黑名单命中/用户主动退出后）',
+            summary: 'Session revoked (blacklist hit / user logout)',
             value: {
               statusCode: 401,
               message: AUTH_ERROR.SESSION_REVOKED,
@@ -506,8 +640,17 @@ export class AuthController {
     const payload = req.user.authTokenPayload;
 
     if (!payload) {
-      throw new UnauthorizedException('No valid token payload found');
+      this.logger.warn(
+        { ip: req.ip },
+        '[AuthController] logout missing payload',
+      );
+      throw new UnauthorizedException(AUTH_ERROR.NO_AUTH_PAYLOAD);
     }
+
+    this.logger.debug(
+      { userId: payload.userId, sessionId: payload.sessionId },
+      '[AuthController] logout',
+    );
 
     const result = await this.authService.logoutSession(payload);
 
@@ -525,6 +668,8 @@ export class AuthController {
 
   @Post('delete-session')
   @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a specific session' })
   @ApiBody({
     description: 'Delete a session by id with password confirmation',
@@ -539,15 +684,26 @@ export class AuthController {
       },
     },
   })
-  @ApiOkResponse({ description: 'Session deleted successfully' })
+  @ApiOkResponse({
+    description: 'Session deleted successfully',
+    schema: { type: 'string', example: 'Session successfully deleted' },
+  })
   @ApiBadRequestResponse({ description: 'Invalid session ID or input' })
   @ApiUnauthorizedResponse({ description: 'Invalid password' })
   @ApiNotFoundResponse({ description: 'Session not found' })
   async deleteSession(
+    @Req() req: FastifyRequest,
     @Body() deleteSessionDto: DeleteSessionDto,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const result = await this.authService.deleteSession(deleteSessionDto);
+    const userId = req.user.authTokenPayload?.userId;
+    if (!userId) {
+      throw new UnauthorizedException(AUTH_ERROR.NO_AUTH_PAYLOAD);
+    }
+    const result = await this.authService.deleteSession(
+      deleteSessionDto,
+      userId,
+    );
     if (result) {
       res.clearCookie(REFRESH_COOKIE_NAME, {
         path: REFRESH_TOKEN_COOKIE_PATH,
@@ -556,5 +712,151 @@ export class AuthController {
         sameSite: 'none',
       });
     }
+  }
+
+  @Post('send-code')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 1, ttl: seconds(60) } })
+  @ApiOperation({
+    summary: 'Request a reset-password verification code (1 per minute)',
+  })
+  @ApiBody({
+    description: 'Request body for sending verification code',
+    type: SendVerificationCodeDto,
+    examples: {
+      example: {
+        summary: 'Send to email',
+        value: { email: 'user@example.com' },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description: 'Verification code sent to email (if user exists)',
+  })
+  @ApiNotFoundResponse({ description: 'Email does not exist' })
+  @ApiBadRequestResponse({ description: 'Invalid request body' })
+  @ApiTooManyRequestsResponse({
+    description: 'Too many requests. Try again later.',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 429 },
+            message: {
+              type: 'string',
+              example: AUTH_ERROR.VERIFICATION_CODE_RATE_LIMIT,
+            },
+            error: { type: 'string', example: 'Too Many Requests' },
+          },
+        },
+      },
+    },
+  })
+  async sendVerificationCode(
+    @Body() sendVerificationDto: SendVerificationCodeDto,
+  ) {
+    this.logger.debug(
+      { email: maskEmail(sendVerificationDto?.email) },
+      '[AuthController] send-code',
+    );
+    return await this.authService.sendVerificationCode(sendVerificationDto);
+  }
+
+  @Post('verify-code')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 3, ttl: seconds(60) } })
+  @ApiOperation({ summary: 'Verify code and return temporary reset token' })
+  @ApiBody({
+    description: 'Request body for verification code validation',
+    type: VerifyCodeDto,
+    examples: {
+      example: {
+        summary: 'Submit email and verification code',
+        value: { email: 'user@example.com', code: '123456' },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description: 'Code verified, reset token issued',
+    type: VerifyCodeResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Incorrect verification code',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 401 },
+            message: {
+              type: 'string',
+              example: AUTH_ERROR.VERIFICATION_CODE_INCORRECT,
+            },
+            error: { type: 'string', example: 'Unauthorized' },
+          },
+        },
+      },
+    },
+  })
+  @ApiBadRequestResponse({ description: 'Invalid request body' })
+  @ApiNotFoundResponse({
+    description: 'Verification code not found or expired',
+  })
+  @ApiTooManyRequestsResponse({
+    description: 'Too many attempts. Code is blocked.',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: { type: 'number', example: 429 },
+            message: {
+              type: 'string',
+              example: AUTH_ERROR.VERIFICATION_CODE_TOO_MANY_ATTEMPTS,
+            },
+            error: { type: 'string', example: 'Too Many Requests' },
+          },
+        },
+      },
+    },
+  })
+  async verifyCode(@Body() verifyCodeDto: VerifyCodeDto) {
+    this.logger.debug(
+      { email: maskEmail(verifyCodeDto?.email) },
+      '[AuthController] verify-code',
+    );
+    return await this.authService.verifyCode(verifyCodeDto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 1, ttl: seconds(60) } })
+  @ApiOperation({
+    summary: 'Reset password with temporary token and revoke all sessions',
+  })
+  @ApiBody({
+    description: 'Reset password request body',
+    type: ResetPasswordDto,
+    examples: {
+      example: {
+        summary: 'Submit temporary token and new password',
+        value: {
+          verification_id: 'uuid-xxxx',
+          token: 'temporary-token',
+          newPassword: 'NewStrongPassword123!',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({ description: 'Password updated and all sessions revoked' })
+  @ApiNotFoundResponse({ description: 'Reset credential invalid or expired' })
+  @ApiBadRequestResponse({ description: 'Invalid request body' })
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    this.logger.debug(
+      { verificationId: resetPasswordDto?.verification_id },
+      '[AuthController] reset-password',
+    );
+    await this.authService.resetPassword(resetPasswordDto);
   }
 }

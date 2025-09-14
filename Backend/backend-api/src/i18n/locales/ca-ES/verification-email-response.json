@@ -1,0 +1,5 @@
+{
+  "success": "El seu correu electrònic ha estat verificat amb èxit.",
+  "alreadyVerified": "El seu correu electrònic ja ha estat verificat.",
+  "invalid": "No es pot verificar, l’enllaç és invàlid o ha caducat."
+}

@@ -21,7 +21,7 @@ import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.navigation.onLeaveScreen
 import org.dsqrwym.shared.util.navigation.popBackStackWithKeyboardDismiss
-import org.dsqrwym.standard.ui.viewmodels.auth.AuthViewModel
+import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
@@ -62,7 +62,7 @@ fun NavGraphBuilder.authNavGraph(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) {
-        val authViewModel = currentKoinScope().get<AuthViewModel>()
+        val sharedAuthViewModel = currentKoinScope().get<SharedAuthViewModel>()
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.LoginScreen(
             onBackButtonClick = {
@@ -74,25 +74,25 @@ fun NavGraphBuilder.authNavGraph(
                     focusManager = focusManager
                 )
             },
-            authViewModel = authViewModel
+            sharedAuthViewModel = sharedAuthViewModel
         )
     }
     composable<ForgotPasswordScreen>(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) { navBackStackEntry ->
-        val authViewModel = currentKoinScope().get<AuthViewModel>()
+        val sharedAuthViewModel = currentKoinScope().get<SharedAuthViewModel>()
         CheckIsPermitted(navController)
         LaunchedEffect(Unit) {
             navController.onLeaveScreen(navBackStackEntry.destination.route) {
-                authViewModel.resetForgetPassword()
+                sharedAuthViewModel.resetResetPassword()
             }
         }
-        org.dsqrwym.standard.ui.screens.auth.ForgotPasswordScreen(
+        org.dsqrwym.standard.ui.screens.auth.ResetPasswordScreen(
             onBackButtonClick = {
                 navController.popBackStackWithKeyboardDismiss(focusManager)
             },
-            authViewModel = authViewModel
+            sharedAuthViewModel = sharedAuthViewModel
         )
     }
 

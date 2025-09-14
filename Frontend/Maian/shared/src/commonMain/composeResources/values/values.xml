@@ -43,7 +43,6 @@
     <!-- Validation Messages -->
     <string name="validation_username_or_email_empty">Username or email cannot be empty</string>
     <string name="validation_username_cannot_contain_at">Username cannot contain the "@" character</string>
-
     <string name="validation_username_length_invalid">Username must be between 3 and 30 characters</string>
     <string name="validation_email_domain_not_supported">example.com emails are not supported</string>
     <string name="validation_password_empty">Password cannot be empty</string>
@@ -69,23 +68,23 @@
     <string name="agreement_section_user_agreement">User Agreement</string>
     <string name="agreement_section_privacy_policy">Privacy Policy</string>
 
-    <!-- ===================== Forgot Password ===================== -->
-    <string name="forgot_email_label">Email</string>
-    <string name="forgot_email_placeholder">Enter your email</string>
-    <string name="forgot_new_password_label">New Password</string>
-    <string name="forgot_repeat_password_label">Repeat New Password</string>
-    <string name="forgot_repeat_password_placeholder">Please repeat new password</string>
-    <string name="forgot_repeat_password_mismatch">Passwords do not match</string>
+    <!-- ===================== Reset Password ===================== -->
+    <string name="reset_email_label">Email</string>
+    <string name="reset_email_placeholder">Enter your email</string>
+    <string name="reset_new_password_label">New Password</string>
+    <string name="reset_repeat_password_label">Repeat New Password</string>
+    <string name="reset_repeat_password_placeholder">Please repeat new password</string>
+    <string name="reset_repeat_password_mismatch">Passwords do not match</string>
 
-    <string name="forgot_verify_email">Verify Email</string>
-    <string name="forgot_verify">Verify</string>
-    <string name="forgot_change_password">Change Password</string>
+    <string name="reset_verify_email">Verify Email</string>
+    <string name="reset_verify">Verify</string>
+    <string name="reset_change_password">Change Password</string>
 
     <!-- Error Messages -->
-    <string name="forgot_unknown_error">Unknown error</string>
-    <string name="forgot_fill_otp">Please enter verification code</string>
-    <string name="forgot_otp_error">Invalid verification code</string>
-    <string name="forgot_email_format_error">Invalid email format</string>
+    <string name="reset_unknown_error">Unknown error</string>
+    <string name="reset_fill_otp">Please enter verification code</string>
+    <string name="reset_otp_error">Invalid verification code</string>
+    <string name="reset_email_format_error">Invalid email format</string>
 
     <string name="error_no_transformation">Something went wrong. Please try again later.</string>
     <string name="error_serialization">Unexpected server response. Please try again.</string>
@@ -95,7 +94,29 @@
     <string name="error_generic">Network request failed. Please try again.</string>
 
 
-    <!-- OTP Related -->
+    <!-- OTP related -->
     <string name="otp_resend">Resend</string>
+    <string name="otp_send">Send verification code</string>
+
+    <!-- ===================== OTP & Reset password messages ===================== -->
+    <string name="otp_code_sent">Verification code sent, please check your email</string>
+    <string name="otp_code_invalid_or_expired">Invalid or expired verification code</string>
+    <string name="otp_code_verified">Verified. You need to reset your password by %1$s</string>
+    <plurals name="expire_seconds">
+        <item quantity="one">%1$d second</item>
+        <item quantity="other">%1$d seconds</item>
+    </plurals>
+    <plurals name="expire_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="expire_minutes_seconds">%1$s %2$s</string>
+    <string name="expire_prefix">within %1$s</string>
+    <string name="expire_absolute">by %1$s</string>
+
+    <string name="request_too_frequent">Too many requests, please try again later</string>
+    <string name="email_not_found">Email not found</string>
+
+    <string name="password_reset_success">Password successfully changed</string>
 
 </resources>

@@ -12,7 +12,7 @@ import { useLogger } from './config/logger.config';
 import * as process from 'node:process';
 import { useCors } from './config/cors.config';
 import { useCookie } from './config/cookie.config';
-import { GLOBAL_PREFIX } from './config/constants';
+import { GLOBAL_PREFIX } from './config/constants.config';
 
 // 用于 session 支持
 
@@ -20,7 +20,8 @@ export async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>( //<NestFastifyApplication>: 是 TypeScript 的泛型，指定了应用实例类型。NestFastifyApplication 表示希望 NestJS 使用 Fastify 作为底层 HTTP 框架，而不是默认的 Express。
     AppModule, //核心模块 提供注入，路由，服务， 控制器等功能
     // AppModule 是 NestJS 应用的根模块，通常在 app.module.ts 文件中定义。它是应用程序的起点，包含了所有其他模块、控制器和服务的引用。
-    new FastifyAdapter(), // FastifyAdapter 是 NestJS 提供的适配器，用于将 NestJS 应用与 Fastify 框架连接起来。它允许我们使用 Fastify 的特性和性能优势。
+    new FastifyAdapter({ trustProxy: true }), // FastifyAdapter 是 NestJS 提供的适配器，用于将 NestJS 应用与 Fastify 框架连接起来。它允许我们使用 Fastify 的特性和性能优势。
+    // trustProxy: true 表示信任所有代理服务器，这对于处理 Cloudflare 等代理服务器的请求非常重要。
     {
       bufferLogs: true, // bufferLogs: true 表示在应用程序启动时，NestJS 将日志缓冲区中的日志输出到控制台。这对于调试和监控应用程序的启动过程非常有用。
     },

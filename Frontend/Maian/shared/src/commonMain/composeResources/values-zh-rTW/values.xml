@@ -68,26 +68,24 @@
     <string name="agreement_section_user_agreement">使用者協議</string>
     <string name="agreement_section_privacy_policy">隱私政策</string>
 
-    <!-- ===================== 忘記密碼 (Forgot Password) ===================== -->
-    <string name="forgot_email_label">電子郵件</string>
-    <string name="forgot_email_placeholder">請輸入電子郵件</string>
-    <string name="forgot_new_password_label">新密碼</string>
-    <string name="forgot_repeat_password_label">再次輸入新密碼</string>
-    <string name="forgot_repeat_password_placeholder">請再次輸入新密碼</string>
-    <string name="forgot_repeat_password_mismatch">輸入的密碼與新密碼不同</string>
+    <!-- ===================== 忘記密碼 (Reset Password) ===================== -->
+    <string name="reset_email_label">電子郵件</string>
+    <string name="reset_email_placeholder">請輸入電子郵件</string>
+    <string name="reset_new_password_label">新密碼</string>
+    <string name="reset_repeat_password_label">再次輸入新密碼</string>
+    <string name="reset_repeat_password_placeholder">請再次輸入新密碼</string>
+    <string name="reset_repeat_password_mismatch">輸入的密碼與新密碼不同</string>
 
-    <string name="forgot_verify_email">驗證電子郵件</string>
-    <string name="forgot_verify">驗證</string>
-    <string name="forgot_change_password">更改密碼</string>
+    <string name="reset_verify_email">驗證電子郵件</string>
+    <string name="reset_verify">驗證</string>
+    <string name="reset_change_password">更改密碼</string>
 
     <!-- 錯誤提示 -->
-    <string name="forgot_unknown_error">未知錯誤</string>
-    <string name="forgot_fill_otp">請輸入驗證碼</string>
-    <string name="forgot_otp_error">驗證碼錯誤</string>
-    <string name="forgot_email_format_error">電子郵件格式不正確</string>
+    <string name="reset_unknown_error">未知錯誤</string>
+    <string name="reset_fill_otp">請輸入驗證碼</string>
+    <string name="reset_otp_error">驗證碼錯誤</string>
+    <string name="reset_email_format_error">電子郵件格式不正確</string>
 
-    <!-- 驗證碼相關 -->
-    <string name="otp_resend">重新發送</string>
 
     <string name="error_no_transformation">發生錯誤，請稍後再試。</string>
     <string name="error_serialization">伺服器回應異常，請再試一次。</string>
@@ -96,5 +94,29 @@
     <string name="error_io">發生網路錯誤，請檢查您的連線。</string>
     <string name="error_generic">網路請求失敗，請再試一次。</string>
 
+    <!-- 驗證碼相關 -->
+    <string name="otp_resend">重新發送</string>
+    <string name="otp_send">發送驗證碼</string>
+
+    <!-- ===================== 驗證碼 & 重設密碼提示 ===================== -->
+    <string name="otp_code_sent">驗證碼已發送，請查收電子郵件</string>
+    <string name="otp_code_invalid_or_expired">驗證碼錯誤或已過期</string>
+    <string name="otp_code_verified">驗證通過，您需要在 %1$s 前重設密碼</string>
+    <plurals name="expire_seconds">
+        <item quantity="one">%1$d 秒</item>
+        <item quantity="other">%1$d 秒</item>
+    </plurals>
+    <plurals name="expire_minutes">
+        <item quantity="one">%1$d 分鐘</item>
+        <item quantity="other">%1$d 分鐘</item>
+    </plurals>
+    <string name="expire_minutes_seconds">%1$s %2$s</string>
+    <string name="expire_prefix">%1$s 內</string>
+    <string name="expire_absolute">%1$s 前</string>
+
+    <string name="request_too_frequent">請求過於頻繁，請稍後再試</string>
+    <string name="email_not_found">該電子郵件不存在</string>
+
+    <string name="password_reset_success">密碼更改成功</string>
 
 </resources>

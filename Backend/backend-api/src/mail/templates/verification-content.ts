@@ -3,7 +3,7 @@ import { DateFormatService } from '../../common/formatter/date-format.service';
 const supportedLanguages = [
   'en',
   'zh-CH',
-  'zh-HK',
+  'zh-TW',
   'es-ES',
   'ca-ES-valencia',
   'fr-FR',
@@ -62,7 +62,7 @@ export const VerificationContent = (
       support: '如有任何问题，请随时联系我们的客服团队。',
       notReply: '此邮件由系统自动发送，请勿回复。',
     },
-    'zh-HK': {
+    'zh-TW': {
       title: '驗證郵箱',
       hello: '您好',
       thankRegister: '感謝您註冊我們的帳戶！',

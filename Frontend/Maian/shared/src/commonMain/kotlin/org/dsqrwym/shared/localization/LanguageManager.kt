@@ -7,6 +7,7 @@ object LanguageManager {
         ENGLISH("en", "English"),
         SPANISH("es-ES", "Español"),
         SPANISH_VALENCIA("ca-ES", "Valencià"),
+        PORTUGUESE("pt-PT", "Português"),
         FRANCE("fr-FR", "Français"),
         CHINESE("zh-CN", "中文（简体）"),
         CHINESE_TRADITIONAL("zh-TW", "中文（繁体）");
@@ -18,6 +19,7 @@ object LanguageManager {
             }
         }
     }
+
     private val aliases = mapOf(
         "ca-es-valencia" to "ca-ES",
         "ca-es" to "ca-ES",
@@ -27,7 +29,10 @@ object LanguageManager {
         "zh-cn" to "zh-CN",
         "es" to "es-ES",
         "en" to "en",
-        "fr" to "fr-FR"
+        "fr" to "fr-FR",
+        "pt" to "pt-PT",
+        "pt-pt" to "pt-PT",
+        "pt-br" to "pt-PT"
     )
 
     fun normalizeLanguageCode(locale: String): String {
@@ -40,6 +45,7 @@ object LanguageManager {
             lower.startsWith("es") -> "es-ES"
             lower.startsWith("en") -> "en"
             lower.startsWith("fr") -> "fr-FR"
+            lower.startsWith("pt") -> "pt-PT"
             else -> "en"
         }
     }
@@ -47,12 +53,15 @@ object LanguageManager {
     fun setLocaleLanguage(locale: String = normalizeLanguageCode(getLocaleLanguage())) {
         customAppLocale = locale
     }
+
     fun followSystemLanguage() {
         customAppLocale = null
     }
+
     fun getCurrentLanguage(): String {
         return customAppLocale ?: normalizeLanguageCode(getLocaleLanguage())
     }
+
     fun getCurrent(): SupportedLanguages {
         val code = customAppLocale ?: normalizeLanguageCode(getLocaleLanguage())
         return SupportedLanguages.fromCode(code)

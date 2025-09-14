@@ -1,9 +1,9 @@
 package org.dsqrwym.shared.ui.components.buttons
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -11,9 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.dsqrwym.shared.data.local.UserPreferences
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_language
 
 /**
  * A button component that allows users to switch between supported languages.
@@ -31,24 +35,26 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
     val onClick: () -> Unit = { expanded = !expanded }
 
     Row(
-        modifier = modifier.padding(padding).clickable(onClick = onClick).animateContentSize(),
+        modifier = modifier.padding(padding),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         /**
-         * The text displaying the current language.
-         * 显示当前语言的文本。
+         * The Text button to toggle the language switcher dropdown menu.
+         * 切换语言切换器下拉菜单的文本按钮。
          */
-        Text(text = LanguageManager.getCurrent().displayName, color = MaterialTheme.colorScheme.onBackground)
+        TextButton(modifier = Modifier.animateContentSize(), onClick = onClick) {
+            /**
+             * The text displaying the current language.
+             * 显示当前语言的文本。
+             */
+            Text(text = LanguageManager.getCurrent().displayName, color = MaterialTheme.colorScheme.onBackground)
 
-        /**
-         * The icon button to toggle the language switcher dropdown menu.
-         * 切换语言切换器下拉菜单的图标按钮。
-         */
-        IconButton(onClick = onClick) {
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+
             Icon(
                 imageVector = SharedIcons.Language,
-                contentDescription = "",
+                contentDescription = stringResource(SharedRes.string.icon_content_description_language),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
@@ -81,7 +87,10 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
              */
             for (item in supportedLanguages) {
                 if (item.code != LanguageManager.getCurrent().code) {
-                    LanguageMenuItem(item, onClick = { LanguageManager.setLocaleLanguage(item.code) })
+                    LanguageMenuItem(item, onClick = {
+                        LanguageManager.setLocaleLanguage(item.code)
+                        UserPreferences.setUserLanguage(item.code)
+                    })
                 }
             }
         }

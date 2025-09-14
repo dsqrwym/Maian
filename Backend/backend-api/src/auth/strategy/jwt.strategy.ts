@@ -5,8 +5,10 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthTokenPayload, ReqUser } from '../auth.types';
 import { Logger } from 'nestjs-pino';
-import { REDIS_CACHE } from '../../cache/redis/redis.module';
-import { AUTH_ERROR, ENV, REDIS_KEYS } from '../../config/constants';
+import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
+import { ENV } from '../../config/constants.config';
+import { AUTH_ERROR } from '../auth.constants';
+import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {

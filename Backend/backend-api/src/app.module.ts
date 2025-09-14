@@ -12,7 +12,7 @@ import { CommonModule } from './common/common.module'; // 全局的
 //  Prisma 模块
 import { PrismaModule } from './prisma/prisma.module'; // 全局的
 // Redis 模块
-import { RedisCacheModule } from './cache/redis/redis.module'; // 全局的
+import { CacheRedisModule } from './cache/cache.redis.module'; // 全局的
 //  邮件模块
 import { MailModule } from './mail/mail.module';
 //  认证模块
@@ -23,7 +23,10 @@ import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter'
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { JwtExceptionFilter } from './common/filters/jwt-exception.filter';
 import { TaskModule } from './tasks/task.module';
-import { MemoryCacheModule } from './cache/memory/memory-cache';
+import { MyI18nModule } from './i18n/i18n.module';
+import { MyThrottlerModule } from './common/rate-limit/rate-limit.module';
+import { REDIS_CACHE } from './cache/redis/cache.redis.token';
+import { ENV } from './config/constants.config';
 
 @Module({
   imports: [
@@ -35,8 +38,7 @@ import { MemoryCacheModule } from './cache/memory/memory-cache';
       }, // isGlobal: true 表示该模块在整个应用程序中都是可用的，而不仅仅是在导入它的模块中。这样可以避免在每个模块中都需要单独导入 ConfigModule。
     ), // 加载环境变量配置文件，默认加载 .env 文件中的变量
     // 默认内存缓存
-    MemoryCacheModule,
-    RedisCacheModule, // Redis 缓存模块
+    CacheRedisModule.register(REDIS_CACHE, ENV.REDIS_CACHE_URL), // Redis 缓存模块
     LoggerModule.forRoot({
       pinoHttp: {
         transport:
@@ -53,6 +55,8 @@ import { MemoryCacheModule } from './cache/memory/memory-cache';
       },
     }),
     ScheduleModule.forRoot(), // 负责任务调度的 NestJS  cron 包集成模块
+    MyI18nModule, // 语言翻译
+    MyThrottlerModule, // 限流模块
 
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
@@ -62,13 +66,14 @@ import { MemoryCacheModule } from './cache/memory/memory-cache';
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
   providers: [
-    AppService,
     {
       provide: ResponseInterceptor,
       useFactory: (reflector: Reflector, logger: PinoLogger) =>
         new ResponseInterceptor(reflector, logger), // 通过工厂函数创建 ResponseInterceptor 实例
       inject: [Reflector, PinoLogger], // 注入 Reflector 依赖项
     },
+
+    AppService,
     PrismaExceptionFilter, // 全局异常过滤器，处理未捕获的异常
     HttpExceptionFilter, // 全局异常过滤器，处理 HTTP 异常
     JwtExceptionFilter, // 全局异常过滤器，处理 JWT 异常
