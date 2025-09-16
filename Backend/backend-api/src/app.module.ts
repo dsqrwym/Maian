@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 
 import { ConfigModule } from '@nestjs/config'; // 用于加载和管理应用程序的配置 比Node.js 自带的 process.env 更加安全和方便维护
 import { LoggerModule, PinoLogger } from 'nestjs-pino';
-import { ScheduleModule } from '@nestjs/schedule';
 
 // 我自己的模块 :
 //  公共模块
@@ -22,7 +21,7 @@ import { Reflector } from '@nestjs/core';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { JwtExceptionFilter } from './common/filters/jwt-exception.filter';
-import { TaskModule } from './tasks/task.module';
+import { ScheduleTaskModule } from './schedule-tasks/schedule-task.module';
 import { MyI18nModule } from './i18n/i18n.module';
 import { MyThrottlerModule } from './common/rate-limit/rate-limit.module';
 import { REDIS_CACHE } from './cache/redis/cache.redis.token';
@@ -54,13 +53,12 @@ import { ENV } from './config/constants.config';
         level: process.env.NODE_ENV === 'production' ? 'error' : 'debug', // 设置日志级别
       },
     }),
-    ScheduleModule.forRoot(), // 负责任务调度的 NestJS  cron 包集成模块
+    ScheduleTaskModule, // 开启定时任务
     MyI18nModule, // 语言翻译
     MyThrottlerModule, // 限流模块
 
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
-    TaskModule, // 开启定时任务
     MailModule, // 邮件模块
     AuthModule, // 认证模块
   ],

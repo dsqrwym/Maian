@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'nestjs-pino';
-import { DateFormatService } from 'src/common/formatter/date-format.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserStatus } from '../../prisma/generated/prisma';
+import { reduceDay } from '../utils/date.utils';
 
 @Injectable()
 export class CleanupTask {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly dateService: DateFormatService,
     private readonly logger: Logger,
   ) {}
 
   private async cleanupSessions(now: Date) {
-    const deleteDate = this.dateService.reduceDay(now, 30);
+    const deleteDate = reduceDay(now, 30);
     try {
       const sessions = await this.prismaService.user_sessions.deleteMany({
         where: { last_active: { lt: deleteDate } },
@@ -30,7 +29,7 @@ export class CleanupTask {
       where: {
         status: UserStatus.INACTIVE,
         AND: {
-          created_at: { lt: this.dateService.reduceDay(now, 7) },
+          created_at: { lt: reduceDay(now, 7) },
         },
       },
     });

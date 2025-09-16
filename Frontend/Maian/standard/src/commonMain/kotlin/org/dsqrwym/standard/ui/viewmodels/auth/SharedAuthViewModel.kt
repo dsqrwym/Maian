@@ -206,8 +206,8 @@ class SharedAuthViewModel(
                         loginUiState = UiState.Success
                         mySnackbarViewModel.showSuccess(
                             getString(SharedRes.string.login_success),
-                            dismissPrevious = true
-                        )
+
+                            )
                         delay(delayMillis)
                         loginUiState = UiState.Idle
                         authSessionViewModel.onLoggedIn()
@@ -226,7 +226,7 @@ class SharedAuthViewModel(
                                     if (validateEmail(email)) SharedRes.string.login_error_email_or_password
                                     else SharedRes.string.login_error_username_or_password
                                 ),
-                                dismissPrevious = true
+                                //
                             )
                         }
                         delay(delayMillis)
@@ -242,7 +242,7 @@ class SharedAuthViewModel(
             val result = repository.logout()
             if (result is SharedResponseResult.Success) {
                 authSessionViewModel.onLoggedOut()
-                mySnackbarViewModel.showSuccess(message = "logout", dismissPrevious = true)
+                mySnackbarViewModel.showSuccess(message = "logout")
                 initLogin()
             } else {
                 mySnackbarViewModel.showError("Error")
@@ -448,7 +448,7 @@ class SharedAuthViewModel(
         when (val result = repository.sendVerifyCode(sendVerificationCodeRequest)) {
             is SharedResponseResult.Success<*> -> {
                 resetPasswordUiState = UiState.Success
-                mySnackbarViewModel.showSuccess(getString(SharedRes.string.otp_code_sent), dismissPrevious = true)
+                mySnackbarViewModel.showSuccess(getString(SharedRes.string.otp_code_sent))
                 resetStep++
                 UiState.Idle
             }
@@ -458,10 +458,10 @@ class SharedAuthViewModel(
                 if (result.type == HttpStatusCode.TooManyRequests) {
                     mySnackbarViewModel.showInfo(
                         getString(SharedRes.string.request_too_frequent),
-                        dismissPrevious = true
-                    )
+
+                        )
                 } else {
-                    mySnackbarViewModel.showError(getString(SharedRes.string.email_not_found), dismissPrevious = true)
+                    mySnackbarViewModel.showError(getString(SharedRes.string.email_not_found))
                     emailError = SharedRes.string.reset_email_format_error
                 }
             }
@@ -479,7 +479,7 @@ class SharedAuthViewModel(
                     getString(
                         SharedRes.string.otp_code_verified,
                         formatExpireDurationFromSeconds(expiresAt)
-                    ), dismissPrevious = true
+                    ),
                 )
                 resetStep++
             }
@@ -488,13 +488,13 @@ class SharedAuthViewModel(
                 if (result.type == HttpStatusCode.TooManyRequests) {
                     mySnackbarViewModel.showInfo(
                         getString(SharedRes.string.request_too_frequent),
-                        dismissPrevious = true
-                    )
+
+                        )
                 } else {
                     mySnackbarViewModel.showError(
                         getString(SharedRes.string.otp_code_invalid_or_expired),
-                        dismissPrevious = true
-                    )
+
+                        )
                     codeError = SharedRes.string.otp_code_invalid_or_expired
                 }
             }
@@ -508,8 +508,8 @@ class SharedAuthViewModel(
                 is SharedResponseResult.Success -> {
                     mySnackbarViewModel.showSuccess(
                         getString(SharedRes.string.password_reset_success),
-                        dismissPrevious = true
-                    )
+
+                        )
                     isResetPasswordDone = true
                 }
 
@@ -517,13 +517,13 @@ class SharedAuthViewModel(
                     if (result.type == HttpStatusCode.TooManyRequests) {
                         mySnackbarViewModel.showInfo(
                             getString(SharedRes.string.request_too_frequent),
-                            dismissPrevious = true
-                        )
+
+                            )
                     } else {
                         mySnackbarViewModel.showError(
                             getString(SharedRes.string.otp_code_invalid_or_expired),
-                            dismissPrevious = true
-                        )
+
+                            )
                     }
                 }
             }

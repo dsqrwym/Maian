@@ -10,10 +10,10 @@ import {
   VerifyCodeDto,
 } from '../dto/reset-password.dto';
 import { maskEmail } from '../../common/formatter/emial-format';
-import { addMinutes } from '../../common/utils/date.utils';
+import { addMinutes } from '../../utils/date.utils';
 import { AUTH_ERROR } from '../auth.constants';
 import { TooManyRequestsExceptions } from '../../common/exceptions/too-many-requests.exceptions';
-import { generateUniformRandomDigits } from '../../common/utils/random.utils';
+import { generateUniformRandomDigits } from '../../utils/random.utils';
 import { VerifyCodeResponseDto } from '../dto/reset-password-response.dto';
 import crypto from 'crypto';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';

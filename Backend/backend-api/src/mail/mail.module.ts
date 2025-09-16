@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ENV } from '../config/constants.config';
 import { MyI18nModule } from '../i18n/i18n.module';
 import { BullModule } from '@nestjs/bullmq';
-import { MailQueueProcessor } from './mail-queue.processor';
+import { MailQueueProcessorService } from './mail-queue-processor.service';
 
 @Module({
   imports: [
@@ -49,7 +49,7 @@ import { MailQueueProcessor } from './mail-queue.processor';
       }),
     }),
   ],
-  providers: [MailService, MailQueueProcessor],
+  providers: [MailService, MailQueueProcessorService],
   exports: [MailService],
 })
 export class MailModule {}

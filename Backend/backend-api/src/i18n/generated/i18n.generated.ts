@@ -5,6 +5,10 @@
 import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
+    "repeat-verification-email": {
+        "content": string;
+        "content2": string;
+    };
     "reset-password": {
         "resetPasswordSubject": string;
         "verificationCodeSubject": string;

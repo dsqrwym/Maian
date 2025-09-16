@@ -20,7 +20,7 @@ type ResetPasswordJob = {
 
 @Processor('mail')
 @Injectable()
-export class MailQueueProcessor extends WorkerHost {
+export class MailQueueProcessorService extends WorkerHost {
   constructor(
     private readonly mailerService: MailerService,
     private readonly logger: PinoLogger,
