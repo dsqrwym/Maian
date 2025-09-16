@@ -11,6 +11,7 @@ import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
 
 private const val AUTH_PATH = "/auth"
+private const val RESET_PASSWORD_PREFIX = "/reset-password"
 
 /**
  * Authentication API wrapper built on top of Ktor [HttpClient].
@@ -83,21 +84,21 @@ class SharedAuthApi(private val client: HttpClient) {
     }
 
     suspend fun sendCode(sendVerificationCodeRequest: SharedSendVerificationCodeRequest): ApiResponse<Unit> {
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH/send-code") {
+        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH$RESET_PASSWORD_PREFIX/send-code") {
             contentType(ContentType.Application.Json)
             setBody(sendVerificationCodeRequest)
         }.body()
     }
 
     suspend fun verifyCode(verifyCodeRequest: SharedVerifyCodeRequest): ApiResponse<SharedVerifyCodeResponse> {
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH/verify-code") {
+        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH$RESET_PASSWORD_PREFIX/verify-code") {
             contentType(ContentType.Application.Json)
             setBody(verifyCodeRequest)
         }.body()
     }
 
     suspend fun resetPassword(resetPasswordRequest: SharedResetPasswordRequest): ApiResponse<Unit> {
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH/reset-password") {
+        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH$RESET_PASSWORD_PREFIX/reset-password") {
             contentType(ContentType.Application.Json)
             setBody(resetPasswordRequest)
         }.body()
@@ -112,7 +113,7 @@ class SharedAuthApi(private val client: HttpClient) {
      */
     suspend fun logout(): ApiResponse<Unit> {
         // logout returns {statusCode,message,data?} but we don't need body
-        val result = client.delete("${ApiConfig.BASE_URL}/auth/logout")
+        val result = client.delete("${ApiConfig.BASE_URL}/session/auth/logout")
         SharedTokenStorage.clear()
 
         return result.body()
