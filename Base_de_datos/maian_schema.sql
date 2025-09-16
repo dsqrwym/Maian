@@ -87,6 +87,7 @@ CREATE TYPE public."UserStatus" AS ENUM (
 -- Name: generate_user_id(); Type: FUNCTION; Schema: public; Owner: -
 --
 
+
 CREATE FUNCTION public.generate_user_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
