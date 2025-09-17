@@ -1,3 +1,5 @@
+export const VERIFICATION_EMAIL_BASE_URL = `https://api.dsqrwym.es/maian/auth/verify-email`;
+
 // Standardized auth error codes for frontend differentiation
 // 标准化认证错误码：用于前端区分不同失败原因，便于精确提示与控制流程
 export const AUTH_ERROR = {

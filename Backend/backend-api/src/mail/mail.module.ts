@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
@@ -8,7 +8,9 @@ import { ENV } from '../config/constants.config';
 import { MyI18nModule } from '../i18n/i18n.module';
 import { BullModule } from '@nestjs/bullmq';
 import { MailQueueProcessorService } from './mail-queue-processor.service';
+import { VerificationMailProcessorService } from './verification-processor/verification-mail-processor.service';
 
+@Global()
 @Module({
   imports: [
     ConfigModule,
@@ -49,7 +51,11 @@ import { MailQueueProcessorService } from './mail-queue-processor.service';
       }),
     }),
   ],
-  providers: [MailService, MailQueueProcessorService],
+  providers: [
+    MailService,
+    MailQueueProcessorService,
+    VerificationMailProcessorService,
+  ],
   exports: [MailService],
 })
 export class MailModule {}

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserStatus } from '../../prisma/generated/prisma';
+import { UserStatus } from '../../prisma/generated';
 import { reduceDay } from '../utils/date.utils';
 
 @Injectable()
@@ -25,15 +25,25 @@ export class CleanupTask {
   }
 
   private async cleanupUnverifiedUsers(now: Date) {
+    const deleteDate = reduceDay(now, 7);
     const deleted = await this.prismaService.users.deleteMany({
       where: {
         status: UserStatus.INACTIVE,
+        email_verified: false,
         AND: {
-          created_at: { lt: reduceDay(now, 7) },
+          created_at: { lt: deleteDate },
         },
       },
     });
     this.logger.log(`Deleted: ${deleted.count} users.`);
+  }
+
+  private async cleanupEmailRemindLog(now: Date) {
+    const deleteDate = reduceDay(now, 5);
+    const deleted = await this.prismaService.email_reminder_log.deleteMany({
+      where: { sent_at: { lt: deleteDate } },
+    });
+    this.logger.log(`Deleted: ${deleted.count} email reminder logs.`);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
@@ -44,6 +54,9 @@ export class CleanupTask {
 
     // 删除用户
     await this.cleanupUnverifiedUsers(now);
+
+    // 删除发送邮件记录
+    await this.cleanupEmailRemindLog(now);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_5AM)

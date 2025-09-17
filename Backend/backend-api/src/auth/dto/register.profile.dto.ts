@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { SpanishCompanyType } from '../auth.types';
-import { UserRole } from 'prisma/generated/prisma/client';
+import { UserRole } from 'prisma/generated';
 
 export class RegisterProfileDto {
   @ApiProperty({

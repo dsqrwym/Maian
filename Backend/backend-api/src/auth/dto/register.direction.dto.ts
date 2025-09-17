@@ -7,7 +7,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { AddressType } from '../../../prisma/generated/prisma';
+import { AddressType } from '../../../prisma/generated';
 import { Transform } from 'class-transformer';
 
 export class DirectionDto {

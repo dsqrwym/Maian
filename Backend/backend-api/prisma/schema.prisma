@@ -1,12 +1,14 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../prisma/generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../prisma/generated"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+  schemas   = ["public"]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -20,6 +22,8 @@ model cart_details {
   created_at          DateTime          @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   carts               carts             @relation(fields: [cart_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   variant_products    variant_products? @relation(fields: [variant_products_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -30,6 +34,8 @@ model carts {
   created_at   DateTime       @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   cart_details cart_details[]
   users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -44,6 +50,8 @@ model categories {
   other_categories categories[] @relation("categoriesTocategories")
   users            users?       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   products         products[]
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -53,6 +61,8 @@ model chat_panels {
   created_at        DateTime            @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   chat_participants chat_participants[]
   messages          messages[]
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -64,6 +74,7 @@ model chat_participants {
   users         users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([chat_panel_id, user_id])
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -73,6 +84,8 @@ model configurations {
   language String @default("en") @db.VarChar(10)
   timezone String @default("UTC") @db.VarChar(32)
   users    users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -91,6 +104,8 @@ model deliveries {
   longitude         Float
   users             users               @relation(fields: [delivery_person], references: [id], onDelete: SetNull, onUpdate: NoAction)
   delivery_timeline delivery_timeline[]
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -104,6 +119,8 @@ model delivery_timeline {
   latitude    Float
   longitude   Float
   deliveries  deliveries?    @relation(fields: [delivery_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -118,6 +135,8 @@ model discounts {
   status         Int      @default(1) @db.SmallInt
   created_at     DateTime @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   users          users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -134,6 +153,8 @@ model files {
   to_delete      Boolean          @default(false)
   message_files  message_files[]
   products_files products_files[]
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -144,6 +165,8 @@ model message_files {
   sort       Int      @db.SmallInt
   files      files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   messages   messages @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -161,6 +184,8 @@ model messages {
   messages       messages?       @relation("messagesTomessages", fields: [reply_to], references: [id], onDelete: SetDefault, onUpdate: NoAction)
   other_messages messages[]      @relation("messagesTomessages")
   users          users?          @relation(fields: [sender_id], references: [id], onDelete: SetDefault, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -175,6 +200,8 @@ model notifications {
   click_action String   @db.VarChar(255)
   created_at   DateTime @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   users        users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -193,6 +220,8 @@ model order_details {
   created_at         DateTime         @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   orders             orders           @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   variant_products   variant_products @relation(fields: [variant_product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -216,6 +245,8 @@ model orders {
   users_orders_retailer_idTousers   users?          @relation("orders_retailer_idTousers", fields: [retailer_id], references: [id], onUpdate: NoAction)
   direcction                        direction?      @relation(fields: [shipping_address], references: [id], onUpdate: NoAction)
   users_orders_wholesaler_idTousers users?          @relation("orders_wholesaler_idTousers", fields: [wholesaler_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -234,6 +265,8 @@ model products {
   users            users              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   products_files   products_files[]
   variant_products variant_products[]
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -244,6 +277,8 @@ model products_files {
   sort       Int      @db.SmallInt
   files      files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -261,6 +296,7 @@ model user_sessions {
   users         users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_sessions_user_id")
 
   @@unique([user_id, device_finger], map: "unique_device_finger_user")
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -280,6 +316,7 @@ model users {
   updated_at                         DateTime?             @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   role                               UserRole
   cif                                String?               @db.VarChar(9)
+  email_verified                     Boolean               @default(false)
   carts                              carts[]
   categories                         categories[]
   chat_participants                  chat_participants[]
@@ -287,6 +324,7 @@ model users {
   deliveries                         deliveries[]
   direction                          direction[]
   discounts                          discounts[]
+  email_reminder_log                 email_reminder_log[]
   messages                           messages[]
   notifications                      notifications[]
   orders_orders_retailer_idTousers   orders[]              @relation("orders_retailer_idTousers")
@@ -294,6 +332,8 @@ model users {
   products                           products[]
   user_sessions                      user_sessions[]
   verification_tokens                verification_tokens[]
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -313,6 +353,8 @@ model variant_products {
   cart_details  cart_details[]
   order_details order_details[]
   products      products        @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -331,6 +373,8 @@ model direction {
   updated_at DateTime?   @db.Timestamp(6)
   users      users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "direcction_user_id_fkey")
   orders     orders[]
+
+  @@schema("public")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -346,18 +390,33 @@ model verification_tokens {
 
   @@index([token], map: "password_reset_tokens_token_idx")
   @@index([user_id], map: "password_reset_tokens_user_id_idx")
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model email_reminder_log {
+  id      BigInt   @id @default(autoincrement())
+  user_id String?  @db.Uuid
+  sent_at DateTime @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  users   users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@schema("public")
 }
 
 enum AddressType {
   DELIVERY
   INVOICE
   STORE
+
+  @@schema("public")
 }
 
 enum DeliveryStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
+
+  @@schema("public")
 }
 
 enum UserRole {
@@ -368,6 +427,8 @@ enum UserRole {
   WAREHOUSE
   ADMIN
   SUPERADMIN
+
+  @@schema("public")
 }
 
 enum UserStatus {
@@ -376,4 +437,6 @@ enum UserStatus {
   PENDING_REVIEW
   APPROVED
   BANNED
+
+  @@schema("public")
 }

@@ -97,7 +97,7 @@ export class ResetPasswordService {
 
     this.logger.debug(
       { userId: user.id, email: markedEmail },
-      '[sendVerificationCode] sent',
+      `[sendVerificationCode] sent , language${user.configurations?.language}`,
     );
   }
 

@@ -18,7 +18,7 @@ import {
 } from 'class-validator'; // 用于验证类属性的装饰器
 import { IsBCP47Language } from 'src/common/validators/decorator/is-bcp47-language.decorator';
 import { IsIANA } from 'src/common/validators/decorator/is-iana.decorator';
-import { UserRole, UserStatus } from '../../../prisma/generated/prisma';
+import { UserRole, UserStatus } from '../../../prisma/generated';
 import { RegisterProfileDto } from './register.profile.dto';
 import { DirectionDto } from './register.direction.dto';
 

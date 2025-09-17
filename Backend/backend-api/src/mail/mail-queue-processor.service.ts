@@ -6,23 +6,15 @@ import { PinoLogger } from 'nestjs-pino';
 import { I18nService } from 'nestjs-i18n';
 import { I18nTranslations } from '../i18n/generated/i18n.generated';
 import { maskEmail } from '../common/formatter/emial-format';
-
-type VerificationEmailJob = {
-  to: string;
-  lang?: string;
-  link: string;
-};
-
-type ResetPasswordJob = {
-  user: { email: string; name: string; language?: string };
-  code: string;
-};
+import { ResetPasswordJob, VerificationEmailJob } from './mail.types';
+import { VerificationMailProcessorService } from './verification-processor/verification-mail-processor.service';
 
 @Processor('mail')
 @Injectable()
 export class MailQueueProcessorService extends WorkerHost {
   constructor(
     private readonly mailerService: MailerService,
+    private readonly verificationMailProcessorService: VerificationMailProcessorService,
     private readonly logger: PinoLogger,
     private readonly i18nService: I18nService<I18nTranslations>,
   ) {
@@ -37,6 +29,9 @@ export class MailQueueProcessorService extends WorkerHost {
       case 'sendResetPassword': {
         return this.sendResetPassword(job.data as ResetPasswordJob);
       }
+      case 'sendRepeatVerification': {
+        return this.sendRepeatVerification(job.data as VerificationEmailJob);
+      }
       default: {
         this.logger.warn(`Unknown mail job: ${job.name}`);
         return;
@@ -45,61 +40,11 @@ export class MailQueueProcessorService extends WorkerHost {
   }
 
   async sendVerification(data: VerificationEmailJob) {
-    const lang = data.lang || 'en';
-    const link = data.link;
+    return this.verificationMailProcessorService.sendVerification(data);
+  }
 
-    if (!data.to) {
-      this.logger.error('sendVerificationEmail missing recipient');
-      return;
-    }
-    if (!link) {
-      this.logger.error(
-        'sendVerificationEmail missing link or verifyBaseUrl+token',
-      );
-      return;
-    }
-
-    const subject = this.i18nService.translate('verification-email.subject', {
-      lang,
-    });
-    const title = this.i18nService.translate('verification-email.title', {
-      lang,
-    });
-    const content = this.i18nService.translate('verification-email.content', {
-      lang,
-    });
-    const content2 = this.i18nService.translate('verification-email.content2', {
-      lang,
-    });
-    const button = this.i18nService.translate('verification-email.button', {
-      lang,
-    });
-    const ignore = this.i18nService.translate('verification-email.ignore', {
-      lang,
-    });
-    const support = this.i18nService.translate('verification-email.support', {
-      lang,
-    });
-
-    try {
-      const info: unknown = await this.mailerService.sendMail({
-        to: data.to,
-        subject,
-        template: 'verification-email',
-        context: { title, content, content2, button, link, ignore, support },
-      });
-      this.logger.info(
-        `Email sent successfully to ${maskEmail(data.to)} with info: ${JSON.stringify(info)}`,
-      );
-      return info;
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      this.logger.error(
-        `sendVerification failed: ${error.message}`,
-        error.stack,
-      );
-      throw error; // 让 BullMQ 来 retry
-    }
+  async sendRepeatVerification(data: VerificationEmailJob) {
+    return this.verificationMailProcessorService.repeatVerificationEmail(data);
   }
 
   async sendResetPassword(data: ResetPasswordJob) {

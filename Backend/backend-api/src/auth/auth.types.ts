@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '../../prisma/generated/prisma';
+import { UserRole, UserStatus } from '../../prisma/generated';
 
 interface ReqUser {
   authenticatedUser: AuthenticatedUser | null;
@@ -45,6 +45,10 @@ interface CSRFPayload {
   sessionId: string;
   deviceFinger: string;
 }
+
+interface EmailVerificationPayload {
+  id: string;
+}
 // 西班牙公司类型枚举
 enum SpanishCompanyType {
   SA = 0, // Sociedad Anónima
@@ -61,6 +65,7 @@ export {
   ReqUser,
   AuthTokenPayload,
   CSRFPayload,
+  EmailVerificationPayload,
   AuthenticatedUser,
   SpanishCompanyType,
 };

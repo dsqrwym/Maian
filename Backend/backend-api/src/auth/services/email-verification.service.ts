@@ -3,7 +3,7 @@ import { FastifyReply } from 'fastify';
 import { Logger } from 'nestjs-pino';
 import { getVerificationResponseContent } from '../../mail/templates/varification-response-content';
 import { getVerificationResponseHtml } from '../../mail/templates/verification-response.tmplates';
-import { UserStatus } from 'prisma/generated/prisma';
+import { UserStatus } from 'prisma/generated';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 

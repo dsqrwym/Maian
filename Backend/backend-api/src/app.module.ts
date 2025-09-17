@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { ConfigModule } from '@nestjs/config'; // 用于加载和管理应用程序的配置 比Node.js 自带的 process.env 更加安全和方便维护
+import { ConfigModule, ConfigService } from '@nestjs/config'; // 用于加载和管理应用程序的配置 比Node.js 自带的 process.env 更加安全和方便维护
 import { LoggerModule, PinoLogger } from 'nestjs-pino';
 
 // 我自己的模块 :
@@ -26,6 +26,7 @@ import { MyI18nModule } from './i18n/i18n.module';
 import { MyThrottlerModule } from './common/rate-limit/rate-limit.module';
 import { REDIS_CACHE } from './cache/redis/cache.redis.token';
 import { ENV } from './config/constants.config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -52,6 +53,17 @@ import { ENV } from './config/constants.config';
             : undefined,
         level: process.env.NODE_ENV === 'production' ? 'error' : 'debug', // 设置日志级别
       },
+    }),
+    JwtModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>(ENV.AUTH_JWT_SECRET),
+        signOptions: {
+          expiresIn: Number(config.get<number>(ENV.ACCESS_TOKEN_EXPIRES_IN)),
+        },
+      }),
     }),
     ScheduleTaskModule, // 开启定时任务
     MyI18nModule, // 语言翻译

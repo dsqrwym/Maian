@@ -6,7 +6,7 @@ import { RegisterDto } from '../dto/register.dto';
 import { HashService } from 'src/common/hash/hash.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
-import { Prisma, UserRole } from 'prisma/generated/prisma';
+import { Prisma, UserRole } from 'prisma/generated';
 import { ENV } from '../../config/constants.config';
 import { AUTH_ERROR } from '../auth.constants';
 import { maskEmail } from '../../common/formatter/emial-format';

@@ -25,16 +25,6 @@ import { ResetPasswordController } from './controllers/reset-password.controller
   imports: [
     RouterModule.register([{ path: 'auth', module: AuthModule }]),
     PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>(ENV.AUTH_JWT_SECRET),
-        signOptions: {
-          expiresIn: Number(config.get<number>(ENV.ACCESS_TOKEN_EXPIRES_IN)),
-        },
-      }),
-    }),
     MailModule,
   ], // 引入邮件模块
   providers: [

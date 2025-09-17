@@ -6,7 +6,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { Prisma } from '../../../prisma/generated/prisma';
+import { Prisma } from '../../../prisma/generated';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()

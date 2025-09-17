@@ -57,4 +57,14 @@ function reduceDay(date: Date, days: number): Date {
   return new Date(date.getTime() - milliseconds);
 }
 
-export { addSeconds, addMinutes, addHours, addDays, reduceDay };
+export {
+  addSeconds,
+  addMinutes,
+  addHours,
+  addDays,
+  reduceDay,
+  SECOND,
+  HOUR,
+  DAY,
+  MINUTE,
+};
