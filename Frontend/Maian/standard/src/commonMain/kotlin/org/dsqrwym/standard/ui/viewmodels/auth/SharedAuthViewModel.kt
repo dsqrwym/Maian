@@ -449,7 +449,9 @@ class SharedAuthViewModel(
             is SharedResponseResult.Success<*> -> {
                 resetPasswordUiState = UiState.Success
                 mySnackbarViewModel.showSuccess(getString(SharedRes.string.otp_code_sent))
-                resetStep++
+                if (!codeSend) {
+                    resetStep++
+                }
                 UiState.Idle
             }
 

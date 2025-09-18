@@ -15,7 +15,7 @@ import { AUTH_ERROR } from '../auth.constants';
 import { TooManyRequestsExceptions } from '../../common/exceptions/too-many-requests.exceptions';
 import { generateUniformRandomDigits } from '../../utils/random.utils';
 import { VerifyCodeResponseDto } from '../dto/reset-password-response.dto';
-import crypto from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { ENV } from '../../config/constants.config';
 import { Logger } from 'nestjs-pino';
@@ -162,7 +162,7 @@ export class ResetPasswordService {
 
     const response: VerifyCodeResponseDto = {
       verification_id: userCode.verification_tokens[0].id,
-      token: crypto.randomUUID(),
+      token: randomUUID(),
       expires_at: addMinutes(new Date(), 10),
     };
 

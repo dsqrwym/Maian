@@ -198,6 +198,7 @@ fun ResetPasswordScreen(
                         imeAction = ImeAction.Done,
                         onImeAction = {
                             focusManager.clearFocus()
+                            sharedAuthViewModel.resetPasswordNextButtonClicked()
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword

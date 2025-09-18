@@ -113,7 +113,7 @@ class SharedAuthApi(private val client: HttpClient) {
      */
     suspend fun logout(): ApiResponse<Unit> {
         // logout returns {statusCode,message,data?} but we don't need body
-        val result = client.delete("${ApiConfig.BASE_URL}/session/auth/logout")
+        val result = client.delete("${ApiConfig.BASE_URL}/auth/session/logout")
         SharedTokenStorage.clear()
 
         return result.body()

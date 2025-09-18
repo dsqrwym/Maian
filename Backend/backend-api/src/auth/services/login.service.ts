@@ -13,7 +13,7 @@ import { Logger } from 'nestjs-pino';
 import { FastifyRequest } from 'fastify';
 import { AuthenticatedUser } from '../auth.types';
 import { LoginDto } from '../dto/login.dto';
-import crypto from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { ENV } from '../../config/constants.config';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { TokenResponseDto } from '../dto/token-response.dto';
@@ -53,7 +53,7 @@ export class LoginService {
     this.logger.debug('OldSessionId Fonded', oldSessionId);
 
     let deletedSessions: string[] = [];
-    const newSessionId = crypto.randomUUID();
+    const newSessionId = randomUUID();
     this.logger.debug('RandomSessionId', { newSessionId });
     // 生成 token payload
     const payload = {
