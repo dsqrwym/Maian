@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common'; // 用于定义可注入的服务
 import { I18nTranslations } from '../i18n/generated/i18n.generated';
 import { PinoLogger } from 'nestjs-pino';
-import { I18nService, TranslateOptions } from 'nestjs-i18n';
+import { I18nService } from 'nestjs-i18n';
 import { maskEmail } from '../common/formatter/emial-format';
 import { InjectQueue } from '@nestjs/bullmq';
 import { JobsOptions, Queue } from 'bullmq';
 import { ENV } from '../config/constants.config';
 import { ConfigService } from '@nestjs/config';
-import { VERIFICATION_EMAIL_BASE_URL } from '../auth/auth.constants';
-import { ResetPasswordJob, VerificationEmailJob } from './mail.types';
+import { RegisterEmailJob, ResetPasswordJob } from './mail.types';
 
 @Injectable()
 export class MailService {
@@ -30,31 +29,16 @@ export class MailService {
     };
   }
 
-  // 发送验证邮件
-  async sendVerificationEmail(
-    to: string,
-    token: string,
-    lang: string = 'en',
-    timeZone: string = 'UTC',
-    date: Date = new Date(),
-    first: boolean = true,
-  ) {
-    const link = `${VERIFICATION_EMAIL_BASE_URL}?lang=${lang}&token=${token}`;
-    const translationOption: TranslateOptions = { lang };
+  async sendNormalRegisterEmail(data: RegisterEmailJob) {
     const subject = this.i18nService.translate(
-      'verification-email.subject',
-      translationOption,
+      'register-verification-email.subject',
+      { lang: data.lang },
     );
     this.logger.info(
-      `Queue job to send verification ${link} email to ${maskEmail(to)} with subject: ${subject}`,
+      `Queue job to send normal register email to ${maskEmail(data.to)} with subject: ${subject}`,
     );
-    // 仅用于日志，真正的模板填充在处理器里完成
-    this.logger.info(
-      `Queue job to send verification email to ${maskEmail(to)} with subject: ${subject}`,
-    );
-    const data: VerificationEmailJob = { to, lang, link, timeZone, date };
     await this.mailQueue.add(
-      first ? 'sendVerificationEmail' : 'sendRepeatVerificationEmail',
+      'sendNormalRegisterEmail',
       data,
       this.mailJobsOption,
     );

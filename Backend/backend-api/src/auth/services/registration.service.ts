@@ -1,155 +1,168 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { MailService } from 'src/mail/mail.service';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RegisterDto } from '../dto/register.dto';
-import { HashService } from 'src/common/hash/hash.service';
-import { ConfigService } from '@nestjs/config';
-import { Logger } from 'nestjs-pino';
-import { Prisma, UserRole } from 'prisma/generated';
-import { ENV } from '../../config/constants.config';
+import { $Enums, AddressType, UserRole } from 'prisma/generated';
+import { randomUUID } from 'node:crypto';
 import { AUTH_ERROR } from '../auth.constants';
-import { maskEmail } from '../../common/formatter/emial-format';
+import { VerificationService } from './verification.service';
+import { VerifyCodeDto } from '../dto/verification.dto';
+import { VerificationEmailType } from '../auth.types';
+import { RegisterRetailerDto } from '../dto/register-retailer.dto';
+import UserStatus = $Enums.UserStatus;
+import { HashService } from 'src/common/hash/hash.service';
+import { SendNormalRegisterMailDto } from '../dto/register.dto';
+import { RegisterWholesalerDto } from '../dto/register-wholesaler.dto';
+import { WholesalerProfileType } from '../../user/type/wholesaler-profile.type';
 
 @Injectable()
 export class RegistrationService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly hashService: HashService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-    private readonly mailService: MailService,
-    private readonly logger: Logger,
+    private readonly verificationService: VerificationService,
   ) {}
-  async register(dto: RegisterDto) {
-    const {
-      email,
-      password,
-      username,
-      firstName,
-      lastName,
-      phone,
-      cif,
-      role,
-      profile,
-      address,
-      language,
-      timezone,
-    } = dto;
-    this.logger.debug(
-      { email: maskEmail(email) },
-      '[Registration] Starting registration',
-    );
-    // 1. 检查用户是否已经存在
-    const existingUser = await this.prismaService.users.findFirst({
-      where: {
-        OR: [{ email }, { username }],
-      },
-      select: { email: true, username: true },
-    });
 
-    if (existingUser) {
-      if (existingUser.email === email) {
-        this.logger.warn(
-          { email: maskEmail(email) },
-          '[Registration] Email conflict',
-        );
-        throw new BadRequestException(AUTH_ERROR.EMAIL_CONFLICT);
-      }
-      if (existingUser.username === username) {
-        this.logger.warn({ username }, '[Registration] Username conflict');
-        throw new BadRequestException(AUTH_ERROR.USERNAME_CONFLICT);
-      }
-    }
+  private async beginNormalRegistration(
+    dto: SendNormalRegisterMailDto,
+    role: UserRole,
+  ) {
+    await this.prismaService.$transaction(async (tx) => {
+      const user = await tx.users.findUnique({
+        where: { email: dto.email },
+        select: { status: true },
+      });
 
-    // 2. 哈希密码
-    const hashedPassword = await this.hashService.hashWithBcrypt(password); // 使用 bcrypt 哈希密码
-
-    // 3. 开始事务
-    return this.prismaService.$transaction(
-      async (tx) => {
-        const user = await tx.users.create({
-          data: {
-            email: email,
-            username: username || null,
-            password: hashedPassword,
-            first_name: firstName || null,
-            last_name: lastName || null,
-            telephone: phone || null,
-            role: role || UserRole.RETAILER, // 默认角色为 1 零售商
-            cif: cif || null,
-
-            profile: profile ? JSON.stringify(profile) : Prisma.JsonNull,
-
-            configurations: {
-              create: {
-                language: language,
-                timezone: timezone,
+      if (user) {
+        if (user.status !== UserStatus.PENDING_VERIFICATION) {
+          throw new ConflictException(AUTH_ERROR.EMAIL_CONFLICT);
+        } else {
+          await tx.users.update({
+            where: { email: dto.email },
+            data: {
+              role: role,
+              configurations: {
+                update: { language: dto.language, timezone: dto.timezone },
               },
             },
-
-            direction: address
-              ? {
-                  createMany: {
-                    data: address.map((a) => ({
-                      type: a.type,
-                      direction: a.direction,
-                      city: a.city,
-                      province: a.province,
-                      zip_code: a.zip_code,
-                      latitude: a.latitude,
-                      longitude: a.longitude,
-                    })),
-                  },
-                }
-              : undefined,
-          },
-          include: { direction: true },
-        });
-
-        this.logger.debug({ userId: user.id }, '[Registration] User created');
-
-        const mailToken = await this.jwtService.signAsync(
-          { id: user.id },
-          {
-            expiresIn: '3 days',
-          },
-        ); // 生成 JWT token
-        // 发送验证邮件
-        this.logger.debug(
-          { email: maskEmail(email) },
-          '[Registration] Sending verification email',
-        );
-        this.mailService
-          .sendVerificationEmail(email, mailToken, language)
-          .catch((e: unknown) =>
-            this.logger.error(
-              { err: e, email: maskEmail(email) },
-              '[Registration] Failed to send email',
-            ),
-          ); // 发送验证邮件
-
-        if (profile && profile.licence) {
-          delete profile.licence;
+          });
         }
+      } else {
+        await tx.users.create({
+          data: {
+            email: dto.email,
+            password: randomUUID(),
+            role: role,
+            configurations: {
+              create: { language: dto.language, timezone: dto.timezone },
+            },
+          },
+        });
+      }
+    });
 
-        return {
-          id: user.id,
-          email: user.email,
-          username: user.username,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          telephone: user.telephone,
-          role: user.role,
-          profile: profile,
-        };
-      },
-      {
-        maxWait:
-          Number(this.configService.get<number>(ENV.PRISMA_MAX_WAIT)) || 5000,
-        timeout:
-          Number(this.configService.get<number>(ENV.PRISMA_TIMEOUT)) || 10000,
-      },
+    await this.verificationService.sendVerificationCode(
+      dto,
+      VerificationEmailType.NORMAL_REGISTER,
     );
+  }
+  async beginRetailerRegistration(dto: SendNormalRegisterMailDto) {
+    return this.beginNormalRegistration(dto, UserRole.RETAILER);
+  }
+
+  async completeRetailerRegistration(dto: RegisterRetailerDto) {
+    await this.prismaService.$transaction(async (tx) => {
+      await this.verificationService.verifyAndConsumeToken(
+        tx,
+        dto.verification_id,
+        dto.token,
+      );
+
+      const hashedPassword = await this.hashService.hashWithCrypto(
+        dto.password,
+      );
+
+      const updatedUser = await tx.users.update({
+        select: { id: true },
+        where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
+        data: {
+          status: UserStatus.INACTIVE,
+          username: dto.username ?? '',
+          password: hashedPassword,
+          directions: {
+            create: {
+              country_iso: dto.address.country,
+              province_id: dto.address.province,
+              city_id: dto.address.city,
+              street: dto.address.street,
+              type: AddressType.STORE,
+              zip_code: dto.address.zipCode,
+              latitude: dto.address.latitude,
+              longitude: dto.address.longitude,
+            },
+          },
+        },
+      });
+      if (!updatedUser) {
+        throw new NotFoundException(AUTH_ERROR.USER_NOT_FOUND);
+      }
+    });
+  }
+
+  async beginWholesalerRegistration(dto: SendNormalRegisterMailDto) {
+    return this.beginNormalRegistration(dto, UserRole.WHOLESALER);
+  }
+
+  async completeWholesalerRegistration(dto: RegisterWholesalerDto) {
+    await this.prismaService.$transaction(async (tx) => {
+      await this.verificationService.verifyAndConsumeToken(
+        tx,
+        dto.verification_id,
+        dto.token,
+      );
+
+      const hashedPassword = await this.hashService.hashWithCrypto(
+        dto.password,
+      );
+
+      const wholesalerProfile: WholesalerProfileType = {
+        company_name: dto.company_name,
+        company_type: dto.company_type,
+      };
+
+      const updatedUser = await tx.users.update({
+        select: { id: true },
+        where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
+        data: {
+          status: UserStatus.INACTIVE,
+          username: dto.username ?? '',
+          password: hashedPassword,
+          telephone: dto.telephone,
+          role: UserRole.WHOLESALER,
+          profile: JSON.stringify(wholesalerProfile),
+          directions: {
+            create: {
+              country_iso: dto.address.country,
+              province_id: dto.address.province,
+              city_id: dto.address.city,
+              street: dto.address.street,
+              type: AddressType.STORE,
+              zip_code: dto.address.zipCode,
+              latitude: dto.address.latitude,
+              longitude: dto.address.longitude,
+            },
+          },
+        },
+      });
+      if (!updatedUser) {
+        throw new NotFoundException(AUTH_ERROR.USER_NOT_FOUND);
+      }
+    });
+  }
+
+  async verifyCode(verifyCodeDto: VerifyCodeDto) {
+    return this.verificationService.verifyCode(verifyCodeDto, 24 * 60);
   }
 }

@@ -1,6 +1,7 @@
-export const VERIFICATION_EMAIL_BASE_URL = `https://api.dsqrwym.es/maian/auth/verify-email`;
-
 // Standardized auth error codes for frontend differentiation
+
+import { UserStatus } from 'prisma/generated';
+
 // 标准化认证错误码：用于前端区分不同失败原因，便于精确提示与控制流程
 export const AUTH_ERROR = {
   // CSRF verification failed / mismatch / expired
@@ -18,6 +19,9 @@ export const AUTH_ERROR = {
   // Generic invalid password
   // 密码错误
   INVALID_PASSWORD: 'INVALID_PASSWORD',
+  // Access denied
+  // 用户没有权限
+  ACCESS_DENIED: 'ACCESS_DENIED',
   // User not found by identifier (email/username)
   // 用户不存在
   USER_NOT_FOUND: 'USER_NOT_FOUND',
@@ -27,6 +31,12 @@ export const AUTH_ERROR = {
   // Username already exists conflict
   // 用户名已存在
   USERNAME_CONFLICT: 'USERNAME_CONFLICT',
+  // User account is not activated
+  // 用户账号未激活
+  USER_INACTIVE: 'USER_INACTIVE',
+  // Account locked due to too many failed login attempts
+  // 登录失败次数过多，账号被锁定
+  ACCOUNT_LOCKED: 'ACCOUNT_LOCKED',
   // Verification email token invalid
   // 邮箱验证令牌无效
   VERIFICATION_EMAIL_INVALID: 'VERIFICATION_EMAIL_INVALID',
@@ -55,3 +65,8 @@ export const AUTH_ERROR = {
   // 重置密码验证令牌无效
   VERIFICATION_TOKEN_INVALID: 'VERIFICATION_TOKEN_INVALID',
 } as const;
+
+export const INACTIVE_STATUSES: Set<UserStatus> = new Set([
+  UserStatus.INACTIVE,
+  UserStatus.PENDING_VERIFICATION,
+]);

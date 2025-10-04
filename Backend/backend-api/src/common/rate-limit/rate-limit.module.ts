@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { seconds, ThrottlerModule } from '@nestjs/throttler';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '../../config/constants.config';
@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from '../guards/custom-throttler.guard';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 
+@Global()
 @Module({
   providers: [
     {

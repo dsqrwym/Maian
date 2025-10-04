@@ -29,10 +29,10 @@ import {
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { AUTH_ERROR } from '../auth.constants';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CSRFPayload } from '../auth.types';
 
-@Controller('')
+@Controller('token')
 @ApiTags('RefreshToken')
 @ApiExtraModels(RefreshTokenDto, TokenResponseDto)
 export class RefreshTokenController {
@@ -46,7 +46,7 @@ export class RefreshTokenController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @Post('refresh-token')
+  @Post('refresh')
   @HttpCode(200)
   @Throttle({
     default: {
@@ -131,7 +131,7 @@ export class RefreshTokenController {
     return result.token;
   }
 
-  @Post('refresh-token-web')
+  @Post('refresh-web')
   @HttpCode(200)
   @Throttle({
     default: {

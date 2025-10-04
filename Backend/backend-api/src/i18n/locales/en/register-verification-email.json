@@ -1,0 +1,8 @@
+{
+  "subject": "Verify your email",
+  "title": "Verify your email now",
+  "content": "Thank you for choosing the MaiAn platform! Here is your verification code: <strong>{code}</strong>. <br>To complete your registration faster, you can also click the button below to continue directly in the app:",
+  "button": "Verify now",
+  "support": "If you have any questions or need assistance, please feel free to contact our customer support team. Thank you for your understanding and cooperation.",
+  "ignore": "If you did not register for the MaiAn platform, please ignore this email. <br>This is an automated message, please do not reply."
+}

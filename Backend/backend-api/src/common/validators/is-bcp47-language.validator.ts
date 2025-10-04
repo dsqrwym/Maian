@@ -4,8 +4,9 @@ import {
   ValidationArguments,
 } from 'class-validator';
 import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
+import { DAY, HOUR } from '../../utils/date.utils';
 
 @ValidatorConstraint({ name: 'IsBCP47Language', async: true })
 @Injectable()
@@ -25,10 +26,10 @@ export class Bcp47LanguageValidator implements ValidatorConstraintInterface {
 
     try {
       new Intl.DateTimeFormat(value);
-      await this.cacheManager.set(cacheKey, true, 604800); // 缓存7天
+      await this.cacheManager.set(cacheKey, true, 7 * DAY); // 缓存7天
       return true;
     } catch {
-      await this.cacheManager.set(cacheKey, false, 3600);
+      await this.cacheManager.set(cacheKey, false, HOUR);
       return false;
     }
   }

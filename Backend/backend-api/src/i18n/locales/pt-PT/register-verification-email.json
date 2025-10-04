@@ -1,0 +1,8 @@
+{
+  "subject": "Verificar e-mail",
+  "title": "Verifique o seu e-mail agora",
+  "content": "Obrigado por escolher a plataforma MaiAn! Este é o seu código de verificação: <strong>{code}</strong>. <br>Para concluir o registo mais rapidamente, também pode clicar no botão abaixo e continuar diretamente na aplicação:",
+  "button": "Verificar agora",
+  "support": "Se tiver alguma dúvida ou precisar de ajuda, entre em contacto com a nossa equipa de apoio ao cliente. Agradecemos a sua compreensão e colaboração.",
+  "ignore": "Se não se registou na plataforma MaiAn, ignore este e-mail. <br>Esta mensagem é enviada automaticamente, por favor não responda."
+}

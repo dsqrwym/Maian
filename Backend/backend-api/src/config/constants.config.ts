@@ -20,6 +20,12 @@ export const ENV = {
   ACCESS_TOKEN_EXPIRES_IN: 'ACCESS_TOKEN_EXPIRES_IN',
   CSRF_TOKEN_SECRET: 'CSRF_TOKEN_SECRET',
   MAX_SESSIONS_PER_USER: 'MAX_SESSIONS_PER_USER',
+  // Maximum number of login attempts before account is locked
+  // 登录失败最大尝试次数，超过后账户将被锁定
+  LOGIN_MAX_ATTEMPTS: 'LOGIN_MAX_ATTEMPTS',
+  // Account lock duration in minutes after exceeding max login attempts
+  // 登录失败超过最大尝试次数后，账户锁定时间（分钟）
+  LOGIN_LOCK_MINUTES: 'LOGIN_LOCK_MINUTES',
 
   // Cookies
   // Cookie 相关配置

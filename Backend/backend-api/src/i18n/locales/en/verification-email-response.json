@@ -1,5 +1,0 @@
-{
-  "success": "Your email has been successfully verified.",
-  "alreadyVerified": "Your email was already verified.",
-  "invalid": "Unable to verify, link is invalid or expired."
-}

@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthTokenPayload, CSRFPayload } from '../auth.types';
+import { CSRFPayload, UserPayload } from '../auth.types';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { AUTH_ERROR } from '../auth.constants';
 import { ENV } from '../../config/constants.config';
@@ -11,7 +11,7 @@ import { HashService } from '../../common/hash/hash.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 
 @Injectable()
 export class TokenService {
@@ -59,7 +59,7 @@ export class TokenService {
   async getAccessToken(refreshToken: string, csrfToken: string | null = null) {
     this.logger.debug('[getAccessToken] Verifying refresh token');
 
-    const payload: AuthTokenPayload =
+    const payload: UserPayload =
       await this.jwtService.verifyAsync(refreshToken);
 
     if (
@@ -165,11 +165,12 @@ export class TokenService {
       throw new UnauthorizedException(AUTH_ERROR.INVALID_REFRESH_TOKEN);
     }
 
-    const newPayload: AuthTokenPayload = {
+    const newPayload: UserPayload = {
       sessionId: payload.sessionId,
       userId: payload.userId,
       deviceFinger: payload.deviceFinger,
       userRole: payload.userRole,
+      userStatus: payload.userStatus,
     };
 
     const newAccessToken = await this.jwtService.signAsync(newPayload);

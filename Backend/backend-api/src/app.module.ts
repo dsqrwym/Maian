@@ -27,6 +27,9 @@ import { MyThrottlerModule } from './common/rate-limit/rate-limit.module';
 import { REDIS_CACHE } from './cache/redis/cache.redis.token';
 import { ENV } from './config/constants.config';
 import { JwtModule } from '@nestjs/jwt';
+import { LocationsModule } from './locations/locations.module';
+import { CaslModule } from './casl/casl.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -72,7 +75,10 @@ import { JwtModule } from '@nestjs/jwt';
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
     MailModule, // 邮件模块
-    AuthModule, // 认证模块
+    AuthModule,
+    LocationsModule,
+    CaslModule,
+    UserModule, // 认证模块
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
   providers: [

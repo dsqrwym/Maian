@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthTokenPayload } from '../auth.types';
+import { UserPayload } from '../auth.types';
 import { AUTH_ERROR } from '../auth.constants';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { ENV } from '../../config/constants.config';
@@ -12,7 +12,7 @@ import { Logger } from 'nestjs-pino';
 import { DeleteSessionDto } from '../dto/delete.session.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { HashService } from 'src/common/hash/hash.service';
 
@@ -25,7 +25,7 @@ export class SessionService {
     private readonly hashService: HashService,
     @Inject(REDIS_CACHE) private readonly redisCache: Cache,
   ) {}
-  async logoutSession(sessionData: AuthTokenPayload) {
+  async logoutSession(sessionData: UserPayload) {
     // 查找会话，并注销
     const result = await this.prismaService.user_sessions.updateMany({
       where: { session_id: sessionData.sessionId, revoked: false }, // 限制只更新未撤销的会话

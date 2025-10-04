@@ -39,7 +39,7 @@ export class DateFormatService {
     try {
       const formatter = this.getFormatter(lang, timeZone);
       return formatter.format(date);
-    } catch (e) {
+    } catch (e: any) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       console.error(`Formatting failed: ${e.message}`);
       // 降级处理：返回 ISO 格式

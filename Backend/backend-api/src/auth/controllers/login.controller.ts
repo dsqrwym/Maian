@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -20,31 +19,21 @@ import {
 import { LoginDto } from '../dto/login.dto';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { LocalAuthGuard } from '../guard/auth.guard';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { AUTH_ERROR } from '../auth.constants';
-import {
-  ENV,
-  REFRESH_COOKIE_NAME,
-  REFRESH_TOKEN_COOKIE_PATH,
-} from '../../config/constants.config';
-import { Logger } from 'nestjs-pino';
-import { CSRFPayload } from '../auth.types';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import { REFRESH_TOKEN_COOKIE_PATH } from '../../config/constants.config';
 import { AuthService } from '../auth.service';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
+import { UserRole } from '../../../prisma/generated';
+import { RolesGuard } from '../../common/guards/roles.guard';
 
 @ApiTags('Authentication')
 @ApiExtraModels(LoginDto, TokenResponseDto)
-@Controller('')
+@UseGuards(LocalAuthGuard, RolesGuard)
+@Controller('login')
 export class LoginController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly logger: Logger,
-    private readonly configService: ConfigService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('login')
+  @Post('standard')
   @HttpCode(200)
   @ApiOperation({ summary: 'Log in a user' })
   @ApiBody({
@@ -77,23 +66,12 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @UseGuards(LocalAuthGuard)
-  async login(@Req() req: FastifyRequest, @Body() body: LoginDto) {
-    const user = req.user.authenticatedUser;
-    if (!user) {
-      this.logger.warn({ ip: req.ip }, '[AuthController] login user missing');
-      throw new BadRequestException(AUTH_ERROR.NO_AUTH_PAYLOAD);
-    }
-
-    this.logger.debug(
-      { userId: user.id, ip: req.ip, device: body.deviceName },
-      '[AuthController] login',
-    );
-    const { token } = await this.authService.login(req, user, body);
-    return token;
+  @RolesAllowed(UserRole.RETAILER)
+  async loginStandard(@Req() req: FastifyRequest, @Body() body: LoginDto) {
+    return await this.authService.login(req, body);
   }
 
-  @Post('login-web')
+  @Post('standard/web')
   @HttpCode(200)
   @ApiOperation({
     summary: 'Web login: returns accessToken and sets refresh_token cookie',
@@ -138,58 +116,206 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @UseGuards(LocalAuthGuard)
-  async loginWeb(
+  @RolesAllowed(UserRole.RETAILER)
+  async loginStandardWeb(
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
     @Body() body: LoginDto,
   ) {
-    const user = req.user.authenticatedUser;
-    if (!user) {
-      this.logger.warn(
-        { ip: req.ip },
-        '[AuthController] login-web user missing',
-      );
-      throw new BadRequestException(AUTH_ERROR.NO_AUTH_PAYLOAD);
-    }
+    return await this.authService.loginWeb(req, res, body);
+  }
 
-    this.logger.debug(
-      { userId: user.id, ip: req.ip, device: body.deviceName },
-      '[AuthController] login-web',
-    );
+  @Post('enterprise')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Log in a user' })
+  @ApiBody({
+    description: 'User login credentials',
+    type: LoginDto,
+    examples: {
+      example1: {
+        summary: 'Valid login data',
+        value: {
+          email: 'user@example.com',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+      example2: {
+        summary: 'Use username instead of email',
+        value: {
+          username: 'john_doe',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description: 'User successfully logged in',
+    type: TokenResponseDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid login credentials' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @RolesAllowed(
+    UserRole.WHOLESALER,
+    UserRole.DELIVERY,
+    UserRole.SUPPORT,
+    UserRole.WAREHOUSE,
+  )
+  async loginEnterprise(@Req() req: FastifyRequest, @Body() body: LoginDto) {
+    return await this.authService.login(req, body);
+  }
 
-    const { token, payload } = await this.authService.login(req, user, body);
-    // Web: 设置 cookie（httpOnly, secure, sameSite）
-    res.setCookie(REFRESH_COOKIE_NAME, token.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none', // 跨域前后端分离（不同子域 / 不同域名）
-      path: REFRESH_TOKEN_COOKIE_PATH,
-      maxAge: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
-    });
+  @Post('enterprise/web')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Web login: returns accessToken and sets refresh_token cookie',
+    description:
+      'For browser-based clients: returns accessToken and sets an httpOnly/secure refresh_token via Set-Cookie.',
+  })
+  @ApiBody({
+    description: 'User login credentials',
+    type: LoginDto,
+    examples: {
+      example1: {
+        summary: 'Valid login data',
+        value: {
+          email: 'user@example.com',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+      example2: {
+        summary: 'Use username instead of email',
+        value: {
+          username: 'john_doe',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description:
+      'User successfully logged in. Web flow: the response body refreshToken carries the CSRF token; the response header sets the real refresh_token via Set-Cookie.',
+    type: TokenResponseDto,
+    headers: {
+      'Set-Cookie': {
+        description: `refresh_token=...; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'; Max-Age=<REFRESH_TOKEN_EXPIRES_IN>`,
+        schema: { type: 'string' },
+        example: `refresh_token=eyJhbGciOi...; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'; Max-Age=2592000`,
+      },
+    },
+  })
+  @ApiBadRequestResponse({ description: 'Invalid login credentials' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @RolesAllowed(
+    UserRole.WHOLESALER,
+    UserRole.DELIVERY,
+    UserRole.SUPPORT,
+    UserRole.WAREHOUSE,
+  )
+  async loginEnterpriseWeb(
+    @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) res: FastifyReply,
+    @Body() body: LoginDto,
+  ) {
+    return await this.authService.loginWeb(req, res, body);
+  }
 
-    this.logger.debug(
-      { userId: user.id, sessionId: payload.sessionId },
-      '[AuthController] login-web set refresh cookie',
-    );
+  @Post('admin')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Log in a user' })
+  @ApiBody({
+    description: 'User login credentials',
+    type: LoginDto,
+    examples: {
+      example1: {
+        summary: 'Valid login data',
+        value: {
+          email: 'user@example.com',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+      example2: {
+        summary: 'Use username instead of email',
+        value: {
+          username: 'john_doe',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description: 'User successfully logged in',
+    type: TokenResponseDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid login credentials' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @RolesAllowed(UserRole.ADMIN, UserRole.SUPERADMIN)
+  async loginAdmin(@Req() req: FastifyRequest, @Body() body: LoginDto) {
+    return await this.authService.login(req, body);
+  }
 
-    const csrfTokenPayload: CSRFPayload = {
-      sessionId: payload.sessionId,
-      deviceFinger: payload.deviceFinger,
-    };
-
-    // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
-
-    const csrfToken = await this.jwtService.signAsync(csrfTokenPayload, {
-      expiresIn: Number(this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN)),
-      secret: this.configService.get(ENV.CSRF_TOKEN_SECRET),
-    });
-
-    const result: TokenResponseDto = {
-      accessToken: token.accessToken,
-      refreshToken: csrfToken,
-    };
-
-    return result;
+  @Post('admin/web')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Web login: returns accessToken and sets refresh_token cookie',
+    description:
+      'For browser-based clients: returns accessToken and sets an httpOnly/secure refresh_token via Set-Cookie.',
+  })
+  @ApiBody({
+    description: 'User login credentials',
+    type: LoginDto,
+    examples: {
+      example1: {
+        summary: 'Valid login data',
+        value: {
+          email: 'user@example.com',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+      example2: {
+        summary: 'Use username instead of email',
+        value: {
+          username: 'john_doe',
+          password: 'StrongPassword123!',
+          deviceName: 'CHROME_BROWSER',
+          userAgent: 'MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    description:
+      'User successfully logged in. Web flow: the response body refreshToken carries the CSRF token; the response header sets the real refresh_token via Set-Cookie.',
+    type: TokenResponseDto,
+    headers: {
+      'Set-Cookie': {
+        description: `refresh_token=...; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'; Max-Age=<REFRESH_TOKEN_EXPIRES_IN>`,
+        schema: { type: 'string' },
+        example: `refresh_token=eyJhbGciOi...; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'; Max-Age=2592000`,
+      },
+    },
+  })
+  @ApiBadRequestResponse({ description: 'Invalid login credentials' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @RolesAllowed(UserRole.ADMIN, UserRole.SUPERADMIN)
+  async loginAdminWeb(
+    @Req() req: FastifyRequest,
+    @Res({ passthrough: true }) res: FastifyReply,
+    @Body() body: LoginDto,
+  ) {
+    return await this.authService.loginWeb(req, res, body);
   }
 }

@@ -5,9 +5,13 @@
 import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
-    "repeat-verification-email": {
+    "register-verification-email": {
+        "subject": string;
+        "title": string;
         "content": string;
-        "content2": string;
+        "button": string;
+        "support": string;
+        "ignore": string;
     };
     "reset-password": {
         "resetPasswordSubject": string;
@@ -15,20 +19,6 @@ export type I18nTranslations = {
         "greeting": string;
         "resetPasswordMessage": string;
         "ignoreMessage": string;
-    };
-    "verification-email-response": {
-        "success": string;
-        "alreadyVerified": string;
-        "invalid": string;
-    };
-    "verification-email": {
-        "subject": string;
-        "title": string;
-        "content": string;
-        "content2": string;
-        "button": string;
-        "support": string;
-        "ignore": string;
     };
 };
 /* prettier-ignore */

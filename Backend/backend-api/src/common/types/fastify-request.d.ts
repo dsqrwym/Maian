@@ -1,7 +1,8 @@
-import { ReqUser } from '../../auth/auth.types';
-
+import { UserPayload } from '../../auth/auth.types';
+import { AppAbility } from '../../casl/casl-types';
 declare module 'fastify' {
   interface FastifyRequest {
-    user: ReqUser;
+    user: UserPayload;
+    ability: AppAbility;
   }
 }

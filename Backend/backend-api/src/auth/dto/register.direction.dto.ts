@@ -1,81 +1,128 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsLatitude,
   IsLongitude,
   IsNumber,
+  IsOptional,
   IsString,
+  Max,
   MaxLength,
+  Min,
 } from 'class-validator';
 import { AddressType } from '../../../prisma/generated';
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 
+/**
+ * DTO for address information
+ * 地址信息数据传输对象
+ */
 export class DirectionDto {
+  /**
+   * Type of the address (e.g., STORE, DELIVERY)
+   * 地址类型（例如：营业地址、收货地址）
+   */
   @ApiProperty({
-    description: 'Address type',
+    description: 'Type of the address (e.g., STORE, DELIVERY)',
     enum: AddressType,
-    example: 'BILLING',
+    default: AddressType.STORE,
+    example: 'STORE',
   })
   @IsEnum(AddressType)
-  type: AddressType;
+  @IsOptional()
+  type: AddressType = AddressType.STORE;
 
+  /**
+   * Street address including building and apartment number
+   * 街道地址，包括门牌号和公寓号
+   */
   @ApiProperty({
-    description: 'Street address',
+    description: 'Street address including building and apartment number',
     maxLength: 200,
-    example: 'Calle Mayor 123, 2ºB',
+    example: '123 Main St, Apt 4B',
   })
   @IsString()
   @MaxLength(200)
-  direction: string;
+  street: string;
 
+  /**
+   * City ID reference
+   * 城市ID
+   */
   @ApiProperty({
-    description: 'City',
-    maxLength: 50,
-    example: 'MADRID',
+    description: 'ID of the city',
+    example: 1,
   })
-  @IsString()
-  @MaxLength(50)
-  @Transform(({ value }) =>
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    typeof value === 'string' ? value.toUpperCase() : value,
-  )
-  city: string;
+  @IsNumber()
+  @Min(1)
+  @Type(() => Number)
+  city: number;
 
+  /**
+   * Province/State ID reference
+   * 省份/州ID
+   */
   @ApiProperty({
-    description: 'Province',
-    maxLength: 80,
-    example: 'MADRID',
+    description: 'ID of the province/state',
+    example: 2,
   })
-  @IsString()
-  @MaxLength(80)
-  @Transform(({ value }) =>
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    typeof value === 'string' ? value.toUpperCase() : value,
-  )
-  province: string;
+  @IsNumber()
+  @Min(1)
+  @Type(() => Number)
+  province: number;
 
+  /**
+   * Country ID reference, ISO 3166-1 numeric code
+   * 国家ISO 3166-1 numeric
+   */
   @ApiProperty({
-    description: 'Postal code',
+    description: 'ID of the country, ISO 3166-1 numeric code',
+    example: 724,
+  })
+  @IsNumber()
+  @Min(1)
+  @Max(999)
+  @Type(() => Number)
+  country: number;
+
+  /**
+   * Postal/ZIP code
+   * 邮政编码
+   */
+  @ApiProperty({
+    description: 'Postal/ZIP code',
     maxLength: 10,
-    example: '28013',
+    example: '10001',
   })
   @IsString()
   @MaxLength(10)
-  zip_code: string;
+  zipCode: string;
 
-  @ApiProperty({
-    description: 'Latitude',
-    example: 40.4168,
+  /**
+   * Latitude coordinate (optional)
+   * 纬度坐标（可选）
+   */
+  @ApiPropertyOptional({
+    description: 'Latitude coordinate',
+    example: 40.7128,
+    required: false,
   })
-  @IsNumber()
+  @IsOptional()
   @IsLatitude()
-  latitude: number;
+  @Type(() => Number)
+  latitude?: number;
 
-  @ApiProperty({
-    description: 'Longitude',
-    example: -3.7038,
+  /**
+   * Longitude coordinate (optional)
+   * 经度坐标（可选）
+   */
+  @ApiPropertyOptional({
+    description: 'Longitude coordinate',
+    example: -74.006,
+    required: false,
   })
-  @IsNumber()
+  @IsOptional()
   @IsLongitude()
-  longitude: number;
+  @Type(() => Number)
+  longitude?: number;
 }

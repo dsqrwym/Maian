@@ -5,7 +5,7 @@ import { FastifyRequest } from 'fastify';
 @Injectable()
 export class CustomThrottlerGuard extends ThrottlerGuard {
   protected getTracker(req: FastifyRequest): Promise<string> {
-    const authTokenPayload = req.user?.authTokenPayload;
+    const authTokenPayload = req.user;
     if (authTokenPayload) {
       return Promise.resolve(`session:${authTokenPayload.sessionId}`);
     }

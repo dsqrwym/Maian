@@ -11,16 +11,16 @@ import {
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import {
-  ResetPasswordDto,
-  SendVerificationCodeDto,
-  VerifyCodeDto,
-} from '../dto/reset-password.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { Logger } from 'nestjs-pino';
 import { AUTH_ERROR } from '../auth.constants';
 import { maskEmail } from '../../common/formatter/emial-format';
-import { VerifyCodeResponseDto } from '../dto/reset-password-response.dto';
 import { AuthService } from '../auth.service';
+import {
+  SendVerificationCodeDto,
+  VerifyCodeDto,
+  VerifyCodeResponseDto,
+} from '../dto/verification.dto';
 
 @ApiTags('Reset Password')
 @ApiExtraModels(
@@ -148,7 +148,7 @@ export class ResetPasswordController {
       { email: maskEmail(verifyCodeDto?.email) },
       '[AuthController] verify-code',
     );
-    return await this.authService.verifyCode(verifyCodeDto);
+    return await this.authService.verifyResetPasswordCode(verifyCodeDto);
   }
 
   @Post('reset-password')

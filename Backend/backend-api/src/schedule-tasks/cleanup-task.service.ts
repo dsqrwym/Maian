@@ -24,12 +24,21 @@ export class CleanupTask {
     }
   }
 
+  private async cleanupVerificationTokens(now: Date) {
+    const deleted = await this.prismaService.verification_tokens.deleteMany({
+      where: {
+        expires_at: { lt: now },
+        OR: [{ is_used: true }],
+      },
+    });
+    this.logger.log(`Deleted: ${deleted.count} verification tokens.`);
+  }
+
   private async cleanupUnverifiedUsers(now: Date) {
-    const deleteDate = reduceDay(now, 7);
+    const deleteDate = reduceDay(now, 1);
     const deleted = await this.prismaService.users.deleteMany({
       where: {
-        status: UserStatus.INACTIVE,
-        email_verified: false,
+        status: UserStatus.PENDING_VERIFICATION,
         AND: {
           created_at: { lt: deleteDate },
         },
@@ -38,12 +47,17 @@ export class CleanupTask {
     this.logger.log(`Deleted: ${deleted.count} users.`);
   }
 
-  private async cleanupEmailRemindLog(now: Date) {
-    const deleteDate = reduceDay(now, 5);
-    const deleted = await this.prismaService.email_reminder_log.deleteMany({
-      where: { sent_at: { lt: deleteDate } },
+  private async cleanupIncompleteInformationUsers(now: Date) {
+    const deleteDate = reduceDay(now, 7);
+    const deleted = await this.prismaService.users.deleteMany({
+      where: {
+        status: UserStatus.INACTIVE,
+        AND: {
+          created_at: { lt: deleteDate },
+        },
+      },
     });
-    this.logger.log(`Deleted: ${deleted.count} email reminder logs.`);
+    this.logger.log(`Deleted: ${deleted.count} users.`);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
@@ -51,12 +65,13 @@ export class CleanupTask {
     const now = new Date();
     // 清理 会话
     await this.cleanupSessions(now);
+    // 清理 验证token
+    await this.cleanupVerificationTokens(now);
 
     // 删除用户
     await this.cleanupUnverifiedUsers(now);
-
-    // 删除发送邮件记录
-    await this.cleanupEmailRemindLog(now);
+    // 删除未填充信息的用户
+    await this.cleanupIncompleteInformationUsers(now);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_5AM)

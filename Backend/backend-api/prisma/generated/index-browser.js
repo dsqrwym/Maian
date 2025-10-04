@@ -317,8 +317,7 @@ exports.Prisma.UsersScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   role: 'role',
-  cif: 'cif',
-  email_verified: 'email_verified'
+  cif: 'cif'
 };
 
 exports.Prisma.Variant_productsScalarFieldEnum = {
@@ -336,20 +335,6 @@ exports.Prisma.Variant_productsScalarFieldEnum = {
   product_code: 'product_code'
 };
 
-exports.Prisma.DirectionScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  type: 'type',
-  direction: 'direction',
-  city: 'city',
-  province: 'province',
-  zip_code: 'zip_code',
-  latitude: 'latitude',
-  longitude: 'longitude',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
 exports.Prisma.Verification_tokensScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -360,10 +345,49 @@ exports.Prisma.Verification_tokensScalarFieldEnum = {
   attempts: 'attempts'
 };
 
-exports.Prisma.Email_reminder_logScalarFieldEnum = {
+exports.Prisma.CitiesScalarFieldEnum = {
+  id: 'id',
+  province_id: 'province_id',
+  name: 'name',
+  name_local: 'name_local'
+};
+
+exports.Prisma.CountriesScalarFieldEnum = {
+  iso_alpha2: 'iso_alpha2',
+  iso_alpha3: 'iso_alpha3',
+  iso_numeric: 'iso_numeric',
+  name: 'name',
+  name_local: 'name_local',
+  currency_id: 'currency_id'
+};
+
+exports.Prisma.DirectionsScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  sent_at: 'sent_at'
+  type: 'type',
+  country_iso: 'country_iso',
+  province_id: 'province_id',
+  city_id: 'city_id',
+  street: 'street',
+  zip_code: 'zip_code',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.ProvincesScalarFieldEnum = {
+  id: 'id',
+  country_iso: 'country_iso',
+  name: 'name',
+  name_local: 'name_local'
+};
+
+exports.Prisma.CurrenciesScalarFieldEnum = {
+  iso_numeric: 'iso_numeric',
+  iso_alpha3: 'iso_alpha3',
+  symbol: 'symbol',
+  decimal_digits: 'decimal_digits'
 };
 
 exports.Prisma.SortOrder = {
@@ -402,6 +426,7 @@ exports.DeliveryStatus = exports.$Enums.DeliveryStatus = {
 };
 
 exports.UserStatus = exports.$Enums.UserStatus = {
+  PENDING_VERIFICATION: 'PENDING_VERIFICATION',
   INACTIVE: 'INACTIVE',
   ACTIVE: 'ACTIVE',
   PENDING_REVIEW: 'PENDING_REVIEW',
@@ -446,9 +471,12 @@ exports.Prisma.ModelName = {
   user_sessions: 'user_sessions',
   users: 'users',
   variant_products: 'variant_products',
-  direction: 'direction',
   verification_tokens: 'verification_tokens',
-  email_reminder_log: 'email_reminder_log'
+  cities: 'cities',
+  countries: 'countries',
+  directions: 'directions',
+  provinces: 'provinces',
+  currencies: 'currencies'
 };
 
 /**

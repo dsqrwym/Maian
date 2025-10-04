@@ -25,7 +25,7 @@ import {
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_PATH,
 } from '../../config/constants.config';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from '../auth.service';
 import { Logger } from 'nestjs-pino';
 import { JwtAuthGuard } from '../guard/auth.guard';
@@ -90,7 +90,7 @@ export class SessionController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const payload = req.user.authTokenPayload;
+    const payload = req.user;
 
     if (!payload) {
       this.logger.warn(
@@ -148,7 +148,7 @@ export class SessionController {
     @Body() deleteSessionDto: DeleteSessionDto,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const userId = req.user.authTokenPayload?.userId;
+    const userId = req.user.userId;
     if (!userId) {
       throw new UnauthorizedException(AUTH_ERROR.NO_AUTH_PAYLOAD);
     }

@@ -1,45 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsOptional,
-  IsString,
-  IsStrongPassword,
-  IsUUID,
-  Matches,
-  MinLength,
-} from 'class-validator';
-
-export class SendVerificationCodeDto {
-  @ApiProperty({
-    description:
-      'The user\'s email address. Must be a valid email format and cannot belong to the "example.com" domain.',
-    example: 'user@example.com',
-  })
-  @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
-  email: string; // 邮箱地址
-
-  @IsOptional()
-  @IsString()
-  deepLink: string;
-}
-
-export class VerifyCodeDto {
-  @ApiProperty({
-    description: 'The 6-digit numeric verification code.',
-    example: '123456',
-  })
-  @IsString()
-  @Matches(/^\d{6}$/, { message: 'Code must be exactly 6 digits' })
-  code: string;
-
-  @ApiProperty({
-    description:
-      'The user\'s email address. Must be a valid email format and cannot belong to the "example.com" domain.',
-    example: 'user@example.com',
-  })
-  @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
-  email: string; // 邮箱地址
-}
+import { IsString, IsStrongPassword, IsUUID, MinLength } from 'class-validator';
 
 export class ResetPasswordDto {
   @IsString()

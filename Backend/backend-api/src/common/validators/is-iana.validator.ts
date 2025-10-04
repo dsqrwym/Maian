@@ -4,8 +4,9 @@ import {
   ValidationArguments,
 } from 'class-validator';
 import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
+import { DAY, HOUR } from '../../utils/date.utils';
 
 @ValidatorConstraint({ name: 'IsIANA', async: true }) // 让Nest可以管理这个类
 @Injectable()
@@ -25,10 +26,10 @@ export class IanaTimezoneValidator implements ValidatorConstraintInterface {
 
     try {
       new Intl.DateTimeFormat('en-US', { timeZone: value });
-      await this.cacheManager.set(cacheKey, true, 604800); // 缓存7天
+      await this.cacheManager.set(cacheKey, true, 7 * DAY); // 缓存7天
       return true;
     } catch {
-      await this.cacheManager.set(cacheKey, false, 3600);
+      await this.cacheManager.set(cacheKey, false, HOUR);
       return false;
     }
   }

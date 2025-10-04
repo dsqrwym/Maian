@@ -1,9 +1,9 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { AuthTokenPayload, ReqUser } from '../auth.types';
+import { UserPayload } from '../auth.types';
 import { Logger } from 'nestjs-pino';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
 import { ENV } from '../../config/constants.config';
@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
     });
   }
 
-  async validate(payload: AuthTokenPayload) {
+  async validate(payload: UserPayload) {
     this.logger.debug(
       `[JwtStrategy] Validating token for userId: ${payload.userId}`,
     );
@@ -40,10 +40,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {
       throw new UnauthorizedException(AUTH_ERROR.SESSION_REVOKED);
     }
 
-    const reqUser: ReqUser = {
-      authenticatedUser: null,
-      authTokenPayload: payload,
-    };
-    return reqUser;
+    return payload;
   }
 }

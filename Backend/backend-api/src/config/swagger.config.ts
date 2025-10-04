@@ -19,7 +19,7 @@ export function useSwagger(app: INestApplication) {
       'bearer',
     )
     .addServer('http://localhost:3000', 'Local')
-    .addServer('https://maian.dsqrwym.es', 'Production')
+    .addServer('https://api.dsqrwym.es', 'Production')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

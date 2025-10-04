@@ -8,7 +8,8 @@ import { ENV } from '../config/constants.config';
 import { MyI18nModule } from '../i18n/i18n.module';
 import { BullModule } from '@nestjs/bullmq';
 import { MailQueueProcessorService } from './mail-queue-processor.service';
-import { VerificationMailProcessorService } from './verification-processor/verification-mail-processor.service';
+import { VerifyRegistrationProcessorService } from './verification-processor/verify-registration-processor.service';
+import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password-processor.service';
 
 @Global()
 @Module({
@@ -54,7 +55,8 @@ import { VerificationMailProcessorService } from './verification-processor/verif
   providers: [
     MailService,
     MailQueueProcessorService,
-    VerificationMailProcessorService,
+    VerifyResetPasswordProcessorService,
+    VerifyRegistrationProcessorService,
   ],
   exports: [MailService],
 })

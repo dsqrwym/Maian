@@ -1,15 +1,12 @@
 import { UserRole, UserStatus } from '../../prisma/generated';
 
-interface ReqUser {
-  authenticatedUser: AuthenticatedUser | null;
-  authTokenPayload: AuthTokenPayload | null;
-}
-
 /**
- * AuthTokenPayload 是嵌入 JWT token 中的载荷（payload）结构。
+ * UserPayload 是嵌入 JWT token 中的载荷（payload）结构。
  * 用于识别当前会话的用户、设备以及该次会话的唯一标识。
+ * 这个接口替代了原来的 AuthTokenPayload 和 AuthenticatedUser 接口，
+ * 将用户认证信息和会话信息合并到一个统一的接口中。
  */
-interface AuthTokenPayload {
+interface UserPayload {
   /**
    * 用户唯一 ID（来自 users 表的主键）
    * 用于标识 token 属于哪个用户。
@@ -17,13 +14,20 @@ interface AuthTokenPayload {
   userId: string;
 
   /**
-   * 用于进行角色权限判断。
+   * 用户角色，用于进行角色权限判断。
+   * 控制用户可以访问哪些资源和执行哪些操作。
    */
   userRole: UserRole;
 
   /**
+   * 用户账户状态
+   * 用于判断用户账户是否被禁用或其他状态。
+   */
+  userStatus: UserStatus;
+
+  /**
    * 设备指纹，由设备名和 UA 信息哈希而成
-   * 用于识别用户使用的是哪个设备。
+   * 用于识别用户使用的是哪个设备，增强安全性。
    */
   deviceFinger: string;
 
@@ -34,38 +38,49 @@ interface AuthTokenPayload {
   sessionId: string;
 }
 
-interface AuthenticatedUser {
-  id: string;
-  user_id: string | null;
-  status: UserStatus;
-  role: UserRole;
-}
-
+/**
+ * CSRF 保护负载
+ * 用于防止跨站请求伪造攻击
+ */
 interface CSRFPayload {
+  /** 会话ID，与用户会话关联 */
   sessionId: string;
+  /** 设备指纹，用于验证请求来源 */
   deviceFinger: string;
 }
 
-interface EmailVerificationPayload {
-  id: string;
-}
-// 西班牙公司类型枚举
+/**
+ * 西班牙公司类型枚举
+ * 用于注册时的公司类型选择
+ */
 enum SpanishCompanyType {
-  SA = 0, // Sociedad Anónima
-  AUTONOMO = 1, // Autónomo (个体)
-  SL = 2, // Sociedad Limitada
-  SLNE = 3, // Nueva Empresa
-  SC = 4, // Sociedad Civil
-  CB = 5, // Comunidad de Bienes
-  COOP = 6, // Cooperativa
-  ASOCIACION = 7, // Asociación / Fundación
+  /** Sociedad Anónima - 股份有限公司 */
+  SA = 0,
+  /** Autónomo - 个体经营者 */
+  AUTONOMO = 1,
+  /** Sociedad Limitada - 有限责任公司 */
+  SL = 2,
+  /** Nueva Empresa - 新企业 */
+  SLNE = 3,
+  /** Sociedad Civil - 民事公司 */
+  SC = 4,
+  /** Comunidad de Bienes - 财产共有 */
+  CB = 5,
+  /** Cooperativa - 合作社 */
+  COOP = 6,
+  /** Asociación / Fundación - 协会/基金会 */
+  ASOCIACION = 7,
 }
 
-export {
-  ReqUser,
-  AuthTokenPayload,
-  CSRFPayload,
-  EmailVerificationPayload,
-  AuthenticatedUser,
-  SpanishCompanyType,
-};
+/**
+ * 验证邮件类型
+ * 用于区分不同场景下的邮箱验证
+ */
+enum VerificationEmailType {
+  /** 重置密码 */
+  RESET_PASSWORD,
+  /** 普通注册 */
+  NORMAL_REGISTER,
+}
+
+export { UserPayload, CSRFPayload, SpanishCompanyType, VerificationEmailType };

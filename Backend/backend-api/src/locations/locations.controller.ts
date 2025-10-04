@@ -1,0 +1,175 @@
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import { LocationsService } from './locations.service';
+import { CacheTTL } from '@nestjs/cache-manager';
+import { DAY } from '../utils/date.utils';
+import { RedisCacheInterceptor } from '../cache/redis/redis.cache.interceptor';
+
+@ApiTags('Locations')
+@Controller('locations')
+@UseInterceptors(RedisCacheInterceptor)
+@CacheTTL(DAY)
+export class LocationsController {
+  constructor(private readonly locationsService: LocationsService) {}
+
+  @Get('countries')
+  @ApiOperation({
+    summary: 'Get all countries',
+    description:
+      'Retrieves a list of all available countries with their details',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved list of countries',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          iso_alpha2: {
+            type: 'string',
+            description: 'ISO 3166-1 alpha-2 country code',
+          },
+          iso_alpha3: {
+            type: 'string',
+            description: 'ISO 3166-1 alpha-3 country code',
+          },
+          iso_numeric: {
+            type: 'number',
+            description: 'ISO 3166-1 numeric country code',
+          },
+          name: { type: 'string', description: 'Country name in English' },
+          name_local: {
+            type: 'string',
+            description: 'Country name in local language',
+            nullable: true,
+          },
+          currency_id: {
+            type: 'number',
+            description: "Reference ID for the country's currency",
+          },
+        },
+        example: {
+          iso_alpha2: 'ES',
+          iso_alpha3: 'ESP',
+          iso_numeric: 724,
+          name: 'Spain',
+          name_local: 'España',
+          currency_id: 978,
+        },
+      },
+    },
+  })
+  async getCountries() {
+    return this.locationsService.findAllCountries();
+  }
+
+  @Get('countries/:isoNumeric/provinces')
+  @ApiOperation({
+    summary: 'Get provinces by country',
+    description:
+      'Retrieves a list of provinces/states for a specific country using its ISO numeric code',
+  })
+  @ApiParam({
+    name: 'isoNumeric',
+    description: 'Numeric ISO country code',
+    type: Number,
+    example: 840,
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved list of provinces',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number' },
+          name: { type: 'string' },
+          name_local: { type: 'string', nullable: true },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Country not found with the specified ISO numeric code',
+  })
+  async getProvinces(@Param('isoNumeric', ParseIntPipe) isoNumeric: number) {
+    return this.locationsService.findProvincesByCountryIsoNumeric(isoNumeric);
+  }
+
+  @Get('provinces/:provinceId/cities')
+  @ApiOperation({
+    summary: 'Get cities by province',
+    description:
+      'Retrieves a list of cities for a specific province using its ID',
+  })
+  @ApiParam({
+    name: 'provinceId',
+    description: 'ID of the province',
+    type: Number,
+    example: 1,
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved list of cities',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number' },
+          name: { type: 'string' },
+          name_local: { type: 'string', nullable: true },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Province not found with the specified ID',
+  })
+  async getCities(@Param('provinceId', ParseIntPipe) provinceId: number) {
+    return this.locationsService.findCitiesByProvinceId(provinceId);
+  }
+
+  @Get('currencies/:isoNumeric')
+  @ApiOperation({
+    summary: 'Get currency details',
+    description: 'Retrieves currency information using its ISO numeric code',
+  })
+  @ApiParam({
+    name: 'isoNumeric',
+    description: 'Numeric ISO currency code',
+    type: Number,
+    example: 840,
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved currency information',
+    schema: {
+      type: 'object',
+      properties: {
+        iso_alpha3: { type: 'string' },
+        symbol: { type: 'string' },
+        decimal_digits: { type: 'number' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Currency not found with the specified ISO numeric code',
+  })
+  async getCurrency(@Param('isoNumeric', ParseIntPipe) isoNumeric: number) {
+    return this.locationsService.getCurrencyByIsoNumeric(isoNumeric);
+  }
+}
