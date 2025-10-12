@@ -1,28 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}">
 <head>
-  <meta charset="UTF-8">
-  <title>Verify Email</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{title}}</title>
   <style>
-    body {
-      font-family: Arial, serif;
-      background: #f9f9f9;
-      padding: 50px;
-      text-align: center;
+    :root {
+      --primary-light: #005F9C;
+      --on-primary-light: #ECF3FF;
+      --background-light: #F5F6FF;
+      --on-background-light: #182F50;
+      --success-light: #0E8343;
+      --on-success-light: #E9FFF1;
+      --error-light: #B31B25;
+      --on-error-light: #FFEFEE;
+      --warning-light: #C37E00;
+
+      --primary-dark: #64B3FF;
+      --background-dark: #000E25;
+      --on-background-dark: #DAE6FF;
+      --success-dark: #6DFFA1;
+      --error-dark: #FF716C;
+      --warning-dark: #FFC54C;
     }
 
-    .box {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      display: inline-block;
+    body {
+      font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: var(--background-light);
+      color: var(--on-background-light);
+      transition: all 0.3s ease;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: var(--background-dark);
+        color: var(--on-background-dark);
+      }
+    }
+
+    .container {
+      text-align: center;
+      max-width: 420px;
+      padding: 36px;
+      border-radius: 18px;
+      background-color: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .container {
+        background-color: #001939;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+      }
+    }
+
+    .icon {
+      font-size: 72px;
+      margin-bottom: 20px;
+    }
+
+    .success {
+      color: var(--success-light);
+    }
+
+    .error {
+      color: var(--error-light);
+    }
+
+    .warning {
+      color: var(--warning-light);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .success {
+        color: var(--success-dark);
+      }
+
+      .error {
+        color: var(--error-dark);
+      }
+
+      .warning {
+        color: var(--warning-dark);
+      }
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0.9;
+      margin: 0;
     }
   </style>
 </head>
 <body>
-<div class="box">
-  <h2>{{message}}</h2>
+<div class="container">
+  {{#if (eq status "success")}}
+    <div class="icon success">✅</div>
+    <h1>{{title}}</h1>
+    <p>{{message}}</p>
+
+  {{else if (eq status "expired")}}
+    <div class="icon warning">⏰</div>
+    <h1>{{title}}</h1>
+    <p>{{message}}</p>
+
+  {{else if (eq status "used")}}
+    <div class="icon warning">⚠️</div>
+    <h1>{{title}}</h1>
+    <p>{{message}}</p>
+
+  {{else}}
+    <div class="icon error">❌</div>
+    <h1>{{title}}</h1>
+    <p>{{message}}</p>
+  {{/if}}
 </div>
 </body>
 </html>

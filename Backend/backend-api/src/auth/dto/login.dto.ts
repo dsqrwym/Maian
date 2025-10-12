@@ -8,6 +8,7 @@ import {
   MaxLength,
   ValidateIf,
   NotContains,
+  IsOptional,
 } from 'class-validator';
 export class LoginDto {
   @ApiProperty({
@@ -34,7 +35,8 @@ export class LoginDto {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   @ValidateIf((o) => !o.username)
   @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
-  email: string; // 邮箱地址
+  @MaxLength(100)
+  email?: string; // 邮箱地址
 
   @ApiPropertyOptional({
     description:
@@ -47,7 +49,18 @@ export class LoginDto {
   @MinLength(3) // 最小长度为3
   @MaxLength(30) // 最大长度为30
   @NotContains('@') // 不能包含 @
-  username: string; // 用户名
+  username?: string; // 用户名
+
+  @ApiPropertyOptional({
+    description:
+      'Optional wholesaler ID (company code). Used for employees (e.g., WHO001@support). Required if multiple users share the same username across wholesalers.',
+    example: 'WHO001',
+  })
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  @MaxLength(20)
+  wholesalerId?: string;
 
   @ApiProperty({
     description:
@@ -56,8 +69,7 @@ export class LoginDto {
   })
   @IsString()
   @MaxLength(150)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  @Transform(({ value }) => value?.toUpperCase()) // 将设备名称转换为大写
+  @Transform(({ value }) => String(value).toUpperCase()) // 将设备名称转换为大写
   deviceName: string; // 登录设备名称
 
   @ApiProperty({
@@ -67,7 +79,6 @@ export class LoginDto {
   })
   @IsString()
   @MaxLength(255)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  @Transform(({ value }) => value?.toUpperCase()) // 将user-agent转换为大写
+  @Transform(({ value }) => String(value).toUpperCase()) // 将user-agent转换为大写
   userAgent: string; // 登录设备
 }

@@ -7,7 +7,14 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { JobsOptions, Queue } from 'bullmq';
 import { ENV } from '../config/constants.config';
 import { ConfigService } from '@nestjs/config';
-import { RegisterEmailJob, ResetPasswordJob } from './mail.types';
+import {
+  ActiveAdminWithPasswordEmailJob,
+  ActiveEmployeeWithPasswordEmailJob,
+  BaseEmailJobWithLink,
+  RegisterEmailJob,
+  ResetPasswordJob,
+  VerifyEmployeeEmailJob,
+} from './mail.types';
 
 @Injectable()
 export class MailService {
@@ -45,21 +52,82 @@ export class MailService {
     return { queued: true };
   }
 
-  async sendResetPassword(
-    user: { email: string; name: string; language?: string },
-    code: string,
-  ) {
-    const lang = user.language || 'en';
-    const namespace = 'reset-password.';
+  async sendResetPassword(dto: ResetPasswordJob) {
+    const lang = dto.lang || 'en';
     const subject: string = this.i18nService.translate(
-      `${namespace}resetPasswordSubject`,
+      'reset-password.resetPasswordSubject',
       { lang },
     );
     this.logger.info(
-      `Queue job to send reset password email to ${maskEmail(user.email)} with subject: ${subject}`,
+      `Queue job to send reset password email to ${maskEmail(dto.to)} with subject: ${subject}`,
     );
-    const data: ResetPasswordJob = { user, code };
-    await this.mailQueue.add('sendResetPassword', data, this.mailJobsOption);
+    await this.mailQueue.add('sendResetPassword', dto, this.mailJobsOption);
+    return { queued: true };
+  }
+
+  async sendEmployeeVerifyEmail(dto: VerifyEmployeeEmailJob) {
+    const lang = dto.lang || 'en';
+    const subject = this.i18nService.translate(
+      'register-verification-email.subject',
+      { lang },
+    );
+    this.logger.info(
+      `Queue job to send employee verify email to ${maskEmail(dto.to)} with subject: ${subject}`,
+    );
+    await this.mailQueue.add(
+      'sendVerifyEmployeeEmail',
+      dto,
+      this.mailJobsOption,
+    );
+    return { queued: true };
+  }
+
+  async sendAdminVerifyEmail(dto: BaseEmailJobWithLink) {
+    const lang = dto.lang || 'en';
+    const subject = this.i18nService.translate(
+      'register-verification-email.subject',
+      { lang },
+    );
+    this.logger.info(
+      `Queue job to send admin verify email to ${maskEmail(dto.to)} with subject: ${subject}`,
+    );
+    await this.mailQueue.add('sendVerifyAdminEmail', dto, this.mailJobsOption);
+    return { queued: true };
+  }
+
+  async sendActiveEmployeeWithTempPasswordEmail(
+    dto: ActiveEmployeeWithPasswordEmailJob,
+  ) {
+    const lang = dto.lang || 'en';
+    const subject = this.i18nService.translate('employee-activation.subject', {
+      lang,
+    });
+    this.logger.info(
+      `Queue job to send employee verify email to ${maskEmail(dto.to)} with subject: ${subject}`,
+    );
+    await this.mailQueue.add(
+      'sendActiveEmployeeWithTempPassword',
+      dto,
+      this.mailJobsOption,
+    );
+    return { queued: true };
+  }
+
+  async sendActiveAdminWithTempPasswordEmail(
+    dto: ActiveAdminWithPasswordEmailJob,
+  ) {
+    const lang = dto.lang || 'en';
+    const subject = this.i18nService.translate('admin-activation.subject', {
+      lang,
+    });
+    this.logger.info(
+      `Queue job to send admin verify email to ${maskEmail(dto.to)} with subject: ${subject}`,
+    );
+    await this.mailQueue.add(
+      'sendActiveAdminWithTempPassword',
+      dto,
+      this.mailJobsOption,
+    );
     return { queued: true };
   }
 }

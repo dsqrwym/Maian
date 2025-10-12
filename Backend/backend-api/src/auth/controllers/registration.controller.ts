@@ -1,8 +1,7 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
-  ApiExtraModels,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -10,7 +9,7 @@ import {
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { RegisterDto, SendNormalRegisterMailDto } from '../dto/register.dto';
+import { SendNormalRegisterMailDto } from '../dto/register.dto';
 import { AUTH_ERROR } from '../auth.constants';
 import { maskEmail } from '../../common/formatter/emial-format';
 import { AuthService } from '../auth.service';
@@ -21,15 +20,14 @@ import { VerifyCodeDto, VerifyCodeResponseDto } from '../dto/verification.dto';
 import { RegisterWholesalerDto } from '../dto/register-wholesaler.dto';
 
 @Controller('registration')
+@Throttle({ default: { limit: 1, ttl: minutes(1) } })
 @ApiTags('Registration')
-@ApiExtraModels(RegisterDto)
 export class RegistrationController {
   constructor(
     private readonly authService: AuthService,
     private readonly logger: Logger,
   ) {}
   @Post('verify-email')
-  @HttpCode(200)
   @Throttle({ default: { limit: 3, ttl: seconds(60) } })
   @ApiOperation({ summary: 'Verify code and return temporary reset token' })
   @ApiBody({
@@ -91,8 +89,6 @@ export class RegistrationController {
   }
 
   @Post('retailer')
-  @HttpCode(200)
-  @Throttle({ default: { limit: 1, ttl: minutes(1) } })
   @ApiOperation({ summary: 'Register new retailer' })
   @ApiBody({
     description: 'Retailer registration payload',
@@ -107,7 +103,6 @@ export class RegistrationController {
   }
 
   @Post('retailer/complete')
-  @Throttle({ default: { limit: 1, ttl: minutes(1) } })
   @ApiOperation({ summary: 'Complete retailer registration' })
   @ApiBody({
     description: 'Retailer registration payload',
@@ -122,8 +117,6 @@ export class RegistrationController {
   }
 
   @Post('wholesaler')
-  @HttpCode(200)
-  @Throttle({ default: { limit: 1, ttl: minutes(1) } })
   @ApiOperation({ summary: 'Register new wholesaler' })
   @ApiBody({
     description: 'Wholesaler registration payload',
@@ -138,7 +131,6 @@ export class RegistrationController {
   }
 
   @Post('wholesaler/complete')
-  @Throttle({ default: { limit: 1, ttl: minutes(1) } })
   @ApiOperation({ summary: 'Complete wholesaler registration' })
   @ApiBody({
     description: 'Wholesaler registration payload',

@@ -1,0 +1,22 @@
+{
+  "invalid": {
+    "status": "invalid",
+    "title": "Invalid verification link",
+    "message": "Please check if the link is correct or has expired."
+  },
+  "expired": {
+    "status": "expired",
+    "title": "Verification link expired",
+    "message": "Please request a new verification email."
+  },
+  "used": {
+    "status": "used",
+    "title": "Link already used",
+    "message": "This verification link has already been completed."
+  },
+  "success": {
+    "status": "success",
+    "title": "Verification successful",
+    "message": "Your email has been successfully verified. Welcome!"
+  }
+}

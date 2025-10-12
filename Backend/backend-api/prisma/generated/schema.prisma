@@ -303,10 +303,10 @@ model user_sessions {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model users {
   id                                 String                @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id                            String?
+  user_id                            String?               @unique
   first_name                         String?               @db.VarChar(50)
   last_name                          String?               @db.VarChar(60)
-  username                           String?               @unique @db.VarChar(30)
+  username                           String?               @unique @db.VarChar(50)
   password                           String
   email                              String                @unique @db.VarChar(255)
   telephone                          String?               @unique @db.VarChar(15)
@@ -315,7 +315,7 @@ model users {
   created_at                         DateTime              @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   updated_at                         DateTime?             @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   role                               UserRole
-  cif                                String?               @db.VarChar(9)
+  cif                                String?               @db.VarChar(20)
   carts                              carts[]
   categories                         categories[]
   chat_participants                  chat_participants[]

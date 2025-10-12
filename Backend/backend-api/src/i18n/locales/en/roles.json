@@ -1,0 +1,9 @@
+{
+  "WHOLESALER": "Wholesaler",
+  "RETAILER": "Retailer",
+  "SUPPORT": "Customer Support",
+  "DELIVERY": "Delivery Person",
+  "WAREHOUSE": "Warehouse Manager",
+  "ADMIN": "Administrator",
+  "SUPERADMIN": "Super Administrator"
+}

@@ -1,0 +1,9 @@
+{
+  "WHOLESALER": "批發商",
+  "RETAILER": "零售商",
+  "SUPPORT": "客服人員",
+  "DELIVERY": "外送員",
+  "WAREHOUSE": "倉庫管理員",
+  "ADMIN": "系統管理員",
+  "SUPERADMIN": "超級管理員"
+}

@@ -1,0 +1,22 @@
+{
+  "invalid": {
+    "status": "invalid",
+    "title": "无效的验证链接",
+    "message": "请检查链接是否正确或已过期。"
+  },
+  "expired": {
+    "status": "expired",
+    "title": "验证链接已过期",
+    "message": "请重新请求验证邮件。"
+  },
+  "used": {
+    "status": "used",
+    "title": "链接已被使用",
+    "message": "该验证链接已经完成验证。"
+  },
+  "success": {
+    "status": "success",
+    "title": "验证成功",
+    "message": "您的邮箱已成功验证，欢迎使用！"
+  }
+}

@@ -1,4 +1,4 @@
-import { BaseProfile } from './profile.type';
+import { BaseProfile } from '../../user/type/profile.type';
 import { SpanishCompanyType } from '../../auth/dto/register-wholesaler.dto';
 
 export interface WholesalerProfileType extends BaseProfile {

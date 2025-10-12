@@ -5,26 +5,34 @@ import {
 } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from 'prisma/generated';
+import { Prisma, UserRole, UserStatus } from 'prisma/generated';
 import {
   SendVerificationCodeDto,
   VerifyCodeDto,
   VerifyCodeResponseDto,
+  VerifyEmailQueryDto,
 } from '../dto/verification.dto';
 import { maskEmail } from '../../common/formatter/emial-format';
 import { addMinutes } from '../../utils/date.utils';
-import { AUTH_ERROR } from '../auth.constants';
+import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
 import { TooManyRequestsExceptions } from '../../common/exceptions/too-many-requests.exceptions';
-import { generateUniformRandomDigits } from '../../utils/random.utils';
+import {
+  generateUniformRandomDigits,
+  generateUniformStrongPassword,
+} from '../../utils/random.utils';
 import { MailService } from '../../mail/mail.service';
 import { HashService } from 'src/common/hash/hash.service';
-import { VerificationEmailType } from '../auth.types';
 import { randomUUID } from 'node:crypto';
 import { RegisterEmailJob } from '../../mail/mail.types';
+import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile.type';
+import { renderTemplate } from '../../utils/hbs-renderer';
+import { FastifyReply } from 'fastify';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class VerificationService {
   constructor(
+    private readonly i18nService: I18nService,
     private readonly prismaService: PrismaService,
     private readonly mailService: MailService,
     private readonly hashService: HashService,
@@ -95,14 +103,12 @@ export class VerificationService {
         break;
       }
       case VerificationEmailType.RESET_PASSWORD:
-        await this.mailService.sendResetPassword(
-          {
-            email: email,
-            name: user.username ?? email,
-            language: user.configurations?.language,
-          },
-          code,
-        );
+        await this.mailService.sendResetPassword({
+          to: email,
+          name: user.username ?? email,
+          lang: user.configurations?.language,
+          code: code,
+        });
         break;
     }
 
@@ -215,5 +221,135 @@ export class VerificationService {
     });
 
     return verificationToken.user_id;
+  }
+
+  async verifyEmailVerificationToken(
+    dto: VerifyEmailQueryDto,
+    reply: FastifyReply,
+  ) {
+    const now = new Date();
+    const hashToken = await this.hashService.hashWithCrypto(dto.token);
+
+    const verificationToken =
+      await this.prismaService.verification_tokens.findFirst({
+        select: { id: true, is_used: true, expires_at: true },
+        where: {
+          user_id: dto.userId,
+          token: hashToken,
+          expires_at: { gt: new Date() },
+        },
+      });
+
+    if (!verificationToken) {
+      return reply.type('text/html').send(
+        renderTemplate(
+          'verification-email-response',
+          this.i18nService.translate('verify-email-response.invalid', {
+            lang: dto.lang,
+          }),
+        ),
+      );
+    }
+
+    if (verificationToken.is_used) {
+      return reply.type('text/html').send(
+        renderTemplate(
+          'verification-email-response',
+          this.i18nService.translate('verify-email-response.used', {
+            lang: dto.lang,
+          }),
+        ),
+      );
+    }
+
+    if (verificationToken.expires_at < now) {
+      return reply.type('text/html').send(
+        renderTemplate(
+          'verification-email-response',
+          this.i18nService.translate('verify-email-response.expired', {
+            lang: dto.lang,
+          }),
+        ),
+      );
+    }
+
+    const password = generateUniformStrongPassword();
+
+    const hashedPassword = await this.hashService.hashWithBcrypt(password);
+
+    const result = await this.prismaService.$transaction(async (tx) => {
+      const updatedUser = await tx.users.update({
+        select: {
+          email: true,
+          role: true,
+          configurations: true,
+          first_name: true,
+          username: true,
+        },
+        where: { id: dto.userId, status: UserStatus.PENDING_VERIFICATION },
+        data: { status: UserStatus.APPROVED, password: hashedPassword },
+      });
+
+      await tx.verification_tokens.update({
+        where: { id: verificationToken.id },
+        data: { is_used: true },
+      });
+
+      if (updatedUser.role === UserRole.ADMIN) {
+        return {
+          email: updatedUser.email,
+          role: updatedUser.role,
+          configurations: updatedUser.configurations,
+          username: updatedUser.username,
+        };
+      } else {
+        const [wholesalerUserId] = dto.token.split('@');
+
+        const profile = await tx.users.findUnique({
+          where: { user_id: wholesalerUserId },
+          select: { profile: true },
+        });
+
+        const wholesalerProfile =
+          profile?.profile as unknown as WholesalerProfileType;
+
+        const companyName = wholesalerProfile.company_name || 'unknow';
+
+        return {
+          email: updatedUser.email,
+          role: updatedUser.role,
+          configurations: updatedUser.configurations,
+          employeeName:
+            updatedUser.first_name || updatedUser.username || updatedUser.email,
+          companyName,
+        };
+      }
+    });
+
+    if (result.role === UserRole.ADMIN) {
+      await this.mailService.sendActiveAdminWithTempPasswordEmail({
+        to: result.email,
+        adminName: result.username?.split('@')[1] || 'unknow',
+        lang: result.configurations?.language,
+        temporaryPassword: password,
+      });
+    } else {
+      await this.mailService.sendActiveEmployeeWithTempPasswordEmail({
+        to: result.email,
+        lang: result.configurations?.language,
+        employeeName: result.employeeName?.split('@')[1] || 'unknow',
+        companyName: result.companyName || 'unknow',
+        temporaryPassword: password,
+      });
+    }
+
+    return reply.type('text/html').send(
+      renderTemplate(
+        'verification-email-response',
+        this.i18nService.translate('verify-email-response.success', {
+          lang: dto.lang,
+        }),
+      ),
+    );
   }
 }

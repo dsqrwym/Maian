@@ -1,0 +1,22 @@
+{
+  "invalid": {
+    "status": "invalid",
+    "title": "Enlace de verificación no válido",
+    "message": "Por favor, compruebe si el enlace es correcto o ha caducado."
+  },
+  "expired": {
+    "status": "expired",
+    "title": "El enlace de verificación ha caducado",
+    "message": "Solicite nuevamente el correo de verificación."
+  },
+  "used": {
+    "status": "used",
+    "title": "El enlace ya ha sido utilizado",
+    "message": "Este enlace de verificación ya se ha completado."
+  },
+  "success": {
+    "status": "success",
+    "title": "Verificación completada",
+    "message": "Su correo electrónico se ha verificado correctamente. ¡Bienvenido!"
+  }
+}

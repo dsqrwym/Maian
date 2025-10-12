@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserStatus } from '../../prisma/generated';
+import { UserRole, UserStatus } from '../../prisma/generated';
 import { reduceDay } from '../utils/date.utils';
 
 @Injectable()
@@ -39,6 +39,14 @@ export class CleanupTask {
     const deleted = await this.prismaService.users.deleteMany({
       where: {
         status: UserStatus.PENDING_VERIFICATION,
+        role: {
+          notIn: [
+            UserRole.SUPPORT,
+            UserRole.DELIVERY,
+            UserRole.WAREHOUSE,
+            UserRole.ADMIN,
+          ],
+        },
         AND: {
           created_at: { lt: deleteDate },
         },
@@ -51,10 +59,17 @@ export class CleanupTask {
     const deleteDate = reduceDay(now, 7);
     const deleted = await this.prismaService.users.deleteMany({
       where: {
-        status: UserStatus.INACTIVE,
-        AND: {
-          created_at: { lt: deleteDate },
-        },
+        OR: [
+          { status: UserStatus.INACTIVE, created_at: { lt: deleteDate } },
+          // 员工类用户：待验证且属于特定角色
+          {
+            status: UserStatus.PENDING_VERIFICATION,
+            role: {
+              in: [UserRole.SUPPORT, UserRole.DELIVERY, UserRole.WAREHOUSE],
+            },
+            created_at: { lt: deleteDate },
+          },
+        ],
       },
     });
     this.logger.log(`Deleted: ${deleted.count} users.`);

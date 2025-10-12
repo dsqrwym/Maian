@@ -119,7 +119,6 @@ kotlin {
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.serialization.kotlinx.json)
 
-            implementation(libs.sonner)
         }
 
         // 公共测试源码集

@@ -36355,13 +36355,13 @@ export namespace Prisma {
 
   export type usersWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    user_id?: string
     username?: string
     email?: string
     telephone?: string
     AND?: usersWhereInput | usersWhereInput[]
     OR?: usersWhereInput[]
     NOT?: usersWhereInput | usersWhereInput[]
-    user_id?: StringNullableFilter<"users"> | string | null
     first_name?: StringNullableFilter<"users"> | string | null
     last_name?: StringNullableFilter<"users"> | string | null
     password?: StringFilter<"users"> | string
@@ -36385,7 +36385,7 @@ export namespace Prisma {
     products?: ProductsListRelationFilter
     user_sessions?: User_sessionsListRelationFilter
     verification_tokens?: Verification_tokensListRelationFilter
-  }, "id" | "username" | "email" | "telephone">
+  }, "id" | "user_id" | "username" | "email" | "telephone">
 
   export type usersOrderByWithAggregationInput = {
     id?: SortOrder

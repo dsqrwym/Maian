@@ -4,6 +4,8 @@ import { HashService } from './hash/hash.service';
 import { Bcp47LanguageValidator } from './validators/is-bcp47-language.validator';
 import { IanaTimezoneValidator } from './validators/is-iana.validator';
 import { HashWorkerPoolProvider } from './hash/hash-worker-pool.provider';
+import { MyI18nModule } from '../i18n/i18n.module';
+import { RoleI18nService } from './i18n/role.i18n';
 @Global() // 让这个模块在全局可用
 @Module({
   providers: [
@@ -12,12 +14,15 @@ import { HashWorkerPoolProvider } from './hash/hash-worker-pool.provider';
     Bcp47LanguageValidator,
     IanaTimezoneValidator,
     HashWorkerPoolProvider,
+    MyI18nModule,
+    RoleI18nService,
   ], // 提供者
   exports: [
     DateFormatService,
     HashService,
     Bcp47LanguageValidator,
     IanaTimezoneValidator,
+    RoleI18nService,
   ], // 导出提供者，以便其他模块可以使用
 })
 export class CommonModule {}

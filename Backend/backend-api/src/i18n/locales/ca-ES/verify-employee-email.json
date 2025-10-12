@@ -1,0 +1,9 @@
+{
+  "subject": "S’ha creat el teu compte d’empleat a la plataforma MaiAn. Si us plau, activa’l com més aviat millor.",
+  "title": "Verifica el teu correu electrònic ara",
+  "content1": "Se t’ha assignat un compte d’empleat a la plataforma MaiAn per part de <strong>{companyName}</strong>, amb el càrrec de <strong>{position}</strong>.<br>Per garantir la seguretat del teu compte i l’ús correcte del sistema, completa l’activació en un termini de <strong>7 dies</strong>.",
+  "content2": "Fes clic al botó de sota per establir la teua contrasenya i activar el compte:",
+  "button": "Verificar ara",
+  "ignore": "Atenció: si no completes l’activació en 7 dies, la informació del teu compte s’eliminarà automàticament.<br>Si no eres empleat de {companyName} o penses que aquest missatge és un error, ignora aquest correu.",
+  "support": "Si tens cap dubte o necessites ajuda, contacta amb el nostre equip d’atenció al client. Gràcies per la teua comprensió i col·laboració."
+}

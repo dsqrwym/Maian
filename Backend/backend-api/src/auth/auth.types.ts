@@ -49,38 +49,4 @@ interface CSRFPayload {
   deviceFinger: string;
 }
 
-/**
- * 西班牙公司类型枚举
- * 用于注册时的公司类型选择
- */
-enum SpanishCompanyType {
-  /** Sociedad Anónima - 股份有限公司 */
-  SA = 0,
-  /** Autónomo - 个体经营者 */
-  AUTONOMO = 1,
-  /** Sociedad Limitada - 有限责任公司 */
-  SL = 2,
-  /** Nueva Empresa - 新企业 */
-  SLNE = 3,
-  /** Sociedad Civil - 民事公司 */
-  SC = 4,
-  /** Comunidad de Bienes - 财产共有 */
-  CB = 5,
-  /** Cooperativa - 合作社 */
-  COOP = 6,
-  /** Asociación / Fundación - 协会/基金会 */
-  ASOCIACION = 7,
-}
-
-/**
- * 验证邮件类型
- * 用于区分不同场景下的邮箱验证
- */
-enum VerificationEmailType {
-  /** 重置密码 */
-  RESET_PASSWORD,
-  /** 普通注册 */
-  NORMAL_REGISTER,
-}
-
-export { UserPayload, CSRFPayload, SpanishCompanyType, VerificationEmailType };
+export { UserPayload, CSRFPayload };

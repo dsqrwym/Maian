@@ -42,7 +42,10 @@ export class RegisterWholesalerDto {
     example: 'wholesaler@example.com',
     required: true,
   })
-  @IsEmail({}, { message: 'Invalid email format' })
+  @IsEmail(
+    { host_blacklist: ['example.com'] },
+    { message: 'Invalid email format' },
+  )
   @MaxLength(100, {
     message: 'Email must be shorter than or equal to 100 characters',
   })

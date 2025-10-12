@@ -1,0 +1,22 @@
+{
+  "invalid": {
+    "status": "invalid",
+    "title": "Lien de vérification invalide",
+    "message": "Veuillez vérifier si le lien est correct ou s’il a expiré."
+  },
+  "expired": {
+    "status": "expired",
+    "title": "Le lien de vérification a expiré",
+    "message": "Veuillez demander à nouveau l’e-mail de vérification."
+  },
+  "used": {
+    "status": "used",
+    "title": "Lien déjà utilisé",
+    "message": "Ce lien de vérification a déjà été validé."
+  },
+  "success": {
+    "status": "success",
+    "title": "Vérification réussie",
+    "message": "Votre adresse e-mail a été vérifiée avec succès. Bienvenue !"
+  }
+}

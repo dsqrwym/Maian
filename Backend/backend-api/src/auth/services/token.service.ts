@@ -175,7 +175,9 @@ export class TokenService {
 
     const newAccessToken = await this.jwtService.signAsync(newPayload);
     const newRefreshToken = await this.jwtService.signAsync(newPayload, {
-      expiresIn: this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN, 259200),
+      expiresIn: Number(
+        this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN, 259200),
+      ),
     });
 
     this.logger.debug(

@@ -5,6 +5,20 @@
 import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
+    "admin-activation": {
+        "subject": string;
+        "title": string;
+        "content": string;
+        "ignore": string;
+        "support": string;
+    };
+    "employee-activation": {
+        "subject": string;
+        "title": string;
+        "content": string;
+        "ignore": string;
+        "support": string;
+    };
     "register-verification-email": {
         "subject": string;
         "title": string;
@@ -19,6 +33,55 @@ export type I18nTranslations = {
         "greeting": string;
         "resetPasswordMessage": string;
         "ignoreMessage": string;
+    };
+    "roles": {
+        "WHOLESALER": string;
+        "RETAILER": string;
+        "SUPPORT": string;
+        "DELIVERY": string;
+        "WAREHOUSE": string;
+        "ADMIN": string;
+        "SUPERADMIN": string;
+    };
+    "verify-admin-email": {
+        "subject": string;
+        "title": string;
+        "content1": string;
+        "content2": string;
+        "button": string;
+        "ignore": string;
+        "support": string;
+    };
+    "verify-email-response": {
+        "invalid": {
+            "status": string;
+            "title": string;
+            "message": string;
+        };
+        "expired": {
+            "status": string;
+            "title": string;
+            "message": string;
+        };
+        "used": {
+            "status": string;
+            "title": string;
+            "message": string;
+        };
+        "success": {
+            "status": string;
+            "title": string;
+            "message": string;
+        };
+    };
+    "verify-employee-email": {
+        "subject": string;
+        "title": string;
+        "content1": string;
+        "content2": string;
+        "button": string;
+        "ignore": string;
+        "support": string;
     };
 };
 /* prettier-ignore */

@@ -1,0 +1,9 @@
+{
+  "subject": "Your administrator account on the MaiAn platform has been created. Please activate it as soon as possible",
+  "title": "Verify your email now",
+  "content1": "You have been assigned an administrator account on the MaiAn platform. To ensure account security and proper system access, please complete the activation within <strong>7 days</strong>.",
+  "content2": "Click the button below to activate your account:",
+  "button": "Verify Now",
+  "ignore": "Note: If you do not complete activation within 7 days, your account information will be automatically deleted.<br>If you are not an employee of the MaiAn platform or believe this email was sent in error, please ignore it.",
+  "support": "If you have any questions or need assistance, please contact our customer support team. Thank you for your understanding and cooperation."
+}

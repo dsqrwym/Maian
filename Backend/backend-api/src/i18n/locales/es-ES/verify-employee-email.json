@@ -1,0 +1,9 @@
+{
+  "subject": "Se ha creado su cuenta de empleado en la plataforma MaiAn. Por favor, actívela lo antes posible.",
+  "title": "Verifica tu correo electrónico ahora",
+  "content1": "Se te ha asignado una cuenta de empleado en la plataforma MaiAn por parte de <strong>{companyName}</strong>, con el puesto de <strong>{position}</strong>.<br>Para garantizar la seguridad de tu cuenta y poder usar el sistema correctamente, por favor completa la activación en un plazo de <strong>7 días</strong>.",
+  "content2": "Haz clic en el siguiente botón para establecer tu contraseña de acceso y activar tu cuenta:",
+  "button": "Verificar ahora",
+  "ignore": "Atención: si no completas la activación en 7 días, la información de tu cuenta se eliminará automáticamente.<br>Si no eres empleado de {companyName} o crees que este mensaje fue un error, ignora este correo.",
+  "support": "Si tienes alguna duda o necesitas ayuda, ponte en contacto con nuestro equipo de atención al cliente. Gracias por tu comprensión y colaboración."
+}

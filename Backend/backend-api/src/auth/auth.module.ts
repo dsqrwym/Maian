@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MailModule } from 'src/mail/mail.module';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { LocalStrategy } from './strategy/local.strategy';
+import { LoginValidationStrategy } from './strategy/login-validation-strategy.service';
 import { PassportModule } from '@nestjs/passport';
 import { ResetPasswordService } from './services/reset-password.service';
 import { SessionService } from './services/session.service';
@@ -16,6 +16,7 @@ import { RefreshTokenController } from './controllers/refresh-token.controller';
 import { SessionController } from './controllers/session.controller';
 import { RouterModule } from '@nestjs/core';
 import { ResetPasswordController } from './controllers/reset-password.controller';
+import { EmailVerificationController } from './controllers/email-verification.controller';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { ResetPasswordController } from './controllers/reset-password.controller
   providers: [
     AuthService,
     JwtStrategy,
-    LocalStrategy,
+    LoginValidationStrategy,
     RegistrationService,
     VerificationService,
     LoginService,
@@ -41,6 +42,7 @@ import { ResetPasswordController } from './controllers/reset-password.controller
     ResetPasswordController,
     RefreshTokenController,
     SessionController,
+    EmailVerificationController,
   ], // 控制器
 })
 export class AuthModule {} // 认证模块

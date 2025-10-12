@@ -1,0 +1,9 @@
+{
+  "subject": "A sua conta de funcionário na plataforma MaiAn foi criada. Por favor, ative-a o mais rapidamente possível.",
+  "title": "Verifique o seu e-mail agora",
+  "content1": "Foi-lhe atribuída uma conta de colaborador na plataforma MaiAn por <strong>{companyName}</strong>, com a função de <strong>{position}</strong>.<br>Para garantir a segurança da sua conta e o correto funcionamento do sistema, por favor conclua a ativação da conta dentro de <strong>7 dias</strong>.",
+  "content2": "Clique no botão abaixo para definir a sua palavra-passe e ativar a conta:",
+  "button": "Verificar agora",
+  "ignore": "Nota: se não concluir a ativação no prazo de 7 dias, as informações da sua conta serão automaticamente eliminadas.<br>Se não for colaborador de {companyName} ou se recebeu este e-mail por engano, por favor ignore esta mensagem.",
+  "support": "Se tiver alguma dúvida ou precisar de ajuda, contacte a nossa equipa de apoio ao cliente. Agradecemos a sua compreensão e colaboração."
+}

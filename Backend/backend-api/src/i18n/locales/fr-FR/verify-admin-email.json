@@ -1,0 +1,9 @@
+{
+  "subject": "Votre compte administrateur sur la plateforme MaiAn a été créé. Veuillez l’activer dès que possible",
+  "title": "Vérifiez votre adresse e-mail dès maintenant",
+  "content1": "Un compte administrateur vous a été attribué sur la plateforme MaiAn. Pour garantir la sécurité de votre compte et le bon fonctionnement du système, veuillez finaliser l’activation dans un délai de <strong>7 jours</strong>.",
+  "content2": "Cliquez sur le bouton ci-dessous pour activer votre compte :",
+  "button": "Vérifier maintenant",
+  "ignore": "Remarque : si vous ne complétez pas l’activation dans un délai de 7 jours, les informations de votre compte seront automatiquement supprimées.<br>Si vous n’êtes pas un employé de la plateforme MaiAn ou pensez avoir reçu cet e-mail par erreur, veuillez l’ignorer.",
+  "support": "Si vous avez des questions ou besoin d’aide, n’hésitez pas à contacter notre équipe du service client. Merci de votre compréhension et de votre coopération."
+}

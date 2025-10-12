@@ -1,0 +1,22 @@
+{
+  "invalid": {
+    "status": "invalid",
+    "title": "Enllaç de verificació no vàlid",
+    "message": "Comproveu si l’enllaç és correcte o si ha caducat."
+  },
+  "expired": {
+    "status": "expired",
+    "title": "L’enllaç de verificació ha caducat",
+    "message": "Torneu a sol·licitar el correu de verificació."
+  },
+  "used": {
+    "status": "used",
+    "title": "L’enllaç ja s’ha utilitzat",
+    "message": "Aquest enllaç de verificació ja s’ha completat."
+  },
+  "success": {
+    "status": "success",
+    "title": "Verificació completada",
+    "message": "El vostre correu electrònic s’ha verificat correctament. Benvingut!"
+  }
+}

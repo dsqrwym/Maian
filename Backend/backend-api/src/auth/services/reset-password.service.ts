@@ -9,11 +9,11 @@ import { HashService } from 'src/common/hash/hash.service';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
 import { VerificationService } from './verification.service';
-import { VerificationEmailType } from '../auth.types';
 import {
   SendVerificationCodeDto,
   VerifyCodeDto,
 } from '../dto/verification.dto';
+import { VerificationEmailType } from '../auth.constants';
 
 @Injectable()
 export class ResetPasswordService {

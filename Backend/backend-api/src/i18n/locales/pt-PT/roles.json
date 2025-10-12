@@ -1,0 +1,9 @@
+{
+  "WHOLESALER": "Grossista",
+  "RETAILER": "Retalhista",
+  "SUPPORT": "Apoio ao cliente",
+  "DELIVERY": "Entregador",
+  "WAREHOUSE": "Gestor de armazém",
+  "ADMIN": "Administrador",
+  "SUPERADMIN": "Superadministrador"
+}

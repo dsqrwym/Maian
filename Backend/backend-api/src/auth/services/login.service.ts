@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
   ServiceUnavailableException,
@@ -22,11 +21,13 @@ import {
 } from '../../config/constants.config';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { TokenResponseDto } from '../dto/token-response.dto';
-import { AUTH_ERROR } from '../auth.constants';
+import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service';
+import { UserRole } from 'prisma/generated';
 
 @Injectable()
 export class LoginService {
   constructor(
+    private readonly loginValidationStrategy: LoginValidationStrategy,
     private readonly configService: ConfigService,
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
@@ -70,7 +71,9 @@ export class LoginService {
       sessionId: newSessionId,
     };
     const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN, 259200),
+      expiresIn: Number(
+        this.configService.get(ENV.REFRESH_TOKEN_EXPIRES_IN, 259200),
+      ),
     });
     const accessToken = await this.jwtService.signAsync(payload);
     const hashedRefreshToken =
@@ -181,12 +184,15 @@ export class LoginService {
     };
   }
 
-  async loginNative(req: FastifyRequest, body: LoginDto) {
-    const user: UserPayload = req.user;
-    if (!user) {
-      this.logger.warn({ ip: req.ip }, '[AuthController] login user missing');
-      throw new BadRequestException(AUTH_ERROR.NO_AUTH_PAYLOAD);
-    }
+  async loginNative(
+    req: FastifyRequest,
+    body: LoginDto,
+    allowedUsers: UserRole[],
+  ) {
+    const user: UserPayload = await this.loginValidationStrategy.validate(
+      body,
+      allowedUsers,
+    );
 
     this.logger.debug(
       { userId: user.userId, ip: req.ip, device: body.deviceName },
@@ -196,15 +202,16 @@ export class LoginService {
     return token;
   }
 
-  async loginWeb(req: FastifyRequest, res: FastifyReply, body: LoginDto) {
-    const user: UserPayload = req.user;
-    if (!user) {
-      this.logger.warn(
-        { ip: req.ip },
-        '[AuthController] login-web user missing',
-      );
-      throw new BadRequestException(AUTH_ERROR.NO_AUTH_PAYLOAD);
-    }
+  async loginWeb(
+    req: FastifyRequest,
+    res: FastifyReply,
+    body: LoginDto,
+    allowedUsers: UserRole[],
+  ) {
+    const user: UserPayload = await this.loginValidationStrategy.validate(
+      body,
+      allowedUsers,
+    );
 
     this.logger.debug(
       { userId: user.userId, ip: req.ip, device: body.deviceName },

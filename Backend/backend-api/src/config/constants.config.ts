@@ -13,6 +13,12 @@ export const REFRESH_COOKIE_NAME = 'refresh_token';
 // Centralized environment variable keys to avoid typos
 // 统一管理环境变量键名，避免拼写错误，便于类型推断与维护
 export const ENV = {
+  // Super Admin
+  // 超级管理员
+  SUPERADMIN_EMAIL: 'SUPERADMIN_EMAIL',
+  SUPERADMIN_USERNAME: 'SUPERADMIN_USERNAME',
+  SUPERADMIN_PASSWORD: 'SUPERADMIN_PASSWORD',
+
   // Auth
   // 认证相关配置
   AUTH_JWT_SECRET: 'AUTH_JWT_SECRET',

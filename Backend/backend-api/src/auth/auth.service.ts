@@ -13,6 +13,7 @@ import { RegisterRetailerDto } from './dto/register-retailer.dto';
 import { SendVerificationCodeDto, VerifyCodeDto } from './dto/verification.dto';
 import { SendNormalRegisterMailDto } from './dto/register.dto';
 import { RegisterWholesalerDto } from './dto/register-wholesaler.dto';
+import { UserRole } from 'prisma/generated';
 
 @Injectable()
 export class AuthService {
@@ -44,12 +45,17 @@ export class AuthService {
     return await this.registrationService.verifyCode(verifyCodeDto);
   }
 
-  async login(req: FastifyRequest, dto: LoginDto) {
-    return await this.loginService.loginNative(req, dto);
+  async login(req: FastifyRequest, dto: LoginDto, allowedUsers: UserRole[]) {
+    return await this.loginService.loginNative(req, dto, allowedUsers);
   }
 
-  async loginWeb(req: FastifyRequest, res: FastifyReply, body: LoginDto) {
-    return await this.loginService.loginWeb(req, res, body);
+  async loginWeb(
+    req: FastifyRequest,
+    res: FastifyReply,
+    body: LoginDto,
+    allowedUsers: UserRole[],
+  ) {
+    return await this.loginService.loginWeb(req, res, body, allowedUsers);
   }
 
   async getAccessToken(refreshToken: string, csrfToken: string | null = null) {

@@ -1,4 +1,12 @@
-import { IsEmail, IsOptional, IsString, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Matches,
+  MaxLength,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SendVerificationCodeDto {
@@ -8,6 +16,7 @@ export class SendVerificationCodeDto {
     example: 'user@example.com',
   })
   @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
+  @MaxLength(100)
   email: string; // 邮箱地址
 
   @IsOptional()
@@ -30,6 +39,7 @@ export class VerifyCodeDto {
     example: 'user@example.com',
   })
   @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
+  @MaxLength(100)
   email: string; // 邮箱地址
 }
 
@@ -52,4 +62,32 @@ export class VerifyCodeResponseDto {
     example: '2023-12-31T23:59:59.999Z',
   })
   expires_at: Date;
+}
+
+export class VerifyEmailQueryDto {
+  @ApiProperty({
+    description: 'User unique identifier (UUID format)',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @IsUUID(undefined, { message: 'userId must be a valid UUID v4' })
+  @IsNotEmpty({ message: 'userId is required' })
+  userId: string;
+
+  @ApiProperty({
+    description: 'Email verification token',
+    example: 'a1b2c3d4e5f6g7h8i9j0',
+  })
+  @IsString({ message: 'token must be a string' })
+  @IsNotEmpty({ message: 'token is required' })
+  token: string;
+
+  @ApiProperty({
+    description: 'Language code for i18n (defaults to en)',
+    example: 'en',
+    required: false,
+    default: 'en',
+  })
+  @IsOptional()
+  @IsString({ message: 'lang must be a string' })
+  lang?: string = 'en';
 }

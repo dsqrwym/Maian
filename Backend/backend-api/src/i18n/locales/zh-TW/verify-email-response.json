@@ -1,0 +1,22 @@
+{
+  "invalid": {
+    "status": "invalid",
+    "title": "無效的驗證連結",
+    "message": "請檢查連結是否正確或已過期。"
+  },
+  "expired": {
+    "status": "expired",
+    "title": "驗證連結已過期",
+    "message": "請重新請求驗證郵件。"
+  },
+  "used": {
+    "status": "used",
+    "title": "連結已被使用",
+    "message": "該驗證連結已經完成驗證。"
+  },
+  "success": {
+    "status": "success",
+    "title": "驗證成功",
+    "message": "您的電子郵件已成功驗證，歡迎使用！"
+  }
+}

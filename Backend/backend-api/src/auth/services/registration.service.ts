@@ -6,16 +6,15 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { $Enums, AddressType, UserRole } from 'prisma/generated';
 import { randomUUID } from 'node:crypto';
-import { AUTH_ERROR } from '../auth.constants';
+import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
 import { VerificationService } from './verification.service';
 import { VerifyCodeDto } from '../dto/verification.dto';
-import { VerificationEmailType } from '../auth.types';
 import { RegisterRetailerDto } from '../dto/register-retailer.dto';
 import UserStatus = $Enums.UserStatus;
 import { HashService } from 'src/common/hash/hash.service';
 import { SendNormalRegisterMailDto } from '../dto/register.dto';
 import { RegisterWholesalerDto } from '../dto/register-wholesaler.dto';
-import { WholesalerProfileType } from '../../user/type/wholesaler-profile.type';
+import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile.type';
 
 @Injectable()
 export class RegistrationService {
@@ -80,7 +79,7 @@ export class RegistrationService {
         dto.token,
       );
 
-      const hashedPassword = await this.hashService.hashWithCrypto(
+      const hashedPassword = await this.hashService.hashWithBcrypt(
         dto.password,
       );
 
@@ -88,7 +87,7 @@ export class RegistrationService {
         select: { id: true },
         where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
         data: {
-          status: UserStatus.INACTIVE,
+          status: UserStatus.ACTIVE,
           username: dto.username ?? '',
           password: hashedPassword,
           directions: {
@@ -123,7 +122,7 @@ export class RegistrationService {
         dto.token,
       );
 
-      const hashedPassword = await this.hashService.hashWithCrypto(
+      const hashedPassword = await this.hashService.hashWithBcrypt(
         dto.password,
       );
 
@@ -136,12 +135,12 @@ export class RegistrationService {
         select: { id: true },
         where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
         data: {
-          status: UserStatus.INACTIVE,
+          status: UserStatus.ACTIVE,
           username: dto.username ?? '',
           password: hashedPassword,
           telephone: dto.telephone,
           role: UserRole.WHOLESALER,
-          profile: JSON.stringify(wholesalerProfile),
+          profile: wholesalerProfile,
           directions: {
             create: {
               country_iso: dto.address.country,

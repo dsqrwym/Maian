@@ -1,0 +1,9 @@
+{
+  "WHOLESALER": "批发商",
+  "RETAILER": "零售商",
+  "SUPPORT": "客服",
+  "DELIVERY": "送货员",
+  "WAREHOUSE": "仓库管理员",
+  "ADMIN": "管理员",
+  "SUPERADMIN": "超级管理员"
+}

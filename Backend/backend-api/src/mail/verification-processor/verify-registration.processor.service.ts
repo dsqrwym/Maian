@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { PinoLogger } from 'nestjs-pino';
-import { maskEmail } from '../../common/formatter/emial-format';
 import { MailerService } from '@nestjs-modules/mailer';
 import { I18nTranslations } from '../../i18n/generated/i18n.generated';
 import { RegisterEmailJob } from '../mail.types';
+import { sendMail } from '../../utils/mailer.utils';
 
 @Injectable()
 export class VerifyRegistrationProcessorService {
@@ -40,24 +40,18 @@ export class VerifyRegistrationProcessorService {
       'register-verification-email.button',
       { lang },
     );
-    try {
-      const info: unknown = await this.mailerService.sendMail({
+
+    await sendMail(
+      this.logger,
+      this.mailerService,
+      'sendNormalRegisterEmail',
+      data.to,
+      {
         subject,
         to: data.to,
         template: 'register-verification-email',
         context: { title, content, button, ignore, support, link: data.link },
-      });
-      this.logger.info(
-        `Email sent successfully to ${maskEmail(data.to)} with info: ${JSON.stringify(info)}`,
-      );
-      return info;
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      this.logger.error(
-        `sendVerification failed: ${error.message}`,
-        error.stack,
-      );
-      throw error; // 让 BullMQ 来 retry
-    }
+      },
+    );
   }
 }

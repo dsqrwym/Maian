@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -18,17 +10,13 @@ import {
 } from '@nestjs/swagger';
 import { LoginDto } from '../dto/login.dto';
 import { TokenResponseDto } from '../dto/token-response.dto';
-import { LocalAuthGuard } from '../guard/auth.guard';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { REFRESH_TOKEN_COOKIE_PATH } from '../../config/constants.config';
 import { AuthService } from '../auth.service';
-import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
 import { UserRole } from '../../../prisma/generated';
-import { RolesGuard } from '../../common/guards/roles.guard';
 
 @ApiTags('Authentication')
 @ApiExtraModels(LoginDto, TokenResponseDto)
-@UseGuards(LocalAuthGuard, RolesGuard)
 @Controller('login')
 export class LoginController {
   constructor(private readonly authService: AuthService) {}
@@ -66,9 +54,8 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @RolesAllowed(UserRole.RETAILER)
   async loginStandard(@Req() req: FastifyRequest, @Body() body: LoginDto) {
-    return await this.authService.login(req, body);
+    return await this.authService.login(req, body, [UserRole.RETAILER]);
   }
 
   @Post('standard/web')
@@ -116,13 +103,12 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @RolesAllowed(UserRole.RETAILER)
   async loginStandardWeb(
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
     @Body() body: LoginDto,
   ) {
-    return await this.authService.loginWeb(req, res, body);
+    return await this.authService.loginWeb(req, res, body, [UserRole.RETAILER]);
   }
 
   @Post('enterprise')
@@ -158,14 +144,13 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @RolesAllowed(
-    UserRole.WHOLESALER,
-    UserRole.DELIVERY,
-    UserRole.SUPPORT,
-    UserRole.WAREHOUSE,
-  )
   async loginEnterprise(@Req() req: FastifyRequest, @Body() body: LoginDto) {
-    return await this.authService.login(req, body);
+    return await this.authService.login(req, body, [
+      UserRole.WHOLESALER,
+      UserRole.DELIVERY,
+      UserRole.SUPPORT,
+      UserRole.WAREHOUSE,
+    ]);
   }
 
   @Post('enterprise/web')
@@ -213,18 +198,17 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @RolesAllowed(
-    UserRole.WHOLESALER,
-    UserRole.DELIVERY,
-    UserRole.SUPPORT,
-    UserRole.WAREHOUSE,
-  )
   async loginEnterpriseWeb(
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
     @Body() body: LoginDto,
   ) {
-    return await this.authService.loginWeb(req, res, body);
+    return await this.authService.loginWeb(req, res, body, [
+      UserRole.WHOLESALER,
+      UserRole.DELIVERY,
+      UserRole.SUPPORT,
+      UserRole.WAREHOUSE,
+    ]);
   }
 
   @Post('admin')
@@ -260,9 +244,11 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @RolesAllowed(UserRole.ADMIN, UserRole.SUPERADMIN)
   async loginAdmin(@Req() req: FastifyRequest, @Body() body: LoginDto) {
-    return await this.authService.login(req, body);
+    return await this.authService.login(req, body, [
+      UserRole.ADMIN,
+      UserRole.SUPERADMIN,
+    ]);
   }
 
   @Post('admin/web')
@@ -310,12 +296,14 @@ export class LoginController {
   })
   @ApiBadRequestResponse({ description: 'Invalid login credentials' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @RolesAllowed(UserRole.ADMIN, UserRole.SUPERADMIN)
   async loginAdminWeb(
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
     @Body() body: LoginDto,
   ) {
-    return await this.authService.loginWeb(req, res, body);
+    return await this.authService.loginWeb(req, res, body, [
+      UserRole.ADMIN,
+      UserRole.SUPERADMIN,
+    ]);
   }
 }

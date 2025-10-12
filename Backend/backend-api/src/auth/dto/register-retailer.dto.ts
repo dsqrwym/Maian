@@ -28,7 +28,10 @@ export class RegisterRetailerDto {
     example: 'retailer@example.com',
     required: true,
   })
-  @IsEmail({}, { message: 'Invalid email format' })
+  @IsEmail(
+    { host_blacklist: ['example.com'] },
+    { message: 'Invalid email format' },
+  )
   @MaxLength(100, {
     message: 'Email must be shorter than or equal to 100 characters',
   })
@@ -81,7 +84,7 @@ export class RegisterRetailerDto {
     message: 'Username must be shorter than or equal to 30 characters',
   })
   @NotContains('@', { message: 'Username cannot contain @ symbol' })
-  username: string;
+  username?: string;
 
   /**
    * Store's business address
