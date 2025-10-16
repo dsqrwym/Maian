@@ -86,13 +86,13 @@ fun MyOutlinedTextField(
     error: String?,
     labelText: String,
     placeholderText: String,
-    leadingIcon: ImageVector,
+    leadingIcon: ImageVector? = null,
     leadingIconContentDescription: String? = null,
     trailingIcon: (@Composable (() -> Unit))? = null,
     isPassword: Boolean = false,
     passwordVisibility: Boolean = false,
     imeAction: ImeAction,
-    onImeAction: () -> Unit,
+    onImeAction: () -> Unit = {},
     semanticsPropertyReceiver: SemanticsPropertyReceiver.() -> Unit = {},
     focusRequester: FocusRequester = FocusRequester.Default,
 ) {
@@ -118,7 +118,9 @@ fun MyOutlinedTextField(
         label = { Text(labelText) },
         placeholder = { Text(placeholderText) },
         leadingIcon = {
-            Icon(imageVector = leadingIcon, contentDescription = leadingIconContentDescription, tint = iconColor)
+            leadingIcon?.let {
+                Icon(imageVector = leadingIcon, contentDescription = leadingIconContentDescription, tint = iconColor)
+            }
         },
         trailingIcon = trailingIcon,
         isError = error != null,
@@ -193,7 +195,7 @@ fun MyPasswordField(
     },
     focusRequester: FocusRequester = FocusRequester.Default,
     imeAction: ImeAction = ImeAction.Done,
-    onImeAction: () -> Unit
+    onImeAction: () -> Unit = {}
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 

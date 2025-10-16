@@ -25,6 +25,7 @@
     <string name="session_revoked">El teu compte s'ha tancat en un altre dispositiu o ha sigut finalitzat per un administrador.</string>
     <string name="csrf_invalid">La validació de seguretat ha fallat. Actualitza la pàgina o torna a iniciar sessió.</string>
     <string name="session_not_found">Sessió no trobada. Torna a iniciar sessió.</string>
+    <string name="token_invalid_or_expired">El token no és vàlid o ha caducat, si us plau, obtingueu-ne un de nou</string>
 
     <!-- Botons d’inici de sessió -->
     <string name="button_login">Iniciar sessió</string>
@@ -32,7 +33,6 @@
     <string name="button_other_login_methods">Altres maneres d’iniciar sessió</string>
     <string name="button_google_login">Inicia sessió amb Google</string>
     <string name="button_wechat_login">Inicia sessió amb WeChat</string>
-    <string name="button_register_new_account">Registra un compte nou</string>
 
     <!-- Camps d’inici de sessió -->
     <string name="field_username_or_email_label">Nom d’usuari o correu electrònic</string>
@@ -54,6 +54,10 @@
     <string name="login_success">Inici de sessió correcte</string>
     <string name="login_error_username_or_password">Nom d'usuari o contrasenya incorrectes</string>
     <string name="login_error_email_or_password">Correu electrònic o contrasenya incorrectes</string>
+
+    <string name="register_email_already_registered">Aquest correu electrònic ja està registrat. Si us plau, inicieu sessió.</string>
+    <string name="register_username_already_registered">Aquest nom d’usuari ja està en ús. Proveu-ne un altre.</string>
+
 
 
     <!-- ===================== Pantalla inicial ===================== -->
@@ -92,6 +96,8 @@
     <string name="error_socket_timeout">El servidor ha tardat massa a respondre. Torna-ho a intentar més tard.</string>
     <string name="error_io">S’ha produït un error de xarxa. Comprova la teua connexió.</string>
     <string name="error_generic">La sol·licitud de xarxa ha fallat. Torna-ho a intentar.</string>
+    <string name="error_no_permission">No té permís per accedir a aquesta funció o recurs.</string>
+
 
 
     <!-- Codi OTP -->
@@ -118,5 +124,25 @@
     <string name="email_not_found">Adreça de correu no trobada</string>
 
     <string name="password_reset_success">Contrasenya canviada correctament</string>
+
+
+    <string name="field_cannot_be_empty">No pot estar buit</string>
+    <string name="field_required">Obligatori</string>
+    <string name="field_optional">Opcional</string>
+
+    <string name="section_address">Adreça</string>
+    <string name="address_country">País</string>
+    <string name="address_search_or_select_country">Cerca o selecciona un país</string>
+    <string name="address_state_or_province">Província/Estat</string>
+    <string name="address_input_or_select_state_or_province">Introdueix o selecciona província/estat</string>
+    <string name="address_city">Ciutat</string>
+    <string name="address_input_or_select_city">Introdueix o selecciona ciutat</string>
+    <string name="address_street">Carrer</string>
+    <string name="address_input_detail">Introdueix l'adreça completa</string>
+    <string name="address_postal_code">Codi postal</string>
+    <string name="address_input_postal_code">Introdueix el codi postal</string>
+    <string name="address_no_match">No hi ha coincidències</string>
+
+    <string name="reset_password_title">Restablir contrasenya</string>
 
 </resources>

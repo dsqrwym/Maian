@@ -113,7 +113,7 @@ fun MyOtpInputField(
         )
         TextButton(
             modifier = Modifier.animateContentSize(),
-            enabled = !isCounting,
+            enabled = !isCounting && enabled,
             onClick = {
                 resendOtp()
                 if (externalTimeLeft == null) {

@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import org.dsqrwym.shared.data.local.UserPreferences
 import org.dsqrwym.shared.navigation.*
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultEnterTransition
@@ -17,11 +18,13 @@ import org.dsqrwym.shared.ui.screens.Agreement.Companion.PRIVACY_POLICY_BASE_URL
 import org.dsqrwym.shared.ui.screens.Agreement.Companion.USER_AGREEMENT_BASE_URL
 import org.dsqrwym.shared.ui.screens.AgreementScreen
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
 import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
-import org.dsqrwym.shared.util.navigation.onLeaveScreen
 import org.dsqrwym.shared.util.navigation.popBackStackWithKeyboardDismiss
-import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel
+import org.dsqrwym.standard.navigation.RegisterScreen
+import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
+import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
@@ -49,50 +52,66 @@ fun NavGraphBuilder.authNavGraph(
                     focusManager = focusManager
                 )
             },
+            onRegisterClick = {
+                navController.navigateWithKeyboardDismiss(
+                    route = RegisterScreen,
+                    focusManager = focusManager
+                )
+            },
             onLoginClick = {
                 navController.navigateWithKeyboardDismiss(
-                    route = LoginScreen,
+                    route = LoginScreen(),
                     focusManager = focusManager
                 )
             },
         )
     }
 
-    composable<LoginScreen>(
+    composable<RegisterScreen>(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) {
-        val sharedAuthViewModel = currentKoinScope().get<SharedAuthViewModel>()
+        val registerViewModel = currentKoinScope().get<RegisterViewModel>()
+        CheckIsPermitted(navController)
+        org.dsqrwym.standard.ui.screens.auth.RegisterScreen(
+            onBackButtonClick = {
+                navController.popBackStackWithKeyboardDismiss(focusManager)
+            },
+            registerViewModel = registerViewModel
+        )
+    }
+    composable<LoginScreen>(
+        enterTransition = { DefaultEnterTransition },
+        exitTransition = { DefaultExitTransition }
+    ) { backStackEntry ->
+        val email = backStackEntry.toRoute<LoginScreen>().email
+        val loginViewModel = currentKoinScope().get<LoginViewModel>()
+        email?.let {
+            loginViewModel.updateEmail(it)
+        }
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.LoginScreen(
             onBackButtonClick = {
                 navController.popBackStackWithKeyboardDismiss(focusManager)
             },
-            onForgetPasswordClick = {
-                navController.navigateWithKeyboardDismiss(
-                    route = ForgotPasswordScreen,
-                    focusManager = focusManager
-                )
-            },
-            sharedAuthViewModel = sharedAuthViewModel
+            loginViewModel = loginViewModel
         )
     }
     composable<ForgotPasswordScreen>(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) { navBackStackEntry ->
-        val sharedAuthViewModel = currentKoinScope().get<SharedAuthViewModel>()
-        CheckIsPermitted(navController)
-        LaunchedEffect(Unit) {
-            navController.onLeaveScreen(navBackStackEntry.destination.route) {
-                sharedAuthViewModel.resetResetPassword()
-            }
+        val resetPasswordViewModel =
+            currentKoinScope().get<SharedResetPasswordViewModel>()
+        val email = navBackStackEntry.toRoute<ForgotPasswordScreen>().email
+        email?.let {
+            resetPasswordViewModel.updateEmail(it)
         }
         org.dsqrwym.standard.ui.screens.auth.ResetPasswordScreen(
             onBackButtonClick = {
                 navController.popBackStackWithKeyboardDismiss(focusManager)
             },
-            sharedAuthViewModel = sharedAuthViewModel
+            resetPasswordViewModel = resetPasswordViewModel
         )
     }
 

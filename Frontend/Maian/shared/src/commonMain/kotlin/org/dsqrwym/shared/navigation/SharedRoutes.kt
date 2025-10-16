@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 object InitialScreen
 @Serializable
-object LoginScreen
+data class LoginScreen(val email: String? = null)
 @Serializable
-object ForgotPasswordScreen
+data class ForgotPasswordScreen(val email: String? = null)
 @Serializable
 object PrivacyPolicy
 

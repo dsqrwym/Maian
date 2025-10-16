@@ -74,6 +74,7 @@ kotlin {
 
             // Material图标扩展
             implementation(libs.material.icons.core)
+            implementation(libs.material.icons.extended)
 
             // 官方导航
             implementation(libs.kmp.navigation.compose)
@@ -130,6 +131,12 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+compose.resources {
+    publicResClass = true
+    nameOfResClass = "StandardRes"
+    generateResClass = auto
 }
 
 compose.desktop {

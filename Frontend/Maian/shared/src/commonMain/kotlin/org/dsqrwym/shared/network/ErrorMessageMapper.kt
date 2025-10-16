@@ -43,9 +43,8 @@ object ErrorMessageMapper {
 
     fun shouldShowToUser(statusCode: HttpStatusCode): Boolean {
         return when (statusCode) {
-            // HttpStatusCode.Unauthorized, 不需要，因为已经会在AuthEvent里处理
+            HttpStatusCode.Unauthorized,
             HttpStatusCode.Forbidden,
-            HttpStatusCode.NotFound,
             HttpStatusCode.InternalServerError,
             HttpStatusCode.ServiceUnavailable,
             HttpStatusCode.RequestTimeout -> true

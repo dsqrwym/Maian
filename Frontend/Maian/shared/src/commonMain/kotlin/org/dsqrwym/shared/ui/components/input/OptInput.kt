@@ -35,8 +35,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
@@ -244,7 +247,9 @@ fun OtpInputField(
     }
     Column(modifier = modifier) {
         BasicTextField(
-            modifier = modifier.widthIn(min = (41 * otpLength).dp),
+            modifier = modifier.semantics{
+                contentType = ContentType.SmsOtpCode
+            } .widthIn(min = (41 * otpLength).dp),
             value = textFieldValue,
             readOnly = !enabled,
             onValueChange = {

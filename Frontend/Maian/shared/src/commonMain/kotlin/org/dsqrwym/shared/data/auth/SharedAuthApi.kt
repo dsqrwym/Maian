@@ -7,11 +7,9 @@ import io.ktor.http.*
 import org.dsqrwym.shared.data.auth.dto.*
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.util.platform.MaiAnPlatformType
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
-
-private const val AUTH_PATH = "/auth"
-private const val RESET_PASSWORD_PREFIX = "/reset-password"
 
 /**
  * Authentication API wrapper built on top of Ktor [HttpClient].
@@ -21,6 +19,24 @@ private const val RESET_PASSWORD_PREFIX = "/reset-password"
  * 提供登录、刷新令牌、登出等跨平台接口。
  */
 class SharedAuthApi(private val client: HttpClient) {
+    /**
+     * Check whether an email already exists in the system (true=used/exist, false=not used).
+     * 检查邮箱是否已经存在（true=已使用/存在，false=未使用/不存在）。
+     */
+    suspend fun checkEmailExists(email: String): ApiResponse<Boolean> {
+        return client.get(ApiConfig.UserPath.CHECK_MAIL) {
+            parameter("email", email)
+        }.body()
+    }
+
+    suspend fun checkUserNameExist(username: String, wholesalerID: String?, isAdmin: Boolean): ApiResponse<Boolean> {
+        return client.get(ApiConfig.UserPath.CHECK_USERNAME) {
+            parameter("username", username)
+            parameter("wholesalerId", wholesalerID)
+            parameter("isAdmin", isAdmin)
+        }.body()
+    }
+
     /**
      * Perform user login with the given request body.
      * 使用给定请求体执行用户登录。
@@ -36,9 +52,17 @@ class SharedAuthApi(private val client: HttpClient) {
      * @return ApiResponse<SharedLoginResponse> Raw server response.
      *         服务器原始响应。
      */
-    suspend fun login(req: SharedLoginRequest): ApiResponse<SharedLoginResponse> {
-        val suffix = if (getPlatform().type == PlatformType.Web) "-web" else ""
-        return client.post("${ApiConfig.BASE_URL}${AUTH_PATH}/login$suffix") {
+    suspend fun login(
+        req: SharedLoginRequest,
+        platform: MaiAnPlatformType = MaiAnPlatformType.STANDARD
+    ): ApiResponse<SharedLoginResponse> {
+        val isWeb = getPlatform().type == PlatformType.Web
+        val url = when (platform) {
+            MaiAnPlatformType.STANDARD -> if (isWeb) ApiConfig.AuthPath.LOGIN_STANDARD_WEB else ApiConfig.AuthPath.LOGIN_STANDARD
+            MaiAnPlatformType.ENTERPRISE -> if (isWeb) ApiConfig.AuthPath.LOGIN_ENTERPRISE_WEB else ApiConfig.AuthPath.LOGIN_ENTERPRISE
+            MaiAnPlatformType.ADMIN -> if (isWeb) ApiConfig.AuthPath.LOGIN_ADMIN_WEB else ApiConfig.AuthPath.LOGIN_ADMIN
+        }
+        return client.post(url) {
             contentType(ContentType.Application.Json)
             setBody(req)
         }.body()
@@ -59,7 +83,7 @@ class SharedAuthApi(private val client: HttpClient) {
      *         服务器原始响应。
      */
     suspend fun refreshToken(
-        platform: PlatformType = PlatformType.Unknown,
+        platform: PlatformType = getPlatform().type,
         callback: HttpRequestBuilder.() -> Unit = {}
     ): ApiResponse<SharedRefreshTokenResponse> {
         // Decide behavior by platform.
@@ -72,7 +96,7 @@ class SharedAuthApi(private val client: HttpClient) {
         val refreshToken = if (isWeb) SharedTokenStorage.getCsrf() else SharedTokenStorage.getRefresh()
         // Endpoint selection: /auth/refresh-token-web for web, /auth/refresh-token for others.
         // 接口选择：Web 调用 /auth/refresh-token-web；其他平台调用 /auth/refresh-token。
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH/refresh-token${if (isWeb) "-web" else ""}") {
+        return client.post(if (isWeb) ApiConfig.AuthPath.TOKEN_REFRESH_WEB else ApiConfig.AuthPath.TOKEN_REFRESH) {
             callback()
             contentType(ContentType.Application.Json)
             if (refreshToken != null) {
@@ -84,21 +108,24 @@ class SharedAuthApi(private val client: HttpClient) {
     }
 
     suspend fun sendCode(sendVerificationCodeRequest: SharedSendVerificationCodeRequest): ApiResponse<Unit> {
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH$RESET_PASSWORD_PREFIX/send-code") {
+        return client.post(ApiConfig.AuthPath.RESET_PASSWORD_SEND_CODE) {
             contentType(ContentType.Application.Json)
             setBody(sendVerificationCodeRequest)
         }.body()
     }
 
-    suspend fun verifyCode(verifyCodeRequest: SharedVerifyCodeRequest): ApiResponse<SharedVerifyCodeResponse> {
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH$RESET_PASSWORD_PREFIX/verify-code") {
+    suspend fun verifyOTPCode(
+        verifyCodeRequest: SharedVerifyCodeRequest,
+        verifyUrl: String
+    ): ApiResponse<SharedVerifyCodeResponse> {
+        return client.post(verifyUrl) {
             contentType(ContentType.Application.Json)
             setBody(verifyCodeRequest)
         }.body()
     }
 
     suspend fun resetPassword(resetPasswordRequest: SharedResetPasswordRequest): ApiResponse<Unit> {
-        return client.post("${ApiConfig.BASE_URL}$AUTH_PATH$RESET_PASSWORD_PREFIX/reset-password") {
+        return client.post(ApiConfig.AuthPath.RESET_PASSWORD_RESET) {
             contentType(ContentType.Application.Json)
             setBody(resetPasswordRequest)
         }.body()
@@ -107,13 +134,10 @@ class SharedAuthApi(private val client: HttpClient) {
     /**
      * Logout current session and clear local tokens.
      * 注销当前会话并清除本地令牌。
-     *
-     * Backend expects DELETE /auth/logout with Bearer access token; current implementation uses POST.
-     * 后端期望使用 DELETE /auth/logout 并携带 Bearer 访问令牌；当前实现仍为 POST。
      */
     suspend fun logout(): ApiResponse<Unit> {
         // logout returns {statusCode,message,data?} but we don't need body
-        val result = client.delete("${ApiConfig.BASE_URL}/auth/session/logout")
+        val result = client.delete(ApiConfig.AuthPath.SESSION_LOGOUT)
         SharedTokenStorage.clear()
 
         return result.body()

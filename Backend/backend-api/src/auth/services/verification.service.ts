@@ -212,7 +212,7 @@ export class VerificationService {
     });
 
     if (!verificationToken) {
-      throw new NotFoundException(AUTH_ERROR.VERIFICATION_TOKEN_INVALID);
+      throw new UnauthorizedException(AUTH_ERROR.VERIFICATION_TOKEN_INVALID);
     }
 
     await tx.verification_tokens.update({

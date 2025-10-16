@@ -17,6 +17,7 @@ import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
+import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -25,6 +26,7 @@ import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateRepeatPassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
+import org.dsqrwym.standard.data.auth.AuthRepository
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
@@ -41,6 +43,7 @@ import kotlin.time.ExperimentalTime
  */
 class SharedAuthViewModel(
     private val repository: SharedAuthRepository,
+    private val loginRepository: AuthRepository,
     private val mySnackbarViewModel: MySnackbarViewModel,
     private val authSessionViewModel: AuthSessionViewModel
 ) : ViewModel() {
@@ -198,7 +201,7 @@ class SharedAuthViewModel(
 
                 // Attempt to login via repository
                 // 尝试通过仓库登录
-                when (val result = repository.login(email, password)) {
+                when (val result = loginRepository.login(email, password)) {
                     is SharedResponseResult.Success -> {
                         // On success, update login state and show success feedback
                         // 登录成功时，更新登录状态并显示成功反馈
@@ -239,7 +242,7 @@ class SharedAuthViewModel(
 
     fun logout() {
         viewModelScope.launch {
-            val result = repository.logout()
+            val result = loginRepository.logout()
             if (result is SharedResponseResult.Success) {
                 authSessionViewModel.onLoggedOut()
                 mySnackbarViewModel.showSuccess(message = "logout")
@@ -473,7 +476,7 @@ class SharedAuthViewModel(
     @OptIn(ExperimentalTime::class)
     private suspend fun verifyCode() {
         val verifyCodeRequest = SharedVerifyCodeRequest(email = this.email, code = this.code)
-        when (val result = repository.verifyCode(verifyCodeRequest)) {
+        when (val result = repository.verifyOTPCode(verifyCodeRequest, ApiConfig.AuthPath.RESET_PASSWORD_VERIFY_CODE)) {
             is SharedResponseResult.Success -> {
                 verifyCodeResult = result.data
                 val expiresAt = result.data!!.expiresAt

@@ -100,6 +100,7 @@ kotlin {
             implementation(libs.kmp.navigation.compose)
             // Material图标扩展
             implementation(libs.material.icons.core)
+            implementation(libs.material.icons.extended)
 
             // Haze 核心库 利用各个平台API实现毛玻璃效果
             implementation(libs.haze)

@@ -25,14 +25,13 @@
     <string name="session_revoked">A conta foi terminada noutro dispositivo ou pelo administrador</string>
     <string name="csrf_invalid">A verificação de segurança falhou, atualize a página ou volte a iniciar sessão</string>
     <string name="session_not_found">Sessão inválida, por favor inicie sessão novamente</string>
-
+    <string name="token_invalid_or_expired">O token é inválido ou expirou, por favor obtenha um novo</string>
     <!-- Botões de login -->
     <string name="button_login">Entrar</string>
     <string name="button_forget_password">Esqueceu-se da palavra-passe</string>
     <string name="button_other_login_methods">Outros métodos de login</string>
     <string name="button_google_login">Entrar com Google</string>
     <string name="button_wechat_login">Entrar com WeChat</string>
-    <string name="button_register_new_account">Registar nova conta</string>
 
     <!-- Campos de login -->
     <string name="field_username_or_email_label">Nome de utilizador ou e-mail</string>
@@ -55,6 +54,10 @@
     <string name="login_success">Sessão iniciada com sucesso</string>
     <string name="login_error_username_or_password">Nome de utilizador ou palavra-passe incorretos</string>
     <string name="login_error_email_or_password">E-mail ou palavra-passe incorretos</string>
+
+    <string name="register_email_already_registered">Este e-mail já está registado. Por favor, inicie sessão.</string>
+    <string name="register_username_already_registered">Este nome de utilizador já está a ser usado. Tente outro.</string>
+
 
     <!-- ===================== Ecrã inicial (Initial Screen) ===================== -->
     <string name="initial_screen_welcome">Bem-vindo ao</string>
@@ -92,6 +95,8 @@
     <string name="error_socket_timeout">Tempo de resposta do servidor excedido, tente novamente mais tarde.</string>
     <string name="error_io">Erro de rede, verifique a sua ligação.</string>
     <string name="error_generic">Falha na requisição, tente novamente.</string>
+    <string name="error_no_permission">Não tem permissão para aceder a esta funcionalidade ou recurso.</string>
+
 
     <!-- Código OTP -->
     <string name="otp_resend">Reenviar</string>
@@ -117,5 +122,24 @@
     <string name="email_not_found">E-mail não encontrado</string>
 
     <string name="password_reset_success">Palavra-passe alterada com sucesso</string>
+
+    <string name="field_cannot_be_empty">Não pode estar vazio</string>
+    <string name="field_required">Obrigatório</string>
+    <string name="field_optional">Opcional</string>
+
+    <string name="section_address">Endereço</string>
+    <string name="address_country">País</string>
+    <string name="address_search_or_select_country">Pesquisar ou selecionar país</string>
+    <string name="address_state_or_province">Estado/Província</string>
+    <string name="address_input_or_select_state_or_province">Digite ou selecione estado/província</string>
+    <string name="address_city">Cidade</string>
+    <string name="address_input_or_select_city">Digite ou selecione cidade</string>
+    <string name="address_street">Rua</string>
+    <string name="address_input_detail">Digite o endereço completo</string>
+    <string name="address_postal_code">Código postal</string>
+    <string name="address_input_postal_code">Digite o código postal</string>
+    <string name="address_no_match">Sem correspondência</string>
+
+    <string name="reset_password_title">Redefinir senha</string>
 
 </resources>

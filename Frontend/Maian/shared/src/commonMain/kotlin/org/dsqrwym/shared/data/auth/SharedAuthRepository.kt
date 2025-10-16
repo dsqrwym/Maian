@@ -1,12 +1,11 @@
 package org.dsqrwym.shared.data.auth
 
-import org.dsqrwym.shared.data.auth.dto.*
+import org.dsqrwym.shared.data.auth.dto.SharedResetPasswordRequest
+import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
+import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeRequest
+import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
-import org.dsqrwym.shared.util.platform.PlatformType
-import org.dsqrwym.shared.util.platform.getPlatform
-import org.dsqrwym.shared.util.platform.getPlatformDeviceInfo
-import org.dsqrwym.shared.util.validation.validateEmail
 
 
 /**
@@ -30,64 +29,33 @@ import org.dsqrwym.shared.util.validation.validateEmail
  */
 class SharedAuthRepository(private val api: SharedAuthApi) {
 
-    /**
-     * Attempts to log in a user with the provided credentials.
-     * 使用提供的凭据尝试登录。
-     *
-     * @param identifier The user's email or username. 用户的邮箱或用户名。
-     * @param password The user's password. 用户的密码。
-     * @return [SharedResponseResult] Normalized login result.
-     *         标准化的登录结果。
-     */
-    suspend fun login(identifier: String, password: String): SharedResponseResult<SharedLoginResponse> {
-        val platform = getPlatform().type
-        // Get device information for the login request
-        // 获取设备信息用于登录请求
-        val deviceInfo = getPlatformDeviceInfo()
-        // 判断标识符是邮箱还是用户名
-        val isEmail = validateEmail(identifier)
-        // Make the login API call
-        // 发起登录API调用
-        val result = safeApiCall {
-            api.login(
-                SharedLoginRequest(
-                    password = password,
-                    // Determine if the identifier is an email or username
-                    email = if (isEmail) identifier else null,
-                    username = if (!isEmail) identifier else null,
-                    deviceName = deviceInfo.deviceName,
-                    userAgent = deviceInfo.userAgent
-                )
-            )
-        }
+    suspend fun checkEmailExists(email: String): SharedResponseResult<Boolean> {
+        return safeApiCall { api.checkEmailExists(email) }
+    }
 
-
-        if (result is SharedResponseResult.Success) {
-            result.data?.let { data ->
-                if (platform == PlatformType.Web) {
-                    SharedTokenStorage.saveAccess(data.accessToken)
-                    SharedTokenStorage.saveCsrf(data.refreshToken)
-                } else {
-                    SharedTokenStorage.save(data.accessToken, data.refreshToken)
-                }
-                return SharedResponseResult.Success(data)
-            }
-        }
-
-        return result
+    suspend fun checkUserNameExist(
+        username: String,
+        wholesalerId: String? = null,
+        isAdmin: Boolean = false
+    ): SharedResponseResult<Boolean> {
+        return safeApiCall { api.checkUserNameExist(username, wholesalerId, isAdmin) }
     }
 
     suspend fun sendVerifyCode(sendVerificationCodeRequest: SharedSendVerificationCodeRequest): SharedResponseResult<Unit> {
         return safeApiCall { api.sendCode(sendVerificationCodeRequest) }
     }
 
-    suspend fun verifyCode(verifyCodeRequest: SharedVerifyCodeRequest): SharedResponseResult<SharedVerifyCodeResponse> {
-        return safeApiCall { api.verifyCode(verifyCodeRequest) }
+    suspend fun verifyOTPCode(
+        verifyCodeRequest: SharedVerifyCodeRequest,
+        verifyUrl: String
+    ): SharedResponseResult<SharedVerifyCodeResponse> {
+        return safeApiCall { api.verifyOTPCode(verifyCodeRequest, verifyUrl) }
     }
 
     suspend fun resetPassword(resetPasswordRequest: SharedResetPasswordRequest): SharedResponseResult<Unit> {
         return safeApiCall { api.resetPassword(resetPasswordRequest) }
     }
+
     suspend fun logout(): SharedResponseResult<Unit> {
         return safeApiCall { api.logout() }
     }

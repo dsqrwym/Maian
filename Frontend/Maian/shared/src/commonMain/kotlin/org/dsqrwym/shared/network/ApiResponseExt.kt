@@ -1,6 +1,10 @@
 package org.dsqrwym.shared.network
 
 import io.ktor.http.*
+import org.jetbrains.compose.resources.getString
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.error_no_permission
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.session_not_found
 
 /**
  * Convert an [ApiResponse] returned by the network layer to a domain-friendly [SharedResponseResult].
@@ -18,7 +22,7 @@ import io.ktor.http.*
  * @return SharedResponseResult<T> A normalized result used by the shared layer. 共享层使用的标准化结果。
  */
 
-fun <T> ApiResponse<T>.toSharedResponseResult(): SharedResponseResult<T> {
+suspend fun <T> ApiResponse<T>.toSharedResponseResult(): SharedResponseResult<T> {
     return when (statusCode) {
         // 200 OK -> 成功，直接返回数据
         HttpStatusCode.OK.value,
@@ -28,6 +32,16 @@ fun <T> ApiResponse<T>.toSharedResponseResult(): SharedResponseResult<T> {
         HttpStatusCode.Accepted.value,
             // 204 No Content -> 同样视为成功
         HttpStatusCode.NoContent.value -> SharedResponseResult.Success(data)
+
+        HttpStatusCode.Unauthorized.value -> SharedResponseResult.Error(
+            HttpStatusCode.Unauthorized,
+            getString(SharedRes.string.session_not_found)
+        )
+
+        HttpStatusCode.Forbidden.value -> SharedResponseResult.Error(
+            HttpStatusCode.Forbidden,
+            getString(SharedRes.string.error_no_permission)
+        )
 
         else -> SharedResponseResult.Error(HttpStatusCode.fromValue(statusCode), message)
     }

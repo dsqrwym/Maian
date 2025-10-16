@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package org.dsqrwym.standard.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
@@ -6,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -20,6 +23,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.LocalIsDarkTheme
+import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.navigation.ForgotPasswordScreen
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.GoogleSignInButton
 import org.dsqrwym.shared.ui.components.buttons.LoginButton
@@ -30,9 +35,9 @@ import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextFi
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
+import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.validation.validateEmail
-import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel
-import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel.CurrentScreenState
+import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
@@ -40,24 +45,20 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @Composable
 fun LoginScreen(
-    sharedAuthViewModel: SharedAuthViewModel = koinViewModel<SharedAuthViewModel>(),
+    loginViewModel: LoginViewModel = koinViewModel<LoginViewModel>(),
     onBackButtonClick: () -> Unit = {},
-    onForgetPasswordClick: () -> Unit = {}
 ) {
-    LaunchedEffect(Unit) {
-        if (sharedAuthViewModel.currentScreenState != CurrentScreenState.Login) {
-            sharedAuthViewModel.initLogin()
-        }
-    }
+    val focusManager = LocalFocusManager.current
+    val navController = LocalNavHostController.current
 
-    val usernameOrEmail = sharedAuthViewModel.email
-    val password = sharedAuthViewModel.password
+    val usernameOrEmail = loginViewModel.email
+    val password = loginViewModel.password
 
     // Validation states
-    val usernameOrEmailError = sharedAuthViewModel.emailError
-    val passwordError = sharedAuthViewModel.passwordError
-    val loginEnabled = sharedAuthViewModel.loginEnabled
-    val loginUiState = sharedAuthViewModel.loginUiState
+    val usernameOrEmailError = loginViewModel.emailError
+    val passwordError = loginViewModel.passwordError
+    val loginEnabled = loginViewModel.loginEnabled
+    val loginUiState = loginViewModel.loginUiState
 
     // 创建 FocusRequester 实例
     val passwordFocusRequester = remember { FocusRequester() }
@@ -66,11 +67,11 @@ fun LoginScreen(
         modifier = Modifier.padding(26.dp),
         usernameOrEmail = usernameOrEmail,
         onUsernameOrEmailChange = {
-            sharedAuthViewModel.updateEmail(it)
+            loginViewModel.updateEmail(it)
         },
         password = password,
         onPasswordChange = {
-            sharedAuthViewModel.updatePassword(it)
+            loginViewModel.updatePassword(it)
         },
         usernameOrEmailError = usernameOrEmailError.asString(),
         passwordError = passwordError.asString(),
@@ -78,9 +79,15 @@ fun LoginScreen(
         loginUiState = loginUiState,
         passwordFocusRequester = passwordFocusRequester,
         onBackButtonClick = onBackButtonClick,
-        onForgetPasswordClick = onForgetPasswordClick,
+        onForgetPasswordClick = {
+            focusManager.clearFocus()
+            navController.navigateWithKeyboardDismiss(
+                ForgotPasswordScreen(email = if (validateEmail(usernameOrEmail)) usernameOrEmail else null),
+                focusManager = focusManager
+            )
+        },
         onLoginClick = {
-            sharedAuthViewModel.login()
+            loginViewModel.login()
         }
     )
 }

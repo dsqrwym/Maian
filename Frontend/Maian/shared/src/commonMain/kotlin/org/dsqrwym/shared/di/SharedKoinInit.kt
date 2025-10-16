@@ -1,6 +1,7 @@
 package org.dsqrwym.shared.di
 
 import org.dsqrwym.shared.di.auth.sharedAuthModule
+import org.dsqrwym.shared.di.location.sharedLocationModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 
@@ -16,6 +17,7 @@ fun sharedInitKoin(callback: (KoinApplication.() -> Unit)? = null) {
     startKoin {
         modules(sharedModule)
         modules(sharedAuthModule)
+        modules(sharedLocationModule)
         callback?.invoke(this)
     }
 }

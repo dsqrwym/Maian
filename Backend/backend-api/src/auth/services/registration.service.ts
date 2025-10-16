@@ -162,6 +162,6 @@ export class RegistrationService {
   }
 
   async verifyCode(verifyCodeDto: VerifyCodeDto) {
-    return this.verificationService.verifyCode(verifyCodeDto, 24 * 60);
+    return this.verificationService.verifyCode(verifyCodeDto, 30);
   }
 }

@@ -20,6 +20,8 @@ import org.dsqrwym.shared.ui.components.containers.FloatingBreathingBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.jetbrains.compose.resources.stringResource
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.StandardRes
+import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.button_register_new_account
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -28,6 +30,7 @@ fun InitialScreen(
     dev: Boolean = false,
     onUserAgreementClick: () -> Unit = {},
     onPrivacyPolicyClick: () -> Unit = {},
+    onRegisterClick: () -> Unit = {},
     onLoginClick: () -> Unit = {}
 ) {
     var isNavEnabled by remember { mutableStateOf(if (dev) false else UserPreferences.isUserAgreed()) }
@@ -67,9 +70,9 @@ fun InitialScreen(
 
             MyTextButton(
                 modifier = Modifier.fillMaxWidth(0.56f),
-                text = stringResource(SharedRes.string.button_register_new_account),
+                text = stringResource(StandardRes.string.button_register_new_account),
                 isEnabled = isNavEnabled,
-            ) {}
+            ) { onRegisterClick() }
 
             AgreementSection(
                 isAgreed = isNavEnabled,

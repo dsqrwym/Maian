@@ -7,10 +7,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
 import org.dsqrwym.shared.ui.components.containers.StateContent
 import org.dsqrwym.shared.ui.components.containers.UiState
+import org.dsqrwym.shared.util.modifier.disableUserInput
+
 /**
  * A customizable floating action button with built-in state management.
  * 具有内置状态管理的可自定义浮动操作按钮。
@@ -44,19 +44,7 @@ fun MyFloatingActionButton(
     }
 
     FloatingActionButton(
-        modifier = modifier.then(
-            if (!enabled || (buttonState == UiState.Loading)) {
-                Modifier.pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        // 消耗所有事件，阻止它们传递给底层组件
-                        while (true) {
-                            awaitPointerEvent(pass = PointerEventPass.Initial)
-                            this.currentEvent.changes.forEach { it.consume() }
-                        }
-                    }
-                }
-            } else Modifier
-        ),
+        modifier = modifier.disableUserInput(!enabled || (buttonState == UiState.Loading)),
         onClick = onClick,
         containerColor = containerColor,
         interactionSource = remember { MutableInteractionSource() }

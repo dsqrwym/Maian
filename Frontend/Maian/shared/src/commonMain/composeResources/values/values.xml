@@ -25,14 +25,14 @@
     <string name="session_revoked">Your account has been logged out on another device or terminated by an administrator.</string>
     <string name="csrf_invalid">Security validation failed. Please refresh the page or log in again.</string>
     <string name="session_not_found">Session not found. Please log in again.</string>
-
+    <string name="token_invalid_or_expired">Token is invalid or expired, please obtain a new one</string>
+    
     <!-- Login Buttons -->
     <string name="button_login">Login</string>
     <string name="button_forget_password">Forgot Password</string>
     <string name="button_other_login_methods">Other login methods</string>
     <string name="button_google_login">Login with Google</string>
     <string name="button_wechat_login">Login with WeChat</string>
-    <string name="button_register_new_account">Register new account</string>
 
     <!-- Login Fields -->
     <string name="field_username_or_email_label">Username or Email</string>
@@ -54,6 +54,9 @@
     <string name="login_success">Login successful</string>
     <string name="login_error_username_or_password">Incorrect username or password</string>
     <string name="login_error_email_or_password">Incorrect email or password</string>
+
+    <string name="register_email_already_registered">This email is already registered. Please log in.</string>
+    <string name="register_username_already_registered">This username is already in use. Please try another one.</string>
 
 
     <!-- ===================== Initial Screen ===================== -->
@@ -92,6 +95,8 @@
     <string name="error_socket_timeout">Server response timed out. Please try again later.</string>
     <string name="error_io">Network error occurred. Please check your connection.</string>
     <string name="error_generic">Network request failed. Please try again.</string>
+    <string name="error_no_permission">You do not have permission to access this feature or resource.</string>
+
 
 
     <!-- OTP related -->
@@ -118,5 +123,24 @@
     <string name="email_not_found">Email not found</string>
 
     <string name="password_reset_success">Password successfully changed</string>
+
+    <string name="field_cannot_be_empty">Cannot be empty</string>
+    <string name="field_required">Required</string>
+    <string name="field_optional">Optional</string>
+
+    <string name="section_address">Address</string>
+    <string name="address_country">Country</string>
+    <string name="address_search_or_select_country">Search or select country</string>
+    <string name="address_state_or_province">State/Province</string>
+    <string name="address_input_or_select_state_or_province">Enter or select state/province</string>
+    <string name="address_city">City</string>
+    <string name="address_input_or_select_city">Enter or select city</string>
+    <string name="address_street">Street</string>
+    <string name="address_input_detail">Enter full address</string>
+    <string name="address_postal_code">Postal code</string>
+    <string name="address_input_postal_code">Enter postal code</string>
+    <string name="address_no_match">No match found</string>
+
+    <string name="reset_password_title">Reset Password</string>
 
 </resources>

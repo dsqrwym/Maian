@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.InProgress
@@ -25,30 +26,31 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.statu
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.status_error_content_description
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.status_in_progress_content_description
 
+/**
+ * AuthStepCard
+ *
+ * EN: Card showing a step indicator for multistep auth flows (e.g., forgot password).
+ * Displays current/total steps and an animated icon for Error/Loading/Success.
+ *
+ * ZH: 用于多步骤认证流程（如忘记密码）的步骤卡片。显示当前/总步数，并以动画图标表示
+ * 错误/加载中/成功状态。
+ */
 @Composable
-        /**
-         * AuthStepCard
-         *
-         * EN: Card showing a step indicator for multistep auth flows (e.g., forgot password).
-         * Displays current/total steps and an animated icon for Error/Loading/Success.
-         *
-         * ZH: 用于多步骤认证流程（如忘记密码）的步骤卡片。显示当前/总步数，并以动画图标表示
-         * 错误/加载中/成功状态。
-         */
 fun AuthStepCard(
     step: Int,
     currentStep: Int,
     maxStep: Int,
     hasError: Boolean = false,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.(enabled: Boolean) -> Unit
 ) {
-    val elevation by animateDpAsState(targetValue = if (currentStep == step) 8.dp else 0.dp)
+    val enabled = currentStep == step
+    val elevation by animateDpAsState(targetValue = if (enabled) 8.dp else 0.dp)
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         elevation = CardDefaults.outlinedCardElevation(elevation),
-        border = CardDefaults.outlinedCardBorder(currentStep == step)
+        border = CardDefaults.outlinedCardBorder(enabled)
     ) {
         Column(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
             Row(
@@ -71,7 +73,7 @@ fun AuthStepCard(
 
                 val targetState = when {
                     hasError -> UiState.Error
-                    currentStep == step -> UiState.Loading
+                    enabled -> UiState.Loading
                     currentStep > step -> UiState.Success
                     else -> null
                 }
@@ -119,9 +121,21 @@ fun AuthStepCard(
                     }
                 }
             }
-            Column(
-                content = content
-            )
+            Box {
+                Column {
+                    content(enabled)
+                }
+
+                if (!enabled) {
+                    Box(Modifier.matchParentSize().pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                awaitPointerEvent()
+                            }
+                        }
+                    })
+                }
+            }
         }
     }
 }

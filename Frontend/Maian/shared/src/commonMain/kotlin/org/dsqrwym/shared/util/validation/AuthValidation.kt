@@ -21,12 +21,20 @@ expect fun validateEmail(email: String): Boolean
 
     // Username length validation
     if (!isEmail) {
-        if (input.length !in 3..30) {
-            return SharedRes.string.validation_username_length_invalid
-        }
-        if (input.contains('@')){
-            return SharedRes.string.validation_username_cannot_contain_at
-        }
+        return validateUsername(input)
+    }
+    return null
+}
+
+fun validateUsername(input: String): StringResource? {
+    if (input.length !in 3..30) {
+        return SharedRes.string.validation_username_length_invalid
+    }
+    if (input.contains('@')){
+        return SharedRes.string.validation_username_cannot_contain_at
+    }
+    if (input.isBlank()){
+        return SharedRes.string.field_cannot_be_empty
     }
     return null
 }

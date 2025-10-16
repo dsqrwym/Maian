@@ -17,7 +17,7 @@ import org.dsqrwym.shared.navigation.InitialScreen
 import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.standard.navigation.navhost.authNavGraph
-import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel
+import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.koin.compose.currentKoinScope
 
 @Composable
@@ -36,7 +36,7 @@ fun App(
     AppRoot { authState ->
         val navController = LocalNavHostController.current
 
-        val sharedAuthViewModel: SharedAuthViewModel = currentKoinScope().get()
+        val loginViewModel: LoginViewModel = currentKoinScope().get()
 
         LaunchedEffect(Unit) {
             onNavHostReady(navController)
@@ -60,7 +60,7 @@ fun App(
                 // 已登录 → 渲染主业务 Graph
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     ElevatedButton(onClick = {
-                        sharedAuthViewModel.logout()
+                        loginViewModel.logout()
                     }) {
                         Text("Logout")
                     }

@@ -25,6 +25,7 @@
     <string name="session_revoked">Votre compte a été déconnecté sur un autre appareil ou désactivé par un administrateur.</string>
     <string name="csrf_invalid">La vérification de sécurité a échoué. Veuillez actualiser la page ou vous reconnecter.</string>
     <string name="session_not_found">Session introuvable. Veuillez vous reconnecter.</string>
+    <string name="token_invalid_or_expired">Le jeton est invalide ou expiré, veuillez en obtenir un nouveau</string>
 
     <!-- Boutons de connexion -->
     <string name="button_login">Se connecter</string>
@@ -32,7 +33,6 @@
     <string name="button_other_login_methods">Autres méthodes de connexion</string>
     <string name="button_google_login">Se connecter avec Google</string>
     <string name="button_wechat_login">Se connecter avec WeChat</string>
-    <string name="button_register_new_account">Créer un compte</string>
 
     <!-- Champs de connexion -->
     <string name="field_username_or_email_label">Nom d'utilisateur ou email</string>
@@ -55,6 +55,8 @@
     <string name="login_error_username_or_password">Nom d’utilisateur ou mot de passe incorrect</string>
     <string name="login_error_email_or_password">E-mail ou mot de passe incorrect</string>
 
+    <string name="register_email_already_registered">Cette adresse e-mail est déjà enregistrée. Veuillez vous connecter.</string>
+    <string name="register_username_already_registered">Ce nom d’utilisateur est déjà utilisé. Veuillez en choisir un autre.</string>
 
     <!-- ===================== Écran initial ===================== -->
     <string name="initial_screen_welcome">Bienvenue sur</string>
@@ -92,6 +94,8 @@
     <string name="error_socket_timeout">Le serveur a mis trop de temps à répondre. Veuillez réessayer plus tard.</string>
     <string name="error_io">Une erreur réseau est survenue. Vérifiez votre connexion.</string>
     <string name="error_generic">La requête réseau a échoué. Veuillez réessayer.</string>
+    <string name="error_no_permission">Vous n’avez pas la permission d’accéder à cette fonctionnalité ou ressource.</string>
+
 
 
     <!-- Code OTP -->
@@ -118,5 +122,24 @@
     <string name="email_not_found">Adresse e-mail introuvable</string>
 
     <string name="password_reset_success">Mot de passe modifié avec succès</string>
+
+    <string name="field_cannot_be_empty">Ne peut pas être vide</string>
+    <string name="field_required">Obligatoire</string>
+    <string name="field_optional">Optionnel</string>
+
+    <string name="section_address">Adresse</string>
+    <string name="address_country">Pays</string>
+    <string name="address_search_or_select_country">Rechercher ou sélectionner un pays</string>
+    <string name="address_state_or_province">Province/État</string>
+    <string name="address_input_or_select_state_or_province">Saisir ou sélectionner province/état</string>
+    <string name="address_city">Ville</string>
+    <string name="address_input_or_select_city">Saisir ou sélectionner ville</string>
+    <string name="address_street">Rue</string>
+    <string name="address_input_detail">Veuillez saisir l'adresse complète</string>
+    <string name="address_postal_code">Code postal</string>
+    <string name="address_input_postal_code">Veuillez saisir le code postal</string>
+    <string name="address_no_match">Aucune correspondance</string>
+
+    <string name="reset_password_title">Réinitialiser le mot de passe</string>
 
 </resources>

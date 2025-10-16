@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.localization
 
+@OptIn(ExperimentalWasmJsInterop::class)
 @JsFun("() => window.navigator.language")
 external fun getBrowserLanguage() : String?
 actual fun getLocaleLanguage(): String {

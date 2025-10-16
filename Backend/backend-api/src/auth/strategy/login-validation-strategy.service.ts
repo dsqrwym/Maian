@@ -141,7 +141,7 @@ export class LoginValidationStrategy {
   async validate(dto: LoginDto, allowedUsers: UserRole[]) {
     const { username, email, password } = dto;
     this.logger.debug(
-      `[Login Validation Strategy] Validating user: ${email || 'N/A'}, username: ${username || 'N/A'}`,
+      `[Login Validation Strategy] Validating user: ${maskEmail(email ?? 'unknow') || 'N/A'}, username: ${username || 'N/A'}`,
     );
 
     const user = await this.findUserForLogin(dto, allowedUsers);

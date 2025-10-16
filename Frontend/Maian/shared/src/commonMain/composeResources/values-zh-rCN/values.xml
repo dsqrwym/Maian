@@ -25,6 +25,7 @@
     <string name="session_revoked">账号已在其他设备退出或被管理员终止</string>
     <string name="csrf_invalid">安全校验失效，请刷新页面或重新登录</string>
     <string name="session_not_found">登录状态失效，请重新登录</string>
+    <string name="token_invalid_or_expired">令牌无效或已过期，请重新获取</string>
 
     <!-- 登录按钮 -->
     <string name="button_login">登录</string>
@@ -32,7 +33,6 @@
     <string name="button_other_login_methods">其他登录方式</string>
     <string name="button_google_login">使用 Google 登录</string>
     <string name="button_wechat_login">使用微信登录</string>
-    <string name="button_register_new_account">注册新账户</string>
 
     <!-- 登录输入框 -->
     <string name="field_username_or_email_label">用户名或者邮箱</string>
@@ -55,6 +55,11 @@
     <string name="login_success">登录成功</string>
     <string name="login_error_username_or_password">用户名或者密码错误</string>
     <string name="login_error_email_or_password">邮箱或者密码错误</string>
+
+    <!-- 注册流程相关 -->
+    <string name="register_email_already_registered">该邮箱已被注册，请直接登录</string>
+    <string name="register_username_already_registered">该用户名已被使用，请尝试其他名称</string>
+
 
     <!-- ===================== 初始页 (Initial Screen) ===================== -->
     <string name="initial_screen_welcome">欢迎来到</string>
@@ -92,6 +97,8 @@
     <string name="error_socket_timeout">服务器响应超时，请稍后再试。</string>
     <string name="error_io">发生网络错误，请检查您的连接。</string>
     <string name="error_generic">网络请求失败，请重试。</string>
+    <string name="error_no_permission">无法访问该功能或资源。</string>
+
 
 
     <!-- 验证码相关 -->
@@ -118,5 +125,27 @@
     <string name="email_not_found">该邮箱不存在</string>
 
     <string name="password_reset_success">密码更改成功</string>
+
+    <!-- ===================== 表单通用 (Form Common) ===================== -->
+    <string name="field_cannot_be_empty">不可为空</string>
+    <string name="field_required">必填</string>
+    <string name="field_optional">选填</string>
+
+    <!-- ===================== 地址信息 (Address Information) ===================== -->
+    <string name="section_address">地址</string>
+    <string name="address_country">国家</string>
+    <string name="address_search_or_select_country">搜索或选择国家</string>
+    <string name="address_state_or_province">省份/州</string>
+    <string name="address_input_or_select_state_or_province">输入或选择省份/州</string>
+    <string name="address_city">城市</string>
+    <string name="address_input_or_select_city">输入或选择城市</string>
+    <string name="address_street">街道</string>
+    <string name="address_input_detail">请输入详细地址</string>
+    <string name="address_postal_code">邮政编码</string>
+    <string name="address_input_postal_code">请输入邮编</string>
+    <string name="address_no_match">无匹配项</string>
+
+    <string name="reset_password_title">重置密码</string>
+
 
 </resources>

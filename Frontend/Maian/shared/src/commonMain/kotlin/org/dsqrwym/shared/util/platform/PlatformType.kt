@@ -1,5 +1,9 @@
 package org.dsqrwym.shared.util.platform
 
+enum class MaiAnPlatformType {
+    STANDARD, ENTERPRISE, ADMIN
+}
+
 sealed class PlatformType(val name: String) {
     object Android : PlatformType("Android")
     object IOS : PlatformType("iOS")

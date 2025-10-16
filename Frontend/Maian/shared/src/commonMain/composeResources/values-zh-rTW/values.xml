@@ -25,14 +25,14 @@
     <string name="session_revoked">帳號已在其他裝置登出或被管理員終止。</string>
     <string name="csrf_invalid">安全驗證失效，請重新整理頁面或重新登入。</string>
     <string name="session_not_found">登入狀態失效，請重新登入。</string>
-
+    <string name="token_invalid_or_expired">令牌無效或已過期，請重新獲取</string>
+    
     <!-- 登入按鈕 -->
     <string name="button_login">登入</string>
     <string name="button_forget_password">忘記密碼</string>
     <string name="button_other_login_methods">其他登入方式</string>
     <string name="button_google_login">使用 Google 登入</string>
     <string name="button_wechat_login">使用微信登入</string>
-    <string name="button_register_new_account">註冊新帳號</string>
 
     <!-- 登入輸入框 -->
     <string name="field_username_or_email_label">使用者名稱或電子郵件</string>
@@ -54,6 +54,9 @@
     <string name="login_success">登入成功</string>
     <string name="login_error_username_or_password">使用者名稱或密碼錯誤</string>
     <string name="login_error_email_or_password">郵箱或密碼錯誤</string>
+    <string name="register_email_already_registered">此電子郵件已被註冊，請直接登入</string>
+    <string name="register_username_already_registered">該使用者名稱已被使用，請嘗試其他名稱</string>
+
 
 
     <!-- ===================== 初始頁 (Initial Screen) ===================== -->
@@ -93,6 +96,8 @@
     <string name="error_socket_timeout">伺服器回應逾時，請稍後再試。</string>
     <string name="error_io">發生網路錯誤，請檢查您的連線。</string>
     <string name="error_generic">網路請求失敗，請再試一次。</string>
+    <string name="error_no_permission">無法訪問該功能或資源。</string>
+
 
     <!-- 驗證碼相關 -->
     <string name="otp_resend">重新發送</string>
@@ -118,5 +123,26 @@
     <string name="email_not_found">該電子郵件不存在</string>
 
     <string name="password_reset_success">密碼更改成功</string>
+
+    
+    <string name="field_cannot_be_empty">不可為空</string>
+    <string name="field_required">必填</string>
+    <string name="field_optional">選填</string>
+
+    <string name="section_address">地址</string>
+    <string name="address_country">國家</string>
+    <string name="address_search_or_select_country">搜尋或選擇國家</string>
+    <string name="address_state_or_province">省份/州</string>
+    <string name="address_input_or_select_state_or_province">輸入或選擇省份/州</string>
+    <string name="address_city">城市</string>
+    <string name="address_input_or_select_city">輸入或選擇城市</string>
+    <string name="address_street">街道</string>
+    <string name="address_input_detail">請輸入詳細地址</string>
+    <string name="address_postal_code">郵政編碼</string>
+    <string name="address_input_postal_code">請輸入郵遞區號</string>
+    <string name="address_no_match">無匹配項</string>
+
+    <string name="reset_password_title">重置密碼</string>
+
 
 </resources>
