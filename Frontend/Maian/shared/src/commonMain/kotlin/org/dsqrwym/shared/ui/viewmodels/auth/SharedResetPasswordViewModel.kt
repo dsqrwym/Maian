@@ -10,6 +10,10 @@ import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.dto.SharedResetPasswordRequest
 import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
+import org.dsqrwym.shared.navigation.LoginScreen
+import org.dsqrwym.shared.navigation.core.NavigationEvent
+import org.dsqrwym.shared.navigation.core.SharedNavigable
+import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -34,7 +38,7 @@ import kotlin.time.ExperimentalTime
 class SharedResetPasswordViewModel(
     override val sharedAuthRepository: SharedAuthRepository,
     override val mySnackbarViewModel: MySnackbarViewModel,
-) : VerifyOtpCodeViewModelBase(sharedAuthRepository, mySnackbarViewModel) {
+) : VerifyOtpCodeViewModelBase(sharedAuthRepository, mySnackbarViewModel), SharedNavigable by SharedNavigableDelegate() {
 
     var password by mutableStateOf("")
     var passwordError by mutableStateOf<StringResource?>(null)
@@ -144,7 +148,7 @@ class SharedResetPasswordViewModel(
                 is SharedResponseResult.Success -> {
                     mySnackbarViewModel.showSuccess(getString(SharedRes.string.password_reset_success))
                     currentStep++
-                    isResetPasswordDone = true
+                    emitNavigation(NavigationEvent.ToRoute(LoginScreen(email)))
                     resetResetPassword()
                 }
 
@@ -178,10 +182,7 @@ class SharedResetPasswordViewModel(
         return passwordError == null && repeatPasswordError == null
     }
 
-    var isResetPasswordDone by mutableStateOf(false)
-
     fun resetResetPassword() {
-        isResetPasswordDone = false
         currentStep = 1
         resetPasswordUiState = UiState.Idle
 

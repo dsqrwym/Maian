@@ -4,7 +4,6 @@ import io.ktor.http.*
 import org.jetbrains.compose.resources.getString
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.error_no_permission
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.session_not_found
 
 /**
  * Convert an [ApiResponse] returned by the network layer to a domain-friendly [SharedResponseResult].
@@ -32,11 +31,6 @@ suspend fun <T> ApiResponse<T>.toSharedResponseResult(): SharedResponseResult<T>
         HttpStatusCode.Accepted.value,
             // 204 No Content -> 同样视为成功
         HttpStatusCode.NoContent.value -> SharedResponseResult.Success(data)
-
-        HttpStatusCode.Unauthorized.value -> SharedResponseResult.Error(
-            HttpStatusCode.Unauthorized,
-            getString(SharedRes.string.session_not_found)
-        )
 
         HttpStatusCode.Forbidden.value -> SharedResponseResult.Error(
             HttpStatusCode.Forbidden,

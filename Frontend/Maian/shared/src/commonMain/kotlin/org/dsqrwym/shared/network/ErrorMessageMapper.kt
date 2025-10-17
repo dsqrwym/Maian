@@ -43,7 +43,6 @@ object ErrorMessageMapper {
 
     fun shouldShowToUser(statusCode: HttpStatusCode): Boolean {
         return when (statusCode) {
-            HttpStatusCode.Unauthorized,
             HttpStatusCode.Forbidden,
             HttpStatusCode.InternalServerError,
             HttpStatusCode.ServiceUnavailable,

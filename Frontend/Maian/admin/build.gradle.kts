@@ -57,7 +57,7 @@ kotlin {
             dependencies {
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
-                implementation(project(":shared"))
+               // implementation(project(":shared"))
             }
         }
         val commonMain by getting {
@@ -76,12 +76,12 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation(project(":shared"))
+                //implementation(project(":shared"))
             }
         }
         val wasmJsMain by getting{
             dependencies {
-                implementation(project(":shared"))
+                //implementation(project(":shared"))
             }
         }
     }

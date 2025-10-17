@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.LocalNavHostController
-import org.dsqrwym.shared.navigation.LoginScreen
+import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.buttons.MyFloatingActionButton
 import org.dsqrwym.shared.ui.components.cards.AuthStepCard
 import org.dsqrwym.shared.ui.components.input.MyOtpInputField
@@ -32,7 +32,6 @@ import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
 import org.dsqrwym.shared.util.formatter.asString
-import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
@@ -62,9 +61,11 @@ fun ResetPasswordScreen(
         else -> stringResource(SharedRes.string.reset_unknown_error)
     }
 
-    LaunchedEffect(resetPasswordViewModel.isResetPasswordDone) {
-        if (resetPasswordViewModel.isResetPasswordDone) {
-            navHostController.navigateWithKeyboardDismiss(route = LoginScreen(email), focusManager = focusManager)
+    LaunchedEffect(Unit) {
+        resetPasswordViewModel.navigateEvent.collect { event ->
+            if (event is NavigationEvent.ToRoute<*>) {
+                navHostController.navigate(event.route)
+            }
         }
     }
 

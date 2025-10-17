@@ -15,6 +15,10 @@ import org.dsqrwym.shared.data.location.dto.CityDto
 import org.dsqrwym.shared.data.location.dto.CountryDto
 import org.dsqrwym.shared.data.location.dto.DirectionRequest
 import org.dsqrwym.shared.data.location.dto.ProvinceDto
+import org.dsqrwym.shared.navigation.LoginScreen
+import org.dsqrwym.shared.navigation.core.NavigationEvent
+import org.dsqrwym.shared.navigation.core.SharedNavigable
+import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -39,8 +43,8 @@ class RegisterViewModel(
     private val authRepository: AuthRepository,
     private val locationRepository: SharedLocationRepository,
     override val mySnackbarViewModel: MySnackbarViewModel
-) : VerifyOtpCodeViewModelBase(sharedAuthRepository, mySnackbarViewModel) {
-    var isRegisterDone by mutableStateOf(false)
+) : VerifyOtpCodeViewModelBase(sharedAuthRepository, mySnackbarViewModel),
+    SharedNavigable by SharedNavigableDelegate() {
     var maxStep by mutableStateOf(3)
     var currentStep by mutableStateOf(1)
     var emailNotExists by mutableStateOf<Boolean?>(null)
@@ -344,8 +348,7 @@ class RegisterViewModel(
                 is SharedResponseResult.Success -> {
                     mySnackbarViewModel.showSuccess(getString(StandardRes.string.register_success))
                     currentStep++
-                    isRegisterDone = true
-                    resetRegister()
+                    emitNavigation(NavigationEvent.ToRoute(LoginScreen(email)))
                 }
 
                 is SharedResponseResult.Error -> {
@@ -364,7 +367,6 @@ class RegisterViewModel(
     }
 
     fun resetRegister() {
-        isRegisterDone = false
         currentStep = 1
         nextButtonUiState = UiState.Idle
 

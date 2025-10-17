@@ -23,7 +23,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.LocalNavHostController
-import org.dsqrwym.shared.navigation.LoginScreen
+import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.MyFloatingActionButton
 import org.dsqrwym.shared.ui.components.cards.AuthStepCard
@@ -61,9 +61,11 @@ fun RegisterScreen(
         else -> stringResource(SharedRes.string.reset_unknown_error)
     }
 
-    LaunchedEffect(registerViewModel.isRegisterDone) {
-        if (registerViewModel.isRegisterDone) {
-            navHostController.navigate(LoginScreen(registerViewModel.email))
+    LaunchedEffect(Unit) {
+        registerViewModel.navigateEvent.collect { event ->
+            if (event is NavigationEvent.ToRoute<*>) {
+                navHostController.navigate(event.route)
+            }
         }
     }
 

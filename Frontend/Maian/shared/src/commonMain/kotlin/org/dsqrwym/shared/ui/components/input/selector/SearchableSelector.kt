@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package org.dsqrwym.shared.ui.components.input.selector
 
 import androidx.compose.foundation.layout.Column
@@ -15,19 +17,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.address_no_match
 import kotlin.math.min
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> SearchableSelector(
     modifier: Modifier = Modifier,
     items: List<T>,
     itemToString: (T) -> String,
     itemId: (T) -> String = { itemToString(it) },
-    // Optional externally controlled selected item id for two-way binding
     selectedItemId: String? = null,
-    // Callback to update external state when selection changes internally
     onSelectedItemIdChange: ((String?) -> Unit)? = null,
     label: String,
     placeholder: String = "",
@@ -35,7 +37,7 @@ fun <T> SearchableSelector(
     enabled: Boolean = true,
     leadingIcon: ImageVector = Icons.Outlined.Search,
     isSearching: Boolean? = null,
-    onSearchStatusChange: ((Boolean) -> Unit)? = null,
+    onSearchChange: ((Boolean) -> Unit)? = null,
     semanticsPropertyReceiver: SemanticsPropertyReceiver.() -> Unit = {},
     imeAction: ImeAction = ImeAction.Done,
     onImeAction: () -> Unit = {},
@@ -102,14 +104,14 @@ fun <T> SearchableSelector(
                     searchJob?.cancel()
                     searchJob = coroutineScope.launch {
                         if (isSearching == null) internalSearching = true
-                        onSearchStatusChange?.invoke(true)
+                        onSearchChange?.invoke(true)
 
                         delay(500)
                         filteredList = filtered(it)
                         expanded = true
 
                         if (isSearching == null) internalSearching = false
-                        onSearchStatusChange?.invoke(false)
+                        onSearchChange?.invoke(false)
                     }
                 },
                 error = error,
@@ -140,9 +142,9 @@ fun <T> SearchableSelector(
                 onImeAction = {
                     if (!explicitSelection) {
                         val best = bestMatchFor(text)
-                        if (isControlled){
+                        if (isControlled) {
                             onSelectedItemIdChange.invoke(best?.let { itemId(it) })
-                        }else{
+                        } else {
                             internalSelectedItem = best
                         }
                         best?.let { text = itemToString(it) }
@@ -167,7 +169,9 @@ fun <T> SearchableSelector(
                 }
             ) {
                 if (filteredList.isEmpty()) {
-                    DropdownMenuItem(text = { Text("无匹配项") }, onClick = { /* no-op */ })
+                    DropdownMenuItem(
+                        text = { Text(stringResource(SharedRes.string.address_no_match)) },
+                        onClick = { /* no-op */ })
                 } else {
                     filteredList.forEach { item ->
                         DropdownMenuItem(
@@ -176,9 +180,9 @@ fun <T> SearchableSelector(
                                 explicitSelection = true
                                 text = itemToString(item)
                                 expanded = false
-                                if (isControlled){
+                                if (isControlled) {
                                     onSelectedItemIdChange.invoke(itemId(item))
-                                }else{
+                                } else {
                                     internalSelectedItem = item
                                 }
                             }
