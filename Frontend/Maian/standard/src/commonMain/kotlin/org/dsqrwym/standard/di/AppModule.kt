@@ -4,7 +4,6 @@ import org.dsqrwym.standard.data.auth.AuthApi
 import org.dsqrwym.standard.data.auth.AuthRepository
 import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
-import org.dsqrwym.standard.ui.viewmodels.auth.SharedAuthViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,10 +16,5 @@ val standardModule = module {
     }
     viewModel<LoginViewModel> {
         LoginViewModel(get(), get(), get())
-    }
-
-    // Optional: existing VM
-    single {
-        SharedAuthViewModel(get(), get(), get(), get())
     }
 }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ComposeFoundationFlags
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -14,12 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.dsqrwym.shared.theme.MyMaterialTheme
 import org.dsqrwym.shared.theme.miSansNormalTypography
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
+import org.dsqrwym.shared.ui.screens.auth.ResetPasswordScreen
 import org.dsqrwym.shared.util.platform.AppContextProvider
 import org.dsqrwym.standard.di.standardInitKoin
-import org.dsqrwym.standard.ui.screens.auth.ResetPasswordScreen
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        ComposeFoundationFlags.isNewContextMenuEnabled = true
         AppContextProvider.init(applicationContext)
         standardInitKoin()
         enableEdgeToEdge()

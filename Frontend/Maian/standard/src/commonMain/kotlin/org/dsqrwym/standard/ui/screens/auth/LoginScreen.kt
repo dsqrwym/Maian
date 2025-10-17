@@ -15,7 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
-import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.font.FontWeight
@@ -60,9 +61,6 @@ fun LoginScreen(
     val loginEnabled = loginViewModel.loginEnabled
     val loginUiState = loginViewModel.loginUiState
 
-    // 创建 FocusRequester 实例
-    val passwordFocusRequester = remember { FocusRequester() }
-
     LoginContent(
         modifier = Modifier.padding(26.dp),
         usernameOrEmail = usernameOrEmail,
@@ -77,7 +75,7 @@ fun LoginScreen(
         passwordError = passwordError.asString(),
         loginEnabled = loginEnabled.value,
         loginUiState = loginUiState,
-        passwordFocusRequester = passwordFocusRequester,
+        focusManager = focusManager,
         onBackButtonClick = onBackButtonClick,
         onForgetPasswordClick = {
             focusManager.clearFocus()
@@ -103,7 +101,7 @@ fun LoginContent(
     passwordError: String?,
     loginEnabled: Boolean,
     loginUiState: UiState,
-    passwordFocusRequester: FocusRequester,
+    focusManager: FocusManager,
     onBackButtonClick: () -> Unit,
     onForgetPasswordClick: () -> Unit,
     onLoginClick: () -> Unit
@@ -120,7 +118,7 @@ fun LoginContent(
             usernameOrEmail,
             onUsernameOrEmailChange,
             usernameOrEmailError,
-            passwordFocusRequester
+            focusManager = LocalFocusManager.current
         )
 
         //Spacer(modifier = Modifier.padding(vertical = 10.dp))
@@ -135,7 +133,7 @@ fun LoginContent(
             password,
             onPasswordChange,
             passwordError,
-            passwordFocusRequester,
+            focusManager = focusManager,
             onLoginClick
         )
 
@@ -199,7 +197,7 @@ fun UsernameOrEmailField(
     value: String,
     onValueChange: (String) -> Unit,
     error: String?,
-    focusRequester: FocusRequester
+    focusManager: FocusManager
 ) {
     var isEmail by remember { mutableStateOf(true) }
 
@@ -222,8 +220,7 @@ fun UsernameOrEmailField(
             SharedRes.string.icon_content_description_person
         ),
         imeAction = ImeAction.Next,
-        onImeAction = { focusRequester.requestFocus() },
-        focusRequester = focusRequester
+        onImeAction = {focusManager.moveFocus(FocusDirection.Next) },
     )
 }
 
@@ -232,19 +229,16 @@ fun PasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     error: String?,
-    focusRequester: FocusRequester,
+    focusManager: FocusManager,
     onLoginClick: () -> Unit
 ) {
-    val focusManager = LocalFocusManager.current
     MyPasswordField(
         labelText = stringResource(SharedRes.string.field_password_label),
         placeholderText = stringResource(SharedRes.string.field_password_placeholder),
         value = value,
         onValueChange = onValueChange,
         error = error,
-        focusRequester = focusRequester,
         onImeAction = {
-            focusRequester.freeFocus()
             focusManager.clearFocus()
             onLoginClick()
         }

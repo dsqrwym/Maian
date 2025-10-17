@@ -26,7 +26,7 @@
     <string name="csrf_invalid">安全驗證失效，請重新整理頁面或重新登入。</string>
     <string name="session_not_found">登入狀態失效，請重新登入。</string>
     <string name="token_invalid_or_expired">令牌無效或已過期，請重新獲取</string>
-    
+
     <!-- 登入按鈕 -->
     <string name="button_login">登入</string>
     <string name="button_forget_password">忘記密碼</string>
@@ -39,6 +39,9 @@
     <string name="field_username_or_email_placeholder">請輸入使用者名稱或電子郵件</string>
     <string name="field_password_label">密碼</string>
     <string name="field_password_placeholder">請輸入密碼</string>
+    <string name="field_username_label">使用者名稱</string>
+    <string name="field_username_placeholder">請輸入使用者名稱</string>
+
 
     <!-- 登入驗證提示 -->
     <string name="validation_username_or_email_empty">使用者名稱或電子郵件不可為空</string>
@@ -56,7 +59,6 @@
     <string name="login_error_email_or_password">郵箱或密碼錯誤</string>
     <string name="register_email_already_registered">此電子郵件已被註冊，請直接登入</string>
     <string name="register_username_already_registered">該使用者名稱已被使用，請嘗試其他名稱</string>
-
 
 
     <!-- ===================== 初始頁 (Initial Screen) ===================== -->
@@ -124,7 +126,7 @@
 
     <string name="password_reset_success">密碼更改成功</string>
 
-    
+
     <string name="field_cannot_be_empty">不可為空</string>
     <string name="field_required">必填</string>
     <string name="field_optional">選填</string>

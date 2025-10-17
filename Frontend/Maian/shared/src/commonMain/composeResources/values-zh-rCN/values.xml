@@ -37,6 +37,8 @@
     <!-- 登录输入框 -->
     <string name="field_username_or_email_label">用户名或者邮箱</string>
     <string name="field_username_or_email_placeholder">请输入用户名或者邮箱</string>
+    <string name="field_username_label">用户名</string>
+    <string name="field_username_placeholder">请输入用户名</string>
     <string name="field_password_label">密码</string>
     <string name="field_password_placeholder">请输入密码</string>
 

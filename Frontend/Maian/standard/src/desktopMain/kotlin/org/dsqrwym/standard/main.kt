@@ -1,5 +1,7 @@
 package org.dsqrwym.standard
 
+import androidx.compose.foundation.ComposeFoundationFlags
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +25,9 @@ import java.io.File
 import kotlin.math.max
 
 
+@OptIn(ExperimentalFoundationApi::class)
 fun main() = application {
+    ComposeFoundationFlags.isNewContextMenuEnabled = true
     addTempDirectoryRemovalHook()
     standardInitKoin()
     Window(

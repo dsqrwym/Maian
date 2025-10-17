@@ -39,6 +39,9 @@
     <string name="field_username_or_email_placeholder">Entrez votre nom d'utilisateur ou email</string>
     <string name="field_password_label">Mot de passe</string>
     <string name="field_password_placeholder">Entrez votre mot de passe</string>
+    <string name="field_username_label">Nom d’utilisateur</string>
+    <string name="field_username_placeholder">Veuillez entrer le nom d’utilisateur</string>
+
 
     <!-- Messages de validation -->
     <string name="validation_username_or_email_empty">Le nom d'utilisateur ou l'email ne peut pas être vide</string>

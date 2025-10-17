@@ -22,7 +22,23 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Share
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.address_no_match
 import kotlin.math.min
 
+data class SearchableSelectorDefaults(
+    val modifier: Modifier = Modifier,
+    val label: String = "",
+    val selectedItemId: String? = null,
+    val onSelectedItemIdChange: ((String?) -> Unit)? = null,
+    val placeholder: String = "",
+    val error: String? = null,
+    val enabled: Boolean = true,
+    val leadingIcon: ImageVector = Icons.Outlined.Search,
+    val isSearching: Boolean? = null,
+    val onSearchChange: ((Boolean) -> Unit)? = null,
+    val semanticsPropertyReceiver: SemanticsPropertyReceiver.() -> Unit = {},
+    val imeAction: ImeAction = ImeAction.Done,
+    val onImeAction: () -> Unit = {},
+)
 
+/*
 @Composable
 fun <T> SearchableSelector(
     modifier: Modifier = Modifier,
@@ -91,7 +107,9 @@ fun <T> SearchableSelector(
     Column(modifier = modifier) {
         ExposedDropdownMenuBox(
             expanded = expanded,
-            onExpandedChange = { /* handled manually in trailing icon */ }
+            onExpandedChange = {  */
+/*handled manually in trailing icon*//*
+  }
         ) {
             MyOutlinedTextField(
                 leadingIcon = leadingIcon,
@@ -171,7 +189,9 @@ fun <T> SearchableSelector(
                 if (filteredList.isEmpty()) {
                     DropdownMenuItem(
                         text = { Text(stringResource(SharedRes.string.address_no_match)) },
-                        onClick = { /* no-op */ })
+                        onClick = {  */
+/*no-op*//*
+  })
                 } else {
                     filteredList.forEach { item ->
                         DropdownMenuItem(
@@ -182,6 +202,167 @@ fun <T> SearchableSelector(
                                 expanded = false
                                 if (isControlled) {
                                     onSelectedItemIdChange.invoke(itemId(item))
+                                } else {
+                                    internalSelectedItem = item
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+*/
+
+
+@Composable
+fun <T> SearchableSelector(
+    items: List<T>,
+    itemToString: (T) -> String,
+    itemId: (T) -> String = { itemToString(it) },
+    config: SearchableSelectorDefaults = SearchableSelectorDefaults()
+) {
+    val isControlled = config.onSelectedItemIdChange != null
+
+    var internalSelectedItem by remember { mutableStateOf<T?>(null) }
+    var text by remember { mutableStateOf("") }
+    var filteredList by remember { mutableStateOf(items) }
+    var expanded by remember { mutableStateOf(false) }
+    var suppressOnDismiss by remember { mutableStateOf(false) }
+    var explicitSelection by remember { mutableStateOf(false) }
+
+    var internalSearching by remember { mutableStateOf(false) }
+    val searching = config.isSearching ?: internalSearching
+
+    val coroutineScope = rememberCoroutineScope()
+    var searchJob by remember { mutableStateOf<Job?>(null) }
+
+    val selectedItem: T? = if (isControlled) {
+        items.firstOrNull { config.selectedItemId != null && itemId(it) == config.selectedItemId }
+    } else {
+        internalSelectedItem
+    }
+
+    LaunchedEffect(items, config.selectedItemId, internalSelectedItem) {
+        text = selectedItem?.let { itemToString(it) } ?: ""
+        filteredList = items
+    }
+
+    fun filtered(query: String): List<T> {
+        if (query.isBlank()) return items
+        val q = query.trim().lowercase()
+        val contains = items.filter { itemToString(it).lowercase().contains(q) }
+        if (contains.isNotEmpty()) return contains
+        val starts = items.filter { itemToString(it).lowercase().startsWith(q) }
+        if (starts.isNotEmpty()) return starts
+        return items.sortedBy { levenshtein(it = itemToString(it).lowercase(), s = q) }.take(10)
+    }
+
+    fun bestMatchFor(query: String): T? {
+        val q = query.trim().lowercase()
+        if (q.isEmpty()) return null
+        val byContains = items.filter { itemToString(it).lowercase().contains(q) }
+        if (byContains.isNotEmpty()) return byContains.first()
+        val byPrefix = items.filter { itemToString(it).lowercase().startsWith(q) }
+        if (byPrefix.isNotEmpty()) return byPrefix.first()
+        return items.minByOrNull { levenshtein(it = itemToString(it).lowercase(), s = q) }
+    }
+
+    Column(modifier = config.modifier) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {/*handled manually in trailing icon */ }
+        ) {
+            MyOutlinedTextField(
+                leadingIcon = config.leadingIcon,
+                enabled = config.enabled,
+                value = text,
+                onValueChange = {
+                    text = it
+                    explicitSelection = false
+
+                    searchJob?.cancel()
+                    searchJob = coroutineScope.launch {
+                        if (config.isSearching == null) internalSearching = true
+                        config.onSearchChange?.invoke(true)
+
+                        delay(500)
+                        filteredList = filtered(it)
+                        expanded = true
+
+                        if (config.isSearching == null) internalSearching = false
+                        config.onSearchChange?.invoke(false)
+                    }
+                },
+                error = config.error,
+                labelText = config.label,
+                placeholderText = config.placeholder,
+                trailingIcon = {
+                    if (searching) {
+                        MyCircularProgressIndicator(
+                            size = 18.dp,
+                            progressStrokeWith = 2.dp
+                        )
+                    } else {
+                        IconButton(
+                            enabled = config.enabled,
+                            onClick = {
+                                suppressOnDismiss = true
+                                expanded = !expanded
+                                if (expanded) {
+                                    filteredList = items
+                                }
+                            }) {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        }
+                    }
+                },
+                semanticsPropertyReceiver = config.semanticsPropertyReceiver,
+                imeAction = config.imeAction,
+                onImeAction = {
+                    if (!explicitSelection) {
+                        val best = bestMatchFor(text)
+                        if (isControlled) {
+                            config.onSelectedItemIdChange.invoke(best?.let { itemId(it) })
+                        } else {
+                            internalSelectedItem = best
+                        }
+                        best?.let { text = itemToString(it) }
+                        config.onSelectedItemIdChange?.invoke(best?.let { itemId(it) })
+                    }
+                    if (expanded) {
+                        expanded = false
+                    }
+                    config.onImeAction()
+                }
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = {
+                    if (suppressOnDismiss) {
+                        // 忽略由按钮点击产生的那次 onDismiss
+                        suppressOnDismiss = false
+                        return@ExposedDropdownMenu
+                    }
+                    expanded = false
+                }
+            ) {
+                if (filteredList.isEmpty()) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(SharedRes.string.address_no_match)) },
+                        onClick = { /* no-op */ })
+                } else {
+                    filteredList.forEach { item ->
+                        DropdownMenuItem(
+                            text = { Text(itemToString(item)) },
+                            onClick = {
+                                explicitSelection = true
+                                text = itemToString(item)
+                                expanded = false
+                                if (isControlled) {
+                                    config.onSelectedItemIdChange.invoke(itemId(item))
                                 } else {
                                     internalSelectedItem = item
                                 }

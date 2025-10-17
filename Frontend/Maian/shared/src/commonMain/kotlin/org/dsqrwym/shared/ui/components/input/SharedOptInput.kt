@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -68,6 +69,7 @@ import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.otp_r
 fun MyOtpInputField(
     modifier: Modifier = Modifier,
     otpTextFieldValue: TextFieldValue = TextFieldValue(text = "", selection = TextRange(0)),
+    focusRequester: FocusRequester = remember { FocusRequester() },
     countdownSeconds: Int = 60,
     // 外部传入剩余秒数（null 表示不传，用内部逻辑）
     externalTimeLeft: Int? = null,
@@ -75,6 +77,7 @@ fun MyOtpInputField(
     enabled: Boolean = true,
     errorMessage: String? = null,
     resendOtp: () -> Unit = {},
+    onDone: () -> Unit = {},
     onOtpChange: (String, Boolean) -> Unit
 ) {
     var internalTimeLeft by rememberSaveable { mutableStateOf(countdownSeconds) }
@@ -106,10 +109,12 @@ fun MyOtpInputField(
     ) {
         OtpInputField(
             otpTextFieldValue = otpTextFieldValue,
+            focusRequester = focusRequester,
             otpLength = otpLength,
             errorMessage = errorMessage,
             enabled = enabled,
             onOtpModified = onOtpChange,
+            onDone = onDone
         )
         TextButton(
             modifier = Modifier.animateContentSize(),

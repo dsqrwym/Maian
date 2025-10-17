@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.ui.screens.auth
+package org.dsqrwym.shared.ui.screens.auth
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -122,8 +122,10 @@ fun ResetPasswordScreen(
                             resetPasswordViewModel.startResentCodeCountDown()
                         }
                     }
+                    val otpRequester = remember { FocusRequester() }
                     MyOtpInputField(
                         modifier = Modifier.fillMaxWidth(),
+                        focusRequester = otpRequester,
                         otpTextFieldValue = TextFieldValue(
                             text = code,
                             selection = TextRange(code.length)
@@ -134,6 +136,9 @@ fun ResetPasswordScreen(
                             resetPasswordViewModel.sendCode()
                             resetPasswordViewModel.startResentCodeCountDown()
                         },
+                        onDone = {
+                            resetPasswordViewModel.resetPasswordNextButtonClicked()
+                        },
                         errorMessage = resetPasswordViewModel.codeError.asString()
                     ) { otp, isComplete ->
                         resetPasswordViewModel.updateCode(otp)
@@ -142,7 +147,7 @@ fun ResetPasswordScreen(
                             focusManager.clearFocus()
                         }
                     }
-
+                    otpRequester.requestFocus()
                 }
             }
 

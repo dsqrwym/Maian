@@ -38,6 +38,9 @@
     <string name="field_username_or_email_placeholder">Introduza o nome de utilizador ou e-mail</string>
     <string name="field_password_label">Palavra-passe</string>
     <string name="field_password_placeholder">Introduza a palavra-passe</string>
+    <string name="field_username_label">Nome de utilizador</string>
+    <string name="field_username_placeholder">Introduza o nome de utilizador</string>
+
 
     <!-- Validações -->
     <string name="validation_username_or_email_empty">O nome de utilizador ou e-mail não pode estar vazio</string>

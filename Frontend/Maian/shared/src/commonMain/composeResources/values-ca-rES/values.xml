@@ -39,6 +39,9 @@
     <string name="field_username_or_email_placeholder">Introdueix el teu nom d’usuari o correu</string>
     <string name="field_password_label">Contrasenya</string>
     <string name="field_password_placeholder">Introdueix la teua contrasenya</string>
+    <string name="field_username_label">Nom d'usuari</string>
+    <string name="field_username_placeholder">Introdueix el nom d’usuari</string>
+
 
     <!-- Missatges de validació -->
     <string name="validation_username_or_email_empty">El nom d’usuari o correu no pot estar buit</string>

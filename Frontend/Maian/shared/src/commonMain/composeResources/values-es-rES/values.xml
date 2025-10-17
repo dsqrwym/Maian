@@ -39,6 +39,9 @@
     <string name="field_username_or_email_placeholder">Introduce tu nombre de usuario o correo</string>
     <string name="field_password_label">Contraseña</string>
     <string name="field_password_placeholder">Introduce tu contraseña</string>
+    <string name="field_username_label">Nombre de usuario</string>
+    <string name="field_username_placeholder">Introduzca el nombre de usuario</string>
+
 
     <!-- Mensajes de validación -->
     <string name="validation_username_or_email_empty">El nombre de usuario o correo no puede estar vacío</string>

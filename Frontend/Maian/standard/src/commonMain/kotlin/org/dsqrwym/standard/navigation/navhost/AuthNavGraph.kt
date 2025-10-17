@@ -23,6 +23,7 @@ import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.navigation.popBackStackWithKeyboardDismiss
 import org.dsqrwym.standard.navigation.RegisterScreen
+import org.dsqrwym.shared.ui.screens.auth.ResetPasswordScreen
 import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
 import org.jetbrains.compose.resources.getString
@@ -75,7 +76,7 @@ fun NavGraphBuilder.authNavGraph(
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.RegisterScreen(
             onBackButtonClick = {
-                navController.popBackStackWithKeyboardDismiss(focusManager)
+                navController.navigateWithKeyboardDismiss(InitialScreen, focusManager = focusManager)
             },
             registerViewModel = registerViewModel
         )
@@ -92,7 +93,7 @@ fun NavGraphBuilder.authNavGraph(
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.LoginScreen(
             onBackButtonClick = {
-                navController.popBackStackWithKeyboardDismiss(focusManager)
+                navController.navigateWithKeyboardDismiss(InitialScreen, focusManager = focusManager)
             },
             loginViewModel = loginViewModel
         )
@@ -107,9 +108,9 @@ fun NavGraphBuilder.authNavGraph(
         email?.let {
             resetPasswordViewModel.updateEmail(it)
         }
-        org.dsqrwym.standard.ui.screens.auth.ResetPasswordScreen(
+        ResetPasswordScreen(
             onBackButtonClick = {
-                navController.popBackStackWithKeyboardDismiss(focusManager)
+                navController.navigateWithKeyboardDismiss(LoginScreen(), focusManager = focusManager)
             },
             resetPasswordViewModel = resetPasswordViewModel
         )

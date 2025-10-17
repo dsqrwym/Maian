@@ -29,6 +29,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,6 +37,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.contentType
@@ -213,6 +216,7 @@ internal fun CharacterContainer(
 @Composable
 fun OtpInputField(
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester = remember { FocusRequester() },
     otpTextFieldValue: TextFieldValue = TextFieldValue(text = "", selection = TextRange(0)),
     otpLength: Int = 6,
     errorMessage: String? = null,
@@ -221,7 +225,8 @@ fun OtpInputField(
     visualTransformation: VisualTransformation = PasswordVisualTransformation(),
     mask: String = "•",
     maskDelay: Long = 800,
-    onOtpModified: (String, Boolean) -> Unit
+    onOtpModified: (String, Boolean) -> Unit,
+    onDone: () -> Unit = {}
 ) {
     // 输入框的焦点交互状态
     val interactionSource = remember { MutableInteractionSource() }
@@ -247,9 +252,9 @@ fun OtpInputField(
     }
     Column(modifier = modifier) {
         BasicTextField(
-            modifier = modifier.semantics{
+            modifier = modifier.semantics {
                 contentType = ContentType.SmsOtpCode
-            } .widthIn(min = (41 * otpLength).dp),
+            }.widthIn(min = (41 * otpLength).dp).focusRequester(focusRequester),
             value = textFieldValue,
             readOnly = !enabled,
             onValueChange = {
@@ -266,6 +271,9 @@ fun OtpInputField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.NumberPassword,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { onDone() }
             ),
             interactionSource = interactionSource,
             visualTransformation = visualTransformation,

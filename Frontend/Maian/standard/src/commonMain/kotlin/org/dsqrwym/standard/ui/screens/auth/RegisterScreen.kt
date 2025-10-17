@@ -13,9 +13,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.TextRange
@@ -31,6 +34,7 @@ import org.dsqrwym.shared.ui.components.input.MyOtpInputField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelector
+import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorDefaults
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
@@ -126,6 +130,7 @@ fun RegisterScreen(
                     maxStep = maxStep,
                     hasError = !registerViewModel.validateRegisterStep2()
                 ) { enabled ->
+                    val otpFocusRequester = remember { FocusRequester() }
                     LaunchedEffect(Unit) {
                         if (!registerViewModel.codeSend) {
                             registerViewModel.startResentCodeCountDown()
@@ -133,6 +138,7 @@ fun RegisterScreen(
                     }
                     MyOtpInputField(
                         modifier = Modifier.fillMaxWidth(),
+                        focusRequester = otpFocusRequester,
                         otpTextFieldValue = TextFieldValue(
                             text = registerViewModel.code,
                             selection = TextRange(registerViewModel.code.length)
@@ -151,7 +157,7 @@ fun RegisterScreen(
                             focusManager.clearFocus()
                         }
                     }
-
+                    otpFocusRequester.requestFocus()
                 }
             }
 
@@ -163,14 +169,14 @@ fun RegisterScreen(
                     hasError = !registerViewModel.validateRegisterStep3()
                 ) { enabled ->
                     MyHorizontalDivider(
-                        "用户名（${stringResource(SharedRes.string.field_optional)}）",
+                        "${stringResource(SharedRes.string.field_username_label)}（${stringResource(SharedRes.string.field_optional)}）",
                         modifier = Modifier.height(38.dp)
                     )
 
                     MyOutlinedTextField(
                         enabled = enabled,
-                        labelText = "用户名",
-                        placeholderText = "请输入用户名",
+                        labelText = stringResource(SharedRes.string.field_username_label),
+                        placeholderText = stringResource(SharedRes.string.field_username_placeholder),
                         leadingIcon = Icons.Rounded.Person,
                         leadingIconContentDescription = stringResource(SharedRes.string.icon_content_description_person),
                         trailingIcon = {
@@ -183,7 +189,7 @@ fun RegisterScreen(
                         error = registerViewModel.usernameError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
-
+                            focusManager.moveFocus(FocusDirection.Next)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewUsername
@@ -204,7 +210,9 @@ fun RegisterScreen(
                             registerViewModel.updatePassword(it)
                         },
                         error = registerViewModel.passwordError.asString(),
-                        imeAction = ImeAction.Next,
+                        imeAction = ImeAction.Next, onImeAction = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword
                         }
@@ -220,6 +228,9 @@ fun RegisterScreen(
                         },
                         error = registerViewModel.repeatPasswordError.asString(),
                         imeAction = ImeAction.Next,
+                        onImeAction = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword
                         }
@@ -235,7 +246,6 @@ fun RegisterScreen(
                     }
 
                     SearchableSelector(
-                        enabled = enabled,
                         items = registerViewModel.countries,
                         itemToString = {
                             if (it.name == it.nameLocal) {
@@ -245,20 +255,25 @@ fun RegisterScreen(
                             }
                         },          // 显示国家名
                         itemId = { it.isoNumeric.toString() },          // 国家唯一ID
-                        label = stringResource(SharedRes.string.address_country),
-                        leadingIcon = Icons.Outlined.Public,
-                        placeholder = stringResource(SharedRes.string.address_search_or_select_country),
-                        error = registerViewModel.selectedCountryError.asString(),
-                        selectedItemId = registerViewModel.selectedCountryIso.toString(),
-                        onSelectedItemIdChange = { registerViewModel.selectCountry(it?.toInt()) },
-                        semanticsPropertyReceiver = {
-                            contentType = ContentType.AddressCountry
-                        },
-                        imeAction = ImeAction.Next,
+                        config = SearchableSelectorDefaults(
+                            modifier = Modifier,
+                            label = stringResource(SharedRes.string.address_country),
+                            placeholder = stringResource(SharedRes.string.address_search_or_select_country),
+                            leadingIcon = Icons.Outlined.Public,
+                            error = registerViewModel.selectedCountryError.asString(),
+                            selectedItemId = registerViewModel.selectedCountryIso.toString(),
+                            onSelectedItemIdChange = { registerViewModel.selectCountry(it?.toInt()) },
+                            semanticsPropertyReceiver = {
+                                contentType = ContentType.AddressCountry
+                            },
+                            imeAction = ImeAction.Next,
+                            onImeAction = {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
+                        ),
                     )
 
                     SearchableSelector(
-                        enabled = enabled,
                         items = registerViewModel.provinces,
                         itemToString = {
                             if (it.name == it.nameLocal) {
@@ -268,20 +283,26 @@ fun RegisterScreen(
                             }
                         },
                         itemId = { it.id.toString() },
-                        label = stringResource(SharedRes.string.address_state_or_province),
-                        placeholder = stringResource(SharedRes.string.address_input_or_select_state_or_province),
-                        leadingIcon = Icons.Outlined.Map,
-                        error = registerViewModel.selectedProvinceError.asString(),
-                        selectedItemId = registerViewModel.selectedProvinceId?.toString(),
-                        onSelectedItemIdChange = { registerViewModel.selectProvince(it?.toInt()) },
-                        semanticsPropertyReceiver = {
-                            contentType = ContentType.AddressRegion
-                        },
-                        imeAction = ImeAction.Next,
+                        config = SearchableSelectorDefaults(
+                            enabled = enabled,
+                            label = stringResource(SharedRes.string.address_state_or_province),
+                            placeholder = stringResource(SharedRes.string.address_input_or_select_state_or_province),
+                            leadingIcon = Icons.Outlined.Map,
+                            error = registerViewModel.selectedProvinceError.asString(),
+                            selectedItemId = registerViewModel.selectedProvinceId?.toString(),
+                            onSelectedItemIdChange = { registerViewModel.selectProvince(it?.toInt()) },
+                            semanticsPropertyReceiver = {
+                                contentType = ContentType.AddressRegion
+                            },
+                            imeAction = ImeAction.Next,
+                            onImeAction = {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
+                        ),
                     )
 
+
                     SearchableSelector(
-                        enabled = enabled,
                         items = registerViewModel.cities,
                         itemToString = {
                             if (it.name == it.nameLocal) {
@@ -291,16 +312,21 @@ fun RegisterScreen(
                             }
                         },
                         itemId = { it.id.toString() },
-                        label = stringResource(SharedRes.string.address_city),
-                        placeholder = stringResource(SharedRes.string.address_state_or_province),
-                        leadingIcon = Icons.Outlined.LocationCity,
-                        error = registerViewModel.selectedCityError.asString(),
-                        selectedItemId = registerViewModel.selectedCityId?.toString(),
-                        onSelectedItemIdChange = { registerViewModel.selectCity(it?.toInt()) },
-                        semanticsPropertyReceiver = {
-                            contentType = ContentType.AddressLocality
-                        },
-                        imeAction = ImeAction.Next,
+                        config = SearchableSelectorDefaults(
+                            enabled = enabled, label = stringResource(SharedRes.string.address_city),
+                            placeholder = stringResource(SharedRes.string.address_state_or_province),
+                            leadingIcon = Icons.Outlined.LocationCity,
+                            error = registerViewModel.selectedCityError.asString(),
+                            selectedItemId = registerViewModel.selectedCityId?.toString(),
+                            onSelectedItemIdChange = { registerViewModel.selectCity(it?.toInt()) },
+                            semanticsPropertyReceiver = {
+                                contentType = ContentType.AddressLocality
+                            },
+                            imeAction = ImeAction.Next,
+                            onImeAction = {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
+                        ),
                     )
 
                     // Street
@@ -313,6 +339,9 @@ fun RegisterScreen(
                         value = registerViewModel.street,
                         onValueChange = { registerViewModel.updateStreet(it) },
                         imeAction = ImeAction.Next,
+                        onImeAction = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.AddressStreet
                         }
