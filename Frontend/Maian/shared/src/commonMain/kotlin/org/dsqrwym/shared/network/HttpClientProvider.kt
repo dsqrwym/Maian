@@ -150,7 +150,10 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
  */
 private fun mapAuthEventFromMessage(message: String?): AuthEvent = when (message) {
     "CSRF_INVALID" -> AuthEvent.CsrfInvalid
+
+    "NO_REFRESH_TOKEN",
     "SESSION_NOT_FOUND" -> AuthEvent.SessionNotFound
+
     "SESSION_REVOKED" -> AuthEvent.SessionRevoked
     else -> AuthEvent.Unknown
 }

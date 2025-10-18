@@ -6,6 +6,7 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import {
   ENV,
@@ -238,7 +239,7 @@ export class RefreshTokenController {
         { ip: req.ip },
         '[AuthController] refresh-token-web no cookie',
       );
-      throw new BadRequestException(AUTH_ERROR.NO_REFRESH_TOKEN);
+      throw new UnauthorizedException(AUTH_ERROR.NO_REFRESH_TOKEN);
     }
     const result = await this.authService.getAccessToken(
       refreshToken,
@@ -252,6 +253,7 @@ export class RefreshTokenController {
     // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
 
     res.setCookie(REFRESH_COOKIE_NAME, result.token.refreshToken, {
+      domain: '.dsqrwym.es',
       httpOnly: true,
       secure: true,
       sameSite: 'none',
