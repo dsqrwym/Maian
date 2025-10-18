@@ -221,7 +221,7 @@ export class LoginService {
     const { token, payload } = await this.login(req, user, body);
     // Web: 设置 cookie（httpOnly, secure, sameSite）
     res.setCookie(REFRESH_COOKIE_NAME, token.refreshToken, {
-      domain: '.dsqrwym.es',
+      domain: 'dsqrwym.es',
       httpOnly: true,
       secure: true,
       sameSite: 'none', // 跨域前后端分离（不同子域 / 不同域名）

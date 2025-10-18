@@ -7,7 +7,7 @@ export const GLOBAL_PREFIX = 'maian';
 
 // Path for the refresh-token web endpoint when used in cookies
 // 用于浏览器 Cookie 的 refresh token 接口路径
-export const REFRESH_TOKEN_COOKIE_PATH = `/${GLOBAL_PREFIX}/auth/refresh-token-web`;
+export const REFRESH_TOKEN_COOKIE_PATH = `/${GLOBAL_PREFIX}/auth/token/refresh-web`;
 
 export const REFRESH_COOKIE_NAME = 'refresh_token';
 // Centralized environment variable keys to avoid typos

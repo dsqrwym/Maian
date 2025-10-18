@@ -253,7 +253,7 @@ export class RefreshTokenController {
     // 从Cookie 中读取到 refresh token，并将新的 refresh token 回写到 Cookie（轮换）
 
     res.setCookie(REFRESH_COOKIE_NAME, result.token.refreshToken, {
-      domain: '.dsqrwym.es',
+      domain: 'dsqrwym.es',
       httpOnly: true,
       secure: true,
       sameSite: 'none',
