@@ -65,11 +65,14 @@ fun AppRoot(
     val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
     val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
 
-    val isDarkTheme = isSystemInDarkTheme()
+    // 通过 UserPreferences 的 SharedFlow 监听主题变化
+    val userIsDarkTheme by UserPreferences.isDarkThemeFlow.collectAsState(initial = UserPreferences.getIsDarkTheme())
+    val systemIsDarkTheme = isSystemInDarkTheme()
+    val isDarkTheme by derivedStateOf { userIsDarkTheme ?: systemIsDarkTheme }
+
     val focusManager = LocalFocusManager.current
 
     val appColors = if (isDarkTheme) DarkExtraColorScheme else LightExtraColorScheme
-
     val navController = rememberNavController()
 
     val state by authSessionViewModel.state.collectAsState()

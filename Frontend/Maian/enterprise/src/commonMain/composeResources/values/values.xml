@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===================== Enterprise Login ===================== -->
+    <string name="enterprise_login_title">Enterprise Login</string>
+    <string name="login_type_selection_title">选择登录类型</string>
+    <string name="login_type_selection_subtitle">请选择您的登录方式</string>
+    
+    <!-- Login Types -->
+    <string name="login_type_employee_title">员工登录</string>
+    <string name="login_type_employee_description">使用员工账户登录，需要批发商ID</string>
+    <string name="login_type_wholesaler_title">批发商登录</string>
+    <string name="login_type_wholesaler_description">使用批发商账户登录</string>
+    
+    <!-- Employee Login -->
+    <string name="employee_login_title">员工登录</string>
+    <string name="employee_login_subtitle">请输入您的员工账户信息</string>
+    <string name="employee_login_help_text">员工登录需要提供批发商ID，请联系管理员获取</string>
+    
+    <!-- Wholesaler Login -->
+    <string name="wholesaler_login_title">批发商登录</string>
+    <string name="wholesaler_login_subtitle">请输入您的批发商账户信息</string>
+    <string name="wholesaler_login_help_text">批发商登录使用您的企业账户信息</string>
+    
+    <!-- Fields -->
+    <string name="field_wholesaler_id_label">批发商ID</string>
+    <string name="field_wholesaler_id_placeholder">请输入批发商ID</string>
+    <string name="icon_content_description_business">Business icon</string>
+    <string name="toggle_login_method">切换登录方式</string>
+    
+    <!-- Buttons -->
+    <string name="button_continue">继续</string>
+    <string name="button_logout">退出登录</string>
+    
+    <!-- Dashboard -->
+    <string name="enterprise_dashboard_title">企业管理系统</string>
+    <string name="enterprise_welcome_title">欢迎使用企业管理系统</string>
+    <string name="enterprise_welcome_message">您已成功登录企业管理系统，可以开始管理您的业务</string>
+    
+    <!-- Features -->
+    <string name="feature_employee_management">员工管理</string>
+    <string name="feature_employee_management_desc">管理员工信息和权限</string>
+    <string name="feature_order_management">订单管理</string>
+    <string name="feature_order_management_desc">处理和管理订单</string>
+    <string name="feature_inventory_management">库存管理</string>
+    <string name="feature_inventory_management_desc">管理商品库存</string>
+    <string name="feature_reports">报表分析</string>
+    <string name="feature_reports_desc">查看业务报表</string>
+    
+    <!-- Quick Actions -->
+    <string name="quick_actions_title">快速操作</string>
+    <string name="quick_action_add_order">添加订单</string>
+    <string name="quick_action_search">搜索</string>
+
+    <!-- Registration -->
+    <string name="employee_register_title">员工注册</string>
+    <string name="wholesaler_register_title">批发商注册</string>
+    <string name="button_register_employee">注册员工</string>
+    <string name="button_register_wholesaler">注册批发商</string>
+
+    <!-- Employee Registration Fields -->
+    <string name="field_first_name_label">名字</string>
+    <string name="field_first_name_placeholder">请输入您的名字</string>
+    <string name="field_last_name_label">姓氏</string>
+    <string name="field_last_name_placeholder">请输入您的姓氏</string>
+    <string name="field_telephone_label">电话号码</string>
+    <string name="field_telephone_placeholder">请输入您的电话号码</string>
+    <string name="field_cif_label">CIF</string>
+    <string name="field_cif_placeholder">请输入您的CIF</string>
+
+    <!-- Wholesaler Registration Fields -->
+    <string name="field_company_name_label">公司名称</string>
+    <string name="field_company_name_placeholder">请输入公司名称</string>
+    <string name="field_company_type_label">公司类型</string>
+    <string name="field_company_type_placeholder">请选择公司类型</string>
+
+    <!-- Address Fields -->
+    <string name="address_section_title">经营地址</string>
+    <string name="field_street_label">街道地址</string>
+    <string name="field_street_placeholder">请输入街道地址</string>
+    <string name="field_zip_code_label">邮政编码</string>
+    <string name="field_zip_code_placeholder">请输入邮政编码</string>
+    <string name="field_city_label">城市</string>
+    <string name="field_city_placeholder">请输入城市</string>
+    <string name="field_province_label">省份</string>
+    <string name="field_province_placeholder">请输入省份</string>
+    <string name="field_country_label">国家</string>
+    <string name="field_country_placeholder">请输入国家</string>
+
+    <!-- Icons -->
+    <string name="icon_content_description_phone">电话图标</string>
+    <string name="icon_content_description_location">位置图标</string>
+</resources>

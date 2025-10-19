@@ -1,24 +1,22 @@
 package org.dsqrwym.standard
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.LocalAppFocusManager
 import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.data.auth.session.AuthState
-import org.dsqrwym.shared.navigation.InitialScreen
+import org.dsqrwym.shared.drawable.SharedImages
+import org.dsqrwym.shared.navigation.SharedDashboardScreen
+import org.dsqrwym.shared.navigation.SharedInitialScreen
+import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
+import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
+import org.dsqrwym.shared.ui.components.containers.BackgroundImage
+import org.dsqrwym.standard.navigation.menu.StandardMenuConfig
 import org.dsqrwym.standard.navigation.navhost.authNavGraph
-import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
-import org.koin.compose.currentKoinScope
+import org.dsqrwym.standard.navigation.navhost.mainNavGraph
 
 @Composable
         /**
@@ -35,8 +33,7 @@ fun App(
 ) {
     AppRoot { authState ->
         val navController = LocalNavHostController.current
-
-        val loginViewModel: LoginViewModel = currentKoinScope().get()
+        val focusManager = LocalAppFocusManager.current
 
         LaunchedEffect(Unit) {
             onNavHostReady(navController)
@@ -44,12 +41,11 @@ fun App(
         when (authState) {
             is AuthState.Unauthenticated -> {
                 // 未登录 → 整个 Auth 流程都包在 AuthContainer 下
-                val focusManager = LocalAppFocusManager.current
                 AuthContainer {
                     SharedAppNavHost(
                         navController = navController,
                         focusManager = focusManager,
-                        startDestination = InitialScreen
+                        startDestination = SharedInitialScreen
                     ) { navController, focusManager ->
                         authNavGraph(navController, focusManager)
                     }
@@ -57,12 +53,28 @@ fun App(
             }
 
             is AuthState.Authenticated -> {
+                var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
                 // 已登录 → 渲染主业务 Graph
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    ElevatedButton(onClick = {
-                        loginViewModel.logout()
-                    }) {
-                        Text("Logout")
+                BackgroundImage(SharedImages.background()) {
+                    SharedAdaptiveNavigation(
+                        menuConfig = SharedMenuConfiguration(
+                            StandardMenuConfig.menuList,
+                            StandardMenuConfig.topBarActions,
+                            StandardMenuConfig.userRole
+                        ),
+                        currentRoute = currentRoute,
+                        onNavigate = {
+                            currentRoute = it
+                            navController.navigate(currentRoute)
+                        }
+                    ) {
+                        SharedAppNavHost(
+                            navController = navController,
+                            focusManager = focusManager,
+                            startDestination = SharedDashboardScreen
+                        ) { navController, focusManager ->
+                            mainNavGraph(navController, focusManager)
+                        }
                     }
                 }
             }

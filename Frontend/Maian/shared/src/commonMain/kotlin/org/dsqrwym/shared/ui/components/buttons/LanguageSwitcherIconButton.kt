@@ -65,23 +65,6 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
          */
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             /**
-             * A dropdown menu item that represents a language option in the language switcher.
-             * 表示语言切换器中语言选项的下拉菜单项。
-             *
-             * @param item The language to display in the menu item.
-             *             要在菜单项中显示的语言。
-             * @param onClick Callback when this language is selected.
-             *                选择此语言时的回调。
-             */
-            @Composable
-            fun LanguageMenuItem(item: LanguageManager.SupportedLanguages, onClick: () -> Unit) {
-                DropdownMenuItem(
-                    onClick = onClick,
-                    text = { Text(item.displayName) }
-                )
-            }
-
-            /**
              * Populate the dropdown menu with language options.
              * 用语言选项填充下拉菜单。
              */
@@ -95,4 +78,21 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
             }
         }
     }
+}
+
+/**
+ * A dropdown menu item that represents a language option in the language switcher.
+ * 表示语言切换器中语言选项的下拉菜单项。
+ *
+ * @param item The language to display in the menu item.
+ *             要在菜单项中显示的语言。
+ * @param onClick Callback when this language is selected.
+ *                选择此语言时的回调。
+ */
+@Composable
+fun LanguageMenuItem(item: LanguageManager.SupportedLanguages, onClick: () -> Unit) {
+    DropdownMenuItem(
+        onClick = onClick,
+        text = { Text(item.displayName) }
+    )
 }

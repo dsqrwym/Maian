@@ -15,7 +15,7 @@ import org.dsqrwym.shared.data.location.dto.CityDto
 import org.dsqrwym.shared.data.location.dto.CountryDto
 import org.dsqrwym.shared.data.location.dto.DirectionRequest
 import org.dsqrwym.shared.data.location.dto.ProvinceDto
-import org.dsqrwym.shared.navigation.LoginScreen
+import org.dsqrwym.shared.navigation.SharedLoginScreen
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
 import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
@@ -348,7 +348,7 @@ class RegisterViewModel(
                 is SharedResponseResult.Success -> {
                     mySnackbarViewModel.showSuccess(getString(StandardRes.string.register_success))
                     currentStep++
-                    emitNavigation(NavigationEvent.ToRoute(LoginScreen(email)))
+                    emitNavigation(NavigationEvent.ToRoute(SharedLoginScreen(email)))
                 }
 
                 is SharedResponseResult.Error -> {

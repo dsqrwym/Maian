@@ -96,15 +96,5 @@ class LoginViewModel(
         }
     }
 
-    fun logout() {
-        viewModelScope.launch {
-            val result = repository.logout()
-            if (result is SharedResponseResult.Success) {
-                authSessionViewModel.onLoggedOut()
-                mySnackbarViewModel.showSuccess(message = "logout")
-            } else {
-                mySnackbarViewModel.showError("Error")
-            }
-        }
-    }
+
 }

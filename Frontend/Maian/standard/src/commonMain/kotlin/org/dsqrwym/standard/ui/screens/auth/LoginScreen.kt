@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.LocalNavHostController
-import org.dsqrwym.shared.navigation.ForgotPasswordScreen
+import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.GoogleSignInButton
 import org.dsqrwym.shared.ui.components.buttons.LoginButton
@@ -80,7 +80,7 @@ fun LoginScreen(
         onForgetPasswordClick = {
             focusManager.clearFocus()
             navController.navigateWithKeyboardDismiss(
-                ForgotPasswordScreen(email = if (validateEmail(usernameOrEmail)) usernameOrEmail else null),
+                SharedResetPasswordScreen(email = if (validateEmail(usernameOrEmail)) usernameOrEmail else null),
                 focusManager = focusManager
             )
         },
@@ -220,7 +220,7 @@ fun UsernameOrEmailField(
             SharedRes.string.icon_content_description_person
         ),
         imeAction = ImeAction.Next,
-        onImeAction = {focusManager.moveFocus(FocusDirection.Next) },
+        onImeAction = { focusManager.moveFocus(FocusDirection.Next) },
     )
 }
 

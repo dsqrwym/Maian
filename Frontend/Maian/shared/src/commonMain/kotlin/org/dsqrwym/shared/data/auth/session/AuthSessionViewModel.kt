@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
+import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
 /**
  * Cross-platform ViewModel-like session holder driven by flows.
@@ -22,7 +25,7 @@ import org.dsqrwym.shared.data.auth.SharedTokenStorage
  * should be performed by platform UI when state changes.
  * 说明：该类保持简单与平台无关；实际导航由各平台 UI 在状态变化时执行。
  */
-class AuthSessionViewModel() : ViewModel() {
+class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnackbarViewModel: MySnackbarViewModel) : ViewModel() {
     /** UI-consumable auth state | UI 可订阅的认证状态 */
     private val _state = MutableStateFlow(initialState())
     val state: StateFlow<AuthState> = _state.asStateFlow()
@@ -68,6 +71,18 @@ class AuthSessionViewModel() : ViewModel() {
     /** 在登出或清理会话后将状态标记为未认证 */
     fun onLoggedOut() {
         _state.value = AuthState.Unauthenticated
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            val result = authRepository.logout()
+            if (result is SharedResponseResult.Success) {
+                onLoggedOut()
+                mySnackbarViewModel.showSuccess(message = "logout")
+            } else {
+                mySnackbarViewModel.showError("Error")
+            }
+        }
     }
 }
 

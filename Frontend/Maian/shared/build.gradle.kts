@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.androidLibrary)          // 用来表明自己是Android库模块插件
     alias(libs.plugins.composeMultiplatform)    // Compose跨平台UI框架
     alias(libs.plugins.composeCompiler)         // Compose编译器集成
-    //alias(libs.plugins.composeHotReload)        // 热重载， 但是应该没用
+    alias(libs.plugins.composeHotReload)        // 热重载， 但是应该没用
     alias(libs.plugins.kotlinxSerialization)
 }
 

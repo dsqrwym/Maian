@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.dto.SharedResetPasswordRequest
 import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
-import org.dsqrwym.shared.navigation.LoginScreen
+import org.dsqrwym.shared.navigation.SharedLoginScreen
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
 import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
@@ -148,7 +148,7 @@ class SharedResetPasswordViewModel(
                 is SharedResponseResult.Success -> {
                     mySnackbarViewModel.showSuccess(getString(SharedRes.string.password_reset_success))
                     currentStep++
-                    emitNavigation(NavigationEvent.ToRoute(LoginScreen(email)))
+                    emitNavigation(NavigationEvent.ToRoute(SharedLoginScreen(email)))
                     resetResetPassword()
                 }
 

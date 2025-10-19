@@ -34,7 +34,7 @@ fun AuthTopBar(
                     maxLines = 1,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
-                        .basicMarquee(spacing = titleMarqueeSpacing),
+                        .basicMarquee(spacing = titleMarqueeSpacing, iterations = Int.MAX_VALUE),
                 )
             }
         },

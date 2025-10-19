@@ -17,13 +17,13 @@ import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.WebExitTransition
 import org.dsqrwym.shared.ui.screens.Agreement.Companion.PRIVACY_POLICY_BASE_URL
 import org.dsqrwym.shared.ui.screens.Agreement.Companion.USER_AGREEMENT_BASE_URL
 import org.dsqrwym.shared.ui.screens.AgreementScreen
+import org.dsqrwym.shared.ui.screens.auth.ResetPasswordScreen
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
 import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.navigation.popBackStackWithKeyboardDismiss
 import org.dsqrwym.standard.navigation.RegisterScreen
-import org.dsqrwym.shared.ui.screens.auth.ResetPasswordScreen
 import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
 import org.jetbrains.compose.resources.getString
@@ -36,20 +36,20 @@ fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
     focusManager: FocusManager,
 ) {
-    composable<InitialScreen>(
+    composable<SharedInitialScreen>(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) { _ ->
         org.dsqrwym.standard.ui.screens.auth.InitialScreen(
             onPrivacyPolicyClick = {
                 navController.navigateWithKeyboardDismiss(
-                    route = PrivacyPolicy,
+                    route = SharedPrivacyPolicy,
                     focusManager = focusManager
                 )
             },
             onUserAgreementClick = {
                 navController.navigateWithKeyboardDismiss(
-                    route = UserAgreement,
+                    route = SharedUserAgreement,
                     focusManager = focusManager
                 )
             },
@@ -61,7 +61,7 @@ fun NavGraphBuilder.authNavGraph(
             },
             onLoginClick = {
                 navController.navigateWithKeyboardDismiss(
-                    route = LoginScreen(),
+                    route = SharedLoginScreen(),
                     focusManager = focusManager
                 )
             },
@@ -76,16 +76,16 @@ fun NavGraphBuilder.authNavGraph(
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.RegisterScreen(
             onBackButtonClick = {
-                navController.navigateWithKeyboardDismiss(InitialScreen, focusManager = focusManager)
+                navController.navigateWithKeyboardDismiss(SharedInitialScreen, focusManager = focusManager)
             },
             registerViewModel = registerViewModel
         )
     }
-    composable<LoginScreen>(
+    composable<SharedLoginScreen>(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) { backStackEntry ->
-        val email = backStackEntry.toRoute<LoginScreen>().email
+        val email = backStackEntry.toRoute<SharedLoginScreen>().email
         val loginViewModel = currentKoinScope().get<LoginViewModel>()
         email?.let {
             loginViewModel.updateEmail(it)
@@ -93,30 +93,30 @@ fun NavGraphBuilder.authNavGraph(
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.LoginScreen(
             onBackButtonClick = {
-                navController.navigateWithKeyboardDismiss(InitialScreen, focusManager = focusManager)
+                navController.navigateWithKeyboardDismiss(SharedInitialScreen, focusManager = focusManager)
             },
             loginViewModel = loginViewModel
         )
     }
-    composable<ForgotPasswordScreen>(
+    composable<SharedResetPasswordScreen>(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) { navBackStackEntry ->
         val resetPasswordViewModel =
             currentKoinScope().get<SharedResetPasswordViewModel>()
-        val email = navBackStackEntry.toRoute<ForgotPasswordScreen>().email
+        val email = navBackStackEntry.toRoute<SharedResetPasswordScreen>().email
         email?.let {
             resetPasswordViewModel.updateEmail(it)
         }
         ResetPasswordScreen(
             onBackButtonClick = {
-                navController.navigateWithKeyboardDismiss(LoginScreen(), focusManager = focusManager)
+                navController.navigateWithKeyboardDismiss(SharedLoginScreen(), focusManager = focusManager)
             },
             resetPasswordViewModel = resetPasswordViewModel
         )
     }
 
-    composable<PrivacyPolicy>(
+    composable<SharedPrivacyPolicy>(
         enterTransition = { WebEnterTransition },
         exitTransition = { WebExitTransition }
     ) {
@@ -130,7 +130,7 @@ fun NavGraphBuilder.authNavGraph(
         }
     }
 
-    composable<UserAgreement>(
+    composable<SharedUserAgreement>(
         enterTransition = { WebEnterTransition },
         exitTransition = { WebExitTransition }
     ) {
@@ -152,7 +152,7 @@ fun NavGraphBuilder.authNavGraph(
          * CheckIsPermitted
          *
          * EN: Guard to ensure the user has accepted agreements before proceeding to auth screens.
-         * If not agreed, redirects to InitialScreen and shows an informational snackbar.
+         * If not agreed, redirects to SharedInitialScreen and shows an informational snackbar.
          *
          * ZH: 进入认证页面前的权限校验。若用户未同意协议，则跳转回初始页并弹出提示消息。
          */
@@ -162,7 +162,7 @@ fun CheckIsPermitted(
 ) {
     LaunchedEffect(Unit) {
         if (!UserPreferences.isUserAgreed()) {
-            navController.navigate(InitialScreen)
+            navController.navigate(SharedInitialScreen)
             mySnackbarViewModel.showInfo(message = getString(SharedRes.string.agreement_warning))
         }
     }
