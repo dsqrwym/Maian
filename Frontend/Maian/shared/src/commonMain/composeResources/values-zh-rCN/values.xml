@@ -150,4 +150,13 @@
     <string name="reset_password_title">重置密码</string>
 
 
+    <string name="menu_content_description">菜单</string>
+    <string name="menu_drawer_more_functions">更多功能</string>
+    <string name="menu_close_content_description">关闭菜单</string>
+    <string name="menu_open_content_description">打开菜单</string>
+    <string name="dashboard">首页</string>
+    <string name="profile">我的</string>
+
+    <string name="change_to_light_mode">切换到浅色模式</string>
+    <string name="change_to_dark_mode">切换到深色模式</string>
 </resources>

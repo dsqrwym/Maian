@@ -14,6 +14,8 @@ import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.LanguageMenuItem
 import org.jetbrains.compose.resources.stringResource
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.change_to_dark_mode
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.change_to_light_mode
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_language
 
 /**
@@ -74,7 +76,12 @@ open class SharedMenuActions(
                 positionProvider = rememberTooltipPositionProvider(toolTipAnchorPosition),
                 tooltip = {
                     PlainTooltip {
-                        Text(text = if (isDarkTheme) "Change to Light" else "Change to Dark")
+                        Text(
+                            text = if (isDarkTheme) stringResource(SharedRes.string.change_to_light_mode)
+                            else stringResource(
+                                SharedRes.string.change_to_dark_mode
+                            )
+                        )
                     }
                 },
                 state = TooltipState()
@@ -82,7 +89,10 @@ open class SharedMenuActions(
                 IconButton(onClick = onClick) {
                     Icon(
                         imageVector = if (isDarkTheme) Icons.Outlined.LightMode else Icons.Outlined.ModeNight,
-                        contentDescription = "",
+                        contentDescription = if (isDarkTheme) stringResource(SharedRes.string.change_to_light_mode)
+                        else stringResource(
+                            SharedRes.string.change_to_dark_mode
+                        ),
                     )
                 }
             }

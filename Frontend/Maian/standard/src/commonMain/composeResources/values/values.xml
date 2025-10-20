@@ -3,4 +3,8 @@
     <string name="register_account_title">Create Account</string>
     <string name="register_success">Registration Successful</string>
     <string name="register_failed">Registration Failed</string>
+
+    <string name="wholesalers">Wholesalers</string>
+    <string name="chat">Messages</string>
+    <string name="shopping_cart">Cart</string>
 </resources>

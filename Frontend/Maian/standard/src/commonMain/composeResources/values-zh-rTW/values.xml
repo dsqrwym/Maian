@@ -3,4 +3,8 @@
     <string name="register_account_title">註冊帳號</string>
     <string name="register_success">註冊成功</string>
     <string name="register_failed">註冊失敗</string>
+
+    <string name="wholesalers">批發商</string>
+    <string name="chat">訊息</string>
+    <string name="shopping_cart">購物車</string>
 </resources>

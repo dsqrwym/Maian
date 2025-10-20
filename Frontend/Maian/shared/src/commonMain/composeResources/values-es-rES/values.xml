@@ -149,4 +149,13 @@
 
     <string name="reset_password_title">Restablecer contraseña</string>
 
+    <string name="menu_content_description">Menú</string>
+    <string name="menu_drawer_more_functions">Más funciones</string>
+    <string name="menu_close_content_description">Cerrar menú</string>
+    <string name="menu_open_content_description">Abrir menú</string>
+    <string name="dashboard">Inicio</string>
+    <string name="profile">Mi cuenta</string>
+
+    <string name="change_to_light_mode">Activar modo claro</string>
+    <string name="change_to_dark_mode">Activar modo oscuro</string>
 </resources>

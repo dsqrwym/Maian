@@ -1,24 +1,38 @@
 package org.dsqrwym.standard
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Chat
+import androidx.compose.material.icons.outlined.ShopTwo
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.LocalAppFocusManager
 import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.data.auth.session.AuthState
+import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.navigation.SharedDashboardScreen
 import org.dsqrwym.shared.navigation.SharedInitialScreen
-import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
-import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
+import org.dsqrwym.shared.navigation.menu.*
 import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
-import org.dsqrwym.standard.navigation.menu.StandardMenuConfig
+import org.dsqrwym.standard.navigation.BasketScreen
+import org.dsqrwym.standard.navigation.ChatScreen
+import org.dsqrwym.standard.navigation.SuppliersScreen
 import org.dsqrwym.standard.navigation.navhost.authNavGraph
 import org.dsqrwym.standard.navigation.navhost.menuNavGraph
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.dashboard
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.profile
+import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.StandardRes
+import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.chat
+import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.shopping_cart
+import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.wholesalers
 
 @Composable
         /**
@@ -57,13 +71,70 @@ fun App(
             is AuthState.Authenticated -> {
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
                 var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
+                val menuList = listOf(
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            SharedMenuItem.Dashboard.route,
+                            stringResource(SharedRes.string.dashboard),
+                            SharedMenuItem.Dashboard.description,
+                            SharedMenuItem.Dashboard.icon,
+                            stringResource(SharedRes.string.dashboard),
+                            SharedMenuItem.Dashboard.requiredRole,
+                            SharedMenuItem.Dashboard.isPrimary
+                        )
+                    ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            route = SuppliersScreen,
+                            label = stringResource(StandardRes.string.wholesalers),
+                            icon = Icons.Outlined.ShopTwo,
+                            iconContentDescription = stringResource(StandardRes.string.wholesalers),
+                            isPrimary = true
+                        )
+                    ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            route = ChatScreen,
+                            label = stringResource(StandardRes.string.chat),
+                            icon = Icons.AutoMirrored.Outlined.Chat,
+                            iconContentDescription = stringResource(StandardRes.string.chat),
+                            isPrimary = true
+                        )
+                    ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            route = BasketScreen,
+                            label = stringResource(StandardRes.string.shopping_cart),
+                            icon = Icons.Outlined.ShoppingCart,
+                            iconContentDescription = stringResource(StandardRes.string.shopping_cart),
+                            isPrimary = true
+                        )
+                    ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            SharedMenuItem.Profile.route,
+                            stringResource(SharedRes.string.profile),
+                            SharedMenuItem.Profile.description,
+                            SharedMenuItem.Profile.icon,
+                            stringResource(SharedRes.string.profile),
+                            SharedMenuItem.Profile.requiredRole,
+                            SharedMenuItem.Profile.isPrimary
+                        )
+                    ),
+                )
+                val topBarActions: List<SharedMenuActions> = listOf(
+                    SharedMenuActions.ThemeChangeIconButton,
+                    SharedMenuActions.LanguageSwitcherIconButton,
+                )
+                val userRole = UserRole.RETAILER
+
                 // 已登录 → 渲染主业务 Graph
                 BackgroundImage(SharedImages.background()) {
                     SharedAdaptiveNavigation(
                         menuConfig = SharedMenuConfiguration(
-                            StandardMenuConfig.menuList,
-                            StandardMenuConfig.topBarActions,
-                            StandardMenuConfig.userRole
+                            menuList,
+                            topBarActions,
+                            userRole
                         ),
                         currentRoute = currentRoute,
                         onNavigate = {

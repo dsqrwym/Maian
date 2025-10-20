@@ -18,6 +18,7 @@ data class SharedMenuItemState(
 open class SharedMenuItem<R : @Serializable Any>(
     val route: @Serializable R,
     val label: String,
+    val description: String? = null,
     val icon: ImageVector? = null,
     val iconContentDescription: String? = null,
     val requiredRole: Set<UserRole>? = null,

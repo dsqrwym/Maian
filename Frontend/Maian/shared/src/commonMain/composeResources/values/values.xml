@@ -146,4 +146,13 @@
 
     <string name="reset_password_title">Reset Password</string>
 
+    <string name="menu_content_description">Menu</string>
+    <string name="menu_drawer_more_functions">More functions</string>
+    <string name="menu_close_content_description">Close menu</string>
+    <string name="menu_open_content_description">Open menu</string>
+    <string name="dashboard">Home</string>
+    <string name="profile">My Account</string>
+
+    <string name="change_to_light_mode">Turn on Light Mode</string>
+    <string name="change_to_dark_mode">Turn on Dark Mode</string>
 </resources>

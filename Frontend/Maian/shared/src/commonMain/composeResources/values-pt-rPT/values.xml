@@ -145,4 +145,13 @@
 
     <string name="reset_password_title">Redefinir senha</string>
 
+    <string name="menu_content_description">Menu</string>
+    <string name="menu_drawer_more_functions">Mais funções</string>
+    <string name="menu_close_content_description">Fechar menu</string>
+    <string name="menu_open_content_description">Abrir menu</string>
+    <string name="dashboard">Início</string>
+    <string name="profile">A minha conta</string>
+
+    <string name="change_to_light_mode">Ativar modo claro</string>
+    <string name="change_to_dark_mode">Ativar modo escuro</string>
 </resources>

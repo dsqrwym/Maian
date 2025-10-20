@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.navigation.menu
+package org.dsqrwym.shared.ui.components.menu
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor

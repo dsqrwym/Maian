@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -19,11 +20,18 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.launch
+import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
-import org.dsqrwym.shared.navigation.menu.SharedMenuIcon
 import org.dsqrwym.shared.theme.MyHazeStyles
 import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
+import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
+import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
+import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_close_content_description
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_open_content_description
 
 /**
  * 底部导航布局 (用于手机竖屏 < 600dp)
@@ -84,33 +92,38 @@ fun SharedBottomNavigationLayout(
                             .fillMaxHeight()
                             .padding(vertical = 16.dp)
                     ) {
-                        Text(
-                            text = "更多功能",
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(horizontal = 28.dp, vertical = 16.dp)
+                        AnimatedImgVector(
+                            imageVector = SharedIcons.MaianLogo,
+                            modifier = Modifier
+                                .padding(20.dp).align(Alignment.CenterHorizontally).size(66.dp)
                         )
 
                         HorizontalDivider()
                         Spacer(Modifier.height(8.dp))
 
                         drawerItems.forEach { state ->
-                            NavigationDrawerItem(
-                                icon = {
-                                    MyBadgedBox(state.showBadge, state.badgeCount) {
-                                        SharedMenuIcon(
-                                            imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                            contentDescription = state.item.iconContentDescription
-                                        )
-                                    }
-                                },
-                                label = { Text(state.item.label) },
-                                selected = isSameRoute(currentRoute, state.item.route),
-                                onClick = {
-                                    onNavigate(state.item.route)
-                                    scope.launch { drawerState.close() }
-                                },
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                            )
+                            SharedMenuTooltipBox(
+                                state = state,
+                                positionProvider = TooltipAnchorPosition.Right,
+                            ) {
+                                NavigationDrawerItem(
+                                    icon = {
+                                        MyBadgedBox(state.showBadge, state.badgeCount) {
+                                            SharedMenuIcon(
+                                                imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                                                contentDescription = state.item.iconContentDescription
+                                            )
+                                        }
+                                    },
+                                    label = { Text(state.item.label) },
+                                    selected = isSameRoute(currentRoute, state.item.route),
+                                    onClick = {
+                                        onNavigate(state.item.route)
+                                        scope.launch { drawerState.close() }
+                                    },
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                                )
+                            }
                         }
                     }
                 }
@@ -138,7 +151,10 @@ fun SharedBottomNavigationLayout(
                                         else
                                             Icons.Outlined.Menu,
                                         durationMillis = 100,
-                                        contentDescription = if (isOpen) "关闭菜单" else "打开菜单"
+                                        contentDescription = if (isOpen) stringResource(SharedRes.string.menu_close_content_description)
+                                        else stringResource(
+                                            SharedRes.string.menu_open_content_description
+                                        )
                                     )
                                 }
 
@@ -178,17 +194,20 @@ fun SharedBottomNavigationLayout(
                     primaryItems.forEach { state ->
                         NavigationBarItem(
                             icon = {
-                                MyBadgedBox(state.showBadge, state.badgeCount) {
-                                    SharedMenuIcon(
-                                        imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                        contentDescription = state.item.iconContentDescription
-                                    )
+                                SharedMenuTooltipBox(state, TooltipAnchorPosition.Above) {
+                                    MyBadgedBox(state.showBadge, state.badgeCount) {
+                                        SharedMenuIcon(
+                                            imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                                            contentDescription = state.item.iconContentDescription
+                                        )
+                                    }
                                 }
                             },
                             label = { Text(state.item.label) },
                             selected = isSameRoute(currentRoute, state.item.route),
                             onClick = { onNavigate(state.item.route) }
                         )
+
                     }
                 }
             },

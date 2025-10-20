@@ -7,7 +7,6 @@ import androidx.compose.material.icons.automirrored.outlined.MenuOpen
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
-import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,11 +17,16 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
-import org.dsqrwym.shared.navigation.menu.SharedMenuIcon
-import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.theme.MyHazeStyles
 import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
+import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
+import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
+import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
+import org.jetbrains.compose.resources.stringResource
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_close_content_description
+import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_open_content_description
 
 /**
  * Navigation Rail 布局 (用于平板、手机横屏 600-840dp)
@@ -59,7 +63,10 @@ fun SharedNavigationRailLayout(
                     IconButton(onClick = { isRailExpanded = !isRailExpanded }) {
                         Icon(
                             imageVector = if (isRailExpanded) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Outlined.Menu,
-                            contentDescription = "Menu"
+                            contentDescription = if (isRailExpanded) stringResource(SharedRes.string.menu_close_content_description)
+                            else stringResource(
+                                SharedRes.string.menu_open_content_description
+                            )
                         )
                     }
                 },
@@ -142,14 +149,9 @@ fun SharedNavigationRailItem(
     items.forEach { state ->
         NavigationRailItem(
             icon = {
-                TooltipBox(
-                    positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Right),
-                    tooltip = {
-                        PlainTooltip {
-                            Text(state.item.label)
-                        }
-                    },
-                    state = TooltipState()
+                SharedMenuTooltipBox(
+                    state,
+                    TooltipAnchorPosition.Right,
                 ) {
                     MyBadgedBox(state.showBadge, state.badgeCount) {
                         SharedMenuIcon(

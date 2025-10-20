@@ -26,10 +26,11 @@ import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
-import org.dsqrwym.shared.navigation.menu.SharedMenuIcon
 import org.dsqrwym.shared.theme.MyHazeStyles
 import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
+import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
+import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
 
 /**
@@ -55,66 +56,67 @@ fun SharedRailWithTopBarLayout(
     val topNavigationHazeStyle = MyHazeStyles.glass()
 
     Row(modifier = modifier.fillMaxSize()) {
-        if (secondaryItems.isNotEmpty()) {
-            // 左侧 Navigation Rail
-            Box {
-                NavigationRail(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .widthIn(max = 88.dp)
-                        .shadow(elevation = 12.dp, shape = RectangleShape),
+        // 左侧 Navigation Rail
+        Box {
+            NavigationRail(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .widthIn(max = 88.dp)
+                    .shadow(elevation = 12.dp, shape = RectangleShape),
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    ) {
-                        Spacer(Modifier.height(12.dp))
-                        AnimatedImgVector(
-                            imageVector = SharedIcons.MaianLogo, modifier = Modifier.size(58.dp)
-                        )
-                        Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(12.dp))
+                    AnimatedImgVector(
+                        imageVector = SharedIcons.MaianLogo, modifier = Modifier.size(58.dp)
+                    )
+                    Spacer(Modifier.height(12.dp))
 
-                        HorizontalDivider()
+                    HorizontalDivider()
 
-                        Spacer(Modifier.height(12.dp))
-                        // 次要菜单项
-                        SharedNavigationRailItem(
-                            secondaryItems,
-                            currentRoute,
-                            onNavigate
-                        )
+                    Spacer(Modifier.height(12.dp))
+                    // 次要菜单项
+                    SharedNavigationRailItem(
+                        secondaryItems,
+                        currentRoute,
+                        onNavigate
+                    )
 
+                    if (secondaryItems.isNotEmpty()) {
                         Spacer(Modifier.weight(1f))
-                        menuConfig.topBarActions?.forEach { action ->
-                            NavigationRailItem(
-                                selected = false,
-                                icon = {
-                                    action.content(TooltipAnchorPosition.Right)
-                                },
-                                onClick = { /* no op */ }
-                            )
-                        }
+                    }
+                    menuConfig.topBarActions?.forEach { action ->
+                        NavigationRailItem(
+                            selected = false,
+                            icon = {
+                                action.content(TooltipAnchorPosition.Right)
+                            },
+                            onClick = { /* no op */ }
+                        )
                     }
                 }
+            }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(start = 80.dp)
-                        .width(16.dp)
-                        .align(Alignment.CenterEnd)
-                        .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(
-                                    MaterialTheme.colorScheme.background,
-                                    Color.Transparent
-                                )
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(start = 80.dp)
+                    .width(16.dp)
+                    .align(Alignment.CenterEnd)
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.background,
+                                Color.Transparent
                             )
                         )
-                )
-            }
+                    )
+            )
         }
+
 
         // 右侧内容区域 + 顶部标签栏
         Box(modifier = Modifier.fillMaxSize()) {
@@ -164,31 +166,36 @@ fun SharedRailWithTopBarLayout(
                     },
                 ) {
                     primaryItems.forEach { state ->
-                        LeadingIconTab(
-                            selected = isSameRoute(currentRoute, state.item.route),
-                            onClick = { onNavigate(state.item.route) },
-                            text = {
-                                Text(
-                                    modifier = Modifier
-                                        .focusable()
-                                        .basicMarquee(
-                                            Int.MAX_VALUE,
-                                            MarqueeAnimationMode.Immediately
-                                        ),
-                                    text = state.item.label,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    maxLines = 1
-                                )
-                            },
-                            icon = {
-                                MyBadgedBox(state.showBadge, state.badgeCount) {
-                                    SharedMenuIcon(
-                                        imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                        contentDescription = state.item.iconContentDescription
+                        SharedMenuTooltipBox(
+                            state,
+                            TooltipAnchorPosition.Below
+                        ) {
+                            LeadingIconTab(
+                                selected = isSameRoute(currentRoute, state.item.route),
+                                onClick = { onNavigate(state.item.route) },
+                                text = {
+                                    Text(
+                                        modifier = Modifier
+                                            .focusable()
+                                            .basicMarquee(
+                                                Int.MAX_VALUE,
+                                                MarqueeAnimationMode.Immediately
+                                            ),
+                                        text = state.item.label,
+                                        style = MaterialTheme.typography.labelLarge,
+                                        maxLines = 1
                                     )
+                                },
+                                icon = {
+                                    MyBadgedBox(state.showBadge, state.badgeCount) {
+                                        SharedMenuIcon(
+                                            imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                                            contentDescription = state.item.iconContentDescription
+                                        )
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }

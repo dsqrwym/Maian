@@ -148,4 +148,13 @@
 
     <string name="reset_password_title">Restablir contrasenya</string>
 
+    <string name="menu_content_description">Menú</string>
+    <string name="menu_drawer_more_functions">Més funcions</string>
+    <string name="menu_close_content_description">Tancar menú</string>
+    <string name="menu_open_content_description">Obrir menú</string>
+    <string name="dashboard">Inici</string>
+    <string name="profile">El meu</string>
+
+    <string name="change_to_light_mode">Activa el mode clar</string>
+    <string name="change_to_dark_mode">Activa el mode fosc</string>
 </resources>
