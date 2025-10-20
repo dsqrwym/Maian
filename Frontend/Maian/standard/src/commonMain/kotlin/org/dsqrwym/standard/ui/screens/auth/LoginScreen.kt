@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.GoogleSignInButton
@@ -40,13 +41,12 @@ import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel = koinViewModel<LoginViewModel>(),
+    loginViewModel: LoginViewModel = SharedAuthScope.scope.get<LoginViewModel>(),
     onBackButtonClick: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current

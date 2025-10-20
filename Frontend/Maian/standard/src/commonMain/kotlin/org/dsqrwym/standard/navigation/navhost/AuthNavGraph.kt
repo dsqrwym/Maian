@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.*
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultEnterTransition
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultExitTransition
@@ -72,7 +73,7 @@ fun NavGraphBuilder.authNavGraph(
         enterTransition = { DefaultEnterTransition },
         exitTransition = { DefaultExitTransition }
     ) {
-        val registerViewModel = currentKoinScope().get<RegisterViewModel>()
+        val registerViewModel = SharedAuthScope.scope.get<RegisterViewModel>()
         CheckIsPermitted(navController)
         org.dsqrwym.standard.ui.screens.auth.RegisterScreen(
             onBackButtonClick = {
@@ -86,7 +87,7 @@ fun NavGraphBuilder.authNavGraph(
         exitTransition = { DefaultExitTransition }
     ) { backStackEntry ->
         val email = backStackEntry.toRoute<SharedLoginScreen>().email
-        val loginViewModel = currentKoinScope().get<LoginViewModel>()
+        val loginViewModel = SharedAuthScope.scope.get<LoginViewModel>()
         email?.let {
             loginViewModel.updateEmail(it)
         }
@@ -103,7 +104,7 @@ fun NavGraphBuilder.authNavGraph(
         exitTransition = { DefaultExitTransition }
     ) { navBackStackEntry ->
         val resetPasswordViewModel =
-            currentKoinScope().get<SharedResetPasswordViewModel>()
+            SharedAuthScope.scope.get<SharedResetPasswordViewModel>()
         val email = navBackStackEntry.toRoute<SharedResetPasswordScreen>().email
         email?.let {
             resetPasswordViewModel.updateEmail(it)

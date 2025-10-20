@@ -28,6 +28,7 @@ import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.menu.SharedMenuIcon
 import org.dsqrwym.shared.theme.MyHazeStyles
+import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.dsqrwym.shared.util.navigation.isSameRoute
 
@@ -141,7 +142,7 @@ fun SharedRailWithTopBarLayout(
             ) {
                 val selectedTabIndex by derivedStateOf {
                     primaryItems.indexOfFirst {
-                        isSameRoute(currentRoute, it.route)
+                        isSameRoute(currentRoute, it.item.route)
                     }.coerceAtLeast(0)
                 }
                 PrimaryTabRow(
@@ -162,10 +163,10 @@ fun SharedRailWithTopBarLayout(
                         )
                     },
                 ) {
-                    primaryItems.forEach { item ->
+                    primaryItems.forEach { state ->
                         LeadingIconTab(
-                            selected = isSameRoute(currentRoute, item.route),
-                            onClick = { onNavigate(item.route) },
+                            selected = isSameRoute(currentRoute, state.item.route),
+                            onClick = { onNavigate(state.item.route) },
                             text = {
                                 Text(
                                     modifier = Modifier
@@ -174,16 +175,18 @@ fun SharedRailWithTopBarLayout(
                                             Int.MAX_VALUE,
                                             MarqueeAnimationMode.Immediately
                                         ),
-                                    text = item.label,
+                                    text = state.item.label,
                                     style = MaterialTheme.typography.labelLarge,
                                     maxLines = 1
                                 )
                             },
                             icon = {
-                                SharedMenuIcon(
-                                    imageVector = item.icon ?: Icons.Outlined.Apps,
-                                    contentDescription = item.iconContentDescription
-                                )
+                                MyBadgedBox(state.showBadge, state.badgeCount) {
+                                    SharedMenuIcon(
+                                        imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                                        contentDescription = state.item.iconContentDescription
+                                    )
+                                }
                             }
                         )
                     }

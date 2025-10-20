@@ -7,50 +7,63 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.navigation.menu.SharedMenuActions
 import org.dsqrwym.shared.navigation.menu.SharedMenuItem
+import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.standard.navigation.BasketScreen
 import org.dsqrwym.standard.navigation.ChatScreen
 import org.dsqrwym.standard.navigation.SuppliersScreen
 
 object StandardMenuConfig {
     val menuList = listOf(
-        SharedMenuItem.Dashboard,
-        SharedMenuItem(
-            route = SuppliersScreen,
-            label = "Suppliers",
-            icon = Icons.Outlined.ShopTwo,
-            iconContentDescription = "Suppliers",
-            isPrimary = true
+        SharedMenuItemState(SharedMenuItem.Dashboard),
+        SharedMenuItemState(
+            SharedMenuItem(
+                route = SuppliersScreen,
+                label = "Suppliers",
+                icon = Icons.Outlined.ShopTwo,
+                iconContentDescription = "Suppliers",
+                isPrimary = true
+            )
         ),
-        SharedMenuItem(
-            route = ChatScreen,
-            label = "Chat",
-            icon = Icons.AutoMirrored.Outlined.Chat,
-            iconContentDescription = "Chat",
-            isPrimary = true
+        SharedMenuItemState(
+            SharedMenuItem(
+                route = ChatScreen,
+                label = "Chat",
+                icon = Icons.AutoMirrored.Outlined.Chat,
+                iconContentDescription = "Chat",
+                isPrimary = true
+            )
         ),
-        SharedMenuItem(
-            route = BasketScreen,
-            label = "Basket",
-            icon = Icons.Outlined.ShoppingCart,
-            isPrimary = true
+        SharedMenuItemState(
+            SharedMenuItem(
+                route = BasketScreen,
+                label = "Basket",
+                icon = Icons.Outlined.ShoppingCart,
+                isPrimary = true
+            )
         ),
-        SharedMenuItem.Profile,
-        SharedMenuItem(
-            route = SuppliersScreen,
-            label = "Suppliers",
-            icon = Icons.Outlined.ShopTwo,
-            iconContentDescription = "Suppliers",
+        SharedMenuItemState(SharedMenuItem.Profile),
+        SharedMenuItemState(
+            SharedMenuItem(
+                route = SuppliersScreen,
+                label = "Suppliers",
+                icon = Icons.Outlined.ShopTwo,
+                iconContentDescription = "Suppliers",
+            )
         ),
-        SharedMenuItem(
-            route = ChatScreen,
-            label = "Chat",
-            icon = Icons.AutoMirrored.Outlined.Chat,
-            iconContentDescription = "Chat",
+        SharedMenuItemState(
+            SharedMenuItem(
+                route = ChatScreen,
+                label = "Chat",
+                icon = Icons.AutoMirrored.Outlined.Chat,
+                iconContentDescription = "Chat",
+            )
         ),
-        SharedMenuItem(
-            route = BasketScreen,
-            label = "Basket",
-            icon = Icons.Outlined.ShoppingCart,
+        SharedMenuItemState(
+            SharedMenuItem(
+                route = BasketScreen,
+                label = "Basket",
+                icon = Icons.Outlined.ShoppingCart,
+            )
         ),
     )
     val topBarActions: List<SharedMenuActions> = listOf(

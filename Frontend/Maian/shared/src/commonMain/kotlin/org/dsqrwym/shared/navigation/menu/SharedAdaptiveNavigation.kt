@@ -1,12 +1,17 @@
 package org.dsqrwym.shared.navigation.menu
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.dsqrwym.shared.navigation.menu.layouts.SharedBottomNavigationLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedNavigationRailLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedRailWithTopBarLayout
+import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
+import org.koin.compose.currentKoinScope
 
 /**
  * 自适应导航组件
@@ -20,8 +25,6 @@ import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
  * @param currentRoute 当前路由
  * @param onNavigate 导航回调
  * @param modifier 修饰符
- * @param topBarTitle 顶部栏标题(仅 Compact 模式使用)
- * @param drawerTitle 抽屉标题(仅 Expanded 模式使用)
  * @param content 页面内容
  */
 @Composable
@@ -30,39 +33,48 @@ fun SharedAdaptiveNavigation(
     currentRoute: Any,
     onNavigate: (Any) -> Unit,
     modifier: Modifier = Modifier,
-    drawerTitle: String = "导航菜单",
     content: @Composable () -> Unit
 ) {
     val windowSizeClass = calculateWindowSizeClass()
+    val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
+
+    LaunchedEffect(Unit) {
+        menuViewModel.initMenu(menuConfig.items)
+    }
+
+    val menuState by menuViewModel.menuStates.collectAsState()
+    val newMenuConfig = menuConfig.copy(items = menuState)
 
     when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
             // < 600dp: 手机竖屏
             SharedBottomNavigationLayout(
-                menuConfig = menuConfig,
+                menuConfig = newMenuConfig,
                 currentRoute = currentRoute,
                 onNavigate = onNavigate,
                 modifier = modifier,
                 content = content
             )
         }
+
         WindowWidthSizeClass.Medium -> {
             // 600-840dp: 平板、手机横屏
             SharedNavigationRailLayout(
-                menuConfig = menuConfig,
+                menuConfig = newMenuConfig,
                 currentRoute = currentRoute,
                 onNavigate = onNavigate,
                 content = content
             )
         }
+
         WindowWidthSizeClass.Expanded -> {
             // >= 840dp: 桌面、大屏平板
             SharedRailWithTopBarLayout(
-                menuConfig = menuConfig,
+                menuConfig = newMenuConfig,
                 currentRoute = currentRoute,
                 onNavigate = onNavigate,
                 modifier = modifier,
-               // appTitle = drawerTitle,
+                // appTitle = drawerTitle,
                 content = content
             )
         }

@@ -13,13 +13,14 @@ import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 fun SharedMenuIcon(
     imageVector: ImageVector,
     contentDescription: String? = null,
+    durationMillis: Int = 800,
     tint: Color = LocalContentColor.current
 ) {
     AnimatedImgVector(
         modifier = Modifier.size(24.dp),
         imageVector = imageVector,
         contentDescription = contentDescription,
-        durationMillis = 1000,
+        durationMillis = durationMillis,
         strokeWidth = 0.2f,
         useOriginalStrokeColor = false,
         tint = tint

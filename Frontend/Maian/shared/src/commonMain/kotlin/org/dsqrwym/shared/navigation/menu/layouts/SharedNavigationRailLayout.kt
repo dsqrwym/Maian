@@ -9,7 +9,6 @@ import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -20,8 +19,9 @@ import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.menu.SharedMenuIcon
-import org.dsqrwym.shared.navigation.menu.SharedMenuItem
+import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.theme.MyHazeStyles
+import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
 
 /**
@@ -42,7 +42,7 @@ fun SharedNavigationRailLayout(
 ) {
     var isRailExpanded by remember { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val currentItem = menuConfig.items.find { isSameRoute(it.route, currentRoute) }
+    val currentItem = menuConfig.items.find { isSameRoute(it.item.route, currentRoute) }
 
     val topBarHazeState = rememberHazeState()
     val topBarHazeStyle = MyHazeStyles.topBar()
@@ -64,7 +64,7 @@ fun SharedNavigationRailLayout(
                     }
                 },
                 title = {
-                    Text(currentItem?.label ?: "")
+                    Text(currentItem?.item?.label ?: "")
                 },
                 actions = {
                     menuConfig.topBarActions?.forEach {
@@ -125,7 +125,6 @@ fun SharedNavigationRailLayout(
                     .fillMaxSize()
                     .weight(1f)
                     .hazeSource(state = topBarHazeState),
-                contentAlignment = Alignment.Center
             ) {
                 content()
             }
@@ -136,31 +135,33 @@ fun SharedNavigationRailLayout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedNavigationRailItem(
-    items: List<SharedMenuItem<out Any>>,
+    items: List<SharedMenuItemState>,
     currentRoute: Any,
     onNavigate: (Any) -> Unit,
 ) {
-    items.forEach { item ->
+    items.forEach { state ->
         NavigationRailItem(
             icon = {
                 TooltipBox(
                     positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Right),
                     tooltip = {
                         PlainTooltip {
-                            Text(item.label)
+                            Text(state.item.label)
                         }
                     },
                     state = TooltipState()
                 ) {
-                    SharedMenuIcon(
-                        imageVector = item.icon ?: Icons.Outlined.Apps,
-                        contentDescription = item.iconContentDescription
-                    )
+                    MyBadgedBox(state.showBadge, state.badgeCount) {
+                        SharedMenuIcon(
+                            imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                            contentDescription = state.item.iconContentDescription
+                        )
+                    }
                 }
             },
-            label = { Text(item.label) },
-            selected = isSameRoute(currentRoute, item.route),
-            onClick = { onNavigate(item.route) }
+            label = { Text(state.item.label) },
+            selected = isSameRoute(currentRoute, state.item.route),
+            onClick = { onNavigate(state.item.route) }
         )
     }
 }

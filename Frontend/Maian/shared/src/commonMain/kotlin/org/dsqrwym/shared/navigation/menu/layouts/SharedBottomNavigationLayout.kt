@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.navigation.menu.layouts
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.menu.SharedMenuIcon
 import org.dsqrwym.shared.theme.MyHazeStyles
+import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
 
 /**
@@ -41,7 +43,7 @@ fun SharedBottomNavigationLayout(
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val currentItem = menuConfig.items.find { isSameRoute(it.route, currentRoute) }
+    val currentItem = menuConfig.items.find { isSameRoute(it.item.route, currentRoute) }
 
     val topBarHazeState = rememberHazeState()
     val topBarHazeStyle = MyHazeStyles.topBar()
@@ -68,12 +70,11 @@ fun SharedBottomNavigationLayout(
                     modifier = Modifier.fillMaxWidth(0.58f).hazeEffect(state = drawerHazeState) {
                         // 使用标准样式，无渐进式模糊
                         style = drawerHazeStyle
-                        // 抽屉固定高透明度，营造玻璃质感
-                        alpha = 0.95f
+                        alpha = 1f
                         progressive = HazeProgressive.horizontalGradient(
                             easing = LinearEasing,
                             startIntensity = 2f,
-                            endIntensity = 0.05f
+                            endIntensity = 0.1f
                         )
                     },
                     drawerContainerColor = Color.Transparent,
@@ -92,18 +93,20 @@ fun SharedBottomNavigationLayout(
                         HorizontalDivider()
                         Spacer(Modifier.height(8.dp))
 
-                        drawerItems.forEach { item ->
+                        drawerItems.forEach { state ->
                             NavigationDrawerItem(
                                 icon = {
-                                    SharedMenuIcon(
-                                        imageVector = item.icon ?: Icons.Outlined.Apps,
-                                        contentDescription = item.iconContentDescription
-                                    )
+                                    MyBadgedBox(state.showBadge, state.badgeCount) {
+                                        SharedMenuIcon(
+                                            imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                                            contentDescription = state.item.iconContentDescription
+                                        )
+                                    }
                                 },
-                                label = { Text(item.label) },
-                                selected = isSameRoute(currentRoute, item.route),
+                                label = { Text(state.item.label) },
+                                selected = isSameRoute(currentRoute, state.item.route),
                                 onClick = {
-                                    onNavigate(item.route)
+                                    onNavigate(state.item.route)
                                     scope.launch { drawerState.close() }
                                 },
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
@@ -117,7 +120,7 @@ fun SharedBottomNavigationLayout(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(currentItem?.label ?: "") },
+                    title = { Text(currentItem?.item?.label ?: "") },
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
@@ -128,10 +131,17 @@ fun SharedBottomNavigationLayout(
                             IconButton(onClick = {
                                 scope.launch { drawerState.open() }
                             }) {
-                                SharedMenuIcon(
-                                    imageVector = if (drawerState.isOpen) Icons.AutoMirrored.Outlined.MenuOpen else Icons.Outlined.Menu,
-                                    contentDescription = if (drawerState.isOpen) "关闭菜单" else "打开菜单"
-                                )
+                                Crossfade(targetState = drawerState.isOpen) { isOpen ->
+                                    SharedMenuIcon(
+                                        imageVector = if (isOpen)
+                                            Icons.AutoMirrored.Outlined.MenuOpen
+                                        else
+                                            Icons.Outlined.Menu,
+                                        durationMillis = 100,
+                                        contentDescription = if (isOpen) "关闭菜单" else "打开菜单"
+                                    )
+                                }
+
                             }
                         }
                     },
@@ -165,17 +175,19 @@ fun SharedBottomNavigationLayout(
                 NavigationBar(
                     tonalElevation = 3.dp
                 ) {
-                    primaryItems.forEach { item ->
+                    primaryItems.forEach { state ->
                         NavigationBarItem(
                             icon = {
-                                SharedMenuIcon(
-                                    imageVector = item.icon ?: Icons.Outlined.Apps,
-                                    contentDescription = item.iconContentDescription
-                                )
+                                MyBadgedBox(state.showBadge, state.badgeCount) {
+                                    SharedMenuIcon(
+                                        imageVector = state.item.icon ?: Icons.Outlined.Apps,
+                                        contentDescription = state.item.iconContentDescription
+                                    )
+                                }
                             },
-                            label = { Text(item.label) },
-                            selected = isSameRoute(currentRoute, item.route),
-                            onClick = { onNavigate(item.route) }
+                            label = { Text(state.item.label) },
+                            selected = isSameRoute(currentRoute, state.item.route),
+                            onClick = { onNavigate(state.item.route) }
                         )
                     }
                 }

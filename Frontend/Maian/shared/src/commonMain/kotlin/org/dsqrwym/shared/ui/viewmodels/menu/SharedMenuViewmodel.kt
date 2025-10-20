@@ -14,15 +14,29 @@ class SharedMenuViewModel : ViewModel() {
     val menuStates = _menuStates.asStateFlow()
 
     fun initMenu(items: List<SharedMenuItemState>) {
-        _menuStates.value = items
+        if (_menuStates.value.isEmpty()) {
+            _menuStates.value = items
+        }
     }
 
-    fun setBadge(route: Any, show: Boolean, count: Int = 0) {
+    fun setBadge(route: Any, count: Int = 0, show: Boolean = true) {
         _menuStates.update { states ->
             states.map {
-                if (isSameRoute(route, it))
+                if (isSameRoute(route, it.item.route))
                     it.copy(showBadge = show, badgeCount = count)
                 else it
+            }
+        }
+    }
+
+    fun getBadgeCount(route: Any): Int {
+        return _menuStates.value.find { isSameRoute(route, it.item.route) }?.badgeCount ?: 0
+    }
+
+    fun clearBadgeAll() {
+        _menuStates.update { states ->
+            states.map {
+                it.copy(showBadge = false, badgeCount = 0)
             }
         }
     }

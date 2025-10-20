@@ -14,9 +14,11 @@ import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
+import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.standard.navigation.menu.StandardMenuConfig
 import org.dsqrwym.standard.navigation.navhost.authNavGraph
-import org.dsqrwym.standard.navigation.navhost.mainNavGraph
+import org.dsqrwym.standard.navigation.navhost.menuNavGraph
+import org.koin.compose.currentKoinScope
 
 @Composable
         /**
@@ -53,6 +55,7 @@ fun App(
             }
 
             is AuthState.Authenticated -> {
+                val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
                 var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
                 // 已登录 → 渲染主业务 Graph
                 BackgroundImage(SharedImages.background()) {
@@ -73,7 +76,7 @@ fun App(
                             focusManager = focusManager,
                             startDestination = SharedDashboardScreen
                         ) { navController, focusManager ->
-                            mainNavGraph(navController, focusManager)
+                            menuNavGraph(menuViewModel, navController, focusManager)
                         }
                     }
                 }

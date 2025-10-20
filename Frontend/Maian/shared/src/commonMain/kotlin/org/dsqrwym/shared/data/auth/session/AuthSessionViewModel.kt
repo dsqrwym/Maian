@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
+import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
@@ -25,7 +26,8 @@ import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
  * should be performed by platform UI when state changes.
  * 说明：该类保持简单与平台无关；实际导航由各平台 UI 在状态变化时执行。
  */
-class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnackbarViewModel: MySnackbarViewModel) : ViewModel() {
+class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnackbarViewModel: MySnackbarViewModel) :
+    ViewModel() {
     /** UI-consumable auth state | UI 可订阅的认证状态 */
     private val _state = MutableStateFlow(initialState())
     val state: StateFlow<AuthState> = _state.asStateFlow()
@@ -65,12 +67,14 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
     /** 在成功登录后将状态标记为已认证 */
     fun onLoggedIn() {
         _state.value = AuthState.Authenticated
+        SharedAuthScope.closeScope()
     }
 
     /** Mark state as unauthenticated, typically after logout or session cleared. */
     /** 在登出或清理会话后将状态标记为未认证 */
     fun onLoggedOut() {
         _state.value = AuthState.Unauthenticated
+        SharedAuthScope.closeScope()
     }
 
     fun logout() {

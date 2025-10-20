@@ -4,7 +4,41 @@ import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
+import org.dsqrwym.shared.util.log.SharedLog
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
+
+object SharedAuthScope : KoinScopeComponent {
+    private const val SHARED_AUTH_SCOPE_ID = "shared_auth_scope"
+    private var _scope: Scope? = null
+
+    override
+    val scope: Scope get() = _scope ?: createScope()
+
+    fun createScope(): Scope {
+        if (_scope == null || !_scope!!.isNotClosed()) {
+            SharedLog.log(
+                tag = "SharedAuthScope",
+                message = "Creating new $SHARED_AUTH_SCOPE_ID"
+            )
+            _scope = getKoin().getOrCreateScope(SHARED_AUTH_SCOPE_ID, named<SharedAuthScope>())
+        } else {
+            SharedLog.log(tag = "SharedAuthScope", message = "Using existing $SHARED_AUTH_SCOPE_ID")
+        }
+        return _scope!!
+    }
+
+    fun closeScope() {
+        SharedLog.log(
+            tag = "SharedAuthScope",
+            message = "Closing $SHARED_AUTH_SCOPE_ID"
+        )
+        _scope?.close()
+        _scope = null
+    }
+}
 
 val sharedAuthModule = module {
     // 提供 SharedAuthApi（单例）
@@ -15,7 +49,12 @@ val sharedAuthModule = module {
     // all callers observe the same auth state/effects across the app.
     // 作为单例注册，保证全局共享同一份会话状态与事件。
     single { AuthSessionViewModel(get(), get()) }
-    // 提供共享的重置密码 ViewModel（单例），供各版本使用
-    single { SharedResetPasswordViewModel(get(), get()) }
-    // 提供共享的注册/创建账户 ViewModel（单例）
+
+    // 提供共享的重置密码 ViewModel，供各版本使用
+    scope<SharedAuthScope> {
+        scoped {
+            SharedResetPasswordViewModel(get(), get())
+        }
+    }
+
 }

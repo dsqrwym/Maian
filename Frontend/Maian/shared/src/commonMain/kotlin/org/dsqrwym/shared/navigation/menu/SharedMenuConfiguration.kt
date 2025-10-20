@@ -3,21 +3,21 @@ package org.dsqrwym.shared.navigation.menu
 import org.dsqrwym.shared.data.user.UserRole
 
 data class SharedMenuConfiguration(
-    val items: List<SharedMenuItem<out Any>>,
+    val items: List<SharedMenuItemState>,
     val topBarActions: List<SharedMenuActions>? = null,
     val userRole: UserRole
 ) {
-    fun getVisibleItems(): List<SharedMenuItem<out Any>> {
+    fun getVisibleItems(): List<SharedMenuItemState> {
         return items.filter {
-            it.requiredRole == null || it.requiredRole.contains(userRole)
+            it.item.requiredRole == null || it.item.requiredRole.contains(userRole)
         }
     }
 
-    fun getPrimaryItems(): List<SharedMenuItem<out Any>> {
-        return items.filter { it.isPrimary }
+    fun getPrimaryItems(): List<SharedMenuItemState> {
+        return items.filter { it.item.isPrimary }
     }
 
-    fun getSecondaryItems(): List<SharedMenuItem<out Any>> {
-        return getVisibleItems().filter { !it.isPrimary }
+    fun getSecondaryItems(): List<SharedMenuItemState> {
+        return getVisibleItems().filter { !it.item.isPrimary }
     }
 }
