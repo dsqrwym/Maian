@@ -26,7 +26,6 @@ class AuthRepository(
     private val sharedAuthApi: SharedAuthApi,
     private val authApi: AuthApi
 ) {
-
     suspend fun login(identifier: String, password: String): SharedResponseResult<SharedLoginResponse> {
         val platform = getPlatform().type
         val deviceInfo = getPlatformDeviceInfo()
@@ -56,11 +55,6 @@ class AuthRepository(
         }
         return result
     }
-
-    suspend fun logout(): SharedResponseResult<Unit> {
-        return safeApiCall { sharedAuthApi.logout() }
-    }
-
     suspend fun startRegister(email: String): SharedResponseResult<Unit> {
         val req = StartRegisterRequest(
             email = email,

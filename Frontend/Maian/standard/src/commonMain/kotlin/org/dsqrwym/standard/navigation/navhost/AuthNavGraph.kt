@@ -8,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.*
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultEnterTransition
@@ -162,7 +162,7 @@ fun CheckIsPermitted(
     mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
 ) {
     LaunchedEffect(Unit) {
-        if (!UserPreferences.isUserAgreed()) {
+        if (!SharedUserPreferences.isUserAgreed()) {
             navController.navigate(SharedInitialScreen)
             mySnackbarViewModel.showInfo(message = getString(SharedRes.string.agreement_warning))
         }

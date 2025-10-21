@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
@@ -72,7 +72,7 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
                 if (item.code != LanguageManager.getCurrent().code) {
                     LanguageMenuItem(item, onClick = {
                         LanguageManager.setLocaleLanguage(item.code)
-                        UserPreferences.setUserLanguage(item.code)
+                        SharedUserPreferences.setUserLanguage(item.code)
                     })
                 }
             }

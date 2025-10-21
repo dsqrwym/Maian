@@ -93,6 +93,7 @@ fun SharedBottomNavigationLayout(
                             .padding(vertical = 16.dp)
                     ) {
                         AnimatedImgVector(
+                            durationMillis = 800,
                             imageVector = SharedIcons.MaianLogo,
                             modifier = Modifier
                                 .padding(20.dp).align(Alignment.CenterHorizontally).size(66.dp)

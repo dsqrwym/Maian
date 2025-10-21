@@ -6,8 +6,11 @@ import androidx.compose.ui.window.ComposeUIViewController
 import org.dsqrwym.standard.di.standardInitKoin
 
 @OptIn(ExperimentalFoundationApi::class)
-fun MainViewController() = ComposeUIViewController {
-    ComposeFoundationFlags.isNewContextMenuEnabled = true
-    standardInitKoin()
+fun MainViewController() = ComposeUIViewController(
+    configure = {
+        ComposeFoundationFlags.isNewContextMenuEnabled = true
+        standardInitKoin()
+    }
+) {
     App()
 }

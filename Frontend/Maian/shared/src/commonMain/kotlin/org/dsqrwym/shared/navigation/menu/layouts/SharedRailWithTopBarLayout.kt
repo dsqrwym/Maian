@@ -71,6 +71,7 @@ fun SharedRailWithTopBarLayout(
                 ) {
                     Spacer(Modifier.height(12.dp))
                     AnimatedImgVector(
+                        durationMillis = 800,
                         imageVector = SharedIcons.MaianLogo, modifier = Modifier.size(58.dp)
                     )
                     Spacer(Modifier.height(12.dp))

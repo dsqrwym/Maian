@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.AgreementSection
 import org.dsqrwym.shared.ui.components.buttons.LanguageSwitcherIconButton
@@ -33,7 +33,7 @@ fun InitialScreen(
     onRegisterClick: () -> Unit = {},
     onLoginClick: () -> Unit = {}
 ) {
-    var isNavEnabled by remember { mutableStateOf(if (dev) false else UserPreferences.isUserAgreed()) }
+    var isNavEnabled by remember { mutableStateOf(if (dev) false else SharedUserPreferences.isUserAgreed()) }
     Box(modifier = Modifier.fillMaxSize()) {
         LanguageSwitcherIconButton(modifier = Modifier.align(Alignment.TopEnd))
 
@@ -78,7 +78,7 @@ fun InitialScreen(
                 isAgreed = isNavEnabled,
                 onAgreementChange = {
                     isNavEnabled = !isNavEnabled
-                    UserPreferences.setUserAgreed(isNavEnabled)
+                    SharedUserPreferences.setUserAgreed(isNavEnabled)
                 },
                 onUserAgreementClick = { onUserAgreementClick() },
                 onPrivacyPolicyClick = { onPrivacyPolicyClick() },

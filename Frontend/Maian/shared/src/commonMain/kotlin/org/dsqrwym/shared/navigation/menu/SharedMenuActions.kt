@@ -7,7 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.*
 import org.dsqrwym.shared.LocalIsDarkTheme
-import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
@@ -59,7 +59,7 @@ open class SharedMenuActions(
                         if (item.code != LanguageManager.getCurrent().code) {
                             LanguageMenuItem(item, onClick = {
                                 LanguageManager.setLocaleLanguage(item.code)
-                                UserPreferences.setUserLanguage(item.code)
+                                SharedUserPreferences.setUserLanguage(item.code)
                             })
                         }
                     }
@@ -71,7 +71,7 @@ open class SharedMenuActions(
     object ThemeChangeIconButton : SharedMenuActions(
         content = { toolTipAnchorPosition ->
             val isDarkTheme = LocalIsDarkTheme.current
-            val onClick: () -> Unit = { UserPreferences.setIsDarkTheme(!isDarkTheme) }
+            val onClick: () -> Unit = { SharedUserPreferences.setIsDarkTheme(!isDarkTheme) }
             TooltipBox(
                 positionProvider = rememberTooltipPositionProvider(toolTipAnchorPosition),
                 tooltip = {

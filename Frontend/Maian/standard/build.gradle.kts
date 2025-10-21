@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -40,14 +39,14 @@ kotlin {
             val projectDirPath = project.projectDir.path*/
             commonWebpackConfig {
                 outputFileName = "standardComposeApp.js"
-               /* devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                        outputPath?.let { add(it.absolutePath) }
-                    }
-                }*/
+                /* devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                     static = (static ?: mutableListOf()).apply {
+                         // Serve sources to debug inside browser
+                         add(rootDirPath)
+                         add(projectDirPath)
+                         outputPath?.let { add(it.absolutePath) }
+                     }
+                 }*/
             }
         }
         binaries.executable()
@@ -58,7 +57,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-           // implementation(project(":shared"))
+            // implementation(project(":shared"))
         }
 
         val commonMain by getting
@@ -120,7 +119,7 @@ android {
         getByName("release") {
             isMinifyEnabled = false
 //            isMinifyEnabled = true   // 同时触发 Shrinking + Optimization + Obfuscation
-//            isShrinkResources = true   // 移除未用资源
+            //isShrinkResources = true   // 移除未用资源
         }
     }
     compileOptions {

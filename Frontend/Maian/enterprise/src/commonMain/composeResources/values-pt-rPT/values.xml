@@ -1,0 +1,14 @@
+<resources>
+    <string name="button_register_new_account">Registar nova conta</string>
+    <string name="register_account_title">Criar conta</string>
+    <string name="register_success">Registo bem-sucedido</string>
+    <string name="register_failed">Falha no registo</string>
+
+    <string name="wholesalers">Grossistas</string>
+
+    <string name="login_tab_employee">Funcionário</string>
+    <string name="field_wholesaler_id_label">ID do grossista</string>
+    <string name="field_wholesaler_id_placeholder">Introduza o seu ID de grossista</string>
+    <string name="error_wholesaler_id_required">O ID do grossista é obrigatório ao iniciar sessão com nome de utilizador</string>
+
+</resources>

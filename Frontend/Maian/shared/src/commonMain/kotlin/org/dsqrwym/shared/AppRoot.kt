@@ -16,7 +16,7 @@ import kotlinx.datetime.toLocalDateTime
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
-import org.dsqrwym.shared.data.local.UserPreferences
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.*
@@ -66,7 +66,7 @@ fun AppRoot(
     val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
 
     // 通过 UserPreferences 的 SharedFlow 监听主题变化
-    val userIsDarkTheme by UserPreferences.isDarkThemeFlow.collectAsState(initial = UserPreferences.getIsDarkTheme())
+    val userIsDarkTheme by SharedUserPreferences.isDarkThemeFlow.collectAsState(initial = SharedUserPreferences.getIsDarkTheme())
     val systemIsDarkTheme = isSystemInDarkTheme()
     val isDarkTheme by derivedStateOf { userIsDarkTheme ?: systemIsDarkTheme }
 
@@ -79,7 +79,7 @@ fun AppRoot(
 
     LaunchedEffect(Unit) {
         if (state is AuthState.Unauthenticated) {
-            LanguageManager.setLocaleLanguage(UserPreferences.getUserLanguage())
+            LanguageManager.setLocaleLanguage(SharedUserPreferences.getUserLanguage())
         }
     }
 

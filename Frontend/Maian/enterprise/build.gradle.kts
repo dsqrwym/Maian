@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -53,37 +54,50 @@ kotlin {
     }
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(compose.preview)
-                implementation(libs.androidx.activity.compose)
-                //implementation(project(":shared"))
-            }
+        val androidMain by getting
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+            //implementation(project(":shared"))
         }
-        val commonMain by getting {
-            dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
-                implementation(libs.androidx.lifecycle.viewmodel)
-                implementation(libs.androidx.lifecycle.runtimeCompose)
-                implementation(project(":shared"))
-            }
+
+        val commonMain by getting
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(libs.material.icons.core)
+            implementation(libs.material.icons.extended)
+
+            // 跨平台储存，防止在commonMain写很多代码
+            implementation(libs.russhwolf.multiplatform.settings)
+            // 官方导航
+            implementation(libs.kmp.navigation.compose)
+
+            // Koin
+            implementation(libs.koin.core) // 或最新版本
+            implementation(libs.koin.compose.viewmodel)
+
+            implementation(project(":shared"))
         }
-        val desktopMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                //implementation(project(":shared"))
-            }
+
+        val desktopMain by getting
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            //implementation(project(":shared"))
         }
-        val wasmJsMain by getting{
-            dependencies {
-                //implementation(project(":shared"))
-            }
+
+        val wasmJsMain by getting
+        wasmJsMain.dependencies {
+            //implementation(project(":shared"))
         }
+
     }
 }
 
@@ -94,6 +108,7 @@ android {
     defaultConfig {
         applicationId = "org.dsqrwym.pgdm.enterprise"
         minSdk = libs.versions.android.minSdk.get().toInt()
+        //noinspection OldTargetApi
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
@@ -106,6 +121,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            //isShrinkResources = true   // 移除未用资源
         }
     }
     compileOptions {
@@ -117,6 +133,13 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
+
+compose.resources {
+    publicResClass = true
+    nameOfResClass = "EnterpriseRes"
+    generateResClass = auto
+}
+
 
 compose.desktop {
     application {
