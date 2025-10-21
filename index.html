@@ -1,32 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maian</title>
-    <link type="text/css" rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico">
-    <link rel="preload" href="composeResources/plataformagestio_ndistribucio_nmayorista.shared.generated.resources/font/Roboto-Regular.ttf"  as="fetch" type="font/ttf" crossorigin />
-    <link rel="preload" href="composeResources/plataformagestio_ndistribucio_nmayorista.shared.generated.resources/font/MiSansVF.ttf" as="fetch" type="font/ttf" crossorigin />
-    <script>
-        var currentLanguagesImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
-        var newLanguagesImplementation = Object.assign({}, currentLanguagesImplementation, {
-            get: function () {
-                if (window.__customLocale) {
-                    return [window.__customLocale];
-                } else {
-                    return currentLanguagesImplementation.get.apply(this);
-                }
+    <title>Select Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #005F9C;
+            --on-primary: #ECF3FF;
+            --primary-container: #39A6FF;
+            --on-primary-container: #002440;
+            --secondary: #005BB0;
+            --on-secondary: #EFF2FF;
+            --secondary-container: #BBD2FF;
+            --background: #F5F6FF;
+            --on-background: #182F50;
+            --surface: #F5F6FF;
+            --on-surface: #182F50;
+            --surface-variant: #CDDDFF;
+            --on-surface-variant: #475C80;
+            --surface-container: #DFE8FF;
+            --surface-container-high: #D6E3FF;
+            --outline: #62779D;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #64B3FF;
+            --on-primary: #003053;
+            --primary-container: #39A6FF;
+            --on-primary-container: #002440;
+            --secondary: #5E9EFC;
+            --on-secondary: #002045;
+            --secondary-container: #005DB5;
+            --background: #000E25;
+            --on-background: #DAE6FF;
+            --surface: #000E25;
+            --on-surface: #DAE6FF;
+            --surface-variant: #00254F;
+            --on-surface-variant: #7F94BB;
+            --surface-container: #001939;
+            --surface-container-high: #001F44;
+            --outline: #61769B;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--background);
+            color: var(--on-background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--on-background);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: var(--on-surface-variant);
+            font-weight: 400;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--surface-container);
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: var(--surface-container-high);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--on-surface);
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover svg {
+            transform: rotate(15deg);
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .app-card {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 32px;
+            text-decoration: none;
+            color: var(--on-surface);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px var(--shadow);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-container);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px var(--shadow);
+            border-color: var(--primary-container);
+        }
+
+        .app-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .app-card:active {
+            transform: translateY(-4px);
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-container);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .app-card:hover .app-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--primary);
+        }
+
+        .app-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--on-primary-container);
+        }
+
+        .app-card:hover .app-icon svg {
+            fill: var(--on-primary);
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--on-surface);
+        }
+
+        .app-description {
+            font-size: 15px;
+            color: var(--on-surface-variant);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .app-badge {
+            display: inline-block;
+            background: var(--secondary-container);
+            color: var(--on-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
             }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggle {
+                width: 48px;
+                height: 48px;
+                top: 16px;
+                right: 16px;
+            }
+        }
+
+        .footer {
+            margin-top: 64px;
+            text-align: center;
+            color: var(--on-surface-variant);
+            font-size: 14px;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
+        </svg>
+        <svg id="moonIcon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z" />
+        </svg>
+    </button>
+
+    <div class="container">
+        <div class="header">
+            <h1>Select Your Application</h1>
+            <p>Choose the platform that best suits your needs</p>
+        </div>
+
+        <div class="apps-grid">
+            <a href="./enterprise/index.html" class="app-card">
+                <div class="app-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zM13 3h8v8h-8V3zm0 10h8v8h-8v-8z" />
+                    </svg>
+                </div>
+                <h2 class="app-title">Enterprise</h2>
+                <p class="app-description">
+                    Under development...
+                </p>
+                <span class="app-badge">Business</span>
+            </a>
+
+            <a href="./standard/index.html" class="app-card">
+                <div class="app-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                    </svg>
+                </div>
+                <h2 class="app-title">Standard</h2>
+                <p class="app-description">
+                    Under development...
+                </p>
+                <span class="app-badge">Essential</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Dsqrwym. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        updateIcons(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcons(newTheme);
         });
 
-        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementation)
+        function updateIcons(theme) {
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
     </script>
-    <script type="application/javascript" src="standardComposeApp.js"></script>
-</head>
-<body>
-<div id="compose-root">
-
-</div>
 </body>
+
 </html>
