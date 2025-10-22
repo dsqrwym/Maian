@@ -15,6 +15,7 @@ import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 import org.jetbrains.compose.resources.StringResource
@@ -40,7 +41,9 @@ class LoginViewModel(
 
     var email by mutableStateOf("")
     var emailError by mutableStateOf<StringResource?>(null)
-
+    val isEmail = derivedStateOf {
+        validateEmail(email)
+    }
     var password by mutableStateOf("")
     var passwordError by mutableStateOf<StringResource?>(null)
 
@@ -57,7 +60,11 @@ class LoginViewModel(
             LoginType.WHOLESALER -> baseFields
 
             LoginType.EMPLOYEE -> {
-                baseFields && wholesalerId?.isNotBlank() == true && wholesalerIdError == null
+                if (isEmail.value) {
+                    baseFields
+                } else {
+                    baseFields && wholesalerId?.isNotBlank() == true && wholesalerIdError == null
+                }
             }
         }
 
@@ -68,6 +75,9 @@ class LoginViewModel(
     fun updateEmail(email: String) {
         this.email = email
         emailError = validateUsernameOrEmail(email)
+        if (isEmail.value && selectedLoginType == LoginType.EMPLOYEE) {
+            wholesalerIdError = null
+        }
     }
 
     fun updatePassword(password: String) {
