@@ -12,4 +12,11 @@
     <string name="error_wholesaler_id_required">L’identifiant du grossiste est requis lors de la connexion avec un nom
         d’utilisateur
     </string>
+
+    <string name="register_section_company_info">Informations sur l\'entreprise</string>
+    <string name="field_company_name_label">Nom de l\'entreprise</string>
+    <string name="field_company_name_placeholder">Entrez le nom de l\'entreprise</string>
+    <string name="field_company_type_label">Type d\'entreprise</string>
+    <string name="field_company_type_placeholder">Sélectionnez le type d\'entreprise</string>
+    <string name="icon_content_description_company">Icône de l\'entreprise</string>
 </resources>

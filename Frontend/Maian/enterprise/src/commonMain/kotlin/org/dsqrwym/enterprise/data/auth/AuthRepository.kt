@@ -1,9 +1,13 @@
 package org.dsqrwym.enterprise.data.auth
 
+import org.dsqrwym.enterprise.data.auth.dto.CompleteRegisterRequest
+import org.dsqrwym.enterprise.data.auth.dto.StartRegisterRequest
 import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
 import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
 import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
+import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.localization.TimezoneManager
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.util.platform.MaiAnPlatformType
@@ -17,7 +21,11 @@ class AuthRepository(
     private val authApi: AuthApi
 ) {
 
-    suspend fun login(identifier: String, password: String, wholesalerId: String?): SharedResponseResult<SharedLoginResponse> {
+    suspend fun login(
+        identifier: String,
+        password: String,
+        wholesalerId: String?
+    ): SharedResponseResult<SharedLoginResponse> {
         val platform = getPlatform().type
         val deviceInfo = getPlatformDeviceInfo()
         val isEmail = validateEmail(identifier)
@@ -47,5 +55,19 @@ class AuthRepository(
             }
         }
         return result
+    }
+
+    suspend fun startRegister(email: String): SharedResponseResult<Unit> {
+        val req = StartRegisterRequest(
+            email = email,
+            language = LanguageManager.getCurrentLanguage(),
+            timezone = TimezoneManager.getCurrentTimeZone(),
+            deepLink = null
+        )
+        return safeApiCall { authApi.startRegister(req) }
+    }
+
+    suspend fun completeResister(dto: CompleteRegisterRequest): SharedResponseResult<Unit> {
+        return safeApiCall { authApi.completeResister(dto) }
     }
 }

@@ -23,8 +23,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
+import org.dsqrwym.enterprise.data.auth.dto.SpanishCompanyType
 import org.dsqrwym.enterprise.ui.viewmodels.auth.RegisterViewModel
 import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.di.auth.SharedAuthScope
@@ -35,14 +39,13 @@ import org.dsqrwym.shared.ui.components.cards.AuthStepCard
 import org.dsqrwym.shared.ui.components.input.MyOtpInputField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
+import org.dsqrwym.shared.ui.components.input.outlinetextfields.OutlinedPhoneNumberField
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelector
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorDefaults
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
-import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @Composable
 fun RegisterScreen(
@@ -59,7 +62,7 @@ fun RegisterScreen(
     val nextButtonText = when (registerViewModel.currentStep) {
         1 -> stringResource(SharedRes.string.reset_verify_email)
         2 -> stringResource(SharedRes.string.reset_verify)
-        3 -> "注册"
+        3 -> stringResource(EnterpriseRes.string.register_account_title)
         else -> stringResource(SharedRes.string.reset_unknown_error)
     }
 
@@ -101,14 +104,7 @@ fun RegisterScreen(
                         placeholderText = stringResource(SharedRes.string.reset_email_placeholder),
                         leadingIcon = Icons.Outlined.Email,
                         leadingIconContentDescription = stringResource(SharedRes.string.icon_content_description_email),
-                        trailingIcon = if (registerViewModel.isCheckingEmail) {
-                            {
-                                MyCircularProgressIndicator(
-                                    size = 18.dp,
-                                    progressStrokeWith = 2.dp
-                                )
-                            }
-                        } else null,
+                        trailingIcon = { CheckingTrailingIcon(registerViewModel.isCheckingEmail) },
                         imeAction = ImeAction.Done,
                         onImeAction = {
                             focusManager.clearFocus()
@@ -233,6 +229,68 @@ fun RegisterScreen(
                             contentType = ContentType.NewPassword
                         }
                     )
+
+                    MyHorizontalDivider(
+                        "${stringResource(EnterpriseRes.string.register_section_company_info)}（${
+                            stringResource(
+                                SharedRes.string.field_required
+                            )
+                        }）",
+                        modifier = Modifier.height(38.dp)
+                    )
+
+                    // Company Name
+                    MyOutlinedTextField(
+                        enabled = enabled,
+                        labelText = stringResource(EnterpriseRes.string.field_company_name_label),
+                        placeholderText = stringResource(EnterpriseRes.string.field_company_name_placeholder),
+                        leadingIcon = Icons.Outlined.Business,
+                        leadingIconContentDescription = stringResource(EnterpriseRes.string.icon_content_description_company),
+                        value = registerViewModel.companyName,
+                        onValueChange = {
+                            registerViewModel.updateCompanyName(it)
+                        },
+                        error = registerViewModel.companyNameError.asString(),
+                        imeAction = ImeAction.Next,
+                        onImeAction = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        },
+                    )
+
+                    // Company Type
+                    SearchableSelector(
+                        items = SpanishCompanyType.entries,
+                        itemToString = { it.name },
+                        itemId = { it.name },
+                        config = SearchableSelectorDefaults(
+                            enabled = enabled,
+                            label = stringResource(EnterpriseRes.string.field_company_type_label),
+                            placeholder = stringResource(EnterpriseRes.string.field_company_type_placeholder),
+                            leadingIcon = Icons.Outlined.Category,
+                            error = registerViewModel.companyTypeError.asString(),
+                            selectedItemId = registerViewModel.selectedCompanyType?.name,
+                            onSelectedItemIdChange = {
+                                registerViewModel.selectCompanyType(
+                                    SpanishCompanyType.entries.find { type -> type.name == it }
+                                )
+                            },
+                            imeAction = ImeAction.Next,
+                            onImeAction = {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
+                        ),
+                    )
+
+                    // Telephone
+                    OutlinedPhoneNumberField(
+                        phoneNumberViewModel = registerViewModel.phoneNumberViewModel,
+                        enabled = enabled,
+                        imeAction = ImeAction.Next,
+                        onImeAction = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        },
+                    )
+
                     MyHorizontalDivider(
                         "${stringResource(SharedRes.string.section_address)}（${stringResource(SharedRes.string.field_required)}）",
                         modifier = Modifier.height(38.dp)
@@ -342,7 +400,8 @@ fun RegisterScreen(
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.AddressStreet
-                        }
+                        },
+                        keyBordType = KeyboardType.Text
                     )
 
                     // ZIP code
@@ -361,7 +420,8 @@ fun RegisterScreen(
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.PostalCode
-                        }
+                        },
+                        keyBordType = KeyboardType.Text
                     )
 
                 }

@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.util.platform
 
+import androidx.compose.ui.text.intl.Locale
 import kotlinx.browser.window
 import org.dsqrwym.shared.util.settings.SharedSettingsProvider
 import kotlin.uuid.ExperimentalUuidApi
@@ -23,6 +24,9 @@ private object WasmJSDeviceInfo : PlatformDeviceInfo {
                     SharedSettingsProvider.plain.putString(PLATFORM_DEVICE_UUID_KEY, newId)
                 }
         }
+
+    override val countryCode: String
+        get() = Locale.current.region
 }
 
 actual fun getPlatformDeviceInfo(): PlatformDeviceInfo {

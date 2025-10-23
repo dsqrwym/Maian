@@ -215,7 +215,7 @@ class RegisterViewModel(
         this.password = password
         passwordError = validatePassword(password)
         if (this.repeatPassword.isNotBlank()) {
-            repeatPasswordError = validateRepeatPassword(this@RegisterViewModel.password, password)
+            repeatPasswordError = validateRepeatPassword(password, repeatPassword)
         }
     }
 

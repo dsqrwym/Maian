@@ -13,10 +13,10 @@ import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.LanguageMenuItem
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.change_to_dark_mode
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.change_to_light_mode
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_language
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.change_to_dark_mode
+import maian.shared.generated.resources.change_to_light_mode
+import maian.shared.generated.resources.icon_content_description_language
 
 /**
  * 定义通用的可组合菜单行为按钮

@@ -19,13 +19,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.dsqrwym.shared.Greeting
 import org.dsqrwym.shared.drawable.brands.GoogleLogo
 import org.dsqrwym.shared.drawable.brands.WechatLogo
 import org.dsqrwym.shared.util.platform.PlatformType
+import org.dsqrwym.shared.util.platform.getPlatform
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import maian.shared.generated.resources.*
 
 /**
  * A Google sign-in button with platform-adaptive styling.
@@ -91,7 +91,7 @@ fun GoogleSignInButton(
  *         如果平台是Android则返回true，否则返回false。
  */
 private fun isAndroidPlatform(): Boolean {
-    return Greeting().getPlatformType() == PlatformType.Android
+    return getPlatform().type == PlatformType.Android
 }
 
 

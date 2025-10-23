@@ -23,7 +23,7 @@ import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateRepeatPassword
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import maian.shared.generated.resources.*
 import kotlin.time.ExperimentalTime
 
 /**

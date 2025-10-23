@@ -110,7 +110,7 @@
     <!-- ===================== 验证码 & 重置密码提示 ===================== -->
     <string name="otp_code_sent">验证码已发送，请查看邮箱</string>
     <string name="otp_code_invalid_or_expired">验证码错误或已过期</string>
-    <string name="otp_code_verified">验证通过，您需要在 %1$s 重置密码</string>
+    <string name="otp_code_verified">验证通过，您需要在 %1$s 完成操作</string>
     <plurals name="expire_seconds">
         <item quantity="one">%1$d 秒</item>
         <item quantity="other">%1$d 秒</item>
@@ -159,4 +159,20 @@
 
     <string name="change_to_light_mode">切换到浅色模式</string>
     <string name="change_to_dark_mode">切换到深色模式</string>
+
+    <string name="field_telephone_label">电话号码</string>
+    <string name="field_telephone_placeholder">请输入电话号码</string>
+
+    <string name="phone_error_empty">电话号码不能为空</string>
+    <string name="phone_error_invalid">电话号码无效</string>
+    <string name="phone_error_invalid_country_code">无效的国家代码</string>
+    <string name="phone_error_too_short">电话号码太短</string>
+    <string name="phone_error_too_long">电话号码太长</string>
+    <string name="phone_error_invalid_length">电话号码长度不正确</string>
+    <string name="phone_error_not_a_number">输入的不是有效的电话号码</string>
+    <string name="phone_error_too_short_after_idd">国际拨号后号码太短</string>
+    <string name="phone_error_format_incorrect">电话号码格式不正确</string>
+    <string name="phone_error_validation_failed">验证电话号码时发生错误</string>
+
+    <string name="phone_hint_invalid_with_format">（当前解析为：%1$s）</string>
 </resources>

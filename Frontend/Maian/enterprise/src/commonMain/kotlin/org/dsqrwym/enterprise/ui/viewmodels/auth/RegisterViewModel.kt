@@ -5,15 +5,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.register_failed
+import maian.enterprise.generated.resources.register_success
+import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.data.auth.AuthRepository
+import org.dsqrwym.enterprise.data.auth.dto.CompleteRegisterRequest
+import org.dsqrwym.enterprise.data.auth.dto.SpanishCompanyType
+import org.dsqrwym.enterprise.data.local.UserPreference
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.location.SharedLocationRepository
 import org.dsqrwym.shared.data.location.dto.CityDto
 import org.dsqrwym.shared.data.location.dto.CountryDto
+import org.dsqrwym.shared.data.location.dto.DirectionRequest
 import org.dsqrwym.shared.data.location.dto.ProvinceDto
+import org.dsqrwym.shared.navigation.SharedLoginScreen
+import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
 import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
 import org.dsqrwym.shared.network.ApiConfig
@@ -21,15 +32,17 @@ import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.VerifyOtpCodeViewModelBase
+import org.dsqrwym.shared.ui.viewmodels.phone.SharedPhoneNumberViewModel
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateRepeatPassword
 import org.dsqrwym.shared.util.validation.validateUsername
 import org.jetbrains.compose.resources.StringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import org.jetbrains.compose.resources.getString
 import kotlin.time.ExperimentalTime
 
 class RegisterViewModel(
+    val phoneNumberViewModel: SharedPhoneNumberViewModel,
     override val sharedAuthRepository: SharedAuthRepository,
     private val authRepository: AuthRepository,
     private val locationRepository: SharedLocationRepository,
@@ -53,10 +66,21 @@ class RegisterViewModel(
         when (currentStep) {
             1 -> noError && email.isNotBlank()
             2 -> noError && codeIsComplete
-            3 -> noError && !isCheckingUsername && password.isNotBlank() && repeatPassword.isNotBlank()
-                    && street.isNotBlank() && zipCode.isNotBlank()
-                    && selectedCountryIso != null && selectedProvinceId != null
-                    && selectedCityId != null
+            3 -> {
+                if (!noError) return@derivedStateOf false
+                if (isCheckingUsername) return@derivedStateOf false
+                if (password.isBlank()) return@derivedStateOf false
+                if (repeatPassword.isBlank()) return@derivedStateOf false
+                if (companyName.isBlank()) return@derivedStateOf false
+                if (selectedCompanyType == null) return@derivedStateOf false
+                if (!phoneNumberViewModel.isValid) return@derivedStateOf false
+                if (street.isBlank()) return@derivedStateOf false
+                if (zipCode.isBlank()) return@derivedStateOf false
+                if (selectedCountryIso == null) return@derivedStateOf false
+                if (selectedProvinceId == null) return@derivedStateOf false
+                if (selectedCityId == null) return@derivedStateOf false
+                return@derivedStateOf true
+            }
 
             else -> false
         }
@@ -71,6 +95,12 @@ class RegisterViewModel(
     var usernameExists by mutableStateOf<Boolean?>(null)
     var usernameCheckJob by mutableStateOf<Job?>(null)
     var isCheckingUsername by mutableStateOf(false)
+
+    // Company information (required)
+    var companyName by mutableStateOf("")
+    var companyNameError by mutableStateOf<StringResource?>(null)
+    var selectedCompanyType: SpanishCompanyType? by mutableStateOf(null)
+    var companyTypeError by mutableStateOf<StringResource?>(null)
 
     // Address state (required)
     var street by mutableStateOf("")
@@ -92,6 +122,18 @@ class RegisterViewModel(
     var isLoadingCountries by mutableStateOf(false)
     var isLoadingProvinces by mutableStateOf(false)
     var isLoadingCities by mutableStateOf(false)
+
+    fun updateCompanyName(value: String) {
+        companyName = value
+        companyNameError = if (value.isBlank()) SharedRes.string.field_cannot_be_empty
+        else null
+    }
+
+    fun selectCompanyType(type: SpanishCompanyType?) {
+        selectedCompanyType = type
+        companyTypeError = if (type == null) SharedRes.string.field_required
+        else null
+    }
 
     fun updateStreet(value: String) {
         street = value
@@ -206,7 +248,7 @@ class RegisterViewModel(
         this.password = password
         passwordError = validatePassword(password)
         if (this.repeatPassword.isNotBlank()) {
-            repeatPasswordError = validateRepeatPassword(this@RegisterViewModel.password, password)
+            repeatPasswordError = validateRepeatPassword(password, repeatPassword)
         }
     }
 
@@ -262,21 +304,27 @@ class RegisterViewModel(
     }
 
     fun validateRegisterStep3(): Boolean {
-        val addressValid = streetError == null
-                && zipCodeError == null
-                && selectedCountryError == null
-                && selectedProvinceError == null
-                && selectedCityError == null
+        if (streetError != null) return false
+        if (zipCodeError != null) return false
+        if (selectedCityError != null) return false
+        if (selectedProvinceError != null) return false
+        if (selectedCountryError != null) return false
 
-        return passwordError == null
-                && repeatPasswordError == null
-                && addressValid
-                && usernameError == null
-                && (if (username.isNotBlank()) usernameExists == false else true)
+        if (passwordError != null) return false
+        if (repeatPasswordError != null) return false
+
+        if (phoneNumberViewModel.errorMessage != null) return false
+
+        if (usernameError != null) return false
+
+        if (username.isNotBlank()) {
+            return usernameExists == false
+        }
+        return true
     }
 
     private suspend fun sendVerificationCode() {
-       /* when (val result = authRepository.startRegister(email)) {
+        when (val result = authRepository.startRegister(email)) {
             is SharedResponseResult.Success<*> -> {
                 nextButtonUiState = UiState.Success
                 mySnackbarViewModel.showSuccess(getString(SharedRes.string.otp_code_sent))
@@ -294,7 +342,7 @@ class RegisterViewModel(
                     emailError = SharedRes.string.register_email_already_registered
                 }
             }
-        }*/
+        }
     }
 
     @OptIn(ExperimentalTime::class)
@@ -319,42 +367,49 @@ class RegisterViewModel(
     }
 
     private suspend fun register() {
-        /*verifyCodeResult?.let {
-            if (selectedCityId == null || selectedProvinceId == null || selectedCountryIso == null) return
-            val req = CompleteRegisterRequest(
-                email = email,
-                password = password,
-                username = username.ifBlank { null },
-                address = DirectionRequest(
-                    street = street,
-                    zipCode = zipCode,
-                    city = selectedCityId!!,
-                    province = selectedProvinceId!!,
-                    country = selectedCountryIso!!
-                ),
-                verificationId = it.verificationId,
-                token = it.token
-            )
-            when (val result = authRepository.completeRegister(req)) {
-                is SharedResponseResult.Success -> {
-                    mySnackbarViewModel.showSuccess(getString(StandardRes.string.register_success))
-                    currentStep++
-                    emitNavigation(NavigationEvent.ToRoute(SharedLoginScreen(email)))
-                }
+        verifyCodeResult?.let { response ->
+            selectedCompanyType?.let { type ->
+                if (selectedCityId == null || selectedProvinceId == null || selectedCountryIso == null) return
+                val req = CompleteRegisterRequest(
+                    email = email,
+                    password = password,
+                    username = username.ifBlank { null },
+                    address = DirectionRequest(
+                        street = street,
+                        zipCode = zipCode,
+                        city = selectedCityId!!,
+                        province = selectedProvinceId!!,
+                        country = selectedCountryIso!!
+                    ),
+                    verificationId = response.verificationId,
+                    token = response.token,
+                    companyType = type,
+                    companyName = companyName,
+                    telephone = phoneNumberViewModel.formattedPhoneNumber
 
-                is SharedResponseResult.Error -> {
-                    if (result.type == HttpStatusCode.TooManyRequests) {
-                        mySnackbarViewModel.showInfo(getString(SharedRes.string.request_too_frequent))
-                    } else if (result.type == HttpStatusCode.Unauthorized) {
-                        mySnackbarViewModel.showError(getString(SharedRes.string.token_invalid_or_expired))
-                        resetRegister()
-                    } else {
-                        mySnackbarViewModel.showError(getString(StandardRes.string.register_failed))
-                        resetRegister()
+                )
+                when (val result = authRepository.completeResister(req)) {
+                    is SharedResponseResult.Success -> {
+                        mySnackbarViewModel.showSuccess(getString(EnterpriseRes.string.register_success))
+                        currentStep++
+                        UserPreference.setUserSelectRole(loginType = LoginType.WHOLESALER)
+                        emitNavigation(NavigationEvent.ToRoute(SharedLoginScreen(email)))
+                    }
+
+                    is SharedResponseResult.Error -> {
+                        if (result.type == HttpStatusCode.TooManyRequests) {
+                            mySnackbarViewModel.showInfo(getString(SharedRes.string.request_too_frequent))
+                        } else if (result.type == HttpStatusCode.Unauthorized) {
+                            mySnackbarViewModel.showError(getString(SharedRes.string.token_invalid_or_expired))
+                            resetRegister()
+                        } else {
+                            mySnackbarViewModel.showError(getString(EnterpriseRes.string.register_failed))
+                            resetRegister()
+                        }
                     }
                 }
             }
-        }*/
+        }
     }
 
     fun resetRegister() {
@@ -390,5 +445,7 @@ class RegisterViewModel(
 
         selectedCityId = null
         selectedCityError = null
+
+        phoneNumberViewModel.resetPhoneNumberViewModel()
     }
 }

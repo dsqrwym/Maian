@@ -108,7 +108,7 @@
     <!-- ===================== 驗證碼 & 重設密碼提示 ===================== -->
     <string name="otp_code_sent">驗證碼已發送，請查收電子郵件</string>
     <string name="otp_code_invalid_or_expired">驗證碼錯誤或已過期</string>
-    <string name="otp_code_verified">驗證通過，您需要在 %1$s 前重設密碼</string>
+    <string name="otp_code_verified">驗證通過，您需要在 %1$s 完成操作</string>
     <plurals name="expire_seconds">
         <item quantity="one">%1$d 秒</item>
         <item quantity="other">%1$d 秒</item>
@@ -155,4 +155,20 @@
 
     <string name="change_to_light_mode">切換到淺色模式</string>
     <string name="change_to_dark_mode">切換到深色模式</string>
+
+    <string name="field_telephone_label">電話號碼</string>
+    <string name="field_telephone_placeholder">請輸入電話號碼</string>
+
+    <string name="phone_error_empty">電話號碼不能為空</string>
+    <string name="phone_error_invalid">電話號碼無效</string>
+    <string name="phone_error_invalid_country_code">無效的國家代碼</string>
+    <string name="phone_error_too_short">電話號碼太短</string>
+    <string name="phone_error_too_long">電話號碼太長</string>
+    <string name="phone_error_invalid_length">電話號碼長度不正確</string>
+    <string name="phone_error_not_a_number">輸入的不是有效的電話號碼</string>
+    <string name="phone_error_too_short_after_idd">國際撥號後號碼太短</string>
+    <string name="phone_error_format_incorrect">電話號碼格式不正確</string>
+    <string name="phone_error_validation_failed">驗證電話號碼時發生錯誤</string>
+
+    <string name="phone_hint_invalid_with_format">（目前解析為：%1$s）</string>
 </resources>

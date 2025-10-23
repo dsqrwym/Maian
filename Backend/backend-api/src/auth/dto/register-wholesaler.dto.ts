@@ -138,7 +138,7 @@ export class RegisterWholesalerDto {
     example: '+34 612 345 678',
     required: true,
   })
-  @IsPhoneNumber('ES', { message: 'Invalid Spanish phone number format' })
+  @IsPhoneNumber(undefined, { message: 'Invalid Spanish phone number format' })
   telephone: string;
 
   /**

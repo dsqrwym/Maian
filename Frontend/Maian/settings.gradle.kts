@@ -1,4 +1,4 @@
-rootProject.name = "PlataformaGestio-nDistribucio-nMayorista" // 根目录名称
+rootProject.name = "MaiAn" // 根目录名称
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS") // 类型安全项目访问器
 
 pluginManagement {// 插件管理

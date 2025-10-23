@@ -22,11 +22,13 @@
     <string name="login_subtitle">Please login to continue</string>
 
     <string name="session_expired">Your session has expired. Please log in again.</string>
-    <string name="session_revoked">Your account has been logged out on another device or terminated by an administrator.</string>
+    <string name="session_revoked">Your account has been logged out on another device or terminated by an
+        administrator.
+    </string>
     <string name="csrf_invalid">Security validation failed. Please refresh the page or log in again.</string>
     <string name="session_not_found">Session not found. Please log in again.</string>
     <string name="token_invalid_or_expired">Token is invalid or expired, please obtain a new one</string>
-    
+
     <!-- Login Buttons -->
     <string name="button_login">Login</string>
     <string name="button_forget_password">Forgot Password</string>
@@ -59,7 +61,8 @@
     <string name="login_error_email_or_password">Incorrect email or password</string>
 
     <string name="register_email_already_registered">This email is already registered. Please log in.</string>
-    <string name="register_username_already_registered">This username is already in use. Please try another one.</string>
+    <string name="register_username_already_registered">This username is already in use. Please try another one.
+    </string>
 
 
     <!-- ===================== Initial Screen ===================== -->
@@ -101,7 +104,6 @@
     <string name="error_no_permission">You do not have permission to access this feature or resource.</string>
 
 
-
     <!-- OTP related -->
     <string name="otp_resend">Resend</string>
     <string name="otp_send">Send verification code</string>
@@ -109,7 +111,7 @@
     <!-- ===================== OTP & Reset password messages ===================== -->
     <string name="otp_code_sent">Verification code sent, please check your email</string>
     <string name="otp_code_invalid_or_expired">Invalid or expired verification code</string>
-    <string name="otp_code_verified">Verified. You need to reset your password by %1$s</string>
+    <string name="otp_code_verified">Verified. Please complete the operation by %1$s</string>
     <plurals name="expire_seconds">
         <item quantity="one">%1$d second</item>
         <item quantity="other">%1$d seconds</item>
@@ -155,4 +157,20 @@
 
     <string name="change_to_light_mode">Turn on Light Mode</string>
     <string name="change_to_dark_mode">Turn on Dark Mode</string>
+
+    <string name="field_telephone_label">Phone Number</string>
+    <string name="field_telephone_placeholder">Enter phone number</string>
+
+    <string name="phone_error_empty">Phone number cannot be empty</string>
+    <string name="phone_error_invalid">Invalid phone number</string>
+    <string name="phone_error_invalid_country_code">Invalid country code</string>
+    <string name="phone_error_too_short">Phone number is too short</string>
+    <string name="phone_error_too_long">Phone number is too long</string>
+    <string name="phone_error_invalid_length">Incorrect phone number length</string>
+    <string name="phone_error_not_a_number">Input is not a valid phone number</string>
+    <string name="phone_error_too_short_after_idd">Number too short after international dialing</string>
+    <string name="phone_error_format_incorrect">Incorrect phone number format</string>
+    <string name="phone_error_validation_failed">An error occurred while validating the phone number</string>
+
+    <string name="phone_hint_invalid_with_format">(Currently parsed as: %1$s)</string>
 </resources>

@@ -10,4 +10,11 @@
     <string name="field_wholesaler_id_label">批發商編號</string>
     <string name="field_wholesaler_id_placeholder">請輸入您的批發商編號</string>
     <string name="error_wholesaler_id_required">使用使用者名稱登入時必須填寫批發商編號</string>
+
+    <string name="register_section_company_info">公司資訊</string>
+    <string name="field_company_name_label">公司名稱</string>
+    <string name="field_company_name_placeholder">請輸入公司名稱</string>
+    <string name="field_company_type_label">公司類型</string>
+    <string name="field_company_type_placeholder">請選擇公司類型</string>
+    <string name="icon_content_description_company">公司圖標</string>
 </resources>

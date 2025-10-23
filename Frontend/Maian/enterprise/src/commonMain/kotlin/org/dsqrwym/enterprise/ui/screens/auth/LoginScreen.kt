@@ -21,6 +21,8 @@ import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.ui.viewmodels.auth.LoginType
 import org.dsqrwym.enterprise.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.shared.LocalIsDarkTheme
@@ -42,8 +44,6 @@ import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.enterprise.generated.resources.*
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 
 @Composable

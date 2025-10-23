@@ -573,7 +573,7 @@ fun SnackbarScaffold(
 // EN: Map SnackbarDuration to milliseconds (approximate), referencing SnackbarHostState.showSnackbar defaults.
 // ZH: 将 SnackbarDuration 映射为大致的毫秒数，参考 SnackbarHostState.showSnackbar 的默认值。
 fun getDurationMillis(duration: SnackbarDuration): Long = when (duration) {
-    SnackbarDuration.Short -> 3800L
+    SnackbarDuration.Short -> 4000L
     SnackbarDuration.Long -> 10000L
     SnackbarDuration.Indefinite -> 60000L
 }

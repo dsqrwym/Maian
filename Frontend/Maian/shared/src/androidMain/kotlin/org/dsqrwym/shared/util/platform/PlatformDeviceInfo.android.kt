@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.util.platform
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
@@ -25,6 +26,9 @@ private object AndroidDeviceInfo : PlatformDeviceInfo {
      */
     override val userAgent: String
         get() = Build.MODEL
+
+    override val countryCode: String
+        get() = getDeviceRegion()
 }
 
 /** 依次尝试：
@@ -68,6 +72,32 @@ private fun getHumanDeviceName(context: Context): String {
  * @return An instance of [PlatformDeviceInfo] for Android.
  *         返回 Android 平台的 [PlatformDeviceInfo] 实例。
  */
+
+@SuppressLint("ObsoleteSdkInt")
+private fun getDeviceRegion(): String {
+    return try {
+        // 更准确地可以用 SIM 或网络国家
+        val countryBySim = try {
+            val tm = android.content.ContextWrapper(null)
+                .applicationContext
+                .getSystemService(Context.TELEPHONY_SERVICE) as android.telephony.TelephonyManager
+            tm.simCountryIso?.uppercase(java.util.Locale.US)
+        } catch (_: Exception) { null }
+
+        val countryByNetwork = try {
+            val tm = android.content.ContextWrapper(null)
+                .applicationContext
+                .getSystemService(Context.TELEPHONY_SERVICE) as android.telephony.TelephonyManager
+            tm.networkCountryIso?.uppercase(java.util.Locale.US)
+        } catch (_: Exception) { null }
+
+
+        countryBySim ?: countryByNetwork ?: java.util.Locale.getDefault().country
+    } catch (_: Exception) {
+        "US"
+    }
+}
+
 actual fun getPlatformDeviceInfo(): PlatformDeviceInfo {
     return AndroidDeviceInfo
 }

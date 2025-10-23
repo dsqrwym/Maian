@@ -1,7 +1,10 @@
 package org.dsqrwym.shared.util.platform
 
 import org.dsqrwym.shared.util.settings.SharedSettingsProvider
+import platform.Foundation.NSLocale
+import platform.Foundation.NSLocaleCountryCode
 import platform.Foundation.NSUUID
+import platform.Foundation.currentLocale
 import platform.UIKit.UIDevice
 
 private object IOSDeviceInfo : PlatformDeviceInfo {
@@ -9,6 +12,8 @@ private object IOSDeviceInfo : PlatformDeviceInfo {
         get() = UIDevice.currentDevice.name
     override val userAgent: String
         get() = DeviceIdProvider.getDeviceId()
+    override val countryCode: String
+        get() = getDeviceRegion()
 }
 
 private object DeviceIdProvider {
@@ -28,6 +33,14 @@ private object DeviceIdProvider {
         return NSUUID().UUIDString.also { newId ->
             SharedSettingsProvider.secure.putString(PLATFORM_DEVICE_UUID_KEY, newId)
         }
+    }
+}
+
+fun getDeviceRegion(): String {
+    return try {
+        NSLocale.currentLocale.objectForKey(NSLocaleCountryCode)?.toString() ?: "US"
+    } catch (_: Exception) {
+        "US"
     }
 }
 

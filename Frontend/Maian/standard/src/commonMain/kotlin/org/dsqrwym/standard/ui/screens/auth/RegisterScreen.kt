@@ -18,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.LocalNavHostController
@@ -103,14 +105,7 @@ fun RegisterScreen(
                         placeholderText = stringResource(SharedRes.string.reset_email_placeholder),
                         leadingIcon = Icons.Outlined.Email,
                         leadingIconContentDescription = stringResource(SharedRes.string.icon_content_description_email),
-                        trailingIcon = if (registerViewModel.isCheckingEmail) {
-                            {
-                                org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator(
-                                    size = 18.dp,
-                                    progressStrokeWith = 2.dp
-                                )
-                            }
-                        } else null,
+                        trailingIcon = { CheckingTrailingIcon(registerViewModel.isCheckingEmail) },
                         imeAction = ImeAction.Done,
                         onImeAction = {
                             focusManager.clearFocus()
@@ -193,7 +188,8 @@ fun RegisterScreen(
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewUsername
-                        }
+                        },
+                        keyBordType = KeyboardType.Text
                     )
 
                     MyHorizontalDivider(
@@ -239,138 +235,13 @@ fun RegisterScreen(
                         "${stringResource(SharedRes.string.section_address)}（${stringResource(SharedRes.string.field_required)}）",
                         modifier = Modifier.height(38.dp)
                     )
-
-                    // Address (required)
-                    LaunchedEffect(Unit) {
-                        registerViewModel.ensureCountriesLoaded()
-                    }
-
-                    SearchableSelector(
-                        items = registerViewModel.countries,
-                        itemToString = {
-                            if (it.name == it.nameLocal) {
-                                it.name
-                            } else {
-                                "${it.name} (${it.nameLocal})"
-                            }
-                        },          // 显示国家名
-                        itemId = { it.isoNumeric.toString() },          // 国家唯一ID
-                        config = SearchableSelectorDefaults(
-                            modifier = Modifier,
-                            label = stringResource(SharedRes.string.address_country),
-                            placeholder = stringResource(SharedRes.string.address_search_or_select_country),
-                            leadingIcon = Icons.Outlined.Public,
-                            error = registerViewModel.selectedCountryError.asString(),
-                            selectedItemId = registerViewModel.selectedCountryIso.toString(),
-                            onSelectedItemIdChange = { registerViewModel.selectCountry(it?.toInt()) },
-                            semanticsPropertyReceiver = {
-                                contentType = ContentType.AddressCountry
-                            },
-                            imeAction = ImeAction.Next,
-                            onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
-                            },
-                        ),
+                    AddressInputSection(
+                        enabled, registerViewModel, focusManager
                     )
-
-                    SearchableSelector(
-                        items = registerViewModel.provinces,
-                        itemToString = {
-                            if (it.name == it.nameLocal) {
-                                it.name
-                            } else {
-                                "${it.name} (${it.nameLocal})"
-                            }
-                        },
-                        itemId = { it.id.toString() },
-                        config = SearchableSelectorDefaults(
-                            enabled = enabled,
-                            label = stringResource(SharedRes.string.address_state_or_province),
-                            placeholder = stringResource(SharedRes.string.address_input_or_select_state_or_province),
-                            leadingIcon = Icons.Outlined.Map,
-                            error = registerViewModel.selectedProvinceError.asString(),
-                            selectedItemId = registerViewModel.selectedProvinceId?.toString(),
-                            onSelectedItemIdChange = { registerViewModel.selectProvince(it?.toInt()) },
-                            semanticsPropertyReceiver = {
-                                contentType = ContentType.AddressRegion
-                            },
-                            imeAction = ImeAction.Next,
-                            onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
-                            },
-                        ),
-                    )
-
-
-                    SearchableSelector(
-                        items = registerViewModel.cities,
-                        itemToString = {
-                            if (it.name == it.nameLocal) {
-                                it.name
-                            } else {
-                                "${it.name} (${it.nameLocal})"
-                            }
-                        },
-                        itemId = { it.id.toString() },
-                        config = SearchableSelectorDefaults(
-                            enabled = enabled, label = stringResource(SharedRes.string.address_city),
-                            placeholder = stringResource(SharedRes.string.address_state_or_province),
-                            leadingIcon = Icons.Outlined.LocationCity,
-                            error = registerViewModel.selectedCityError.asString(),
-                            selectedItemId = registerViewModel.selectedCityId?.toString(),
-                            onSelectedItemIdChange = { registerViewModel.selectCity(it?.toInt()) },
-                            semanticsPropertyReceiver = {
-                                contentType = ContentType.AddressLocality
-                            },
-                            imeAction = ImeAction.Next,
-                            onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
-                            },
-                        ),
-                    )
-
-                    // Street
-                    MyOutlinedTextField(
-                        enabled = enabled,
-                        labelText = stringResource(SharedRes.string.address_street),
-                        leadingIcon = Icons.Outlined.Streetview,
-                        placeholderText = stringResource(SharedRes.string.address_input_detail),
-                        error = registerViewModel.streetError.asString(),
-                        value = registerViewModel.street,
-                        onValueChange = { registerViewModel.updateStreet(it) },
-                        imeAction = ImeAction.Next,
-                        onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
-                        },
-                        semanticsPropertyReceiver = {
-                            contentType = ContentType.AddressStreet
-                        }
-                    )
-
-                    // ZIP code
-                    MyOutlinedTextField(
-                        enabled = enabled,
-                        labelText = stringResource(SharedRes.string.address_postal_code),
-                        placeholderText = stringResource(SharedRes.string.address_input_postal_code),
-                        error = registerViewModel.zipCodeError.asString(),
-                        leadingIcon = Icons.Outlined.Pin,
-                        value = registerViewModel.zipCode,
-                        onValueChange = { registerViewModel.updateZipCode(it) },
-                        imeAction = ImeAction.Done,
-                        onImeAction = {
-                            focusManager.clearFocus()
-                            registerViewModel.nextButtonClicked()
-                        },
-                        semanticsPropertyReceiver = {
-                            contentType = ContentType.PostalCode
-                        }
-                    )
-
                 }
-
             }
-
         }
+
         MyFloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd),
@@ -383,4 +254,141 @@ fun RegisterScreen(
             Text(nextButtonText, Modifier.padding(horizontal = 16.dp))
         }
     }
+}
+
+@Composable
+private fun AddressInputSection(
+    enabled: Boolean,
+    registerViewModel: RegisterViewModel,
+    focusManager: FocusManager
+) {
+
+    // Address (required)
+    LaunchedEffect(Unit) {
+        registerViewModel.ensureCountriesLoaded()
+    }
+
+    SearchableSelector(
+        items = registerViewModel.countries,
+        itemToString = {
+            if (it.name == it.nameLocal) {
+                it.name
+            } else {
+                "${it.name} (${it.nameLocal})"
+            }
+        },          // 显示国家名
+        itemId = { it.isoNumeric.toString() },          // 国家唯一ID
+        config = SearchableSelectorDefaults(
+            modifier = Modifier,
+            label = stringResource(SharedRes.string.address_country),
+            placeholder = stringResource(SharedRes.string.address_search_or_select_country),
+            leadingIcon = Icons.Outlined.Public,
+            error = registerViewModel.selectedCountryError.asString(),
+            selectedItemId = registerViewModel.selectedCountryIso.toString(),
+            onSelectedItemIdChange = { registerViewModel.selectCountry(it?.toInt()) },
+            semanticsPropertyReceiver = {
+                contentType = ContentType.AddressCountry
+            },
+            imeAction = ImeAction.Next,
+            onImeAction = {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
+        ),
+    )
+
+    SearchableSelector(
+        items = registerViewModel.provinces,
+        itemToString = {
+            if (it.name == it.nameLocal) {
+                it.name
+            } else {
+                "${it.name} (${it.nameLocal})"
+            }
+        },
+        itemId = { it.id.toString() },
+        config = SearchableSelectorDefaults(
+            enabled = enabled,
+            label = stringResource(SharedRes.string.address_state_or_province),
+            placeholder = stringResource(SharedRes.string.address_input_or_select_state_or_province),
+            leadingIcon = Icons.Outlined.Map,
+            error = registerViewModel.selectedProvinceError.asString(),
+            selectedItemId = registerViewModel.selectedProvinceId?.toString(),
+            onSelectedItemIdChange = { registerViewModel.selectProvince(it?.toInt()) },
+            semanticsPropertyReceiver = {
+                contentType = ContentType.AddressRegion
+            },
+            imeAction = ImeAction.Next,
+            onImeAction = {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
+        ),
+    )
+
+
+    SearchableSelector(
+        items = registerViewModel.cities,
+        itemToString = {
+            if (it.name == it.nameLocal) {
+                it.name
+            } else {
+                "${it.name} (${it.nameLocal})"
+            }
+        },
+        itemId = { it.id.toString() },
+        config = SearchableSelectorDefaults(
+            enabled = enabled, label = stringResource(SharedRes.string.address_city),
+            placeholder = stringResource(SharedRes.string.address_state_or_province),
+            leadingIcon = Icons.Outlined.LocationCity,
+            error = registerViewModel.selectedCityError.asString(),
+            selectedItemId = registerViewModel.selectedCityId?.toString(),
+            onSelectedItemIdChange = { registerViewModel.selectCity(it?.toInt()) },
+            semanticsPropertyReceiver = {
+                contentType = ContentType.AddressLocality
+            },
+            imeAction = ImeAction.Next,
+            onImeAction = {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
+        ),
+    )
+
+    // Street
+    MyOutlinedTextField(
+        enabled = enabled,
+        labelText = stringResource(SharedRes.string.address_street),
+        leadingIcon = Icons.Outlined.Streetview,
+        placeholderText = stringResource(SharedRes.string.address_input_detail),
+        error = registerViewModel.streetError.asString(),
+        value = registerViewModel.street,
+        onValueChange = { registerViewModel.updateStreet(it) },
+        imeAction = ImeAction.Next,
+        onImeAction = {
+            focusManager.moveFocus(FocusDirection.Next)
+        },
+        semanticsPropertyReceiver = {
+            contentType = ContentType.AddressStreet
+        },
+        keyBordType = KeyboardType.Text
+    )
+
+    // ZIP code
+    MyOutlinedTextField(
+        enabled = enabled,
+        labelText = stringResource(SharedRes.string.address_postal_code),
+        placeholderText = stringResource(SharedRes.string.address_input_postal_code),
+        error = registerViewModel.zipCodeError.asString(),
+        leadingIcon = Icons.Outlined.Pin,
+        value = registerViewModel.zipCode,
+        onValueChange = { registerViewModel.updateZipCode(it) },
+        imeAction = ImeAction.Done,
+        onImeAction = {
+            focusManager.clearFocus()
+            registerViewModel.nextButtonClicked()
+        },
+        semanticsPropertyReceiver = {
+            contentType = ContentType.PostalCode
+        },
+        keyBordType = KeyboardType.Text
+    )
+
 }

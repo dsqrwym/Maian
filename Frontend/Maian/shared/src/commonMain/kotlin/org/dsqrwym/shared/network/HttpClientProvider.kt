@@ -21,6 +21,7 @@ import org.dsqrwym.shared.util.platform.getPlatform
  */
 expect object HttpClientProvider {
     val client: HttpClient
+    val publicClient: HttpClient?
 }
 
 
@@ -41,7 +42,7 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
         requestTimeoutMillis = ApiConfig.REQUEST_TIMEOUT_MILLIS
     }
     if (ApiConfig.ENABLE_LOGGING) {
-        install(Logging) { level = LogLevel.INFO }
+        install(Logging) { level = LogLevel.ALL }
     }
 
     // Authorization header strategy note:

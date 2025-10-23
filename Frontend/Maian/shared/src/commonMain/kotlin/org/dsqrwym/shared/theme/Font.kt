@@ -4,8 +4,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.MiSansVF
+import maian.shared.generated.resources.SharedRes
 
 
 @Composable

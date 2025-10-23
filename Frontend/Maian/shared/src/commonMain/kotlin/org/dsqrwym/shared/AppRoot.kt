@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
@@ -25,7 +26,6 @@ import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.settings.initSharedSettingsProvider
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 import kotlin.time.ExperimentalTime
 
 /**

@@ -15,7 +15,7 @@ val enterpriseAuthModule = module {
 
     scope<SharedAuthScope> {
         scoped {
-            RegisterViewModel(get(), get(), get(), get())
+            RegisterViewModel(get(), get(), get(), get(), get())
         }
         viewModel<LoginViewModel> {
             LoginViewModel(get(), get(), get())

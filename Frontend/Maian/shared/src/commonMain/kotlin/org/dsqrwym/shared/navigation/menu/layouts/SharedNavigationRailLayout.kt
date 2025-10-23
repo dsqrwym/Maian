@@ -24,9 +24,9 @@ import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_close_content_description
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_open_content_description
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.menu_close_content_description
+import maian.shared.generated.resources.menu_open_content_description
 
 /**
  * Navigation Rail 布局 (用于平板、手机横屏 600-840dp)

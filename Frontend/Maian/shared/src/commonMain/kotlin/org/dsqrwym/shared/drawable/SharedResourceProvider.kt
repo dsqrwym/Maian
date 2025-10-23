@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.jetbrains.compose.resources.DrawableResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.image_vertical_background
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.image_vertical_background_dark
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.image_vertical_background
+import maian.shared.generated.resources.image_vertical_background_dark
 
 /**
  * EN: Centralized accessors for shared image resources.

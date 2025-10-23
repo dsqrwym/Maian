@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,8 +19,8 @@ import kotlinx.coroutines.launch
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.address_no_match
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.address_no_match
 import kotlin.math.min
 
 data class SearchableSelectorDefaults(
@@ -335,7 +336,8 @@ fun <T> SearchableSelector(
                         expanded = false
                     }
                     config.onImeAction()
-                }
+                },
+                keyBordType = KeyboardType.Text
             )
 
             ExposedDropdownMenu(

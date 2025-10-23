@@ -19,9 +19,9 @@ import org.dsqrwym.shared.ui.components.buttons.MyTextButton
 import org.dsqrwym.shared.ui.components.containers.FloatingBreathingBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.enterprise.generated.resources.EnterpriseRes
-import plataformagestio_ndistribucio_nmayorista.enterprise.generated.resources.button_register_new_account
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.button_register_new_account
+import maian.shared.generated.resources.*
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)

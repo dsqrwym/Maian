@@ -25,9 +25,9 @@ import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Visibility
 import org.dsqrwym.shared.drawable.sharedicons.VisibilityOff
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_lock
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_password_toggle_visibility
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.icon_content_description_lock
+import maian.shared.generated.resources.icon_content_description_password_toggle_visibility
 
 /**
  * A reusable OutlinedTextField with icon support, password toggle, error states, and IME action handling.
@@ -91,8 +91,10 @@ fun MyOutlinedTextField(
     trailingIcon: (@Composable (() -> Unit))? = null,
     isPassword: Boolean = false,
     passwordVisibility: Boolean = false,
+    visualTransformation: VisualTransformation? = null,
     imeAction: ImeAction,
     onImeAction: () -> Unit = {},
+    keyBordType: KeyboardType? = null,
     semanticsPropertyReceiver: SemanticsPropertyReceiver.() -> Unit = {},
     focusRequester: FocusRequester = FocusRequester.Default,
 ) {
@@ -105,7 +107,8 @@ fun MyOutlinedTextField(
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
-    val visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
+    val visualTransformation =
+        visualTransformation ?: if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
 
     OutlinedTextField(
         enabled = enabled,
@@ -132,7 +135,7 @@ fun MyOutlinedTextField(
         },
         visualTransformation = if (isPassword) visualTransformation else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Email,
+            keyboardType = keyBordType ?: if (isPassword) KeyboardType.Password else KeyboardType.Email,
             imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(

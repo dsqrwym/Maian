@@ -14,8 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.ui.components.buttons.LanguageSwitcherIconButton
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.button_back_button_content_description
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.button_back_button_content_description
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

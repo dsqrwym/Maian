@@ -2,8 +2,8 @@ package org.dsqrwym.shared.network
 
 import io.ktor.http.*
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.error_no_permission
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.error_no_permission
 
 /**
  * Convert an [ApiResponse] returned by the network layer to a domain-friendly [SharedResponseResult].

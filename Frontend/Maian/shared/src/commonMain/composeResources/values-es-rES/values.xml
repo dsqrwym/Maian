@@ -112,7 +112,7 @@
     <!-- ===================== OTP & Restablecer contraseña ===================== -->
     <string name="otp_code_sent">Código de verificación enviado, revisa tu correo</string>
     <string name="otp_code_invalid_or_expired">Código inválido o caducado</string>
-    <string name="otp_code_verified">Verificado. Debes restablecer tu contraseña antes de %1$s</string>
+    <string name="otp_code_verified">Verificado. Debes completar la operación antes de %1$s</string>
     <plurals name="expire_seconds">
         <item quantity="one">%1$d segundo</item>
         <item quantity="other">%1$d segundos</item>
@@ -158,4 +158,20 @@
 
     <string name="change_to_light_mode">Activar modo claro</string>
     <string name="change_to_dark_mode">Activar modo oscuro</string>
+
+    <string name="field_telephone_label">Número de teléfono</string>
+    <string name="field_telephone_placeholder">Introduzca el número de teléfono</string>
+
+    <string name="phone_error_empty">El número de teléfono no puede estar vacío</string>
+    <string name="phone_error_invalid">Número de teléfono no válido</string>
+    <string name="phone_error_invalid_country_code">Código de país no válido</string>
+    <string name="phone_error_too_short">El número de teléfono es demasiado corto</string>
+    <string name="phone_error_too_long">El número de teléfono es demasiado largo</string>
+    <string name="phone_error_invalid_length">Longitud de número de teléfono incorrecta</string>
+    <string name="phone_error_not_a_number">Lo introducido no es un número de teléfono válido</string>
+    <string name="phone_error_too_short_after_idd">Número demasiado corto después de la marcación internacional</string>
+    <string name="phone_error_format_incorrect">Formato de número de teléfono incorrecto</string>
+    <string name="phone_error_validation_failed">Ocurrió un error al validar el número de teléfono</string>
+
+    <string name="phone_hint_invalid_with_format">(Actualmente analizado como: %1$s)</string>
 </resources>

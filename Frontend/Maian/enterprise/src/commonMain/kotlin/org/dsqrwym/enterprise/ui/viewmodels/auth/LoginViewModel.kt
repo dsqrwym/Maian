@@ -8,6 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.error_wholesaler_id_required
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.login_error_email_or_password
+import maian.shared.generated.resources.login_error_username_or_password
+import maian.shared.generated.resources.login_success
 import org.dsqrwym.enterprise.data.auth.AuthRepository
 import org.dsqrwym.enterprise.data.local.UserPreference
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
@@ -20,12 +26,6 @@ import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.enterprise.generated.resources.EnterpriseRes
-import plataformagestio_ndistribucio_nmayorista.enterprise.generated.resources.error_wholesaler_id_required
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_error_email_or_password
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_error_username_or_password
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_success
 
 enum class LoginType {
     WHOLESALER,

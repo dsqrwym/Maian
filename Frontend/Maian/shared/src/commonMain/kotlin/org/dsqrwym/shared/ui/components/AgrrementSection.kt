@@ -18,10 +18,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agreement_section_agreement_text_template
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agreement_section_privacy_policy
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agreement_section_user_agreement
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.agreement_section_agreement_text_template
+import maian.shared.generated.resources.agreement_section_privacy_policy
+import maian.shared.generated.resources.agreement_section_user_agreement
 
 /**
  * This package contains reusable UI components for the application.

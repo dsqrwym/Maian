@@ -102,6 +102,9 @@ kotlin {
             implementation(libs.material.icons.core)
             implementation(libs.material.icons.extended)
 
+            // 电话号码解析
+            implementation(libs.libphonenumber)
+
             // Haze 核心库 利用各个平台API实现毛玻璃效果
             implementation(libs.haze)
             // JSON处理

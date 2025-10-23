@@ -110,7 +110,7 @@
     <!-- ===================== OTP & Restablir contrasenya ===================== -->
     <string name="otp_code_sent">Codi de verificació enviat, revisa el teu correu</string>
     <string name="otp_code_invalid_or_expired">Codi no vàlid o caducat</string>
-    <string name="otp_code_verified">Verificat. Has de restablir la contrasenya abans de %1$s</string>
+    <string name="otp_code_verified">Verificat. Has de completar l’operació abans de %1$s</string>
     <plurals name="expire_seconds">
         <item quantity="one">%1$d segon</item>
         <item quantity="other">%1$d segons</item>
@@ -157,4 +157,20 @@
 
     <string name="change_to_light_mode">Activa el mode clar</string>
     <string name="change_to_dark_mode">Activa el mode fosc</string>
+
+    <string name="field_telephone_label">Número de telèfon</string>
+    <string name="field_telephone_placeholder">Introduïu el número de telèfon</string>
+
+    <string name="phone_error_empty">El número de telèfon no pot estar buit</string>
+    <string name="phone_error_invalid">Número de telèfon no vàlid</string>
+    <string name="phone_error_invalid_country_code">Codi de país no vàlid</string>
+    <string name="phone_error_too_short">El número de telèfon és massa curt</string>
+    <string name="phone_error_too_long">El número de telèfon és massa llarg</string>
+    <string name="phone_error_invalid_length">Longitud de número de telèfon incorrecta</string>
+    <string name="phone_error_not_a_number">L\'entrada no és un número de telèfon vàlid</string>
+    <string name="phone_error_too_short_after_idd">El número és massa curt després de la marcació internacional</string>
+    <string name="phone_error_format_incorrect">Format de número de telèfon incorrecte</string>
+    <string name="phone_error_validation_failed">S\'ha produït un error en validar el número de telèfon</string>
+
+    <string name="phone_hint_invalid_with_format">(Actualment analitzat com: %1$s)</string>
 </resources>

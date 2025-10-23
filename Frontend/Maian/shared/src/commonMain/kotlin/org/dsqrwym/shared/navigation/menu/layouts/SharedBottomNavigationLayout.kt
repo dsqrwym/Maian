@@ -29,9 +29,9 @@ import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
 import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
 import org.dsqrwym.shared.util.navigation.isSameRoute
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_close_content_description
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.menu_open_content_description
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.menu_close_content_description
+import maian.shared.generated.resources.menu_open_content_description
 
 /**
  * 底部导航布局 (用于手机竖屏 < 600dp)

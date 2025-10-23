@@ -7,4 +7,6 @@ actual object HttpClientProvider {
     actual val client: HttpClient by lazy {
         HttpClient(CIO) { installCommonPlugins() }
     }
+    actual val publicClient: HttpClient?
+        get() = null
 }

@@ -19,9 +19,9 @@ import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.dashboard
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.profile
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.dashboard
+import maian.shared.generated.resources.profile
 
 @Composable
         /**

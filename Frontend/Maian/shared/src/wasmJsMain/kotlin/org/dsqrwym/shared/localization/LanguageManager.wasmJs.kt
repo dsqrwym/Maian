@@ -1,11 +1,9 @@
 package org.dsqrwym.shared.localization
 
-@OptIn(ExperimentalWasmJsInterop::class)
-@JsFun("() => window.navigator.language")
-external fun getBrowserLanguage() : String?
+import androidx.compose.ui.text.intl.Locale
+
 actual fun getLocaleLanguage(): String {
-    val lang = getBrowserLanguage()?.replace('_', '-') ?: "en"
-    return lang
+    return Locale.current.toLanguageTag()
 }
 
 fun getAppDisplayName(): String {

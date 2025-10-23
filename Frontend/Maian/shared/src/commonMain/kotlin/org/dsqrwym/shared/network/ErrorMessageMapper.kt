@@ -5,8 +5,8 @@ import io.ktor.client.network.sockets.*
 import io.ktor.http.*
 import kotlinx.io.IOException
 import kotlinx.serialization.SerializationException
+import maian.shared.generated.resources.*
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 /**
  * Maps exceptions to user-friendly messages.

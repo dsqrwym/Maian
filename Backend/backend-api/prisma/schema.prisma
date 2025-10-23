@@ -309,7 +309,7 @@ model users {
   username                           String?               @unique @db.VarChar(50)
   password                           String
   email                              String                @unique @db.VarChar(255)
-  telephone                          String?               @unique @db.VarChar(15)
+  telephone                          String?               @db.VarChar(25)
   status                             UserStatus            @default(PENDING_VERIFICATION)
   profile                            Json?
   created_at                         DateTime              @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
@@ -368,6 +368,7 @@ model verification_tokens {
 
   @@index([token], map: "password_reset_tokens_token_idx")
   @@index([user_id], map: "password_reset_tokens_user_id_idx")
+  @@index([user_id, token])
   @@schema("public")
 }
 

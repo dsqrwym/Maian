@@ -30,8 +30,8 @@ import dev.chrisbanes.haze.hazeSource
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_background_content_description
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.login_background_content_description
 
 
 /**

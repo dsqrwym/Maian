@@ -88,7 +88,7 @@ export class RegistrationService {
         where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
         data: {
           status: UserStatus.ACTIVE,
-          username: dto.username ?? '',
+          username: dto.username ?? randomUUID(),
           password: hashedPassword,
           directions: {
             create: {
@@ -136,7 +136,7 @@ export class RegistrationService {
         where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
         data: {
           status: UserStatus.ACTIVE,
-          username: dto.username ?? '',
+          username: dto.username ?? randomUUID(),
           password: hashedPassword,
           telephone: dto.telephone,
           role: UserRole.WHOLESALER,

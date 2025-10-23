@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.otp_resend
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.otp_resend
 
 /**
  * A reusable OTP (One-Time Password) input field with countdown resend functionality.

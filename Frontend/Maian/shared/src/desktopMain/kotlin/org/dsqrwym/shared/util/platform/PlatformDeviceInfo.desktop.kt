@@ -22,6 +22,11 @@ private object JVMDeviceInfo : PlatformDeviceInfo {
                     SharedSettingsProvider.plain.putString(PLATFORM_DEVICE_UUID_KEY, newId)
                 }
         }
+
+    override val countryCode: String
+        get() {
+            return Locale.getDefault().country.takeIf { it.isNotBlank() } ?: "US"
+        }
 }
 
 

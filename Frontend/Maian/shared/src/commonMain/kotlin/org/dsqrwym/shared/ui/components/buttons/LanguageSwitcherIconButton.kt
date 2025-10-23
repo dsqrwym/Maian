@@ -16,8 +16,8 @@ import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.icon_content_description_language
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.icon_content_description_language
 
 /**
  * A button component that allows users to switch between supported languages.

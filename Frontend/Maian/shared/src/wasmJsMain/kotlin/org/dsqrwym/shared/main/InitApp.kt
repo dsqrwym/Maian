@@ -21,9 +21,9 @@ import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.dsqrwym.shared.util.log.SharedLog
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.preloadFont
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.MiSansVF
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.Roboto_Regular
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.MiSansVF
+import maian.shared.generated.resources.Roboto_Regular
+import maian.shared.generated.resources.SharedRes
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

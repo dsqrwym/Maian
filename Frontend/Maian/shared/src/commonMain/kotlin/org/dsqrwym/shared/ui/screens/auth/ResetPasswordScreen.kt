@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -34,7 +35,6 @@ import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
 import org.dsqrwym.shared.util.formatter.asString
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.ui.components.containers.StateContent
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.button_login
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.button_login
 
 /**
  * A reusable login button component with loading and success states.

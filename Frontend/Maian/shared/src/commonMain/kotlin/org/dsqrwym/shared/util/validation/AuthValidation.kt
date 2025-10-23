@@ -1,7 +1,7 @@
 package org.dsqrwym.shared.util.validation
 
+import maian.shared.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 
 expect fun validateEmail(email: String): Boolean

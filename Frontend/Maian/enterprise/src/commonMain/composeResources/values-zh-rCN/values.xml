@@ -10,4 +10,11 @@
     <string name="field_wholesaler_id_label">批发商编号</string>
     <string name="field_wholesaler_id_placeholder">请输入您的批发商编号</string>
     <string name="error_wholesaler_id_required">使用用户名登录时必须填写批发商编号</string>
+
+    <string name="register_section_company_info">公司信息</string>
+    <string name="field_company_name_label">公司名称</string>
+    <string name="field_company_name_placeholder">请输入公司名称</string>
+    <string name="field_company_type_label">公司类型</string>
+    <string name="field_company_type_placeholder">请选择公司类型</string>
+    <string name="icon_content_description_company">公司图标</string>
 </resources>

@@ -17,10 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 @Composable
 fun UsernameOrEmailField(

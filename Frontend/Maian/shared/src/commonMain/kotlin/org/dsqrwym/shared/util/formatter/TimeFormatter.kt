@@ -1,7 +1,7 @@
 
 import org.jetbrains.compose.resources.getPluralString
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import maian.shared.generated.resources.*
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 

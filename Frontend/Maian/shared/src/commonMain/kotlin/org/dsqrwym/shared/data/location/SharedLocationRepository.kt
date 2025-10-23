@@ -36,4 +36,14 @@ class SharedLocationRepository(private val api: SharedLocationsApi) {
 
     suspend fun getCurrencyByIsoNumeric(isoNumeric: Int): SharedResponseResult<CurrencyDto> =
         safeApiCall { api.getCurrencyByIsoNumeric(isoNumeric) }
+
+
+    suspend fun getRealRegionCode(): String? {
+        return try {
+            val result = api.getRealRegionCode()
+            result.country
+        } catch (e: Exception) {
+            return null
+        }
+    }
 }

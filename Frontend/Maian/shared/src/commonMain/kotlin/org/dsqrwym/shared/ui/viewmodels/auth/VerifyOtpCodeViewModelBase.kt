@@ -18,7 +18,7 @@ import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
+import maian.shared.generated.resources.*
 import kotlin.time.ExperimentalTime
 
 /**
