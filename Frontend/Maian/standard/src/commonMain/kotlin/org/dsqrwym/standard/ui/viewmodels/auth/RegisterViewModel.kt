@@ -9,6 +9,10 @@ import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import maian.shared.generated.resources.*
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.register_failed
+import maian.standard.generated.resources.register_success
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.location.SharedLocationRepository
 import org.dsqrwym.shared.data.location.dto.CityDto
@@ -32,10 +36,6 @@ import org.dsqrwym.standard.data.auth.AuthRepository
 import org.dsqrwym.standard.data.auth.dto.CompleteRegisterRequest
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.StandardRes
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.register_failed
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.register_success
 import kotlin.time.ExperimentalTime
 
 class RegisterViewModel(

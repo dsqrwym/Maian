@@ -43,10 +43,10 @@ import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.StandardRes
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.button_register_new_account
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.register_account_title
+import maian.shared.generated.resources.*
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.button_register_new_account
+import maian.standard.generated.resources.register_account_title
 
 @Composable
 fun RegisterScreen(

@@ -327,12 +327,16 @@ exports.Prisma.Variant_productsScalarFieldEnum = {
   type_sale: 'type_sale',
   price: 'price',
   price_iva: 'price_iva',
-  stock: 'stock',
+  available_stock: 'available_stock',
   sort: 'sort',
   attributes: 'attributes',
   status: 'status',
   iva: 'iva',
-  product_code: 'product_code'
+  product_code: 'product_code',
+  reserved_stock: 'reserved_stock',
+  low_stock_threshold: 'low_stock_threshold',
+  sale_unit_qty: 'sale_unit_qty',
+  min_order_qty: 'min_order_qty'
 };
 
 exports.Prisma.Verification_tokensScalarFieldEnum = {
@@ -442,6 +446,12 @@ exports.UserRole = exports.$Enums.UserRole = {
   WAREHOUSE: 'WAREHOUSE',
   ADMIN: 'ADMIN',
   SUPERADMIN: 'SUPERADMIN'
+};
+
+exports.SaleVariant = exports.$Enums.SaleVariant = {
+  UNIT: 'UNIT',
+  BOX: 'BOX',
+  PACK: 'PACK'
 };
 
 exports.AddressType = exports.$Enums.AddressType = {

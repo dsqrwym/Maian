@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package org.dsqrwym.shared.util.log
 
 @JsFun("(msg, style) => console.debug(msg, style)")

@@ -59,6 +59,7 @@ fun LoginScreen(
     val usernameOrEmail = loginViewModel.email
 
     BottomSheetScaffold(
+        containerColor = Color.Transparent,
         sheetPeekHeight = if (selectedLoginType == LoginType.EMPLOYEE) 0.dp else 38.dp,
         sheetDragHandle = {
             MyHorizontalDivider(

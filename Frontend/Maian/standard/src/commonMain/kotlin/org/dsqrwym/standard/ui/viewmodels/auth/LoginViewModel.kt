@@ -18,10 +18,10 @@ import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 import org.dsqrwym.standard.data.auth.AuthRepository
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_error_email_or_password
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_error_username_or_password
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.login_success
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.login_error_email_or_password
+import maian.shared.generated.resources.login_error_username_or_password
+import maian.shared.generated.resources.login_success
 
 
 /**

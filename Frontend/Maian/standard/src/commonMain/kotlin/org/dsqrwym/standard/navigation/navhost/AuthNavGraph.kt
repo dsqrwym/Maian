@@ -29,8 +29,8 @@ import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.agreement_warning
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.agreement_warning
 
 
 fun NavGraphBuilder.authNavGraph(

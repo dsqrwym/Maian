@@ -336,21 +336,25 @@ model users {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model variant_products {
-  id            BigInt          @id @default(autoincrement())
-  created_at    DateTime        @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  product_id    BigInt
-  type_sale     Int             @db.SmallInt
-  price         Decimal         @db.Decimal(10, 2)
-  price_iva     Decimal         @db.Decimal(10, 2)
-  stock         Int
-  sort          Int             @db.SmallInt
-  attributes    Json?
-  status        Int             @db.SmallInt
-  iva           Decimal         @db.Decimal(5, 2)
-  product_code  String          @db.VarChar(50)
-  cart_details  cart_details[]
-  order_details order_details[]
-  products      products        @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                  BigInt          @id @default(autoincrement())
+  created_at          DateTime        @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  product_id          BigInt
+  type_sale           SaleVariant
+  price               Decimal         @db.Decimal(10, 2)
+  price_iva           Decimal         @db.Decimal(10, 2)
+  available_stock     Int
+  sort                Int             @db.SmallInt
+  attributes          Json?
+  status              Int             @db.SmallInt
+  iva                 Decimal         @db.Decimal(5, 2)
+  product_code        String          @db.VarChar(50)
+  reserved_stock      Int             @default(0)
+  low_stock_threshold Int             @default(0)
+  sale_unit_qty       Int             @default(1)
+  min_order_qty       Int             @default(1)
+  cart_details        cart_details[]
+  order_details       order_details[]
+  products            products        @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -479,6 +483,15 @@ enum UserStatus {
   PENDING_REVIEW
   APPROVED
   BANNED
+
+  @@schema("public")
+}
+
+/// This enum is commented in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+enum SaleVariant {
+  UNIT
+  BOX
+  PACK
 
   @@schema("public")
 }

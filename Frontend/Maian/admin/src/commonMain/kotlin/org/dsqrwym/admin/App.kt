@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.todayDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import plataformagestio_ndistribucio_nmayorista.admin.generated.resources.Res
-import plataformagestio_ndistribucio_nmayorista.admin.generated.resources.compose_multiplatform
+import maian.admin.generated.resources.Res
+import maian.admin.generated.resources.compose_multiplatform
 
 @Composable
 @Preview

@@ -6,6 +6,13 @@ import androidx.compose.material.icons.outlined.ShopTwo
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.dashboard
+import maian.shared.generated.resources.profile
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.chat
+import maian.standard.generated.resources.shopping_cart
+import maian.standard.generated.resources.wholesalers
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.LocalAppFocusManager
 import org.dsqrwym.shared.LocalNavHostController
@@ -26,13 +33,6 @@ import org.dsqrwym.standard.navigation.navhost.authNavGraph
 import org.dsqrwym.standard.navigation.navhost.menuNavGraph
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.SharedRes
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.dashboard
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.profile
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.StandardRes
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.chat
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.shopping_cart
-import plataformagestio_ndistribucio_nmayorista.standard.generated.resources.wholesalers
 
 @Composable
         /**

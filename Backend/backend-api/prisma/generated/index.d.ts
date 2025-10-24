@@ -200,6 +200,15 @@ export const UserStatus: {
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
+
+export const SaleVariant: {
+  UNIT: 'UNIT',
+  BOX: 'BOX',
+  PACK: 'PACK'
+};
+
+export type SaleVariant = (typeof SaleVariant)[keyof typeof SaleVariant]
+
 }
 
 export type AddressType = $Enums.AddressType
@@ -217,6 +226,10 @@ export const UserRole: typeof $Enums.UserRole
 export type UserStatus = $Enums.UserStatus
 
 export const UserStatus: typeof $Enums.UserStatus
+
+export type SaleVariant = $Enums.SaleVariant
+
+export const SaleVariant: typeof $Enums.SaleVariant
 
 /**
  * ##  Prisma Client ʲˢ
@@ -26261,53 +26274,67 @@ export namespace Prisma {
   export type Variant_productsAvgAggregateOutputType = {
     id: number | null
     product_id: number | null
-    type_sale: number | null
     price: Decimal | null
     price_iva: Decimal | null
-    stock: number | null
+    available_stock: number | null
     sort: number | null
     status: number | null
     iva: Decimal | null
+    reserved_stock: number | null
+    low_stock_threshold: number | null
+    sale_unit_qty: number | null
+    min_order_qty: number | null
   }
 
   export type Variant_productsSumAggregateOutputType = {
     id: bigint | null
     product_id: bigint | null
-    type_sale: number | null
     price: Decimal | null
     price_iva: Decimal | null
-    stock: number | null
+    available_stock: number | null
     sort: number | null
     status: number | null
     iva: Decimal | null
+    reserved_stock: number | null
+    low_stock_threshold: number | null
+    sale_unit_qty: number | null
+    min_order_qty: number | null
   }
 
   export type Variant_productsMinAggregateOutputType = {
     id: bigint | null
     created_at: Date | null
     product_id: bigint | null
-    type_sale: number | null
+    type_sale: $Enums.SaleVariant | null
     price: Decimal | null
     price_iva: Decimal | null
-    stock: number | null
+    available_stock: number | null
     sort: number | null
     status: number | null
     iva: Decimal | null
     product_code: string | null
+    reserved_stock: number | null
+    low_stock_threshold: number | null
+    sale_unit_qty: number | null
+    min_order_qty: number | null
   }
 
   export type Variant_productsMaxAggregateOutputType = {
     id: bigint | null
     created_at: Date | null
     product_id: bigint | null
-    type_sale: number | null
+    type_sale: $Enums.SaleVariant | null
     price: Decimal | null
     price_iva: Decimal | null
-    stock: number | null
+    available_stock: number | null
     sort: number | null
     status: number | null
     iva: Decimal | null
     product_code: string | null
+    reserved_stock: number | null
+    low_stock_threshold: number | null
+    sale_unit_qty: number | null
+    min_order_qty: number | null
   }
 
   export type Variant_productsCountAggregateOutputType = {
@@ -26317,12 +26344,16 @@ export namespace Prisma {
     type_sale: number
     price: number
     price_iva: number
-    stock: number
+    available_stock: number
     sort: number
     attributes: number
     status: number
     iva: number
     product_code: number
+    reserved_stock: number
+    low_stock_threshold: number
+    sale_unit_qty: number
+    min_order_qty: number
     _all: number
   }
 
@@ -26330,25 +26361,31 @@ export namespace Prisma {
   export type Variant_productsAvgAggregateInputType = {
     id?: true
     product_id?: true
-    type_sale?: true
     price?: true
     price_iva?: true
-    stock?: true
+    available_stock?: true
     sort?: true
     status?: true
     iva?: true
+    reserved_stock?: true
+    low_stock_threshold?: true
+    sale_unit_qty?: true
+    min_order_qty?: true
   }
 
   export type Variant_productsSumAggregateInputType = {
     id?: true
     product_id?: true
-    type_sale?: true
     price?: true
     price_iva?: true
-    stock?: true
+    available_stock?: true
     sort?: true
     status?: true
     iva?: true
+    reserved_stock?: true
+    low_stock_threshold?: true
+    sale_unit_qty?: true
+    min_order_qty?: true
   }
 
   export type Variant_productsMinAggregateInputType = {
@@ -26358,11 +26395,15 @@ export namespace Prisma {
     type_sale?: true
     price?: true
     price_iva?: true
-    stock?: true
+    available_stock?: true
     sort?: true
     status?: true
     iva?: true
     product_code?: true
+    reserved_stock?: true
+    low_stock_threshold?: true
+    sale_unit_qty?: true
+    min_order_qty?: true
   }
 
   export type Variant_productsMaxAggregateInputType = {
@@ -26372,11 +26413,15 @@ export namespace Prisma {
     type_sale?: true
     price?: true
     price_iva?: true
-    stock?: true
+    available_stock?: true
     sort?: true
     status?: true
     iva?: true
     product_code?: true
+    reserved_stock?: true
+    low_stock_threshold?: true
+    sale_unit_qty?: true
+    min_order_qty?: true
   }
 
   export type Variant_productsCountAggregateInputType = {
@@ -26386,12 +26431,16 @@ export namespace Prisma {
     type_sale?: true
     price?: true
     price_iva?: true
-    stock?: true
+    available_stock?: true
     sort?: true
     attributes?: true
     status?: true
     iva?: true
     product_code?: true
+    reserved_stock?: true
+    low_stock_threshold?: true
+    sale_unit_qty?: true
+    min_order_qty?: true
     _all?: true
   }
 
@@ -26485,15 +26534,19 @@ export namespace Prisma {
     id: bigint
     created_at: Date
     product_id: bigint
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal
     price_iva: Decimal
-    stock: number
+    available_stock: number
     sort: number
     attributes: JsonValue | null
     status: number
     iva: Decimal
     product_code: string
+    reserved_stock: number
+    low_stock_threshold: number
+    sale_unit_qty: number
+    min_order_qty: number
     _count: Variant_productsCountAggregateOutputType | null
     _avg: Variant_productsAvgAggregateOutputType | null
     _sum: Variant_productsSumAggregateOutputType | null
@@ -26522,12 +26575,16 @@ export namespace Prisma {
     type_sale?: boolean
     price?: boolean
     price_iva?: boolean
-    stock?: boolean
+    available_stock?: boolean
     sort?: boolean
     attributes?: boolean
     status?: boolean
     iva?: boolean
     product_code?: boolean
+    reserved_stock?: boolean
+    low_stock_threshold?: boolean
+    sale_unit_qty?: boolean
+    min_order_qty?: boolean
     cart_details?: boolean | variant_products$cart_detailsArgs<ExtArgs>
     order_details?: boolean | variant_products$order_detailsArgs<ExtArgs>
     products?: boolean | productsDefaultArgs<ExtArgs>
@@ -26541,12 +26598,16 @@ export namespace Prisma {
     type_sale?: boolean
     price?: boolean
     price_iva?: boolean
-    stock?: boolean
+    available_stock?: boolean
     sort?: boolean
     attributes?: boolean
     status?: boolean
     iva?: boolean
     product_code?: boolean
+    reserved_stock?: boolean
+    low_stock_threshold?: boolean
+    sale_unit_qty?: boolean
+    min_order_qty?: boolean
     products?: boolean | productsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["variant_products"]>
 
@@ -26557,12 +26618,16 @@ export namespace Prisma {
     type_sale?: boolean
     price?: boolean
     price_iva?: boolean
-    stock?: boolean
+    available_stock?: boolean
     sort?: boolean
     attributes?: boolean
     status?: boolean
     iva?: boolean
     product_code?: boolean
+    reserved_stock?: boolean
+    low_stock_threshold?: boolean
+    sale_unit_qty?: boolean
+    min_order_qty?: boolean
     products?: boolean | productsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["variant_products"]>
 
@@ -26573,15 +26638,19 @@ export namespace Prisma {
     type_sale?: boolean
     price?: boolean
     price_iva?: boolean
-    stock?: boolean
+    available_stock?: boolean
     sort?: boolean
     attributes?: boolean
     status?: boolean
     iva?: boolean
     product_code?: boolean
+    reserved_stock?: boolean
+    low_stock_threshold?: boolean
+    sale_unit_qty?: boolean
+    min_order_qty?: boolean
   }
 
-  export type variant_productsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "product_id" | "type_sale" | "price" | "price_iva" | "stock" | "sort" | "attributes" | "status" | "iva" | "product_code", ExtArgs["result"]["variant_products"]>
+  export type variant_productsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "created_at" | "product_id" | "type_sale" | "price" | "price_iva" | "available_stock" | "sort" | "attributes" | "status" | "iva" | "product_code" | "reserved_stock" | "low_stock_threshold" | "sale_unit_qty" | "min_order_qty", ExtArgs["result"]["variant_products"]>
   export type variant_productsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cart_details?: boolean | variant_products$cart_detailsArgs<ExtArgs>
     order_details?: boolean | variant_products$order_detailsArgs<ExtArgs>
@@ -26606,15 +26675,19 @@ export namespace Prisma {
       id: bigint
       created_at: Date
       product_id: bigint
-      type_sale: number
+      type_sale: $Enums.SaleVariant
       price: Prisma.Decimal
       price_iva: Prisma.Decimal
-      stock: number
+      available_stock: number
       sort: number
       attributes: Prisma.JsonValue | null
       status: number
       iva: Prisma.Decimal
       product_code: string
+      reserved_stock: number
+      low_stock_threshold: number
+      sale_unit_qty: number
+      min_order_qty: number
     }, ExtArgs["result"]["variant_products"]>
     composites: {}
   }
@@ -27044,15 +27117,19 @@ export namespace Prisma {
     readonly id: FieldRef<"variant_products", 'BigInt'>
     readonly created_at: FieldRef<"variant_products", 'DateTime'>
     readonly product_id: FieldRef<"variant_products", 'BigInt'>
-    readonly type_sale: FieldRef<"variant_products", 'Int'>
+    readonly type_sale: FieldRef<"variant_products", 'SaleVariant'>
     readonly price: FieldRef<"variant_products", 'Decimal'>
     readonly price_iva: FieldRef<"variant_products", 'Decimal'>
-    readonly stock: FieldRef<"variant_products", 'Int'>
+    readonly available_stock: FieldRef<"variant_products", 'Int'>
     readonly sort: FieldRef<"variant_products", 'Int'>
     readonly attributes: FieldRef<"variant_products", 'Json'>
     readonly status: FieldRef<"variant_products", 'Int'>
     readonly iva: FieldRef<"variant_products", 'Decimal'>
     readonly product_code: FieldRef<"variant_products", 'String'>
+    readonly reserved_stock: FieldRef<"variant_products", 'Int'>
+    readonly low_stock_threshold: FieldRef<"variant_products", 'Int'>
+    readonly sale_unit_qty: FieldRef<"variant_products", 'Int'>
+    readonly min_order_qty: FieldRef<"variant_products", 'Int'>
   }
     
 
@@ -34703,12 +34780,16 @@ export namespace Prisma {
     type_sale: 'type_sale',
     price: 'price',
     price_iva: 'price_iva',
-    stock: 'stock',
+    available_stock: 'available_stock',
     sort: 'sort',
     attributes: 'attributes',
     status: 'status',
     iva: 'iva',
-    product_code: 'product_code'
+    product_code: 'product_code',
+    reserved_stock: 'reserved_stock',
+    low_stock_threshold: 'low_stock_threshold',
+    sale_unit_qty: 'sale_unit_qty',
+    min_order_qty: 'min_order_qty'
   };
 
   export type Variant_productsScalarFieldEnum = (typeof Variant_productsScalarFieldEnum)[keyof typeof Variant_productsScalarFieldEnum]
@@ -34984,6 +35065,20 @@ export namespace Prisma {
    * Reference to a field of type 'UserRole[]'
    */
   export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SaleVariant'
+   */
+  export type EnumSaleVariantFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SaleVariant'>
+    
+
+
+  /**
+   * Reference to a field of type 'SaleVariant[]'
+   */
+  export type ListEnumSaleVariantFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SaleVariant[]'>
     
 
 
@@ -36435,15 +36530,19 @@ export namespace Prisma {
     id?: BigIntFilter<"variant_products"> | bigint | number
     created_at?: DateTimeFilter<"variant_products"> | Date | string
     product_id?: BigIntFilter<"variant_products"> | bigint | number
-    type_sale?: IntFilter<"variant_products"> | number
+    type_sale?: EnumSaleVariantFilter<"variant_products"> | $Enums.SaleVariant
     price?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
-    stock?: IntFilter<"variant_products"> | number
+    available_stock?: IntFilter<"variant_products"> | number
     sort?: IntFilter<"variant_products"> | number
     attributes?: JsonNullableFilter<"variant_products">
     status?: IntFilter<"variant_products"> | number
     iva?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     product_code?: StringFilter<"variant_products"> | string
+    reserved_stock?: IntFilter<"variant_products"> | number
+    low_stock_threshold?: IntFilter<"variant_products"> | number
+    sale_unit_qty?: IntFilter<"variant_products"> | number
+    min_order_qty?: IntFilter<"variant_products"> | number
     cart_details?: Cart_detailsListRelationFilter
     order_details?: Order_detailsListRelationFilter
     products?: XOR<ProductsScalarRelationFilter, productsWhereInput>
@@ -36456,12 +36555,16 @@ export namespace Prisma {
     type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     attributes?: SortOrderInput | SortOrder
     status?: SortOrder
     iva?: SortOrder
     product_code?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
     cart_details?: cart_detailsOrderByRelationAggregateInput
     order_details?: order_detailsOrderByRelationAggregateInput
     products?: productsOrderByWithRelationInput
@@ -36474,15 +36577,19 @@ export namespace Prisma {
     NOT?: variant_productsWhereInput | variant_productsWhereInput[]
     created_at?: DateTimeFilter<"variant_products"> | Date | string
     product_id?: BigIntFilter<"variant_products"> | bigint | number
-    type_sale?: IntFilter<"variant_products"> | number
+    type_sale?: EnumSaleVariantFilter<"variant_products"> | $Enums.SaleVariant
     price?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
-    stock?: IntFilter<"variant_products"> | number
+    available_stock?: IntFilter<"variant_products"> | number
     sort?: IntFilter<"variant_products"> | number
     attributes?: JsonNullableFilter<"variant_products">
     status?: IntFilter<"variant_products"> | number
     iva?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     product_code?: StringFilter<"variant_products"> | string
+    reserved_stock?: IntFilter<"variant_products"> | number
+    low_stock_threshold?: IntFilter<"variant_products"> | number
+    sale_unit_qty?: IntFilter<"variant_products"> | number
+    min_order_qty?: IntFilter<"variant_products"> | number
     cart_details?: Cart_detailsListRelationFilter
     order_details?: Order_detailsListRelationFilter
     products?: XOR<ProductsScalarRelationFilter, productsWhereInput>
@@ -36495,12 +36602,16 @@ export namespace Prisma {
     type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     attributes?: SortOrderInput | SortOrder
     status?: SortOrder
     iva?: SortOrder
     product_code?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
     _count?: variant_productsCountOrderByAggregateInput
     _avg?: variant_productsAvgOrderByAggregateInput
     _max?: variant_productsMaxOrderByAggregateInput
@@ -36515,15 +36626,19 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter<"variant_products"> | bigint | number
     created_at?: DateTimeWithAggregatesFilter<"variant_products"> | Date | string
     product_id?: BigIntWithAggregatesFilter<"variant_products"> | bigint | number
-    type_sale?: IntWithAggregatesFilter<"variant_products"> | number
+    type_sale?: EnumSaleVariantWithAggregatesFilter<"variant_products"> | $Enums.SaleVariant
     price?: DecimalWithAggregatesFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalWithAggregatesFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
-    stock?: IntWithAggregatesFilter<"variant_products"> | number
+    available_stock?: IntWithAggregatesFilter<"variant_products"> | number
     sort?: IntWithAggregatesFilter<"variant_products"> | number
     attributes?: JsonNullableWithAggregatesFilter<"variant_products">
     status?: IntWithAggregatesFilter<"variant_products"> | number
     iva?: DecimalWithAggregatesFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     product_code?: StringWithAggregatesFilter<"variant_products"> | string
+    reserved_stock?: IntWithAggregatesFilter<"variant_products"> | number
+    low_stock_threshold?: IntWithAggregatesFilter<"variant_products"> | number
+    sale_unit_qty?: IntWithAggregatesFilter<"variant_products"> | number
+    min_order_qty?: IntWithAggregatesFilter<"variant_products"> | number
   }
 
   export type verification_tokensWhereInput = {
@@ -38414,15 +38529,19 @@ export namespace Prisma {
   export type variant_productsCreateInput = {
     id?: bigint | number
     created_at?: Date | string
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     cart_details?: cart_detailsCreateNestedManyWithoutVariant_productsInput
     order_details?: order_detailsCreateNestedManyWithoutVariant_productsInput
     products: productsCreateNestedOneWithoutVariant_productsInput
@@ -38432,15 +38551,19 @@ export namespace Prisma {
     id?: bigint | number
     created_at?: Date | string
     product_id: bigint | number
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     cart_details?: cart_detailsUncheckedCreateNestedManyWithoutVariant_productsInput
     order_details?: order_detailsUncheckedCreateNestedManyWithoutVariant_productsInput
   }
@@ -38448,15 +38571,19 @@ export namespace Prisma {
   export type variant_productsUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     cart_details?: cart_detailsUpdateManyWithoutVariant_productsNestedInput
     order_details?: order_detailsUpdateManyWithoutVariant_productsNestedInput
     products?: productsUpdateOneRequiredWithoutVariant_productsNestedInput
@@ -38466,15 +38593,19 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     cart_details?: cart_detailsUncheckedUpdateManyWithoutVariant_productsNestedInput
     order_details?: order_detailsUncheckedUpdateManyWithoutVariant_productsNestedInput
   }
@@ -38483,44 +38614,56 @@ export namespace Prisma {
     id?: bigint | number
     created_at?: Date | string
     product_id: bigint | number
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
   }
 
   export type variant_productsUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
   }
 
   export type variant_productsUncheckedUpdateManyInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
   }
 
   export type verification_tokensCreateInput = {
@@ -40493,6 +40636,13 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type EnumSaleVariantFilter<$PrismaModel = never> = {
+    equals?: $Enums.SaleVariant | EnumSaleVariantFieldRefInput<$PrismaModel>
+    in?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    not?: NestedEnumSaleVariantFilter<$PrismaModel> | $Enums.SaleVariant
+  }
+
   export type variant_productsCountOrderByAggregateInput = {
     id?: SortOrder
     created_at?: SortOrder
@@ -40500,24 +40650,31 @@ export namespace Prisma {
     type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     attributes?: SortOrder
     status?: SortOrder
     iva?: SortOrder
     product_code?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
   }
 
   export type variant_productsAvgOrderByAggregateInput = {
     id?: SortOrder
     product_id?: SortOrder
-    type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     status?: SortOrder
     iva?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
   }
 
   export type variant_productsMaxOrderByAggregateInput = {
@@ -40527,11 +40684,15 @@ export namespace Prisma {
     type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     status?: SortOrder
     iva?: SortOrder
     product_code?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
   }
 
   export type variant_productsMinOrderByAggregateInput = {
@@ -40541,23 +40702,40 @@ export namespace Prisma {
     type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     status?: SortOrder
     iva?: SortOrder
     product_code?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
   }
 
   export type variant_productsSumOrderByAggregateInput = {
     id?: SortOrder
     product_id?: SortOrder
-    type_sale?: SortOrder
     price?: SortOrder
     price_iva?: SortOrder
-    stock?: SortOrder
+    available_stock?: SortOrder
     sort?: SortOrder
     status?: SortOrder
     iva?: SortOrder
+    reserved_stock?: SortOrder
+    low_stock_threshold?: SortOrder
+    sale_unit_qty?: SortOrder
+    min_order_qty?: SortOrder
+  }
+
+  export type EnumSaleVariantWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SaleVariant | EnumSaleVariantFieldRefInput<$PrismaModel>
+    in?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    not?: NestedEnumSaleVariantWithAggregatesFilter<$PrismaModel> | $Enums.SaleVariant
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSaleVariantFilter<$PrismaModel>
+    _max?: NestedEnumSaleVariantFilter<$PrismaModel>
   }
 
   export type verification_tokensCountOrderByAggregateInput = {
@@ -42546,6 +42724,10 @@ export namespace Prisma {
     connect?: order_detailsWhereUniqueInput | order_detailsWhereUniqueInput[]
   }
 
+  export type EnumSaleVariantFieldUpdateOperationsInput = {
+    set?: $Enums.SaleVariant
+  }
+
   export type cart_detailsUpdateManyWithoutVariant_productsNestedInput = {
     create?: XOR<cart_detailsCreateWithoutVariant_productsInput, cart_detailsUncheckedCreateWithoutVariant_productsInput> | cart_detailsCreateWithoutVariant_productsInput[] | cart_detailsUncheckedCreateWithoutVariant_productsInput[]
     connectOrCreate?: cart_detailsCreateOrConnectWithoutVariant_productsInput | cart_detailsCreateOrConnectWithoutVariant_productsInput[]
@@ -43494,6 +43676,23 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type NestedEnumSaleVariantFilter<$PrismaModel = never> = {
+    equals?: $Enums.SaleVariant | EnumSaleVariantFieldRefInput<$PrismaModel>
+    in?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    not?: NestedEnumSaleVariantFilter<$PrismaModel> | $Enums.SaleVariant
+  }
+
+  export type NestedEnumSaleVariantWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SaleVariant | EnumSaleVariantFieldRefInput<$PrismaModel>
+    in?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SaleVariant[] | ListEnumSaleVariantFieldRefInput<$PrismaModel>
+    not?: NestedEnumSaleVariantWithAggregatesFilter<$PrismaModel> | $Enums.SaleVariant
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSaleVariantFilter<$PrismaModel>
+    _max?: NestedEnumSaleVariantFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -43563,15 +43762,19 @@ export namespace Prisma {
   export type variant_productsCreateWithoutCart_detailsInput = {
     id?: bigint | number
     created_at?: Date | string
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     order_details?: order_detailsCreateNestedManyWithoutVariant_productsInput
     products: productsCreateNestedOneWithoutVariant_productsInput
   }
@@ -43580,15 +43783,19 @@ export namespace Prisma {
     id?: bigint | number
     created_at?: Date | string
     product_id: bigint | number
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     order_details?: order_detailsUncheckedCreateNestedManyWithoutVariant_productsInput
   }
 
@@ -43634,15 +43841,19 @@ export namespace Prisma {
   export type variant_productsUpdateWithoutCart_detailsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     order_details?: order_detailsUpdateManyWithoutVariant_productsNestedInput
     products?: productsUpdateOneRequiredWithoutVariant_productsNestedInput
   }
@@ -43651,15 +43862,19 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     order_details?: order_detailsUncheckedUpdateManyWithoutVariant_productsNestedInput
   }
 
@@ -45723,15 +45938,19 @@ export namespace Prisma {
   export type variant_productsCreateWithoutOrder_detailsInput = {
     id?: bigint | number
     created_at?: Date | string
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     cart_details?: cart_detailsCreateNestedManyWithoutVariant_productsInput
     products: productsCreateNestedOneWithoutVariant_productsInput
   }
@@ -45740,15 +45959,19 @@ export namespace Prisma {
     id?: bigint | number
     created_at?: Date | string
     product_id: bigint | number
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     cart_details?: cart_detailsUncheckedCreateNestedManyWithoutVariant_productsInput
   }
 
@@ -45818,15 +46041,19 @@ export namespace Prisma {
   export type variant_productsUpdateWithoutOrder_detailsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     cart_details?: cart_detailsUpdateManyWithoutVariant_productsNestedInput
     products?: productsUpdateOneRequiredWithoutVariant_productsNestedInput
   }
@@ -45835,15 +46062,19 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     cart_details?: cart_detailsUncheckedUpdateManyWithoutVariant_productsNestedInput
   }
 
@@ -46382,15 +46613,19 @@ export namespace Prisma {
   export type variant_productsCreateWithoutProductsInput = {
     id?: bigint | number
     created_at?: Date | string
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     cart_details?: cart_detailsCreateNestedManyWithoutVariant_productsInput
     order_details?: order_detailsCreateNestedManyWithoutVariant_productsInput
   }
@@ -46398,15 +46633,19 @@ export namespace Prisma {
   export type variant_productsUncheckedCreateWithoutProductsInput = {
     id?: bigint | number
     created_at?: Date | string
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
     cart_details?: cart_detailsUncheckedCreateNestedManyWithoutVariant_productsInput
     order_details?: order_detailsUncheckedCreateNestedManyWithoutVariant_productsInput
   }
@@ -46562,15 +46801,19 @@ export namespace Prisma {
     id?: BigIntFilter<"variant_products"> | bigint | number
     created_at?: DateTimeFilter<"variant_products"> | Date | string
     product_id?: BigIntFilter<"variant_products"> | bigint | number
-    type_sale?: IntFilter<"variant_products"> | number
+    type_sale?: EnumSaleVariantFilter<"variant_products"> | $Enums.SaleVariant
     price?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
-    stock?: IntFilter<"variant_products"> | number
+    available_stock?: IntFilter<"variant_products"> | number
     sort?: IntFilter<"variant_products"> | number
     attributes?: JsonNullableFilter<"variant_products">
     status?: IntFilter<"variant_products"> | number
     iva?: DecimalFilter<"variant_products"> | Decimal | DecimalJsLike | number | string
     product_code?: StringFilter<"variant_products"> | string
+    reserved_stock?: IntFilter<"variant_products"> | number
+    low_stock_threshold?: IntFilter<"variant_products"> | number
+    sale_unit_qty?: IntFilter<"variant_products"> | number
+    min_order_qty?: IntFilter<"variant_products"> | number
   }
 
   export type filesCreateWithoutProducts_filesInput = {
@@ -49157,15 +49400,19 @@ export namespace Prisma {
   export type variant_productsCreateManyProductsInput = {
     id?: bigint | number
     created_at?: Date | string
-    type_sale: number
+    type_sale: $Enums.SaleVariant
     price: Decimal | DecimalJsLike | number | string
     price_iva: Decimal | DecimalJsLike | number | string
-    stock: number
+    available_stock: number
     sort: number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status: number
     iva: Decimal | DecimalJsLike | number | string
     product_code: string
+    reserved_stock?: number
+    low_stock_threshold?: number
+    sale_unit_qty?: number
+    min_order_qty?: number
   }
 
   export type products_filesUpdateWithoutProductsInput = {
@@ -49189,15 +49436,19 @@ export namespace Prisma {
   export type variant_productsUpdateWithoutProductsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     cart_details?: cart_detailsUpdateManyWithoutVariant_productsNestedInput
     order_details?: order_detailsUpdateManyWithoutVariant_productsNestedInput
   }
@@ -49205,15 +49456,19 @@ export namespace Prisma {
   export type variant_productsUncheckedUpdateWithoutProductsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
     cart_details?: cart_detailsUncheckedUpdateManyWithoutVariant_productsNestedInput
     order_details?: order_detailsUncheckedUpdateManyWithoutVariant_productsNestedInput
   }
@@ -49221,15 +49476,19 @@ export namespace Prisma {
   export type variant_productsUncheckedUpdateManyWithoutProductsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    type_sale?: IntFieldUpdateOperationsInput | number
+    type_sale?: EnumSaleVariantFieldUpdateOperationsInput | $Enums.SaleVariant
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     price_iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    stock?: IntFieldUpdateOperationsInput | number
+    available_stock?: IntFieldUpdateOperationsInput | number
     sort?: IntFieldUpdateOperationsInput | number
     attributes?: NullableJsonNullValueInput | InputJsonValue
     status?: IntFieldUpdateOperationsInput | number
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     product_code?: StringFieldUpdateOperationsInput | string
+    reserved_stock?: IntFieldUpdateOperationsInput | number
+    low_stock_threshold?: IntFieldUpdateOperationsInput | number
+    sale_unit_qty?: IntFieldUpdateOperationsInput | number
+    min_order_qty?: IntFieldUpdateOperationsInput | number
   }
 
   export type cartsCreateManyUsersInput = {

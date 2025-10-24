@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.di.auth.SharedAuthScope
@@ -31,7 +32,6 @@ import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.standard.ui.viewmodels.auth.LoginViewModel
 import org.jetbrains.compose.resources.stringResource
-import plataformagestio_ndistribucio_nmayorista.shared.generated.resources.*
 
 
 @Composable
