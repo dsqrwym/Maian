@@ -12,6 +12,7 @@ import { VerifyRegistrationProcessorService } from './verification-processor/ver
 import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password.processor.service';
 import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service';
 import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service';
+import { Logger } from 'nestjs-pino';
 
 @Global()
 @Module({
@@ -20,12 +21,22 @@ import { VerifyAdminMailProcessorService } from './verification-processor/verify
     MyI18nModule,
     BullModule.registerQueueAsync({
       name: 'mail',
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService, logger: Logger) => ({
         connection: {
           url: configService.get<string>(
             ENV.REDIS_BULL_URL,
             'redis://localhost:6379',
           ),
+          reconnectOnError: (error) => {
+            logger.error('[Bull Redis error]:', error);
+            return true;
+          },
+          maxRedirections: null,
+          retryStrategy: (times) => {
+            const delay = Math.min(times * 100, 3000);
+            logger.warn(`[BullMQ Redis Retry] reconnecting in ${delay}ms`);
+            return delay;
+          },
         },
       }),
       inject: [ConfigService],

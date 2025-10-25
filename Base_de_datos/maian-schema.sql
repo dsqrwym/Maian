@@ -2,9 +2,9 @@
 -- PostgreSQL database dump
 --
 
-\restrict aQLD1iHNVdhud4ZOIWelxuiVrqKE3j4Vbmu9jcFkeGP9nseWqfcyxNDYJ1qQcjF
+\restrict NdnH6NUfjODg1HDCH77HqLBxRLIbG2dCh7lzEzfB3YUhkVaCyki4YiHxIExitla
 
--- Dumped from database version 17.5 (1b53132)
+-- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
 SET statement_timeout = 0;
@@ -56,6 +56,24 @@ CREATE TYPE public."DeliveryStatus" AS ENUM (
 
 
 --
+-- Name: SaleVariant; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public."SaleVariant" AS ENUM (
+    'UNIT',
+    'BOX',
+    'PACK'
+);
+
+
+--
+-- Name: TYPE "SaleVariant"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TYPE public."SaleVariant" IS '产品销售变体的类型，分别为散卖，箱和包';
+
+
+--
 -- Name: UserRole; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -75,8 +93,9 @@ CREATE TYPE public."UserRole" AS ENUM (
 --
 
 CREATE TYPE public."UserStatus" AS ENUM (
+    'PENDING_VERIFICATION',
     'INACTIVE',
-    ' ACTIVE',
+    'ACTIVE',
     'PENDING_REVIEW',
     'APPROVED',
     'BANNED'
@@ -84,39 +103,56 @@ CREATE TYPE public."UserStatus" AS ENUM (
 
 
 --
--- Name: generate_user_id(); Type: FUNCTION; Schema: public; Owner: -
+-- Name: TYPE "UserStatus"; Type: COMMENT; Schema: public; Owner: -
 --
 
+COMMENT ON TYPE public."UserStatus" IS '用户状态';
+
+
+--
+-- Name: generate_user_id(); Type: FUNCTION; Schema: public; Owner: -
+--
 
 CREATE FUNCTION public.generate_user_id() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE 
-acronym TEXT;
-seq_num INT;
+    acronym TEXT;
+    seq_num INT;
 BEGIN
-CASE NEW.role
-WHEN 0 THEN
-acronym := 'WHO';
-seq_num := nextval('seq_wholesaler_id');
-WHEN 1 then
-acronym := 'RET';
-seq_num := nextval('seq_retailer_id');
-WHEN 2 then
-acronym := 'SUP';
-seq_num := nextval('seq_support_id');
-WHEN 3 then
-acronym := 'DEL';
-seq_num := nextval('seq_deliveryman_id');
-WHEN 5 THEN
-acronym := 'WAR';
-seq_num := nextval('seq_warehouse_id');
-ELSE
-RAISE EXCEPTION 'Unknown role %', NEW.role;
-END CASE;
-NEW.user_id := acronym || LPAD(seq_num::TEXT, 3, '0');
+    IF OLD.status = 'PENDING_VERIFICATION' 
+       AND NEW.status IS DISTINCT FROM 'PENDING_VERIFICATION'
+       AND NEW.user_id IS NULL THEN
+        CASE NEW.role
+            WHEN 'WHOLESALER' THEN
+                acronym := 'WHO';
+                seq_num := nextval('seq_wholesaler_id');
+            WHEN 'RETAILER' THEN
+                acronym := 'RET';
+                seq_num := nextval('seq_retailer_id');
+            WHEN 'SUPPORT' THEN
+                acronym := 'SUP';
+                seq_num := nextval('seq_support_id');
+            WHEN 'DELIVERY' THEN
+                acronym := 'DEL';
+                seq_num := nextval('seq_deliveryman_id');
+            WHEN 'WAREHOUSE' THEN
+                acronym := 'WAR';
+                seq_num := nextval('seq_warehouse_id');
+            WHEN 'ADMIN' THEN
+                acronym := 'ADM';
+                seq_num := nextval('seq_admin_id');
+            WHEN 'SUPERADMIN' THEN
+                acronym := 'SADM';
+                seq_num := nextval('seq_superadmin_id');
+            ELSE
+                RAISE EXCEPTION 'Unknown role %', NEW.role;
+        END CASE;
 
-RETURN NEW;
+        NEW.user_id := acronym || LPAD(seq_num::TEXT, 3, '0');
+    END IF;
+
+    RETURN NEW;
 END;
 $$;
 
@@ -299,6 +335,59 @@ COMMENT ON TABLE public.chat_participants IS '连接用户和聊天会话 / Cone
 
 
 --
+-- Name: cities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cities (
+    id integer NOT NULL,
+    province_id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    name_local character varying(100) NOT NULL
+);
+
+
+--
+-- Name: COLUMN cities.province_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.cities.province_id IS '所属省份 ID，外键关联 provinces 表';
+
+
+--
+-- Name: COLUMN cities.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.cities.name IS '城市英文名称';
+
+
+--
+-- Name: COLUMN cities.name_local; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.cities.name_local IS '城市本地名称';
+
+
+--
+-- Name: cities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cities_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cities_id_seq OWNED BY public.cities.id;
+
+
+--
 -- Name: configurations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -321,6 +410,74 @@ COMMENT ON COLUMN public.configurations.language IS 'BCP-47 Code';
 --
 
 COMMENT ON COLUMN public.configurations.timezone IS 'IANA时区名字';
+
+
+--
+-- Name: countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries (
+    iso_alpha2 character(2) NOT NULL,
+    iso_alpha3 character(3) NOT NULL,
+    iso_numeric smallint NOT NULL,
+    name character varying(100) NOT NULL,
+    name_local character varying(100) NOT NULL,
+    currency_id smallint
+);
+
+
+--
+-- Name: COLUMN countries.iso_alpha2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso_alpha2 IS 'ISO 3166-1 alpha-2 国家代码，两位字符';
+
+
+--
+-- Name: COLUMN countries.iso_alpha3; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso_alpha3 IS 'ISO 3166-1 alpha-3 国家代码，三位字符';
+
+
+--
+-- Name: COLUMN countries.iso_numeric; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso_numeric IS 'ISO 3166-1 数字代码';
+
+
+--
+-- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.name IS '国家英文官方名称';
+
+
+--
+-- Name: COLUMN countries.name_local; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.name_local IS '国家本地语言名称';
+
+
+--
+-- Name: COLUMN countries.currency_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.currency_id IS '使用的货币';
+
+
+--
+-- Name: currencies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.currencies (
+    iso_numeric smallint NOT NULL,
+    iso_alpha3 character(3) NOT NULL,
+    symbol character varying(5) NOT NULL,
+    decimal_digits smallint NOT NULL
+);
 
 
 --
@@ -428,44 +585,38 @@ ALTER TABLE public.delivery_timeline ALTER COLUMN id ADD GENERATED BY DEFAULT AS
 
 
 --
--- Name: direction; Type: TABLE; Schema: public; Owner: -
+-- Name: directions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.direction (
+CREATE TABLE public.directions (
     id bigint NOT NULL,
     user_id uuid NOT NULL,
-    type public."AddressType" NOT NULL,
-    direction character varying(200) NOT NULL,
-    city character varying(50) NOT NULL,
-    province character varying(80) NOT NULL,
+    type public."AddressType" DEFAULT 'STORE'::public."AddressType" NOT NULL,
+    country_iso smallint NOT NULL,
+    province_id integer NOT NULL,
+    city_id integer NOT NULL,
+    street character varying(200) NOT NULL,
     zip_code character varying(10) NOT NULL,
-    latitude double precision NOT NULL,
-    longitude double precision NOT NULL,
+    latitude double precision,
+    longitude double precision,
     created_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text) NOT NULL,
     updated_at timestamp without time zone
 );
 
 
 --
--- Name: TABLE direction; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN directions.type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.direction IS '储存位置表';
-
-
---
--- Name: COLUMN direction.type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.direction.type IS '0=送货地址（可以有多个，如果没有则默认用商店地址， 1=发票地址，2=商店地址（批发商和零售商）';
+COMMENT ON COLUMN public.directions.type IS '地址类型';
 
 
 --
--- Name: direcction_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: directions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-ALTER TABLE public.direction ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
-    SEQUENCE NAME public.direcction_id_seq
+ALTER TABLE public.directions ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.directions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -843,6 +994,71 @@ ALTER TABLE public.products ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY
 
 
 --
+-- Name: provinces; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.provinces (
+    id integer NOT NULL,
+    country_iso smallint NOT NULL,
+    name character varying(100) NOT NULL,
+    name_local character varying(100) NOT NULL
+);
+
+
+--
+-- Name: COLUMN provinces.country_iso; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.provinces.country_iso IS '所属国家 iso numeric，外键关联 countries 表';
+
+
+--
+-- Name: COLUMN provinces.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.provinces.name IS '省份/州的英文名称';
+
+
+--
+-- Name: COLUMN provinces.name_local; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.provinces.name_local IS '省份/州的本地名称';
+
+
+--
+-- Name: provinces_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.provinces_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: provinces_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.provinces_id_seq OWNED BY public.provinces.id;
+
+
+--
+-- Name: seq_admin_id; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.seq_admin_id
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
 -- Name: seq_deliveryman_id; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -859,6 +1075,18 @@ CREATE SEQUENCE public.seq_deliveryman_id
 --
 
 CREATE SEQUENCE public.seq_retailer_id
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: seq_superadmin_id; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.seq_superadmin_id
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -907,7 +1135,7 @@ CREATE SEQUENCE public.seq_wholesaler_id
 --
 
 CREATE TABLE public.user_sessions (
-    session_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    session_id uuid DEFAULT extensions.uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     device_name character varying(150) NOT NULL,
     device_finger character varying(255) NOT NULL,
@@ -925,21 +1153,20 @@ CREATE TABLE public.user_sessions (
 --
 
 CREATE TABLE public.users (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    id uuid DEFAULT extensions.uuid_generate_v4() NOT NULL,
     user_id text,
     first_name character varying(50),
     last_name character varying(60),
-    username character varying(30),
+    username character varying(50),
     password text NOT NULL,
     email character varying(255) NOT NULL,
-    telephone character varying(15),
-    status public."UserStatus" DEFAULT 'INACTIVE'::public."UserStatus" NOT NULL,
+    telephone character varying(25),
+    status public."UserStatus" DEFAULT 'PENDING_VERIFICATION'::public."UserStatus" NOT NULL,
     profile jsonb,
     created_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text) NOT NULL,
     updated_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text),
     role public."UserRole" NOT NULL,
-    cif character varying(9),
-    email_verified boolean DEFAULT false NOT NULL
+    cif character varying(20)
 );
 
 
@@ -948,13 +1175,6 @@ CREATE TABLE public.users (
 --
 
 COMMENT ON TABLE public.users IS '用户表';
-
-
---
--- Name: COLUMN users.status; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.users.status IS '0 → inactive  临时账号，未验证则 1 → active    2 → banned  因为违反用户协议而封锁';
 
 
 --
@@ -979,15 +1199,19 @@ CREATE TABLE public.variant_products (
     id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text) NOT NULL,
     product_id bigint NOT NULL,
-    type_sale smallint NOT NULL,
+    type_sale public."SaleVariant" NOT NULL,
     price numeric(10,2) NOT NULL,
     price_iva numeric(10,2) NOT NULL,
-    stock integer NOT NULL,
+    available_stock integer NOT NULL,
     sort smallint NOT NULL,
     attributes jsonb,
     status smallint NOT NULL,
     iva numeric(5,2) NOT NULL,
-    product_code character varying(50) NOT NULL
+    product_code character varying(50) NOT NULL,
+    reserved_stock integer DEFAULT 0 NOT NULL,
+    low_stock_threshold integer DEFAULT 0 NOT NULL,
+    sale_unit_qty integer DEFAULT 1 NOT NULL,
+    min_order_qty integer DEFAULT 1 NOT NULL
 );
 
 
@@ -999,10 +1223,52 @@ COMMENT ON TABLE public.variant_products IS '变体销售配置';
 
 
 --
+-- Name: COLUMN variant_products.type_sale; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.variant_products.type_sale IS '销售变体类型，分别为散卖，按包，按箱。';
+
+
+--
+-- Name: COLUMN variant_products.available_stock; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.variant_products.available_stock IS '实际可供销售和发货的可用库存数量。';
+
+
+--
 -- Name: COLUMN variant_products.status; Type: COMMENT; Schema: public; Owner: -
 --
 
 COMMENT ON COLUMN public.variant_products.status IS '1=activado,0=desactivado';
+
+
+--
+-- Name: COLUMN variant_products.reserved_stock; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.variant_products.reserved_stock IS '已下单但尚未发货的预留库存数量，避免超卖。';
+
+
+--
+-- Name: COLUMN variant_products.low_stock_threshold; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.variant_products.low_stock_threshold IS '触发低库存预警的阈值。当可用库存低于此值时，向分销商发送通知。';
+
+
+--
+-- Name: COLUMN variant_products.sale_unit_qty; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.variant_products.sale_unit_qty IS '一个销售单位（如：一箱、一包）所包含的最小库存单位数量。';
+
+
+--
+-- Name: COLUMN variant_products.min_order_qty; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.variant_products.min_order_qty IS '最小订购数量（以销售单位计）。';
 
 
 --
@@ -1024,7 +1290,7 @@ ALTER TABLE public.variant_products ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
 --
 
 CREATE TABLE public.verification_tokens (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    id uuid DEFAULT extensions.uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     token character varying(255) NOT NULL,
     expires_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text) NOT NULL,
@@ -1032,6 +1298,20 @@ CREATE TABLE public.verification_tokens (
     created_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text) NOT NULL,
     attempts smallint DEFAULT 0 NOT NULL
 );
+
+
+--
+-- Name: cities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cities ALTER COLUMN id SET DEFAULT nextval('public.cities_id_seq'::regclass);
+
+
+--
+-- Name: provinces id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.provinces ALTER COLUMN id SET DEFAULT nextval('public.provinces_id_seq'::regclass);
 
 
 --
@@ -1075,11 +1355,67 @@ ALTER TABLE ONLY public.chat_participants
 
 
 --
+-- Name: cities cities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cities
+    ADD CONSTRAINT cities_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: configurations configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.configurations
     ADD CONSTRAINT configurations_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: countries countries_iso_alpha2_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_iso_alpha2_key UNIQUE (iso_alpha2);
+
+
+--
+-- Name: countries countries_iso_alpha3_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_iso_alpha3_key UNIQUE (iso_alpha3);
+
+
+--
+-- Name: countries countries_iso_numeric_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_iso_numeric_key UNIQUE (iso_numeric);
+
+
+--
+-- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_pkey PRIMARY KEY (iso_numeric);
+
+
+--
+-- Name: currencies currencies_iso_alpha3_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.currencies
+    ADD CONSTRAINT currencies_iso_alpha3_key UNIQUE (iso_alpha3);
+
+
+--
+-- Name: currencies currencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.currencies
+    ADD CONSTRAINT currencies_pkey PRIMARY KEY (iso_numeric);
 
 
 --
@@ -1099,11 +1435,11 @@ ALTER TABLE ONLY public.delivery_timeline
 
 
 --
--- Name: direction direcction_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: directions directions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.direction
-    ADD CONSTRAINT direcction_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.directions
+    ADD CONSTRAINT directions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1195,6 +1531,14 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: provinces provinces_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.provinces
+    ADD CONSTRAINT provinces_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: user_sessions unique_device_finger_user; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1227,11 +1571,11 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_telephone_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_user_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_telephone_key UNIQUE (telephone);
+    ADD CONSTRAINT users_user_id_key UNIQUE (user_id);
 
 
 --
@@ -1265,17 +1609,17 @@ CREATE INDEX password_reset_tokens_user_id_idx ON public.verification_tokens USI
 
 
 --
--- Name: users tg_insert_user_id; Type: TRIGGER; Schema: public; Owner: -
+-- Name: verification_tokens_user_id_token_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tg_insert_user_id BEFORE INSERT ON public.users FOR EACH ROW WHEN ((new.user_id IS NULL)) EXECUTE FUNCTION public.generate_user_id();
+CREATE INDEX verification_tokens_user_id_token_idx ON public.verification_tokens USING btree (user_id, token);
 
 
 --
--- Name: users tg_update_user_id; Type: TRIGGER; Schema: public; Owner: -
+-- Name: users trg_generate_user_id; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER tg_update_user_id BEFORE UPDATE ON public.users FOR EACH ROW WHEN ((new.role IS DISTINCT FROM old.role)) EXECUTE FUNCTION public.generate_user_id();
+CREATE TRIGGER trg_generate_user_id BEFORE UPDATE OF status ON public.users FOR EACH ROW EXECUTE FUNCTION public.generate_user_id();
 
 
 --
@@ -1335,11 +1679,27 @@ ALTER TABLE ONLY public.chat_participants
 
 
 --
+-- Name: cities cities_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cities
+    ADD CONSTRAINT cities_province_id_fkey FOREIGN KEY (province_id) REFERENCES public.provinces(id) ON DELETE CASCADE;
+
+
+--
 -- Name: configurations configurations_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.configurations
     ADD CONSTRAINT configurations_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: countries countries_currency_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_currency_id_fkey FOREIGN KEY (currency_id) REFERENCES public.currencies(iso_numeric) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -1359,11 +1719,35 @@ ALTER TABLE ONLY public.delivery_timeline
 
 
 --
--- Name: direction direcction_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: directions directions_city_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.direction
-    ADD CONSTRAINT direcction_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.directions
+    ADD CONSTRAINT directions_city_id_fkey FOREIGN KEY (city_id) REFERENCES public.cities(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: directions directions_country_iso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.directions
+    ADD CONSTRAINT directions_country_iso_fkey FOREIGN KEY (country_iso) REFERENCES public.countries(iso_numeric) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: directions directions_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.directions
+    ADD CONSTRAINT directions_province_id_fkey FOREIGN KEY (province_id) REFERENCES public.provinces(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: directions directions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.directions
+    ADD CONSTRAINT directions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
@@ -1459,7 +1843,7 @@ ALTER TABLE ONLY public.orders
 --
 
 ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT orders_shipping_address_fkey FOREIGN KEY (shipping_address) REFERENCES public.direction(id) ON DELETE SET NULL;
+    ADD CONSTRAINT orders_shipping_address_fkey FOREIGN KEY (shipping_address) REFERENCES public.directions(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
 --
@@ -1511,6 +1895,14 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: provinces provinces_country_iso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.provinces
+    ADD CONSTRAINT provinces_country_iso_fkey FOREIGN KEY (country_iso) REFERENCES public.countries(iso_numeric) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: variant_products variant_products_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1547,12 +1939,6 @@ ALTER TABLE public.deliveries ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.delivery_timeline ENABLE ROW LEVEL SECURITY;
-
---
--- Name: direction; Type: ROW SECURITY; Schema: public; Owner: -
---
-
-ALTER TABLE public.direction ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: messages; Type: ROW SECURITY; Schema: public; Owner: -
@@ -1600,5 +1986,5 @@ ALTER TABLE public.verification_tokens ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict aQLD1iHNVdhud4ZOIWelxuiVrqKE3j4Vbmu9jcFkeGP9nseWqfcyxNDYJ1qQcjF
+\unrestrict NdnH6NUfjODg1HDCH77HqLBxRLIbG2dCh7lzEzfB3YUhkVaCyki4YiHxIExitla
 
