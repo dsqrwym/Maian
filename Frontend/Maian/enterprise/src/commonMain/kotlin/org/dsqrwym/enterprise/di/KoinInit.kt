@@ -5,7 +5,7 @@ import org.dsqrwym.shared.di.sharedInitKoin
 
 fun enterpriseInitKoin(){
     sharedInitKoin{
-        modules(standardModule)
+        modules(enterpriseModule)
         modules(enterpriseAuthModule)
     }
 }

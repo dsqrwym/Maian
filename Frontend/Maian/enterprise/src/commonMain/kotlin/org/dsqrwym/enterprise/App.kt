@@ -2,6 +2,9 @@ package org.dsqrwym.enterprise
 
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.dashboard
+import maian.shared.generated.resources.profile
 import org.dsqrwym.enterprise.navigation.navhost.authNavGraph
 import org.dsqrwym.enterprise.navigation.navhost.menuNavGraph
 import org.dsqrwym.shared.AppRoot
@@ -19,20 +22,17 @@ import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.dashboard
-import maian.shared.generated.resources.profile
 
+/**
+ * App (Standard module)
+ *
+ * EN: Entry point for the app in the standard flavor. Creates a NavController, initializes
+ * AppRoot, and wires the AuthNavHost. Optionally exposes navController via onNavHostReady.
+ *
+ * ZH: 标准模块的应用入口。创建 NavController，初始化 AppRoot，并接入 AuthNavHost。
+ * 可通过 onNavHostReady 回调暴露 navController。
+ */
 @Composable
-        /**
-         * App (Standard module)
-         *
-         * EN: Entry point for the app in the standard flavor. Creates a NavController, initializes
-         * AppRoot, and wires the AuthNavHost. Optionally exposes navController via onNavHostReady.
-         *
-         * ZH: 标准模块的应用入口。创建 NavController，初始化 AppRoot，并接入 AuthNavHost。
-         * 可通过 onNavHostReady 回调暴露 navController。
-         */
 fun App(
     onNavHostReady: suspend (NavController) -> Unit = {}
 ) {

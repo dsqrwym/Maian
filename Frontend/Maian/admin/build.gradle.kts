@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -38,7 +39,7 @@ kotlin {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
-                outputFileName = "adminComposeApp.js"
+                //outputFileName = "adminComposeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside browser
@@ -53,36 +54,41 @@ kotlin {
     }
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(compose.preview)
-                implementation(libs.androidx.activity.compose)
-               // implementation(project(":shared"))
-            }
+        val androidMain by getting
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
         }
-        val commonMain by getting {
-            dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-                implementation(compose.components.uiToolingPreview)
-                implementation(libs.androidx.lifecycle.viewmodel)
-                implementation(libs.androidx.lifecycle.runtimeCompose)
-                implementation(project(":shared"))
-            }
+
+        val commonMain by getting
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(libs.material.icons.core)
+            implementation(libs.material.icons.extended)
+            // 官方导航
+            implementation(libs.kmp.navigation.compose)
+
+            // Koin
+            implementation(libs.koin.core) // 或最新版本
+            implementation(libs.koin.compose.viewmodel)
+            implementation(project(":shared"))
         }
-        val desktopMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                //implementation(project(":shared"))
-            }
+        val desktopMain by getting
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
         }
-        val wasmJsMain by getting{
-            dependencies {
-                //implementation(project(":shared"))
-            }
+
+        val wasmJsMain by getting
+        wasmJsMain.dependencies {
+            //implementation(project(":shared"))
         }
     }
 }
@@ -94,6 +100,7 @@ android {
     defaultConfig {
         applicationId = "org.dsqrwym.pgdm.admin"
         minSdk = libs.versions.android.minSdk.get().toInt()
+        //noinspection OldTargetApi
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
@@ -116,6 +123,12 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+compose.resources {
+    publicResClass = true
+    nameOfResClass = "AdminRes"
+    generateResClass = auto
 }
 
 compose.desktop {

@@ -1,51 +1,118 @@
 package org.dsqrwym.admin
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import org.dsqrwym.shared.todayDate
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import maian.admin.generated.resources.Res
-import maian.admin.generated.resources.compose_multiplatform
+import androidx.navigation.NavController
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.dashboard
+import maian.shared.generated.resources.profile
+import org.dsqrwym.admin.navigation.navhost.authNavGraph
+import org.dsqrwym.admin.navigation.navhost.menuNavGraph
+import org.dsqrwym.shared.AppRoot
+import org.dsqrwym.shared.LocalAppFocusManager
+import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.data.auth.session.AuthState
+import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.drawable.SharedImages
+import org.dsqrwym.shared.navigation.SharedDashboardScreen
+import org.dsqrwym.shared.navigation.SharedInitialScreen
+import org.dsqrwym.shared.navigation.menu.*
+import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
+import org.dsqrwym.shared.ui.components.containers.AuthContainer
+import org.dsqrwym.shared.ui.components.containers.BackgroundImage
+import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.currentKoinScope
 
 @Composable
-@Preview
-fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "Today's date is ${todayDate()}",
-                modifier = Modifier.padding(20.dp),
-                fontSize = 24.sp,
-                textAlign = TextAlign.Center
-            )
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
+fun App(
+    onNavHostReady: suspend (NavController) -> Unit = {}
+) {
+    AppRoot { authState ->
+        val navController = LocalNavHostController.current
+        val focusManager = LocalAppFocusManager.current
 
-                Column(
-                    Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: ")
+        LaunchedEffect(Unit) {
+            onNavHostReady(navController)
+        }
+        when (authState) {
+            is AuthState.Unauthenticated -> {
+                // 未登录 → 整个 Auth 流程都包在 AuthContainer 下
+                AuthContainer {
+                    SharedAppNavHost(
+                        navController = navController,
+                        focusManager = focusManager,
+                        startDestination = SharedInitialScreen
+                    ) { navController, focusManager ->
+                        authNavGraph(navController, focusManager)
+                    }
+                }
+            }
+
+            is AuthState.Authenticated -> {
+                val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
+                var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
+                val menuList = listOf(
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            SharedMenuItem.Dashboard.route,
+                            stringResource(SharedRes.string.dashboard),
+                            SharedMenuItem.Dashboard.description,
+                            SharedMenuItem.Dashboard.icon,
+                            stringResource(SharedRes.string.dashboard),
+                            SharedMenuItem.Dashboard.requiredRole,
+                            SharedMenuItem.Dashboard.isPrimary
+                        )
+                    ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            SharedMenuItem.Profile.route,
+                            stringResource(SharedRes.string.profile),
+                            SharedMenuItem.Profile.description,
+                            SharedMenuItem.Profile.icon,
+                            stringResource(SharedRes.string.profile),
+                            SharedMenuItem.Profile.requiredRole,
+                            SharedMenuItem.Profile.isPrimary
+                        )
+                    ),SharedMenuItemState(
+                        SharedMenuItem(
+                            SharedMenuItem.Profile.route,
+                            stringResource(SharedRes.string.profile),
+                            SharedMenuItem.Profile.description,
+                            SharedMenuItem.Profile.icon,
+                            stringResource(SharedRes.string.profile),
+                            SharedMenuItem.Profile.requiredRole,
+                            SharedMenuItem.Profile.isPrimary
+                        )
+                    ),
+                )
+                val topBarActions: List<SharedMenuActions> = listOf(
+                    SharedMenuActions.ThemeChangeIconButton,
+                    SharedMenuActions.LanguageSwitcherIconButton,
+                )
+                val userRole = UserRole.RETAILER
+
+                // 已登录 → 渲染主业务 Graph
+                BackgroundImage(SharedImages.background()) {
+                    SharedAdaptiveNavigation(
+                        menuConfig = SharedMenuConfiguration(
+                            menuList,
+                            topBarActions,
+                            userRole
+                        ),
+                        currentRoute = currentRoute,
+                        onNavigate = {
+                            currentRoute = it
+                            navController.navigate(currentRoute)
+                        }
+                    ) {
+                        SharedAppNavHost(
+                            navController = navController,
+                            focusManager = focusManager,
+                            startDestination = SharedDashboardScreen
+                        ) { navController, focusManager ->
+                            menuNavGraph(menuViewModel, navController, focusManager)
+                        }
+                    }
                 }
             }
         }

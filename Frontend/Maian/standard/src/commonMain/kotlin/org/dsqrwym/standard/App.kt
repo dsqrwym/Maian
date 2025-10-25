@@ -34,16 +34,16 @@ import org.dsqrwym.standard.navigation.navhost.menuNavGraph
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
 
+/**
+ * App (Standard module)
+ *
+ * EN: Entry point for the app in the standard flavor. Creates a NavController, initializes
+ * AppRoot, and wires the AuthNavHost. Optionally exposes navController via onNavHostReady.
+ *
+ * ZH: 标准模块的应用入口。创建 NavController，初始化 AppRoot，并接入 AuthNavHost。
+ * 可通过 onNavHostReady 回调暴露 navController。
+ */
 @Composable
-        /**
-         * App (Standard module)
-         *
-         * EN: Entry point for the app in the standard flavor. Creates a NavController, initializes
-         * AppRoot, and wires the AuthNavHost. Optionally exposes navController via onNavHostReady.
-         *
-         * ZH: 标准模块的应用入口。创建 NavController，初始化 AppRoot，并接入 AuthNavHost。
-         * 可通过 onNavHostReady 回调暴露 navController。
-         */
 fun App(
     onNavHostReady: suspend (NavController) -> Unit = {}
 ) {
