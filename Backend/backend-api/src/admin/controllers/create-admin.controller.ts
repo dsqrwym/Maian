@@ -24,7 +24,7 @@ import { UserRole } from 'prisma/generated';
 @ApiTags('Admin Management')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@RolesAllowed(UserRole.ADMIN)
+@RolesAllowed(UserRole.SUPERADMIN)
 @Controller('create-admin')
 export class CreateAdminController {
   constructor(private readonly createAdminService: CreateAdminService) {}

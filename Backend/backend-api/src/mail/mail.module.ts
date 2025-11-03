@@ -39,7 +39,7 @@ import { Logger } from 'nestjs-pino';
           },
         },
       }),
-      inject: [ConfigService],
+      inject: [ConfigService, Logger],
     }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],

@@ -12,7 +12,7 @@ export class PrismaService
   implements OnModuleInit, BeforeApplicationShutdown
 {
   constructor(private readonly logger: PinoLogger) {
-    super();
+    super({ log: ['query', 'info', 'warn', 'error'] });
     this.logger.setContext(PrismaService.name);
   }
 

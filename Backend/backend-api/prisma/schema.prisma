@@ -18,7 +18,7 @@ model cart_details {
   id                  BigInt            @id @default(autoincrement())
   cart_id             BigInt
   variant_products_id BigInt?
-  quantity            Int               @db.SmallInt
+  quantity            Int
   created_at          DateTime          @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   carts               carts             @relation(fields: [cart_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   variant_products    variant_products? @relation(fields: [variant_products_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -38,18 +38,23 @@ model carts {
   @@schema("public")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model categories {
-  id               BigInt       @id @default(autoincrement())
-  user_id          String?      @db.Uuid
-  name             String       @db.VarChar(50)
-  iva              Decimal?     @db.Decimal(5, 2)
-  parent_id        BigInt?
-  created_at       DateTime     @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  categories       categories?  @relation("categoriesTocategories", fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  other_categories categories[] @relation("categoriesTocategories")
-  users            users?       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  products         products[]
+  id                    BigInt                  @id @default(autoincrement())
+  user_id               String?                 @db.Uuid
+  name                  String                  @db.VarChar(50)
+  iva                   Decimal?                @db.Decimal(5, 2)
+  parent_id             BigInt?
+  created_at            DateTime                @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  level                 Int                     @db.SmallInt
+  name_unaccent         String?                 @default(dbgenerated("immutable_unaccent((name)::text)"))
+  parent                categories?             @relation("CategoryParent", fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  children              categories[]            @relation("CategoryParent")
+  users                 users?                  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  category_translations category_translations[]
+  product_categories    product_categories[]
 
   @@schema("public")
 }
@@ -78,12 +83,49 @@ model chat_participants {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cities {
+  id          Int          @id @default(autoincrement())
+  province_id Int
+  name        String       @db.VarChar(100)
+  name_local  String       @db.VarChar(100)
+  provinces   provinces    @relation(fields: [province_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  directions  directions[]
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model configurations {
   user_id  String @id @db.Uuid
   language String @default("en") @db.VarChar(10)
   timezone String @default("UTC") @db.VarChar(32)
   users    users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model countries {
+  iso_alpha2  String       @unique @db.Char(2)
+  iso_alpha3  String       @unique @db.Char(3)
+  iso_numeric Int          @id @unique @db.SmallInt
+  name        String       @db.VarChar(100)
+  name_local  String       @db.VarChar(100)
+  currency_id Int?         @db.SmallInt
+  currencies  currencies?  @relation(fields: [currency_id], references: [iso_numeric], onDelete: Restrict)
+  directions  directions[]
+  provinces   provinces[]
+
+  @@schema("public")
+}
+
+model currencies {
+  iso_numeric    Int         @id @db.SmallInt
+  iso_alpha3     String      @unique @db.Char(3)
+  symbol         String      @db.VarChar(5)
+  decimal_digits Int         @db.SmallInt
+  countries      countries[]
 
   @@schema("public")
 }
@@ -119,6 +161,29 @@ model delivery_timeline {
   latitude    Float
   longitude   Float
   deliveries  deliveries?    @relation(fields: [delivery_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model directions {
+  id          BigInt      @id @default(autoincrement())
+  user_id     String      @db.Uuid
+  type        AddressType @default(STORE)
+  country_iso Int         @db.SmallInt
+  province_id Int
+  city_id     Int
+  street      String      @db.VarChar(200)
+  zip_code    String      @db.VarChar(10)
+  latitude    Float?
+  longitude   Float?
+  created_at  DateTime    @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  updated_at  DateTime?   @db.Timestamp(6)
+  cities      cities      @relation(fields: [city_id], references: [id], onUpdate: NoAction)
+  countries   countries   @relation(fields: [country_iso], references: [iso_numeric])
+  provinces   provinces   @relation(fields: [province_id], references: [id], onUpdate: NoAction)
+  users       users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  orders      orders[]
 
   @@schema("public")
 }
@@ -210,7 +275,7 @@ model order_details {
   order_id           BigInt
   product_code       String           @db.VarChar(50)
   variant_product_id BigInt
-  quantity           Int              @db.SmallInt
+  quantity           Int
   unit_price         Decimal          @db.Decimal(10, 2)
   unit_price_iva     Decimal          @db.Decimal(10, 2)
   subtotal           Decimal          @db.Decimal(12, 2)
@@ -243,28 +308,40 @@ model orders {
   updated_at                        DateTime?       @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   order_details                     order_details[]
   users_orders_retailer_idTousers   users?          @relation("orders_retailer_idTousers", fields: [retailer_id], references: [id], onUpdate: NoAction)
-  direcction                        directions?     @relation(fields: [shipping_address], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  directions                        directions?     @relation(fields: [shipping_address], references: [id], onDelete: Restrict, onUpdate: Restrict)
   users_orders_wholesaler_idTousers users?          @relation("orders_wholesaler_idTousers", fields: [wholesaler_id], references: [id], onUpdate: NoAction)
 
   @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model product_categories {
+  product_id  BigInt
+  category_id BigInt
+  is_primary  Boolean    @default(false)
+  created_at  DateTime   @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  categories  categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  products    products   @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([product_id, category_id])
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model products {
-  id               BigInt             @id @default(autoincrement())
-  user_id          String             @db.Uuid
-  name             String             @db.VarChar(50)
-  title            String?            @db.VarChar(100)
-  description      String?
-  iva              Decimal            @db.Decimal(5, 2)
-  category_id      BigInt
-  status           Int                @default(1) @db.SmallInt
-  created_at       DateTime           @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  product_code     String             @db.VarChar(50)
-  categories       categories         @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users            users              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  products_files   products_files[]
-  variant_products variant_products[]
+  id                 BigInt               @id @default(autoincrement())
+  user_id            String               @db.Uuid
+  name               String               @db.VarChar(50)
+  title              String?              @db.VarChar(100)
+  description        String?
+  iva                Decimal              @db.Decimal(5, 2)
+  status             ProductStatus        @default(ACTIVE)
+  created_at         DateTime             @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  product_code       String               @db.VarChar(50)
+  product_categories product_categories[]
+  users              users                @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  products_files     products_files[]
+  variant_products   variant_products[]
 
   @@schema("public")
 }
@@ -277,6 +354,19 @@ model products_files {
   sort       Int      @db.SmallInt
   files      files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model provinces {
+  id          Int          @id @default(autoincrement())
+  country_iso Int          @db.SmallInt
+  name        String       @db.VarChar(100)
+  name_local  String       @db.VarChar(100)
+  cities      cities[]
+  directions  directions[]
+  countries   countries    @relation(fields: [country_iso], references: [iso_numeric], onDelete: Cascade)
 
   @@schema("public")
 }
@@ -376,75 +466,17 @@ model verification_tokens {
   @@schema("public")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model cities {
-  id          Int          @id @default(autoincrement())
-  province_id Int
-  name        String       @db.VarChar(100)
-  name_local  String       @db.VarChar(100)
-  provinces   provinces    @relation(fields: [province_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  directions  directions[]
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model category_translations {
+  category_id   BigInt
+  lang_code     String     @db.VarChar(10)
+  name          String     @db.VarChar(50)
+  name_unaccent String?    @default(dbgenerated("immutable_unaccent((name)::text)"))
+  categories    categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_category_translations_category_id")
 
-  @@schema("public")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model countries {
-  iso_alpha2  String       @unique @db.Char(2)
-  iso_alpha3  String       @unique @db.Char(3)
-  iso_numeric Int          @id @unique @db.SmallInt
-  name        String       @db.VarChar(100)
-  name_local  String       @db.VarChar(100)
-  currency_id Int?         @db.SmallInt
-  currencies  currencies?  @relation(fields: [currency_id], references: [iso_numeric], onDelete: Restrict)
-  directions  directions[]
-  provinces   provinces[]
-
-  @@schema("public")
-}
-
-model directions {
-  id          BigInt      @id @default(autoincrement())
-  user_id     String      @db.Uuid
-  type        AddressType @default(STORE)
-  country_iso Int         @db.SmallInt
-  province_id Int
-  city_id     Int
-  street      String      @db.VarChar(200)
-  zip_code    String      @db.VarChar(10)
-  latitude    Float?
-  longitude   Float?
-  created_at  DateTime    @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  updated_at  DateTime?   @db.Timestamp(6)
-  cities      cities      @relation(fields: [city_id], references: [id], onUpdate: NoAction)
-  countries   countries   @relation(fields: [country_iso], references: [iso_numeric])
-  provinces   provinces   @relation(fields: [province_id], references: [id], onUpdate: NoAction)
-  users       users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  orders      orders[]
-
-  @@schema("public")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model provinces {
-  id          Int          @id @default(autoincrement())
-  country_iso Int          @db.SmallInt
-  name        String       @db.VarChar(100)
-  name_local  String       @db.VarChar(100)
-  cities      cities[]
-  directions  directions[]
-  countries   countries    @relation(fields: [country_iso], references: [iso_numeric], onDelete: Cascade)
-
-  @@schema("public")
-}
-
-model currencies {
-  iso_numeric    Int         @id @db.SmallInt
-  iso_alpha3     String      @unique @db.Char(3)
-  symbol         String      @db.VarChar(5)
-  decimal_digits Int         @db.SmallInt
-  countries      countries[]
-
+  @@id([category_id, lang_code], map: "pk_category_translations")
+  @@index([lang_code], map: "idx_category_translations_lang_code")
+  @@index([name], map: "idx_category_translations_name")
   @@schema("public")
 }
 
@@ -464,6 +496,23 @@ enum DeliveryStatus {
   @@schema("public")
 }
 
+/// This enum is commented in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("public")
+}
+
+/// This enum is commented in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+enum SaleVariant {
+  UNIT
+  BOX
+  PACK
+
+  @@schema("public")
+}
+
 enum UserRole {
   WHOLESALER
   RETAILER
@@ -476,6 +525,7 @@ enum UserRole {
   @@schema("public")
 }
 
+/// This enum is commented in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 enum UserStatus {
   PENDING_VERIFICATION
   INACTIVE
@@ -483,15 +533,6 @@ enum UserStatus {
   PENDING_REVIEW
   APPROVED
   BANNED
-
-  @@schema("public")
-}
-
-/// This enum is commented in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-enum SaleVariant {
-  UNIT
-  BOX
-  PACK
 
   @@schema("public")
 }

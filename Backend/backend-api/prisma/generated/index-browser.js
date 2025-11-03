@@ -140,7 +140,9 @@ exports.Prisma.CategoriesScalarFieldEnum = {
   name: 'name',
   iva: 'iva',
   parent_id: 'parent_id',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  level: 'level',
+  name_unaccent: 'name_unaccent'
 };
 
 exports.Prisma.Chat_panelsScalarFieldEnum = {
@@ -155,10 +157,33 @@ exports.Prisma.Chat_participantsScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.CitiesScalarFieldEnum = {
+  id: 'id',
+  province_id: 'province_id',
+  name: 'name',
+  name_local: 'name_local'
+};
+
 exports.Prisma.ConfigurationsScalarFieldEnum = {
   user_id: 'user_id',
   language: 'language',
   timezone: 'timezone'
+};
+
+exports.Prisma.CountriesScalarFieldEnum = {
+  iso_alpha2: 'iso_alpha2',
+  iso_alpha3: 'iso_alpha3',
+  iso_numeric: 'iso_numeric',
+  name: 'name',
+  name_local: 'name_local',
+  currency_id: 'currency_id'
+};
+
+exports.Prisma.CurrenciesScalarFieldEnum = {
+  iso_numeric: 'iso_numeric',
+  iso_alpha3: 'iso_alpha3',
+  symbol: 'symbol',
+  decimal_digits: 'decimal_digits'
 };
 
 exports.Prisma.DeliveriesScalarFieldEnum = {
@@ -183,6 +208,21 @@ exports.Prisma.Delivery_timelineScalarFieldEnum = {
   created_at: 'created_at',
   latitude: 'latitude',
   longitude: 'longitude'
+};
+
+exports.Prisma.DirectionsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  type: 'type',
+  country_iso: 'country_iso',
+  province_id: 'province_id',
+  city_id: 'city_id',
+  street: 'street',
+  zip_code: 'zip_code',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.DiscountsScalarFieldEnum = {
@@ -270,6 +310,13 @@ exports.Prisma.OrdersScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.Product_categoriesScalarFieldEnum = {
+  product_id: 'product_id',
+  category_id: 'category_id',
+  is_primary: 'is_primary',
+  created_at: 'created_at'
+};
+
 exports.Prisma.ProductsScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -277,7 +324,6 @@ exports.Prisma.ProductsScalarFieldEnum = {
   title: 'title',
   description: 'description',
   iva: 'iva',
-  category_id: 'category_id',
   status: 'status',
   created_at: 'created_at',
   product_code: 'product_code'
@@ -288,6 +334,13 @@ exports.Prisma.Products_filesScalarFieldEnum = {
   product_id: 'product_id',
   file_id: 'file_id',
   sort: 'sort'
+};
+
+exports.Prisma.ProvincesScalarFieldEnum = {
+  id: 'id',
+  country_iso: 'country_iso',
+  name: 'name',
+  name_local: 'name_local'
 };
 
 exports.Prisma.User_sessionsScalarFieldEnum = {
@@ -349,49 +402,11 @@ exports.Prisma.Verification_tokensScalarFieldEnum = {
   attempts: 'attempts'
 };
 
-exports.Prisma.CitiesScalarFieldEnum = {
-  id: 'id',
-  province_id: 'province_id',
+exports.Prisma.Category_translationsScalarFieldEnum = {
+  category_id: 'category_id',
+  lang_code: 'lang_code',
   name: 'name',
-  name_local: 'name_local'
-};
-
-exports.Prisma.CountriesScalarFieldEnum = {
-  iso_alpha2: 'iso_alpha2',
-  iso_alpha3: 'iso_alpha3',
-  iso_numeric: 'iso_numeric',
-  name: 'name',
-  name_local: 'name_local',
-  currency_id: 'currency_id'
-};
-
-exports.Prisma.DirectionsScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  type: 'type',
-  country_iso: 'country_iso',
-  province_id: 'province_id',
-  city_id: 'city_id',
-  street: 'street',
-  zip_code: 'zip_code',
-  latitude: 'latitude',
-  longitude: 'longitude',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
-exports.Prisma.ProvincesScalarFieldEnum = {
-  id: 'id',
-  country_iso: 'country_iso',
-  name: 'name',
-  name_local: 'name_local'
-};
-
-exports.Prisma.CurrenciesScalarFieldEnum = {
-  iso_numeric: 'iso_numeric',
-  iso_alpha3: 'iso_alpha3',
-  symbol: 'symbol',
-  decimal_digits: 'decimal_digits'
+  name_unaccent: 'name_unaccent'
 };
 
 exports.Prisma.SortOrder = {
@@ -429,6 +444,17 @@ exports.DeliveryStatus = exports.$Enums.DeliveryStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.AddressType = exports.$Enums.AddressType = {
+  DELIVERY: 'DELIVERY',
+  INVOICE: 'INVOICE',
+  STORE: 'STORE'
+};
+
+exports.ProductStatus = exports.$Enums.ProductStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+};
+
 exports.UserStatus = exports.$Enums.UserStatus = {
   PENDING_VERIFICATION: 'PENDING_VERIFICATION',
   INACTIVE: 'INACTIVE',
@@ -454,21 +480,19 @@ exports.SaleVariant = exports.$Enums.SaleVariant = {
   PACK: 'PACK'
 };
 
-exports.AddressType = exports.$Enums.AddressType = {
-  DELIVERY: 'DELIVERY',
-  INVOICE: 'INVOICE',
-  STORE: 'STORE'
-};
-
 exports.Prisma.ModelName = {
   cart_details: 'cart_details',
   carts: 'carts',
   categories: 'categories',
   chat_panels: 'chat_panels',
   chat_participants: 'chat_participants',
+  cities: 'cities',
   configurations: 'configurations',
+  countries: 'countries',
+  currencies: 'currencies',
   deliveries: 'deliveries',
   delivery_timeline: 'delivery_timeline',
+  directions: 'directions',
   discounts: 'discounts',
   files: 'files',
   message_files: 'message_files',
@@ -476,17 +500,15 @@ exports.Prisma.ModelName = {
   notifications: 'notifications',
   order_details: 'order_details',
   orders: 'orders',
+  product_categories: 'product_categories',
   products: 'products',
   products_files: 'products_files',
+  provinces: 'provinces',
   user_sessions: 'user_sessions',
   users: 'users',
   variant_products: 'variant_products',
   verification_tokens: 'verification_tokens',
-  cities: 'cities',
-  countries: 'countries',
-  directions: 'directions',
-  provinces: 'provinces',
-  currencies: 'currencies'
+  category_translations: 'category_translations'
 };
 
 /**

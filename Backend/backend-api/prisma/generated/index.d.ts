@@ -28,7 +28,9 @@ export type cart_details = $Result.DefaultSelection<Prisma.$cart_detailsPayload>
 export type carts = $Result.DefaultSelection<Prisma.$cartsPayload>
 /**
  * Model categories
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
  */
 export type categories = $Result.DefaultSelection<Prisma.$categoriesPayload>
 /**
@@ -42,11 +44,26 @@ export type chat_panels = $Result.DefaultSelection<Prisma.$chat_panelsPayload>
  */
 export type chat_participants = $Result.DefaultSelection<Prisma.$chat_participantsPayload>
 /**
+ * Model cities
+ * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ */
+export type cities = $Result.DefaultSelection<Prisma.$citiesPayload>
+/**
  * Model configurations
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
  */
 export type configurations = $Result.DefaultSelection<Prisma.$configurationsPayload>
+/**
+ * Model countries
+ * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ */
+export type countries = $Result.DefaultSelection<Prisma.$countriesPayload>
+/**
+ * Model currencies
+ * 
+ */
+export type currencies = $Result.DefaultSelection<Prisma.$currenciesPayload>
 /**
  * Model deliveries
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -59,6 +76,11 @@ export type deliveries = $Result.DefaultSelection<Prisma.$deliveriesPayload>
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
  */
 export type delivery_timeline = $Result.DefaultSelection<Prisma.$delivery_timelinePayload>
+/**
+ * Model directions
+ * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ */
+export type directions = $Result.DefaultSelection<Prisma.$directionsPayload>
 /**
  * Model discounts
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -98,6 +120,11 @@ export type order_details = $Result.DefaultSelection<Prisma.$order_detailsPayloa
  */
 export type orders = $Result.DefaultSelection<Prisma.$ordersPayload>
 /**
+ * Model product_categories
+ * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ */
+export type product_categories = $Result.DefaultSelection<Prisma.$product_categoriesPayload>
+/**
  * Model products
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  */
@@ -107,6 +134,11 @@ export type products = $Result.DefaultSelection<Prisma.$productsPayload>
  * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
  */
 export type products_files = $Result.DefaultSelection<Prisma.$products_filesPayload>
+/**
+ * Model provinces
+ * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ */
+export type provinces = $Result.DefaultSelection<Prisma.$provincesPayload>
 /**
  * Model user_sessions
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -129,30 +161,10 @@ export type variant_products = $Result.DefaultSelection<Prisma.$variant_products
  */
 export type verification_tokens = $Result.DefaultSelection<Prisma.$verification_tokensPayload>
 /**
- * Model cities
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+ * Model category_translations
+ * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
  */
-export type cities = $Result.DefaultSelection<Prisma.$citiesPayload>
-/**
- * Model countries
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type countries = $Result.DefaultSelection<Prisma.$countriesPayload>
-/**
- * Model directions
- * 
- */
-export type directions = $Result.DefaultSelection<Prisma.$directionsPayload>
-/**
- * Model provinces
- * This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
- */
-export type provinces = $Result.DefaultSelection<Prisma.$provincesPayload>
-/**
- * Model currencies
- * 
- */
-export type currencies = $Result.DefaultSelection<Prisma.$currenciesPayload>
+export type category_translations = $Result.DefaultSelection<Prisma.$category_translationsPayload>
 
 /**
  * Enums
@@ -174,6 +186,23 @@ export const DeliveryStatus: {
 };
 
 export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus]
+
+
+export const ProductStatus: {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+};
+
+export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
+
+
+export const SaleVariant: {
+  UNIT: 'UNIT',
+  BOX: 'BOX',
+  PACK: 'PACK'
+};
+
+export type SaleVariant = (typeof SaleVariant)[keyof typeof SaleVariant]
 
 
 export const UserRole: {
@@ -200,15 +229,6 @@ export const UserStatus: {
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
-
-export const SaleVariant: {
-  UNIT: 'UNIT',
-  BOX: 'BOX',
-  PACK: 'PACK'
-};
-
-export type SaleVariant = (typeof SaleVariant)[keyof typeof SaleVariant]
-
 }
 
 export type AddressType = $Enums.AddressType
@@ -219,6 +239,14 @@ export type DeliveryStatus = $Enums.DeliveryStatus
 
 export const DeliveryStatus: typeof $Enums.DeliveryStatus
 
+export type ProductStatus = $Enums.ProductStatus
+
+export const ProductStatus: typeof $Enums.ProductStatus
+
+export type SaleVariant = $Enums.SaleVariant
+
+export const SaleVariant: typeof $Enums.SaleVariant
+
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
@@ -226,10 +254,6 @@ export const UserRole: typeof $Enums.UserRole
 export type UserStatus = $Enums.UserStatus
 
 export const UserStatus: typeof $Enums.UserStatus
-
-export type SaleVariant = $Enums.SaleVariant
-
-export const SaleVariant: typeof $Enums.SaleVariant
 
 /**
  * ##  Prisma Client ʲˢ
@@ -400,6 +424,16 @@ export class PrismaClient<
   get chat_participants(): Prisma.chat_participantsDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.cities`: Exposes CRUD operations for the **cities** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Cities
+    * const cities = await prisma.cities.findMany()
+    * ```
+    */
+  get cities(): Prisma.citiesDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.configurations`: Exposes CRUD operations for the **configurations** model.
     * Example usage:
     * ```ts
@@ -408,6 +442,26 @@ export class PrismaClient<
     * ```
     */
   get configurations(): Prisma.configurationsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.countries`: Exposes CRUD operations for the **countries** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Countries
+    * const countries = await prisma.countries.findMany()
+    * ```
+    */
+  get countries(): Prisma.countriesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.currencies`: Exposes CRUD operations for the **currencies** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Currencies
+    * const currencies = await prisma.currencies.findMany()
+    * ```
+    */
+  get currencies(): Prisma.currenciesDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.deliveries`: Exposes CRUD operations for the **deliveries** model.
@@ -428,6 +482,16 @@ export class PrismaClient<
     * ```
     */
   get delivery_timeline(): Prisma.delivery_timelineDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.directions`: Exposes CRUD operations for the **directions** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Directions
+    * const directions = await prisma.directions.findMany()
+    * ```
+    */
+  get directions(): Prisma.directionsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.discounts`: Exposes CRUD operations for the **discounts** model.
@@ -500,6 +564,16 @@ export class PrismaClient<
   get orders(): Prisma.ordersDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.product_categories`: Exposes CRUD operations for the **product_categories** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Product_categories
+    * const product_categories = await prisma.product_categories.findMany()
+    * ```
+    */
+  get product_categories(): Prisma.product_categoriesDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.products`: Exposes CRUD operations for the **products** model.
     * Example usage:
     * ```ts
@@ -518,6 +592,16 @@ export class PrismaClient<
     * ```
     */
   get products_files(): Prisma.products_filesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.provinces`: Exposes CRUD operations for the **provinces** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Provinces
+    * const provinces = await prisma.provinces.findMany()
+    * ```
+    */
+  get provinces(): Prisma.provincesDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.user_sessions`: Exposes CRUD operations for the **user_sessions** model.
@@ -560,54 +644,14 @@ export class PrismaClient<
   get verification_tokens(): Prisma.verification_tokensDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.cities`: Exposes CRUD operations for the **cities** model.
+   * `prisma.category_translations`: Exposes CRUD operations for the **category_translations** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Cities
-    * const cities = await prisma.cities.findMany()
+    * // Fetch zero or more Category_translations
+    * const category_translations = await prisma.category_translations.findMany()
     * ```
     */
-  get cities(): Prisma.citiesDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.countries`: Exposes CRUD operations for the **countries** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Countries
-    * const countries = await prisma.countries.findMany()
-    * ```
-    */
-  get countries(): Prisma.countriesDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.directions`: Exposes CRUD operations for the **directions** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Directions
-    * const directions = await prisma.directions.findMany()
-    * ```
-    */
-  get directions(): Prisma.directionsDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.provinces`: Exposes CRUD operations for the **provinces** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Provinces
-    * const provinces = await prisma.provinces.findMany()
-    * ```
-    */
-  get provinces(): Prisma.provincesDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.currencies`: Exposes CRUD operations for the **currencies** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Currencies
-    * const currencies = await prisma.currencies.findMany()
-    * ```
-    */
-  get currencies(): Prisma.currenciesDelegate<ExtArgs, ClientOptions>;
+  get category_translations(): Prisma.category_translationsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1054,9 +1098,13 @@ export namespace Prisma {
     categories: 'categories',
     chat_panels: 'chat_panels',
     chat_participants: 'chat_participants',
+    cities: 'cities',
     configurations: 'configurations',
+    countries: 'countries',
+    currencies: 'currencies',
     deliveries: 'deliveries',
     delivery_timeline: 'delivery_timeline',
+    directions: 'directions',
     discounts: 'discounts',
     files: 'files',
     message_files: 'message_files',
@@ -1064,17 +1112,15 @@ export namespace Prisma {
     notifications: 'notifications',
     order_details: 'order_details',
     orders: 'orders',
+    product_categories: 'product_categories',
     products: 'products',
     products_files: 'products_files',
+    provinces: 'provinces',
     user_sessions: 'user_sessions',
     users: 'users',
     variant_products: 'variant_products',
     verification_tokens: 'verification_tokens',
-    cities: 'cities',
-    countries: 'countries',
-    directions: 'directions',
-    provinces: 'provinces',
-    currencies: 'currencies'
+    category_translations: 'category_translations'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1093,7 +1139,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cart_details" | "carts" | "categories" | "chat_panels" | "chat_participants" | "configurations" | "deliveries" | "delivery_timeline" | "discounts" | "files" | "message_files" | "messages" | "notifications" | "order_details" | "orders" | "products" | "products_files" | "user_sessions" | "users" | "variant_products" | "verification_tokens" | "cities" | "countries" | "directions" | "provinces" | "currencies"
+      modelProps: "cart_details" | "carts" | "categories" | "chat_panels" | "chat_participants" | "cities" | "configurations" | "countries" | "currencies" | "deliveries" | "delivery_timeline" | "directions" | "discounts" | "files" | "message_files" | "messages" | "notifications" | "order_details" | "orders" | "product_categories" | "products" | "products_files" | "provinces" | "user_sessions" | "users" | "variant_products" | "verification_tokens" | "category_translations"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1467,6 +1513,80 @@ export namespace Prisma {
           }
         }
       }
+      cities: {
+        payload: Prisma.$citiesPayload<ExtArgs>
+        fields: Prisma.citiesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.citiesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.citiesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+          }
+          findFirst: {
+            args: Prisma.citiesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.citiesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+          }
+          findMany: {
+            args: Prisma.citiesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>[]
+          }
+          create: {
+            args: Prisma.citiesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+          }
+          createMany: {
+            args: Prisma.citiesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.citiesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>[]
+          }
+          delete: {
+            args: Prisma.citiesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+          }
+          update: {
+            args: Prisma.citiesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+          }
+          deleteMany: {
+            args: Prisma.citiesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.citiesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.citiesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>[]
+          }
+          upsert: {
+            args: Prisma.citiesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+          }
+          aggregate: {
+            args: Prisma.CitiesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCities>
+          }
+          groupBy: {
+            args: Prisma.citiesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CitiesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.citiesCountArgs<ExtArgs>
+            result: $Utils.Optional<CitiesCountAggregateOutputType> | number
+          }
+        }
+      }
       configurations: {
         payload: Prisma.$configurationsPayload<ExtArgs>
         fields: Prisma.configurationsFieldRefs
@@ -1538,6 +1658,154 @@ export namespace Prisma {
           count: {
             args: Prisma.configurationsCountArgs<ExtArgs>
             result: $Utils.Optional<ConfigurationsCountAggregateOutputType> | number
+          }
+        }
+      }
+      countries: {
+        payload: Prisma.$countriesPayload<ExtArgs>
+        fields: Prisma.countriesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.countriesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.countriesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
+          }
+          findFirst: {
+            args: Prisma.countriesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.countriesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
+          }
+          findMany: {
+            args: Prisma.countriesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>[]
+          }
+          create: {
+            args: Prisma.countriesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
+          }
+          createMany: {
+            args: Prisma.countriesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.countriesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>[]
+          }
+          delete: {
+            args: Prisma.countriesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
+          }
+          update: {
+            args: Prisma.countriesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
+          }
+          deleteMany: {
+            args: Prisma.countriesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.countriesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.countriesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>[]
+          }
+          upsert: {
+            args: Prisma.countriesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
+          }
+          aggregate: {
+            args: Prisma.CountriesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCountries>
+          }
+          groupBy: {
+            args: Prisma.countriesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CountriesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.countriesCountArgs<ExtArgs>
+            result: $Utils.Optional<CountriesCountAggregateOutputType> | number
+          }
+        }
+      }
+      currencies: {
+        payload: Prisma.$currenciesPayload<ExtArgs>
+        fields: Prisma.currenciesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.currenciesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.currenciesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
+          }
+          findFirst: {
+            args: Prisma.currenciesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.currenciesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
+          }
+          findMany: {
+            args: Prisma.currenciesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>[]
+          }
+          create: {
+            args: Prisma.currenciesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
+          }
+          createMany: {
+            args: Prisma.currenciesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.currenciesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>[]
+          }
+          delete: {
+            args: Prisma.currenciesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
+          }
+          update: {
+            args: Prisma.currenciesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
+          }
+          deleteMany: {
+            args: Prisma.currenciesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.currenciesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.currenciesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>[]
+          }
+          upsert: {
+            args: Prisma.currenciesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
+          }
+          aggregate: {
+            args: Prisma.CurrenciesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCurrencies>
+          }
+          groupBy: {
+            args: Prisma.currenciesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CurrenciesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.currenciesCountArgs<ExtArgs>
+            result: $Utils.Optional<CurrenciesCountAggregateOutputType> | number
           }
         }
       }
@@ -1686,6 +1954,80 @@ export namespace Prisma {
           count: {
             args: Prisma.delivery_timelineCountArgs<ExtArgs>
             result: $Utils.Optional<Delivery_timelineCountAggregateOutputType> | number
+          }
+        }
+      }
+      directions: {
+        payload: Prisma.$directionsPayload<ExtArgs>
+        fields: Prisma.directionsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.directionsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.directionsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
+          }
+          findFirst: {
+            args: Prisma.directionsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.directionsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
+          }
+          findMany: {
+            args: Prisma.directionsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>[]
+          }
+          create: {
+            args: Prisma.directionsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
+          }
+          createMany: {
+            args: Prisma.directionsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.directionsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>[]
+          }
+          delete: {
+            args: Prisma.directionsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
+          }
+          update: {
+            args: Prisma.directionsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
+          }
+          deleteMany: {
+            args: Prisma.directionsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.directionsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.directionsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>[]
+          }
+          upsert: {
+            args: Prisma.directionsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
+          }
+          aggregate: {
+            args: Prisma.DirectionsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDirections>
+          }
+          groupBy: {
+            args: Prisma.directionsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DirectionsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.directionsCountArgs<ExtArgs>
+            result: $Utils.Optional<DirectionsCountAggregateOutputType> | number
           }
         }
       }
@@ -2207,6 +2549,80 @@ export namespace Prisma {
           }
         }
       }
+      product_categories: {
+        payload: Prisma.$product_categoriesPayload<ExtArgs>
+        fields: Prisma.product_categoriesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.product_categoriesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.product_categoriesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>
+          }
+          findFirst: {
+            args: Prisma.product_categoriesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.product_categoriesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>
+          }
+          findMany: {
+            args: Prisma.product_categoriesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>[]
+          }
+          create: {
+            args: Prisma.product_categoriesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>
+          }
+          createMany: {
+            args: Prisma.product_categoriesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.product_categoriesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>[]
+          }
+          delete: {
+            args: Prisma.product_categoriesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>
+          }
+          update: {
+            args: Prisma.product_categoriesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>
+          }
+          deleteMany: {
+            args: Prisma.product_categoriesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.product_categoriesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.product_categoriesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>[]
+          }
+          upsert: {
+            args: Prisma.product_categoriesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$product_categoriesPayload>
+          }
+          aggregate: {
+            args: Prisma.Product_categoriesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProduct_categories>
+          }
+          groupBy: {
+            args: Prisma.product_categoriesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Product_categoriesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.product_categoriesCountArgs<ExtArgs>
+            result: $Utils.Optional<Product_categoriesCountAggregateOutputType> | number
+          }
+        }
+      }
       products: {
         payload: Prisma.$productsPayload<ExtArgs>
         fields: Prisma.productsFieldRefs
@@ -2352,6 +2768,80 @@ export namespace Prisma {
           count: {
             args: Prisma.products_filesCountArgs<ExtArgs>
             result: $Utils.Optional<Products_filesCountAggregateOutputType> | number
+          }
+        }
+      }
+      provinces: {
+        payload: Prisma.$provincesPayload<ExtArgs>
+        fields: Prisma.provincesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.provincesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.provincesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
+          }
+          findFirst: {
+            args: Prisma.provincesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.provincesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
+          }
+          findMany: {
+            args: Prisma.provincesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>[]
+          }
+          create: {
+            args: Prisma.provincesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
+          }
+          createMany: {
+            args: Prisma.provincesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.provincesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>[]
+          }
+          delete: {
+            args: Prisma.provincesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
+          }
+          update: {
+            args: Prisma.provincesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
+          }
+          deleteMany: {
+            args: Prisma.provincesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.provincesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.provincesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>[]
+          }
+          upsert: {
+            args: Prisma.provincesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
+          }
+          aggregate: {
+            args: Prisma.ProvincesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProvinces>
+          }
+          groupBy: {
+            args: Prisma.provincesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProvincesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.provincesCountArgs<ExtArgs>
+            result: $Utils.Optional<ProvincesCountAggregateOutputType> | number
           }
         }
       }
@@ -2651,373 +3141,77 @@ export namespace Prisma {
           }
         }
       }
-      cities: {
-        payload: Prisma.$citiesPayload<ExtArgs>
-        fields: Prisma.citiesFieldRefs
+      category_translations: {
+        payload: Prisma.$category_translationsPayload<ExtArgs>
+        fields: Prisma.category_translationsFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.citiesFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload> | null
+            args: Prisma.category_translationsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.citiesFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+            args: Prisma.category_translationsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>
           }
           findFirst: {
-            args: Prisma.citiesFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload> | null
+            args: Prisma.category_translationsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.citiesFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+            args: Prisma.category_translationsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>
           }
           findMany: {
-            args: Prisma.citiesFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>[]
+            args: Prisma.category_translationsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>[]
           }
           create: {
-            args: Prisma.citiesCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+            args: Prisma.category_translationsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>
           }
           createMany: {
-            args: Prisma.citiesCreateManyArgs<ExtArgs>
+            args: Prisma.category_translationsCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.citiesCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>[]
+            args: Prisma.category_translationsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>[]
           }
           delete: {
-            args: Prisma.citiesDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+            args: Prisma.category_translationsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>
           }
           update: {
-            args: Prisma.citiesUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+            args: Prisma.category_translationsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>
           }
           deleteMany: {
-            args: Prisma.citiesDeleteManyArgs<ExtArgs>
+            args: Prisma.category_translationsDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.citiesUpdateManyArgs<ExtArgs>
+            args: Prisma.category_translationsUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.citiesUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>[]
+            args: Prisma.category_translationsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>[]
           }
           upsert: {
-            args: Prisma.citiesUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$citiesPayload>
+            args: Prisma.category_translationsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_translationsPayload>
           }
           aggregate: {
-            args: Prisma.CitiesAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCities>
+            args: Prisma.Category_translationsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCategory_translations>
           }
           groupBy: {
-            args: Prisma.citiesGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CitiesGroupByOutputType>[]
+            args: Prisma.category_translationsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Category_translationsGroupByOutputType>[]
           }
           count: {
-            args: Prisma.citiesCountArgs<ExtArgs>
-            result: $Utils.Optional<CitiesCountAggregateOutputType> | number
-          }
-        }
-      }
-      countries: {
-        payload: Prisma.$countriesPayload<ExtArgs>
-        fields: Prisma.countriesFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.countriesFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.countriesFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
-          }
-          findFirst: {
-            args: Prisma.countriesFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.countriesFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
-          }
-          findMany: {
-            args: Prisma.countriesFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>[]
-          }
-          create: {
-            args: Prisma.countriesCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
-          }
-          createMany: {
-            args: Prisma.countriesCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.countriesCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>[]
-          }
-          delete: {
-            args: Prisma.countriesDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
-          }
-          update: {
-            args: Prisma.countriesUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
-          }
-          deleteMany: {
-            args: Prisma.countriesDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.countriesUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.countriesUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>[]
-          }
-          upsert: {
-            args: Prisma.countriesUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$countriesPayload>
-          }
-          aggregate: {
-            args: Prisma.CountriesAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCountries>
-          }
-          groupBy: {
-            args: Prisma.countriesGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CountriesGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.countriesCountArgs<ExtArgs>
-            result: $Utils.Optional<CountriesCountAggregateOutputType> | number
-          }
-        }
-      }
-      directions: {
-        payload: Prisma.$directionsPayload<ExtArgs>
-        fields: Prisma.directionsFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.directionsFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.directionsFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
-          }
-          findFirst: {
-            args: Prisma.directionsFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.directionsFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
-          }
-          findMany: {
-            args: Prisma.directionsFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>[]
-          }
-          create: {
-            args: Prisma.directionsCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
-          }
-          createMany: {
-            args: Prisma.directionsCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.directionsCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>[]
-          }
-          delete: {
-            args: Prisma.directionsDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
-          }
-          update: {
-            args: Prisma.directionsUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
-          }
-          deleteMany: {
-            args: Prisma.directionsDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.directionsUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.directionsUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>[]
-          }
-          upsert: {
-            args: Prisma.directionsUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$directionsPayload>
-          }
-          aggregate: {
-            args: Prisma.DirectionsAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateDirections>
-          }
-          groupBy: {
-            args: Prisma.directionsGroupByArgs<ExtArgs>
-            result: $Utils.Optional<DirectionsGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.directionsCountArgs<ExtArgs>
-            result: $Utils.Optional<DirectionsCountAggregateOutputType> | number
-          }
-        }
-      }
-      provinces: {
-        payload: Prisma.$provincesPayload<ExtArgs>
-        fields: Prisma.provincesFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.provincesFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.provincesFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
-          }
-          findFirst: {
-            args: Prisma.provincesFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.provincesFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
-          }
-          findMany: {
-            args: Prisma.provincesFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>[]
-          }
-          create: {
-            args: Prisma.provincesCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
-          }
-          createMany: {
-            args: Prisma.provincesCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.provincesCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>[]
-          }
-          delete: {
-            args: Prisma.provincesDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
-          }
-          update: {
-            args: Prisma.provincesUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
-          }
-          deleteMany: {
-            args: Prisma.provincesDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.provincesUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.provincesUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>[]
-          }
-          upsert: {
-            args: Prisma.provincesUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$provincesPayload>
-          }
-          aggregate: {
-            args: Prisma.ProvincesAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateProvinces>
-          }
-          groupBy: {
-            args: Prisma.provincesGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ProvincesGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.provincesCountArgs<ExtArgs>
-            result: $Utils.Optional<ProvincesCountAggregateOutputType> | number
-          }
-        }
-      }
-      currencies: {
-        payload: Prisma.$currenciesPayload<ExtArgs>
-        fields: Prisma.currenciesFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.currenciesFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.currenciesFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
-          }
-          findFirst: {
-            args: Prisma.currenciesFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.currenciesFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
-          }
-          findMany: {
-            args: Prisma.currenciesFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>[]
-          }
-          create: {
-            args: Prisma.currenciesCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
-          }
-          createMany: {
-            args: Prisma.currenciesCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.currenciesCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>[]
-          }
-          delete: {
-            args: Prisma.currenciesDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
-          }
-          update: {
-            args: Prisma.currenciesUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
-          }
-          deleteMany: {
-            args: Prisma.currenciesDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.currenciesUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.currenciesUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>[]
-          }
-          upsert: {
-            args: Prisma.currenciesUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$currenciesPayload>
-          }
-          aggregate: {
-            args: Prisma.CurrenciesAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCurrencies>
-          }
-          groupBy: {
-            args: Prisma.currenciesGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CurrenciesGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.currenciesCountArgs<ExtArgs>
-            result: $Utils.Optional<CurrenciesCountAggregateOutputType> | number
+            args: Prisma.category_translationsCountArgs<ExtArgs>
+            result: $Utils.Optional<Category_translationsCountAggregateOutputType> | number
           }
         }
       }
@@ -3122,9 +3316,13 @@ export namespace Prisma {
     categories?: categoriesOmit
     chat_panels?: chat_panelsOmit
     chat_participants?: chat_participantsOmit
+    cities?: citiesOmit
     configurations?: configurationsOmit
+    countries?: countriesOmit
+    currencies?: currenciesOmit
     deliveries?: deliveriesOmit
     delivery_timeline?: delivery_timelineOmit
+    directions?: directionsOmit
     discounts?: discountsOmit
     files?: filesOmit
     message_files?: message_filesOmit
@@ -3132,17 +3330,15 @@ export namespace Prisma {
     notifications?: notificationsOmit
     order_details?: order_detailsOmit
     orders?: ordersOmit
+    product_categories?: product_categoriesOmit
     products?: productsOmit
     products_files?: products_filesOmit
+    provinces?: provincesOmit
     user_sessions?: user_sessionsOmit
     users?: usersOmit
     variant_products?: variant_productsOmit
     verification_tokens?: verification_tokensOmit
-    cities?: citiesOmit
-    countries?: countriesOmit
-    directions?: directionsOmit
-    provinces?: provincesOmit
-    currencies?: currenciesOmit
+    category_translations?: category_translationsOmit
   }
 
   /* Types for Logging */
@@ -3254,13 +3450,15 @@ export namespace Prisma {
    */
 
   export type CategoriesCountOutputType = {
-    other_categories: number
-    products: number
+    children: number
+    category_translations: number
+    product_categories: number
   }
 
   export type CategoriesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    other_categories?: boolean | CategoriesCountOutputTypeCountOther_categoriesArgs
-    products?: boolean | CategoriesCountOutputTypeCountProductsArgs
+    children?: boolean | CategoriesCountOutputTypeCountChildrenArgs
+    category_translations?: boolean | CategoriesCountOutputTypeCountCategory_translationsArgs
+    product_categories?: boolean | CategoriesCountOutputTypeCountProduct_categoriesArgs
   }
 
   // Custom InputTypes
@@ -3277,15 +3475,22 @@ export namespace Prisma {
   /**
    * CategoriesCountOutputType without action
    */
-  export type CategoriesCountOutputTypeCountOther_categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CategoriesCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: categoriesWhereInput
   }
 
   /**
    * CategoriesCountOutputType without action
    */
-  export type CategoriesCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: productsWhereInput
+  export type CategoriesCountOutputTypeCountCategory_translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: category_translationsWhereInput
+  }
+
+  /**
+   * CategoriesCountOutputType without action
+   */
+  export type CategoriesCountOutputTypeCountProduct_categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: product_categoriesWhereInput
   }
 
 
@@ -3330,6 +3535,108 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CitiesCountOutputType
+   */
+
+  export type CitiesCountOutputType = {
+    directions: number
+  }
+
+  export type CitiesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    directions?: boolean | CitiesCountOutputTypeCountDirectionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CitiesCountOutputType without action
+   */
+  export type CitiesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CitiesCountOutputType
+     */
+    select?: CitiesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CitiesCountOutputType without action
+   */
+  export type CitiesCountOutputTypeCountDirectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: directionsWhereInput
+  }
+
+
+  /**
+   * Count Type CountriesCountOutputType
+   */
+
+  export type CountriesCountOutputType = {
+    directions: number
+    provinces: number
+  }
+
+  export type CountriesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    directions?: boolean | CountriesCountOutputTypeCountDirectionsArgs
+    provinces?: boolean | CountriesCountOutputTypeCountProvincesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CountriesCountOutputType without action
+   */
+  export type CountriesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CountriesCountOutputType
+     */
+    select?: CountriesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CountriesCountOutputType without action
+   */
+  export type CountriesCountOutputTypeCountDirectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: directionsWhereInput
+  }
+
+  /**
+   * CountriesCountOutputType without action
+   */
+  export type CountriesCountOutputTypeCountProvincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: provincesWhereInput
+  }
+
+
+  /**
+   * Count Type CurrenciesCountOutputType
+   */
+
+  export type CurrenciesCountOutputType = {
+    countries: number
+  }
+
+  export type CurrenciesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    countries?: boolean | CurrenciesCountOutputTypeCountCountriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CurrenciesCountOutputType without action
+   */
+  export type CurrenciesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CurrenciesCountOutputType
+     */
+    select?: CurrenciesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CurrenciesCountOutputType without action
+   */
+  export type CurrenciesCountOutputTypeCountCountriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: countriesWhereInput
+  }
+
+
+  /**
    * Count Type DeliveriesCountOutputType
    */
 
@@ -3357,6 +3664,37 @@ export namespace Prisma {
    */
   export type DeliveriesCountOutputTypeCountDelivery_timelineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: delivery_timelineWhereInput
+  }
+
+
+  /**
+   * Count Type DirectionsCountOutputType
+   */
+
+  export type DirectionsCountOutputType = {
+    orders: number
+  }
+
+  export type DirectionsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    orders?: boolean | DirectionsCountOutputTypeCountOrdersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DirectionsCountOutputType without action
+   */
+  export type DirectionsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DirectionsCountOutputType
+     */
+    select?: DirectionsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DirectionsCountOutputType without action
+   */
+  export type DirectionsCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ordersWhereInput
   }
 
 
@@ -3476,11 +3814,13 @@ export namespace Prisma {
    */
 
   export type ProductsCountOutputType = {
+    product_categories: number
     products_files: number
     variant_products: number
   }
 
   export type ProductsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product_categories?: boolean | ProductsCountOutputTypeCountProduct_categoriesArgs
     products_files?: boolean | ProductsCountOutputTypeCountProducts_filesArgs
     variant_products?: boolean | ProductsCountOutputTypeCountVariant_productsArgs
   }
@@ -3499,6 +3839,13 @@ export namespace Prisma {
   /**
    * ProductsCountOutputType without action
    */
+  export type ProductsCountOutputTypeCountProduct_categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: product_categoriesWhereInput
+  }
+
+  /**
+   * ProductsCountOutputType without action
+   */
   export type ProductsCountOutputTypeCountProducts_filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: products_filesWhereInput
   }
@@ -3508,6 +3855,46 @@ export namespace Prisma {
    */
   export type ProductsCountOutputTypeCountVariant_productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: variant_productsWhereInput
+  }
+
+
+  /**
+   * Count Type ProvincesCountOutputType
+   */
+
+  export type ProvincesCountOutputType = {
+    cities: number
+    directions: number
+  }
+
+  export type ProvincesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | ProvincesCountOutputTypeCountCitiesArgs
+    directions?: boolean | ProvincesCountOutputTypeCountDirectionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProvincesCountOutputType without action
+   */
+  export type ProvincesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProvincesCountOutputType
+     */
+    select?: ProvincesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProvincesCountOutputType without action
+   */
+  export type ProvincesCountOutputTypeCountCitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: citiesWhereInput
+  }
+
+  /**
+   * ProvincesCountOutputType without action
+   */
+  export type ProvincesCountOutputTypeCountDirectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: directionsWhereInput
   }
 
 
@@ -3687,179 +4074,6 @@ export namespace Prisma {
    */
   export type Variant_productsCountOutputTypeCountOrder_detailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: order_detailsWhereInput
-  }
-
-
-  /**
-   * Count Type CitiesCountOutputType
-   */
-
-  export type CitiesCountOutputType = {
-    directions: number
-  }
-
-  export type CitiesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    directions?: boolean | CitiesCountOutputTypeCountDirectionsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * CitiesCountOutputType without action
-   */
-  export type CitiesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CitiesCountOutputType
-     */
-    select?: CitiesCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * CitiesCountOutputType without action
-   */
-  export type CitiesCountOutputTypeCountDirectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: directionsWhereInput
-  }
-
-
-  /**
-   * Count Type CountriesCountOutputType
-   */
-
-  export type CountriesCountOutputType = {
-    directions: number
-    provinces: number
-  }
-
-  export type CountriesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    directions?: boolean | CountriesCountOutputTypeCountDirectionsArgs
-    provinces?: boolean | CountriesCountOutputTypeCountProvincesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * CountriesCountOutputType without action
-   */
-  export type CountriesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CountriesCountOutputType
-     */
-    select?: CountriesCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * CountriesCountOutputType without action
-   */
-  export type CountriesCountOutputTypeCountDirectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: directionsWhereInput
-  }
-
-  /**
-   * CountriesCountOutputType without action
-   */
-  export type CountriesCountOutputTypeCountProvincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: provincesWhereInput
-  }
-
-
-  /**
-   * Count Type DirectionsCountOutputType
-   */
-
-  export type DirectionsCountOutputType = {
-    orders: number
-  }
-
-  export type DirectionsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    orders?: boolean | DirectionsCountOutputTypeCountOrdersArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * DirectionsCountOutputType without action
-   */
-  export type DirectionsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DirectionsCountOutputType
-     */
-    select?: DirectionsCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * DirectionsCountOutputType without action
-   */
-  export type DirectionsCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ordersWhereInput
-  }
-
-
-  /**
-   * Count Type ProvincesCountOutputType
-   */
-
-  export type ProvincesCountOutputType = {
-    cities: number
-    directions: number
-  }
-
-  export type ProvincesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cities?: boolean | ProvincesCountOutputTypeCountCitiesArgs
-    directions?: boolean | ProvincesCountOutputTypeCountDirectionsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ProvincesCountOutputType without action
-   */
-  export type ProvincesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ProvincesCountOutputType
-     */
-    select?: ProvincesCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ProvincesCountOutputType without action
-   */
-  export type ProvincesCountOutputTypeCountCitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: citiesWhereInput
-  }
-
-  /**
-   * ProvincesCountOutputType without action
-   */
-  export type ProvincesCountOutputTypeCountDirectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: directionsWhereInput
-  }
-
-
-  /**
-   * Count Type CurrenciesCountOutputType
-   */
-
-  export type CurrenciesCountOutputType = {
-    countries: number
-  }
-
-  export type CurrenciesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    countries?: boolean | CurrenciesCountOutputTypeCountCountriesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * CurrenciesCountOutputType without action
-   */
-  export type CurrenciesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CurrenciesCountOutputType
-     */
-    select?: CurrenciesCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * CurrenciesCountOutputType without action
-   */
-  export type CurrenciesCountOutputTypeCountCountriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: countriesWhereInput
   }
 
 
@@ -6110,12 +6324,14 @@ export namespace Prisma {
     id: number | null
     iva: Decimal | null
     parent_id: number | null
+    level: number | null
   }
 
   export type CategoriesSumAggregateOutputType = {
     id: bigint | null
     iva: Decimal | null
     parent_id: bigint | null
+    level: number | null
   }
 
   export type CategoriesMinAggregateOutputType = {
@@ -6125,6 +6341,8 @@ export namespace Prisma {
     iva: Decimal | null
     parent_id: bigint | null
     created_at: Date | null
+    level: number | null
+    name_unaccent: string | null
   }
 
   export type CategoriesMaxAggregateOutputType = {
@@ -6134,6 +6352,8 @@ export namespace Prisma {
     iva: Decimal | null
     parent_id: bigint | null
     created_at: Date | null
+    level: number | null
+    name_unaccent: string | null
   }
 
   export type CategoriesCountAggregateOutputType = {
@@ -6143,6 +6363,8 @@ export namespace Prisma {
     iva: number
     parent_id: number
     created_at: number
+    level: number
+    name_unaccent: number
     _all: number
   }
 
@@ -6151,12 +6373,14 @@ export namespace Prisma {
     id?: true
     iva?: true
     parent_id?: true
+    level?: true
   }
 
   export type CategoriesSumAggregateInputType = {
     id?: true
     iva?: true
     parent_id?: true
+    level?: true
   }
 
   export type CategoriesMinAggregateInputType = {
@@ -6166,6 +6390,8 @@ export namespace Prisma {
     iva?: true
     parent_id?: true
     created_at?: true
+    level?: true
+    name_unaccent?: true
   }
 
   export type CategoriesMaxAggregateInputType = {
@@ -6175,6 +6401,8 @@ export namespace Prisma {
     iva?: true
     parent_id?: true
     created_at?: true
+    level?: true
+    name_unaccent?: true
   }
 
   export type CategoriesCountAggregateInputType = {
@@ -6184,6 +6412,8 @@ export namespace Prisma {
     iva?: true
     parent_id?: true
     created_at?: true
+    level?: true
+    name_unaccent?: true
     _all?: true
   }
 
@@ -6280,6 +6510,8 @@ export namespace Prisma {
     iva: Decimal | null
     parent_id: bigint | null
     created_at: Date
+    level: number
+    name_unaccent: string | null
     _count: CategoriesCountAggregateOutputType | null
     _avg: CategoriesAvgAggregateOutputType | null
     _sum: CategoriesSumAggregateOutputType | null
@@ -6308,10 +6540,13 @@ export namespace Prisma {
     iva?: boolean
     parent_id?: boolean
     created_at?: boolean
-    categories?: boolean | categories$categoriesArgs<ExtArgs>
-    other_categories?: boolean | categories$other_categoriesArgs<ExtArgs>
+    level?: boolean
+    name_unaccent?: boolean
+    parent?: boolean | categories$parentArgs<ExtArgs>
+    children?: boolean | categories$childrenArgs<ExtArgs>
     users?: boolean | categories$usersArgs<ExtArgs>
-    products?: boolean | categories$productsArgs<ExtArgs>
+    category_translations?: boolean | categories$category_translationsArgs<ExtArgs>
+    product_categories?: boolean | categories$product_categoriesArgs<ExtArgs>
     _count?: boolean | CategoriesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["categories"]>
 
@@ -6322,7 +6557,9 @@ export namespace Prisma {
     iva?: boolean
     parent_id?: boolean
     created_at?: boolean
-    categories?: boolean | categories$categoriesArgs<ExtArgs>
+    level?: boolean
+    name_unaccent?: boolean
+    parent?: boolean | categories$parentArgs<ExtArgs>
     users?: boolean | categories$usersArgs<ExtArgs>
   }, ExtArgs["result"]["categories"]>
 
@@ -6333,7 +6570,9 @@ export namespace Prisma {
     iva?: boolean
     parent_id?: boolean
     created_at?: boolean
-    categories?: boolean | categories$categoriesArgs<ExtArgs>
+    level?: boolean
+    name_unaccent?: boolean
+    parent?: boolean | categories$parentArgs<ExtArgs>
     users?: boolean | categories$usersArgs<ExtArgs>
   }, ExtArgs["result"]["categories"]>
 
@@ -6344,32 +6583,36 @@ export namespace Prisma {
     iva?: boolean
     parent_id?: boolean
     created_at?: boolean
+    level?: boolean
+    name_unaccent?: boolean
   }
 
-  export type categoriesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "iva" | "parent_id" | "created_at", ExtArgs["result"]["categories"]>
+  export type categoriesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "iva" | "parent_id" | "created_at" | "level" | "name_unaccent", ExtArgs["result"]["categories"]>
   export type categoriesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | categories$categoriesArgs<ExtArgs>
-    other_categories?: boolean | categories$other_categoriesArgs<ExtArgs>
+    parent?: boolean | categories$parentArgs<ExtArgs>
+    children?: boolean | categories$childrenArgs<ExtArgs>
     users?: boolean | categories$usersArgs<ExtArgs>
-    products?: boolean | categories$productsArgs<ExtArgs>
+    category_translations?: boolean | categories$category_translationsArgs<ExtArgs>
+    product_categories?: boolean | categories$product_categoriesArgs<ExtArgs>
     _count?: boolean | CategoriesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type categoriesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | categories$categoriesArgs<ExtArgs>
+    parent?: boolean | categories$parentArgs<ExtArgs>
     users?: boolean | categories$usersArgs<ExtArgs>
   }
   export type categoriesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | categories$categoriesArgs<ExtArgs>
+    parent?: boolean | categories$parentArgs<ExtArgs>
     users?: boolean | categories$usersArgs<ExtArgs>
   }
 
   export type $categoriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "categories"
     objects: {
-      categories: Prisma.$categoriesPayload<ExtArgs> | null
-      other_categories: Prisma.$categoriesPayload<ExtArgs>[]
+      parent: Prisma.$categoriesPayload<ExtArgs> | null
+      children: Prisma.$categoriesPayload<ExtArgs>[]
       users: Prisma.$usersPayload<ExtArgs> | null
-      products: Prisma.$productsPayload<ExtArgs>[]
+      category_translations: Prisma.$category_translationsPayload<ExtArgs>[]
+      product_categories: Prisma.$product_categoriesPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
@@ -6378,6 +6621,8 @@ export namespace Prisma {
       iva: Prisma.Decimal | null
       parent_id: bigint | null
       created_at: Date
+      level: number
+      name_unaccent: string | null
     }, ExtArgs["result"]["categories"]>
     composites: {}
   }
@@ -6772,10 +7017,11 @@ export namespace Prisma {
    */
   export interface Prisma__categoriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    categories<T extends categories$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, categories$categoriesArgs<ExtArgs>>): Prisma__categoriesClient<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    other_categories<T extends categories$other_categoriesArgs<ExtArgs> = {}>(args?: Subset<T, categories$other_categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    parent<T extends categories$parentArgs<ExtArgs> = {}>(args?: Subset<T, categories$parentArgs<ExtArgs>>): Prisma__categoriesClient<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    children<T extends categories$childrenArgs<ExtArgs> = {}>(args?: Subset<T, categories$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends categories$usersArgs<ExtArgs> = {}>(args?: Subset<T, categories$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    products<T extends categories$productsArgs<ExtArgs> = {}>(args?: Subset<T, categories$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$productsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    category_translations<T extends categories$category_translationsArgs<ExtArgs> = {}>(args?: Subset<T, categories$category_translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    product_categories<T extends categories$product_categoriesArgs<ExtArgs> = {}>(args?: Subset<T, categories$product_categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6811,6 +7057,8 @@ export namespace Prisma {
     readonly iva: FieldRef<"categories", 'Decimal'>
     readonly parent_id: FieldRef<"categories", 'BigInt'>
     readonly created_at: FieldRef<"categories", 'DateTime'>
+    readonly level: FieldRef<"categories", 'Int'>
+    readonly name_unaccent: FieldRef<"categories", 'String'>
   }
     
 
@@ -7207,9 +7455,9 @@ export namespace Prisma {
   }
 
   /**
-   * categories.categories
+   * categories.parent
    */
-  export type categories$categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type categories$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the categories
      */
@@ -7226,9 +7474,9 @@ export namespace Prisma {
   }
 
   /**
-   * categories.other_categories
+   * categories.children
    */
-  export type categories$other_categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type categories$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the categories
      */
@@ -7269,27 +7517,51 @@ export namespace Prisma {
   }
 
   /**
-   * categories.products
+   * categories.category_translations
    */
-  export type categories$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type categories$category_translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the products
+     * Select specific fields to fetch from the category_translations
      */
-    select?: productsSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the products
+     * Omit specific fields from the category_translations
      */
-    omit?: productsOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: productsInclude<ExtArgs> | null
-    where?: productsWhereInput
-    orderBy?: productsOrderByWithRelationInput | productsOrderByWithRelationInput[]
-    cursor?: productsWhereUniqueInput
+    include?: category_translationsInclude<ExtArgs> | null
+    where?: category_translationsWhereInput
+    orderBy?: category_translationsOrderByWithRelationInput | category_translationsOrderByWithRelationInput[]
+    cursor?: category_translationsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ProductsScalarFieldEnum | ProductsScalarFieldEnum[]
+    distinct?: Category_translationsScalarFieldEnum | Category_translationsScalarFieldEnum[]
+  }
+
+  /**
+   * categories.product_categories
+   */
+  export type categories$product_categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    where?: product_categoriesWhereInput
+    orderBy?: product_categoriesOrderByWithRelationInput | product_categoriesOrderByWithRelationInput[]
+    cursor?: product_categoriesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Product_categoriesScalarFieldEnum | Product_categoriesScalarFieldEnum[]
   }
 
   /**
@@ -9492,6 +9764,1119 @@ export namespace Prisma {
 
 
   /**
+   * Model cities
+   */
+
+  export type AggregateCities = {
+    _count: CitiesCountAggregateOutputType | null
+    _avg: CitiesAvgAggregateOutputType | null
+    _sum: CitiesSumAggregateOutputType | null
+    _min: CitiesMinAggregateOutputType | null
+    _max: CitiesMaxAggregateOutputType | null
+  }
+
+  export type CitiesAvgAggregateOutputType = {
+    id: number | null
+    province_id: number | null
+  }
+
+  export type CitiesSumAggregateOutputType = {
+    id: number | null
+    province_id: number | null
+  }
+
+  export type CitiesMinAggregateOutputType = {
+    id: number | null
+    province_id: number | null
+    name: string | null
+    name_local: string | null
+  }
+
+  export type CitiesMaxAggregateOutputType = {
+    id: number | null
+    province_id: number | null
+    name: string | null
+    name_local: string | null
+  }
+
+  export type CitiesCountAggregateOutputType = {
+    id: number
+    province_id: number
+    name: number
+    name_local: number
+    _all: number
+  }
+
+
+  export type CitiesAvgAggregateInputType = {
+    id?: true
+    province_id?: true
+  }
+
+  export type CitiesSumAggregateInputType = {
+    id?: true
+    province_id?: true
+  }
+
+  export type CitiesMinAggregateInputType = {
+    id?: true
+    province_id?: true
+    name?: true
+    name_local?: true
+  }
+
+  export type CitiesMaxAggregateInputType = {
+    id?: true
+    province_id?: true
+    name?: true
+    name_local?: true
+  }
+
+  export type CitiesCountAggregateInputType = {
+    id?: true
+    province_id?: true
+    name?: true
+    name_local?: true
+    _all?: true
+  }
+
+  export type CitiesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which cities to aggregate.
+     */
+    where?: citiesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of cities to fetch.
+     */
+    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: citiesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` cities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` cities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned cities
+    **/
+    _count?: true | CitiesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CitiesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CitiesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CitiesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CitiesMaxAggregateInputType
+  }
+
+  export type GetCitiesAggregateType<T extends CitiesAggregateArgs> = {
+        [P in keyof T & keyof AggregateCities]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCities[P]>
+      : GetScalarType<T[P], AggregateCities[P]>
+  }
+
+
+
+
+  export type citiesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: citiesWhereInput
+    orderBy?: citiesOrderByWithAggregationInput | citiesOrderByWithAggregationInput[]
+    by: CitiesScalarFieldEnum[] | CitiesScalarFieldEnum
+    having?: citiesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CitiesCountAggregateInputType | true
+    _avg?: CitiesAvgAggregateInputType
+    _sum?: CitiesSumAggregateInputType
+    _min?: CitiesMinAggregateInputType
+    _max?: CitiesMaxAggregateInputType
+  }
+
+  export type CitiesGroupByOutputType = {
+    id: number
+    province_id: number
+    name: string
+    name_local: string
+    _count: CitiesCountAggregateOutputType | null
+    _avg: CitiesAvgAggregateOutputType | null
+    _sum: CitiesSumAggregateOutputType | null
+    _min: CitiesMinAggregateOutputType | null
+    _max: CitiesMaxAggregateOutputType | null
+  }
+
+  type GetCitiesGroupByPayload<T extends citiesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CitiesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CitiesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CitiesGroupByOutputType[P]>
+            : GetScalarType<T[P], CitiesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type citiesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    province_id?: boolean
+    name?: boolean
+    name_local?: boolean
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    directions?: boolean | cities$directionsArgs<ExtArgs>
+    _count?: boolean | CitiesCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cities"]>
+
+  export type citiesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    province_id?: boolean
+    name?: boolean
+    name_local?: boolean
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cities"]>
+
+  export type citiesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    province_id?: boolean
+    name?: boolean
+    name_local?: boolean
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cities"]>
+
+  export type citiesSelectScalar = {
+    id?: boolean
+    province_id?: boolean
+    name?: boolean
+    name_local?: boolean
+  }
+
+  export type citiesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "province_id" | "name" | "name_local", ExtArgs["result"]["cities"]>
+  export type citiesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    directions?: boolean | cities$directionsArgs<ExtArgs>
+    _count?: boolean | CitiesCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type citiesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+  }
+  export type citiesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+  }
+
+  export type $citiesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "cities"
+    objects: {
+      provinces: Prisma.$provincesPayload<ExtArgs>
+      directions: Prisma.$directionsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      province_id: number
+      name: string
+      name_local: string
+    }, ExtArgs["result"]["cities"]>
+    composites: {}
+  }
+
+  type citiesGetPayload<S extends boolean | null | undefined | citiesDefaultArgs> = $Result.GetResult<Prisma.$citiesPayload, S>
+
+  type citiesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<citiesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CitiesCountAggregateInputType | true
+    }
+
+  export interface citiesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['cities'], meta: { name: 'cities' } }
+    /**
+     * Find zero or one Cities that matches the filter.
+     * @param {citiesFindUniqueArgs} args - Arguments to find a Cities
+     * @example
+     * // Get one Cities
+     * const cities = await prisma.cities.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends citiesFindUniqueArgs>(args: SelectSubset<T, citiesFindUniqueArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Cities that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {citiesFindUniqueOrThrowArgs} args - Arguments to find a Cities
+     * @example
+     * // Get one Cities
+     * const cities = await prisma.cities.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends citiesFindUniqueOrThrowArgs>(args: SelectSubset<T, citiesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Cities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {citiesFindFirstArgs} args - Arguments to find a Cities
+     * @example
+     * // Get one Cities
+     * const cities = await prisma.cities.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends citiesFindFirstArgs>(args?: SelectSubset<T, citiesFindFirstArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Cities that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {citiesFindFirstOrThrowArgs} args - Arguments to find a Cities
+     * @example
+     * // Get one Cities
+     * const cities = await prisma.cities.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends citiesFindFirstOrThrowArgs>(args?: SelectSubset<T, citiesFindFirstOrThrowArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Cities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {citiesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Cities
+     * const cities = await prisma.cities.findMany()
+     * 
+     * // Get first 10 Cities
+     * const cities = await prisma.cities.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const citiesWithIdOnly = await prisma.cities.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends citiesFindManyArgs>(args?: SelectSubset<T, citiesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Cities.
+     * @param {citiesCreateArgs} args - Arguments to create a Cities.
+     * @example
+     * // Create one Cities
+     * const Cities = await prisma.cities.create({
+     *   data: {
+     *     // ... data to create a Cities
+     *   }
+     * })
+     * 
+     */
+    create<T extends citiesCreateArgs>(args: SelectSubset<T, citiesCreateArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Cities.
+     * @param {citiesCreateManyArgs} args - Arguments to create many Cities.
+     * @example
+     * // Create many Cities
+     * const cities = await prisma.cities.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends citiesCreateManyArgs>(args?: SelectSubset<T, citiesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Cities and returns the data saved in the database.
+     * @param {citiesCreateManyAndReturnArgs} args - Arguments to create many Cities.
+     * @example
+     * // Create many Cities
+     * const cities = await prisma.cities.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Cities and only return the `id`
+     * const citiesWithIdOnly = await prisma.cities.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends citiesCreateManyAndReturnArgs>(args?: SelectSubset<T, citiesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Cities.
+     * @param {citiesDeleteArgs} args - Arguments to delete one Cities.
+     * @example
+     * // Delete one Cities
+     * const Cities = await prisma.cities.delete({
+     *   where: {
+     *     // ... filter to delete one Cities
+     *   }
+     * })
+     * 
+     */
+    delete<T extends citiesDeleteArgs>(args: SelectSubset<T, citiesDeleteArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Cities.
+     * @param {citiesUpdateArgs} args - Arguments to update one Cities.
+     * @example
+     * // Update one Cities
+     * const cities = await prisma.cities.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends citiesUpdateArgs>(args: SelectSubset<T, citiesUpdateArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Cities.
+     * @param {citiesDeleteManyArgs} args - Arguments to filter Cities to delete.
+     * @example
+     * // Delete a few Cities
+     * const { count } = await prisma.cities.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends citiesDeleteManyArgs>(args?: SelectSubset<T, citiesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Cities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {citiesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Cities
+     * const cities = await prisma.cities.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends citiesUpdateManyArgs>(args: SelectSubset<T, citiesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Cities and returns the data updated in the database.
+     * @param {citiesUpdateManyAndReturnArgs} args - Arguments to update many Cities.
+     * @example
+     * // Update many Cities
+     * const cities = await prisma.cities.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Cities and only return the `id`
+     * const citiesWithIdOnly = await prisma.cities.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends citiesUpdateManyAndReturnArgs>(args: SelectSubset<T, citiesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Cities.
+     * @param {citiesUpsertArgs} args - Arguments to update or create a Cities.
+     * @example
+     * // Update or create a Cities
+     * const cities = await prisma.cities.upsert({
+     *   create: {
+     *     // ... data to create a Cities
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Cities we want to update
+     *   }
+     * })
+     */
+    upsert<T extends citiesUpsertArgs>(args: SelectSubset<T, citiesUpsertArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Cities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {citiesCountArgs} args - Arguments to filter Cities to count.
+     * @example
+     * // Count the number of Cities
+     * const count = await prisma.cities.count({
+     *   where: {
+     *     // ... the filter for the Cities we want to count
+     *   }
+     * })
+    **/
+    count<T extends citiesCountArgs>(
+      args?: Subset<T, citiesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CitiesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Cities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CitiesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CitiesAggregateArgs>(args: Subset<T, CitiesAggregateArgs>): Prisma.PrismaPromise<GetCitiesAggregateType<T>>
+
+    /**
+     * Group by Cities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {citiesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends citiesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: citiesGroupByArgs['orderBy'] }
+        : { orderBy?: citiesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, citiesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCitiesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the cities model
+   */
+  readonly fields: citiesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for cities.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__citiesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    provinces<T extends provincesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, provincesDefaultArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    directions<T extends cities$directionsArgs<ExtArgs> = {}>(args?: Subset<T, cities$directionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the cities model
+   */
+  interface citiesFieldRefs {
+    readonly id: FieldRef<"cities", 'Int'>
+    readonly province_id: FieldRef<"cities", 'Int'>
+    readonly name: FieldRef<"cities", 'String'>
+    readonly name_local: FieldRef<"cities", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * cities findUnique
+   */
+  export type citiesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * Filter, which cities to fetch.
+     */
+    where: citiesWhereUniqueInput
+  }
+
+  /**
+   * cities findUniqueOrThrow
+   */
+  export type citiesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * Filter, which cities to fetch.
+     */
+    where: citiesWhereUniqueInput
+  }
+
+  /**
+   * cities findFirst
+   */
+  export type citiesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * Filter, which cities to fetch.
+     */
+    where?: citiesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of cities to fetch.
+     */
+    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for cities.
+     */
+    cursor?: citiesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` cities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` cities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of cities.
+     */
+    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+  }
+
+  /**
+   * cities findFirstOrThrow
+   */
+  export type citiesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * Filter, which cities to fetch.
+     */
+    where?: citiesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of cities to fetch.
+     */
+    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for cities.
+     */
+    cursor?: citiesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` cities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` cities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of cities.
+     */
+    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+  }
+
+  /**
+   * cities findMany
+   */
+  export type citiesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * Filter, which cities to fetch.
+     */
+    where?: citiesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of cities to fetch.
+     */
+    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing cities.
+     */
+    cursor?: citiesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` cities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` cities.
+     */
+    skip?: number
+    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+  }
+
+  /**
+   * cities create
+   */
+  export type citiesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a cities.
+     */
+    data: XOR<citiesCreateInput, citiesUncheckedCreateInput>
+  }
+
+  /**
+   * cities createMany
+   */
+  export type citiesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many cities.
+     */
+    data: citiesCreateManyInput | citiesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * cities createManyAndReturn
+   */
+  export type citiesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * The data used to create many cities.
+     */
+    data: citiesCreateManyInput | citiesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * cities update
+   */
+  export type citiesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a cities.
+     */
+    data: XOR<citiesUpdateInput, citiesUncheckedUpdateInput>
+    /**
+     * Choose, which cities to update.
+     */
+    where: citiesWhereUniqueInput
+  }
+
+  /**
+   * cities updateMany
+   */
+  export type citiesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update cities.
+     */
+    data: XOR<citiesUpdateManyMutationInput, citiesUncheckedUpdateManyInput>
+    /**
+     * Filter which cities to update
+     */
+    where?: citiesWhereInput
+    /**
+     * Limit how many cities to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * cities updateManyAndReturn
+   */
+  export type citiesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * The data used to update cities.
+     */
+    data: XOR<citiesUpdateManyMutationInput, citiesUncheckedUpdateManyInput>
+    /**
+     * Filter which cities to update
+     */
+    where?: citiesWhereInput
+    /**
+     * Limit how many cities to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * cities upsert
+   */
+  export type citiesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the cities to update in case it exists.
+     */
+    where: citiesWhereUniqueInput
+    /**
+     * In case the cities found by the `where` argument doesn't exist, create a new cities with this data.
+     */
+    create: XOR<citiesCreateInput, citiesUncheckedCreateInput>
+    /**
+     * In case the cities was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<citiesUpdateInput, citiesUncheckedUpdateInput>
+  }
+
+  /**
+   * cities delete
+   */
+  export type citiesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    /**
+     * Filter which cities to delete.
+     */
+    where: citiesWhereUniqueInput
+  }
+
+  /**
+   * cities deleteMany
+   */
+  export type citiesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which cities to delete
+     */
+    where?: citiesWhereInput
+    /**
+     * Limit how many cities to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * cities.directions
+   */
+  export type cities$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    where?: directionsWhereInput
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    cursor?: directionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
+  }
+
+  /**
+   * cities without action
+   */
+  export type citiesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model configurations
    */
 
@@ -10520,6 +11905,2287 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: configurationsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model countries
+   */
+
+  export type AggregateCountries = {
+    _count: CountriesCountAggregateOutputType | null
+    _avg: CountriesAvgAggregateOutputType | null
+    _sum: CountriesSumAggregateOutputType | null
+    _min: CountriesMinAggregateOutputType | null
+    _max: CountriesMaxAggregateOutputType | null
+  }
+
+  export type CountriesAvgAggregateOutputType = {
+    iso_numeric: number | null
+    currency_id: number | null
+  }
+
+  export type CountriesSumAggregateOutputType = {
+    iso_numeric: number | null
+    currency_id: number | null
+  }
+
+  export type CountriesMinAggregateOutputType = {
+    iso_alpha2: string | null
+    iso_alpha3: string | null
+    iso_numeric: number | null
+    name: string | null
+    name_local: string | null
+    currency_id: number | null
+  }
+
+  export type CountriesMaxAggregateOutputType = {
+    iso_alpha2: string | null
+    iso_alpha3: string | null
+    iso_numeric: number | null
+    name: string | null
+    name_local: string | null
+    currency_id: number | null
+  }
+
+  export type CountriesCountAggregateOutputType = {
+    iso_alpha2: number
+    iso_alpha3: number
+    iso_numeric: number
+    name: number
+    name_local: number
+    currency_id: number
+    _all: number
+  }
+
+
+  export type CountriesAvgAggregateInputType = {
+    iso_numeric?: true
+    currency_id?: true
+  }
+
+  export type CountriesSumAggregateInputType = {
+    iso_numeric?: true
+    currency_id?: true
+  }
+
+  export type CountriesMinAggregateInputType = {
+    iso_alpha2?: true
+    iso_alpha3?: true
+    iso_numeric?: true
+    name?: true
+    name_local?: true
+    currency_id?: true
+  }
+
+  export type CountriesMaxAggregateInputType = {
+    iso_alpha2?: true
+    iso_alpha3?: true
+    iso_numeric?: true
+    name?: true
+    name_local?: true
+    currency_id?: true
+  }
+
+  export type CountriesCountAggregateInputType = {
+    iso_alpha2?: true
+    iso_alpha3?: true
+    iso_numeric?: true
+    name?: true
+    name_local?: true
+    currency_id?: true
+    _all?: true
+  }
+
+  export type CountriesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which countries to aggregate.
+     */
+    where?: countriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of countries to fetch.
+     */
+    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: countriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` countries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` countries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned countries
+    **/
+    _count?: true | CountriesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CountriesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CountriesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CountriesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CountriesMaxAggregateInputType
+  }
+
+  export type GetCountriesAggregateType<T extends CountriesAggregateArgs> = {
+        [P in keyof T & keyof AggregateCountries]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCountries[P]>
+      : GetScalarType<T[P], AggregateCountries[P]>
+  }
+
+
+
+
+  export type countriesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: countriesWhereInput
+    orderBy?: countriesOrderByWithAggregationInput | countriesOrderByWithAggregationInput[]
+    by: CountriesScalarFieldEnum[] | CountriesScalarFieldEnum
+    having?: countriesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CountriesCountAggregateInputType | true
+    _avg?: CountriesAvgAggregateInputType
+    _sum?: CountriesSumAggregateInputType
+    _min?: CountriesMinAggregateInputType
+    _max?: CountriesMaxAggregateInputType
+  }
+
+  export type CountriesGroupByOutputType = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currency_id: number | null
+    _count: CountriesCountAggregateOutputType | null
+    _avg: CountriesAvgAggregateOutputType | null
+    _sum: CountriesSumAggregateOutputType | null
+    _min: CountriesMinAggregateOutputType | null
+    _max: CountriesMaxAggregateOutputType | null
+  }
+
+  type GetCountriesGroupByPayload<T extends countriesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CountriesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CountriesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CountriesGroupByOutputType[P]>
+            : GetScalarType<T[P], CountriesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type countriesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    iso_alpha2?: boolean
+    iso_alpha3?: boolean
+    iso_numeric?: boolean
+    name?: boolean
+    name_local?: boolean
+    currency_id?: boolean
+    currencies?: boolean | countries$currenciesArgs<ExtArgs>
+    directions?: boolean | countries$directionsArgs<ExtArgs>
+    provinces?: boolean | countries$provincesArgs<ExtArgs>
+    _count?: boolean | CountriesCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["countries"]>
+
+  export type countriesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    iso_alpha2?: boolean
+    iso_alpha3?: boolean
+    iso_numeric?: boolean
+    name?: boolean
+    name_local?: boolean
+    currency_id?: boolean
+    currencies?: boolean | countries$currenciesArgs<ExtArgs>
+  }, ExtArgs["result"]["countries"]>
+
+  export type countriesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    iso_alpha2?: boolean
+    iso_alpha3?: boolean
+    iso_numeric?: boolean
+    name?: boolean
+    name_local?: boolean
+    currency_id?: boolean
+    currencies?: boolean | countries$currenciesArgs<ExtArgs>
+  }, ExtArgs["result"]["countries"]>
+
+  export type countriesSelectScalar = {
+    iso_alpha2?: boolean
+    iso_alpha3?: boolean
+    iso_numeric?: boolean
+    name?: boolean
+    name_local?: boolean
+    currency_id?: boolean
+  }
+
+  export type countriesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"iso_alpha2" | "iso_alpha3" | "iso_numeric" | "name" | "name_local" | "currency_id", ExtArgs["result"]["countries"]>
+  export type countriesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    currencies?: boolean | countries$currenciesArgs<ExtArgs>
+    directions?: boolean | countries$directionsArgs<ExtArgs>
+    provinces?: boolean | countries$provincesArgs<ExtArgs>
+    _count?: boolean | CountriesCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type countriesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    currencies?: boolean | countries$currenciesArgs<ExtArgs>
+  }
+  export type countriesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    currencies?: boolean | countries$currenciesArgs<ExtArgs>
+  }
+
+  export type $countriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "countries"
+    objects: {
+      currencies: Prisma.$currenciesPayload<ExtArgs> | null
+      directions: Prisma.$directionsPayload<ExtArgs>[]
+      provinces: Prisma.$provincesPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      iso_alpha2: string
+      iso_alpha3: string
+      iso_numeric: number
+      name: string
+      name_local: string
+      currency_id: number | null
+    }, ExtArgs["result"]["countries"]>
+    composites: {}
+  }
+
+  type countriesGetPayload<S extends boolean | null | undefined | countriesDefaultArgs> = $Result.GetResult<Prisma.$countriesPayload, S>
+
+  type countriesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<countriesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CountriesCountAggregateInputType | true
+    }
+
+  export interface countriesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['countries'], meta: { name: 'countries' } }
+    /**
+     * Find zero or one Countries that matches the filter.
+     * @param {countriesFindUniqueArgs} args - Arguments to find a Countries
+     * @example
+     * // Get one Countries
+     * const countries = await prisma.countries.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends countriesFindUniqueArgs>(args: SelectSubset<T, countriesFindUniqueArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Countries that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {countriesFindUniqueOrThrowArgs} args - Arguments to find a Countries
+     * @example
+     * // Get one Countries
+     * const countries = await prisma.countries.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends countriesFindUniqueOrThrowArgs>(args: SelectSubset<T, countriesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Countries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {countriesFindFirstArgs} args - Arguments to find a Countries
+     * @example
+     * // Get one Countries
+     * const countries = await prisma.countries.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends countriesFindFirstArgs>(args?: SelectSubset<T, countriesFindFirstArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Countries that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {countriesFindFirstOrThrowArgs} args - Arguments to find a Countries
+     * @example
+     * // Get one Countries
+     * const countries = await prisma.countries.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends countriesFindFirstOrThrowArgs>(args?: SelectSubset<T, countriesFindFirstOrThrowArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Countries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {countriesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Countries
+     * const countries = await prisma.countries.findMany()
+     * 
+     * // Get first 10 Countries
+     * const countries = await prisma.countries.findMany({ take: 10 })
+     * 
+     * // Only select the `iso_alpha2`
+     * const countriesWithIso_alpha2Only = await prisma.countries.findMany({ select: { iso_alpha2: true } })
+     * 
+     */
+    findMany<T extends countriesFindManyArgs>(args?: SelectSubset<T, countriesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Countries.
+     * @param {countriesCreateArgs} args - Arguments to create a Countries.
+     * @example
+     * // Create one Countries
+     * const Countries = await prisma.countries.create({
+     *   data: {
+     *     // ... data to create a Countries
+     *   }
+     * })
+     * 
+     */
+    create<T extends countriesCreateArgs>(args: SelectSubset<T, countriesCreateArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Countries.
+     * @param {countriesCreateManyArgs} args - Arguments to create many Countries.
+     * @example
+     * // Create many Countries
+     * const countries = await prisma.countries.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends countriesCreateManyArgs>(args?: SelectSubset<T, countriesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Countries and returns the data saved in the database.
+     * @param {countriesCreateManyAndReturnArgs} args - Arguments to create many Countries.
+     * @example
+     * // Create many Countries
+     * const countries = await prisma.countries.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Countries and only return the `iso_alpha2`
+     * const countriesWithIso_alpha2Only = await prisma.countries.createManyAndReturn({
+     *   select: { iso_alpha2: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends countriesCreateManyAndReturnArgs>(args?: SelectSubset<T, countriesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Countries.
+     * @param {countriesDeleteArgs} args - Arguments to delete one Countries.
+     * @example
+     * // Delete one Countries
+     * const Countries = await prisma.countries.delete({
+     *   where: {
+     *     // ... filter to delete one Countries
+     *   }
+     * })
+     * 
+     */
+    delete<T extends countriesDeleteArgs>(args: SelectSubset<T, countriesDeleteArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Countries.
+     * @param {countriesUpdateArgs} args - Arguments to update one Countries.
+     * @example
+     * // Update one Countries
+     * const countries = await prisma.countries.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends countriesUpdateArgs>(args: SelectSubset<T, countriesUpdateArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Countries.
+     * @param {countriesDeleteManyArgs} args - Arguments to filter Countries to delete.
+     * @example
+     * // Delete a few Countries
+     * const { count } = await prisma.countries.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends countriesDeleteManyArgs>(args?: SelectSubset<T, countriesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Countries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {countriesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Countries
+     * const countries = await prisma.countries.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends countriesUpdateManyArgs>(args: SelectSubset<T, countriesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Countries and returns the data updated in the database.
+     * @param {countriesUpdateManyAndReturnArgs} args - Arguments to update many Countries.
+     * @example
+     * // Update many Countries
+     * const countries = await prisma.countries.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Countries and only return the `iso_alpha2`
+     * const countriesWithIso_alpha2Only = await prisma.countries.updateManyAndReturn({
+     *   select: { iso_alpha2: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends countriesUpdateManyAndReturnArgs>(args: SelectSubset<T, countriesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Countries.
+     * @param {countriesUpsertArgs} args - Arguments to update or create a Countries.
+     * @example
+     * // Update or create a Countries
+     * const countries = await prisma.countries.upsert({
+     *   create: {
+     *     // ... data to create a Countries
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Countries we want to update
+     *   }
+     * })
+     */
+    upsert<T extends countriesUpsertArgs>(args: SelectSubset<T, countriesUpsertArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Countries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {countriesCountArgs} args - Arguments to filter Countries to count.
+     * @example
+     * // Count the number of Countries
+     * const count = await prisma.countries.count({
+     *   where: {
+     *     // ... the filter for the Countries we want to count
+     *   }
+     * })
+    **/
+    count<T extends countriesCountArgs>(
+      args?: Subset<T, countriesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CountriesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Countries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CountriesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CountriesAggregateArgs>(args: Subset<T, CountriesAggregateArgs>): Prisma.PrismaPromise<GetCountriesAggregateType<T>>
+
+    /**
+     * Group by Countries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {countriesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends countriesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: countriesGroupByArgs['orderBy'] }
+        : { orderBy?: countriesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, countriesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCountriesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the countries model
+   */
+  readonly fields: countriesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for countries.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__countriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    currencies<T extends countries$currenciesArgs<ExtArgs> = {}>(args?: Subset<T, countries$currenciesArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    directions<T extends countries$directionsArgs<ExtArgs> = {}>(args?: Subset<T, countries$directionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    provinces<T extends countries$provincesArgs<ExtArgs> = {}>(args?: Subset<T, countries$provincesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the countries model
+   */
+  interface countriesFieldRefs {
+    readonly iso_alpha2: FieldRef<"countries", 'String'>
+    readonly iso_alpha3: FieldRef<"countries", 'String'>
+    readonly iso_numeric: FieldRef<"countries", 'Int'>
+    readonly name: FieldRef<"countries", 'String'>
+    readonly name_local: FieldRef<"countries", 'String'>
+    readonly currency_id: FieldRef<"countries", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * countries findUnique
+   */
+  export type countriesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * Filter, which countries to fetch.
+     */
+    where: countriesWhereUniqueInput
+  }
+
+  /**
+   * countries findUniqueOrThrow
+   */
+  export type countriesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * Filter, which countries to fetch.
+     */
+    where: countriesWhereUniqueInput
+  }
+
+  /**
+   * countries findFirst
+   */
+  export type countriesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * Filter, which countries to fetch.
+     */
+    where?: countriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of countries to fetch.
+     */
+    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for countries.
+     */
+    cursor?: countriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` countries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` countries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of countries.
+     */
+    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
+  }
+
+  /**
+   * countries findFirstOrThrow
+   */
+  export type countriesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * Filter, which countries to fetch.
+     */
+    where?: countriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of countries to fetch.
+     */
+    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for countries.
+     */
+    cursor?: countriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` countries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` countries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of countries.
+     */
+    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
+  }
+
+  /**
+   * countries findMany
+   */
+  export type countriesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * Filter, which countries to fetch.
+     */
+    where?: countriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of countries to fetch.
+     */
+    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing countries.
+     */
+    cursor?: countriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` countries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` countries.
+     */
+    skip?: number
+    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
+  }
+
+  /**
+   * countries create
+   */
+  export type countriesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a countries.
+     */
+    data: XOR<countriesCreateInput, countriesUncheckedCreateInput>
+  }
+
+  /**
+   * countries createMany
+   */
+  export type countriesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many countries.
+     */
+    data: countriesCreateManyInput | countriesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * countries createManyAndReturn
+   */
+  export type countriesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * The data used to create many countries.
+     */
+    data: countriesCreateManyInput | countriesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * countries update
+   */
+  export type countriesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a countries.
+     */
+    data: XOR<countriesUpdateInput, countriesUncheckedUpdateInput>
+    /**
+     * Choose, which countries to update.
+     */
+    where: countriesWhereUniqueInput
+  }
+
+  /**
+   * countries updateMany
+   */
+  export type countriesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update countries.
+     */
+    data: XOR<countriesUpdateManyMutationInput, countriesUncheckedUpdateManyInput>
+    /**
+     * Filter which countries to update
+     */
+    where?: countriesWhereInput
+    /**
+     * Limit how many countries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * countries updateManyAndReturn
+   */
+  export type countriesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * The data used to update countries.
+     */
+    data: XOR<countriesUpdateManyMutationInput, countriesUncheckedUpdateManyInput>
+    /**
+     * Filter which countries to update
+     */
+    where?: countriesWhereInput
+    /**
+     * Limit how many countries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * countries upsert
+   */
+  export type countriesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the countries to update in case it exists.
+     */
+    where: countriesWhereUniqueInput
+    /**
+     * In case the countries found by the `where` argument doesn't exist, create a new countries with this data.
+     */
+    create: XOR<countriesCreateInput, countriesUncheckedCreateInput>
+    /**
+     * In case the countries was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<countriesUpdateInput, countriesUncheckedUpdateInput>
+  }
+
+  /**
+   * countries delete
+   */
+  export type countriesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    /**
+     * Filter which countries to delete.
+     */
+    where: countriesWhereUniqueInput
+  }
+
+  /**
+   * countries deleteMany
+   */
+  export type countriesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which countries to delete
+     */
+    where?: countriesWhereInput
+    /**
+     * Limit how many countries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * countries.currencies
+   */
+  export type countries$currenciesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    where?: currenciesWhereInput
+  }
+
+  /**
+   * countries.directions
+   */
+  export type countries$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    where?: directionsWhereInput
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    cursor?: directionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
+  }
+
+  /**
+   * countries.provinces
+   */
+  export type countries$provincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    where?: provincesWhereInput
+    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
+    cursor?: provincesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * countries without action
+   */
+  export type countriesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model currencies
+   */
+
+  export type AggregateCurrencies = {
+    _count: CurrenciesCountAggregateOutputType | null
+    _avg: CurrenciesAvgAggregateOutputType | null
+    _sum: CurrenciesSumAggregateOutputType | null
+    _min: CurrenciesMinAggregateOutputType | null
+    _max: CurrenciesMaxAggregateOutputType | null
+  }
+
+  export type CurrenciesAvgAggregateOutputType = {
+    iso_numeric: number | null
+    decimal_digits: number | null
+  }
+
+  export type CurrenciesSumAggregateOutputType = {
+    iso_numeric: number | null
+    decimal_digits: number | null
+  }
+
+  export type CurrenciesMinAggregateOutputType = {
+    iso_numeric: number | null
+    iso_alpha3: string | null
+    symbol: string | null
+    decimal_digits: number | null
+  }
+
+  export type CurrenciesMaxAggregateOutputType = {
+    iso_numeric: number | null
+    iso_alpha3: string | null
+    symbol: string | null
+    decimal_digits: number | null
+  }
+
+  export type CurrenciesCountAggregateOutputType = {
+    iso_numeric: number
+    iso_alpha3: number
+    symbol: number
+    decimal_digits: number
+    _all: number
+  }
+
+
+  export type CurrenciesAvgAggregateInputType = {
+    iso_numeric?: true
+    decimal_digits?: true
+  }
+
+  export type CurrenciesSumAggregateInputType = {
+    iso_numeric?: true
+    decimal_digits?: true
+  }
+
+  export type CurrenciesMinAggregateInputType = {
+    iso_numeric?: true
+    iso_alpha3?: true
+    symbol?: true
+    decimal_digits?: true
+  }
+
+  export type CurrenciesMaxAggregateInputType = {
+    iso_numeric?: true
+    iso_alpha3?: true
+    symbol?: true
+    decimal_digits?: true
+  }
+
+  export type CurrenciesCountAggregateInputType = {
+    iso_numeric?: true
+    iso_alpha3?: true
+    symbol?: true
+    decimal_digits?: true
+    _all?: true
+  }
+
+  export type CurrenciesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which currencies to aggregate.
+     */
+    where?: currenciesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of currencies to fetch.
+     */
+    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: currenciesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` currencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` currencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned currencies
+    **/
+    _count?: true | CurrenciesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CurrenciesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CurrenciesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CurrenciesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CurrenciesMaxAggregateInputType
+  }
+
+  export type GetCurrenciesAggregateType<T extends CurrenciesAggregateArgs> = {
+        [P in keyof T & keyof AggregateCurrencies]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCurrencies[P]>
+      : GetScalarType<T[P], AggregateCurrencies[P]>
+  }
+
+
+
+
+  export type currenciesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: currenciesWhereInput
+    orderBy?: currenciesOrderByWithAggregationInput | currenciesOrderByWithAggregationInput[]
+    by: CurrenciesScalarFieldEnum[] | CurrenciesScalarFieldEnum
+    having?: currenciesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CurrenciesCountAggregateInputType | true
+    _avg?: CurrenciesAvgAggregateInputType
+    _sum?: CurrenciesSumAggregateInputType
+    _min?: CurrenciesMinAggregateInputType
+    _max?: CurrenciesMaxAggregateInputType
+  }
+
+  export type CurrenciesGroupByOutputType = {
+    iso_numeric: number
+    iso_alpha3: string
+    symbol: string
+    decimal_digits: number
+    _count: CurrenciesCountAggregateOutputType | null
+    _avg: CurrenciesAvgAggregateOutputType | null
+    _sum: CurrenciesSumAggregateOutputType | null
+    _min: CurrenciesMinAggregateOutputType | null
+    _max: CurrenciesMaxAggregateOutputType | null
+  }
+
+  type GetCurrenciesGroupByPayload<T extends currenciesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CurrenciesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CurrenciesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CurrenciesGroupByOutputType[P]>
+            : GetScalarType<T[P], CurrenciesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type currenciesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    iso_numeric?: boolean
+    iso_alpha3?: boolean
+    symbol?: boolean
+    decimal_digits?: boolean
+    countries?: boolean | currencies$countriesArgs<ExtArgs>
+    _count?: boolean | CurrenciesCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["currencies"]>
+
+  export type currenciesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    iso_numeric?: boolean
+    iso_alpha3?: boolean
+    symbol?: boolean
+    decimal_digits?: boolean
+  }, ExtArgs["result"]["currencies"]>
+
+  export type currenciesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    iso_numeric?: boolean
+    iso_alpha3?: boolean
+    symbol?: boolean
+    decimal_digits?: boolean
+  }, ExtArgs["result"]["currencies"]>
+
+  export type currenciesSelectScalar = {
+    iso_numeric?: boolean
+    iso_alpha3?: boolean
+    symbol?: boolean
+    decimal_digits?: boolean
+  }
+
+  export type currenciesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"iso_numeric" | "iso_alpha3" | "symbol" | "decimal_digits", ExtArgs["result"]["currencies"]>
+  export type currenciesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    countries?: boolean | currencies$countriesArgs<ExtArgs>
+    _count?: boolean | CurrenciesCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type currenciesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type currenciesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $currenciesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "currencies"
+    objects: {
+      countries: Prisma.$countriesPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      iso_numeric: number
+      iso_alpha3: string
+      symbol: string
+      decimal_digits: number
+    }, ExtArgs["result"]["currencies"]>
+    composites: {}
+  }
+
+  type currenciesGetPayload<S extends boolean | null | undefined | currenciesDefaultArgs> = $Result.GetResult<Prisma.$currenciesPayload, S>
+
+  type currenciesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<currenciesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CurrenciesCountAggregateInputType | true
+    }
+
+  export interface currenciesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['currencies'], meta: { name: 'currencies' } }
+    /**
+     * Find zero or one Currencies that matches the filter.
+     * @param {currenciesFindUniqueArgs} args - Arguments to find a Currencies
+     * @example
+     * // Get one Currencies
+     * const currencies = await prisma.currencies.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends currenciesFindUniqueArgs>(args: SelectSubset<T, currenciesFindUniqueArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Currencies that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {currenciesFindUniqueOrThrowArgs} args - Arguments to find a Currencies
+     * @example
+     * // Get one Currencies
+     * const currencies = await prisma.currencies.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends currenciesFindUniqueOrThrowArgs>(args: SelectSubset<T, currenciesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Currencies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {currenciesFindFirstArgs} args - Arguments to find a Currencies
+     * @example
+     * // Get one Currencies
+     * const currencies = await prisma.currencies.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends currenciesFindFirstArgs>(args?: SelectSubset<T, currenciesFindFirstArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Currencies that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {currenciesFindFirstOrThrowArgs} args - Arguments to find a Currencies
+     * @example
+     * // Get one Currencies
+     * const currencies = await prisma.currencies.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends currenciesFindFirstOrThrowArgs>(args?: SelectSubset<T, currenciesFindFirstOrThrowArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Currencies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {currenciesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Currencies
+     * const currencies = await prisma.currencies.findMany()
+     * 
+     * // Get first 10 Currencies
+     * const currencies = await prisma.currencies.findMany({ take: 10 })
+     * 
+     * // Only select the `iso_numeric`
+     * const currenciesWithIso_numericOnly = await prisma.currencies.findMany({ select: { iso_numeric: true } })
+     * 
+     */
+    findMany<T extends currenciesFindManyArgs>(args?: SelectSubset<T, currenciesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Currencies.
+     * @param {currenciesCreateArgs} args - Arguments to create a Currencies.
+     * @example
+     * // Create one Currencies
+     * const Currencies = await prisma.currencies.create({
+     *   data: {
+     *     // ... data to create a Currencies
+     *   }
+     * })
+     * 
+     */
+    create<T extends currenciesCreateArgs>(args: SelectSubset<T, currenciesCreateArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Currencies.
+     * @param {currenciesCreateManyArgs} args - Arguments to create many Currencies.
+     * @example
+     * // Create many Currencies
+     * const currencies = await prisma.currencies.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends currenciesCreateManyArgs>(args?: SelectSubset<T, currenciesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Currencies and returns the data saved in the database.
+     * @param {currenciesCreateManyAndReturnArgs} args - Arguments to create many Currencies.
+     * @example
+     * // Create many Currencies
+     * const currencies = await prisma.currencies.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Currencies and only return the `iso_numeric`
+     * const currenciesWithIso_numericOnly = await prisma.currencies.createManyAndReturn({
+     *   select: { iso_numeric: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends currenciesCreateManyAndReturnArgs>(args?: SelectSubset<T, currenciesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Currencies.
+     * @param {currenciesDeleteArgs} args - Arguments to delete one Currencies.
+     * @example
+     * // Delete one Currencies
+     * const Currencies = await prisma.currencies.delete({
+     *   where: {
+     *     // ... filter to delete one Currencies
+     *   }
+     * })
+     * 
+     */
+    delete<T extends currenciesDeleteArgs>(args: SelectSubset<T, currenciesDeleteArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Currencies.
+     * @param {currenciesUpdateArgs} args - Arguments to update one Currencies.
+     * @example
+     * // Update one Currencies
+     * const currencies = await prisma.currencies.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends currenciesUpdateArgs>(args: SelectSubset<T, currenciesUpdateArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Currencies.
+     * @param {currenciesDeleteManyArgs} args - Arguments to filter Currencies to delete.
+     * @example
+     * // Delete a few Currencies
+     * const { count } = await prisma.currencies.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends currenciesDeleteManyArgs>(args?: SelectSubset<T, currenciesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Currencies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {currenciesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Currencies
+     * const currencies = await prisma.currencies.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends currenciesUpdateManyArgs>(args: SelectSubset<T, currenciesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Currencies and returns the data updated in the database.
+     * @param {currenciesUpdateManyAndReturnArgs} args - Arguments to update many Currencies.
+     * @example
+     * // Update many Currencies
+     * const currencies = await prisma.currencies.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Currencies and only return the `iso_numeric`
+     * const currenciesWithIso_numericOnly = await prisma.currencies.updateManyAndReturn({
+     *   select: { iso_numeric: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends currenciesUpdateManyAndReturnArgs>(args: SelectSubset<T, currenciesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Currencies.
+     * @param {currenciesUpsertArgs} args - Arguments to update or create a Currencies.
+     * @example
+     * // Update or create a Currencies
+     * const currencies = await prisma.currencies.upsert({
+     *   create: {
+     *     // ... data to create a Currencies
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Currencies we want to update
+     *   }
+     * })
+     */
+    upsert<T extends currenciesUpsertArgs>(args: SelectSubset<T, currenciesUpsertArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Currencies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {currenciesCountArgs} args - Arguments to filter Currencies to count.
+     * @example
+     * // Count the number of Currencies
+     * const count = await prisma.currencies.count({
+     *   where: {
+     *     // ... the filter for the Currencies we want to count
+     *   }
+     * })
+    **/
+    count<T extends currenciesCountArgs>(
+      args?: Subset<T, currenciesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CurrenciesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Currencies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurrenciesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CurrenciesAggregateArgs>(args: Subset<T, CurrenciesAggregateArgs>): Prisma.PrismaPromise<GetCurrenciesAggregateType<T>>
+
+    /**
+     * Group by Currencies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {currenciesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends currenciesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: currenciesGroupByArgs['orderBy'] }
+        : { orderBy?: currenciesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, currenciesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCurrenciesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the currencies model
+   */
+  readonly fields: currenciesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for currencies.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__currenciesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    countries<T extends currencies$countriesArgs<ExtArgs> = {}>(args?: Subset<T, currencies$countriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the currencies model
+   */
+  interface currenciesFieldRefs {
+    readonly iso_numeric: FieldRef<"currencies", 'Int'>
+    readonly iso_alpha3: FieldRef<"currencies", 'String'>
+    readonly symbol: FieldRef<"currencies", 'String'>
+    readonly decimal_digits: FieldRef<"currencies", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * currencies findUnique
+   */
+  export type currenciesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * Filter, which currencies to fetch.
+     */
+    where: currenciesWhereUniqueInput
+  }
+
+  /**
+   * currencies findUniqueOrThrow
+   */
+  export type currenciesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * Filter, which currencies to fetch.
+     */
+    where: currenciesWhereUniqueInput
+  }
+
+  /**
+   * currencies findFirst
+   */
+  export type currenciesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * Filter, which currencies to fetch.
+     */
+    where?: currenciesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of currencies to fetch.
+     */
+    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for currencies.
+     */
+    cursor?: currenciesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` currencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` currencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of currencies.
+     */
+    distinct?: CurrenciesScalarFieldEnum | CurrenciesScalarFieldEnum[]
+  }
+
+  /**
+   * currencies findFirstOrThrow
+   */
+  export type currenciesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * Filter, which currencies to fetch.
+     */
+    where?: currenciesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of currencies to fetch.
+     */
+    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for currencies.
+     */
+    cursor?: currenciesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` currencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` currencies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of currencies.
+     */
+    distinct?: CurrenciesScalarFieldEnum | CurrenciesScalarFieldEnum[]
+  }
+
+  /**
+   * currencies findMany
+   */
+  export type currenciesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * Filter, which currencies to fetch.
+     */
+    where?: currenciesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of currencies to fetch.
+     */
+    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing currencies.
+     */
+    cursor?: currenciesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` currencies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` currencies.
+     */
+    skip?: number
+    distinct?: CurrenciesScalarFieldEnum | CurrenciesScalarFieldEnum[]
+  }
+
+  /**
+   * currencies create
+   */
+  export type currenciesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a currencies.
+     */
+    data: XOR<currenciesCreateInput, currenciesUncheckedCreateInput>
+  }
+
+  /**
+   * currencies createMany
+   */
+  export type currenciesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many currencies.
+     */
+    data: currenciesCreateManyInput | currenciesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * currencies createManyAndReturn
+   */
+  export type currenciesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * The data used to create many currencies.
+     */
+    data: currenciesCreateManyInput | currenciesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * currencies update
+   */
+  export type currenciesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a currencies.
+     */
+    data: XOR<currenciesUpdateInput, currenciesUncheckedUpdateInput>
+    /**
+     * Choose, which currencies to update.
+     */
+    where: currenciesWhereUniqueInput
+  }
+
+  /**
+   * currencies updateMany
+   */
+  export type currenciesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update currencies.
+     */
+    data: XOR<currenciesUpdateManyMutationInput, currenciesUncheckedUpdateManyInput>
+    /**
+     * Filter which currencies to update
+     */
+    where?: currenciesWhereInput
+    /**
+     * Limit how many currencies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * currencies updateManyAndReturn
+   */
+  export type currenciesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * The data used to update currencies.
+     */
+    data: XOR<currenciesUpdateManyMutationInput, currenciesUncheckedUpdateManyInput>
+    /**
+     * Filter which currencies to update
+     */
+    where?: currenciesWhereInput
+    /**
+     * Limit how many currencies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * currencies upsert
+   */
+  export type currenciesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the currencies to update in case it exists.
+     */
+    where: currenciesWhereUniqueInput
+    /**
+     * In case the currencies found by the `where` argument doesn't exist, create a new currencies with this data.
+     */
+    create: XOR<currenciesCreateInput, currenciesUncheckedCreateInput>
+    /**
+     * In case the currencies was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<currenciesUpdateInput, currenciesUncheckedUpdateInput>
+  }
+
+  /**
+   * currencies delete
+   */
+  export type currenciesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
+    /**
+     * Filter which currencies to delete.
+     */
+    where: currenciesWhereUniqueInput
+  }
+
+  /**
+   * currencies deleteMany
+   */
+  export type currenciesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which currencies to delete
+     */
+    where?: currenciesWhereInput
+    /**
+     * Limit how many currencies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * currencies.countries
+   */
+  export type currencies$countriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the countries
+     */
+    select?: countriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the countries
+     */
+    omit?: countriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: countriesInclude<ExtArgs> | null
+    where?: countriesWhereInput
+    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
+    cursor?: countriesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
+  }
+
+  /**
+   * currencies without action
+   */
+  export type currenciesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the currencies
+     */
+    select?: currenciesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the currencies
+     */
+    omit?: currenciesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: currenciesInclude<ExtArgs> | null
   }
 
 
@@ -12881,6 +16547,1263 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: delivery_timelineInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model directions
+   */
+
+  export type AggregateDirections = {
+    _count: DirectionsCountAggregateOutputType | null
+    _avg: DirectionsAvgAggregateOutputType | null
+    _sum: DirectionsSumAggregateOutputType | null
+    _min: DirectionsMinAggregateOutputType | null
+    _max: DirectionsMaxAggregateOutputType | null
+  }
+
+  export type DirectionsAvgAggregateOutputType = {
+    id: number | null
+    country_iso: number | null
+    province_id: number | null
+    city_id: number | null
+    latitude: number | null
+    longitude: number | null
+  }
+
+  export type DirectionsSumAggregateOutputType = {
+    id: bigint | null
+    country_iso: number | null
+    province_id: number | null
+    city_id: number | null
+    latitude: number | null
+    longitude: number | null
+  }
+
+  export type DirectionsMinAggregateOutputType = {
+    id: bigint | null
+    user_id: string | null
+    type: $Enums.AddressType | null
+    country_iso: number | null
+    province_id: number | null
+    city_id: number | null
+    street: string | null
+    zip_code: string | null
+    latitude: number | null
+    longitude: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type DirectionsMaxAggregateOutputType = {
+    id: bigint | null
+    user_id: string | null
+    type: $Enums.AddressType | null
+    country_iso: number | null
+    province_id: number | null
+    city_id: number | null
+    street: string | null
+    zip_code: string | null
+    latitude: number | null
+    longitude: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type DirectionsCountAggregateOutputType = {
+    id: number
+    user_id: number
+    type: number
+    country_iso: number
+    province_id: number
+    city_id: number
+    street: number
+    zip_code: number
+    latitude: number
+    longitude: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type DirectionsAvgAggregateInputType = {
+    id?: true
+    country_iso?: true
+    province_id?: true
+    city_id?: true
+    latitude?: true
+    longitude?: true
+  }
+
+  export type DirectionsSumAggregateInputType = {
+    id?: true
+    country_iso?: true
+    province_id?: true
+    city_id?: true
+    latitude?: true
+    longitude?: true
+  }
+
+  export type DirectionsMinAggregateInputType = {
+    id?: true
+    user_id?: true
+    type?: true
+    country_iso?: true
+    province_id?: true
+    city_id?: true
+    street?: true
+    zip_code?: true
+    latitude?: true
+    longitude?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type DirectionsMaxAggregateInputType = {
+    id?: true
+    user_id?: true
+    type?: true
+    country_iso?: true
+    province_id?: true
+    city_id?: true
+    street?: true
+    zip_code?: true
+    latitude?: true
+    longitude?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type DirectionsCountAggregateInputType = {
+    id?: true
+    user_id?: true
+    type?: true
+    country_iso?: true
+    province_id?: true
+    city_id?: true
+    street?: true
+    zip_code?: true
+    latitude?: true
+    longitude?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type DirectionsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which directions to aggregate.
+     */
+    where?: directionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of directions to fetch.
+     */
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: directionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` directions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` directions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned directions
+    **/
+    _count?: true | DirectionsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DirectionsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DirectionsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DirectionsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DirectionsMaxAggregateInputType
+  }
+
+  export type GetDirectionsAggregateType<T extends DirectionsAggregateArgs> = {
+        [P in keyof T & keyof AggregateDirections]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDirections[P]>
+      : GetScalarType<T[P], AggregateDirections[P]>
+  }
+
+
+
+
+  export type directionsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: directionsWhereInput
+    orderBy?: directionsOrderByWithAggregationInput | directionsOrderByWithAggregationInput[]
+    by: DirectionsScalarFieldEnum[] | DirectionsScalarFieldEnum
+    having?: directionsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DirectionsCountAggregateInputType | true
+    _avg?: DirectionsAvgAggregateInputType
+    _sum?: DirectionsSumAggregateInputType
+    _min?: DirectionsMinAggregateInputType
+    _max?: DirectionsMaxAggregateInputType
+  }
+
+  export type DirectionsGroupByOutputType = {
+    id: bigint
+    user_id: string
+    type: $Enums.AddressType
+    country_iso: number
+    province_id: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude: number | null
+    longitude: number | null
+    created_at: Date
+    updated_at: Date | null
+    _count: DirectionsCountAggregateOutputType | null
+    _avg: DirectionsAvgAggregateOutputType | null
+    _sum: DirectionsSumAggregateOutputType | null
+    _min: DirectionsMinAggregateOutputType | null
+    _max: DirectionsMaxAggregateOutputType | null
+  }
+
+  type GetDirectionsGroupByPayload<T extends directionsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DirectionsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DirectionsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DirectionsGroupByOutputType[P]>
+            : GetScalarType<T[P], DirectionsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type directionsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    type?: boolean
+    country_iso?: boolean
+    province_id?: boolean
+    city_id?: boolean
+    street?: boolean
+    zip_code?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    cities?: boolean | citiesDefaultArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    users?: boolean | usersDefaultArgs<ExtArgs>
+    orders?: boolean | directions$ordersArgs<ExtArgs>
+    _count?: boolean | DirectionsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["directions"]>
+
+  export type directionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    type?: boolean
+    country_iso?: boolean
+    province_id?: boolean
+    city_id?: boolean
+    street?: boolean
+    zip_code?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    cities?: boolean | citiesDefaultArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["directions"]>
+
+  export type directionsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    type?: boolean
+    country_iso?: boolean
+    province_id?: boolean
+    city_id?: boolean
+    street?: boolean
+    zip_code?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    cities?: boolean | citiesDefaultArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["directions"]>
+
+  export type directionsSelectScalar = {
+    id?: boolean
+    user_id?: boolean
+    type?: boolean
+    country_iso?: boolean
+    province_id?: boolean
+    city_id?: boolean
+    street?: boolean
+    zip_code?: boolean
+    latitude?: boolean
+    longitude?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type directionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "type" | "country_iso" | "province_id" | "city_id" | "street" | "zip_code" | "latitude" | "longitude" | "created_at" | "updated_at", ExtArgs["result"]["directions"]>
+  export type directionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | citiesDefaultArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    users?: boolean | usersDefaultArgs<ExtArgs>
+    orders?: boolean | directions$ordersArgs<ExtArgs>
+    _count?: boolean | DirectionsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type directionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | citiesDefaultArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }
+  export type directionsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | citiesDefaultArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+    users?: boolean | usersDefaultArgs<ExtArgs>
+  }
+
+  export type $directionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "directions"
+    objects: {
+      cities: Prisma.$citiesPayload<ExtArgs>
+      countries: Prisma.$countriesPayload<ExtArgs>
+      provinces: Prisma.$provincesPayload<ExtArgs>
+      users: Prisma.$usersPayload<ExtArgs>
+      orders: Prisma.$ordersPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: bigint
+      user_id: string
+      type: $Enums.AddressType
+      country_iso: number
+      province_id: number
+      city_id: number
+      street: string
+      zip_code: string
+      latitude: number | null
+      longitude: number | null
+      created_at: Date
+      updated_at: Date | null
+    }, ExtArgs["result"]["directions"]>
+    composites: {}
+  }
+
+  type directionsGetPayload<S extends boolean | null | undefined | directionsDefaultArgs> = $Result.GetResult<Prisma.$directionsPayload, S>
+
+  type directionsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<directionsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DirectionsCountAggregateInputType | true
+    }
+
+  export interface directionsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['directions'], meta: { name: 'directions' } }
+    /**
+     * Find zero or one Directions that matches the filter.
+     * @param {directionsFindUniqueArgs} args - Arguments to find a Directions
+     * @example
+     * // Get one Directions
+     * const directions = await prisma.directions.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends directionsFindUniqueArgs>(args: SelectSubset<T, directionsFindUniqueArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Directions that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {directionsFindUniqueOrThrowArgs} args - Arguments to find a Directions
+     * @example
+     * // Get one Directions
+     * const directions = await prisma.directions.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends directionsFindUniqueOrThrowArgs>(args: SelectSubset<T, directionsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Directions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {directionsFindFirstArgs} args - Arguments to find a Directions
+     * @example
+     * // Get one Directions
+     * const directions = await prisma.directions.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends directionsFindFirstArgs>(args?: SelectSubset<T, directionsFindFirstArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Directions that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {directionsFindFirstOrThrowArgs} args - Arguments to find a Directions
+     * @example
+     * // Get one Directions
+     * const directions = await prisma.directions.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends directionsFindFirstOrThrowArgs>(args?: SelectSubset<T, directionsFindFirstOrThrowArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Directions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {directionsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Directions
+     * const directions = await prisma.directions.findMany()
+     * 
+     * // Get first 10 Directions
+     * const directions = await prisma.directions.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const directionsWithIdOnly = await prisma.directions.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends directionsFindManyArgs>(args?: SelectSubset<T, directionsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Directions.
+     * @param {directionsCreateArgs} args - Arguments to create a Directions.
+     * @example
+     * // Create one Directions
+     * const Directions = await prisma.directions.create({
+     *   data: {
+     *     // ... data to create a Directions
+     *   }
+     * })
+     * 
+     */
+    create<T extends directionsCreateArgs>(args: SelectSubset<T, directionsCreateArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Directions.
+     * @param {directionsCreateManyArgs} args - Arguments to create many Directions.
+     * @example
+     * // Create many Directions
+     * const directions = await prisma.directions.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends directionsCreateManyArgs>(args?: SelectSubset<T, directionsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Directions and returns the data saved in the database.
+     * @param {directionsCreateManyAndReturnArgs} args - Arguments to create many Directions.
+     * @example
+     * // Create many Directions
+     * const directions = await prisma.directions.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Directions and only return the `id`
+     * const directionsWithIdOnly = await prisma.directions.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends directionsCreateManyAndReturnArgs>(args?: SelectSubset<T, directionsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Directions.
+     * @param {directionsDeleteArgs} args - Arguments to delete one Directions.
+     * @example
+     * // Delete one Directions
+     * const Directions = await prisma.directions.delete({
+     *   where: {
+     *     // ... filter to delete one Directions
+     *   }
+     * })
+     * 
+     */
+    delete<T extends directionsDeleteArgs>(args: SelectSubset<T, directionsDeleteArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Directions.
+     * @param {directionsUpdateArgs} args - Arguments to update one Directions.
+     * @example
+     * // Update one Directions
+     * const directions = await prisma.directions.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends directionsUpdateArgs>(args: SelectSubset<T, directionsUpdateArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Directions.
+     * @param {directionsDeleteManyArgs} args - Arguments to filter Directions to delete.
+     * @example
+     * // Delete a few Directions
+     * const { count } = await prisma.directions.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends directionsDeleteManyArgs>(args?: SelectSubset<T, directionsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Directions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {directionsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Directions
+     * const directions = await prisma.directions.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends directionsUpdateManyArgs>(args: SelectSubset<T, directionsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Directions and returns the data updated in the database.
+     * @param {directionsUpdateManyAndReturnArgs} args - Arguments to update many Directions.
+     * @example
+     * // Update many Directions
+     * const directions = await prisma.directions.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Directions and only return the `id`
+     * const directionsWithIdOnly = await prisma.directions.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends directionsUpdateManyAndReturnArgs>(args: SelectSubset<T, directionsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Directions.
+     * @param {directionsUpsertArgs} args - Arguments to update or create a Directions.
+     * @example
+     * // Update or create a Directions
+     * const directions = await prisma.directions.upsert({
+     *   create: {
+     *     // ... data to create a Directions
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Directions we want to update
+     *   }
+     * })
+     */
+    upsert<T extends directionsUpsertArgs>(args: SelectSubset<T, directionsUpsertArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Directions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {directionsCountArgs} args - Arguments to filter Directions to count.
+     * @example
+     * // Count the number of Directions
+     * const count = await prisma.directions.count({
+     *   where: {
+     *     // ... the filter for the Directions we want to count
+     *   }
+     * })
+    **/
+    count<T extends directionsCountArgs>(
+      args?: Subset<T, directionsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DirectionsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Directions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DirectionsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DirectionsAggregateArgs>(args: Subset<T, DirectionsAggregateArgs>): Prisma.PrismaPromise<GetDirectionsAggregateType<T>>
+
+    /**
+     * Group by Directions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {directionsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends directionsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: directionsGroupByArgs['orderBy'] }
+        : { orderBy?: directionsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, directionsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDirectionsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the directions model
+   */
+  readonly fields: directionsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for directions.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__directionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    cities<T extends citiesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, citiesDefaultArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    countries<T extends countriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, countriesDefaultArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    provinces<T extends provincesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, provincesDefaultArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    orders<T extends directions$ordersArgs<ExtArgs> = {}>(args?: Subset<T, directions$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the directions model
+   */
+  interface directionsFieldRefs {
+    readonly id: FieldRef<"directions", 'BigInt'>
+    readonly user_id: FieldRef<"directions", 'String'>
+    readonly type: FieldRef<"directions", 'AddressType'>
+    readonly country_iso: FieldRef<"directions", 'Int'>
+    readonly province_id: FieldRef<"directions", 'Int'>
+    readonly city_id: FieldRef<"directions", 'Int'>
+    readonly street: FieldRef<"directions", 'String'>
+    readonly zip_code: FieldRef<"directions", 'String'>
+    readonly latitude: FieldRef<"directions", 'Float'>
+    readonly longitude: FieldRef<"directions", 'Float'>
+    readonly created_at: FieldRef<"directions", 'DateTime'>
+    readonly updated_at: FieldRef<"directions", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * directions findUnique
+   */
+  export type directionsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * Filter, which directions to fetch.
+     */
+    where: directionsWhereUniqueInput
+  }
+
+  /**
+   * directions findUniqueOrThrow
+   */
+  export type directionsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * Filter, which directions to fetch.
+     */
+    where: directionsWhereUniqueInput
+  }
+
+  /**
+   * directions findFirst
+   */
+  export type directionsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * Filter, which directions to fetch.
+     */
+    where?: directionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of directions to fetch.
+     */
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for directions.
+     */
+    cursor?: directionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` directions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` directions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of directions.
+     */
+    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
+  }
+
+  /**
+   * directions findFirstOrThrow
+   */
+  export type directionsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * Filter, which directions to fetch.
+     */
+    where?: directionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of directions to fetch.
+     */
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for directions.
+     */
+    cursor?: directionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` directions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` directions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of directions.
+     */
+    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
+  }
+
+  /**
+   * directions findMany
+   */
+  export type directionsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * Filter, which directions to fetch.
+     */
+    where?: directionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of directions to fetch.
+     */
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing directions.
+     */
+    cursor?: directionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` directions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` directions.
+     */
+    skip?: number
+    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
+  }
+
+  /**
+   * directions create
+   */
+  export type directionsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a directions.
+     */
+    data: XOR<directionsCreateInput, directionsUncheckedCreateInput>
+  }
+
+  /**
+   * directions createMany
+   */
+  export type directionsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many directions.
+     */
+    data: directionsCreateManyInput | directionsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * directions createManyAndReturn
+   */
+  export type directionsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * The data used to create many directions.
+     */
+    data: directionsCreateManyInput | directionsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * directions update
+   */
+  export type directionsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a directions.
+     */
+    data: XOR<directionsUpdateInput, directionsUncheckedUpdateInput>
+    /**
+     * Choose, which directions to update.
+     */
+    where: directionsWhereUniqueInput
+  }
+
+  /**
+   * directions updateMany
+   */
+  export type directionsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update directions.
+     */
+    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyInput>
+    /**
+     * Filter which directions to update
+     */
+    where?: directionsWhereInput
+    /**
+     * Limit how many directions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * directions updateManyAndReturn
+   */
+  export type directionsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * The data used to update directions.
+     */
+    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyInput>
+    /**
+     * Filter which directions to update
+     */
+    where?: directionsWhereInput
+    /**
+     * Limit how many directions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * directions upsert
+   */
+  export type directionsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the directions to update in case it exists.
+     */
+    where: directionsWhereUniqueInput
+    /**
+     * In case the directions found by the `where` argument doesn't exist, create a new directions with this data.
+     */
+    create: XOR<directionsCreateInput, directionsUncheckedCreateInput>
+    /**
+     * In case the directions was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<directionsUpdateInput, directionsUncheckedUpdateInput>
+  }
+
+  /**
+   * directions delete
+   */
+  export type directionsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    /**
+     * Filter which directions to delete.
+     */
+    where: directionsWhereUniqueInput
+  }
+
+  /**
+   * directions deleteMany
+   */
+  export type directionsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which directions to delete
+     */
+    where?: directionsWhereInput
+    /**
+     * Limit how many directions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * directions.orders
+   */
+  export type directions$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the orders
+     */
+    select?: ordersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the orders
+     */
+    omit?: ordersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ordersInclude<ExtArgs> | null
+    where?: ordersWhereInput
+    orderBy?: ordersOrderByWithRelationInput | ordersOrderByWithRelationInput[]
+    cursor?: ordersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrdersScalarFieldEnum | OrdersScalarFieldEnum[]
+  }
+
+  /**
+   * directions without action
+   */
+  export type directionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
   }
 
 
@@ -20215,7 +25138,7 @@ export namespace Prisma {
     updated_at?: boolean
     order_details?: boolean | orders$order_detailsArgs<ExtArgs>
     users_orders_retailer_idTousers?: boolean | orders$users_orders_retailer_idTousersArgs<ExtArgs>
-    direcction?: boolean | orders$direcctionArgs<ExtArgs>
+    directions?: boolean | orders$directionsArgs<ExtArgs>
     users_orders_wholesaler_idTousers?: boolean | orders$users_orders_wholesaler_idTousersArgs<ExtArgs>
     _count?: boolean | OrdersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orders"]>
@@ -20237,7 +25160,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     users_orders_retailer_idTousers?: boolean | orders$users_orders_retailer_idTousersArgs<ExtArgs>
-    direcction?: boolean | orders$direcctionArgs<ExtArgs>
+    directions?: boolean | orders$directionsArgs<ExtArgs>
     users_orders_wholesaler_idTousers?: boolean | orders$users_orders_wholesaler_idTousersArgs<ExtArgs>
   }, ExtArgs["result"]["orders"]>
 
@@ -20258,7 +25181,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     users_orders_retailer_idTousers?: boolean | orders$users_orders_retailer_idTousersArgs<ExtArgs>
-    direcction?: boolean | orders$direcctionArgs<ExtArgs>
+    directions?: boolean | orders$directionsArgs<ExtArgs>
     users_orders_wholesaler_idTousers?: boolean | orders$users_orders_wholesaler_idTousersArgs<ExtArgs>
   }, ExtArgs["result"]["orders"]>
 
@@ -20284,18 +25207,18 @@ export namespace Prisma {
   export type ordersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order_details?: boolean | orders$order_detailsArgs<ExtArgs>
     users_orders_retailer_idTousers?: boolean | orders$users_orders_retailer_idTousersArgs<ExtArgs>
-    direcction?: boolean | orders$direcctionArgs<ExtArgs>
+    directions?: boolean | orders$directionsArgs<ExtArgs>
     users_orders_wholesaler_idTousers?: boolean | orders$users_orders_wholesaler_idTousersArgs<ExtArgs>
     _count?: boolean | OrdersCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ordersIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users_orders_retailer_idTousers?: boolean | orders$users_orders_retailer_idTousersArgs<ExtArgs>
-    direcction?: boolean | orders$direcctionArgs<ExtArgs>
+    directions?: boolean | orders$directionsArgs<ExtArgs>
     users_orders_wholesaler_idTousers?: boolean | orders$users_orders_wholesaler_idTousersArgs<ExtArgs>
   }
   export type ordersIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users_orders_retailer_idTousers?: boolean | orders$users_orders_retailer_idTousersArgs<ExtArgs>
-    direcction?: boolean | orders$direcctionArgs<ExtArgs>
+    directions?: boolean | orders$directionsArgs<ExtArgs>
     users_orders_wholesaler_idTousers?: boolean | orders$users_orders_wholesaler_idTousersArgs<ExtArgs>
   }
 
@@ -20304,7 +25227,7 @@ export namespace Prisma {
     objects: {
       order_details: Prisma.$order_detailsPayload<ExtArgs>[]
       users_orders_retailer_idTousers: Prisma.$usersPayload<ExtArgs> | null
-      direcction: Prisma.$directionsPayload<ExtArgs> | null
+      directions: Prisma.$directionsPayload<ExtArgs> | null
       users_orders_wholesaler_idTousers: Prisma.$usersPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -20719,7 +25642,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     order_details<T extends orders$order_detailsArgs<ExtArgs> = {}>(args?: Subset<T, orders$order_detailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$order_detailsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users_orders_retailer_idTousers<T extends orders$users_orders_retailer_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, orders$users_orders_retailer_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    direcction<T extends orders$direcctionArgs<ExtArgs> = {}>(args?: Subset<T, orders$direcctionArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    directions<T extends orders$directionsArgs<ExtArgs> = {}>(args?: Subset<T, orders$directionsArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_orders_wholesaler_idTousers<T extends orders$users_orders_wholesaler_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, orders$users_orders_wholesaler_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -21204,9 +26127,9 @@ export namespace Prisma {
   }
 
   /**
-   * orders.direcction
+   * orders.directions
    */
-  export type orders$direcctionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type orders$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the directions
      */
@@ -21261,6 +26184,1097 @@ export namespace Prisma {
 
 
   /**
+   * Model product_categories
+   */
+
+  export type AggregateProduct_categories = {
+    _count: Product_categoriesCountAggregateOutputType | null
+    _avg: Product_categoriesAvgAggregateOutputType | null
+    _sum: Product_categoriesSumAggregateOutputType | null
+    _min: Product_categoriesMinAggregateOutputType | null
+    _max: Product_categoriesMaxAggregateOutputType | null
+  }
+
+  export type Product_categoriesAvgAggregateOutputType = {
+    product_id: number | null
+    category_id: number | null
+  }
+
+  export type Product_categoriesSumAggregateOutputType = {
+    product_id: bigint | null
+    category_id: bigint | null
+  }
+
+  export type Product_categoriesMinAggregateOutputType = {
+    product_id: bigint | null
+    category_id: bigint | null
+    is_primary: boolean | null
+    created_at: Date | null
+  }
+
+  export type Product_categoriesMaxAggregateOutputType = {
+    product_id: bigint | null
+    category_id: bigint | null
+    is_primary: boolean | null
+    created_at: Date | null
+  }
+
+  export type Product_categoriesCountAggregateOutputType = {
+    product_id: number
+    category_id: number
+    is_primary: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type Product_categoriesAvgAggregateInputType = {
+    product_id?: true
+    category_id?: true
+  }
+
+  export type Product_categoriesSumAggregateInputType = {
+    product_id?: true
+    category_id?: true
+  }
+
+  export type Product_categoriesMinAggregateInputType = {
+    product_id?: true
+    category_id?: true
+    is_primary?: true
+    created_at?: true
+  }
+
+  export type Product_categoriesMaxAggregateInputType = {
+    product_id?: true
+    category_id?: true
+    is_primary?: true
+    created_at?: true
+  }
+
+  export type Product_categoriesCountAggregateInputType = {
+    product_id?: true
+    category_id?: true
+    is_primary?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type Product_categoriesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which product_categories to aggregate.
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of product_categories to fetch.
+     */
+    orderBy?: product_categoriesOrderByWithRelationInput | product_categoriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: product_categoriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` product_categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` product_categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned product_categories
+    **/
+    _count?: true | Product_categoriesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Product_categoriesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Product_categoriesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Product_categoriesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Product_categoriesMaxAggregateInputType
+  }
+
+  export type GetProduct_categoriesAggregateType<T extends Product_categoriesAggregateArgs> = {
+        [P in keyof T & keyof AggregateProduct_categories]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProduct_categories[P]>
+      : GetScalarType<T[P], AggregateProduct_categories[P]>
+  }
+
+
+
+
+  export type product_categoriesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: product_categoriesWhereInput
+    orderBy?: product_categoriesOrderByWithAggregationInput | product_categoriesOrderByWithAggregationInput[]
+    by: Product_categoriesScalarFieldEnum[] | Product_categoriesScalarFieldEnum
+    having?: product_categoriesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Product_categoriesCountAggregateInputType | true
+    _avg?: Product_categoriesAvgAggregateInputType
+    _sum?: Product_categoriesSumAggregateInputType
+    _min?: Product_categoriesMinAggregateInputType
+    _max?: Product_categoriesMaxAggregateInputType
+  }
+
+  export type Product_categoriesGroupByOutputType = {
+    product_id: bigint
+    category_id: bigint
+    is_primary: boolean
+    created_at: Date
+    _count: Product_categoriesCountAggregateOutputType | null
+    _avg: Product_categoriesAvgAggregateOutputType | null
+    _sum: Product_categoriesSumAggregateOutputType | null
+    _min: Product_categoriesMinAggregateOutputType | null
+    _max: Product_categoriesMaxAggregateOutputType | null
+  }
+
+  type GetProduct_categoriesGroupByPayload<T extends product_categoriesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Product_categoriesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Product_categoriesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Product_categoriesGroupByOutputType[P]>
+            : GetScalarType<T[P], Product_categoriesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type product_categoriesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    product_id?: boolean
+    category_id?: boolean
+    is_primary?: boolean
+    created_at?: boolean
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    products?: boolean | productsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product_categories"]>
+
+  export type product_categoriesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    product_id?: boolean
+    category_id?: boolean
+    is_primary?: boolean
+    created_at?: boolean
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    products?: boolean | productsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product_categories"]>
+
+  export type product_categoriesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    product_id?: boolean
+    category_id?: boolean
+    is_primary?: boolean
+    created_at?: boolean
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    products?: boolean | productsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product_categories"]>
+
+  export type product_categoriesSelectScalar = {
+    product_id?: boolean
+    category_id?: boolean
+    is_primary?: boolean
+    created_at?: boolean
+  }
+
+  export type product_categoriesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"product_id" | "category_id" | "is_primary" | "created_at", ExtArgs["result"]["product_categories"]>
+  export type product_categoriesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    products?: boolean | productsDefaultArgs<ExtArgs>
+  }
+  export type product_categoriesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    products?: boolean | productsDefaultArgs<ExtArgs>
+  }
+  export type product_categoriesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    products?: boolean | productsDefaultArgs<ExtArgs>
+  }
+
+  export type $product_categoriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "product_categories"
+    objects: {
+      categories: Prisma.$categoriesPayload<ExtArgs>
+      products: Prisma.$productsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      product_id: bigint
+      category_id: bigint
+      is_primary: boolean
+      created_at: Date
+    }, ExtArgs["result"]["product_categories"]>
+    composites: {}
+  }
+
+  type product_categoriesGetPayload<S extends boolean | null | undefined | product_categoriesDefaultArgs> = $Result.GetResult<Prisma.$product_categoriesPayload, S>
+
+  type product_categoriesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<product_categoriesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Product_categoriesCountAggregateInputType | true
+    }
+
+  export interface product_categoriesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['product_categories'], meta: { name: 'product_categories' } }
+    /**
+     * Find zero or one Product_categories that matches the filter.
+     * @param {product_categoriesFindUniqueArgs} args - Arguments to find a Product_categories
+     * @example
+     * // Get one Product_categories
+     * const product_categories = await prisma.product_categories.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends product_categoriesFindUniqueArgs>(args: SelectSubset<T, product_categoriesFindUniqueArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Product_categories that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {product_categoriesFindUniqueOrThrowArgs} args - Arguments to find a Product_categories
+     * @example
+     * // Get one Product_categories
+     * const product_categories = await prisma.product_categories.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends product_categoriesFindUniqueOrThrowArgs>(args: SelectSubset<T, product_categoriesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Product_categories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {product_categoriesFindFirstArgs} args - Arguments to find a Product_categories
+     * @example
+     * // Get one Product_categories
+     * const product_categories = await prisma.product_categories.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends product_categoriesFindFirstArgs>(args?: SelectSubset<T, product_categoriesFindFirstArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Product_categories that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {product_categoriesFindFirstOrThrowArgs} args - Arguments to find a Product_categories
+     * @example
+     * // Get one Product_categories
+     * const product_categories = await prisma.product_categories.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends product_categoriesFindFirstOrThrowArgs>(args?: SelectSubset<T, product_categoriesFindFirstOrThrowArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Product_categories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {product_categoriesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Product_categories
+     * const product_categories = await prisma.product_categories.findMany()
+     * 
+     * // Get first 10 Product_categories
+     * const product_categories = await prisma.product_categories.findMany({ take: 10 })
+     * 
+     * // Only select the `product_id`
+     * const product_categoriesWithProduct_idOnly = await prisma.product_categories.findMany({ select: { product_id: true } })
+     * 
+     */
+    findMany<T extends product_categoriesFindManyArgs>(args?: SelectSubset<T, product_categoriesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Product_categories.
+     * @param {product_categoriesCreateArgs} args - Arguments to create a Product_categories.
+     * @example
+     * // Create one Product_categories
+     * const Product_categories = await prisma.product_categories.create({
+     *   data: {
+     *     // ... data to create a Product_categories
+     *   }
+     * })
+     * 
+     */
+    create<T extends product_categoriesCreateArgs>(args: SelectSubset<T, product_categoriesCreateArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Product_categories.
+     * @param {product_categoriesCreateManyArgs} args - Arguments to create many Product_categories.
+     * @example
+     * // Create many Product_categories
+     * const product_categories = await prisma.product_categories.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends product_categoriesCreateManyArgs>(args?: SelectSubset<T, product_categoriesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Product_categories and returns the data saved in the database.
+     * @param {product_categoriesCreateManyAndReturnArgs} args - Arguments to create many Product_categories.
+     * @example
+     * // Create many Product_categories
+     * const product_categories = await prisma.product_categories.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Product_categories and only return the `product_id`
+     * const product_categoriesWithProduct_idOnly = await prisma.product_categories.createManyAndReturn({
+     *   select: { product_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends product_categoriesCreateManyAndReturnArgs>(args?: SelectSubset<T, product_categoriesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Product_categories.
+     * @param {product_categoriesDeleteArgs} args - Arguments to delete one Product_categories.
+     * @example
+     * // Delete one Product_categories
+     * const Product_categories = await prisma.product_categories.delete({
+     *   where: {
+     *     // ... filter to delete one Product_categories
+     *   }
+     * })
+     * 
+     */
+    delete<T extends product_categoriesDeleteArgs>(args: SelectSubset<T, product_categoriesDeleteArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Product_categories.
+     * @param {product_categoriesUpdateArgs} args - Arguments to update one Product_categories.
+     * @example
+     * // Update one Product_categories
+     * const product_categories = await prisma.product_categories.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends product_categoriesUpdateArgs>(args: SelectSubset<T, product_categoriesUpdateArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Product_categories.
+     * @param {product_categoriesDeleteManyArgs} args - Arguments to filter Product_categories to delete.
+     * @example
+     * // Delete a few Product_categories
+     * const { count } = await prisma.product_categories.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends product_categoriesDeleteManyArgs>(args?: SelectSubset<T, product_categoriesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Product_categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {product_categoriesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Product_categories
+     * const product_categories = await prisma.product_categories.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends product_categoriesUpdateManyArgs>(args: SelectSubset<T, product_categoriesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Product_categories and returns the data updated in the database.
+     * @param {product_categoriesUpdateManyAndReturnArgs} args - Arguments to update many Product_categories.
+     * @example
+     * // Update many Product_categories
+     * const product_categories = await prisma.product_categories.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Product_categories and only return the `product_id`
+     * const product_categoriesWithProduct_idOnly = await prisma.product_categories.updateManyAndReturn({
+     *   select: { product_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends product_categoriesUpdateManyAndReturnArgs>(args: SelectSubset<T, product_categoriesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Product_categories.
+     * @param {product_categoriesUpsertArgs} args - Arguments to update or create a Product_categories.
+     * @example
+     * // Update or create a Product_categories
+     * const product_categories = await prisma.product_categories.upsert({
+     *   create: {
+     *     // ... data to create a Product_categories
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Product_categories we want to update
+     *   }
+     * })
+     */
+    upsert<T extends product_categoriesUpsertArgs>(args: SelectSubset<T, product_categoriesUpsertArgs<ExtArgs>>): Prisma__product_categoriesClient<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Product_categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {product_categoriesCountArgs} args - Arguments to filter Product_categories to count.
+     * @example
+     * // Count the number of Product_categories
+     * const count = await prisma.product_categories.count({
+     *   where: {
+     *     // ... the filter for the Product_categories we want to count
+     *   }
+     * })
+    **/
+    count<T extends product_categoriesCountArgs>(
+      args?: Subset<T, product_categoriesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Product_categoriesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Product_categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Product_categoriesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Product_categoriesAggregateArgs>(args: Subset<T, Product_categoriesAggregateArgs>): Prisma.PrismaPromise<GetProduct_categoriesAggregateType<T>>
+
+    /**
+     * Group by Product_categories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {product_categoriesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends product_categoriesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: product_categoriesGroupByArgs['orderBy'] }
+        : { orderBy?: product_categoriesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, product_categoriesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProduct_categoriesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the product_categories model
+   */
+  readonly fields: product_categoriesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for product_categories.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__product_categoriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    categories<T extends categoriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, categoriesDefaultArgs<ExtArgs>>): Prisma__categoriesClient<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    products<T extends productsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, productsDefaultArgs<ExtArgs>>): Prisma__productsClient<$Result.GetResult<Prisma.$productsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the product_categories model
+   */
+  interface product_categoriesFieldRefs {
+    readonly product_id: FieldRef<"product_categories", 'BigInt'>
+    readonly category_id: FieldRef<"product_categories", 'BigInt'>
+    readonly is_primary: FieldRef<"product_categories", 'Boolean'>
+    readonly created_at: FieldRef<"product_categories", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * product_categories findUnique
+   */
+  export type product_categoriesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * Filter, which product_categories to fetch.
+     */
+    where: product_categoriesWhereUniqueInput
+  }
+
+  /**
+   * product_categories findUniqueOrThrow
+   */
+  export type product_categoriesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * Filter, which product_categories to fetch.
+     */
+    where: product_categoriesWhereUniqueInput
+  }
+
+  /**
+   * product_categories findFirst
+   */
+  export type product_categoriesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * Filter, which product_categories to fetch.
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of product_categories to fetch.
+     */
+    orderBy?: product_categoriesOrderByWithRelationInput | product_categoriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for product_categories.
+     */
+    cursor?: product_categoriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` product_categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` product_categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of product_categories.
+     */
+    distinct?: Product_categoriesScalarFieldEnum | Product_categoriesScalarFieldEnum[]
+  }
+
+  /**
+   * product_categories findFirstOrThrow
+   */
+  export type product_categoriesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * Filter, which product_categories to fetch.
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of product_categories to fetch.
+     */
+    orderBy?: product_categoriesOrderByWithRelationInput | product_categoriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for product_categories.
+     */
+    cursor?: product_categoriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` product_categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` product_categories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of product_categories.
+     */
+    distinct?: Product_categoriesScalarFieldEnum | Product_categoriesScalarFieldEnum[]
+  }
+
+  /**
+   * product_categories findMany
+   */
+  export type product_categoriesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * Filter, which product_categories to fetch.
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of product_categories to fetch.
+     */
+    orderBy?: product_categoriesOrderByWithRelationInput | product_categoriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing product_categories.
+     */
+    cursor?: product_categoriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` product_categories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` product_categories.
+     */
+    skip?: number
+    distinct?: Product_categoriesScalarFieldEnum | Product_categoriesScalarFieldEnum[]
+  }
+
+  /**
+   * product_categories create
+   */
+  export type product_categoriesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a product_categories.
+     */
+    data: XOR<product_categoriesCreateInput, product_categoriesUncheckedCreateInput>
+  }
+
+  /**
+   * product_categories createMany
+   */
+  export type product_categoriesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many product_categories.
+     */
+    data: product_categoriesCreateManyInput | product_categoriesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * product_categories createManyAndReturn
+   */
+  export type product_categoriesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * The data used to create many product_categories.
+     */
+    data: product_categoriesCreateManyInput | product_categoriesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * product_categories update
+   */
+  export type product_categoriesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a product_categories.
+     */
+    data: XOR<product_categoriesUpdateInput, product_categoriesUncheckedUpdateInput>
+    /**
+     * Choose, which product_categories to update.
+     */
+    where: product_categoriesWhereUniqueInput
+  }
+
+  /**
+   * product_categories updateMany
+   */
+  export type product_categoriesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update product_categories.
+     */
+    data: XOR<product_categoriesUpdateManyMutationInput, product_categoriesUncheckedUpdateManyInput>
+    /**
+     * Filter which product_categories to update
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * Limit how many product_categories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * product_categories updateManyAndReturn
+   */
+  export type product_categoriesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * The data used to update product_categories.
+     */
+    data: XOR<product_categoriesUpdateManyMutationInput, product_categoriesUncheckedUpdateManyInput>
+    /**
+     * Filter which product_categories to update
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * Limit how many product_categories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * product_categories upsert
+   */
+  export type product_categoriesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the product_categories to update in case it exists.
+     */
+    where: product_categoriesWhereUniqueInput
+    /**
+     * In case the product_categories found by the `where` argument doesn't exist, create a new product_categories with this data.
+     */
+    create: XOR<product_categoriesCreateInput, product_categoriesUncheckedCreateInput>
+    /**
+     * In case the product_categories was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<product_categoriesUpdateInput, product_categoriesUncheckedUpdateInput>
+  }
+
+  /**
+   * product_categories delete
+   */
+  export type product_categoriesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    /**
+     * Filter which product_categories to delete.
+     */
+    where: product_categoriesWhereUniqueInput
+  }
+
+  /**
+   * product_categories deleteMany
+   */
+  export type product_categoriesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which product_categories to delete
+     */
+    where?: product_categoriesWhereInput
+    /**
+     * Limit how many product_categories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * product_categories without action
+   */
+  export type product_categoriesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model products
    */
 
@@ -21275,15 +27289,11 @@ export namespace Prisma {
   export type ProductsAvgAggregateOutputType = {
     id: number | null
     iva: Decimal | null
-    category_id: number | null
-    status: number | null
   }
 
   export type ProductsSumAggregateOutputType = {
     id: bigint | null
     iva: Decimal | null
-    category_id: bigint | null
-    status: number | null
   }
 
   export type ProductsMinAggregateOutputType = {
@@ -21293,8 +27303,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     iva: Decimal | null
-    category_id: bigint | null
-    status: number | null
+    status: $Enums.ProductStatus | null
     created_at: Date | null
     product_code: string | null
   }
@@ -21306,8 +27315,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     iva: Decimal | null
-    category_id: bigint | null
-    status: number | null
+    status: $Enums.ProductStatus | null
     created_at: Date | null
     product_code: string | null
   }
@@ -21319,7 +27327,6 @@ export namespace Prisma {
     title: number
     description: number
     iva: number
-    category_id: number
     status: number
     created_at: number
     product_code: number
@@ -21330,15 +27337,11 @@ export namespace Prisma {
   export type ProductsAvgAggregateInputType = {
     id?: true
     iva?: true
-    category_id?: true
-    status?: true
   }
 
   export type ProductsSumAggregateInputType = {
     id?: true
     iva?: true
-    category_id?: true
-    status?: true
   }
 
   export type ProductsMinAggregateInputType = {
@@ -21348,7 +27351,6 @@ export namespace Prisma {
     title?: true
     description?: true
     iva?: true
-    category_id?: true
     status?: true
     created_at?: true
     product_code?: true
@@ -21361,7 +27363,6 @@ export namespace Prisma {
     title?: true
     description?: true
     iva?: true
-    category_id?: true
     status?: true
     created_at?: true
     product_code?: true
@@ -21374,7 +27375,6 @@ export namespace Prisma {
     title?: true
     description?: true
     iva?: true
-    category_id?: true
     status?: true
     created_at?: true
     product_code?: true
@@ -21474,8 +27474,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     iva: Decimal
-    category_id: bigint
-    status: number
+    status: $Enums.ProductStatus
     created_at: Date
     product_code: string
     _count: ProductsCountAggregateOutputType | null
@@ -21506,11 +27505,10 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     iva?: boolean
-    category_id?: boolean
     status?: boolean
     created_at?: boolean
     product_code?: boolean
-    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    product_categories?: boolean | products$product_categoriesArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     products_files?: boolean | products$products_filesArgs<ExtArgs>
     variant_products?: boolean | products$variant_productsArgs<ExtArgs>
@@ -21524,11 +27522,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     iva?: boolean
-    category_id?: boolean
     status?: boolean
     created_at?: boolean
     product_code?: boolean
-    categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["products"]>
 
@@ -21539,11 +27535,9 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     iva?: boolean
-    category_id?: boolean
     status?: boolean
     created_at?: boolean
     product_code?: boolean
-    categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["products"]>
 
@@ -21554,33 +27548,30 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     iva?: boolean
-    category_id?: boolean
     status?: boolean
     created_at?: boolean
     product_code?: boolean
   }
 
-  export type productsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "title" | "description" | "iva" | "category_id" | "status" | "created_at" | "product_code", ExtArgs["result"]["products"]>
+  export type productsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "title" | "description" | "iva" | "status" | "created_at" | "product_code", ExtArgs["result"]["products"]>
   export type productsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+    product_categories?: boolean | products$product_categoriesArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
     products_files?: boolean | products$products_filesArgs<ExtArgs>
     variant_products?: boolean | products$variant_productsArgs<ExtArgs>
     _count?: boolean | ProductsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type productsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
   export type productsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | categoriesDefaultArgs<ExtArgs>
     users?: boolean | usersDefaultArgs<ExtArgs>
   }
 
   export type $productsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "products"
     objects: {
-      categories: Prisma.$categoriesPayload<ExtArgs>
+      product_categories: Prisma.$product_categoriesPayload<ExtArgs>[]
       users: Prisma.$usersPayload<ExtArgs>
       products_files: Prisma.$products_filesPayload<ExtArgs>[]
       variant_products: Prisma.$variant_productsPayload<ExtArgs>[]
@@ -21592,8 +27583,7 @@ export namespace Prisma {
       title: string | null
       description: string | null
       iva: Prisma.Decimal
-      category_id: bigint
-      status: number
+      status: $Enums.ProductStatus
       created_at: Date
       product_code: string
     }, ExtArgs["result"]["products"]>
@@ -21990,7 +27980,7 @@ export namespace Prisma {
    */
   export interface Prisma__productsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    categories<T extends categoriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, categoriesDefaultArgs<ExtArgs>>): Prisma__categoriesClient<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product_categories<T extends products$product_categoriesArgs<ExtArgs> = {}>(args?: Subset<T, products$product_categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$product_categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     products_files<T extends products$products_filesArgs<ExtArgs> = {}>(args?: Subset<T, products$products_filesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$products_filesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     variant_products<T extends products$variant_productsArgs<ExtArgs> = {}>(args?: Subset<T, products$variant_productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$variant_productsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -22029,8 +28019,7 @@ export namespace Prisma {
     readonly title: FieldRef<"products", 'String'>
     readonly description: FieldRef<"products", 'String'>
     readonly iva: FieldRef<"products", 'Decimal'>
-    readonly category_id: FieldRef<"products", 'BigInt'>
-    readonly status: FieldRef<"products", 'Int'>
+    readonly status: FieldRef<"products", 'ProductStatus'>
     readonly created_at: FieldRef<"products", 'DateTime'>
     readonly product_code: FieldRef<"products", 'String'>
   }
@@ -22426,6 +28415,30 @@ export namespace Prisma {
      * Limit how many products to delete.
      */
     limit?: number
+  }
+
+  /**
+   * products.product_categories
+   */
+  export type products$product_categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the product_categories
+     */
+    select?: product_categoriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the product_categories
+     */
+    omit?: product_categoriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_categoriesInclude<ExtArgs> | null
+    where?: product_categoriesWhereInput
+    orderBy?: product_categoriesOrderByWithRelationInput | product_categoriesOrderByWithRelationInput[]
+    cursor?: product_categoriesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Product_categoriesScalarFieldEnum | Product_categoriesScalarFieldEnum[]
   }
 
   /**
@@ -23591,6 +29604,1147 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: products_filesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model provinces
+   */
+
+  export type AggregateProvinces = {
+    _count: ProvincesCountAggregateOutputType | null
+    _avg: ProvincesAvgAggregateOutputType | null
+    _sum: ProvincesSumAggregateOutputType | null
+    _min: ProvincesMinAggregateOutputType | null
+    _max: ProvincesMaxAggregateOutputType | null
+  }
+
+  export type ProvincesAvgAggregateOutputType = {
+    id: number | null
+    country_iso: number | null
+  }
+
+  export type ProvincesSumAggregateOutputType = {
+    id: number | null
+    country_iso: number | null
+  }
+
+  export type ProvincesMinAggregateOutputType = {
+    id: number | null
+    country_iso: number | null
+    name: string | null
+    name_local: string | null
+  }
+
+  export type ProvincesMaxAggregateOutputType = {
+    id: number | null
+    country_iso: number | null
+    name: string | null
+    name_local: string | null
+  }
+
+  export type ProvincesCountAggregateOutputType = {
+    id: number
+    country_iso: number
+    name: number
+    name_local: number
+    _all: number
+  }
+
+
+  export type ProvincesAvgAggregateInputType = {
+    id?: true
+    country_iso?: true
+  }
+
+  export type ProvincesSumAggregateInputType = {
+    id?: true
+    country_iso?: true
+  }
+
+  export type ProvincesMinAggregateInputType = {
+    id?: true
+    country_iso?: true
+    name?: true
+    name_local?: true
+  }
+
+  export type ProvincesMaxAggregateInputType = {
+    id?: true
+    country_iso?: true
+    name?: true
+    name_local?: true
+  }
+
+  export type ProvincesCountAggregateInputType = {
+    id?: true
+    country_iso?: true
+    name?: true
+    name_local?: true
+    _all?: true
+  }
+
+  export type ProvincesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which provinces to aggregate.
+     */
+    where?: provincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of provinces to fetch.
+     */
+    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: provincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned provinces
+    **/
+    _count?: true | ProvincesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProvincesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProvincesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProvincesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProvincesMaxAggregateInputType
+  }
+
+  export type GetProvincesAggregateType<T extends ProvincesAggregateArgs> = {
+        [P in keyof T & keyof AggregateProvinces]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProvinces[P]>
+      : GetScalarType<T[P], AggregateProvinces[P]>
+  }
+
+
+
+
+  export type provincesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: provincesWhereInput
+    orderBy?: provincesOrderByWithAggregationInput | provincesOrderByWithAggregationInput[]
+    by: ProvincesScalarFieldEnum[] | ProvincesScalarFieldEnum
+    having?: provincesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProvincesCountAggregateInputType | true
+    _avg?: ProvincesAvgAggregateInputType
+    _sum?: ProvincesSumAggregateInputType
+    _min?: ProvincesMinAggregateInputType
+    _max?: ProvincesMaxAggregateInputType
+  }
+
+  export type ProvincesGroupByOutputType = {
+    id: number
+    country_iso: number
+    name: string
+    name_local: string
+    _count: ProvincesCountAggregateOutputType | null
+    _avg: ProvincesAvgAggregateOutputType | null
+    _sum: ProvincesSumAggregateOutputType | null
+    _min: ProvincesMinAggregateOutputType | null
+    _max: ProvincesMaxAggregateOutputType | null
+  }
+
+  type GetProvincesGroupByPayload<T extends provincesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProvincesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProvincesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProvincesGroupByOutputType[P]>
+            : GetScalarType<T[P], ProvincesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type provincesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    country_iso?: boolean
+    name?: boolean
+    name_local?: boolean
+    cities?: boolean | provinces$citiesArgs<ExtArgs>
+    directions?: boolean | provinces$directionsArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    _count?: boolean | ProvincesCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["provinces"]>
+
+  export type provincesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    country_iso?: boolean
+    name?: boolean
+    name_local?: boolean
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["provinces"]>
+
+  export type provincesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    country_iso?: boolean
+    name?: boolean
+    name_local?: boolean
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["provinces"]>
+
+  export type provincesSelectScalar = {
+    id?: boolean
+    country_iso?: boolean
+    name?: boolean
+    name_local?: boolean
+  }
+
+  export type provincesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "country_iso" | "name" | "name_local", ExtArgs["result"]["provinces"]>
+  export type provincesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cities?: boolean | provinces$citiesArgs<ExtArgs>
+    directions?: boolean | provinces$directionsArgs<ExtArgs>
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+    _count?: boolean | ProvincesCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type provincesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+  }
+  export type provincesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    countries?: boolean | countriesDefaultArgs<ExtArgs>
+  }
+
+  export type $provincesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "provinces"
+    objects: {
+      cities: Prisma.$citiesPayload<ExtArgs>[]
+      directions: Prisma.$directionsPayload<ExtArgs>[]
+      countries: Prisma.$countriesPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      country_iso: number
+      name: string
+      name_local: string
+    }, ExtArgs["result"]["provinces"]>
+    composites: {}
+  }
+
+  type provincesGetPayload<S extends boolean | null | undefined | provincesDefaultArgs> = $Result.GetResult<Prisma.$provincesPayload, S>
+
+  type provincesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<provincesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProvincesCountAggregateInputType | true
+    }
+
+  export interface provincesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['provinces'], meta: { name: 'provinces' } }
+    /**
+     * Find zero or one Provinces that matches the filter.
+     * @param {provincesFindUniqueArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends provincesFindUniqueArgs>(args: SelectSubset<T, provincesFindUniqueArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Provinces that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {provincesFindUniqueOrThrowArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends provincesFindUniqueOrThrowArgs>(args: SelectSubset<T, provincesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Provinces that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {provincesFindFirstArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends provincesFindFirstArgs>(args?: SelectSubset<T, provincesFindFirstArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Provinces that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {provincesFindFirstOrThrowArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends provincesFindFirstOrThrowArgs>(args?: SelectSubset<T, provincesFindFirstOrThrowArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Provinces that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {provincesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Provinces
+     * const provinces = await prisma.provinces.findMany()
+     * 
+     * // Get first 10 Provinces
+     * const provinces = await prisma.provinces.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const provincesWithIdOnly = await prisma.provinces.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends provincesFindManyArgs>(args?: SelectSubset<T, provincesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Provinces.
+     * @param {provincesCreateArgs} args - Arguments to create a Provinces.
+     * @example
+     * // Create one Provinces
+     * const Provinces = await prisma.provinces.create({
+     *   data: {
+     *     // ... data to create a Provinces
+     *   }
+     * })
+     * 
+     */
+    create<T extends provincesCreateArgs>(args: SelectSubset<T, provincesCreateArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Provinces.
+     * @param {provincesCreateManyArgs} args - Arguments to create many Provinces.
+     * @example
+     * // Create many Provinces
+     * const provinces = await prisma.provinces.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends provincesCreateManyArgs>(args?: SelectSubset<T, provincesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Provinces and returns the data saved in the database.
+     * @param {provincesCreateManyAndReturnArgs} args - Arguments to create many Provinces.
+     * @example
+     * // Create many Provinces
+     * const provinces = await prisma.provinces.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Provinces and only return the `id`
+     * const provincesWithIdOnly = await prisma.provinces.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends provincesCreateManyAndReturnArgs>(args?: SelectSubset<T, provincesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Provinces.
+     * @param {provincesDeleteArgs} args - Arguments to delete one Provinces.
+     * @example
+     * // Delete one Provinces
+     * const Provinces = await prisma.provinces.delete({
+     *   where: {
+     *     // ... filter to delete one Provinces
+     *   }
+     * })
+     * 
+     */
+    delete<T extends provincesDeleteArgs>(args: SelectSubset<T, provincesDeleteArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Provinces.
+     * @param {provincesUpdateArgs} args - Arguments to update one Provinces.
+     * @example
+     * // Update one Provinces
+     * const provinces = await prisma.provinces.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends provincesUpdateArgs>(args: SelectSubset<T, provincesUpdateArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Provinces.
+     * @param {provincesDeleteManyArgs} args - Arguments to filter Provinces to delete.
+     * @example
+     * // Delete a few Provinces
+     * const { count } = await prisma.provinces.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends provincesDeleteManyArgs>(args?: SelectSubset<T, provincesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {provincesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Provinces
+     * const provinces = await prisma.provinces.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends provincesUpdateManyArgs>(args: SelectSubset<T, provincesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Provinces and returns the data updated in the database.
+     * @param {provincesUpdateManyAndReturnArgs} args - Arguments to update many Provinces.
+     * @example
+     * // Update many Provinces
+     * const provinces = await prisma.provinces.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Provinces and only return the `id`
+     * const provincesWithIdOnly = await prisma.provinces.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends provincesUpdateManyAndReturnArgs>(args: SelectSubset<T, provincesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Provinces.
+     * @param {provincesUpsertArgs} args - Arguments to update or create a Provinces.
+     * @example
+     * // Update or create a Provinces
+     * const provinces = await prisma.provinces.upsert({
+     *   create: {
+     *     // ... data to create a Provinces
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Provinces we want to update
+     *   }
+     * })
+     */
+    upsert<T extends provincesUpsertArgs>(args: SelectSubset<T, provincesUpsertArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {provincesCountArgs} args - Arguments to filter Provinces to count.
+     * @example
+     * // Count the number of Provinces
+     * const count = await prisma.provinces.count({
+     *   where: {
+     *     // ... the filter for the Provinces we want to count
+     *   }
+     * })
+    **/
+    count<T extends provincesCountArgs>(
+      args?: Subset<T, provincesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProvincesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProvincesAggregateArgs>(args: Subset<T, ProvincesAggregateArgs>): Prisma.PrismaPromise<GetProvincesAggregateType<T>>
+
+    /**
+     * Group by Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {provincesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends provincesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: provincesGroupByArgs['orderBy'] }
+        : { orderBy?: provincesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, provincesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProvincesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the provinces model
+   */
+  readonly fields: provincesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for provinces.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__provincesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    cities<T extends provinces$citiesArgs<ExtArgs> = {}>(args?: Subset<T, provinces$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    directions<T extends provinces$directionsArgs<ExtArgs> = {}>(args?: Subset<T, provinces$directionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    countries<T extends countriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, countriesDefaultArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the provinces model
+   */
+  interface provincesFieldRefs {
+    readonly id: FieldRef<"provinces", 'Int'>
+    readonly country_iso: FieldRef<"provinces", 'Int'>
+    readonly name: FieldRef<"provinces", 'String'>
+    readonly name_local: FieldRef<"provinces", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * provinces findUnique
+   */
+  export type provincesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * Filter, which provinces to fetch.
+     */
+    where: provincesWhereUniqueInput
+  }
+
+  /**
+   * provinces findUniqueOrThrow
+   */
+  export type provincesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * Filter, which provinces to fetch.
+     */
+    where: provincesWhereUniqueInput
+  }
+
+  /**
+   * provinces findFirst
+   */
+  export type provincesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * Filter, which provinces to fetch.
+     */
+    where?: provincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of provinces to fetch.
+     */
+    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for provinces.
+     */
+    cursor?: provincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of provinces.
+     */
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * provinces findFirstOrThrow
+   */
+  export type provincesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * Filter, which provinces to fetch.
+     */
+    where?: provincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of provinces to fetch.
+     */
+    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for provinces.
+     */
+    cursor?: provincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of provinces.
+     */
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * provinces findMany
+   */
+  export type provincesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * Filter, which provinces to fetch.
+     */
+    where?: provincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of provinces to fetch.
+     */
+    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing provinces.
+     */
+    cursor?: provincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` provinces.
+     */
+    skip?: number
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * provinces create
+   */
+  export type provincesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a provinces.
+     */
+    data: XOR<provincesCreateInput, provincesUncheckedCreateInput>
+  }
+
+  /**
+   * provinces createMany
+   */
+  export type provincesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many provinces.
+     */
+    data: provincesCreateManyInput | provincesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * provinces createManyAndReturn
+   */
+  export type provincesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * The data used to create many provinces.
+     */
+    data: provincesCreateManyInput | provincesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * provinces update
+   */
+  export type provincesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a provinces.
+     */
+    data: XOR<provincesUpdateInput, provincesUncheckedUpdateInput>
+    /**
+     * Choose, which provinces to update.
+     */
+    where: provincesWhereUniqueInput
+  }
+
+  /**
+   * provinces updateMany
+   */
+  export type provincesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update provinces.
+     */
+    data: XOR<provincesUpdateManyMutationInput, provincesUncheckedUpdateManyInput>
+    /**
+     * Filter which provinces to update
+     */
+    where?: provincesWhereInput
+    /**
+     * Limit how many provinces to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * provinces updateManyAndReturn
+   */
+  export type provincesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * The data used to update provinces.
+     */
+    data: XOR<provincesUpdateManyMutationInput, provincesUncheckedUpdateManyInput>
+    /**
+     * Filter which provinces to update
+     */
+    where?: provincesWhereInput
+    /**
+     * Limit how many provinces to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * provinces upsert
+   */
+  export type provincesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the provinces to update in case it exists.
+     */
+    where: provincesWhereUniqueInput
+    /**
+     * In case the provinces found by the `where` argument doesn't exist, create a new provinces with this data.
+     */
+    create: XOR<provincesCreateInput, provincesUncheckedCreateInput>
+    /**
+     * In case the provinces was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<provincesUpdateInput, provincesUncheckedUpdateInput>
+  }
+
+  /**
+   * provinces delete
+   */
+  export type provincesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
+    /**
+     * Filter which provinces to delete.
+     */
+    where: provincesWhereUniqueInput
+  }
+
+  /**
+   * provinces deleteMany
+   */
+  export type provincesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which provinces to delete
+     */
+    where?: provincesWhereInput
+    /**
+     * Limit how many provinces to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * provinces.cities
+   */
+  export type provinces$citiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the cities
+     */
+    select?: citiesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the cities
+     */
+    omit?: citiesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: citiesInclude<ExtArgs> | null
+    where?: citiesWhereInput
+    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    cursor?: citiesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+  }
+
+  /**
+   * provinces.directions
+   */
+  export type provinces$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the directions
+     */
+    select?: directionsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the directions
+     */
+    omit?: directionsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: directionsInclude<ExtArgs> | null
+    where?: directionsWhereInput
+    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
+    cursor?: directionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
+  }
+
+  /**
+   * provinces without action
+   */
+  export type provincesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the provinces
+     */
+    select?: provincesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the provinces
+     */
+    omit?: provincesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: provincesInclude<ExtArgs> | null
   }
 
 
@@ -28711,382 +35865,373 @@ export namespace Prisma {
 
 
   /**
-   * Model cities
+   * Model category_translations
    */
 
-  export type AggregateCities = {
-    _count: CitiesCountAggregateOutputType | null
-    _avg: CitiesAvgAggregateOutputType | null
-    _sum: CitiesSumAggregateOutputType | null
-    _min: CitiesMinAggregateOutputType | null
-    _max: CitiesMaxAggregateOutputType | null
+  export type AggregateCategory_translations = {
+    _count: Category_translationsCountAggregateOutputType | null
+    _avg: Category_translationsAvgAggregateOutputType | null
+    _sum: Category_translationsSumAggregateOutputType | null
+    _min: Category_translationsMinAggregateOutputType | null
+    _max: Category_translationsMaxAggregateOutputType | null
   }
 
-  export type CitiesAvgAggregateOutputType = {
-    id: number | null
-    province_id: number | null
+  export type Category_translationsAvgAggregateOutputType = {
+    category_id: number | null
   }
 
-  export type CitiesSumAggregateOutputType = {
-    id: number | null
-    province_id: number | null
+  export type Category_translationsSumAggregateOutputType = {
+    category_id: bigint | null
   }
 
-  export type CitiesMinAggregateOutputType = {
-    id: number | null
-    province_id: number | null
+  export type Category_translationsMinAggregateOutputType = {
+    category_id: bigint | null
+    lang_code: string | null
     name: string | null
-    name_local: string | null
+    name_unaccent: string | null
   }
 
-  export type CitiesMaxAggregateOutputType = {
-    id: number | null
-    province_id: number | null
+  export type Category_translationsMaxAggregateOutputType = {
+    category_id: bigint | null
+    lang_code: string | null
     name: string | null
-    name_local: string | null
+    name_unaccent: string | null
   }
 
-  export type CitiesCountAggregateOutputType = {
-    id: number
-    province_id: number
+  export type Category_translationsCountAggregateOutputType = {
+    category_id: number
+    lang_code: number
     name: number
-    name_local: number
+    name_unaccent: number
     _all: number
   }
 
 
-  export type CitiesAvgAggregateInputType = {
-    id?: true
-    province_id?: true
+  export type Category_translationsAvgAggregateInputType = {
+    category_id?: true
   }
 
-  export type CitiesSumAggregateInputType = {
-    id?: true
-    province_id?: true
+  export type Category_translationsSumAggregateInputType = {
+    category_id?: true
   }
 
-  export type CitiesMinAggregateInputType = {
-    id?: true
-    province_id?: true
+  export type Category_translationsMinAggregateInputType = {
+    category_id?: true
+    lang_code?: true
     name?: true
-    name_local?: true
+    name_unaccent?: true
   }
 
-  export type CitiesMaxAggregateInputType = {
-    id?: true
-    province_id?: true
+  export type Category_translationsMaxAggregateInputType = {
+    category_id?: true
+    lang_code?: true
     name?: true
-    name_local?: true
+    name_unaccent?: true
   }
 
-  export type CitiesCountAggregateInputType = {
-    id?: true
-    province_id?: true
+  export type Category_translationsCountAggregateInputType = {
+    category_id?: true
+    lang_code?: true
     name?: true
-    name_local?: true
+    name_unaccent?: true
     _all?: true
   }
 
-  export type CitiesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Category_translationsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which cities to aggregate.
+     * Filter which category_translations to aggregate.
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of cities to fetch.
+     * Determine the order of category_translations to fetch.
      */
-    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    orderBy?: category_translationsOrderByWithRelationInput | category_translationsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: citiesWhereUniqueInput
+    cursor?: category_translationsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` cities from the position of the cursor.
+     * Take `±n` category_translations from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` cities.
+     * Skip the first `n` category_translations.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned cities
+     * Count returned category_translations
     **/
-    _count?: true | CitiesCountAggregateInputType
+    _count?: true | Category_translationsCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: CitiesAvgAggregateInputType
+    _avg?: Category_translationsAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: CitiesSumAggregateInputType
+    _sum?: Category_translationsSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: CitiesMinAggregateInputType
+    _min?: Category_translationsMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: CitiesMaxAggregateInputType
+    _max?: Category_translationsMaxAggregateInputType
   }
 
-  export type GetCitiesAggregateType<T extends CitiesAggregateArgs> = {
-        [P in keyof T & keyof AggregateCities]: P extends '_count' | 'count'
+  export type GetCategory_translationsAggregateType<T extends Category_translationsAggregateArgs> = {
+        [P in keyof T & keyof AggregateCategory_translations]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateCities[P]>
-      : GetScalarType<T[P], AggregateCities[P]>
+        : GetScalarType<T[P], AggregateCategory_translations[P]>
+      : GetScalarType<T[P], AggregateCategory_translations[P]>
   }
 
 
 
 
-  export type citiesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: citiesWhereInput
-    orderBy?: citiesOrderByWithAggregationInput | citiesOrderByWithAggregationInput[]
-    by: CitiesScalarFieldEnum[] | CitiesScalarFieldEnum
-    having?: citiesScalarWhereWithAggregatesInput
+  export type category_translationsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: category_translationsWhereInput
+    orderBy?: category_translationsOrderByWithAggregationInput | category_translationsOrderByWithAggregationInput[]
+    by: Category_translationsScalarFieldEnum[] | Category_translationsScalarFieldEnum
+    having?: category_translationsScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: CitiesCountAggregateInputType | true
-    _avg?: CitiesAvgAggregateInputType
-    _sum?: CitiesSumAggregateInputType
-    _min?: CitiesMinAggregateInputType
-    _max?: CitiesMaxAggregateInputType
+    _count?: Category_translationsCountAggregateInputType | true
+    _avg?: Category_translationsAvgAggregateInputType
+    _sum?: Category_translationsSumAggregateInputType
+    _min?: Category_translationsMinAggregateInputType
+    _max?: Category_translationsMaxAggregateInputType
   }
 
-  export type CitiesGroupByOutputType = {
-    id: number
-    province_id: number
+  export type Category_translationsGroupByOutputType = {
+    category_id: bigint
+    lang_code: string
     name: string
-    name_local: string
-    _count: CitiesCountAggregateOutputType | null
-    _avg: CitiesAvgAggregateOutputType | null
-    _sum: CitiesSumAggregateOutputType | null
-    _min: CitiesMinAggregateOutputType | null
-    _max: CitiesMaxAggregateOutputType | null
+    name_unaccent: string | null
+    _count: Category_translationsCountAggregateOutputType | null
+    _avg: Category_translationsAvgAggregateOutputType | null
+    _sum: Category_translationsSumAggregateOutputType | null
+    _min: Category_translationsMinAggregateOutputType | null
+    _max: Category_translationsMaxAggregateOutputType | null
   }
 
-  type GetCitiesGroupByPayload<T extends citiesGroupByArgs> = Prisma.PrismaPromise<
+  type GetCategory_translationsGroupByPayload<T extends category_translationsGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<CitiesGroupByOutputType, T['by']> &
+      PickEnumerable<Category_translationsGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof CitiesGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof Category_translationsGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], CitiesGroupByOutputType[P]>
-            : GetScalarType<T[P], CitiesGroupByOutputType[P]>
+              : GetScalarType<T[P], Category_translationsGroupByOutputType[P]>
+            : GetScalarType<T[P], Category_translationsGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type citiesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    province_id?: boolean
+  export type category_translationsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    category_id?: boolean
+    lang_code?: boolean
     name?: boolean
-    name_local?: boolean
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    directions?: boolean | cities$directionsArgs<ExtArgs>
-    _count?: boolean | CitiesCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["cities"]>
+    name_unaccent?: boolean
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category_translations"]>
 
-  export type citiesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    province_id?: boolean
+  export type category_translationsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    category_id?: boolean
+    lang_code?: boolean
     name?: boolean
-    name_local?: boolean
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["cities"]>
+    name_unaccent?: boolean
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category_translations"]>
 
-  export type citiesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    province_id?: boolean
+  export type category_translationsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    category_id?: boolean
+    lang_code?: boolean
     name?: boolean
-    name_local?: boolean
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["cities"]>
+    name_unaccent?: boolean
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["category_translations"]>
 
-  export type citiesSelectScalar = {
-    id?: boolean
-    province_id?: boolean
+  export type category_translationsSelectScalar = {
+    category_id?: boolean
+    lang_code?: boolean
     name?: boolean
-    name_local?: boolean
+    name_unaccent?: boolean
   }
 
-  export type citiesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "province_id" | "name" | "name_local", ExtArgs["result"]["cities"]>
-  export type citiesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    directions?: boolean | cities$directionsArgs<ExtArgs>
-    _count?: boolean | CitiesCountOutputTypeDefaultArgs<ExtArgs>
+  export type category_translationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"category_id" | "lang_code" | "name" | "name_unaccent", ExtArgs["result"]["category_translations"]>
+  export type category_translationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
   }
-  export type citiesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+  export type category_translationsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
   }
-  export type citiesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
+  export type category_translationsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | categoriesDefaultArgs<ExtArgs>
   }
 
-  export type $citiesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "cities"
+  export type $category_translationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "category_translations"
     objects: {
-      provinces: Prisma.$provincesPayload<ExtArgs>
-      directions: Prisma.$directionsPayload<ExtArgs>[]
+      categories: Prisma.$categoriesPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: number
-      province_id: number
+      category_id: bigint
+      lang_code: string
       name: string
-      name_local: string
-    }, ExtArgs["result"]["cities"]>
+      name_unaccent: string | null
+    }, ExtArgs["result"]["category_translations"]>
     composites: {}
   }
 
-  type citiesGetPayload<S extends boolean | null | undefined | citiesDefaultArgs> = $Result.GetResult<Prisma.$citiesPayload, S>
+  type category_translationsGetPayload<S extends boolean | null | undefined | category_translationsDefaultArgs> = $Result.GetResult<Prisma.$category_translationsPayload, S>
 
-  type citiesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<citiesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CitiesCountAggregateInputType | true
+  type category_translationsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<category_translationsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Category_translationsCountAggregateInputType | true
     }
 
-  export interface citiesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['cities'], meta: { name: 'cities' } }
+  export interface category_translationsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['category_translations'], meta: { name: 'category_translations' } }
     /**
-     * Find zero or one Cities that matches the filter.
-     * @param {citiesFindUniqueArgs} args - Arguments to find a Cities
+     * Find zero or one Category_translations that matches the filter.
+     * @param {category_translationsFindUniqueArgs} args - Arguments to find a Category_translations
      * @example
-     * // Get one Cities
-     * const cities = await prisma.cities.findUnique({
+     * // Get one Category_translations
+     * const category_translations = await prisma.category_translations.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends citiesFindUniqueArgs>(args: SelectSubset<T, citiesFindUniqueArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends category_translationsFindUniqueArgs>(args: SelectSubset<T, category_translationsFindUniqueArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Cities that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Category_translations that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {citiesFindUniqueOrThrowArgs} args - Arguments to find a Cities
+     * @param {category_translationsFindUniqueOrThrowArgs} args - Arguments to find a Category_translations
      * @example
-     * // Get one Cities
-     * const cities = await prisma.cities.findUniqueOrThrow({
+     * // Get one Category_translations
+     * const category_translations = await prisma.category_translations.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends citiesFindUniqueOrThrowArgs>(args: SelectSubset<T, citiesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends category_translationsFindUniqueOrThrowArgs>(args: SelectSubset<T, category_translationsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Cities that matches the filter.
+     * Find the first Category_translations that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {citiesFindFirstArgs} args - Arguments to find a Cities
+     * @param {category_translationsFindFirstArgs} args - Arguments to find a Category_translations
      * @example
-     * // Get one Cities
-     * const cities = await prisma.cities.findFirst({
+     * // Get one Category_translations
+     * const category_translations = await prisma.category_translations.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends citiesFindFirstArgs>(args?: SelectSubset<T, citiesFindFirstArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends category_translationsFindFirstArgs>(args?: SelectSubset<T, category_translationsFindFirstArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Cities that matches the filter or
+     * Find the first Category_translations that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {citiesFindFirstOrThrowArgs} args - Arguments to find a Cities
+     * @param {category_translationsFindFirstOrThrowArgs} args - Arguments to find a Category_translations
      * @example
-     * // Get one Cities
-     * const cities = await prisma.cities.findFirstOrThrow({
+     * // Get one Category_translations
+     * const category_translations = await prisma.category_translations.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends citiesFindFirstOrThrowArgs>(args?: SelectSubset<T, citiesFindFirstOrThrowArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends category_translationsFindFirstOrThrowArgs>(args?: SelectSubset<T, category_translationsFindFirstOrThrowArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Cities that matches the filter.
+     * Find zero or more Category_translations that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {citiesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {category_translationsFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Cities
-     * const cities = await prisma.cities.findMany()
+     * // Get all Category_translations
+     * const category_translations = await prisma.category_translations.findMany()
      * 
-     * // Get first 10 Cities
-     * const cities = await prisma.cities.findMany({ take: 10 })
+     * // Get first 10 Category_translations
+     * const category_translations = await prisma.category_translations.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const citiesWithIdOnly = await prisma.cities.findMany({ select: { id: true } })
+     * // Only select the `category_id`
+     * const category_translationsWithCategory_idOnly = await prisma.category_translations.findMany({ select: { category_id: true } })
      * 
      */
-    findMany<T extends citiesFindManyArgs>(args?: SelectSubset<T, citiesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends category_translationsFindManyArgs>(args?: SelectSubset<T, category_translationsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Cities.
-     * @param {citiesCreateArgs} args - Arguments to create a Cities.
+     * Create a Category_translations.
+     * @param {category_translationsCreateArgs} args - Arguments to create a Category_translations.
      * @example
-     * // Create one Cities
-     * const Cities = await prisma.cities.create({
+     * // Create one Category_translations
+     * const Category_translations = await prisma.category_translations.create({
      *   data: {
-     *     // ... data to create a Cities
+     *     // ... data to create a Category_translations
      *   }
      * })
      * 
      */
-    create<T extends citiesCreateArgs>(args: SelectSubset<T, citiesCreateArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends category_translationsCreateArgs>(args: SelectSubset<T, category_translationsCreateArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Cities.
-     * @param {citiesCreateManyArgs} args - Arguments to create many Cities.
+     * Create many Category_translations.
+     * @param {category_translationsCreateManyArgs} args - Arguments to create many Category_translations.
      * @example
-     * // Create many Cities
-     * const cities = await prisma.cities.createMany({
+     * // Create many Category_translations
+     * const category_translations = await prisma.category_translations.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends citiesCreateManyArgs>(args?: SelectSubset<T, citiesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends category_translationsCreateManyArgs>(args?: SelectSubset<T, category_translationsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Cities and returns the data saved in the database.
-     * @param {citiesCreateManyAndReturnArgs} args - Arguments to create many Cities.
+     * Create many Category_translations and returns the data saved in the database.
+     * @param {category_translationsCreateManyAndReturnArgs} args - Arguments to create many Category_translations.
      * @example
-     * // Create many Cities
-     * const cities = await prisma.cities.createManyAndReturn({
+     * // Create many Category_translations
+     * const category_translations = await prisma.category_translations.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Cities and only return the `id`
-     * const citiesWithIdOnly = await prisma.cities.createManyAndReturn({
-     *   select: { id: true },
+     * // Create many Category_translations and only return the `category_id`
+     * const category_translationsWithCategory_idOnly = await prisma.category_translations.createManyAndReturn({
+     *   select: { category_id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -29095,28 +36240,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends citiesCreateManyAndReturnArgs>(args?: SelectSubset<T, citiesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends category_translationsCreateManyAndReturnArgs>(args?: SelectSubset<T, category_translationsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Cities.
-     * @param {citiesDeleteArgs} args - Arguments to delete one Cities.
+     * Delete a Category_translations.
+     * @param {category_translationsDeleteArgs} args - Arguments to delete one Category_translations.
      * @example
-     * // Delete one Cities
-     * const Cities = await prisma.cities.delete({
+     * // Delete one Category_translations
+     * const Category_translations = await prisma.category_translations.delete({
      *   where: {
-     *     // ... filter to delete one Cities
+     *     // ... filter to delete one Category_translations
      *   }
      * })
      * 
      */
-    delete<T extends citiesDeleteArgs>(args: SelectSubset<T, citiesDeleteArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends category_translationsDeleteArgs>(args: SelectSubset<T, category_translationsDeleteArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Cities.
-     * @param {citiesUpdateArgs} args - Arguments to update one Cities.
+     * Update one Category_translations.
+     * @param {category_translationsUpdateArgs} args - Arguments to update one Category_translations.
      * @example
-     * // Update one Cities
-     * const cities = await prisma.cities.update({
+     * // Update one Category_translations
+     * const category_translations = await prisma.category_translations.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -29126,30 +36271,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends citiesUpdateArgs>(args: SelectSubset<T, citiesUpdateArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends category_translationsUpdateArgs>(args: SelectSubset<T, category_translationsUpdateArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Cities.
-     * @param {citiesDeleteManyArgs} args - Arguments to filter Cities to delete.
+     * Delete zero or more Category_translations.
+     * @param {category_translationsDeleteManyArgs} args - Arguments to filter Category_translations to delete.
      * @example
-     * // Delete a few Cities
-     * const { count } = await prisma.cities.deleteMany({
+     * // Delete a few Category_translations
+     * const { count } = await prisma.category_translations.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends citiesDeleteManyArgs>(args?: SelectSubset<T, citiesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends category_translationsDeleteManyArgs>(args?: SelectSubset<T, category_translationsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Cities.
+     * Update zero or more Category_translations.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {citiesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {category_translationsUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Cities
-     * const cities = await prisma.cities.updateMany({
+     * // Update many Category_translations
+     * const category_translations = await prisma.category_translations.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -29159,14 +36304,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends citiesUpdateManyArgs>(args: SelectSubset<T, citiesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends category_translationsUpdateManyArgs>(args: SelectSubset<T, category_translationsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Cities and returns the data updated in the database.
-     * @param {citiesUpdateManyAndReturnArgs} args - Arguments to update many Cities.
+     * Update zero or more Category_translations and returns the data updated in the database.
+     * @param {category_translationsUpdateManyAndReturnArgs} args - Arguments to update many Category_translations.
      * @example
-     * // Update many Cities
-     * const cities = await prisma.cities.updateManyAndReturn({
+     * // Update many Category_translations
+     * const category_translations = await prisma.category_translations.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -29175,9 +36320,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Cities and only return the `id`
-     * const citiesWithIdOnly = await prisma.cities.updateManyAndReturn({
-     *   select: { id: true },
+     * // Update zero or more Category_translations and only return the `category_id`
+     * const category_translationsWithCategory_idOnly = await prisma.category_translations.updateManyAndReturn({
+     *   select: { category_id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -29189,56 +36334,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends citiesUpdateManyAndReturnArgs>(args: SelectSubset<T, citiesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends category_translationsUpdateManyAndReturnArgs>(args: SelectSubset<T, category_translationsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Cities.
-     * @param {citiesUpsertArgs} args - Arguments to update or create a Cities.
+     * Create or update one Category_translations.
+     * @param {category_translationsUpsertArgs} args - Arguments to update or create a Category_translations.
      * @example
-     * // Update or create a Cities
-     * const cities = await prisma.cities.upsert({
+     * // Update or create a Category_translations
+     * const category_translations = await prisma.category_translations.upsert({
      *   create: {
-     *     // ... data to create a Cities
+     *     // ... data to create a Category_translations
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Cities we want to update
+     *     // ... the filter for the Category_translations we want to update
      *   }
      * })
      */
-    upsert<T extends citiesUpsertArgs>(args: SelectSubset<T, citiesUpsertArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends category_translationsUpsertArgs>(args: SelectSubset<T, category_translationsUpsertArgs<ExtArgs>>): Prisma__category_translationsClient<$Result.GetResult<Prisma.$category_translationsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Cities.
+     * Count the number of Category_translations.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {citiesCountArgs} args - Arguments to filter Cities to count.
+     * @param {category_translationsCountArgs} args - Arguments to filter Category_translations to count.
      * @example
-     * // Count the number of Cities
-     * const count = await prisma.cities.count({
+     * // Count the number of Category_translations
+     * const count = await prisma.category_translations.count({
      *   where: {
-     *     // ... the filter for the Cities we want to count
+     *     // ... the filter for the Category_translations we want to count
      *   }
      * })
     **/
-    count<T extends citiesCountArgs>(
-      args?: Subset<T, citiesCountArgs>,
+    count<T extends category_translationsCountArgs>(
+      args?: Subset<T, category_translationsCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], CitiesCountAggregateOutputType>
+          : GetScalarType<T['select'], Category_translationsCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Cities.
+     * Allows you to perform aggregations operations on a Category_translations.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CitiesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {Category_translationsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -29258,13 +36403,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends CitiesAggregateArgs>(args: Subset<T, CitiesAggregateArgs>): Prisma.PrismaPromise<GetCitiesAggregateType<T>>
+    aggregate<T extends Category_translationsAggregateArgs>(args: Subset<T, Category_translationsAggregateArgs>): Prisma.PrismaPromise<GetCategory_translationsAggregateType<T>>
 
     /**
-     * Group by Cities.
+     * Group by Category_translations.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {citiesGroupByArgs} args - Group by arguments.
+     * @param {category_translationsGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -29279,14 +36424,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends citiesGroupByArgs,
+      T extends category_translationsGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: citiesGroupByArgs['orderBy'] }
-        : { orderBy?: citiesGroupByArgs['orderBy'] },
+        ? { orderBy: category_translationsGroupByArgs['orderBy'] }
+        : { orderBy?: category_translationsGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -29335,23 +36480,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, citiesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCitiesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, category_translationsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategory_translationsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the cities model
+   * Fields of the category_translations model
    */
-  readonly fields: citiesFieldRefs;
+  readonly fields: category_translationsFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for cities.
+   * The delegate class that acts as a "Promise-like" for category_translations.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__citiesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__category_translationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    provinces<T extends provincesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, provincesDefaultArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    directions<T extends cities$directionsArgs<ExtArgs> = {}>(args?: Subset<T, cities$directionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    categories<T extends categoriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, categoriesDefaultArgs<ExtArgs>>): Prisma__categoriesClient<$Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -29378,5127 +36522,424 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the cities model
+   * Fields of the category_translations model
    */
-  interface citiesFieldRefs {
-    readonly id: FieldRef<"cities", 'Int'>
-    readonly province_id: FieldRef<"cities", 'Int'>
-    readonly name: FieldRef<"cities", 'String'>
-    readonly name_local: FieldRef<"cities", 'String'>
+  interface category_translationsFieldRefs {
+    readonly category_id: FieldRef<"category_translations", 'BigInt'>
+    readonly lang_code: FieldRef<"category_translations", 'String'>
+    readonly name: FieldRef<"category_translations", 'String'>
+    readonly name_unaccent: FieldRef<"category_translations", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * cities findUnique
+   * category_translations findUnique
    */
-  export type citiesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * Filter, which cities to fetch.
+     * Filter, which category_translations to fetch.
      */
-    where: citiesWhereUniqueInput
+    where: category_translationsWhereUniqueInput
   }
 
   /**
-   * cities findUniqueOrThrow
+   * category_translations findUniqueOrThrow
    */
-  export type citiesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * Filter, which cities to fetch.
+     * Filter, which category_translations to fetch.
      */
-    where: citiesWhereUniqueInput
+    where: category_translationsWhereUniqueInput
   }
 
   /**
-   * cities findFirst
+   * category_translations findFirst
    */
-  export type citiesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * Filter, which cities to fetch.
+     * Filter, which category_translations to fetch.
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of cities to fetch.
+     * Determine the order of category_translations to fetch.
      */
-    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    orderBy?: category_translationsOrderByWithRelationInput | category_translationsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for cities.
+     * Sets the position for searching for category_translations.
      */
-    cursor?: citiesWhereUniqueInput
+    cursor?: category_translationsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` cities from the position of the cursor.
+     * Take `±n` category_translations from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` cities.
+     * Skip the first `n` category_translations.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of cities.
+     * Filter by unique combinations of category_translations.
      */
-    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+    distinct?: Category_translationsScalarFieldEnum | Category_translationsScalarFieldEnum[]
   }
 
   /**
-   * cities findFirstOrThrow
+   * category_translations findFirstOrThrow
    */
-  export type citiesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * Filter, which cities to fetch.
+     * Filter, which category_translations to fetch.
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of cities to fetch.
+     * Determine the order of category_translations to fetch.
      */
-    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    orderBy?: category_translationsOrderByWithRelationInput | category_translationsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for cities.
+     * Sets the position for searching for category_translations.
      */
-    cursor?: citiesWhereUniqueInput
+    cursor?: category_translationsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` cities from the position of the cursor.
+     * Take `±n` category_translations from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` cities.
+     * Skip the first `n` category_translations.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of cities.
+     * Filter by unique combinations of category_translations.
      */
-    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+    distinct?: Category_translationsScalarFieldEnum | Category_translationsScalarFieldEnum[]
   }
 
   /**
-   * cities findMany
+   * category_translations findMany
    */
-  export type citiesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * Filter, which cities to fetch.
+     * Filter, which category_translations to fetch.
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of cities to fetch.
+     * Determine the order of category_translations to fetch.
      */
-    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
+    orderBy?: category_translationsOrderByWithRelationInput | category_translationsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing cities.
+     * Sets the position for listing category_translations.
      */
-    cursor?: citiesWhereUniqueInput
+    cursor?: category_translationsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` cities from the position of the cursor.
+     * Take `±n` category_translations from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` cities.
+     * Skip the first `n` category_translations.
      */
     skip?: number
-    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
+    distinct?: Category_translationsScalarFieldEnum | Category_translationsScalarFieldEnum[]
   }
 
   /**
-   * cities create
+   * category_translations create
    */
-  export type citiesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * The data needed to create a cities.
+     * The data needed to create a category_translations.
      */
-    data: XOR<citiesCreateInput, citiesUncheckedCreateInput>
+    data: XOR<category_translationsCreateInput, category_translationsUncheckedCreateInput>
   }
 
   /**
-   * cities createMany
+   * category_translations createMany
    */
-  export type citiesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many cities.
+     * The data used to create many category_translations.
      */
-    data: citiesCreateManyInput | citiesCreateManyInput[]
+    data: category_translationsCreateManyInput | category_translationsCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * cities createManyAndReturn
+   * category_translations createManyAndReturn
    */
-  export type citiesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelectCreateManyAndReturn<ExtArgs> | null
+    select?: category_translationsSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
-     * The data used to create many cities.
+     * The data used to create many category_translations.
      */
-    data: citiesCreateManyInput | citiesCreateManyInput[]
+    data: category_translationsCreateManyInput | category_translationsCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: category_translationsIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * cities update
+   * category_translations update
    */
-  export type citiesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * The data needed to update a cities.
+     * The data needed to update a category_translations.
      */
-    data: XOR<citiesUpdateInput, citiesUncheckedUpdateInput>
+    data: XOR<category_translationsUpdateInput, category_translationsUncheckedUpdateInput>
     /**
-     * Choose, which cities to update.
+     * Choose, which category_translations to update.
      */
-    where: citiesWhereUniqueInput
+    where: category_translationsWhereUniqueInput
   }
 
   /**
-   * cities updateMany
+   * category_translations updateMany
    */
-  export type citiesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update cities.
+     * The data used to update category_translations.
      */
-    data: XOR<citiesUpdateManyMutationInput, citiesUncheckedUpdateManyInput>
+    data: XOR<category_translationsUpdateManyMutationInput, category_translationsUncheckedUpdateManyInput>
     /**
-     * Filter which cities to update
+     * Filter which category_translations to update
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
-     * Limit how many cities to update.
+     * Limit how many category_translations to update.
      */
     limit?: number
   }
 
   /**
-   * cities updateManyAndReturn
+   * category_translations updateManyAndReturn
    */
-  export type citiesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: category_translationsSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
-     * The data used to update cities.
+     * The data used to update category_translations.
      */
-    data: XOR<citiesUpdateManyMutationInput, citiesUncheckedUpdateManyInput>
+    data: XOR<category_translationsUpdateManyMutationInput, category_translationsUncheckedUpdateManyInput>
     /**
-     * Filter which cities to update
+     * Filter which category_translations to update
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
-     * Limit how many cities to update.
+     * Limit how many category_translations to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: category_translationsIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * cities upsert
+   * category_translations upsert
    */
-  export type citiesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * The filter to search for the cities to update in case it exists.
+     * The filter to search for the category_translations to update in case it exists.
      */
-    where: citiesWhereUniqueInput
+    where: category_translationsWhereUniqueInput
     /**
-     * In case the cities found by the `where` argument doesn't exist, create a new cities with this data.
+     * In case the category_translations found by the `where` argument doesn't exist, create a new category_translations with this data.
      */
-    create: XOR<citiesCreateInput, citiesUncheckedCreateInput>
+    create: XOR<category_translationsCreateInput, category_translationsUncheckedCreateInput>
     /**
-     * In case the cities was found with the provided `where` argument, update it with this data.
+     * In case the category_translations was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<citiesUpdateInput, citiesUncheckedUpdateInput>
+    update: XOR<category_translationsUpdateInput, category_translationsUncheckedUpdateInput>
   }
 
   /**
-   * cities delete
+   * category_translations delete
    */
-  export type citiesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the cities
+     * Select specific fields to fetch from the category_translations
      */
-    select?: citiesSelect<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the cities
+     * Omit specific fields from the category_translations
      */
-    omit?: citiesOmit<ExtArgs> | null
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: citiesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
     /**
-     * Filter which cities to delete.
+     * Filter which category_translations to delete.
      */
-    where: citiesWhereUniqueInput
+    where: category_translationsWhereUniqueInput
   }
 
   /**
-   * cities deleteMany
+   * category_translations deleteMany
    */
-  export type citiesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which cities to delete
+     * Filter which category_translations to delete
      */
-    where?: citiesWhereInput
+    where?: category_translationsWhereInput
     /**
-     * Limit how many cities to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * cities.directions
-   */
-  export type cities$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    where?: directionsWhereInput
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    cursor?: directionsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
-  }
-
-  /**
-   * cities without action
-   */
-  export type citiesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the cities
-     */
-    select?: citiesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the cities
-     */
-    omit?: citiesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: citiesInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model countries
-   */
-
-  export type AggregateCountries = {
-    _count: CountriesCountAggregateOutputType | null
-    _avg: CountriesAvgAggregateOutputType | null
-    _sum: CountriesSumAggregateOutputType | null
-    _min: CountriesMinAggregateOutputType | null
-    _max: CountriesMaxAggregateOutputType | null
-  }
-
-  export type CountriesAvgAggregateOutputType = {
-    iso_numeric: number | null
-    currency_id: number | null
-  }
-
-  export type CountriesSumAggregateOutputType = {
-    iso_numeric: number | null
-    currency_id: number | null
-  }
-
-  export type CountriesMinAggregateOutputType = {
-    iso_alpha2: string | null
-    iso_alpha3: string | null
-    iso_numeric: number | null
-    name: string | null
-    name_local: string | null
-    currency_id: number | null
-  }
-
-  export type CountriesMaxAggregateOutputType = {
-    iso_alpha2: string | null
-    iso_alpha3: string | null
-    iso_numeric: number | null
-    name: string | null
-    name_local: string | null
-    currency_id: number | null
-  }
-
-  export type CountriesCountAggregateOutputType = {
-    iso_alpha2: number
-    iso_alpha3: number
-    iso_numeric: number
-    name: number
-    name_local: number
-    currency_id: number
-    _all: number
-  }
-
-
-  export type CountriesAvgAggregateInputType = {
-    iso_numeric?: true
-    currency_id?: true
-  }
-
-  export type CountriesSumAggregateInputType = {
-    iso_numeric?: true
-    currency_id?: true
-  }
-
-  export type CountriesMinAggregateInputType = {
-    iso_alpha2?: true
-    iso_alpha3?: true
-    iso_numeric?: true
-    name?: true
-    name_local?: true
-    currency_id?: true
-  }
-
-  export type CountriesMaxAggregateInputType = {
-    iso_alpha2?: true
-    iso_alpha3?: true
-    iso_numeric?: true
-    name?: true
-    name_local?: true
-    currency_id?: true
-  }
-
-  export type CountriesCountAggregateInputType = {
-    iso_alpha2?: true
-    iso_alpha3?: true
-    iso_numeric?: true
-    name?: true
-    name_local?: true
-    currency_id?: true
-    _all?: true
-  }
-
-  export type CountriesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which countries to aggregate.
-     */
-    where?: countriesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of countries to fetch.
-     */
-    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: countriesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` countries from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` countries.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned countries
-    **/
-    _count?: true | CountriesCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: CountriesAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: CountriesSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: CountriesMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: CountriesMaxAggregateInputType
-  }
-
-  export type GetCountriesAggregateType<T extends CountriesAggregateArgs> = {
-        [P in keyof T & keyof AggregateCountries]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateCountries[P]>
-      : GetScalarType<T[P], AggregateCountries[P]>
-  }
-
-
-
-
-  export type countriesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: countriesWhereInput
-    orderBy?: countriesOrderByWithAggregationInput | countriesOrderByWithAggregationInput[]
-    by: CountriesScalarFieldEnum[] | CountriesScalarFieldEnum
-    having?: countriesScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: CountriesCountAggregateInputType | true
-    _avg?: CountriesAvgAggregateInputType
-    _sum?: CountriesSumAggregateInputType
-    _min?: CountriesMinAggregateInputType
-    _max?: CountriesMaxAggregateInputType
-  }
-
-  export type CountriesGroupByOutputType = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currency_id: number | null
-    _count: CountriesCountAggregateOutputType | null
-    _avg: CountriesAvgAggregateOutputType | null
-    _sum: CountriesSumAggregateOutputType | null
-    _min: CountriesMinAggregateOutputType | null
-    _max: CountriesMaxAggregateOutputType | null
-  }
-
-  type GetCountriesGroupByPayload<T extends countriesGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<CountriesGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof CountriesGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], CountriesGroupByOutputType[P]>
-            : GetScalarType<T[P], CountriesGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type countriesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    iso_alpha2?: boolean
-    iso_alpha3?: boolean
-    iso_numeric?: boolean
-    name?: boolean
-    name_local?: boolean
-    currency_id?: boolean
-    currencies?: boolean | countries$currenciesArgs<ExtArgs>
-    directions?: boolean | countries$directionsArgs<ExtArgs>
-    provinces?: boolean | countries$provincesArgs<ExtArgs>
-    _count?: boolean | CountriesCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["countries"]>
-
-  export type countriesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    iso_alpha2?: boolean
-    iso_alpha3?: boolean
-    iso_numeric?: boolean
-    name?: boolean
-    name_local?: boolean
-    currency_id?: boolean
-    currencies?: boolean | countries$currenciesArgs<ExtArgs>
-  }, ExtArgs["result"]["countries"]>
-
-  export type countriesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    iso_alpha2?: boolean
-    iso_alpha3?: boolean
-    iso_numeric?: boolean
-    name?: boolean
-    name_local?: boolean
-    currency_id?: boolean
-    currencies?: boolean | countries$currenciesArgs<ExtArgs>
-  }, ExtArgs["result"]["countries"]>
-
-  export type countriesSelectScalar = {
-    iso_alpha2?: boolean
-    iso_alpha3?: boolean
-    iso_numeric?: boolean
-    name?: boolean
-    name_local?: boolean
-    currency_id?: boolean
-  }
-
-  export type countriesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"iso_alpha2" | "iso_alpha3" | "iso_numeric" | "name" | "name_local" | "currency_id", ExtArgs["result"]["countries"]>
-  export type countriesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    currencies?: boolean | countries$currenciesArgs<ExtArgs>
-    directions?: boolean | countries$directionsArgs<ExtArgs>
-    provinces?: boolean | countries$provincesArgs<ExtArgs>
-    _count?: boolean | CountriesCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type countriesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    currencies?: boolean | countries$currenciesArgs<ExtArgs>
-  }
-  export type countriesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    currencies?: boolean | countries$currenciesArgs<ExtArgs>
-  }
-
-  export type $countriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "countries"
-    objects: {
-      currencies: Prisma.$currenciesPayload<ExtArgs> | null
-      directions: Prisma.$directionsPayload<ExtArgs>[]
-      provinces: Prisma.$provincesPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      iso_alpha2: string
-      iso_alpha3: string
-      iso_numeric: number
-      name: string
-      name_local: string
-      currency_id: number | null
-    }, ExtArgs["result"]["countries"]>
-    composites: {}
-  }
-
-  type countriesGetPayload<S extends boolean | null | undefined | countriesDefaultArgs> = $Result.GetResult<Prisma.$countriesPayload, S>
-
-  type countriesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<countriesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CountriesCountAggregateInputType | true
-    }
-
-  export interface countriesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['countries'], meta: { name: 'countries' } }
-    /**
-     * Find zero or one Countries that matches the filter.
-     * @param {countriesFindUniqueArgs} args - Arguments to find a Countries
-     * @example
-     * // Get one Countries
-     * const countries = await prisma.countries.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends countriesFindUniqueArgs>(args: SelectSubset<T, countriesFindUniqueArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Countries that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {countriesFindUniqueOrThrowArgs} args - Arguments to find a Countries
-     * @example
-     * // Get one Countries
-     * const countries = await prisma.countries.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends countriesFindUniqueOrThrowArgs>(args: SelectSubset<T, countriesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Countries that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {countriesFindFirstArgs} args - Arguments to find a Countries
-     * @example
-     * // Get one Countries
-     * const countries = await prisma.countries.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends countriesFindFirstArgs>(args?: SelectSubset<T, countriesFindFirstArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Countries that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {countriesFindFirstOrThrowArgs} args - Arguments to find a Countries
-     * @example
-     * // Get one Countries
-     * const countries = await prisma.countries.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends countriesFindFirstOrThrowArgs>(args?: SelectSubset<T, countriesFindFirstOrThrowArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Countries that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {countriesFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Countries
-     * const countries = await prisma.countries.findMany()
-     * 
-     * // Get first 10 Countries
-     * const countries = await prisma.countries.findMany({ take: 10 })
-     * 
-     * // Only select the `iso_alpha2`
-     * const countriesWithIso_alpha2Only = await prisma.countries.findMany({ select: { iso_alpha2: true } })
-     * 
-     */
-    findMany<T extends countriesFindManyArgs>(args?: SelectSubset<T, countriesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Countries.
-     * @param {countriesCreateArgs} args - Arguments to create a Countries.
-     * @example
-     * // Create one Countries
-     * const Countries = await prisma.countries.create({
-     *   data: {
-     *     // ... data to create a Countries
-     *   }
-     * })
-     * 
-     */
-    create<T extends countriesCreateArgs>(args: SelectSubset<T, countriesCreateArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Countries.
-     * @param {countriesCreateManyArgs} args - Arguments to create many Countries.
-     * @example
-     * // Create many Countries
-     * const countries = await prisma.countries.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends countriesCreateManyArgs>(args?: SelectSubset<T, countriesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Countries and returns the data saved in the database.
-     * @param {countriesCreateManyAndReturnArgs} args - Arguments to create many Countries.
-     * @example
-     * // Create many Countries
-     * const countries = await prisma.countries.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Countries and only return the `iso_alpha2`
-     * const countriesWithIso_alpha2Only = await prisma.countries.createManyAndReturn({
-     *   select: { iso_alpha2: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends countriesCreateManyAndReturnArgs>(args?: SelectSubset<T, countriesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Countries.
-     * @param {countriesDeleteArgs} args - Arguments to delete one Countries.
-     * @example
-     * // Delete one Countries
-     * const Countries = await prisma.countries.delete({
-     *   where: {
-     *     // ... filter to delete one Countries
-     *   }
-     * })
-     * 
-     */
-    delete<T extends countriesDeleteArgs>(args: SelectSubset<T, countriesDeleteArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Countries.
-     * @param {countriesUpdateArgs} args - Arguments to update one Countries.
-     * @example
-     * // Update one Countries
-     * const countries = await prisma.countries.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends countriesUpdateArgs>(args: SelectSubset<T, countriesUpdateArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Countries.
-     * @param {countriesDeleteManyArgs} args - Arguments to filter Countries to delete.
-     * @example
-     * // Delete a few Countries
-     * const { count } = await prisma.countries.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends countriesDeleteManyArgs>(args?: SelectSubset<T, countriesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Countries.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {countriesUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Countries
-     * const countries = await prisma.countries.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends countriesUpdateManyArgs>(args: SelectSubset<T, countriesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Countries and returns the data updated in the database.
-     * @param {countriesUpdateManyAndReturnArgs} args - Arguments to update many Countries.
-     * @example
-     * // Update many Countries
-     * const countries = await prisma.countries.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Countries and only return the `iso_alpha2`
-     * const countriesWithIso_alpha2Only = await prisma.countries.updateManyAndReturn({
-     *   select: { iso_alpha2: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends countriesUpdateManyAndReturnArgs>(args: SelectSubset<T, countriesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Countries.
-     * @param {countriesUpsertArgs} args - Arguments to update or create a Countries.
-     * @example
-     * // Update or create a Countries
-     * const countries = await prisma.countries.upsert({
-     *   create: {
-     *     // ... data to create a Countries
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Countries we want to update
-     *   }
-     * })
-     */
-    upsert<T extends countriesUpsertArgs>(args: SelectSubset<T, countriesUpsertArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Countries.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {countriesCountArgs} args - Arguments to filter Countries to count.
-     * @example
-     * // Count the number of Countries
-     * const count = await prisma.countries.count({
-     *   where: {
-     *     // ... the filter for the Countries we want to count
-     *   }
-     * })
-    **/
-    count<T extends countriesCountArgs>(
-      args?: Subset<T, countriesCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], CountriesCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Countries.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CountriesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends CountriesAggregateArgs>(args: Subset<T, CountriesAggregateArgs>): Prisma.PrismaPromise<GetCountriesAggregateType<T>>
-
-    /**
-     * Group by Countries.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {countriesGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends countriesGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: countriesGroupByArgs['orderBy'] }
-        : { orderBy?: countriesGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, countriesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCountriesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the countries model
-   */
-  readonly fields: countriesFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for countries.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__countriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    currencies<T extends countries$currenciesArgs<ExtArgs> = {}>(args?: Subset<T, countries$currenciesArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    directions<T extends countries$directionsArgs<ExtArgs> = {}>(args?: Subset<T, countries$directionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    provinces<T extends countries$provincesArgs<ExtArgs> = {}>(args?: Subset<T, countries$provincesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the countries model
-   */
-  interface countriesFieldRefs {
-    readonly iso_alpha2: FieldRef<"countries", 'String'>
-    readonly iso_alpha3: FieldRef<"countries", 'String'>
-    readonly iso_numeric: FieldRef<"countries", 'Int'>
-    readonly name: FieldRef<"countries", 'String'>
-    readonly name_local: FieldRef<"countries", 'String'>
-    readonly currency_id: FieldRef<"countries", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * countries findUnique
-   */
-  export type countriesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * Filter, which countries to fetch.
-     */
-    where: countriesWhereUniqueInput
-  }
-
-  /**
-   * countries findUniqueOrThrow
-   */
-  export type countriesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * Filter, which countries to fetch.
-     */
-    where: countriesWhereUniqueInput
-  }
-
-  /**
-   * countries findFirst
-   */
-  export type countriesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * Filter, which countries to fetch.
-     */
-    where?: countriesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of countries to fetch.
-     */
-    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for countries.
-     */
-    cursor?: countriesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` countries from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` countries.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of countries.
-     */
-    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
-  }
-
-  /**
-   * countries findFirstOrThrow
-   */
-  export type countriesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * Filter, which countries to fetch.
-     */
-    where?: countriesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of countries to fetch.
-     */
-    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for countries.
-     */
-    cursor?: countriesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` countries from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` countries.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of countries.
-     */
-    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
-  }
-
-  /**
-   * countries findMany
-   */
-  export type countriesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * Filter, which countries to fetch.
-     */
-    where?: countriesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of countries to fetch.
-     */
-    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing countries.
-     */
-    cursor?: countriesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` countries from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` countries.
-     */
-    skip?: number
-    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
-  }
-
-  /**
-   * countries create
-   */
-  export type countriesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * The data needed to create a countries.
-     */
-    data: XOR<countriesCreateInput, countriesUncheckedCreateInput>
-  }
-
-  /**
-   * countries createMany
-   */
-  export type countriesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many countries.
-     */
-    data: countriesCreateManyInput | countriesCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * countries createManyAndReturn
-   */
-  export type countriesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * The data used to create many countries.
-     */
-    data: countriesCreateManyInput | countriesCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * countries update
-   */
-  export type countriesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * The data needed to update a countries.
-     */
-    data: XOR<countriesUpdateInput, countriesUncheckedUpdateInput>
-    /**
-     * Choose, which countries to update.
-     */
-    where: countriesWhereUniqueInput
-  }
-
-  /**
-   * countries updateMany
-   */
-  export type countriesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update countries.
-     */
-    data: XOR<countriesUpdateManyMutationInput, countriesUncheckedUpdateManyInput>
-    /**
-     * Filter which countries to update
-     */
-    where?: countriesWhereInput
-    /**
-     * Limit how many countries to update.
+     * Limit how many category_translations to delete.
      */
     limit?: number
   }
 
   /**
-   * countries updateManyAndReturn
+   * category_translations without action
    */
-  export type countriesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type category_translationsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the countries
+     * Select specific fields to fetch from the category_translations
      */
-    select?: countriesSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: category_translationsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the countries
+     * Omit specific fields from the category_translations
      */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * The data used to update countries.
-     */
-    data: XOR<countriesUpdateManyMutationInput, countriesUncheckedUpdateManyInput>
-    /**
-     * Filter which countries to update
-     */
-    where?: countriesWhereInput
-    /**
-     * Limit how many countries to update.
-     */
-    limit?: number
+    omit?: category_translationsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: countriesIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * countries upsert
-   */
-  export type countriesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * The filter to search for the countries to update in case it exists.
-     */
-    where: countriesWhereUniqueInput
-    /**
-     * In case the countries found by the `where` argument doesn't exist, create a new countries with this data.
-     */
-    create: XOR<countriesCreateInput, countriesUncheckedCreateInput>
-    /**
-     * In case the countries was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<countriesUpdateInput, countriesUncheckedUpdateInput>
-  }
-
-  /**
-   * countries delete
-   */
-  export type countriesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    /**
-     * Filter which countries to delete.
-     */
-    where: countriesWhereUniqueInput
-  }
-
-  /**
-   * countries deleteMany
-   */
-  export type countriesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which countries to delete
-     */
-    where?: countriesWhereInput
-    /**
-     * Limit how many countries to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * countries.currencies
-   */
-  export type countries$currenciesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    where?: currenciesWhereInput
-  }
-
-  /**
-   * countries.directions
-   */
-  export type countries$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    where?: directionsWhereInput
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    cursor?: directionsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
-  }
-
-  /**
-   * countries.provinces
-   */
-  export type countries$provincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    where?: provincesWhereInput
-    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
-    cursor?: provincesWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
-  }
-
-  /**
-   * countries without action
-   */
-  export type countriesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model directions
-   */
-
-  export type AggregateDirections = {
-    _count: DirectionsCountAggregateOutputType | null
-    _avg: DirectionsAvgAggregateOutputType | null
-    _sum: DirectionsSumAggregateOutputType | null
-    _min: DirectionsMinAggregateOutputType | null
-    _max: DirectionsMaxAggregateOutputType | null
-  }
-
-  export type DirectionsAvgAggregateOutputType = {
-    id: number | null
-    country_iso: number | null
-    province_id: number | null
-    city_id: number | null
-    latitude: number | null
-    longitude: number | null
-  }
-
-  export type DirectionsSumAggregateOutputType = {
-    id: bigint | null
-    country_iso: number | null
-    province_id: number | null
-    city_id: number | null
-    latitude: number | null
-    longitude: number | null
-  }
-
-  export type DirectionsMinAggregateOutputType = {
-    id: bigint | null
-    user_id: string | null
-    type: $Enums.AddressType | null
-    country_iso: number | null
-    province_id: number | null
-    city_id: number | null
-    street: string | null
-    zip_code: string | null
-    latitude: number | null
-    longitude: number | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type DirectionsMaxAggregateOutputType = {
-    id: bigint | null
-    user_id: string | null
-    type: $Enums.AddressType | null
-    country_iso: number | null
-    province_id: number | null
-    city_id: number | null
-    street: string | null
-    zip_code: string | null
-    latitude: number | null
-    longitude: number | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type DirectionsCountAggregateOutputType = {
-    id: number
-    user_id: number
-    type: number
-    country_iso: number
-    province_id: number
-    city_id: number
-    street: number
-    zip_code: number
-    latitude: number
-    longitude: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type DirectionsAvgAggregateInputType = {
-    id?: true
-    country_iso?: true
-    province_id?: true
-    city_id?: true
-    latitude?: true
-    longitude?: true
-  }
-
-  export type DirectionsSumAggregateInputType = {
-    id?: true
-    country_iso?: true
-    province_id?: true
-    city_id?: true
-    latitude?: true
-    longitude?: true
-  }
-
-  export type DirectionsMinAggregateInputType = {
-    id?: true
-    user_id?: true
-    type?: true
-    country_iso?: true
-    province_id?: true
-    city_id?: true
-    street?: true
-    zip_code?: true
-    latitude?: true
-    longitude?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type DirectionsMaxAggregateInputType = {
-    id?: true
-    user_id?: true
-    type?: true
-    country_iso?: true
-    province_id?: true
-    city_id?: true
-    street?: true
-    zip_code?: true
-    latitude?: true
-    longitude?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type DirectionsCountAggregateInputType = {
-    id?: true
-    user_id?: true
-    type?: true
-    country_iso?: true
-    province_id?: true
-    city_id?: true
-    street?: true
-    zip_code?: true
-    latitude?: true
-    longitude?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type DirectionsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which directions to aggregate.
-     */
-    where?: directionsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of directions to fetch.
-     */
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: directionsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` directions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` directions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned directions
-    **/
-    _count?: true | DirectionsCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: DirectionsAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: DirectionsSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: DirectionsMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: DirectionsMaxAggregateInputType
-  }
-
-  export type GetDirectionsAggregateType<T extends DirectionsAggregateArgs> = {
-        [P in keyof T & keyof AggregateDirections]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateDirections[P]>
-      : GetScalarType<T[P], AggregateDirections[P]>
-  }
-
-
-
-
-  export type directionsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: directionsWhereInput
-    orderBy?: directionsOrderByWithAggregationInput | directionsOrderByWithAggregationInput[]
-    by: DirectionsScalarFieldEnum[] | DirectionsScalarFieldEnum
-    having?: directionsScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: DirectionsCountAggregateInputType | true
-    _avg?: DirectionsAvgAggregateInputType
-    _sum?: DirectionsSumAggregateInputType
-    _min?: DirectionsMinAggregateInputType
-    _max?: DirectionsMaxAggregateInputType
-  }
-
-  export type DirectionsGroupByOutputType = {
-    id: bigint
-    user_id: string
-    type: $Enums.AddressType
-    country_iso: number
-    province_id: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude: number | null
-    longitude: number | null
-    created_at: Date
-    updated_at: Date | null
-    _count: DirectionsCountAggregateOutputType | null
-    _avg: DirectionsAvgAggregateOutputType | null
-    _sum: DirectionsSumAggregateOutputType | null
-    _min: DirectionsMinAggregateOutputType | null
-    _max: DirectionsMaxAggregateOutputType | null
-  }
-
-  type GetDirectionsGroupByPayload<T extends directionsGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<DirectionsGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof DirectionsGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], DirectionsGroupByOutputType[P]>
-            : GetScalarType<T[P], DirectionsGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type directionsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    user_id?: boolean
-    type?: boolean
-    country_iso?: boolean
-    province_id?: boolean
-    city_id?: boolean
-    street?: boolean
-    zip_code?: boolean
-    latitude?: boolean
-    longitude?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    cities?: boolean | citiesDefaultArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    users?: boolean | usersDefaultArgs<ExtArgs>
-    orders?: boolean | directions$ordersArgs<ExtArgs>
-    _count?: boolean | DirectionsCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["directions"]>
-
-  export type directionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    user_id?: boolean
-    type?: boolean
-    country_iso?: boolean
-    province_id?: boolean
-    city_id?: boolean
-    street?: boolean
-    zip_code?: boolean
-    latitude?: boolean
-    longitude?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    cities?: boolean | citiesDefaultArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    users?: boolean | usersDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["directions"]>
-
-  export type directionsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    user_id?: boolean
-    type?: boolean
-    country_iso?: boolean
-    province_id?: boolean
-    city_id?: boolean
-    street?: boolean
-    zip_code?: boolean
-    latitude?: boolean
-    longitude?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    cities?: boolean | citiesDefaultArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    users?: boolean | usersDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["directions"]>
-
-  export type directionsSelectScalar = {
-    id?: boolean
-    user_id?: boolean
-    type?: boolean
-    country_iso?: boolean
-    province_id?: boolean
-    city_id?: boolean
-    street?: boolean
-    zip_code?: boolean
-    latitude?: boolean
-    longitude?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type directionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "type" | "country_iso" | "province_id" | "city_id" | "street" | "zip_code" | "latitude" | "longitude" | "created_at" | "updated_at", ExtArgs["result"]["directions"]>
-  export type directionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cities?: boolean | citiesDefaultArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    users?: boolean | usersDefaultArgs<ExtArgs>
-    orders?: boolean | directions$ordersArgs<ExtArgs>
-    _count?: boolean | DirectionsCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type directionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cities?: boolean | citiesDefaultArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    users?: boolean | usersDefaultArgs<ExtArgs>
-  }
-  export type directionsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cities?: boolean | citiesDefaultArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    provinces?: boolean | provincesDefaultArgs<ExtArgs>
-    users?: boolean | usersDefaultArgs<ExtArgs>
-  }
-
-  export type $directionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "directions"
-    objects: {
-      cities: Prisma.$citiesPayload<ExtArgs>
-      countries: Prisma.$countriesPayload<ExtArgs>
-      provinces: Prisma.$provincesPayload<ExtArgs>
-      users: Prisma.$usersPayload<ExtArgs>
-      orders: Prisma.$ordersPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: bigint
-      user_id: string
-      type: $Enums.AddressType
-      country_iso: number
-      province_id: number
-      city_id: number
-      street: string
-      zip_code: string
-      latitude: number | null
-      longitude: number | null
-      created_at: Date
-      updated_at: Date | null
-    }, ExtArgs["result"]["directions"]>
-    composites: {}
-  }
-
-  type directionsGetPayload<S extends boolean | null | undefined | directionsDefaultArgs> = $Result.GetResult<Prisma.$directionsPayload, S>
-
-  type directionsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<directionsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: DirectionsCountAggregateInputType | true
-    }
-
-  export interface directionsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['directions'], meta: { name: 'directions' } }
-    /**
-     * Find zero or one Directions that matches the filter.
-     * @param {directionsFindUniqueArgs} args - Arguments to find a Directions
-     * @example
-     * // Get one Directions
-     * const directions = await prisma.directions.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends directionsFindUniqueArgs>(args: SelectSubset<T, directionsFindUniqueArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Directions that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {directionsFindUniqueOrThrowArgs} args - Arguments to find a Directions
-     * @example
-     * // Get one Directions
-     * const directions = await prisma.directions.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends directionsFindUniqueOrThrowArgs>(args: SelectSubset<T, directionsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Directions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {directionsFindFirstArgs} args - Arguments to find a Directions
-     * @example
-     * // Get one Directions
-     * const directions = await prisma.directions.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends directionsFindFirstArgs>(args?: SelectSubset<T, directionsFindFirstArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Directions that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {directionsFindFirstOrThrowArgs} args - Arguments to find a Directions
-     * @example
-     * // Get one Directions
-     * const directions = await prisma.directions.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends directionsFindFirstOrThrowArgs>(args?: SelectSubset<T, directionsFindFirstOrThrowArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Directions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {directionsFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Directions
-     * const directions = await prisma.directions.findMany()
-     * 
-     * // Get first 10 Directions
-     * const directions = await prisma.directions.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const directionsWithIdOnly = await prisma.directions.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends directionsFindManyArgs>(args?: SelectSubset<T, directionsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Directions.
-     * @param {directionsCreateArgs} args - Arguments to create a Directions.
-     * @example
-     * // Create one Directions
-     * const Directions = await prisma.directions.create({
-     *   data: {
-     *     // ... data to create a Directions
-     *   }
-     * })
-     * 
-     */
-    create<T extends directionsCreateArgs>(args: SelectSubset<T, directionsCreateArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Directions.
-     * @param {directionsCreateManyArgs} args - Arguments to create many Directions.
-     * @example
-     * // Create many Directions
-     * const directions = await prisma.directions.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends directionsCreateManyArgs>(args?: SelectSubset<T, directionsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Directions and returns the data saved in the database.
-     * @param {directionsCreateManyAndReturnArgs} args - Arguments to create many Directions.
-     * @example
-     * // Create many Directions
-     * const directions = await prisma.directions.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Directions and only return the `id`
-     * const directionsWithIdOnly = await prisma.directions.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends directionsCreateManyAndReturnArgs>(args?: SelectSubset<T, directionsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Directions.
-     * @param {directionsDeleteArgs} args - Arguments to delete one Directions.
-     * @example
-     * // Delete one Directions
-     * const Directions = await prisma.directions.delete({
-     *   where: {
-     *     // ... filter to delete one Directions
-     *   }
-     * })
-     * 
-     */
-    delete<T extends directionsDeleteArgs>(args: SelectSubset<T, directionsDeleteArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Directions.
-     * @param {directionsUpdateArgs} args - Arguments to update one Directions.
-     * @example
-     * // Update one Directions
-     * const directions = await prisma.directions.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends directionsUpdateArgs>(args: SelectSubset<T, directionsUpdateArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Directions.
-     * @param {directionsDeleteManyArgs} args - Arguments to filter Directions to delete.
-     * @example
-     * // Delete a few Directions
-     * const { count } = await prisma.directions.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends directionsDeleteManyArgs>(args?: SelectSubset<T, directionsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Directions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {directionsUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Directions
-     * const directions = await prisma.directions.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends directionsUpdateManyArgs>(args: SelectSubset<T, directionsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Directions and returns the data updated in the database.
-     * @param {directionsUpdateManyAndReturnArgs} args - Arguments to update many Directions.
-     * @example
-     * // Update many Directions
-     * const directions = await prisma.directions.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Directions and only return the `id`
-     * const directionsWithIdOnly = await prisma.directions.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends directionsUpdateManyAndReturnArgs>(args: SelectSubset<T, directionsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Directions.
-     * @param {directionsUpsertArgs} args - Arguments to update or create a Directions.
-     * @example
-     * // Update or create a Directions
-     * const directions = await prisma.directions.upsert({
-     *   create: {
-     *     // ... data to create a Directions
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Directions we want to update
-     *   }
-     * })
-     */
-    upsert<T extends directionsUpsertArgs>(args: SelectSubset<T, directionsUpsertArgs<ExtArgs>>): Prisma__directionsClient<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Directions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {directionsCountArgs} args - Arguments to filter Directions to count.
-     * @example
-     * // Count the number of Directions
-     * const count = await prisma.directions.count({
-     *   where: {
-     *     // ... the filter for the Directions we want to count
-     *   }
-     * })
-    **/
-    count<T extends directionsCountArgs>(
-      args?: Subset<T, directionsCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], DirectionsCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Directions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DirectionsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends DirectionsAggregateArgs>(args: Subset<T, DirectionsAggregateArgs>): Prisma.PrismaPromise<GetDirectionsAggregateType<T>>
-
-    /**
-     * Group by Directions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {directionsGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends directionsGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: directionsGroupByArgs['orderBy'] }
-        : { orderBy?: directionsGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, directionsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDirectionsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the directions model
-   */
-  readonly fields: directionsFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for directions.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__directionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    cities<T extends citiesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, citiesDefaultArgs<ExtArgs>>): Prisma__citiesClient<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    countries<T extends countriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, countriesDefaultArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    provinces<T extends provincesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, provincesDefaultArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    users<T extends usersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, usersDefaultArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    orders<T extends directions$ordersArgs<ExtArgs> = {}>(args?: Subset<T, directions$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ordersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the directions model
-   */
-  interface directionsFieldRefs {
-    readonly id: FieldRef<"directions", 'BigInt'>
-    readonly user_id: FieldRef<"directions", 'String'>
-    readonly type: FieldRef<"directions", 'AddressType'>
-    readonly country_iso: FieldRef<"directions", 'Int'>
-    readonly province_id: FieldRef<"directions", 'Int'>
-    readonly city_id: FieldRef<"directions", 'Int'>
-    readonly street: FieldRef<"directions", 'String'>
-    readonly zip_code: FieldRef<"directions", 'String'>
-    readonly latitude: FieldRef<"directions", 'Float'>
-    readonly longitude: FieldRef<"directions", 'Float'>
-    readonly created_at: FieldRef<"directions", 'DateTime'>
-    readonly updated_at: FieldRef<"directions", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * directions findUnique
-   */
-  export type directionsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * Filter, which directions to fetch.
-     */
-    where: directionsWhereUniqueInput
-  }
-
-  /**
-   * directions findUniqueOrThrow
-   */
-  export type directionsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * Filter, which directions to fetch.
-     */
-    where: directionsWhereUniqueInput
-  }
-
-  /**
-   * directions findFirst
-   */
-  export type directionsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * Filter, which directions to fetch.
-     */
-    where?: directionsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of directions to fetch.
-     */
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for directions.
-     */
-    cursor?: directionsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` directions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` directions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of directions.
-     */
-    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
-  }
-
-  /**
-   * directions findFirstOrThrow
-   */
-  export type directionsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * Filter, which directions to fetch.
-     */
-    where?: directionsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of directions to fetch.
-     */
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for directions.
-     */
-    cursor?: directionsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` directions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` directions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of directions.
-     */
-    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
-  }
-
-  /**
-   * directions findMany
-   */
-  export type directionsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * Filter, which directions to fetch.
-     */
-    where?: directionsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of directions to fetch.
-     */
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing directions.
-     */
-    cursor?: directionsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` directions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` directions.
-     */
-    skip?: number
-    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
-  }
-
-  /**
-   * directions create
-   */
-  export type directionsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * The data needed to create a directions.
-     */
-    data: XOR<directionsCreateInput, directionsUncheckedCreateInput>
-  }
-
-  /**
-   * directions createMany
-   */
-  export type directionsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many directions.
-     */
-    data: directionsCreateManyInput | directionsCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * directions createManyAndReturn
-   */
-  export type directionsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * The data used to create many directions.
-     */
-    data: directionsCreateManyInput | directionsCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * directions update
-   */
-  export type directionsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * The data needed to update a directions.
-     */
-    data: XOR<directionsUpdateInput, directionsUncheckedUpdateInput>
-    /**
-     * Choose, which directions to update.
-     */
-    where: directionsWhereUniqueInput
-  }
-
-  /**
-   * directions updateMany
-   */
-  export type directionsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update directions.
-     */
-    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyInput>
-    /**
-     * Filter which directions to update
-     */
-    where?: directionsWhereInput
-    /**
-     * Limit how many directions to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * directions updateManyAndReturn
-   */
-  export type directionsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * The data used to update directions.
-     */
-    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyInput>
-    /**
-     * Filter which directions to update
-     */
-    where?: directionsWhereInput
-    /**
-     * Limit how many directions to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * directions upsert
-   */
-  export type directionsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * The filter to search for the directions to update in case it exists.
-     */
-    where: directionsWhereUniqueInput
-    /**
-     * In case the directions found by the `where` argument doesn't exist, create a new directions with this data.
-     */
-    create: XOR<directionsCreateInput, directionsUncheckedCreateInput>
-    /**
-     * In case the directions was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<directionsUpdateInput, directionsUncheckedUpdateInput>
-  }
-
-  /**
-   * directions delete
-   */
-  export type directionsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    /**
-     * Filter which directions to delete.
-     */
-    where: directionsWhereUniqueInput
-  }
-
-  /**
-   * directions deleteMany
-   */
-  export type directionsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which directions to delete
-     */
-    where?: directionsWhereInput
-    /**
-     * Limit how many directions to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * directions.orders
-   */
-  export type directions$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the orders
-     */
-    select?: ordersSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the orders
-     */
-    omit?: ordersOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ordersInclude<ExtArgs> | null
-    where?: ordersWhereInput
-    orderBy?: ordersOrderByWithRelationInput | ordersOrderByWithRelationInput[]
-    cursor?: ordersWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: OrdersScalarFieldEnum | OrdersScalarFieldEnum[]
-  }
-
-  /**
-   * directions without action
-   */
-  export type directionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model provinces
-   */
-
-  export type AggregateProvinces = {
-    _count: ProvincesCountAggregateOutputType | null
-    _avg: ProvincesAvgAggregateOutputType | null
-    _sum: ProvincesSumAggregateOutputType | null
-    _min: ProvincesMinAggregateOutputType | null
-    _max: ProvincesMaxAggregateOutputType | null
-  }
-
-  export type ProvincesAvgAggregateOutputType = {
-    id: number | null
-    country_iso: number | null
-  }
-
-  export type ProvincesSumAggregateOutputType = {
-    id: number | null
-    country_iso: number | null
-  }
-
-  export type ProvincesMinAggregateOutputType = {
-    id: number | null
-    country_iso: number | null
-    name: string | null
-    name_local: string | null
-  }
-
-  export type ProvincesMaxAggregateOutputType = {
-    id: number | null
-    country_iso: number | null
-    name: string | null
-    name_local: string | null
-  }
-
-  export type ProvincesCountAggregateOutputType = {
-    id: number
-    country_iso: number
-    name: number
-    name_local: number
-    _all: number
-  }
-
-
-  export type ProvincesAvgAggregateInputType = {
-    id?: true
-    country_iso?: true
-  }
-
-  export type ProvincesSumAggregateInputType = {
-    id?: true
-    country_iso?: true
-  }
-
-  export type ProvincesMinAggregateInputType = {
-    id?: true
-    country_iso?: true
-    name?: true
-    name_local?: true
-  }
-
-  export type ProvincesMaxAggregateInputType = {
-    id?: true
-    country_iso?: true
-    name?: true
-    name_local?: true
-  }
-
-  export type ProvincesCountAggregateInputType = {
-    id?: true
-    country_iso?: true
-    name?: true
-    name_local?: true
-    _all?: true
-  }
-
-  export type ProvincesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which provinces to aggregate.
-     */
-    where?: provincesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of provinces to fetch.
-     */
-    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: provincesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` provinces from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` provinces.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned provinces
-    **/
-    _count?: true | ProvincesCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ProvincesAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ProvincesSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ProvincesMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ProvincesMaxAggregateInputType
-  }
-
-  export type GetProvincesAggregateType<T extends ProvincesAggregateArgs> = {
-        [P in keyof T & keyof AggregateProvinces]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateProvinces[P]>
-      : GetScalarType<T[P], AggregateProvinces[P]>
-  }
-
-
-
-
-  export type provincesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: provincesWhereInput
-    orderBy?: provincesOrderByWithAggregationInput | provincesOrderByWithAggregationInput[]
-    by: ProvincesScalarFieldEnum[] | ProvincesScalarFieldEnum
-    having?: provincesScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ProvincesCountAggregateInputType | true
-    _avg?: ProvincesAvgAggregateInputType
-    _sum?: ProvincesSumAggregateInputType
-    _min?: ProvincesMinAggregateInputType
-    _max?: ProvincesMaxAggregateInputType
-  }
-
-  export type ProvincesGroupByOutputType = {
-    id: number
-    country_iso: number
-    name: string
-    name_local: string
-    _count: ProvincesCountAggregateOutputType | null
-    _avg: ProvincesAvgAggregateOutputType | null
-    _sum: ProvincesSumAggregateOutputType | null
-    _min: ProvincesMinAggregateOutputType | null
-    _max: ProvincesMaxAggregateOutputType | null
-  }
-
-  type GetProvincesGroupByPayload<T extends provincesGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ProvincesGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ProvincesGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ProvincesGroupByOutputType[P]>
-            : GetScalarType<T[P], ProvincesGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type provincesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    country_iso?: boolean
-    name?: boolean
-    name_local?: boolean
-    cities?: boolean | provinces$citiesArgs<ExtArgs>
-    directions?: boolean | provinces$directionsArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    _count?: boolean | ProvincesCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["provinces"]>
-
-  export type provincesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    country_iso?: boolean
-    name?: boolean
-    name_local?: boolean
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["provinces"]>
-
-  export type provincesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    country_iso?: boolean
-    name?: boolean
-    name_local?: boolean
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["provinces"]>
-
-  export type provincesSelectScalar = {
-    id?: boolean
-    country_iso?: boolean
-    name?: boolean
-    name_local?: boolean
-  }
-
-  export type provincesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "country_iso" | "name" | "name_local", ExtArgs["result"]["provinces"]>
-  export type provincesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cities?: boolean | provinces$citiesArgs<ExtArgs>
-    directions?: boolean | provinces$directionsArgs<ExtArgs>
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-    _count?: boolean | ProvincesCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type provincesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-  }
-  export type provincesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    countries?: boolean | countriesDefaultArgs<ExtArgs>
-  }
-
-  export type $provincesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "provinces"
-    objects: {
-      cities: Prisma.$citiesPayload<ExtArgs>[]
-      directions: Prisma.$directionsPayload<ExtArgs>[]
-      countries: Prisma.$countriesPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      country_iso: number
-      name: string
-      name_local: string
-    }, ExtArgs["result"]["provinces"]>
-    composites: {}
-  }
-
-  type provincesGetPayload<S extends boolean | null | undefined | provincesDefaultArgs> = $Result.GetResult<Prisma.$provincesPayload, S>
-
-  type provincesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<provincesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ProvincesCountAggregateInputType | true
-    }
-
-  export interface provincesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['provinces'], meta: { name: 'provinces' } }
-    /**
-     * Find zero or one Provinces that matches the filter.
-     * @param {provincesFindUniqueArgs} args - Arguments to find a Provinces
-     * @example
-     * // Get one Provinces
-     * const provinces = await prisma.provinces.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends provincesFindUniqueArgs>(args: SelectSubset<T, provincesFindUniqueArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Provinces that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {provincesFindUniqueOrThrowArgs} args - Arguments to find a Provinces
-     * @example
-     * // Get one Provinces
-     * const provinces = await prisma.provinces.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends provincesFindUniqueOrThrowArgs>(args: SelectSubset<T, provincesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Provinces that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {provincesFindFirstArgs} args - Arguments to find a Provinces
-     * @example
-     * // Get one Provinces
-     * const provinces = await prisma.provinces.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends provincesFindFirstArgs>(args?: SelectSubset<T, provincesFindFirstArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Provinces that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {provincesFindFirstOrThrowArgs} args - Arguments to find a Provinces
-     * @example
-     * // Get one Provinces
-     * const provinces = await prisma.provinces.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends provincesFindFirstOrThrowArgs>(args?: SelectSubset<T, provincesFindFirstOrThrowArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Provinces that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {provincesFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Provinces
-     * const provinces = await prisma.provinces.findMany()
-     * 
-     * // Get first 10 Provinces
-     * const provinces = await prisma.provinces.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const provincesWithIdOnly = await prisma.provinces.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends provincesFindManyArgs>(args?: SelectSubset<T, provincesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Provinces.
-     * @param {provincesCreateArgs} args - Arguments to create a Provinces.
-     * @example
-     * // Create one Provinces
-     * const Provinces = await prisma.provinces.create({
-     *   data: {
-     *     // ... data to create a Provinces
-     *   }
-     * })
-     * 
-     */
-    create<T extends provincesCreateArgs>(args: SelectSubset<T, provincesCreateArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Provinces.
-     * @param {provincesCreateManyArgs} args - Arguments to create many Provinces.
-     * @example
-     * // Create many Provinces
-     * const provinces = await prisma.provinces.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends provincesCreateManyArgs>(args?: SelectSubset<T, provincesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Provinces and returns the data saved in the database.
-     * @param {provincesCreateManyAndReturnArgs} args - Arguments to create many Provinces.
-     * @example
-     * // Create many Provinces
-     * const provinces = await prisma.provinces.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Provinces and only return the `id`
-     * const provincesWithIdOnly = await prisma.provinces.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends provincesCreateManyAndReturnArgs>(args?: SelectSubset<T, provincesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Provinces.
-     * @param {provincesDeleteArgs} args - Arguments to delete one Provinces.
-     * @example
-     * // Delete one Provinces
-     * const Provinces = await prisma.provinces.delete({
-     *   where: {
-     *     // ... filter to delete one Provinces
-     *   }
-     * })
-     * 
-     */
-    delete<T extends provincesDeleteArgs>(args: SelectSubset<T, provincesDeleteArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Provinces.
-     * @param {provincesUpdateArgs} args - Arguments to update one Provinces.
-     * @example
-     * // Update one Provinces
-     * const provinces = await prisma.provinces.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends provincesUpdateArgs>(args: SelectSubset<T, provincesUpdateArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Provinces.
-     * @param {provincesDeleteManyArgs} args - Arguments to filter Provinces to delete.
-     * @example
-     * // Delete a few Provinces
-     * const { count } = await prisma.provinces.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends provincesDeleteManyArgs>(args?: SelectSubset<T, provincesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Provinces.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {provincesUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Provinces
-     * const provinces = await prisma.provinces.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends provincesUpdateManyArgs>(args: SelectSubset<T, provincesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Provinces and returns the data updated in the database.
-     * @param {provincesUpdateManyAndReturnArgs} args - Arguments to update many Provinces.
-     * @example
-     * // Update many Provinces
-     * const provinces = await prisma.provinces.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Provinces and only return the `id`
-     * const provincesWithIdOnly = await prisma.provinces.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends provincesUpdateManyAndReturnArgs>(args: SelectSubset<T, provincesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Provinces.
-     * @param {provincesUpsertArgs} args - Arguments to update or create a Provinces.
-     * @example
-     * // Update or create a Provinces
-     * const provinces = await prisma.provinces.upsert({
-     *   create: {
-     *     // ... data to create a Provinces
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Provinces we want to update
-     *   }
-     * })
-     */
-    upsert<T extends provincesUpsertArgs>(args: SelectSubset<T, provincesUpsertArgs<ExtArgs>>): Prisma__provincesClient<$Result.GetResult<Prisma.$provincesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Provinces.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {provincesCountArgs} args - Arguments to filter Provinces to count.
-     * @example
-     * // Count the number of Provinces
-     * const count = await prisma.provinces.count({
-     *   where: {
-     *     // ... the filter for the Provinces we want to count
-     *   }
-     * })
-    **/
-    count<T extends provincesCountArgs>(
-      args?: Subset<T, provincesCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ProvincesCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Provinces.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProvincesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ProvincesAggregateArgs>(args: Subset<T, ProvincesAggregateArgs>): Prisma.PrismaPromise<GetProvincesAggregateType<T>>
-
-    /**
-     * Group by Provinces.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {provincesGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends provincesGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: provincesGroupByArgs['orderBy'] }
-        : { orderBy?: provincesGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, provincesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProvincesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the provinces model
-   */
-  readonly fields: provincesFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for provinces.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__provincesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    cities<T extends provinces$citiesArgs<ExtArgs> = {}>(args?: Subset<T, provinces$citiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$citiesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    directions<T extends provinces$directionsArgs<ExtArgs> = {}>(args?: Subset<T, provinces$directionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$directionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    countries<T extends countriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, countriesDefaultArgs<ExtArgs>>): Prisma__countriesClient<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the provinces model
-   */
-  interface provincesFieldRefs {
-    readonly id: FieldRef<"provinces", 'Int'>
-    readonly country_iso: FieldRef<"provinces", 'Int'>
-    readonly name: FieldRef<"provinces", 'String'>
-    readonly name_local: FieldRef<"provinces", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * provinces findUnique
-   */
-  export type provincesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * Filter, which provinces to fetch.
-     */
-    where: provincesWhereUniqueInput
-  }
-
-  /**
-   * provinces findUniqueOrThrow
-   */
-  export type provincesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * Filter, which provinces to fetch.
-     */
-    where: provincesWhereUniqueInput
-  }
-
-  /**
-   * provinces findFirst
-   */
-  export type provincesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * Filter, which provinces to fetch.
-     */
-    where?: provincesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of provinces to fetch.
-     */
-    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for provinces.
-     */
-    cursor?: provincesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` provinces from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` provinces.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of provinces.
-     */
-    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
-  }
-
-  /**
-   * provinces findFirstOrThrow
-   */
-  export type provincesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * Filter, which provinces to fetch.
-     */
-    where?: provincesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of provinces to fetch.
-     */
-    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for provinces.
-     */
-    cursor?: provincesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` provinces from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` provinces.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of provinces.
-     */
-    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
-  }
-
-  /**
-   * provinces findMany
-   */
-  export type provincesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * Filter, which provinces to fetch.
-     */
-    where?: provincesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of provinces to fetch.
-     */
-    orderBy?: provincesOrderByWithRelationInput | provincesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing provinces.
-     */
-    cursor?: provincesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` provinces from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` provinces.
-     */
-    skip?: number
-    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
-  }
-
-  /**
-   * provinces create
-   */
-  export type provincesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * The data needed to create a provinces.
-     */
-    data: XOR<provincesCreateInput, provincesUncheckedCreateInput>
-  }
-
-  /**
-   * provinces createMany
-   */
-  export type provincesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many provinces.
-     */
-    data: provincesCreateManyInput | provincesCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * provinces createManyAndReturn
-   */
-  export type provincesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * The data used to create many provinces.
-     */
-    data: provincesCreateManyInput | provincesCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * provinces update
-   */
-  export type provincesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * The data needed to update a provinces.
-     */
-    data: XOR<provincesUpdateInput, provincesUncheckedUpdateInput>
-    /**
-     * Choose, which provinces to update.
-     */
-    where: provincesWhereUniqueInput
-  }
-
-  /**
-   * provinces updateMany
-   */
-  export type provincesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update provinces.
-     */
-    data: XOR<provincesUpdateManyMutationInput, provincesUncheckedUpdateManyInput>
-    /**
-     * Filter which provinces to update
-     */
-    where?: provincesWhereInput
-    /**
-     * Limit how many provinces to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * provinces updateManyAndReturn
-   */
-  export type provincesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * The data used to update provinces.
-     */
-    data: XOR<provincesUpdateManyMutationInput, provincesUncheckedUpdateManyInput>
-    /**
-     * Filter which provinces to update
-     */
-    where?: provincesWhereInput
-    /**
-     * Limit how many provinces to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * provinces upsert
-   */
-  export type provincesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * The filter to search for the provinces to update in case it exists.
-     */
-    where: provincesWhereUniqueInput
-    /**
-     * In case the provinces found by the `where` argument doesn't exist, create a new provinces with this data.
-     */
-    create: XOR<provincesCreateInput, provincesUncheckedCreateInput>
-    /**
-     * In case the provinces was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<provincesUpdateInput, provincesUncheckedUpdateInput>
-  }
-
-  /**
-   * provinces delete
-   */
-  export type provincesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-    /**
-     * Filter which provinces to delete.
-     */
-    where: provincesWhereUniqueInput
-  }
-
-  /**
-   * provinces deleteMany
-   */
-  export type provincesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which provinces to delete
-     */
-    where?: provincesWhereInput
-    /**
-     * Limit how many provinces to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * provinces.cities
-   */
-  export type provinces$citiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the cities
-     */
-    select?: citiesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the cities
-     */
-    omit?: citiesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: citiesInclude<ExtArgs> | null
-    where?: citiesWhereInput
-    orderBy?: citiesOrderByWithRelationInput | citiesOrderByWithRelationInput[]
-    cursor?: citiesWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CitiesScalarFieldEnum | CitiesScalarFieldEnum[]
-  }
-
-  /**
-   * provinces.directions
-   */
-  export type provinces$directionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the directions
-     */
-    select?: directionsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the directions
-     */
-    omit?: directionsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: directionsInclude<ExtArgs> | null
-    where?: directionsWhereInput
-    orderBy?: directionsOrderByWithRelationInput | directionsOrderByWithRelationInput[]
-    cursor?: directionsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DirectionsScalarFieldEnum | DirectionsScalarFieldEnum[]
-  }
-
-  /**
-   * provinces without action
-   */
-  export type provincesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the provinces
-     */
-    select?: provincesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the provinces
-     */
-    omit?: provincesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: provincesInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model currencies
-   */
-
-  export type AggregateCurrencies = {
-    _count: CurrenciesCountAggregateOutputType | null
-    _avg: CurrenciesAvgAggregateOutputType | null
-    _sum: CurrenciesSumAggregateOutputType | null
-    _min: CurrenciesMinAggregateOutputType | null
-    _max: CurrenciesMaxAggregateOutputType | null
-  }
-
-  export type CurrenciesAvgAggregateOutputType = {
-    iso_numeric: number | null
-    decimal_digits: number | null
-  }
-
-  export type CurrenciesSumAggregateOutputType = {
-    iso_numeric: number | null
-    decimal_digits: number | null
-  }
-
-  export type CurrenciesMinAggregateOutputType = {
-    iso_numeric: number | null
-    iso_alpha3: string | null
-    symbol: string | null
-    decimal_digits: number | null
-  }
-
-  export type CurrenciesMaxAggregateOutputType = {
-    iso_numeric: number | null
-    iso_alpha3: string | null
-    symbol: string | null
-    decimal_digits: number | null
-  }
-
-  export type CurrenciesCountAggregateOutputType = {
-    iso_numeric: number
-    iso_alpha3: number
-    symbol: number
-    decimal_digits: number
-    _all: number
-  }
-
-
-  export type CurrenciesAvgAggregateInputType = {
-    iso_numeric?: true
-    decimal_digits?: true
-  }
-
-  export type CurrenciesSumAggregateInputType = {
-    iso_numeric?: true
-    decimal_digits?: true
-  }
-
-  export type CurrenciesMinAggregateInputType = {
-    iso_numeric?: true
-    iso_alpha3?: true
-    symbol?: true
-    decimal_digits?: true
-  }
-
-  export type CurrenciesMaxAggregateInputType = {
-    iso_numeric?: true
-    iso_alpha3?: true
-    symbol?: true
-    decimal_digits?: true
-  }
-
-  export type CurrenciesCountAggregateInputType = {
-    iso_numeric?: true
-    iso_alpha3?: true
-    symbol?: true
-    decimal_digits?: true
-    _all?: true
-  }
-
-  export type CurrenciesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which currencies to aggregate.
-     */
-    where?: currenciesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of currencies to fetch.
-     */
-    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: currenciesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` currencies from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` currencies.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned currencies
-    **/
-    _count?: true | CurrenciesCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: CurrenciesAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: CurrenciesSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: CurrenciesMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: CurrenciesMaxAggregateInputType
-  }
-
-  export type GetCurrenciesAggregateType<T extends CurrenciesAggregateArgs> = {
-        [P in keyof T & keyof AggregateCurrencies]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateCurrencies[P]>
-      : GetScalarType<T[P], AggregateCurrencies[P]>
-  }
-
-
-
-
-  export type currenciesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: currenciesWhereInput
-    orderBy?: currenciesOrderByWithAggregationInput | currenciesOrderByWithAggregationInput[]
-    by: CurrenciesScalarFieldEnum[] | CurrenciesScalarFieldEnum
-    having?: currenciesScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: CurrenciesCountAggregateInputType | true
-    _avg?: CurrenciesAvgAggregateInputType
-    _sum?: CurrenciesSumAggregateInputType
-    _min?: CurrenciesMinAggregateInputType
-    _max?: CurrenciesMaxAggregateInputType
-  }
-
-  export type CurrenciesGroupByOutputType = {
-    iso_numeric: number
-    iso_alpha3: string
-    symbol: string
-    decimal_digits: number
-    _count: CurrenciesCountAggregateOutputType | null
-    _avg: CurrenciesAvgAggregateOutputType | null
-    _sum: CurrenciesSumAggregateOutputType | null
-    _min: CurrenciesMinAggregateOutputType | null
-    _max: CurrenciesMaxAggregateOutputType | null
-  }
-
-  type GetCurrenciesGroupByPayload<T extends currenciesGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<CurrenciesGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof CurrenciesGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], CurrenciesGroupByOutputType[P]>
-            : GetScalarType<T[P], CurrenciesGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type currenciesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    iso_numeric?: boolean
-    iso_alpha3?: boolean
-    symbol?: boolean
-    decimal_digits?: boolean
-    countries?: boolean | currencies$countriesArgs<ExtArgs>
-    _count?: boolean | CurrenciesCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["currencies"]>
-
-  export type currenciesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    iso_numeric?: boolean
-    iso_alpha3?: boolean
-    symbol?: boolean
-    decimal_digits?: boolean
-  }, ExtArgs["result"]["currencies"]>
-
-  export type currenciesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    iso_numeric?: boolean
-    iso_alpha3?: boolean
-    symbol?: boolean
-    decimal_digits?: boolean
-  }, ExtArgs["result"]["currencies"]>
-
-  export type currenciesSelectScalar = {
-    iso_numeric?: boolean
-    iso_alpha3?: boolean
-    symbol?: boolean
-    decimal_digits?: boolean
-  }
-
-  export type currenciesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"iso_numeric" | "iso_alpha3" | "symbol" | "decimal_digits", ExtArgs["result"]["currencies"]>
-  export type currenciesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    countries?: boolean | currencies$countriesArgs<ExtArgs>
-    _count?: boolean | CurrenciesCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type currenciesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type currenciesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $currenciesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "currencies"
-    objects: {
-      countries: Prisma.$countriesPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      iso_numeric: number
-      iso_alpha3: string
-      symbol: string
-      decimal_digits: number
-    }, ExtArgs["result"]["currencies"]>
-    composites: {}
-  }
-
-  type currenciesGetPayload<S extends boolean | null | undefined | currenciesDefaultArgs> = $Result.GetResult<Prisma.$currenciesPayload, S>
-
-  type currenciesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<currenciesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CurrenciesCountAggregateInputType | true
-    }
-
-  export interface currenciesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['currencies'], meta: { name: 'currencies' } }
-    /**
-     * Find zero or one Currencies that matches the filter.
-     * @param {currenciesFindUniqueArgs} args - Arguments to find a Currencies
-     * @example
-     * // Get one Currencies
-     * const currencies = await prisma.currencies.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends currenciesFindUniqueArgs>(args: SelectSubset<T, currenciesFindUniqueArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Currencies that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {currenciesFindUniqueOrThrowArgs} args - Arguments to find a Currencies
-     * @example
-     * // Get one Currencies
-     * const currencies = await prisma.currencies.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends currenciesFindUniqueOrThrowArgs>(args: SelectSubset<T, currenciesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Currencies that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {currenciesFindFirstArgs} args - Arguments to find a Currencies
-     * @example
-     * // Get one Currencies
-     * const currencies = await prisma.currencies.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends currenciesFindFirstArgs>(args?: SelectSubset<T, currenciesFindFirstArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Currencies that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {currenciesFindFirstOrThrowArgs} args - Arguments to find a Currencies
-     * @example
-     * // Get one Currencies
-     * const currencies = await prisma.currencies.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends currenciesFindFirstOrThrowArgs>(args?: SelectSubset<T, currenciesFindFirstOrThrowArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Currencies that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {currenciesFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Currencies
-     * const currencies = await prisma.currencies.findMany()
-     * 
-     * // Get first 10 Currencies
-     * const currencies = await prisma.currencies.findMany({ take: 10 })
-     * 
-     * // Only select the `iso_numeric`
-     * const currenciesWithIso_numericOnly = await prisma.currencies.findMany({ select: { iso_numeric: true } })
-     * 
-     */
-    findMany<T extends currenciesFindManyArgs>(args?: SelectSubset<T, currenciesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Currencies.
-     * @param {currenciesCreateArgs} args - Arguments to create a Currencies.
-     * @example
-     * // Create one Currencies
-     * const Currencies = await prisma.currencies.create({
-     *   data: {
-     *     // ... data to create a Currencies
-     *   }
-     * })
-     * 
-     */
-    create<T extends currenciesCreateArgs>(args: SelectSubset<T, currenciesCreateArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Currencies.
-     * @param {currenciesCreateManyArgs} args - Arguments to create many Currencies.
-     * @example
-     * // Create many Currencies
-     * const currencies = await prisma.currencies.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends currenciesCreateManyArgs>(args?: SelectSubset<T, currenciesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Currencies and returns the data saved in the database.
-     * @param {currenciesCreateManyAndReturnArgs} args - Arguments to create many Currencies.
-     * @example
-     * // Create many Currencies
-     * const currencies = await prisma.currencies.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Currencies and only return the `iso_numeric`
-     * const currenciesWithIso_numericOnly = await prisma.currencies.createManyAndReturn({
-     *   select: { iso_numeric: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends currenciesCreateManyAndReturnArgs>(args?: SelectSubset<T, currenciesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Currencies.
-     * @param {currenciesDeleteArgs} args - Arguments to delete one Currencies.
-     * @example
-     * // Delete one Currencies
-     * const Currencies = await prisma.currencies.delete({
-     *   where: {
-     *     // ... filter to delete one Currencies
-     *   }
-     * })
-     * 
-     */
-    delete<T extends currenciesDeleteArgs>(args: SelectSubset<T, currenciesDeleteArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Currencies.
-     * @param {currenciesUpdateArgs} args - Arguments to update one Currencies.
-     * @example
-     * // Update one Currencies
-     * const currencies = await prisma.currencies.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends currenciesUpdateArgs>(args: SelectSubset<T, currenciesUpdateArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Currencies.
-     * @param {currenciesDeleteManyArgs} args - Arguments to filter Currencies to delete.
-     * @example
-     * // Delete a few Currencies
-     * const { count } = await prisma.currencies.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends currenciesDeleteManyArgs>(args?: SelectSubset<T, currenciesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Currencies.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {currenciesUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Currencies
-     * const currencies = await prisma.currencies.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends currenciesUpdateManyArgs>(args: SelectSubset<T, currenciesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Currencies and returns the data updated in the database.
-     * @param {currenciesUpdateManyAndReturnArgs} args - Arguments to update many Currencies.
-     * @example
-     * // Update many Currencies
-     * const currencies = await prisma.currencies.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Currencies and only return the `iso_numeric`
-     * const currenciesWithIso_numericOnly = await prisma.currencies.updateManyAndReturn({
-     *   select: { iso_numeric: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends currenciesUpdateManyAndReturnArgs>(args: SelectSubset<T, currenciesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Currencies.
-     * @param {currenciesUpsertArgs} args - Arguments to update or create a Currencies.
-     * @example
-     * // Update or create a Currencies
-     * const currencies = await prisma.currencies.upsert({
-     *   create: {
-     *     // ... data to create a Currencies
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Currencies we want to update
-     *   }
-     * })
-     */
-    upsert<T extends currenciesUpsertArgs>(args: SelectSubset<T, currenciesUpsertArgs<ExtArgs>>): Prisma__currenciesClient<$Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Currencies.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {currenciesCountArgs} args - Arguments to filter Currencies to count.
-     * @example
-     * // Count the number of Currencies
-     * const count = await prisma.currencies.count({
-     *   where: {
-     *     // ... the filter for the Currencies we want to count
-     *   }
-     * })
-    **/
-    count<T extends currenciesCountArgs>(
-      args?: Subset<T, currenciesCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], CurrenciesCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Currencies.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CurrenciesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends CurrenciesAggregateArgs>(args: Subset<T, CurrenciesAggregateArgs>): Prisma.PrismaPromise<GetCurrenciesAggregateType<T>>
-
-    /**
-     * Group by Currencies.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {currenciesGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends currenciesGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: currenciesGroupByArgs['orderBy'] }
-        : { orderBy?: currenciesGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, currenciesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCurrenciesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the currencies model
-   */
-  readonly fields: currenciesFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for currencies.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__currenciesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    countries<T extends currencies$countriesArgs<ExtArgs> = {}>(args?: Subset<T, currencies$countriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$countriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the currencies model
-   */
-  interface currenciesFieldRefs {
-    readonly iso_numeric: FieldRef<"currencies", 'Int'>
-    readonly iso_alpha3: FieldRef<"currencies", 'String'>
-    readonly symbol: FieldRef<"currencies", 'String'>
-    readonly decimal_digits: FieldRef<"currencies", 'Int'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * currencies findUnique
-   */
-  export type currenciesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * Filter, which currencies to fetch.
-     */
-    where: currenciesWhereUniqueInput
-  }
-
-  /**
-   * currencies findUniqueOrThrow
-   */
-  export type currenciesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * Filter, which currencies to fetch.
-     */
-    where: currenciesWhereUniqueInput
-  }
-
-  /**
-   * currencies findFirst
-   */
-  export type currenciesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * Filter, which currencies to fetch.
-     */
-    where?: currenciesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of currencies to fetch.
-     */
-    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for currencies.
-     */
-    cursor?: currenciesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` currencies from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` currencies.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of currencies.
-     */
-    distinct?: CurrenciesScalarFieldEnum | CurrenciesScalarFieldEnum[]
-  }
-
-  /**
-   * currencies findFirstOrThrow
-   */
-  export type currenciesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * Filter, which currencies to fetch.
-     */
-    where?: currenciesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of currencies to fetch.
-     */
-    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for currencies.
-     */
-    cursor?: currenciesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` currencies from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` currencies.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of currencies.
-     */
-    distinct?: CurrenciesScalarFieldEnum | CurrenciesScalarFieldEnum[]
-  }
-
-  /**
-   * currencies findMany
-   */
-  export type currenciesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * Filter, which currencies to fetch.
-     */
-    where?: currenciesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of currencies to fetch.
-     */
-    orderBy?: currenciesOrderByWithRelationInput | currenciesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing currencies.
-     */
-    cursor?: currenciesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` currencies from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` currencies.
-     */
-    skip?: number
-    distinct?: CurrenciesScalarFieldEnum | CurrenciesScalarFieldEnum[]
-  }
-
-  /**
-   * currencies create
-   */
-  export type currenciesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * The data needed to create a currencies.
-     */
-    data: XOR<currenciesCreateInput, currenciesUncheckedCreateInput>
-  }
-
-  /**
-   * currencies createMany
-   */
-  export type currenciesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many currencies.
-     */
-    data: currenciesCreateManyInput | currenciesCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * currencies createManyAndReturn
-   */
-  export type currenciesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * The data used to create many currencies.
-     */
-    data: currenciesCreateManyInput | currenciesCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * currencies update
-   */
-  export type currenciesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * The data needed to update a currencies.
-     */
-    data: XOR<currenciesUpdateInput, currenciesUncheckedUpdateInput>
-    /**
-     * Choose, which currencies to update.
-     */
-    where: currenciesWhereUniqueInput
-  }
-
-  /**
-   * currencies updateMany
-   */
-  export type currenciesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update currencies.
-     */
-    data: XOR<currenciesUpdateManyMutationInput, currenciesUncheckedUpdateManyInput>
-    /**
-     * Filter which currencies to update
-     */
-    where?: currenciesWhereInput
-    /**
-     * Limit how many currencies to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * currencies updateManyAndReturn
-   */
-  export type currenciesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * The data used to update currencies.
-     */
-    data: XOR<currenciesUpdateManyMutationInput, currenciesUncheckedUpdateManyInput>
-    /**
-     * Filter which currencies to update
-     */
-    where?: currenciesWhereInput
-    /**
-     * Limit how many currencies to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * currencies upsert
-   */
-  export type currenciesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * The filter to search for the currencies to update in case it exists.
-     */
-    where: currenciesWhereUniqueInput
-    /**
-     * In case the currencies found by the `where` argument doesn't exist, create a new currencies with this data.
-     */
-    create: XOR<currenciesCreateInput, currenciesUncheckedCreateInput>
-    /**
-     * In case the currencies was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<currenciesUpdateInput, currenciesUncheckedUpdateInput>
-  }
-
-  /**
-   * currencies delete
-   */
-  export type currenciesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
-    /**
-     * Filter which currencies to delete.
-     */
-    where: currenciesWhereUniqueInput
-  }
-
-  /**
-   * currencies deleteMany
-   */
-  export type currenciesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which currencies to delete
-     */
-    where?: currenciesWhereInput
-    /**
-     * Limit how many currencies to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * currencies.countries
-   */
-  export type currencies$countriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the countries
-     */
-    select?: countriesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the countries
-     */
-    omit?: countriesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: countriesInclude<ExtArgs> | null
-    where?: countriesWhereInput
-    orderBy?: countriesOrderByWithRelationInput | countriesOrderByWithRelationInput[]
-    cursor?: countriesWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CountriesScalarFieldEnum | CountriesScalarFieldEnum[]
-  }
-
-  /**
-   * currencies without action
-   */
-  export type currenciesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the currencies
-     */
-    select?: currenciesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the currencies
-     */
-    omit?: currenciesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: currenciesInclude<ExtArgs> | null
+    include?: category_translationsInclude<ExtArgs> | null
   }
 
 
@@ -34542,7 +36983,9 @@ export namespace Prisma {
     name: 'name',
     iva: 'iva',
     parent_id: 'parent_id',
-    created_at: 'created_at'
+    created_at: 'created_at',
+    level: 'level',
+    name_unaccent: 'name_unaccent'
   };
 
   export type CategoriesScalarFieldEnum = (typeof CategoriesScalarFieldEnum)[keyof typeof CategoriesScalarFieldEnum]
@@ -34566,6 +37009,16 @@ export namespace Prisma {
   export type Chat_participantsScalarFieldEnum = (typeof Chat_participantsScalarFieldEnum)[keyof typeof Chat_participantsScalarFieldEnum]
 
 
+  export const CitiesScalarFieldEnum: {
+    id: 'id',
+    province_id: 'province_id',
+    name: 'name',
+    name_local: 'name_local'
+  };
+
+  export type CitiesScalarFieldEnum = (typeof CitiesScalarFieldEnum)[keyof typeof CitiesScalarFieldEnum]
+
+
   export const ConfigurationsScalarFieldEnum: {
     user_id: 'user_id',
     language: 'language',
@@ -34573,6 +37026,28 @@ export namespace Prisma {
   };
 
   export type ConfigurationsScalarFieldEnum = (typeof ConfigurationsScalarFieldEnum)[keyof typeof ConfigurationsScalarFieldEnum]
+
+
+  export const CountriesScalarFieldEnum: {
+    iso_alpha2: 'iso_alpha2',
+    iso_alpha3: 'iso_alpha3',
+    iso_numeric: 'iso_numeric',
+    name: 'name',
+    name_local: 'name_local',
+    currency_id: 'currency_id'
+  };
+
+  export type CountriesScalarFieldEnum = (typeof CountriesScalarFieldEnum)[keyof typeof CountriesScalarFieldEnum]
+
+
+  export const CurrenciesScalarFieldEnum: {
+    iso_numeric: 'iso_numeric',
+    iso_alpha3: 'iso_alpha3',
+    symbol: 'symbol',
+    decimal_digits: 'decimal_digits'
+  };
+
+  export type CurrenciesScalarFieldEnum = (typeof CurrenciesScalarFieldEnum)[keyof typeof CurrenciesScalarFieldEnum]
 
 
   export const DeliveriesScalarFieldEnum: {
@@ -34603,6 +37078,24 @@ export namespace Prisma {
   };
 
   export type Delivery_timelineScalarFieldEnum = (typeof Delivery_timelineScalarFieldEnum)[keyof typeof Delivery_timelineScalarFieldEnum]
+
+
+  export const DirectionsScalarFieldEnum: {
+    id: 'id',
+    user_id: 'user_id',
+    type: 'type',
+    country_iso: 'country_iso',
+    province_id: 'province_id',
+    city_id: 'city_id',
+    street: 'street',
+    zip_code: 'zip_code',
+    latitude: 'latitude',
+    longitude: 'longitude',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type DirectionsScalarFieldEnum = (typeof DirectionsScalarFieldEnum)[keyof typeof DirectionsScalarFieldEnum]
 
 
   export const DiscountsScalarFieldEnum: {
@@ -34711,6 +37204,16 @@ export namespace Prisma {
   export type OrdersScalarFieldEnum = (typeof OrdersScalarFieldEnum)[keyof typeof OrdersScalarFieldEnum]
 
 
+  export const Product_categoriesScalarFieldEnum: {
+    product_id: 'product_id',
+    category_id: 'category_id',
+    is_primary: 'is_primary',
+    created_at: 'created_at'
+  };
+
+  export type Product_categoriesScalarFieldEnum = (typeof Product_categoriesScalarFieldEnum)[keyof typeof Product_categoriesScalarFieldEnum]
+
+
   export const ProductsScalarFieldEnum: {
     id: 'id',
     user_id: 'user_id',
@@ -34718,7 +37221,6 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     iva: 'iva',
-    category_id: 'category_id',
     status: 'status',
     created_at: 'created_at',
     product_code: 'product_code'
@@ -34735,6 +37237,16 @@ export namespace Prisma {
   };
 
   export type Products_filesScalarFieldEnum = (typeof Products_filesScalarFieldEnum)[keyof typeof Products_filesScalarFieldEnum]
+
+
+  export const ProvincesScalarFieldEnum: {
+    id: 'id',
+    country_iso: 'country_iso',
+    name: 'name',
+    name_local: 'name_local'
+  };
+
+  export type ProvincesScalarFieldEnum = (typeof ProvincesScalarFieldEnum)[keyof typeof ProvincesScalarFieldEnum]
 
 
   export const User_sessionsScalarFieldEnum: {
@@ -34808,64 +37320,14 @@ export namespace Prisma {
   export type Verification_tokensScalarFieldEnum = (typeof Verification_tokensScalarFieldEnum)[keyof typeof Verification_tokensScalarFieldEnum]
 
 
-  export const CitiesScalarFieldEnum: {
-    id: 'id',
-    province_id: 'province_id',
+  export const Category_translationsScalarFieldEnum: {
+    category_id: 'category_id',
+    lang_code: 'lang_code',
     name: 'name',
-    name_local: 'name_local'
+    name_unaccent: 'name_unaccent'
   };
 
-  export type CitiesScalarFieldEnum = (typeof CitiesScalarFieldEnum)[keyof typeof CitiesScalarFieldEnum]
-
-
-  export const CountriesScalarFieldEnum: {
-    iso_alpha2: 'iso_alpha2',
-    iso_alpha3: 'iso_alpha3',
-    iso_numeric: 'iso_numeric',
-    name: 'name',
-    name_local: 'name_local',
-    currency_id: 'currency_id'
-  };
-
-  export type CountriesScalarFieldEnum = (typeof CountriesScalarFieldEnum)[keyof typeof CountriesScalarFieldEnum]
-
-
-  export const DirectionsScalarFieldEnum: {
-    id: 'id',
-    user_id: 'user_id',
-    type: 'type',
-    country_iso: 'country_iso',
-    province_id: 'province_id',
-    city_id: 'city_id',
-    street: 'street',
-    zip_code: 'zip_code',
-    latitude: 'latitude',
-    longitude: 'longitude',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type DirectionsScalarFieldEnum = (typeof DirectionsScalarFieldEnum)[keyof typeof DirectionsScalarFieldEnum]
-
-
-  export const ProvincesScalarFieldEnum: {
-    id: 'id',
-    country_iso: 'country_iso',
-    name: 'name',
-    name_local: 'name_local'
-  };
-
-  export type ProvincesScalarFieldEnum = (typeof ProvincesScalarFieldEnum)[keyof typeof ProvincesScalarFieldEnum]
-
-
-  export const CurrenciesScalarFieldEnum: {
-    iso_numeric: 'iso_numeric',
-    iso_alpha3: 'iso_alpha3',
-    symbol: 'symbol',
-    decimal_digits: 'decimal_digits'
-  };
-
-  export type CurrenciesScalarFieldEnum = (typeof CurrenciesScalarFieldEnum)[keyof typeof CurrenciesScalarFieldEnum]
+  export type Category_translationsScalarFieldEnum = (typeof Category_translationsScalarFieldEnum)[keyof typeof Category_translationsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -35020,6 +37482,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'AddressType'
+   */
+  export type EnumAddressTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AddressType'>
+    
+
+
+  /**
+   * Reference to a field of type 'AddressType[]'
+   */
+  export type ListEnumAddressTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AddressType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -35037,6 +37513,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProductStatus'
+   */
+  export type EnumProductStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProductStatus[]'
+   */
+  export type ListEnumProductStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStatus[]'>
     
 
 
@@ -35079,20 +37569,6 @@ export namespace Prisma {
    * Reference to a field of type 'SaleVariant[]'
    */
   export type ListEnumSaleVariantFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SaleVariant[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'AddressType'
-   */
-  export type EnumAddressTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AddressType'>
-    
-
-
-  /**
-   * Reference to a field of type 'AddressType[]'
-   */
-  export type ListEnumAddressTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AddressType[]'>
     
   /**
    * Deep Input Types
@@ -35219,10 +37695,13 @@ export namespace Prisma {
     iva?: DecimalNullableFilter<"categories"> | Decimal | DecimalJsLike | number | string | null
     parent_id?: BigIntNullableFilter<"categories"> | bigint | number | null
     created_at?: DateTimeFilter<"categories"> | Date | string
-    categories?: XOR<CategoriesNullableScalarRelationFilter, categoriesWhereInput> | null
-    other_categories?: CategoriesListRelationFilter
+    level?: IntFilter<"categories"> | number
+    name_unaccent?: StringNullableFilter<"categories"> | string | null
+    parent?: XOR<CategoriesNullableScalarRelationFilter, categoriesWhereInput> | null
+    children?: CategoriesListRelationFilter
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    products?: ProductsListRelationFilter
+    category_translations?: Category_translationsListRelationFilter
+    product_categories?: Product_categoriesListRelationFilter
   }
 
   export type categoriesOrderByWithRelationInput = {
@@ -35232,10 +37711,13 @@ export namespace Prisma {
     iva?: SortOrderInput | SortOrder
     parent_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
-    categories?: categoriesOrderByWithRelationInput
-    other_categories?: categoriesOrderByRelationAggregateInput
+    level?: SortOrder
+    name_unaccent?: SortOrderInput | SortOrder
+    parent?: categoriesOrderByWithRelationInput
+    children?: categoriesOrderByRelationAggregateInput
     users?: usersOrderByWithRelationInput
-    products?: productsOrderByRelationAggregateInput
+    category_translations?: category_translationsOrderByRelationAggregateInput
+    product_categories?: product_categoriesOrderByRelationAggregateInput
   }
 
   export type categoriesWhereUniqueInput = Prisma.AtLeast<{
@@ -35248,10 +37730,13 @@ export namespace Prisma {
     iva?: DecimalNullableFilter<"categories"> | Decimal | DecimalJsLike | number | string | null
     parent_id?: BigIntNullableFilter<"categories"> | bigint | number | null
     created_at?: DateTimeFilter<"categories"> | Date | string
-    categories?: XOR<CategoriesNullableScalarRelationFilter, categoriesWhereInput> | null
-    other_categories?: CategoriesListRelationFilter
+    level?: IntFilter<"categories"> | number
+    name_unaccent?: StringNullableFilter<"categories"> | string | null
+    parent?: XOR<CategoriesNullableScalarRelationFilter, categoriesWhereInput> | null
+    children?: CategoriesListRelationFilter
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    products?: ProductsListRelationFilter
+    category_translations?: Category_translationsListRelationFilter
+    product_categories?: Product_categoriesListRelationFilter
   }, "id">
 
   export type categoriesOrderByWithAggregationInput = {
@@ -35261,6 +37746,8 @@ export namespace Prisma {
     iva?: SortOrderInput | SortOrder
     parent_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
+    level?: SortOrder
+    name_unaccent?: SortOrderInput | SortOrder
     _count?: categoriesCountOrderByAggregateInput
     _avg?: categoriesAvgOrderByAggregateInput
     _max?: categoriesMaxOrderByAggregateInput
@@ -35278,6 +37765,8 @@ export namespace Prisma {
     iva?: DecimalNullableWithAggregatesFilter<"categories"> | Decimal | DecimalJsLike | number | string | null
     parent_id?: BigIntNullableWithAggregatesFilter<"categories"> | bigint | number | null
     created_at?: DateTimeWithAggregatesFilter<"categories"> | Date | string
+    level?: IntWithAggregatesFilter<"categories"> | number
+    name_unaccent?: StringNullableWithAggregatesFilter<"categories"> | string | null
   }
 
   export type chat_panelsWhereInput = {
@@ -35381,6 +37870,61 @@ export namespace Prisma {
     created_at?: DateTimeNullableWithAggregatesFilter<"chat_participants"> | Date | string | null
   }
 
+  export type citiesWhereInput = {
+    AND?: citiesWhereInput | citiesWhereInput[]
+    OR?: citiesWhereInput[]
+    NOT?: citiesWhereInput | citiesWhereInput[]
+    id?: IntFilter<"cities"> | number
+    province_id?: IntFilter<"cities"> | number
+    name?: StringFilter<"cities"> | string
+    name_local?: StringFilter<"cities"> | string
+    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
+    directions?: DirectionsListRelationFilter
+  }
+
+  export type citiesOrderByWithRelationInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    provinces?: provincesOrderByWithRelationInput
+    directions?: directionsOrderByRelationAggregateInput
+  }
+
+  export type citiesWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: citiesWhereInput | citiesWhereInput[]
+    OR?: citiesWhereInput[]
+    NOT?: citiesWhereInput | citiesWhereInput[]
+    province_id?: IntFilter<"cities"> | number
+    name?: StringFilter<"cities"> | string
+    name_local?: StringFilter<"cities"> | string
+    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
+    directions?: DirectionsListRelationFilter
+  }, "id">
+
+  export type citiesOrderByWithAggregationInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    _count?: citiesCountOrderByAggregateInput
+    _avg?: citiesAvgOrderByAggregateInput
+    _max?: citiesMaxOrderByAggregateInput
+    _min?: citiesMinOrderByAggregateInput
+    _sum?: citiesSumOrderByAggregateInput
+  }
+
+  export type citiesScalarWhereWithAggregatesInput = {
+    AND?: citiesScalarWhereWithAggregatesInput | citiesScalarWhereWithAggregatesInput[]
+    OR?: citiesScalarWhereWithAggregatesInput[]
+    NOT?: citiesScalarWhereWithAggregatesInput | citiesScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"cities"> | number
+    province_id?: IntWithAggregatesFilter<"cities"> | number
+    name?: StringWithAggregatesFilter<"cities"> | string
+    name_local?: StringWithAggregatesFilter<"cities"> | string
+  }
+
   export type configurationsWhereInput = {
     AND?: configurationsWhereInput | configurationsWhereInput[]
     OR?: configurationsWhereInput[]
@@ -35424,6 +37968,126 @@ export namespace Prisma {
     user_id?: UuidWithAggregatesFilter<"configurations"> | string
     language?: StringWithAggregatesFilter<"configurations"> | string
     timezone?: StringWithAggregatesFilter<"configurations"> | string
+  }
+
+  export type countriesWhereInput = {
+    AND?: countriesWhereInput | countriesWhereInput[]
+    OR?: countriesWhereInput[]
+    NOT?: countriesWhereInput | countriesWhereInput[]
+    iso_alpha2?: StringFilter<"countries"> | string
+    iso_alpha3?: StringFilter<"countries"> | string
+    iso_numeric?: IntFilter<"countries"> | number
+    name?: StringFilter<"countries"> | string
+    name_local?: StringFilter<"countries"> | string
+    currency_id?: IntNullableFilter<"countries"> | number | null
+    currencies?: XOR<CurrenciesNullableScalarRelationFilter, currenciesWhereInput> | null
+    directions?: DirectionsListRelationFilter
+    provinces?: ProvincesListRelationFilter
+  }
+
+  export type countriesOrderByWithRelationInput = {
+    iso_alpha2?: SortOrder
+    iso_alpha3?: SortOrder
+    iso_numeric?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    currency_id?: SortOrderInput | SortOrder
+    currencies?: currenciesOrderByWithRelationInput
+    directions?: directionsOrderByRelationAggregateInput
+    provinces?: provincesOrderByRelationAggregateInput
+  }
+
+  export type countriesWhereUniqueInput = Prisma.AtLeast<{
+    iso_alpha2?: string
+    iso_alpha3?: string
+    iso_numeric?: number
+    AND?: countriesWhereInput | countriesWhereInput[]
+    OR?: countriesWhereInput[]
+    NOT?: countriesWhereInput | countriesWhereInput[]
+    name?: StringFilter<"countries"> | string
+    name_local?: StringFilter<"countries"> | string
+    currency_id?: IntNullableFilter<"countries"> | number | null
+    currencies?: XOR<CurrenciesNullableScalarRelationFilter, currenciesWhereInput> | null
+    directions?: DirectionsListRelationFilter
+    provinces?: ProvincesListRelationFilter
+  }, "iso_numeric" | "iso_alpha2" | "iso_alpha3" | "iso_numeric">
+
+  export type countriesOrderByWithAggregationInput = {
+    iso_alpha2?: SortOrder
+    iso_alpha3?: SortOrder
+    iso_numeric?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    currency_id?: SortOrderInput | SortOrder
+    _count?: countriesCountOrderByAggregateInput
+    _avg?: countriesAvgOrderByAggregateInput
+    _max?: countriesMaxOrderByAggregateInput
+    _min?: countriesMinOrderByAggregateInput
+    _sum?: countriesSumOrderByAggregateInput
+  }
+
+  export type countriesScalarWhereWithAggregatesInput = {
+    AND?: countriesScalarWhereWithAggregatesInput | countriesScalarWhereWithAggregatesInput[]
+    OR?: countriesScalarWhereWithAggregatesInput[]
+    NOT?: countriesScalarWhereWithAggregatesInput | countriesScalarWhereWithAggregatesInput[]
+    iso_alpha2?: StringWithAggregatesFilter<"countries"> | string
+    iso_alpha3?: StringWithAggregatesFilter<"countries"> | string
+    iso_numeric?: IntWithAggregatesFilter<"countries"> | number
+    name?: StringWithAggregatesFilter<"countries"> | string
+    name_local?: StringWithAggregatesFilter<"countries"> | string
+    currency_id?: IntNullableWithAggregatesFilter<"countries"> | number | null
+  }
+
+  export type currenciesWhereInput = {
+    AND?: currenciesWhereInput | currenciesWhereInput[]
+    OR?: currenciesWhereInput[]
+    NOT?: currenciesWhereInput | currenciesWhereInput[]
+    iso_numeric?: IntFilter<"currencies"> | number
+    iso_alpha3?: StringFilter<"currencies"> | string
+    symbol?: StringFilter<"currencies"> | string
+    decimal_digits?: IntFilter<"currencies"> | number
+    countries?: CountriesListRelationFilter
+  }
+
+  export type currenciesOrderByWithRelationInput = {
+    iso_numeric?: SortOrder
+    iso_alpha3?: SortOrder
+    symbol?: SortOrder
+    decimal_digits?: SortOrder
+    countries?: countriesOrderByRelationAggregateInput
+  }
+
+  export type currenciesWhereUniqueInput = Prisma.AtLeast<{
+    iso_numeric?: number
+    iso_alpha3?: string
+    AND?: currenciesWhereInput | currenciesWhereInput[]
+    OR?: currenciesWhereInput[]
+    NOT?: currenciesWhereInput | currenciesWhereInput[]
+    symbol?: StringFilter<"currencies"> | string
+    decimal_digits?: IntFilter<"currencies"> | number
+    countries?: CountriesListRelationFilter
+  }, "iso_numeric" | "iso_alpha3">
+
+  export type currenciesOrderByWithAggregationInput = {
+    iso_numeric?: SortOrder
+    iso_alpha3?: SortOrder
+    symbol?: SortOrder
+    decimal_digits?: SortOrder
+    _count?: currenciesCountOrderByAggregateInput
+    _avg?: currenciesAvgOrderByAggregateInput
+    _max?: currenciesMaxOrderByAggregateInput
+    _min?: currenciesMinOrderByAggregateInput
+    _sum?: currenciesSumOrderByAggregateInput
+  }
+
+  export type currenciesScalarWhereWithAggregatesInput = {
+    AND?: currenciesScalarWhereWithAggregatesInput | currenciesScalarWhereWithAggregatesInput[]
+    OR?: currenciesScalarWhereWithAggregatesInput[]
+    NOT?: currenciesScalarWhereWithAggregatesInput | currenciesScalarWhereWithAggregatesInput[]
+    iso_numeric?: IntWithAggregatesFilter<"currencies"> | number
+    iso_alpha3?: StringWithAggregatesFilter<"currencies"> | string
+    symbol?: StringWithAggregatesFilter<"currencies"> | string
+    decimal_digits?: IntWithAggregatesFilter<"currencies"> | number
   }
 
   export type deliveriesWhereInput = {
@@ -35581,6 +38245,110 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"delivery_timeline"> | Date | string
     latitude?: FloatWithAggregatesFilter<"delivery_timeline"> | number
     longitude?: FloatWithAggregatesFilter<"delivery_timeline"> | number
+  }
+
+  export type directionsWhereInput = {
+    AND?: directionsWhereInput | directionsWhereInput[]
+    OR?: directionsWhereInput[]
+    NOT?: directionsWhereInput | directionsWhereInput[]
+    id?: BigIntFilter<"directions"> | bigint | number
+    user_id?: UuidFilter<"directions"> | string
+    type?: EnumAddressTypeFilter<"directions"> | $Enums.AddressType
+    country_iso?: IntFilter<"directions"> | number
+    province_id?: IntFilter<"directions"> | number
+    city_id?: IntFilter<"directions"> | number
+    street?: StringFilter<"directions"> | string
+    zip_code?: StringFilter<"directions"> | string
+    latitude?: FloatNullableFilter<"directions"> | number | null
+    longitude?: FloatNullableFilter<"directions"> | number | null
+    created_at?: DateTimeFilter<"directions"> | Date | string
+    updated_at?: DateTimeNullableFilter<"directions"> | Date | string | null
+    cities?: XOR<CitiesScalarRelationFilter, citiesWhereInput>
+    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
+    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
+    users?: XOR<UsersScalarRelationFilter, usersWhereInput>
+    orders?: OrdersListRelationFilter
+  }
+
+  export type directionsOrderByWithRelationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    street?: SortOrder
+    zip_code?: SortOrder
+    latitude?: SortOrderInput | SortOrder
+    longitude?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    cities?: citiesOrderByWithRelationInput
+    countries?: countriesOrderByWithRelationInput
+    provinces?: provincesOrderByWithRelationInput
+    users?: usersOrderByWithRelationInput
+    orders?: ordersOrderByRelationAggregateInput
+  }
+
+  export type directionsWhereUniqueInput = Prisma.AtLeast<{
+    id?: bigint | number
+    AND?: directionsWhereInput | directionsWhereInput[]
+    OR?: directionsWhereInput[]
+    NOT?: directionsWhereInput | directionsWhereInput[]
+    user_id?: UuidFilter<"directions"> | string
+    type?: EnumAddressTypeFilter<"directions"> | $Enums.AddressType
+    country_iso?: IntFilter<"directions"> | number
+    province_id?: IntFilter<"directions"> | number
+    city_id?: IntFilter<"directions"> | number
+    street?: StringFilter<"directions"> | string
+    zip_code?: StringFilter<"directions"> | string
+    latitude?: FloatNullableFilter<"directions"> | number | null
+    longitude?: FloatNullableFilter<"directions"> | number | null
+    created_at?: DateTimeFilter<"directions"> | Date | string
+    updated_at?: DateTimeNullableFilter<"directions"> | Date | string | null
+    cities?: XOR<CitiesScalarRelationFilter, citiesWhereInput>
+    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
+    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
+    users?: XOR<UsersScalarRelationFilter, usersWhereInput>
+    orders?: OrdersListRelationFilter
+  }, "id">
+
+  export type directionsOrderByWithAggregationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    street?: SortOrder
+    zip_code?: SortOrder
+    latitude?: SortOrderInput | SortOrder
+    longitude?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    _count?: directionsCountOrderByAggregateInput
+    _avg?: directionsAvgOrderByAggregateInput
+    _max?: directionsMaxOrderByAggregateInput
+    _min?: directionsMinOrderByAggregateInput
+    _sum?: directionsSumOrderByAggregateInput
+  }
+
+  export type directionsScalarWhereWithAggregatesInput = {
+    AND?: directionsScalarWhereWithAggregatesInput | directionsScalarWhereWithAggregatesInput[]
+    OR?: directionsScalarWhereWithAggregatesInput[]
+    NOT?: directionsScalarWhereWithAggregatesInput | directionsScalarWhereWithAggregatesInput[]
+    id?: BigIntWithAggregatesFilter<"directions"> | bigint | number
+    user_id?: UuidWithAggregatesFilter<"directions"> | string
+    type?: EnumAddressTypeWithAggregatesFilter<"directions"> | $Enums.AddressType
+    country_iso?: IntWithAggregatesFilter<"directions"> | number
+    province_id?: IntWithAggregatesFilter<"directions"> | number
+    city_id?: IntWithAggregatesFilter<"directions"> | number
+    street?: StringWithAggregatesFilter<"directions"> | string
+    zip_code?: StringWithAggregatesFilter<"directions"> | string
+    latitude?: FloatNullableWithAggregatesFilter<"directions"> | number | null
+    longitude?: FloatNullableWithAggregatesFilter<"directions"> | number | null
+    created_at?: DateTimeWithAggregatesFilter<"directions"> | Date | string
+    updated_at?: DateTimeNullableWithAggregatesFilter<"directions"> | Date | string | null
   }
 
   export type discountsWhereInput = {
@@ -36062,7 +38830,7 @@ export namespace Prisma {
     updated_at?: DateTimeNullableFilter<"orders"> | Date | string | null
     order_details?: Order_detailsListRelationFilter
     users_orders_retailer_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    direcction?: XOR<DirectionsNullableScalarRelationFilter, directionsWhereInput> | null
+    directions?: XOR<DirectionsNullableScalarRelationFilter, directionsWhereInput> | null
     users_orders_wholesaler_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
   }
 
@@ -36084,7 +38852,7 @@ export namespace Prisma {
     updated_at?: SortOrderInput | SortOrder
     order_details?: order_detailsOrderByRelationAggregateInput
     users_orders_retailer_idTousers?: usersOrderByWithRelationInput
-    direcction?: directionsOrderByWithRelationInput
+    directions?: directionsOrderByWithRelationInput
     users_orders_wholesaler_idTousers?: usersOrderByWithRelationInput
   }
 
@@ -36109,7 +38877,7 @@ export namespace Prisma {
     updated_at?: DateTimeNullableFilter<"orders"> | Date | string | null
     order_details?: Order_detailsListRelationFilter
     users_orders_retailer_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    direcction?: XOR<DirectionsNullableScalarRelationFilter, directionsWhereInput> | null
+    directions?: XOR<DirectionsNullableScalarRelationFilter, directionsWhereInput> | null
     users_orders_wholesaler_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
   }, "id">
 
@@ -36157,6 +38925,62 @@ export namespace Prisma {
     updated_at?: DateTimeNullableWithAggregatesFilter<"orders"> | Date | string | null
   }
 
+  export type product_categoriesWhereInput = {
+    AND?: product_categoriesWhereInput | product_categoriesWhereInput[]
+    OR?: product_categoriesWhereInput[]
+    NOT?: product_categoriesWhereInput | product_categoriesWhereInput[]
+    product_id?: BigIntFilter<"product_categories"> | bigint | number
+    category_id?: BigIntFilter<"product_categories"> | bigint | number
+    is_primary?: BoolFilter<"product_categories"> | boolean
+    created_at?: DateTimeFilter<"product_categories"> | Date | string
+    categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
+    products?: XOR<ProductsScalarRelationFilter, productsWhereInput>
+  }
+
+  export type product_categoriesOrderByWithRelationInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+    is_primary?: SortOrder
+    created_at?: SortOrder
+    categories?: categoriesOrderByWithRelationInput
+    products?: productsOrderByWithRelationInput
+  }
+
+  export type product_categoriesWhereUniqueInput = Prisma.AtLeast<{
+    product_id_category_id?: product_categoriesProduct_idCategory_idCompoundUniqueInput
+    AND?: product_categoriesWhereInput | product_categoriesWhereInput[]
+    OR?: product_categoriesWhereInput[]
+    NOT?: product_categoriesWhereInput | product_categoriesWhereInput[]
+    product_id?: BigIntFilter<"product_categories"> | bigint | number
+    category_id?: BigIntFilter<"product_categories"> | bigint | number
+    is_primary?: BoolFilter<"product_categories"> | boolean
+    created_at?: DateTimeFilter<"product_categories"> | Date | string
+    categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
+    products?: XOR<ProductsScalarRelationFilter, productsWhereInput>
+  }, "product_id_category_id">
+
+  export type product_categoriesOrderByWithAggregationInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+    is_primary?: SortOrder
+    created_at?: SortOrder
+    _count?: product_categoriesCountOrderByAggregateInput
+    _avg?: product_categoriesAvgOrderByAggregateInput
+    _max?: product_categoriesMaxOrderByAggregateInput
+    _min?: product_categoriesMinOrderByAggregateInput
+    _sum?: product_categoriesSumOrderByAggregateInput
+  }
+
+  export type product_categoriesScalarWhereWithAggregatesInput = {
+    AND?: product_categoriesScalarWhereWithAggregatesInput | product_categoriesScalarWhereWithAggregatesInput[]
+    OR?: product_categoriesScalarWhereWithAggregatesInput[]
+    NOT?: product_categoriesScalarWhereWithAggregatesInput | product_categoriesScalarWhereWithAggregatesInput[]
+    product_id?: BigIntWithAggregatesFilter<"product_categories"> | bigint | number
+    category_id?: BigIntWithAggregatesFilter<"product_categories"> | bigint | number
+    is_primary?: BoolWithAggregatesFilter<"product_categories"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"product_categories"> | Date | string
+  }
+
   export type productsWhereInput = {
     AND?: productsWhereInput | productsWhereInput[]
     OR?: productsWhereInput[]
@@ -36167,11 +38991,10 @@ export namespace Prisma {
     title?: StringNullableFilter<"products"> | string | null
     description?: StringNullableFilter<"products"> | string | null
     iva?: DecimalFilter<"products"> | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFilter<"products"> | bigint | number
-    status?: IntFilter<"products"> | number
+    status?: EnumProductStatusFilter<"products"> | $Enums.ProductStatus
     created_at?: DateTimeFilter<"products"> | Date | string
     product_code?: StringFilter<"products"> | string
-    categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
+    product_categories?: Product_categoriesListRelationFilter
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     products_files?: Products_filesListRelationFilter
     variant_products?: Variant_productsListRelationFilter
@@ -36184,11 +39007,10 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     product_code?: SortOrder
-    categories?: categoriesOrderByWithRelationInput
+    product_categories?: product_categoriesOrderByRelationAggregateInput
     users?: usersOrderByWithRelationInput
     products_files?: products_filesOrderByRelationAggregateInput
     variant_products?: variant_productsOrderByRelationAggregateInput
@@ -36204,11 +39026,10 @@ export namespace Prisma {
     title?: StringNullableFilter<"products"> | string | null
     description?: StringNullableFilter<"products"> | string | null
     iva?: DecimalFilter<"products"> | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFilter<"products"> | bigint | number
-    status?: IntFilter<"products"> | number
+    status?: EnumProductStatusFilter<"products"> | $Enums.ProductStatus
     created_at?: DateTimeFilter<"products"> | Date | string
     product_code?: StringFilter<"products"> | string
-    categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
+    product_categories?: Product_categoriesListRelationFilter
     users?: XOR<UsersScalarRelationFilter, usersWhereInput>
     products_files?: Products_filesListRelationFilter
     variant_products?: Variant_productsListRelationFilter
@@ -36221,7 +39042,6 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     product_code?: SortOrder
@@ -36242,8 +39062,7 @@ export namespace Prisma {
     title?: StringNullableWithAggregatesFilter<"products"> | string | null
     description?: StringNullableWithAggregatesFilter<"products"> | string | null
     iva?: DecimalWithAggregatesFilter<"products"> | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntWithAggregatesFilter<"products"> | bigint | number
-    status?: IntWithAggregatesFilter<"products"> | number
+    status?: EnumProductStatusWithAggregatesFilter<"products"> | $Enums.ProductStatus
     created_at?: DateTimeWithAggregatesFilter<"products"> | Date | string
     product_code?: StringWithAggregatesFilter<"products"> | string
   }
@@ -36301,6 +39120,64 @@ export namespace Prisma {
     product_id?: BigIntWithAggregatesFilter<"products_files"> | bigint | number
     file_id?: BigIntWithAggregatesFilter<"products_files"> | bigint | number
     sort?: IntWithAggregatesFilter<"products_files"> | number
+  }
+
+  export type provincesWhereInput = {
+    AND?: provincesWhereInput | provincesWhereInput[]
+    OR?: provincesWhereInput[]
+    NOT?: provincesWhereInput | provincesWhereInput[]
+    id?: IntFilter<"provinces"> | number
+    country_iso?: IntFilter<"provinces"> | number
+    name?: StringFilter<"provinces"> | string
+    name_local?: StringFilter<"provinces"> | string
+    cities?: CitiesListRelationFilter
+    directions?: DirectionsListRelationFilter
+    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
+  }
+
+  export type provincesOrderByWithRelationInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    cities?: citiesOrderByRelationAggregateInput
+    directions?: directionsOrderByRelationAggregateInput
+    countries?: countriesOrderByWithRelationInput
+  }
+
+  export type provincesWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: provincesWhereInput | provincesWhereInput[]
+    OR?: provincesWhereInput[]
+    NOT?: provincesWhereInput | provincesWhereInput[]
+    country_iso?: IntFilter<"provinces"> | number
+    name?: StringFilter<"provinces"> | string
+    name_local?: StringFilter<"provinces"> | string
+    cities?: CitiesListRelationFilter
+    directions?: DirectionsListRelationFilter
+    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
+  }, "id">
+
+  export type provincesOrderByWithAggregationInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    _count?: provincesCountOrderByAggregateInput
+    _avg?: provincesAvgOrderByAggregateInput
+    _max?: provincesMaxOrderByAggregateInput
+    _min?: provincesMinOrderByAggregateInput
+    _sum?: provincesSumOrderByAggregateInput
+  }
+
+  export type provincesScalarWhereWithAggregatesInput = {
+    AND?: provincesScalarWhereWithAggregatesInput | provincesScalarWhereWithAggregatesInput[]
+    OR?: provincesScalarWhereWithAggregatesInput[]
+    NOT?: provincesScalarWhereWithAggregatesInput | provincesScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"provinces"> | number
+    country_iso?: IntWithAggregatesFilter<"provinces"> | number
+    name?: StringWithAggregatesFilter<"provinces"> | string
+    name_local?: StringWithAggregatesFilter<"provinces"> | string
   }
 
   export type user_sessionsWhereInput = {
@@ -36708,341 +39585,57 @@ export namespace Prisma {
     attempts?: IntWithAggregatesFilter<"verification_tokens"> | number
   }
 
-  export type citiesWhereInput = {
-    AND?: citiesWhereInput | citiesWhereInput[]
-    OR?: citiesWhereInput[]
-    NOT?: citiesWhereInput | citiesWhereInput[]
-    id?: IntFilter<"cities"> | number
-    province_id?: IntFilter<"cities"> | number
-    name?: StringFilter<"cities"> | string
-    name_local?: StringFilter<"cities"> | string
-    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
-    directions?: DirectionsListRelationFilter
+  export type category_translationsWhereInput = {
+    AND?: category_translationsWhereInput | category_translationsWhereInput[]
+    OR?: category_translationsWhereInput[]
+    NOT?: category_translationsWhereInput | category_translationsWhereInput[]
+    category_id?: BigIntFilter<"category_translations"> | bigint | number
+    lang_code?: StringFilter<"category_translations"> | string
+    name?: StringFilter<"category_translations"> | string
+    name_unaccent?: StringNullableFilter<"category_translations"> | string | null
+    categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
   }
 
-  export type citiesOrderByWithRelationInput = {
-    id?: SortOrder
-    province_id?: SortOrder
+  export type category_translationsOrderByWithRelationInput = {
+    category_id?: SortOrder
+    lang_code?: SortOrder
     name?: SortOrder
-    name_local?: SortOrder
-    provinces?: provincesOrderByWithRelationInput
-    directions?: directionsOrderByRelationAggregateInput
+    name_unaccent?: SortOrderInput | SortOrder
+    categories?: categoriesOrderByWithRelationInput
   }
 
-  export type citiesWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: citiesWhereInput | citiesWhereInput[]
-    OR?: citiesWhereInput[]
-    NOT?: citiesWhereInput | citiesWhereInput[]
-    province_id?: IntFilter<"cities"> | number
-    name?: StringFilter<"cities"> | string
-    name_local?: StringFilter<"cities"> | string
-    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
-    directions?: DirectionsListRelationFilter
-  }, "id">
+  export type category_translationsWhereUniqueInput = Prisma.AtLeast<{
+    category_id_lang_code?: category_translationsCategory_idLang_codeCompoundUniqueInput
+    AND?: category_translationsWhereInput | category_translationsWhereInput[]
+    OR?: category_translationsWhereInput[]
+    NOT?: category_translationsWhereInput | category_translationsWhereInput[]
+    category_id?: BigIntFilter<"category_translations"> | bigint | number
+    lang_code?: StringFilter<"category_translations"> | string
+    name?: StringFilter<"category_translations"> | string
+    name_unaccent?: StringNullableFilter<"category_translations"> | string | null
+    categories?: XOR<CategoriesScalarRelationFilter, categoriesWhereInput>
+  }, "category_id_lang_code">
 
-  export type citiesOrderByWithAggregationInput = {
-    id?: SortOrder
-    province_id?: SortOrder
+  export type category_translationsOrderByWithAggregationInput = {
+    category_id?: SortOrder
+    lang_code?: SortOrder
     name?: SortOrder
-    name_local?: SortOrder
-    _count?: citiesCountOrderByAggregateInput
-    _avg?: citiesAvgOrderByAggregateInput
-    _max?: citiesMaxOrderByAggregateInput
-    _min?: citiesMinOrderByAggregateInput
-    _sum?: citiesSumOrderByAggregateInput
+    name_unaccent?: SortOrderInput | SortOrder
+    _count?: category_translationsCountOrderByAggregateInput
+    _avg?: category_translationsAvgOrderByAggregateInput
+    _max?: category_translationsMaxOrderByAggregateInput
+    _min?: category_translationsMinOrderByAggregateInput
+    _sum?: category_translationsSumOrderByAggregateInput
   }
 
-  export type citiesScalarWhereWithAggregatesInput = {
-    AND?: citiesScalarWhereWithAggregatesInput | citiesScalarWhereWithAggregatesInput[]
-    OR?: citiesScalarWhereWithAggregatesInput[]
-    NOT?: citiesScalarWhereWithAggregatesInput | citiesScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"cities"> | number
-    province_id?: IntWithAggregatesFilter<"cities"> | number
-    name?: StringWithAggregatesFilter<"cities"> | string
-    name_local?: StringWithAggregatesFilter<"cities"> | string
-  }
-
-  export type countriesWhereInput = {
-    AND?: countriesWhereInput | countriesWhereInput[]
-    OR?: countriesWhereInput[]
-    NOT?: countriesWhereInput | countriesWhereInput[]
-    iso_alpha2?: StringFilter<"countries"> | string
-    iso_alpha3?: StringFilter<"countries"> | string
-    iso_numeric?: IntFilter<"countries"> | number
-    name?: StringFilter<"countries"> | string
-    name_local?: StringFilter<"countries"> | string
-    currency_id?: IntNullableFilter<"countries"> | number | null
-    currencies?: XOR<CurrenciesNullableScalarRelationFilter, currenciesWhereInput> | null
-    directions?: DirectionsListRelationFilter
-    provinces?: ProvincesListRelationFilter
-  }
-
-  export type countriesOrderByWithRelationInput = {
-    iso_alpha2?: SortOrder
-    iso_alpha3?: SortOrder
-    iso_numeric?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    currency_id?: SortOrderInput | SortOrder
-    currencies?: currenciesOrderByWithRelationInput
-    directions?: directionsOrderByRelationAggregateInput
-    provinces?: provincesOrderByRelationAggregateInput
-  }
-
-  export type countriesWhereUniqueInput = Prisma.AtLeast<{
-    iso_alpha2?: string
-    iso_alpha3?: string
-    iso_numeric?: number
-    AND?: countriesWhereInput | countriesWhereInput[]
-    OR?: countriesWhereInput[]
-    NOT?: countriesWhereInput | countriesWhereInput[]
-    name?: StringFilter<"countries"> | string
-    name_local?: StringFilter<"countries"> | string
-    currency_id?: IntNullableFilter<"countries"> | number | null
-    currencies?: XOR<CurrenciesNullableScalarRelationFilter, currenciesWhereInput> | null
-    directions?: DirectionsListRelationFilter
-    provinces?: ProvincesListRelationFilter
-  }, "iso_numeric" | "iso_alpha2" | "iso_alpha3" | "iso_numeric">
-
-  export type countriesOrderByWithAggregationInput = {
-    iso_alpha2?: SortOrder
-    iso_alpha3?: SortOrder
-    iso_numeric?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    currency_id?: SortOrderInput | SortOrder
-    _count?: countriesCountOrderByAggregateInput
-    _avg?: countriesAvgOrderByAggregateInput
-    _max?: countriesMaxOrderByAggregateInput
-    _min?: countriesMinOrderByAggregateInput
-    _sum?: countriesSumOrderByAggregateInput
-  }
-
-  export type countriesScalarWhereWithAggregatesInput = {
-    AND?: countriesScalarWhereWithAggregatesInput | countriesScalarWhereWithAggregatesInput[]
-    OR?: countriesScalarWhereWithAggregatesInput[]
-    NOT?: countriesScalarWhereWithAggregatesInput | countriesScalarWhereWithAggregatesInput[]
-    iso_alpha2?: StringWithAggregatesFilter<"countries"> | string
-    iso_alpha3?: StringWithAggregatesFilter<"countries"> | string
-    iso_numeric?: IntWithAggregatesFilter<"countries"> | number
-    name?: StringWithAggregatesFilter<"countries"> | string
-    name_local?: StringWithAggregatesFilter<"countries"> | string
-    currency_id?: IntNullableWithAggregatesFilter<"countries"> | number | null
-  }
-
-  export type directionsWhereInput = {
-    AND?: directionsWhereInput | directionsWhereInput[]
-    OR?: directionsWhereInput[]
-    NOT?: directionsWhereInput | directionsWhereInput[]
-    id?: BigIntFilter<"directions"> | bigint | number
-    user_id?: UuidFilter<"directions"> | string
-    type?: EnumAddressTypeFilter<"directions"> | $Enums.AddressType
-    country_iso?: IntFilter<"directions"> | number
-    province_id?: IntFilter<"directions"> | number
-    city_id?: IntFilter<"directions"> | number
-    street?: StringFilter<"directions"> | string
-    zip_code?: StringFilter<"directions"> | string
-    latitude?: FloatNullableFilter<"directions"> | number | null
-    longitude?: FloatNullableFilter<"directions"> | number | null
-    created_at?: DateTimeFilter<"directions"> | Date | string
-    updated_at?: DateTimeNullableFilter<"directions"> | Date | string | null
-    cities?: XOR<CitiesScalarRelationFilter, citiesWhereInput>
-    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
-    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
-    users?: XOR<UsersScalarRelationFilter, usersWhereInput>
-    orders?: OrdersListRelationFilter
-  }
-
-  export type directionsOrderByWithRelationInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    type?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    street?: SortOrder
-    zip_code?: SortOrder
-    latitude?: SortOrderInput | SortOrder
-    longitude?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrderInput | SortOrder
-    cities?: citiesOrderByWithRelationInput
-    countries?: countriesOrderByWithRelationInput
-    provinces?: provincesOrderByWithRelationInput
-    users?: usersOrderByWithRelationInput
-    orders?: ordersOrderByRelationAggregateInput
-  }
-
-  export type directionsWhereUniqueInput = Prisma.AtLeast<{
-    id?: bigint | number
-    AND?: directionsWhereInput | directionsWhereInput[]
-    OR?: directionsWhereInput[]
-    NOT?: directionsWhereInput | directionsWhereInput[]
-    user_id?: UuidFilter<"directions"> | string
-    type?: EnumAddressTypeFilter<"directions"> | $Enums.AddressType
-    country_iso?: IntFilter<"directions"> | number
-    province_id?: IntFilter<"directions"> | number
-    city_id?: IntFilter<"directions"> | number
-    street?: StringFilter<"directions"> | string
-    zip_code?: StringFilter<"directions"> | string
-    latitude?: FloatNullableFilter<"directions"> | number | null
-    longitude?: FloatNullableFilter<"directions"> | number | null
-    created_at?: DateTimeFilter<"directions"> | Date | string
-    updated_at?: DateTimeNullableFilter<"directions"> | Date | string | null
-    cities?: XOR<CitiesScalarRelationFilter, citiesWhereInput>
-    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
-    provinces?: XOR<ProvincesScalarRelationFilter, provincesWhereInput>
-    users?: XOR<UsersScalarRelationFilter, usersWhereInput>
-    orders?: OrdersListRelationFilter
-  }, "id">
-
-  export type directionsOrderByWithAggregationInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    type?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    street?: SortOrder
-    zip_code?: SortOrder
-    latitude?: SortOrderInput | SortOrder
-    longitude?: SortOrderInput | SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrderInput | SortOrder
-    _count?: directionsCountOrderByAggregateInput
-    _avg?: directionsAvgOrderByAggregateInput
-    _max?: directionsMaxOrderByAggregateInput
-    _min?: directionsMinOrderByAggregateInput
-    _sum?: directionsSumOrderByAggregateInput
-  }
-
-  export type directionsScalarWhereWithAggregatesInput = {
-    AND?: directionsScalarWhereWithAggregatesInput | directionsScalarWhereWithAggregatesInput[]
-    OR?: directionsScalarWhereWithAggregatesInput[]
-    NOT?: directionsScalarWhereWithAggregatesInput | directionsScalarWhereWithAggregatesInput[]
-    id?: BigIntWithAggregatesFilter<"directions"> | bigint | number
-    user_id?: UuidWithAggregatesFilter<"directions"> | string
-    type?: EnumAddressTypeWithAggregatesFilter<"directions"> | $Enums.AddressType
-    country_iso?: IntWithAggregatesFilter<"directions"> | number
-    province_id?: IntWithAggregatesFilter<"directions"> | number
-    city_id?: IntWithAggregatesFilter<"directions"> | number
-    street?: StringWithAggregatesFilter<"directions"> | string
-    zip_code?: StringWithAggregatesFilter<"directions"> | string
-    latitude?: FloatNullableWithAggregatesFilter<"directions"> | number | null
-    longitude?: FloatNullableWithAggregatesFilter<"directions"> | number | null
-    created_at?: DateTimeWithAggregatesFilter<"directions"> | Date | string
-    updated_at?: DateTimeNullableWithAggregatesFilter<"directions"> | Date | string | null
-  }
-
-  export type provincesWhereInput = {
-    AND?: provincesWhereInput | provincesWhereInput[]
-    OR?: provincesWhereInput[]
-    NOT?: provincesWhereInput | provincesWhereInput[]
-    id?: IntFilter<"provinces"> | number
-    country_iso?: IntFilter<"provinces"> | number
-    name?: StringFilter<"provinces"> | string
-    name_local?: StringFilter<"provinces"> | string
-    cities?: CitiesListRelationFilter
-    directions?: DirectionsListRelationFilter
-    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
-  }
-
-  export type provincesOrderByWithRelationInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    cities?: citiesOrderByRelationAggregateInput
-    directions?: directionsOrderByRelationAggregateInput
-    countries?: countriesOrderByWithRelationInput
-  }
-
-  export type provincesWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: provincesWhereInput | provincesWhereInput[]
-    OR?: provincesWhereInput[]
-    NOT?: provincesWhereInput | provincesWhereInput[]
-    country_iso?: IntFilter<"provinces"> | number
-    name?: StringFilter<"provinces"> | string
-    name_local?: StringFilter<"provinces"> | string
-    cities?: CitiesListRelationFilter
-    directions?: DirectionsListRelationFilter
-    countries?: XOR<CountriesScalarRelationFilter, countriesWhereInput>
-  }, "id">
-
-  export type provincesOrderByWithAggregationInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    _count?: provincesCountOrderByAggregateInput
-    _avg?: provincesAvgOrderByAggregateInput
-    _max?: provincesMaxOrderByAggregateInput
-    _min?: provincesMinOrderByAggregateInput
-    _sum?: provincesSumOrderByAggregateInput
-  }
-
-  export type provincesScalarWhereWithAggregatesInput = {
-    AND?: provincesScalarWhereWithAggregatesInput | provincesScalarWhereWithAggregatesInput[]
-    OR?: provincesScalarWhereWithAggregatesInput[]
-    NOT?: provincesScalarWhereWithAggregatesInput | provincesScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"provinces"> | number
-    country_iso?: IntWithAggregatesFilter<"provinces"> | number
-    name?: StringWithAggregatesFilter<"provinces"> | string
-    name_local?: StringWithAggregatesFilter<"provinces"> | string
-  }
-
-  export type currenciesWhereInput = {
-    AND?: currenciesWhereInput | currenciesWhereInput[]
-    OR?: currenciesWhereInput[]
-    NOT?: currenciesWhereInput | currenciesWhereInput[]
-    iso_numeric?: IntFilter<"currencies"> | number
-    iso_alpha3?: StringFilter<"currencies"> | string
-    symbol?: StringFilter<"currencies"> | string
-    decimal_digits?: IntFilter<"currencies"> | number
-    countries?: CountriesListRelationFilter
-  }
-
-  export type currenciesOrderByWithRelationInput = {
-    iso_numeric?: SortOrder
-    iso_alpha3?: SortOrder
-    symbol?: SortOrder
-    decimal_digits?: SortOrder
-    countries?: countriesOrderByRelationAggregateInput
-  }
-
-  export type currenciesWhereUniqueInput = Prisma.AtLeast<{
-    iso_numeric?: number
-    iso_alpha3?: string
-    AND?: currenciesWhereInput | currenciesWhereInput[]
-    OR?: currenciesWhereInput[]
-    NOT?: currenciesWhereInput | currenciesWhereInput[]
-    symbol?: StringFilter<"currencies"> | string
-    decimal_digits?: IntFilter<"currencies"> | number
-    countries?: CountriesListRelationFilter
-  }, "iso_numeric" | "iso_alpha3">
-
-  export type currenciesOrderByWithAggregationInput = {
-    iso_numeric?: SortOrder
-    iso_alpha3?: SortOrder
-    symbol?: SortOrder
-    decimal_digits?: SortOrder
-    _count?: currenciesCountOrderByAggregateInput
-    _avg?: currenciesAvgOrderByAggregateInput
-    _max?: currenciesMaxOrderByAggregateInput
-    _min?: currenciesMinOrderByAggregateInput
-    _sum?: currenciesSumOrderByAggregateInput
-  }
-
-  export type currenciesScalarWhereWithAggregatesInput = {
-    AND?: currenciesScalarWhereWithAggregatesInput | currenciesScalarWhereWithAggregatesInput[]
-    OR?: currenciesScalarWhereWithAggregatesInput[]
-    NOT?: currenciesScalarWhereWithAggregatesInput | currenciesScalarWhereWithAggregatesInput[]
-    iso_numeric?: IntWithAggregatesFilter<"currencies"> | number
-    iso_alpha3?: StringWithAggregatesFilter<"currencies"> | string
-    symbol?: StringWithAggregatesFilter<"currencies"> | string
-    decimal_digits?: IntWithAggregatesFilter<"currencies"> | number
+  export type category_translationsScalarWhereWithAggregatesInput = {
+    AND?: category_translationsScalarWhereWithAggregatesInput | category_translationsScalarWhereWithAggregatesInput[]
+    OR?: category_translationsScalarWhereWithAggregatesInput[]
+    NOT?: category_translationsScalarWhereWithAggregatesInput | category_translationsScalarWhereWithAggregatesInput[]
+    category_id?: BigIntWithAggregatesFilter<"category_translations"> | bigint | number
+    lang_code?: StringWithAggregatesFilter<"category_translations"> | string
+    name?: StringWithAggregatesFilter<"category_translations"> | string
+    name_unaccent?: StringNullableWithAggregatesFilter<"category_translations"> | string | null
   }
 
   export type cart_detailsCreateInput = {
@@ -37149,10 +39742,13 @@ export namespace Prisma {
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    categories?: categoriesCreateNestedOneWithoutOther_categoriesInput
-    other_categories?: categoriesCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    parent?: categoriesCreateNestedOneWithoutChildrenInput
+    children?: categoriesCreateNestedManyWithoutParentInput
     users?: usersCreateNestedOneWithoutCategoriesInput
-    products?: productsCreateNestedManyWithoutCategoriesInput
+    category_translations?: category_translationsCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesCreateNestedManyWithoutCategoriesInput
   }
 
   export type categoriesUncheckedCreateInput = {
@@ -37162,8 +39758,11 @@ export namespace Prisma {
     iva?: Decimal | DecimalJsLike | number | string | null
     parent_id?: bigint | number | null
     created_at?: Date | string
-    other_categories?: categoriesUncheckedCreateNestedManyWithoutCategoriesInput
-    products?: productsUncheckedCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    children?: categoriesUncheckedCreateNestedManyWithoutParentInput
+    category_translations?: category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
   }
 
   export type categoriesUpdateInput = {
@@ -37171,10 +39770,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: categoriesUpdateOneWithoutOther_categoriesNestedInput
-    other_categories?: categoriesUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    parent?: categoriesUpdateOneWithoutChildrenNestedInput
+    children?: categoriesUpdateManyWithoutParentNestedInput
     users?: usersUpdateOneWithoutCategoriesNestedInput
-    products?: productsUpdateManyWithoutCategoriesNestedInput
+    category_translations?: category_translationsUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutCategoriesNestedInput
   }
 
   export type categoriesUncheckedUpdateInput = {
@@ -37184,8 +39786,11 @@ export namespace Prisma {
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    other_categories?: categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
-    products?: productsUncheckedUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: categoriesUncheckedUpdateManyWithoutParentNestedInput
+    category_translations?: category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
   }
 
   export type categoriesCreateManyInput = {
@@ -37195,6 +39800,8 @@ export namespace Prisma {
     iva?: Decimal | DecimalJsLike | number | string | null
     parent_id?: bigint | number | null
     created_at?: Date | string
+    level: number
+    name_unaccent?: string | null
   }
 
   export type categoriesUpdateManyMutationInput = {
@@ -37202,6 +39809,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type categoriesUncheckedUpdateManyInput = {
@@ -37211,6 +39820,8 @@ export namespace Prisma {
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type chat_panelsCreateInput = {
@@ -37303,6 +39914,55 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type citiesCreateInput = {
+    name: string
+    name_local: string
+    provinces: provincesCreateNestedOneWithoutCitiesInput
+    directions?: directionsCreateNestedManyWithoutCitiesInput
+  }
+
+  export type citiesUncheckedCreateInput = {
+    id?: number
+    province_id: number
+    name: string
+    name_local: string
+    directions?: directionsUncheckedCreateNestedManyWithoutCitiesInput
+  }
+
+  export type citiesUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    provinces?: provincesUpdateOneRequiredWithoutCitiesNestedInput
+    directions?: directionsUpdateManyWithoutCitiesNestedInput
+  }
+
+  export type citiesUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUncheckedUpdateManyWithoutCitiesNestedInput
+  }
+
+  export type citiesCreateManyInput = {
+    id?: number
+    province_id: number
+    name: string
+    name_local: string
+  }
+
+  export type citiesUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type citiesUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
   export type configurationsCreateInput = {
     language?: string
     timezone?: string
@@ -37342,6 +40002,129 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     timezone?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type countriesCreateInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currencies?: currenciesCreateNestedOneWithoutCountriesInput
+    directions?: directionsCreateNestedManyWithoutCountriesInput
+    provinces?: provincesCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesUncheckedCreateInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currency_id?: number | null
+    directions?: directionsUncheckedCreateNestedManyWithoutCountriesInput
+    provinces?: provincesUncheckedCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesUpdateInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currencies?: currenciesUpdateOneWithoutCountriesNestedInput
+    directions?: directionsUpdateManyWithoutCountriesNestedInput
+    provinces?: provincesUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type countriesUncheckedUpdateInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
+    directions?: directionsUncheckedUpdateManyWithoutCountriesNestedInput
+    provinces?: provincesUncheckedUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type countriesCreateManyInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currency_id?: number | null
+  }
+
+  export type countriesUpdateManyMutationInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type countriesUncheckedUpdateManyInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type currenciesCreateInput = {
+    iso_numeric: number
+    iso_alpha3: string
+    symbol: string
+    decimal_digits: number
+    countries?: countriesCreateNestedManyWithoutCurrenciesInput
+  }
+
+  export type currenciesUncheckedCreateInput = {
+    iso_numeric: number
+    iso_alpha3: string
+    symbol: string
+    decimal_digits: number
+    countries?: countriesUncheckedCreateNestedManyWithoutCurrenciesInput
+  }
+
+  export type currenciesUpdateInput = {
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    decimal_digits?: IntFieldUpdateOperationsInput | number
+    countries?: countriesUpdateManyWithoutCurrenciesNestedInput
+  }
+
+  export type currenciesUncheckedUpdateInput = {
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    decimal_digits?: IntFieldUpdateOperationsInput | number
+    countries?: countriesUncheckedUpdateManyWithoutCurrenciesNestedInput
+  }
+
+  export type currenciesCreateManyInput = {
+    iso_numeric: number
+    iso_alpha3: string
+    symbol: string
+    decimal_digits: number
+  }
+
+  export type currenciesUpdateManyMutationInput = {
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    decimal_digits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type currenciesUncheckedUpdateManyInput = {
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    decimal_digits?: IntFieldUpdateOperationsInput | number
   }
 
   export type deliveriesCreateInput = {
@@ -37512,6 +40295,111 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type directionsCreateInput = {
+    id?: bigint | number
+    type?: $Enums.AddressType
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    cities: citiesCreateNestedOneWithoutDirectionsInput
+    countries: countriesCreateNestedOneWithoutDirectionsInput
+    provinces: provincesCreateNestedOneWithoutDirectionsInput
+    users: usersCreateNestedOneWithoutDirectionsInput
+    orders?: ordersCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsUncheckedCreateInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    country_iso: number
+    province_id: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    orders?: ordersUncheckedCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
+    countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
+    provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
+    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
+    orders?: ordersUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    country_iso?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    city_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orders?: ordersUncheckedUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsCreateManyInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    country_iso: number
+    province_id: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type directionsUpdateManyMutationInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type directionsUncheckedUpdateManyInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    country_iso?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    city_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type discountsCreateInput = {
@@ -38005,7 +40893,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     order_details?: order_detailsCreateNestedManyWithoutOrdersInput
     users_orders_retailer_idTousers?: usersCreateNestedOneWithoutOrders_orders_retailer_idTousersInput
-    direcction?: directionsCreateNestedOneWithoutOrdersInput
+    directions?: directionsCreateNestedOneWithoutOrdersInput
     users_orders_wholesaler_idTousers?: usersCreateNestedOneWithoutOrders_orders_wholesaler_idTousersInput
   }
 
@@ -38043,7 +40931,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     order_details?: order_detailsUpdateManyWithoutOrdersNestedInput
     users_orders_retailer_idTousers?: usersUpdateOneWithoutOrders_orders_retailer_idTousersNestedInput
-    direcction?: directionsUpdateOneWithoutOrdersNestedInput
+    directions?: directionsUpdateOneWithoutOrdersNestedInput
     users_orders_wholesaler_idTousers?: usersUpdateOneWithoutOrders_orders_wholesaler_idTousersNestedInput
   }
 
@@ -38117,16 +41005,63 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type product_categoriesCreateInput = {
+    is_primary?: boolean
+    created_at?: Date | string
+    categories: categoriesCreateNestedOneWithoutProduct_categoriesInput
+    products: productsCreateNestedOneWithoutProduct_categoriesInput
+  }
+
+  export type product_categoriesUncheckedCreateInput = {
+    product_id: bigint | number
+    category_id: bigint | number
+    is_primary?: boolean
+    created_at?: Date | string
+  }
+
+  export type product_categoriesUpdateInput = {
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: categoriesUpdateOneRequiredWithoutProduct_categoriesNestedInput
+    products?: productsUpdateOneRequiredWithoutProduct_categoriesNestedInput
+  }
+
+  export type product_categoriesUncheckedUpdateInput = {
+    product_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type product_categoriesCreateManyInput = {
+    product_id: bigint | number
+    category_id: bigint | number
+    is_primary?: boolean
+    created_at?: Date | string
+  }
+
+  export type product_categoriesUpdateManyMutationInput = {
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type product_categoriesUncheckedUpdateManyInput = {
+    product_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type productsCreateInput = {
     id?: bigint | number
     name: string
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
-    categories: categoriesCreateNestedOneWithoutProductsInput
+    product_categories?: product_categoriesCreateNestedManyWithoutProductsInput
     users: usersCreateNestedOneWithoutProductsInput
     products_files?: products_filesCreateNestedManyWithoutProductsInput
     variant_products?: variant_productsCreateNestedManyWithoutProductsInput
@@ -38139,10 +41074,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    category_id: bigint | number
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutProductsInput
     products_files?: products_filesUncheckedCreateNestedManyWithoutProductsInput
     variant_products?: variant_productsUncheckedCreateNestedManyWithoutProductsInput
   }
@@ -38153,10 +41088,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
-    categories?: categoriesUpdateOneRequiredWithoutProductsNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutProductsNestedInput
     users?: usersUpdateOneRequiredWithoutProductsNestedInput
     products_files?: products_filesUpdateManyWithoutProductsNestedInput
     variant_products?: variant_productsUpdateManyWithoutProductsNestedInput
@@ -38169,10 +41104,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
     products_files?: products_filesUncheckedUpdateManyWithoutProductsNestedInput
     variant_products?: variant_productsUncheckedUpdateManyWithoutProductsNestedInput
   }
@@ -38184,8 +41119,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    category_id: bigint | number
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
   }
@@ -38196,7 +41130,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
   }
@@ -38208,8 +41142,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
   }
@@ -38259,6 +41192,59 @@ export namespace Prisma {
     product_id?: BigIntFieldUpdateOperationsInput | bigint | number
     file_id?: BigIntFieldUpdateOperationsInput | bigint | number
     sort?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type provincesCreateInput = {
+    name: string
+    name_local: string
+    cities?: citiesCreateNestedManyWithoutProvincesInput
+    directions?: directionsCreateNestedManyWithoutProvincesInput
+    countries: countriesCreateNestedOneWithoutProvincesInput
+  }
+
+  export type provincesUncheckedCreateInput = {
+    id?: number
+    country_iso: number
+    name: string
+    name_local: string
+    cities?: citiesUncheckedCreateNestedManyWithoutProvincesInput
+    directions?: directionsUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type provincesUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    cities?: citiesUpdateManyWithoutProvincesNestedInput
+    directions?: directionsUpdateManyWithoutProvincesNestedInput
+    countries?: countriesUpdateOneRequiredWithoutProvincesNestedInput
+  }
+
+  export type provincesUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    country_iso?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    cities?: citiesUncheckedUpdateManyWithoutProvincesNestedInput
+    directions?: directionsUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type provincesCreateManyInput = {
+    id?: number
+    country_iso: number
+    name: string
+    name_local: string
+  }
+
+  export type provincesUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type provincesUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    country_iso?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
   }
 
   export type user_sessionsCreateInput = {
@@ -38735,334 +41721,52 @@ export namespace Prisma {
     attempts?: IntFieldUpdateOperationsInput | number
   }
 
-  export type citiesCreateInput = {
+  export type category_translationsCreateInput = {
+    lang_code: string
     name: string
-    name_local: string
-    provinces: provincesCreateNestedOneWithoutCitiesInput
-    directions?: directionsCreateNestedManyWithoutCitiesInput
+    name_unaccent?: string | null
+    categories: categoriesCreateNestedOneWithoutCategory_translationsInput
   }
 
-  export type citiesUncheckedCreateInput = {
-    id?: number
-    province_id: number
+  export type category_translationsUncheckedCreateInput = {
+    category_id: bigint | number
+    lang_code: string
     name: string
-    name_local: string
-    directions?: directionsUncheckedCreateNestedManyWithoutCitiesInput
+    name_unaccent?: string | null
   }
 
-  export type citiesUpdateInput = {
+  export type category_translationsUpdateInput = {
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    provinces?: provincesUpdateOneRequiredWithoutCitiesNestedInput
-    directions?: directionsUpdateManyWithoutCitiesNestedInput
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    categories?: categoriesUpdateOneRequiredWithoutCategory_translationsNestedInput
   }
 
-  export type citiesUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
+  export type category_translationsUncheckedUpdateInput = {
+    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUncheckedUpdateManyWithoutCitiesNestedInput
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type citiesCreateManyInput = {
-    id?: number
-    province_id: number
+  export type category_translationsCreateManyInput = {
+    category_id: bigint | number
+    lang_code: string
     name: string
-    name_local: string
+    name_unaccent?: string | null
   }
 
-  export type citiesUpdateManyMutationInput = {
+  export type category_translationsUpdateManyMutationInput = {
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type citiesUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
+  export type category_translationsUncheckedUpdateManyInput = {
+    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type countriesCreateInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currencies?: currenciesCreateNestedOneWithoutCountriesInput
-    directions?: directionsCreateNestedManyWithoutCountriesInput
-    provinces?: provincesCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesUncheckedCreateInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currency_id?: number | null
-    directions?: directionsUncheckedCreateNestedManyWithoutCountriesInput
-    provinces?: provincesUncheckedCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesUpdateInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currencies?: currenciesUpdateOneWithoutCountriesNestedInput
-    directions?: directionsUpdateManyWithoutCountriesNestedInput
-    provinces?: provincesUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesUncheckedUpdateInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
-    directions?: directionsUncheckedUpdateManyWithoutCountriesNestedInput
-    provinces?: provincesUncheckedUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesCreateManyInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currency_id?: number | null
-  }
-
-  export type countriesUpdateManyMutationInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type countriesUncheckedUpdateManyInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
-  }
-
-  export type directionsCreateInput = {
-    id?: bigint | number
-    type?: $Enums.AddressType
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    cities: citiesCreateNestedOneWithoutDirectionsInput
-    countries: countriesCreateNestedOneWithoutDirectionsInput
-    provinces: provincesCreateNestedOneWithoutDirectionsInput
-    users: usersCreateNestedOneWithoutDirectionsInput
-    orders?: ordersCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsUncheckedCreateInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    country_iso: number
-    province_id: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    orders?: ordersUncheckedCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
-    countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
-    provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
-    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
-    orders?: ordersUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    country_iso?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
-    city_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    orders?: ordersUncheckedUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsCreateManyInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    country_iso: number
-    province_id: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-  }
-
-  export type directionsUpdateManyMutationInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type directionsUncheckedUpdateManyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    country_iso?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
-    city_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type provincesCreateInput = {
-    name: string
-    name_local: string
-    cities?: citiesCreateNestedManyWithoutProvincesInput
-    directions?: directionsCreateNestedManyWithoutProvincesInput
-    countries: countriesCreateNestedOneWithoutProvincesInput
-  }
-
-  export type provincesUncheckedCreateInput = {
-    id?: number
-    country_iso: number
-    name: string
-    name_local: string
-    cities?: citiesUncheckedCreateNestedManyWithoutProvincesInput
-    directions?: directionsUncheckedCreateNestedManyWithoutProvincesInput
-  }
-
-  export type provincesUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    cities?: citiesUpdateManyWithoutProvincesNestedInput
-    directions?: directionsUpdateManyWithoutProvincesNestedInput
-    countries?: countriesUpdateOneRequiredWithoutProvincesNestedInput
-  }
-
-  export type provincesUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    country_iso?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    cities?: citiesUncheckedUpdateManyWithoutProvincesNestedInput
-    directions?: directionsUncheckedUpdateManyWithoutProvincesNestedInput
-  }
-
-  export type provincesCreateManyInput = {
-    id?: number
-    country_iso: number
-    name: string
-    name_local: string
-  }
-
-  export type provincesUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type provincesUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    country_iso?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type currenciesCreateInput = {
-    iso_numeric: number
-    iso_alpha3: string
-    symbol: string
-    decimal_digits: number
-    countries?: countriesCreateNestedManyWithoutCurrenciesInput
-  }
-
-  export type currenciesUncheckedCreateInput = {
-    iso_numeric: number
-    iso_alpha3: string
-    symbol: string
-    decimal_digits: number
-    countries?: countriesUncheckedCreateNestedManyWithoutCurrenciesInput
-  }
-
-  export type currenciesUpdateInput = {
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    symbol?: StringFieldUpdateOperationsInput | string
-    decimal_digits?: IntFieldUpdateOperationsInput | number
-    countries?: countriesUpdateManyWithoutCurrenciesNestedInput
-  }
-
-  export type currenciesUncheckedUpdateInput = {
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    symbol?: StringFieldUpdateOperationsInput | string
-    decimal_digits?: IntFieldUpdateOperationsInput | number
-    countries?: countriesUncheckedUpdateManyWithoutCurrenciesNestedInput
-  }
-
-  export type currenciesCreateManyInput = {
-    iso_numeric: number
-    iso_alpha3: string
-    symbol: string
-    decimal_digits: number
-  }
-
-  export type currenciesUpdateManyMutationInput = {
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    symbol?: StringFieldUpdateOperationsInput | string
-    decimal_digits?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type currenciesUncheckedUpdateManyInput = {
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    symbol?: StringFieldUpdateOperationsInput | string
-    decimal_digits?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BigIntFilter<$PrismaModel = never> = {
@@ -39330,6 +42034,21 @@ export namespace Prisma {
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type CategoriesNullableScalarRelationFilter = {
     is?: categoriesWhereInput | null
     isNot?: categoriesWhereInput | null
@@ -39346,17 +42065,27 @@ export namespace Prisma {
     isNot?: usersWhereInput | null
   }
 
-  export type ProductsListRelationFilter = {
-    every?: productsWhereInput
-    some?: productsWhereInput
-    none?: productsWhereInput
+  export type Category_translationsListRelationFilter = {
+    every?: category_translationsWhereInput
+    some?: category_translationsWhereInput
+    none?: category_translationsWhereInput
+  }
+
+  export type Product_categoriesListRelationFilter = {
+    every?: product_categoriesWhereInput
+    some?: product_categoriesWhereInput
+    none?: product_categoriesWhereInput
   }
 
   export type categoriesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type productsOrderByRelationAggregateInput = {
+  export type category_translationsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type product_categoriesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39367,12 +42096,15 @@ export namespace Prisma {
     iva?: SortOrder
     parent_id?: SortOrder
     created_at?: SortOrder
+    level?: SortOrder
+    name_unaccent?: SortOrder
   }
 
   export type categoriesAvgOrderByAggregateInput = {
     id?: SortOrder
     iva?: SortOrder
     parent_id?: SortOrder
+    level?: SortOrder
   }
 
   export type categoriesMaxOrderByAggregateInput = {
@@ -39382,6 +42114,8 @@ export namespace Prisma {
     iva?: SortOrder
     parent_id?: SortOrder
     created_at?: SortOrder
+    level?: SortOrder
+    name_unaccent?: SortOrder
   }
 
   export type categoriesMinOrderByAggregateInput = {
@@ -39391,12 +42125,15 @@ export namespace Prisma {
     iva?: SortOrder
     parent_id?: SortOrder
     created_at?: SortOrder
+    level?: SortOrder
+    name_unaccent?: SortOrder
   }
 
   export type categoriesSumOrderByAggregateInput = {
     id?: SortOrder
     iva?: SortOrder
     parent_id?: SortOrder
+    level?: SortOrder
   }
 
   export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -39446,6 +42183,24 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type Chat_participantsListRelationFilter = {
@@ -39555,6 +42310,52 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type ProvincesScalarRelationFilter = {
+    is?: provincesWhereInput
+    isNot?: provincesWhereInput
+  }
+
+  export type DirectionsListRelationFilter = {
+    every?: directionsWhereInput
+    some?: directionsWhereInput
+    none?: directionsWhereInput
+  }
+
+  export type directionsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type citiesCountOrderByAggregateInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+  }
+
+  export type citiesAvgOrderByAggregateInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+  }
+
+  export type citiesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+  }
+
+  export type citiesMinOrderByAggregateInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+  }
+
+  export type citiesSumOrderByAggregateInput = {
+    id?: SortOrder
+    province_id?: SortOrder
+  }
+
   export type configurationsCountOrderByAggregateInput = {
     user_id?: SortOrder
     language?: SortOrder
@@ -39571,6 +42372,126 @@ export namespace Prisma {
     user_id?: SortOrder
     language?: SortOrder
     timezone?: SortOrder
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type CurrenciesNullableScalarRelationFilter = {
+    is?: currenciesWhereInput | null
+    isNot?: currenciesWhereInput | null
+  }
+
+  export type ProvincesListRelationFilter = {
+    every?: provincesWhereInput
+    some?: provincesWhereInput
+    none?: provincesWhereInput
+  }
+
+  export type provincesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type countriesCountOrderByAggregateInput = {
+    iso_alpha2?: SortOrder
+    iso_alpha3?: SortOrder
+    iso_numeric?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    currency_id?: SortOrder
+  }
+
+  export type countriesAvgOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    currency_id?: SortOrder
+  }
+
+  export type countriesMaxOrderByAggregateInput = {
+    iso_alpha2?: SortOrder
+    iso_alpha3?: SortOrder
+    iso_numeric?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    currency_id?: SortOrder
+  }
+
+  export type countriesMinOrderByAggregateInput = {
+    iso_alpha2?: SortOrder
+    iso_alpha3?: SortOrder
+    iso_numeric?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+    currency_id?: SortOrder
+  }
+
+  export type countriesSumOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    currency_id?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type CountriesListRelationFilter = {
+    every?: countriesWhereInput
+    some?: countriesWhereInput
+    none?: countriesWhereInput
+  }
+
+  export type countriesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type currenciesCountOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    iso_alpha3?: SortOrder
+    symbol?: SortOrder
+    decimal_digits?: SortOrder
+  }
+
+  export type currenciesAvgOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    decimal_digits?: SortOrder
+  }
+
+  export type currenciesMaxOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    iso_alpha3?: SortOrder
+    symbol?: SortOrder
+    decimal_digits?: SortOrder
+  }
+
+  export type currenciesMinOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    iso_alpha3?: SortOrder
+    symbol?: SortOrder
+    decimal_digits?: SortOrder
+  }
+
+  export type currenciesSumOrderByAggregateInput = {
+    iso_numeric?: SortOrder
+    decimal_digits?: SortOrder
   }
 
   export type EnumDeliveryStatusFilter<$PrismaModel = never> = {
@@ -39683,21 +42604,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type DeliveriesNullableScalarRelationFilter = {
     is?: deliveriesWhereInput | null
     isNot?: deliveriesWhereInput | null
@@ -39747,22 +42653,131 @@ export namespace Prisma {
     longitude?: SortOrder
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  export type EnumAddressTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAddressTypeFilter<$PrismaModel> | $Enums.AddressType
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type CitiesScalarRelationFilter = {
+    is?: citiesWhereInput
+    isNot?: citiesWhereInput
+  }
+
+  export type CountriesScalarRelationFilter = {
+    is?: countriesWhereInput
+    isNot?: countriesWhereInput
+  }
+
+  export type OrdersListRelationFilter = {
+    every?: ordersWhereInput
+    some?: ordersWhereInput
+    none?: ordersWhereInput
+  }
+
+  export type ordersOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type directionsCountOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    street?: SortOrder
+    zip_code?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type directionsAvgOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+  }
+
+  export type directionsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    street?: SortOrder
+    zip_code?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type directionsMinOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    street?: SortOrder
+    zip_code?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type directionsSumOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    province_id?: SortOrder
+    city_id?: SortOrder
+    latitude?: SortOrder
+    longitude?: SortOrder
+  }
+
+  export type EnumAddressTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAddressTypeWithAggregatesFilter<$PrismaModel> | $Enums.AddressType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAddressTypeFilter<$PrismaModel>
+    _max?: NestedEnumAddressTypeFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -40272,6 +43287,54 @@ export namespace Prisma {
     isNot?: categoriesWhereInput
   }
 
+  export type ProductsScalarRelationFilter = {
+    is?: productsWhereInput
+    isNot?: productsWhereInput
+  }
+
+  export type product_categoriesProduct_idCategory_idCompoundUniqueInput = {
+    product_id: bigint | number
+    category_id: bigint | number
+  }
+
+  export type product_categoriesCountOrderByAggregateInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+    is_primary?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type product_categoriesAvgOrderByAggregateInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+  }
+
+  export type product_categoriesMaxOrderByAggregateInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+    is_primary?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type product_categoriesMinOrderByAggregateInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+    is_primary?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type product_categoriesSumOrderByAggregateInput = {
+    product_id?: SortOrder
+    category_id?: SortOrder
+  }
+
+  export type EnumProductStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductStatus | EnumProductStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductStatusFilter<$PrismaModel> | $Enums.ProductStatus
+  }
+
   export type Variant_productsListRelationFilter = {
     every?: variant_productsWhereInput
     some?: variant_productsWhereInput
@@ -40289,7 +43352,6 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     product_code?: SortOrder
@@ -40298,8 +43360,6 @@ export namespace Prisma {
   export type productsAvgOrderByAggregateInput = {
     id?: SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
-    status?: SortOrder
   }
 
   export type productsMaxOrderByAggregateInput = {
@@ -40309,7 +43369,6 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     product_code?: SortOrder
@@ -40322,7 +43381,6 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
     status?: SortOrder
     created_at?: SortOrder
     product_code?: SortOrder
@@ -40331,13 +43389,16 @@ export namespace Prisma {
   export type productsSumOrderByAggregateInput = {
     id?: SortOrder
     iva?: SortOrder
-    category_id?: SortOrder
-    status?: SortOrder
   }
 
-  export type ProductsScalarRelationFilter = {
-    is?: productsWhereInput
-    isNot?: productsWhereInput
+  export type EnumProductStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductStatus | EnumProductStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProductStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProductStatusFilter<$PrismaModel>
+    _max?: NestedEnumProductStatusFilter<$PrismaModel>
   }
 
   export type products_filesCountOrderByAggregateInput = {
@@ -40373,6 +43434,47 @@ export namespace Prisma {
     product_id?: SortOrder
     file_id?: SortOrder
     sort?: SortOrder
+  }
+
+  export type CitiesListRelationFilter = {
+    every?: citiesWhereInput
+    some?: citiesWhereInput
+    none?: citiesWhereInput
+  }
+
+  export type citiesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type provincesCountOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+  }
+
+  export type provincesAvgOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+  }
+
+  export type provincesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+  }
+
+  export type provincesMinOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
+    name?: SortOrder
+    name_local?: SortOrder
+  }
+
+  export type provincesSumOrderByAggregateInput = {
+    id?: SortOrder
+    country_iso?: SortOrder
   }
 
   export type user_sessionsUser_idDevice_fingerCompoundUniqueInput = {
@@ -40473,12 +43575,6 @@ export namespace Prisma {
     none?: deliveriesWhereInput
   }
 
-  export type DirectionsListRelationFilter = {
-    every?: directionsWhereInput
-    some?: directionsWhereInput
-    none?: directionsWhereInput
-  }
-
   export type DiscountsListRelationFilter = {
     every?: discountsWhereInput
     some?: discountsWhereInput
@@ -40491,10 +43587,10 @@ export namespace Prisma {
     none?: notificationsWhereInput
   }
 
-  export type OrdersListRelationFilter = {
-    every?: ordersWhereInput
-    some?: ordersWhereInput
-    none?: ordersWhereInput
+  export type ProductsListRelationFilter = {
+    every?: productsWhereInput
+    some?: productsWhereInput
+    none?: productsWhereInput
   }
 
   export type User_sessionsListRelationFilter = {
@@ -40517,10 +43613,6 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type directionsOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type discountsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -40529,7 +43621,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ordersOrderByRelationAggregateInput = {
+  export type productsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -40776,318 +43868,38 @@ export namespace Prisma {
     attempts?: SortOrder
   }
 
-  export type ProvincesScalarRelationFilter = {
-    is?: provincesWhereInput
-    isNot?: provincesWhereInput
+  export type category_translationsCategory_idLang_codeCompoundUniqueInput = {
+    category_id: bigint | number
+    lang_code: string
   }
 
-  export type citiesCountOrderByAggregateInput = {
-    id?: SortOrder
-    province_id?: SortOrder
+  export type category_translationsCountOrderByAggregateInput = {
+    category_id?: SortOrder
+    lang_code?: SortOrder
     name?: SortOrder
-    name_local?: SortOrder
+    name_unaccent?: SortOrder
   }
 
-  export type citiesAvgOrderByAggregateInput = {
-    id?: SortOrder
-    province_id?: SortOrder
+  export type category_translationsAvgOrderByAggregateInput = {
+    category_id?: SortOrder
   }
 
-  export type citiesMaxOrderByAggregateInput = {
-    id?: SortOrder
-    province_id?: SortOrder
+  export type category_translationsMaxOrderByAggregateInput = {
+    category_id?: SortOrder
+    lang_code?: SortOrder
     name?: SortOrder
-    name_local?: SortOrder
+    name_unaccent?: SortOrder
   }
 
-  export type citiesMinOrderByAggregateInput = {
-    id?: SortOrder
-    province_id?: SortOrder
+  export type category_translationsMinOrderByAggregateInput = {
+    category_id?: SortOrder
+    lang_code?: SortOrder
     name?: SortOrder
-    name_local?: SortOrder
+    name_unaccent?: SortOrder
   }
 
-  export type citiesSumOrderByAggregateInput = {
-    id?: SortOrder
-    province_id?: SortOrder
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type CurrenciesNullableScalarRelationFilter = {
-    is?: currenciesWhereInput | null
-    isNot?: currenciesWhereInput | null
-  }
-
-  export type ProvincesListRelationFilter = {
-    every?: provincesWhereInput
-    some?: provincesWhereInput
-    none?: provincesWhereInput
-  }
-
-  export type provincesOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type countriesCountOrderByAggregateInput = {
-    iso_alpha2?: SortOrder
-    iso_alpha3?: SortOrder
-    iso_numeric?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    currency_id?: SortOrder
-  }
-
-  export type countriesAvgOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    currency_id?: SortOrder
-  }
-
-  export type countriesMaxOrderByAggregateInput = {
-    iso_alpha2?: SortOrder
-    iso_alpha3?: SortOrder
-    iso_numeric?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    currency_id?: SortOrder
-  }
-
-  export type countriesMinOrderByAggregateInput = {
-    iso_alpha2?: SortOrder
-    iso_alpha3?: SortOrder
-    iso_numeric?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-    currency_id?: SortOrder
-  }
-
-  export type countriesSumOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    currency_id?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type EnumAddressTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumAddressTypeFilter<$PrismaModel> | $Enums.AddressType
-  }
-
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type CitiesScalarRelationFilter = {
-    is?: citiesWhereInput
-    isNot?: citiesWhereInput
-  }
-
-  export type CountriesScalarRelationFilter = {
-    is?: countriesWhereInput
-    isNot?: countriesWhereInput
-  }
-
-  export type directionsCountOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    type?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    street?: SortOrder
-    zip_code?: SortOrder
-    latitude?: SortOrder
-    longitude?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type directionsAvgOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    latitude?: SortOrder
-    longitude?: SortOrder
-  }
-
-  export type directionsMaxOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    type?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    street?: SortOrder
-    zip_code?: SortOrder
-    latitude?: SortOrder
-    longitude?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type directionsMinOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    type?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    street?: SortOrder
-    zip_code?: SortOrder
-    latitude?: SortOrder
-    longitude?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type directionsSumOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    province_id?: SortOrder
-    city_id?: SortOrder
-    latitude?: SortOrder
-    longitude?: SortOrder
-  }
-
-  export type EnumAddressTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumAddressTypeWithAggregatesFilter<$PrismaModel> | $Enums.AddressType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumAddressTypeFilter<$PrismaModel>
-    _max?: NestedEnumAddressTypeFilter<$PrismaModel>
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
-  }
-
-  export type CitiesListRelationFilter = {
-    every?: citiesWhereInput
-    some?: citiesWhereInput
-    none?: citiesWhereInput
-  }
-
-  export type citiesOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type provincesCountOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-  }
-
-  export type provincesAvgOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-  }
-
-  export type provincesMaxOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-  }
-
-  export type provincesMinOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-    name?: SortOrder
-    name_local?: SortOrder
-  }
-
-  export type provincesSumOrderByAggregateInput = {
-    id?: SortOrder
-    country_iso?: SortOrder
-  }
-
-  export type CountriesListRelationFilter = {
-    every?: countriesWhereInput
-    some?: countriesWhereInput
-    none?: countriesWhereInput
-  }
-
-  export type countriesOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type currenciesCountOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    iso_alpha3?: SortOrder
-    symbol?: SortOrder
-    decimal_digits?: SortOrder
-  }
-
-  export type currenciesAvgOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    decimal_digits?: SortOrder
-  }
-
-  export type currenciesMaxOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    iso_alpha3?: SortOrder
-    symbol?: SortOrder
-    decimal_digits?: SortOrder
-  }
-
-  export type currenciesMinOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    iso_alpha3?: SortOrder
-    symbol?: SortOrder
-    decimal_digits?: SortOrder
-  }
-
-  export type currenciesSumOrderByAggregateInput = {
-    iso_numeric?: SortOrder
-    decimal_digits?: SortOrder
+  export type category_translationsSumOrderByAggregateInput = {
+    category_id?: SortOrder
   }
 
   export type cartsCreateNestedOneWithoutCart_detailsInput = {
@@ -41208,16 +44020,16 @@ export namespace Prisma {
     deleteMany?: cart_detailsScalarWhereInput | cart_detailsScalarWhereInput[]
   }
 
-  export type categoriesCreateNestedOneWithoutOther_categoriesInput = {
-    create?: XOR<categoriesCreateWithoutOther_categoriesInput, categoriesUncheckedCreateWithoutOther_categoriesInput>
-    connectOrCreate?: categoriesCreateOrConnectWithoutOther_categoriesInput
+  export type categoriesCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<categoriesCreateWithoutChildrenInput, categoriesUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: categoriesCreateOrConnectWithoutChildrenInput
     connect?: categoriesWhereUniqueInput
   }
 
-  export type categoriesCreateNestedManyWithoutCategoriesInput = {
-    create?: XOR<categoriesCreateWithoutCategoriesInput, categoriesUncheckedCreateWithoutCategoriesInput> | categoriesCreateWithoutCategoriesInput[] | categoriesUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: categoriesCreateOrConnectWithoutCategoriesInput | categoriesCreateOrConnectWithoutCategoriesInput[]
-    createMany?: categoriesCreateManyCategoriesInputEnvelope
+  export type categoriesCreateNestedManyWithoutParentInput = {
+    create?: XOR<categoriesCreateWithoutParentInput, categoriesUncheckedCreateWithoutParentInput> | categoriesCreateWithoutParentInput[] | categoriesUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: categoriesCreateOrConnectWithoutParentInput | categoriesCreateOrConnectWithoutParentInput[]
+    createMany?: categoriesCreateManyParentInputEnvelope
     connect?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
   }
 
@@ -41227,25 +44039,39 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
-  export type productsCreateNestedManyWithoutCategoriesInput = {
-    create?: XOR<productsCreateWithoutCategoriesInput, productsUncheckedCreateWithoutCategoriesInput> | productsCreateWithoutCategoriesInput[] | productsUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: productsCreateOrConnectWithoutCategoriesInput | productsCreateOrConnectWithoutCategoriesInput[]
-    createMany?: productsCreateManyCategoriesInputEnvelope
-    connect?: productsWhereUniqueInput | productsWhereUniqueInput[]
+  export type category_translationsCreateNestedManyWithoutCategoriesInput = {
+    create?: XOR<category_translationsCreateWithoutCategoriesInput, category_translationsUncheckedCreateWithoutCategoriesInput> | category_translationsCreateWithoutCategoriesInput[] | category_translationsUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: category_translationsCreateOrConnectWithoutCategoriesInput | category_translationsCreateOrConnectWithoutCategoriesInput[]
+    createMany?: category_translationsCreateManyCategoriesInputEnvelope
+    connect?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
   }
 
-  export type categoriesUncheckedCreateNestedManyWithoutCategoriesInput = {
-    create?: XOR<categoriesCreateWithoutCategoriesInput, categoriesUncheckedCreateWithoutCategoriesInput> | categoriesCreateWithoutCategoriesInput[] | categoriesUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: categoriesCreateOrConnectWithoutCategoriesInput | categoriesCreateOrConnectWithoutCategoriesInput[]
-    createMany?: categoriesCreateManyCategoriesInputEnvelope
+  export type product_categoriesCreateNestedManyWithoutCategoriesInput = {
+    create?: XOR<product_categoriesCreateWithoutCategoriesInput, product_categoriesUncheckedCreateWithoutCategoriesInput> | product_categoriesCreateWithoutCategoriesInput[] | product_categoriesUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutCategoriesInput | product_categoriesCreateOrConnectWithoutCategoriesInput[]
+    createMany?: product_categoriesCreateManyCategoriesInputEnvelope
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+  }
+
+  export type categoriesUncheckedCreateNestedManyWithoutParentInput = {
+    create?: XOR<categoriesCreateWithoutParentInput, categoriesUncheckedCreateWithoutParentInput> | categoriesCreateWithoutParentInput[] | categoriesUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: categoriesCreateOrConnectWithoutParentInput | categoriesCreateOrConnectWithoutParentInput[]
+    createMany?: categoriesCreateManyParentInputEnvelope
     connect?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
   }
 
-  export type productsUncheckedCreateNestedManyWithoutCategoriesInput = {
-    create?: XOR<productsCreateWithoutCategoriesInput, productsUncheckedCreateWithoutCategoriesInput> | productsCreateWithoutCategoriesInput[] | productsUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: productsCreateOrConnectWithoutCategoriesInput | productsCreateOrConnectWithoutCategoriesInput[]
-    createMany?: productsCreateManyCategoriesInputEnvelope
-    connect?: productsWhereUniqueInput | productsWhereUniqueInput[]
+  export type category_translationsUncheckedCreateNestedManyWithoutCategoriesInput = {
+    create?: XOR<category_translationsCreateWithoutCategoriesInput, category_translationsUncheckedCreateWithoutCategoriesInput> | category_translationsCreateWithoutCategoriesInput[] | category_translationsUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: category_translationsCreateOrConnectWithoutCategoriesInput | category_translationsCreateOrConnectWithoutCategoriesInput[]
+    createMany?: category_translationsCreateManyCategoriesInputEnvelope
+    connect?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+  }
+
+  export type product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput = {
+    create?: XOR<product_categoriesCreateWithoutCategoriesInput, product_categoriesUncheckedCreateWithoutCategoriesInput> | product_categoriesCreateWithoutCategoriesInput[] | product_categoriesUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutCategoriesInput | product_categoriesCreateOrConnectWithoutCategoriesInput[]
+    createMany?: product_categoriesCreateManyCategoriesInputEnvelope
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -41256,27 +44082,31 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
-  export type categoriesUpdateOneWithoutOther_categoriesNestedInput = {
-    create?: XOR<categoriesCreateWithoutOther_categoriesInput, categoriesUncheckedCreateWithoutOther_categoriesInput>
-    connectOrCreate?: categoriesCreateOrConnectWithoutOther_categoriesInput
-    upsert?: categoriesUpsertWithoutOther_categoriesInput
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type categoriesUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<categoriesCreateWithoutChildrenInput, categoriesUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: categoriesCreateOrConnectWithoutChildrenInput
+    upsert?: categoriesUpsertWithoutChildrenInput
     disconnect?: categoriesWhereInput | boolean
     delete?: categoriesWhereInput | boolean
     connect?: categoriesWhereUniqueInput
-    update?: XOR<XOR<categoriesUpdateToOneWithWhereWithoutOther_categoriesInput, categoriesUpdateWithoutOther_categoriesInput>, categoriesUncheckedUpdateWithoutOther_categoriesInput>
+    update?: XOR<XOR<categoriesUpdateToOneWithWhereWithoutChildrenInput, categoriesUpdateWithoutChildrenInput>, categoriesUncheckedUpdateWithoutChildrenInput>
   }
 
-  export type categoriesUpdateManyWithoutCategoriesNestedInput = {
-    create?: XOR<categoriesCreateWithoutCategoriesInput, categoriesUncheckedCreateWithoutCategoriesInput> | categoriesCreateWithoutCategoriesInput[] | categoriesUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: categoriesCreateOrConnectWithoutCategoriesInput | categoriesCreateOrConnectWithoutCategoriesInput[]
-    upsert?: categoriesUpsertWithWhereUniqueWithoutCategoriesInput | categoriesUpsertWithWhereUniqueWithoutCategoriesInput[]
-    createMany?: categoriesCreateManyCategoriesInputEnvelope
+  export type categoriesUpdateManyWithoutParentNestedInput = {
+    create?: XOR<categoriesCreateWithoutParentInput, categoriesUncheckedCreateWithoutParentInput> | categoriesCreateWithoutParentInput[] | categoriesUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: categoriesCreateOrConnectWithoutParentInput | categoriesCreateOrConnectWithoutParentInput[]
+    upsert?: categoriesUpsertWithWhereUniqueWithoutParentInput | categoriesUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: categoriesCreateManyParentInputEnvelope
     set?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
     disconnect?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
     delete?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
     connect?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
-    update?: categoriesUpdateWithWhereUniqueWithoutCategoriesInput | categoriesUpdateWithWhereUniqueWithoutCategoriesInput[]
-    updateMany?: categoriesUpdateManyWithWhereWithoutCategoriesInput | categoriesUpdateManyWithWhereWithoutCategoriesInput[]
+    update?: categoriesUpdateWithWhereUniqueWithoutParentInput | categoriesUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: categoriesUpdateManyWithWhereWithoutParentInput | categoriesUpdateManyWithWhereWithoutParentInput[]
     deleteMany?: categoriesScalarWhereInput | categoriesScalarWhereInput[]
   }
 
@@ -41290,50 +44120,74 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutCategoriesInput, usersUpdateWithoutCategoriesInput>, usersUncheckedUpdateWithoutCategoriesInput>
   }
 
-  export type productsUpdateManyWithoutCategoriesNestedInput = {
-    create?: XOR<productsCreateWithoutCategoriesInput, productsUncheckedCreateWithoutCategoriesInput> | productsCreateWithoutCategoriesInput[] | productsUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: productsCreateOrConnectWithoutCategoriesInput | productsCreateOrConnectWithoutCategoriesInput[]
-    upsert?: productsUpsertWithWhereUniqueWithoutCategoriesInput | productsUpsertWithWhereUniqueWithoutCategoriesInput[]
-    createMany?: productsCreateManyCategoriesInputEnvelope
-    set?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    disconnect?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    delete?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    connect?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    update?: productsUpdateWithWhereUniqueWithoutCategoriesInput | productsUpdateWithWhereUniqueWithoutCategoriesInput[]
-    updateMany?: productsUpdateManyWithWhereWithoutCategoriesInput | productsUpdateManyWithWhereWithoutCategoriesInput[]
-    deleteMany?: productsScalarWhereInput | productsScalarWhereInput[]
+  export type category_translationsUpdateManyWithoutCategoriesNestedInput = {
+    create?: XOR<category_translationsCreateWithoutCategoriesInput, category_translationsUncheckedCreateWithoutCategoriesInput> | category_translationsCreateWithoutCategoriesInput[] | category_translationsUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: category_translationsCreateOrConnectWithoutCategoriesInput | category_translationsCreateOrConnectWithoutCategoriesInput[]
+    upsert?: category_translationsUpsertWithWhereUniqueWithoutCategoriesInput | category_translationsUpsertWithWhereUniqueWithoutCategoriesInput[]
+    createMany?: category_translationsCreateManyCategoriesInputEnvelope
+    set?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    disconnect?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    delete?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    connect?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    update?: category_translationsUpdateWithWhereUniqueWithoutCategoriesInput | category_translationsUpdateWithWhereUniqueWithoutCategoriesInput[]
+    updateMany?: category_translationsUpdateManyWithWhereWithoutCategoriesInput | category_translationsUpdateManyWithWhereWithoutCategoriesInput[]
+    deleteMany?: category_translationsScalarWhereInput | category_translationsScalarWhereInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type product_categoriesUpdateManyWithoutCategoriesNestedInput = {
+    create?: XOR<product_categoriesCreateWithoutCategoriesInput, product_categoriesUncheckedCreateWithoutCategoriesInput> | product_categoriesCreateWithoutCategoriesInput[] | product_categoriesUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutCategoriesInput | product_categoriesCreateOrConnectWithoutCategoriesInput[]
+    upsert?: product_categoriesUpsertWithWhereUniqueWithoutCategoriesInput | product_categoriesUpsertWithWhereUniqueWithoutCategoriesInput[]
+    createMany?: product_categoriesCreateManyCategoriesInputEnvelope
+    set?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    disconnect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    delete?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    update?: product_categoriesUpdateWithWhereUniqueWithoutCategoriesInput | product_categoriesUpdateWithWhereUniqueWithoutCategoriesInput[]
+    updateMany?: product_categoriesUpdateManyWithWhereWithoutCategoriesInput | product_categoriesUpdateManyWithWhereWithoutCategoriesInput[]
+    deleteMany?: product_categoriesScalarWhereInput | product_categoriesScalarWhereInput[]
   }
 
-  export type categoriesUncheckedUpdateManyWithoutCategoriesNestedInput = {
-    create?: XOR<categoriesCreateWithoutCategoriesInput, categoriesUncheckedCreateWithoutCategoriesInput> | categoriesCreateWithoutCategoriesInput[] | categoriesUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: categoriesCreateOrConnectWithoutCategoriesInput | categoriesCreateOrConnectWithoutCategoriesInput[]
-    upsert?: categoriesUpsertWithWhereUniqueWithoutCategoriesInput | categoriesUpsertWithWhereUniqueWithoutCategoriesInput[]
-    createMany?: categoriesCreateManyCategoriesInputEnvelope
+  export type categoriesUncheckedUpdateManyWithoutParentNestedInput = {
+    create?: XOR<categoriesCreateWithoutParentInput, categoriesUncheckedCreateWithoutParentInput> | categoriesCreateWithoutParentInput[] | categoriesUncheckedCreateWithoutParentInput[]
+    connectOrCreate?: categoriesCreateOrConnectWithoutParentInput | categoriesCreateOrConnectWithoutParentInput[]
+    upsert?: categoriesUpsertWithWhereUniqueWithoutParentInput | categoriesUpsertWithWhereUniqueWithoutParentInput[]
+    createMany?: categoriesCreateManyParentInputEnvelope
     set?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
     disconnect?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
     delete?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
     connect?: categoriesWhereUniqueInput | categoriesWhereUniqueInput[]
-    update?: categoriesUpdateWithWhereUniqueWithoutCategoriesInput | categoriesUpdateWithWhereUniqueWithoutCategoriesInput[]
-    updateMany?: categoriesUpdateManyWithWhereWithoutCategoriesInput | categoriesUpdateManyWithWhereWithoutCategoriesInput[]
+    update?: categoriesUpdateWithWhereUniqueWithoutParentInput | categoriesUpdateWithWhereUniqueWithoutParentInput[]
+    updateMany?: categoriesUpdateManyWithWhereWithoutParentInput | categoriesUpdateManyWithWhereWithoutParentInput[]
     deleteMany?: categoriesScalarWhereInput | categoriesScalarWhereInput[]
   }
 
-  export type productsUncheckedUpdateManyWithoutCategoriesNestedInput = {
-    create?: XOR<productsCreateWithoutCategoriesInput, productsUncheckedCreateWithoutCategoriesInput> | productsCreateWithoutCategoriesInput[] | productsUncheckedCreateWithoutCategoriesInput[]
-    connectOrCreate?: productsCreateOrConnectWithoutCategoriesInput | productsCreateOrConnectWithoutCategoriesInput[]
-    upsert?: productsUpsertWithWhereUniqueWithoutCategoriesInput | productsUpsertWithWhereUniqueWithoutCategoriesInput[]
-    createMany?: productsCreateManyCategoriesInputEnvelope
-    set?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    disconnect?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    delete?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    connect?: productsWhereUniqueInput | productsWhereUniqueInput[]
-    update?: productsUpdateWithWhereUniqueWithoutCategoriesInput | productsUpdateWithWhereUniqueWithoutCategoriesInput[]
-    updateMany?: productsUpdateManyWithWhereWithoutCategoriesInput | productsUpdateManyWithWhereWithoutCategoriesInput[]
-    deleteMany?: productsScalarWhereInput | productsScalarWhereInput[]
+  export type category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput = {
+    create?: XOR<category_translationsCreateWithoutCategoriesInput, category_translationsUncheckedCreateWithoutCategoriesInput> | category_translationsCreateWithoutCategoriesInput[] | category_translationsUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: category_translationsCreateOrConnectWithoutCategoriesInput | category_translationsCreateOrConnectWithoutCategoriesInput[]
+    upsert?: category_translationsUpsertWithWhereUniqueWithoutCategoriesInput | category_translationsUpsertWithWhereUniqueWithoutCategoriesInput[]
+    createMany?: category_translationsCreateManyCategoriesInputEnvelope
+    set?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    disconnect?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    delete?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    connect?: category_translationsWhereUniqueInput | category_translationsWhereUniqueInput[]
+    update?: category_translationsUpdateWithWhereUniqueWithoutCategoriesInput | category_translationsUpdateWithWhereUniqueWithoutCategoriesInput[]
+    updateMany?: category_translationsUpdateManyWithWhereWithoutCategoriesInput | category_translationsUpdateManyWithWhereWithoutCategoriesInput[]
+    deleteMany?: category_translationsScalarWhereInput | category_translationsScalarWhereInput[]
+  }
+
+  export type product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput = {
+    create?: XOR<product_categoriesCreateWithoutCategoriesInput, product_categoriesUncheckedCreateWithoutCategoriesInput> | product_categoriesCreateWithoutCategoriesInput[] | product_categoriesUncheckedCreateWithoutCategoriesInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutCategoriesInput | product_categoriesCreateOrConnectWithoutCategoriesInput[]
+    upsert?: product_categoriesUpsertWithWhereUniqueWithoutCategoriesInput | product_categoriesUpsertWithWhereUniqueWithoutCategoriesInput[]
+    createMany?: product_categoriesCreateManyCategoriesInputEnvelope
+    set?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    disconnect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    delete?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    update?: product_categoriesUpdateWithWhereUniqueWithoutCategoriesInput | product_categoriesUpdateWithWhereUniqueWithoutCategoriesInput[]
+    updateMany?: product_categoriesUpdateManyWithWhereWithoutCategoriesInput | product_categoriesUpdateManyWithWhereWithoutCategoriesInput[]
+    deleteMany?: product_categoriesScalarWhereInput | product_categoriesScalarWhereInput[]
   }
 
   export type chat_participantsCreateNestedManyWithoutChat_panelsInput = {
@@ -41452,6 +44306,62 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutChat_participantsInput, usersUpdateWithoutChat_participantsInput>, usersUncheckedUpdateWithoutChat_participantsInput>
   }
 
+  export type provincesCreateNestedOneWithoutCitiesInput = {
+    create?: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
+    connectOrCreate?: provincesCreateOrConnectWithoutCitiesInput
+    connect?: provincesWhereUniqueInput
+  }
+
+  export type directionsCreateNestedManyWithoutCitiesInput = {
+    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
+    createMany?: directionsCreateManyCitiesInputEnvelope
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+  }
+
+  export type directionsUncheckedCreateNestedManyWithoutCitiesInput = {
+    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
+    createMany?: directionsCreateManyCitiesInputEnvelope
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+  }
+
+  export type provincesUpdateOneRequiredWithoutCitiesNestedInput = {
+    create?: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
+    connectOrCreate?: provincesCreateOrConnectWithoutCitiesInput
+    upsert?: provincesUpsertWithoutCitiesInput
+    connect?: provincesWhereUniqueInput
+    update?: XOR<XOR<provincesUpdateToOneWithWhereWithoutCitiesInput, provincesUpdateWithoutCitiesInput>, provincesUncheckedUpdateWithoutCitiesInput>
+  }
+
+  export type directionsUpdateManyWithoutCitiesNestedInput = {
+    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
+    upsert?: directionsUpsertWithWhereUniqueWithoutCitiesInput | directionsUpsertWithWhereUniqueWithoutCitiesInput[]
+    createMany?: directionsCreateManyCitiesInputEnvelope
+    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    update?: directionsUpdateWithWhereUniqueWithoutCitiesInput | directionsUpdateWithWhereUniqueWithoutCitiesInput[]
+    updateMany?: directionsUpdateManyWithWhereWithoutCitiesInput | directionsUpdateManyWithWhereWithoutCitiesInput[]
+    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
+  }
+
+  export type directionsUncheckedUpdateManyWithoutCitiesNestedInput = {
+    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
+    upsert?: directionsUpsertWithWhereUniqueWithoutCitiesInput | directionsUpsertWithWhereUniqueWithoutCitiesInput[]
+    createMany?: directionsCreateManyCitiesInputEnvelope
+    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    update?: directionsUpdateWithWhereUniqueWithoutCitiesInput | directionsUpdateWithWhereUniqueWithoutCitiesInput[]
+    updateMany?: directionsUpdateManyWithWhereWithoutCitiesInput | directionsUpdateManyWithWhereWithoutCitiesInput[]
+    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
+  }
+
   export type usersCreateNestedOneWithoutConfigurationsInput = {
     create?: XOR<usersCreateWithoutConfigurationsInput, usersUncheckedCreateWithoutConfigurationsInput>
     connectOrCreate?: usersCreateOrConnectWithoutConfigurationsInput
@@ -41464,6 +44374,156 @@ export namespace Prisma {
     upsert?: usersUpsertWithoutConfigurationsInput
     connect?: usersWhereUniqueInput
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutConfigurationsInput, usersUpdateWithoutConfigurationsInput>, usersUncheckedUpdateWithoutConfigurationsInput>
+  }
+
+  export type currenciesCreateNestedOneWithoutCountriesInput = {
+    create?: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
+    connectOrCreate?: currenciesCreateOrConnectWithoutCountriesInput
+    connect?: currenciesWhereUniqueInput
+  }
+
+  export type directionsCreateNestedManyWithoutCountriesInput = {
+    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
+    createMany?: directionsCreateManyCountriesInputEnvelope
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+  }
+
+  export type provincesCreateNestedManyWithoutCountriesInput = {
+    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
+    createMany?: provincesCreateManyCountriesInputEnvelope
+    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+  }
+
+  export type directionsUncheckedCreateNestedManyWithoutCountriesInput = {
+    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
+    createMany?: directionsCreateManyCountriesInputEnvelope
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+  }
+
+  export type provincesUncheckedCreateNestedManyWithoutCountriesInput = {
+    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
+    createMany?: provincesCreateManyCountriesInputEnvelope
+    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+  }
+
+  export type currenciesUpdateOneWithoutCountriesNestedInput = {
+    create?: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
+    connectOrCreate?: currenciesCreateOrConnectWithoutCountriesInput
+    upsert?: currenciesUpsertWithoutCountriesInput
+    disconnect?: currenciesWhereInput | boolean
+    delete?: currenciesWhereInput | boolean
+    connect?: currenciesWhereUniqueInput
+    update?: XOR<XOR<currenciesUpdateToOneWithWhereWithoutCountriesInput, currenciesUpdateWithoutCountriesInput>, currenciesUncheckedUpdateWithoutCountriesInput>
+  }
+
+  export type directionsUpdateManyWithoutCountriesNestedInput = {
+    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
+    upsert?: directionsUpsertWithWhereUniqueWithoutCountriesInput | directionsUpsertWithWhereUniqueWithoutCountriesInput[]
+    createMany?: directionsCreateManyCountriesInputEnvelope
+    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    update?: directionsUpdateWithWhereUniqueWithoutCountriesInput | directionsUpdateWithWhereUniqueWithoutCountriesInput[]
+    updateMany?: directionsUpdateManyWithWhereWithoutCountriesInput | directionsUpdateManyWithWhereWithoutCountriesInput[]
+    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
+  }
+
+  export type provincesUpdateManyWithoutCountriesNestedInput = {
+    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
+    upsert?: provincesUpsertWithWhereUniqueWithoutCountriesInput | provincesUpsertWithWhereUniqueWithoutCountriesInput[]
+    createMany?: provincesCreateManyCountriesInputEnvelope
+    set?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    disconnect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    delete?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    update?: provincesUpdateWithWhereUniqueWithoutCountriesInput | provincesUpdateWithWhereUniqueWithoutCountriesInput[]
+    updateMany?: provincesUpdateManyWithWhereWithoutCountriesInput | provincesUpdateManyWithWhereWithoutCountriesInput[]
+    deleteMany?: provincesScalarWhereInput | provincesScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type directionsUncheckedUpdateManyWithoutCountriesNestedInput = {
+    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
+    upsert?: directionsUpsertWithWhereUniqueWithoutCountriesInput | directionsUpsertWithWhereUniqueWithoutCountriesInput[]
+    createMany?: directionsCreateManyCountriesInputEnvelope
+    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    update?: directionsUpdateWithWhereUniqueWithoutCountriesInput | directionsUpdateWithWhereUniqueWithoutCountriesInput[]
+    updateMany?: directionsUpdateManyWithWhereWithoutCountriesInput | directionsUpdateManyWithWhereWithoutCountriesInput[]
+    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
+  }
+
+  export type provincesUncheckedUpdateManyWithoutCountriesNestedInput = {
+    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
+    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
+    upsert?: provincesUpsertWithWhereUniqueWithoutCountriesInput | provincesUpsertWithWhereUniqueWithoutCountriesInput[]
+    createMany?: provincesCreateManyCountriesInputEnvelope
+    set?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    disconnect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    delete?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
+    update?: provincesUpdateWithWhereUniqueWithoutCountriesInput | provincesUpdateWithWhereUniqueWithoutCountriesInput[]
+    updateMany?: provincesUpdateManyWithWhereWithoutCountriesInput | provincesUpdateManyWithWhereWithoutCountriesInput[]
+    deleteMany?: provincesScalarWhereInput | provincesScalarWhereInput[]
+  }
+
+  export type countriesCreateNestedManyWithoutCurrenciesInput = {
+    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
+    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
+    createMany?: countriesCreateManyCurrenciesInputEnvelope
+    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+  }
+
+  export type countriesUncheckedCreateNestedManyWithoutCurrenciesInput = {
+    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
+    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
+    createMany?: countriesCreateManyCurrenciesInputEnvelope
+    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+  }
+
+  export type countriesUpdateManyWithoutCurrenciesNestedInput = {
+    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
+    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
+    upsert?: countriesUpsertWithWhereUniqueWithoutCurrenciesInput | countriesUpsertWithWhereUniqueWithoutCurrenciesInput[]
+    createMany?: countriesCreateManyCurrenciesInputEnvelope
+    set?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    disconnect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    delete?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    update?: countriesUpdateWithWhereUniqueWithoutCurrenciesInput | countriesUpdateWithWhereUniqueWithoutCurrenciesInput[]
+    updateMany?: countriesUpdateManyWithWhereWithoutCurrenciesInput | countriesUpdateManyWithWhereWithoutCurrenciesInput[]
+    deleteMany?: countriesScalarWhereInput | countriesScalarWhereInput[]
+  }
+
+  export type countriesUncheckedUpdateManyWithoutCurrenciesNestedInput = {
+    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
+    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
+    upsert?: countriesUpsertWithWhereUniqueWithoutCurrenciesInput | countriesUpsertWithWhereUniqueWithoutCurrenciesInput[]
+    createMany?: countriesCreateManyCurrenciesInputEnvelope
+    set?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    disconnect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    delete?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
+    update?: countriesUpdateWithWhereUniqueWithoutCurrenciesInput | countriesUpdateWithWhereUniqueWithoutCurrenciesInput[]
+    updateMany?: countriesUpdateManyWithWhereWithoutCurrenciesInput | countriesUpdateManyWithWhereWithoutCurrenciesInput[]
+    deleteMany?: countriesScalarWhereInput | countriesScalarWhereInput[]
   }
 
   export type usersCreateNestedOneWithoutDeliveriesInput = {
@@ -41548,6 +44608,116 @@ export namespace Prisma {
     delete?: deliveriesWhereInput | boolean
     connect?: deliveriesWhereUniqueInput
     update?: XOR<XOR<deliveriesUpdateToOneWithWhereWithoutDelivery_timelineInput, deliveriesUpdateWithoutDelivery_timelineInput>, deliveriesUncheckedUpdateWithoutDelivery_timelineInput>
+  }
+
+  export type citiesCreateNestedOneWithoutDirectionsInput = {
+    create?: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: citiesCreateOrConnectWithoutDirectionsInput
+    connect?: citiesWhereUniqueInput
+  }
+
+  export type countriesCreateNestedOneWithoutDirectionsInput = {
+    create?: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: countriesCreateOrConnectWithoutDirectionsInput
+    connect?: countriesWhereUniqueInput
+  }
+
+  export type provincesCreateNestedOneWithoutDirectionsInput = {
+    create?: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: provincesCreateOrConnectWithoutDirectionsInput
+    connect?: provincesWhereUniqueInput
+  }
+
+  export type usersCreateNestedOneWithoutDirectionsInput = {
+    create?: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: usersCreateOrConnectWithoutDirectionsInput
+    connect?: usersWhereUniqueInput
+  }
+
+  export type ordersCreateNestedManyWithoutDirectionsInput = {
+    create?: XOR<ordersCreateWithoutDirectionsInput, ordersUncheckedCreateWithoutDirectionsInput> | ordersCreateWithoutDirectionsInput[] | ordersUncheckedCreateWithoutDirectionsInput[]
+    connectOrCreate?: ordersCreateOrConnectWithoutDirectionsInput | ordersCreateOrConnectWithoutDirectionsInput[]
+    createMany?: ordersCreateManyDirectionsInputEnvelope
+    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+  }
+
+  export type ordersUncheckedCreateNestedManyWithoutDirectionsInput = {
+    create?: XOR<ordersCreateWithoutDirectionsInput, ordersUncheckedCreateWithoutDirectionsInput> | ordersCreateWithoutDirectionsInput[] | ordersUncheckedCreateWithoutDirectionsInput[]
+    connectOrCreate?: ordersCreateOrConnectWithoutDirectionsInput | ordersCreateOrConnectWithoutDirectionsInput[]
+    createMany?: ordersCreateManyDirectionsInputEnvelope
+    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+  }
+
+  export type EnumAddressTypeFieldUpdateOperationsInput = {
+    set?: $Enums.AddressType
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type citiesUpdateOneRequiredWithoutDirectionsNestedInput = {
+    create?: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: citiesCreateOrConnectWithoutDirectionsInput
+    upsert?: citiesUpsertWithoutDirectionsInput
+    connect?: citiesWhereUniqueInput
+    update?: XOR<XOR<citiesUpdateToOneWithWhereWithoutDirectionsInput, citiesUpdateWithoutDirectionsInput>, citiesUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type countriesUpdateOneRequiredWithoutDirectionsNestedInput = {
+    create?: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: countriesCreateOrConnectWithoutDirectionsInput
+    upsert?: countriesUpsertWithoutDirectionsInput
+    connect?: countriesWhereUniqueInput
+    update?: XOR<XOR<countriesUpdateToOneWithWhereWithoutDirectionsInput, countriesUpdateWithoutDirectionsInput>, countriesUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type provincesUpdateOneRequiredWithoutDirectionsNestedInput = {
+    create?: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: provincesCreateOrConnectWithoutDirectionsInput
+    upsert?: provincesUpsertWithoutDirectionsInput
+    connect?: provincesWhereUniqueInput
+    update?: XOR<XOR<provincesUpdateToOneWithWhereWithoutDirectionsInput, provincesUpdateWithoutDirectionsInput>, provincesUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type usersUpdateOneRequiredWithoutDirectionsNestedInput = {
+    create?: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
+    connectOrCreate?: usersCreateOrConnectWithoutDirectionsInput
+    upsert?: usersUpsertWithoutDirectionsInput
+    connect?: usersWhereUniqueInput
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutDirectionsInput, usersUpdateWithoutDirectionsInput>, usersUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type ordersUpdateManyWithoutDirectionsNestedInput = {
+    create?: XOR<ordersCreateWithoutDirectionsInput, ordersUncheckedCreateWithoutDirectionsInput> | ordersCreateWithoutDirectionsInput[] | ordersUncheckedCreateWithoutDirectionsInput[]
+    connectOrCreate?: ordersCreateOrConnectWithoutDirectionsInput | ordersCreateOrConnectWithoutDirectionsInput[]
+    upsert?: ordersUpsertWithWhereUniqueWithoutDirectionsInput | ordersUpsertWithWhereUniqueWithoutDirectionsInput[]
+    createMany?: ordersCreateManyDirectionsInputEnvelope
+    set?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    disconnect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    delete?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    update?: ordersUpdateWithWhereUniqueWithoutDirectionsInput | ordersUpdateWithWhereUniqueWithoutDirectionsInput[]
+    updateMany?: ordersUpdateManyWithWhereWithoutDirectionsInput | ordersUpdateManyWithWhereWithoutDirectionsInput[]
+    deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
+  }
+
+  export type ordersUncheckedUpdateManyWithoutDirectionsNestedInput = {
+    create?: XOR<ordersCreateWithoutDirectionsInput, ordersUncheckedCreateWithoutDirectionsInput> | ordersCreateWithoutDirectionsInput[] | ordersUncheckedCreateWithoutDirectionsInput[]
+    connectOrCreate?: ordersCreateOrConnectWithoutDirectionsInput | ordersCreateOrConnectWithoutDirectionsInput[]
+    upsert?: ordersUpsertWithWhereUniqueWithoutDirectionsInput | ordersUpsertWithWhereUniqueWithoutDirectionsInput[]
+    createMany?: ordersCreateManyDirectionsInputEnvelope
+    set?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    disconnect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    delete?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
+    update?: ordersUpdateWithWhereUniqueWithoutDirectionsInput | ordersUpdateWithWhereUniqueWithoutDirectionsInput[]
+    updateMany?: ordersUpdateManyWithWhereWithoutDirectionsInput | ordersUpdateManyWithWhereWithoutDirectionsInput[]
+    deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
   }
 
   export type usersCreateNestedOneWithoutDiscountsInput = {
@@ -41950,10 +45120,39 @@ export namespace Prisma {
     deleteMany?: order_detailsScalarWhereInput | order_detailsScalarWhereInput[]
   }
 
-  export type categoriesCreateNestedOneWithoutProductsInput = {
-    create?: XOR<categoriesCreateWithoutProductsInput, categoriesUncheckedCreateWithoutProductsInput>
-    connectOrCreate?: categoriesCreateOrConnectWithoutProductsInput
+  export type categoriesCreateNestedOneWithoutProduct_categoriesInput = {
+    create?: XOR<categoriesCreateWithoutProduct_categoriesInput, categoriesUncheckedCreateWithoutProduct_categoriesInput>
+    connectOrCreate?: categoriesCreateOrConnectWithoutProduct_categoriesInput
     connect?: categoriesWhereUniqueInput
+  }
+
+  export type productsCreateNestedOneWithoutProduct_categoriesInput = {
+    create?: XOR<productsCreateWithoutProduct_categoriesInput, productsUncheckedCreateWithoutProduct_categoriesInput>
+    connectOrCreate?: productsCreateOrConnectWithoutProduct_categoriesInput
+    connect?: productsWhereUniqueInput
+  }
+
+  export type categoriesUpdateOneRequiredWithoutProduct_categoriesNestedInput = {
+    create?: XOR<categoriesCreateWithoutProduct_categoriesInput, categoriesUncheckedCreateWithoutProduct_categoriesInput>
+    connectOrCreate?: categoriesCreateOrConnectWithoutProduct_categoriesInput
+    upsert?: categoriesUpsertWithoutProduct_categoriesInput
+    connect?: categoriesWhereUniqueInput
+    update?: XOR<XOR<categoriesUpdateToOneWithWhereWithoutProduct_categoriesInput, categoriesUpdateWithoutProduct_categoriesInput>, categoriesUncheckedUpdateWithoutProduct_categoriesInput>
+  }
+
+  export type productsUpdateOneRequiredWithoutProduct_categoriesNestedInput = {
+    create?: XOR<productsCreateWithoutProduct_categoriesInput, productsUncheckedCreateWithoutProduct_categoriesInput>
+    connectOrCreate?: productsCreateOrConnectWithoutProduct_categoriesInput
+    upsert?: productsUpsertWithoutProduct_categoriesInput
+    connect?: productsWhereUniqueInput
+    update?: XOR<XOR<productsUpdateToOneWithWhereWithoutProduct_categoriesInput, productsUpdateWithoutProduct_categoriesInput>, productsUncheckedUpdateWithoutProduct_categoriesInput>
+  }
+
+  export type product_categoriesCreateNestedManyWithoutProductsInput = {
+    create?: XOR<product_categoriesCreateWithoutProductsInput, product_categoriesUncheckedCreateWithoutProductsInput> | product_categoriesCreateWithoutProductsInput[] | product_categoriesUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutProductsInput | product_categoriesCreateOrConnectWithoutProductsInput[]
+    createMany?: product_categoriesCreateManyProductsInputEnvelope
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
   }
 
   export type usersCreateNestedOneWithoutProductsInput = {
@@ -41976,6 +45175,13 @@ export namespace Prisma {
     connect?: variant_productsWhereUniqueInput | variant_productsWhereUniqueInput[]
   }
 
+  export type product_categoriesUncheckedCreateNestedManyWithoutProductsInput = {
+    create?: XOR<product_categoriesCreateWithoutProductsInput, product_categoriesUncheckedCreateWithoutProductsInput> | product_categoriesCreateWithoutProductsInput[] | product_categoriesUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutProductsInput | product_categoriesCreateOrConnectWithoutProductsInput[]
+    createMany?: product_categoriesCreateManyProductsInputEnvelope
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+  }
+
   export type products_filesUncheckedCreateNestedManyWithoutProductsInput = {
     create?: XOR<products_filesCreateWithoutProductsInput, products_filesUncheckedCreateWithoutProductsInput> | products_filesCreateWithoutProductsInput[] | products_filesUncheckedCreateWithoutProductsInput[]
     connectOrCreate?: products_filesCreateOrConnectWithoutProductsInput | products_filesCreateOrConnectWithoutProductsInput[]
@@ -41990,12 +45196,22 @@ export namespace Prisma {
     connect?: variant_productsWhereUniqueInput | variant_productsWhereUniqueInput[]
   }
 
-  export type categoriesUpdateOneRequiredWithoutProductsNestedInput = {
-    create?: XOR<categoriesCreateWithoutProductsInput, categoriesUncheckedCreateWithoutProductsInput>
-    connectOrCreate?: categoriesCreateOrConnectWithoutProductsInput
-    upsert?: categoriesUpsertWithoutProductsInput
-    connect?: categoriesWhereUniqueInput
-    update?: XOR<XOR<categoriesUpdateToOneWithWhereWithoutProductsInput, categoriesUpdateWithoutProductsInput>, categoriesUncheckedUpdateWithoutProductsInput>
+  export type EnumProductStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProductStatus
+  }
+
+  export type product_categoriesUpdateManyWithoutProductsNestedInput = {
+    create?: XOR<product_categoriesCreateWithoutProductsInput, product_categoriesUncheckedCreateWithoutProductsInput> | product_categoriesCreateWithoutProductsInput[] | product_categoriesUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutProductsInput | product_categoriesCreateOrConnectWithoutProductsInput[]
+    upsert?: product_categoriesUpsertWithWhereUniqueWithoutProductsInput | product_categoriesUpsertWithWhereUniqueWithoutProductsInput[]
+    createMany?: product_categoriesCreateManyProductsInputEnvelope
+    set?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    disconnect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    delete?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    update?: product_categoriesUpdateWithWhereUniqueWithoutProductsInput | product_categoriesUpdateWithWhereUniqueWithoutProductsInput[]
+    updateMany?: product_categoriesUpdateManyWithWhereWithoutProductsInput | product_categoriesUpdateManyWithWhereWithoutProductsInput[]
+    deleteMany?: product_categoriesScalarWhereInput | product_categoriesScalarWhereInput[]
   }
 
   export type usersUpdateOneRequiredWithoutProductsNestedInput = {
@@ -42032,6 +45248,20 @@ export namespace Prisma {
     update?: variant_productsUpdateWithWhereUniqueWithoutProductsInput | variant_productsUpdateWithWhereUniqueWithoutProductsInput[]
     updateMany?: variant_productsUpdateManyWithWhereWithoutProductsInput | variant_productsUpdateManyWithWhereWithoutProductsInput[]
     deleteMany?: variant_productsScalarWhereInput | variant_productsScalarWhereInput[]
+  }
+
+  export type product_categoriesUncheckedUpdateManyWithoutProductsNestedInput = {
+    create?: XOR<product_categoriesCreateWithoutProductsInput, product_categoriesUncheckedCreateWithoutProductsInput> | product_categoriesCreateWithoutProductsInput[] | product_categoriesUncheckedCreateWithoutProductsInput[]
+    connectOrCreate?: product_categoriesCreateOrConnectWithoutProductsInput | product_categoriesCreateOrConnectWithoutProductsInput[]
+    upsert?: product_categoriesUpsertWithWhereUniqueWithoutProductsInput | product_categoriesUpsertWithWhereUniqueWithoutProductsInput[]
+    createMany?: product_categoriesCreateManyProductsInputEnvelope
+    set?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    disconnect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    delete?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    connect?: product_categoriesWhereUniqueInput | product_categoriesWhereUniqueInput[]
+    update?: product_categoriesUpdateWithWhereUniqueWithoutProductsInput | product_categoriesUpdateWithWhereUniqueWithoutProductsInput[]
+    updateMany?: product_categoriesUpdateManyWithWhereWithoutProductsInput | product_categoriesUpdateManyWithWhereWithoutProductsInput[]
+    deleteMany?: product_categoriesScalarWhereInput | product_categoriesScalarWhereInput[]
   }
 
   export type products_filesUncheckedUpdateManyWithoutProductsNestedInput = {
@@ -42088,6 +45318,104 @@ export namespace Prisma {
     upsert?: productsUpsertWithoutProducts_filesInput
     connect?: productsWhereUniqueInput
     update?: XOR<XOR<productsUpdateToOneWithWhereWithoutProducts_filesInput, productsUpdateWithoutProducts_filesInput>, productsUncheckedUpdateWithoutProducts_filesInput>
+  }
+
+  export type citiesCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
+    createMany?: citiesCreateManyProvincesInputEnvelope
+    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+  }
+
+  export type directionsCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
+    createMany?: directionsCreateManyProvincesInputEnvelope
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+  }
+
+  export type countriesCreateNestedOneWithoutProvincesInput = {
+    create?: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
+    connectOrCreate?: countriesCreateOrConnectWithoutProvincesInput
+    connect?: countriesWhereUniqueInput
+  }
+
+  export type citiesUncheckedCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
+    createMany?: citiesCreateManyProvincesInputEnvelope
+    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+  }
+
+  export type directionsUncheckedCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
+    createMany?: directionsCreateManyProvincesInputEnvelope
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+  }
+
+  export type citiesUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
+    upsert?: citiesUpsertWithWhereUniqueWithoutProvincesInput | citiesUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: citiesCreateManyProvincesInputEnvelope
+    set?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    disconnect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    delete?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    update?: citiesUpdateWithWhereUniqueWithoutProvincesInput | citiesUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: citiesUpdateManyWithWhereWithoutProvincesInput | citiesUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: citiesScalarWhereInput | citiesScalarWhereInput[]
+  }
+
+  export type directionsUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
+    upsert?: directionsUpsertWithWhereUniqueWithoutProvincesInput | directionsUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: directionsCreateManyProvincesInputEnvelope
+    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    update?: directionsUpdateWithWhereUniqueWithoutProvincesInput | directionsUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: directionsUpdateManyWithWhereWithoutProvincesInput | directionsUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
+  }
+
+  export type countriesUpdateOneRequiredWithoutProvincesNestedInput = {
+    create?: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
+    connectOrCreate?: countriesCreateOrConnectWithoutProvincesInput
+    upsert?: countriesUpsertWithoutProvincesInput
+    connect?: countriesWhereUniqueInput
+    update?: XOR<XOR<countriesUpdateToOneWithWhereWithoutProvincesInput, countriesUpdateWithoutProvincesInput>, countriesUncheckedUpdateWithoutProvincesInput>
+  }
+
+  export type citiesUncheckedUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
+    upsert?: citiesUpsertWithWhereUniqueWithoutProvincesInput | citiesUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: citiesCreateManyProvincesInputEnvelope
+    set?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    disconnect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    delete?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
+    update?: citiesUpdateWithWhereUniqueWithoutProvincesInput | citiesUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: citiesUpdateManyWithWhereWithoutProvincesInput | citiesUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: citiesScalarWhereInput | citiesScalarWhereInput[]
+  }
+
+  export type directionsUncheckedUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
+    upsert?: directionsUpsertWithWhereUniqueWithoutProvincesInput | directionsUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: directionsCreateManyProvincesInputEnvelope
+    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
+    update?: directionsUpdateWithWhereUniqueWithoutProvincesInput | directionsUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: directionsUpdateManyWithWhereWithoutProvincesInput | directionsUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
   }
 
   export type usersCreateNestedOneWithoutUser_sessionsInput = {
@@ -42806,418 +46134,18 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutVerification_tokensInput, usersUpdateWithoutVerification_tokensInput>, usersUncheckedUpdateWithoutVerification_tokensInput>
   }
 
-  export type provincesCreateNestedOneWithoutCitiesInput = {
-    create?: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
-    connectOrCreate?: provincesCreateOrConnectWithoutCitiesInput
-    connect?: provincesWhereUniqueInput
+  export type categoriesCreateNestedOneWithoutCategory_translationsInput = {
+    create?: XOR<categoriesCreateWithoutCategory_translationsInput, categoriesUncheckedCreateWithoutCategory_translationsInput>
+    connectOrCreate?: categoriesCreateOrConnectWithoutCategory_translationsInput
+    connect?: categoriesWhereUniqueInput
   }
 
-  export type directionsCreateNestedManyWithoutCitiesInput = {
-    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
-    createMany?: directionsCreateManyCitiesInputEnvelope
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-  }
-
-  export type directionsUncheckedCreateNestedManyWithoutCitiesInput = {
-    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
-    createMany?: directionsCreateManyCitiesInputEnvelope
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-  }
-
-  export type provincesUpdateOneRequiredWithoutCitiesNestedInput = {
-    create?: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
-    connectOrCreate?: provincesCreateOrConnectWithoutCitiesInput
-    upsert?: provincesUpsertWithoutCitiesInput
-    connect?: provincesWhereUniqueInput
-    update?: XOR<XOR<provincesUpdateToOneWithWhereWithoutCitiesInput, provincesUpdateWithoutCitiesInput>, provincesUncheckedUpdateWithoutCitiesInput>
-  }
-
-  export type directionsUpdateManyWithoutCitiesNestedInput = {
-    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
-    upsert?: directionsUpsertWithWhereUniqueWithoutCitiesInput | directionsUpsertWithWhereUniqueWithoutCitiesInput[]
-    createMany?: directionsCreateManyCitiesInputEnvelope
-    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    update?: directionsUpdateWithWhereUniqueWithoutCitiesInput | directionsUpdateWithWhereUniqueWithoutCitiesInput[]
-    updateMany?: directionsUpdateManyWithWhereWithoutCitiesInput | directionsUpdateManyWithWhereWithoutCitiesInput[]
-    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
-  }
-
-  export type directionsUncheckedUpdateManyWithoutCitiesNestedInput = {
-    create?: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput> | directionsCreateWithoutCitiesInput[] | directionsUncheckedCreateWithoutCitiesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCitiesInput | directionsCreateOrConnectWithoutCitiesInput[]
-    upsert?: directionsUpsertWithWhereUniqueWithoutCitiesInput | directionsUpsertWithWhereUniqueWithoutCitiesInput[]
-    createMany?: directionsCreateManyCitiesInputEnvelope
-    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    update?: directionsUpdateWithWhereUniqueWithoutCitiesInput | directionsUpdateWithWhereUniqueWithoutCitiesInput[]
-    updateMany?: directionsUpdateManyWithWhereWithoutCitiesInput | directionsUpdateManyWithWhereWithoutCitiesInput[]
-    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
-  }
-
-  export type currenciesCreateNestedOneWithoutCountriesInput = {
-    create?: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
-    connectOrCreate?: currenciesCreateOrConnectWithoutCountriesInput
-    connect?: currenciesWhereUniqueInput
-  }
-
-  export type directionsCreateNestedManyWithoutCountriesInput = {
-    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
-    createMany?: directionsCreateManyCountriesInputEnvelope
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-  }
-
-  export type provincesCreateNestedManyWithoutCountriesInput = {
-    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
-    createMany?: provincesCreateManyCountriesInputEnvelope
-    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-  }
-
-  export type directionsUncheckedCreateNestedManyWithoutCountriesInput = {
-    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
-    createMany?: directionsCreateManyCountriesInputEnvelope
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-  }
-
-  export type provincesUncheckedCreateNestedManyWithoutCountriesInput = {
-    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
-    createMany?: provincesCreateManyCountriesInputEnvelope
-    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-  }
-
-  export type currenciesUpdateOneWithoutCountriesNestedInput = {
-    create?: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
-    connectOrCreate?: currenciesCreateOrConnectWithoutCountriesInput
-    upsert?: currenciesUpsertWithoutCountriesInput
-    disconnect?: currenciesWhereInput | boolean
-    delete?: currenciesWhereInput | boolean
-    connect?: currenciesWhereUniqueInput
-    update?: XOR<XOR<currenciesUpdateToOneWithWhereWithoutCountriesInput, currenciesUpdateWithoutCountriesInput>, currenciesUncheckedUpdateWithoutCountriesInput>
-  }
-
-  export type directionsUpdateManyWithoutCountriesNestedInput = {
-    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
-    upsert?: directionsUpsertWithWhereUniqueWithoutCountriesInput | directionsUpsertWithWhereUniqueWithoutCountriesInput[]
-    createMany?: directionsCreateManyCountriesInputEnvelope
-    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    update?: directionsUpdateWithWhereUniqueWithoutCountriesInput | directionsUpdateWithWhereUniqueWithoutCountriesInput[]
-    updateMany?: directionsUpdateManyWithWhereWithoutCountriesInput | directionsUpdateManyWithWhereWithoutCountriesInput[]
-    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
-  }
-
-  export type provincesUpdateManyWithoutCountriesNestedInput = {
-    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
-    upsert?: provincesUpsertWithWhereUniqueWithoutCountriesInput | provincesUpsertWithWhereUniqueWithoutCountriesInput[]
-    createMany?: provincesCreateManyCountriesInputEnvelope
-    set?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    disconnect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    delete?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    update?: provincesUpdateWithWhereUniqueWithoutCountriesInput | provincesUpdateWithWhereUniqueWithoutCountriesInput[]
-    updateMany?: provincesUpdateManyWithWhereWithoutCountriesInput | provincesUpdateManyWithWhereWithoutCountriesInput[]
-    deleteMany?: provincesScalarWhereInput | provincesScalarWhereInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type directionsUncheckedUpdateManyWithoutCountriesNestedInput = {
-    create?: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput> | directionsCreateWithoutCountriesInput[] | directionsUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutCountriesInput | directionsCreateOrConnectWithoutCountriesInput[]
-    upsert?: directionsUpsertWithWhereUniqueWithoutCountriesInput | directionsUpsertWithWhereUniqueWithoutCountriesInput[]
-    createMany?: directionsCreateManyCountriesInputEnvelope
-    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    update?: directionsUpdateWithWhereUniqueWithoutCountriesInput | directionsUpdateWithWhereUniqueWithoutCountriesInput[]
-    updateMany?: directionsUpdateManyWithWhereWithoutCountriesInput | directionsUpdateManyWithWhereWithoutCountriesInput[]
-    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
-  }
-
-  export type provincesUncheckedUpdateManyWithoutCountriesNestedInput = {
-    create?: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput> | provincesCreateWithoutCountriesInput[] | provincesUncheckedCreateWithoutCountriesInput[]
-    connectOrCreate?: provincesCreateOrConnectWithoutCountriesInput | provincesCreateOrConnectWithoutCountriesInput[]
-    upsert?: provincesUpsertWithWhereUniqueWithoutCountriesInput | provincesUpsertWithWhereUniqueWithoutCountriesInput[]
-    createMany?: provincesCreateManyCountriesInputEnvelope
-    set?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    disconnect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    delete?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    connect?: provincesWhereUniqueInput | provincesWhereUniqueInput[]
-    update?: provincesUpdateWithWhereUniqueWithoutCountriesInput | provincesUpdateWithWhereUniqueWithoutCountriesInput[]
-    updateMany?: provincesUpdateManyWithWhereWithoutCountriesInput | provincesUpdateManyWithWhereWithoutCountriesInput[]
-    deleteMany?: provincesScalarWhereInput | provincesScalarWhereInput[]
-  }
-
-  export type citiesCreateNestedOneWithoutDirectionsInput = {
-    create?: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: citiesCreateOrConnectWithoutDirectionsInput
-    connect?: citiesWhereUniqueInput
-  }
-
-  export type countriesCreateNestedOneWithoutDirectionsInput = {
-    create?: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: countriesCreateOrConnectWithoutDirectionsInput
-    connect?: countriesWhereUniqueInput
-  }
-
-  export type provincesCreateNestedOneWithoutDirectionsInput = {
-    create?: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: provincesCreateOrConnectWithoutDirectionsInput
-    connect?: provincesWhereUniqueInput
-  }
-
-  export type usersCreateNestedOneWithoutDirectionsInput = {
-    create?: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: usersCreateOrConnectWithoutDirectionsInput
-    connect?: usersWhereUniqueInput
-  }
-
-  export type ordersCreateNestedManyWithoutDirecctionInput = {
-    create?: XOR<ordersCreateWithoutDirecctionInput, ordersUncheckedCreateWithoutDirecctionInput> | ordersCreateWithoutDirecctionInput[] | ordersUncheckedCreateWithoutDirecctionInput[]
-    connectOrCreate?: ordersCreateOrConnectWithoutDirecctionInput | ordersCreateOrConnectWithoutDirecctionInput[]
-    createMany?: ordersCreateManyDirecctionInputEnvelope
-    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-  }
-
-  export type ordersUncheckedCreateNestedManyWithoutDirecctionInput = {
-    create?: XOR<ordersCreateWithoutDirecctionInput, ordersUncheckedCreateWithoutDirecctionInput> | ordersCreateWithoutDirecctionInput[] | ordersUncheckedCreateWithoutDirecctionInput[]
-    connectOrCreate?: ordersCreateOrConnectWithoutDirecctionInput | ordersCreateOrConnectWithoutDirecctionInput[]
-    createMany?: ordersCreateManyDirecctionInputEnvelope
-    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-  }
-
-  export type EnumAddressTypeFieldUpdateOperationsInput = {
-    set?: $Enums.AddressType
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type citiesUpdateOneRequiredWithoutDirectionsNestedInput = {
-    create?: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: citiesCreateOrConnectWithoutDirectionsInput
-    upsert?: citiesUpsertWithoutDirectionsInput
-    connect?: citiesWhereUniqueInput
-    update?: XOR<XOR<citiesUpdateToOneWithWhereWithoutDirectionsInput, citiesUpdateWithoutDirectionsInput>, citiesUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type countriesUpdateOneRequiredWithoutDirectionsNestedInput = {
-    create?: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: countriesCreateOrConnectWithoutDirectionsInput
-    upsert?: countriesUpsertWithoutDirectionsInput
-    connect?: countriesWhereUniqueInput
-    update?: XOR<XOR<countriesUpdateToOneWithWhereWithoutDirectionsInput, countriesUpdateWithoutDirectionsInput>, countriesUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type provincesUpdateOneRequiredWithoutDirectionsNestedInput = {
-    create?: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: provincesCreateOrConnectWithoutDirectionsInput
-    upsert?: provincesUpsertWithoutDirectionsInput
-    connect?: provincesWhereUniqueInput
-    update?: XOR<XOR<provincesUpdateToOneWithWhereWithoutDirectionsInput, provincesUpdateWithoutDirectionsInput>, provincesUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type usersUpdateOneRequiredWithoutDirectionsNestedInput = {
-    create?: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
-    connectOrCreate?: usersCreateOrConnectWithoutDirectionsInput
-    upsert?: usersUpsertWithoutDirectionsInput
-    connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutDirectionsInput, usersUpdateWithoutDirectionsInput>, usersUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type ordersUpdateManyWithoutDirecctionNestedInput = {
-    create?: XOR<ordersCreateWithoutDirecctionInput, ordersUncheckedCreateWithoutDirecctionInput> | ordersCreateWithoutDirecctionInput[] | ordersUncheckedCreateWithoutDirecctionInput[]
-    connectOrCreate?: ordersCreateOrConnectWithoutDirecctionInput | ordersCreateOrConnectWithoutDirecctionInput[]
-    upsert?: ordersUpsertWithWhereUniqueWithoutDirecctionInput | ordersUpsertWithWhereUniqueWithoutDirecctionInput[]
-    createMany?: ordersCreateManyDirecctionInputEnvelope
-    set?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    disconnect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    delete?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    update?: ordersUpdateWithWhereUniqueWithoutDirecctionInput | ordersUpdateWithWhereUniqueWithoutDirecctionInput[]
-    updateMany?: ordersUpdateManyWithWhereWithoutDirecctionInput | ordersUpdateManyWithWhereWithoutDirecctionInput[]
-    deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
-  }
-
-  export type ordersUncheckedUpdateManyWithoutDirecctionNestedInput = {
-    create?: XOR<ordersCreateWithoutDirecctionInput, ordersUncheckedCreateWithoutDirecctionInput> | ordersCreateWithoutDirecctionInput[] | ordersUncheckedCreateWithoutDirecctionInput[]
-    connectOrCreate?: ordersCreateOrConnectWithoutDirecctionInput | ordersCreateOrConnectWithoutDirecctionInput[]
-    upsert?: ordersUpsertWithWhereUniqueWithoutDirecctionInput | ordersUpsertWithWhereUniqueWithoutDirecctionInput[]
-    createMany?: ordersCreateManyDirecctionInputEnvelope
-    set?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    disconnect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    delete?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    connect?: ordersWhereUniqueInput | ordersWhereUniqueInput[]
-    update?: ordersUpdateWithWhereUniqueWithoutDirecctionInput | ordersUpdateWithWhereUniqueWithoutDirecctionInput[]
-    updateMany?: ordersUpdateManyWithWhereWithoutDirecctionInput | ordersUpdateManyWithWhereWithoutDirecctionInput[]
-    deleteMany?: ordersScalarWhereInput | ordersScalarWhereInput[]
-  }
-
-  export type citiesCreateNestedManyWithoutProvincesInput = {
-    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
-    createMany?: citiesCreateManyProvincesInputEnvelope
-    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-  }
-
-  export type directionsCreateNestedManyWithoutProvincesInput = {
-    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
-    createMany?: directionsCreateManyProvincesInputEnvelope
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-  }
-
-  export type countriesCreateNestedOneWithoutProvincesInput = {
-    create?: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
-    connectOrCreate?: countriesCreateOrConnectWithoutProvincesInput
-    connect?: countriesWhereUniqueInput
-  }
-
-  export type citiesUncheckedCreateNestedManyWithoutProvincesInput = {
-    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
-    createMany?: citiesCreateManyProvincesInputEnvelope
-    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-  }
-
-  export type directionsUncheckedCreateNestedManyWithoutProvincesInput = {
-    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
-    createMany?: directionsCreateManyProvincesInputEnvelope
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-  }
-
-  export type citiesUpdateManyWithoutProvincesNestedInput = {
-    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
-    upsert?: citiesUpsertWithWhereUniqueWithoutProvincesInput | citiesUpsertWithWhereUniqueWithoutProvincesInput[]
-    createMany?: citiesCreateManyProvincesInputEnvelope
-    set?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    disconnect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    delete?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    update?: citiesUpdateWithWhereUniqueWithoutProvincesInput | citiesUpdateWithWhereUniqueWithoutProvincesInput[]
-    updateMany?: citiesUpdateManyWithWhereWithoutProvincesInput | citiesUpdateManyWithWhereWithoutProvincesInput[]
-    deleteMany?: citiesScalarWhereInput | citiesScalarWhereInput[]
-  }
-
-  export type directionsUpdateManyWithoutProvincesNestedInput = {
-    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
-    upsert?: directionsUpsertWithWhereUniqueWithoutProvincesInput | directionsUpsertWithWhereUniqueWithoutProvincesInput[]
-    createMany?: directionsCreateManyProvincesInputEnvelope
-    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    update?: directionsUpdateWithWhereUniqueWithoutProvincesInput | directionsUpdateWithWhereUniqueWithoutProvincesInput[]
-    updateMany?: directionsUpdateManyWithWhereWithoutProvincesInput | directionsUpdateManyWithWhereWithoutProvincesInput[]
-    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
-  }
-
-  export type countriesUpdateOneRequiredWithoutProvincesNestedInput = {
-    create?: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
-    connectOrCreate?: countriesCreateOrConnectWithoutProvincesInput
-    upsert?: countriesUpsertWithoutProvincesInput
-    connect?: countriesWhereUniqueInput
-    update?: XOR<XOR<countriesUpdateToOneWithWhereWithoutProvincesInput, countriesUpdateWithoutProvincesInput>, countriesUncheckedUpdateWithoutProvincesInput>
-  }
-
-  export type citiesUncheckedUpdateManyWithoutProvincesNestedInput = {
-    create?: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput> | citiesCreateWithoutProvincesInput[] | citiesUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: citiesCreateOrConnectWithoutProvincesInput | citiesCreateOrConnectWithoutProvincesInput[]
-    upsert?: citiesUpsertWithWhereUniqueWithoutProvincesInput | citiesUpsertWithWhereUniqueWithoutProvincesInput[]
-    createMany?: citiesCreateManyProvincesInputEnvelope
-    set?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    disconnect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    delete?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    connect?: citiesWhereUniqueInput | citiesWhereUniqueInput[]
-    update?: citiesUpdateWithWhereUniqueWithoutProvincesInput | citiesUpdateWithWhereUniqueWithoutProvincesInput[]
-    updateMany?: citiesUpdateManyWithWhereWithoutProvincesInput | citiesUpdateManyWithWhereWithoutProvincesInput[]
-    deleteMany?: citiesScalarWhereInput | citiesScalarWhereInput[]
-  }
-
-  export type directionsUncheckedUpdateManyWithoutProvincesNestedInput = {
-    create?: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput> | directionsCreateWithoutProvincesInput[] | directionsUncheckedCreateWithoutProvincesInput[]
-    connectOrCreate?: directionsCreateOrConnectWithoutProvincesInput | directionsCreateOrConnectWithoutProvincesInput[]
-    upsert?: directionsUpsertWithWhereUniqueWithoutProvincesInput | directionsUpsertWithWhereUniqueWithoutProvincesInput[]
-    createMany?: directionsCreateManyProvincesInputEnvelope
-    set?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    disconnect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    delete?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    connect?: directionsWhereUniqueInput | directionsWhereUniqueInput[]
-    update?: directionsUpdateWithWhereUniqueWithoutProvincesInput | directionsUpdateWithWhereUniqueWithoutProvincesInput[]
-    updateMany?: directionsUpdateManyWithWhereWithoutProvincesInput | directionsUpdateManyWithWhereWithoutProvincesInput[]
-    deleteMany?: directionsScalarWhereInput | directionsScalarWhereInput[]
-  }
-
-  export type countriesCreateNestedManyWithoutCurrenciesInput = {
-    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
-    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
-    createMany?: countriesCreateManyCurrenciesInputEnvelope
-    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-  }
-
-  export type countriesUncheckedCreateNestedManyWithoutCurrenciesInput = {
-    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
-    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
-    createMany?: countriesCreateManyCurrenciesInputEnvelope
-    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-  }
-
-  export type countriesUpdateManyWithoutCurrenciesNestedInput = {
-    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
-    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
-    upsert?: countriesUpsertWithWhereUniqueWithoutCurrenciesInput | countriesUpsertWithWhereUniqueWithoutCurrenciesInput[]
-    createMany?: countriesCreateManyCurrenciesInputEnvelope
-    set?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    disconnect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    delete?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    update?: countriesUpdateWithWhereUniqueWithoutCurrenciesInput | countriesUpdateWithWhereUniqueWithoutCurrenciesInput[]
-    updateMany?: countriesUpdateManyWithWhereWithoutCurrenciesInput | countriesUpdateManyWithWhereWithoutCurrenciesInput[]
-    deleteMany?: countriesScalarWhereInput | countriesScalarWhereInput[]
-  }
-
-  export type countriesUncheckedUpdateManyWithoutCurrenciesNestedInput = {
-    create?: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput> | countriesCreateWithoutCurrenciesInput[] | countriesUncheckedCreateWithoutCurrenciesInput[]
-    connectOrCreate?: countriesCreateOrConnectWithoutCurrenciesInput | countriesCreateOrConnectWithoutCurrenciesInput[]
-    upsert?: countriesUpsertWithWhereUniqueWithoutCurrenciesInput | countriesUpsertWithWhereUniqueWithoutCurrenciesInput[]
-    createMany?: countriesCreateManyCurrenciesInputEnvelope
-    set?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    disconnect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    delete?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    connect?: countriesWhereUniqueInput | countriesWhereUniqueInput[]
-    update?: countriesUpdateWithWhereUniqueWithoutCurrenciesInput | countriesUpdateWithWhereUniqueWithoutCurrenciesInput[]
-    updateMany?: countriesUpdateManyWithWhereWithoutCurrenciesInput | countriesUpdateManyWithWhereWithoutCurrenciesInput[]
-    deleteMany?: countriesScalarWhereInput | countriesScalarWhereInput[]
+  export type categoriesUpdateOneRequiredWithoutCategory_translationsNestedInput = {
+    create?: XOR<categoriesCreateWithoutCategory_translationsInput, categoriesUncheckedCreateWithoutCategory_translationsInput>
+    connectOrCreate?: categoriesCreateOrConnectWithoutCategory_translationsInput
+    upsert?: categoriesUpsertWithoutCategory_translationsInput
+    connect?: categoriesWhereUniqueInput
+    update?: XOR<XOR<categoriesUpdateToOneWithWhereWithoutCategory_translationsInput, categoriesUpdateWithoutCategory_translationsInput>, categoriesUncheckedUpdateWithoutCategory_translationsInput>
   }
 
   export type NestedBigIntFilter<$PrismaModel = never> = {
@@ -43420,20 +46348,6 @@ export namespace Prisma {
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
-  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -43446,6 +46360,20 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -43481,6 +46409,23 @@ export namespace Prisma {
     _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -43504,6 +46449,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumDeliveryStatusFilter<$PrismaModel = never> = {
@@ -43539,21 +46500,37 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  export type NestedEnumAddressTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAddressTypeFilter<$PrismaModel> | $Enums.AddressType
+  }
+
+  export type NestedEnumAddressTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumAddressTypeWithAggregatesFilter<$PrismaModel> | $Enums.AddressType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAddressTypeFilter<$PrismaModel>
+    _max?: NestedEnumAddressTypeFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -43617,6 +46594,23 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProductStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductStatus | EnumProductStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductStatusFilter<$PrismaModel> | $Enums.ProductStatus
+  }
+
+  export type NestedEnumProductStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProductStatus | EnumProductStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProductStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProductStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProductStatusFilter<$PrismaModel>
+    _max?: NestedEnumProductStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumUserStatusFilter<$PrismaModel = never> = {
@@ -43691,55 +46685,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSaleVariantFilter<$PrismaModel>
     _max?: NestedEnumSaleVariantFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumAddressTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumAddressTypeFilter<$PrismaModel> | $Enums.AddressType
-  }
-
-  export type NestedEnumAddressTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumAddressTypeWithAggregatesFilter<$PrismaModel> | $Enums.AddressType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumAddressTypeFilter<$PrismaModel>
-    _max?: NestedEnumAddressTypeFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type cartsCreateWithoutCart_detailsInput = {
@@ -44065,58 +47010,70 @@ export namespace Prisma {
     verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type categoriesCreateWithoutOther_categoriesInput = {
+  export type categoriesCreateWithoutChildrenInput = {
     id?: bigint | number
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    categories?: categoriesCreateNestedOneWithoutOther_categoriesInput
+    level: number
+    name_unaccent?: string | null
+    parent?: categoriesCreateNestedOneWithoutChildrenInput
     users?: usersCreateNestedOneWithoutCategoriesInput
-    products?: productsCreateNestedManyWithoutCategoriesInput
+    category_translations?: category_translationsCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesCreateNestedManyWithoutCategoriesInput
   }
 
-  export type categoriesUncheckedCreateWithoutOther_categoriesInput = {
+  export type categoriesUncheckedCreateWithoutChildrenInput = {
     id?: bigint | number
     user_id?: string | null
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     parent_id?: bigint | number | null
     created_at?: Date | string
-    products?: productsUncheckedCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    category_translations?: category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
   }
 
-  export type categoriesCreateOrConnectWithoutOther_categoriesInput = {
+  export type categoriesCreateOrConnectWithoutChildrenInput = {
     where: categoriesWhereUniqueInput
-    create: XOR<categoriesCreateWithoutOther_categoriesInput, categoriesUncheckedCreateWithoutOther_categoriesInput>
+    create: XOR<categoriesCreateWithoutChildrenInput, categoriesUncheckedCreateWithoutChildrenInput>
   }
 
-  export type categoriesCreateWithoutCategoriesInput = {
+  export type categoriesCreateWithoutParentInput = {
     id?: bigint | number
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    other_categories?: categoriesCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    children?: categoriesCreateNestedManyWithoutParentInput
     users?: usersCreateNestedOneWithoutCategoriesInput
-    products?: productsCreateNestedManyWithoutCategoriesInput
+    category_translations?: category_translationsCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesCreateNestedManyWithoutCategoriesInput
   }
 
-  export type categoriesUncheckedCreateWithoutCategoriesInput = {
+  export type categoriesUncheckedCreateWithoutParentInput = {
     id?: bigint | number
     user_id?: string | null
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    other_categories?: categoriesUncheckedCreateNestedManyWithoutCategoriesInput
-    products?: productsUncheckedCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    children?: categoriesUncheckedCreateNestedManyWithoutParentInput
+    category_translations?: category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
   }
 
-  export type categoriesCreateOrConnectWithoutCategoriesInput = {
+  export type categoriesCreateOrConnectWithoutParentInput = {
     where: categoriesWhereUniqueInput
-    create: XOR<categoriesCreateWithoutCategoriesInput, categoriesUncheckedCreateWithoutCategoriesInput>
+    create: XOR<categoriesCreateWithoutParentInput, categoriesUncheckedCreateWithoutParentInput>
   }
 
-  export type categoriesCreateManyCategoriesInputEnvelope = {
-    data: categoriesCreateManyCategoriesInput | categoriesCreateManyCategoriesInput[]
+  export type categoriesCreateManyParentInputEnvelope = {
+    data: categoriesCreateManyParentInput | categoriesCreateManyParentInput[]
     skipDuplicates?: boolean
   }
 
@@ -44185,89 +47142,101 @@ export namespace Prisma {
     create: XOR<usersCreateWithoutCategoriesInput, usersUncheckedCreateWithoutCategoriesInput>
   }
 
-  export type productsCreateWithoutCategoriesInput = {
-    id?: bigint | number
+  export type category_translationsCreateWithoutCategoriesInput = {
+    lang_code: string
     name: string
-    title?: string | null
-    description?: string | null
-    iva: Decimal | DecimalJsLike | number | string
-    status?: number
-    created_at?: Date | string
-    product_code: string
-    users: usersCreateNestedOneWithoutProductsInput
-    products_files?: products_filesCreateNestedManyWithoutProductsInput
-    variant_products?: variant_productsCreateNestedManyWithoutProductsInput
+    name_unaccent?: string | null
   }
 
-  export type productsUncheckedCreateWithoutCategoriesInput = {
-    id?: bigint | number
-    user_id: string
+  export type category_translationsUncheckedCreateWithoutCategoriesInput = {
+    lang_code: string
     name: string
-    title?: string | null
-    description?: string | null
-    iva: Decimal | DecimalJsLike | number | string
-    status?: number
-    created_at?: Date | string
-    product_code: string
-    products_files?: products_filesUncheckedCreateNestedManyWithoutProductsInput
-    variant_products?: variant_productsUncheckedCreateNestedManyWithoutProductsInput
+    name_unaccent?: string | null
   }
 
-  export type productsCreateOrConnectWithoutCategoriesInput = {
-    where: productsWhereUniqueInput
-    create: XOR<productsCreateWithoutCategoriesInput, productsUncheckedCreateWithoutCategoriesInput>
+  export type category_translationsCreateOrConnectWithoutCategoriesInput = {
+    where: category_translationsWhereUniqueInput
+    create: XOR<category_translationsCreateWithoutCategoriesInput, category_translationsUncheckedCreateWithoutCategoriesInput>
   }
 
-  export type productsCreateManyCategoriesInputEnvelope = {
-    data: productsCreateManyCategoriesInput | productsCreateManyCategoriesInput[]
+  export type category_translationsCreateManyCategoriesInputEnvelope = {
+    data: category_translationsCreateManyCategoriesInput | category_translationsCreateManyCategoriesInput[]
     skipDuplicates?: boolean
   }
 
-  export type categoriesUpsertWithoutOther_categoriesInput = {
-    update: XOR<categoriesUpdateWithoutOther_categoriesInput, categoriesUncheckedUpdateWithoutOther_categoriesInput>
-    create: XOR<categoriesCreateWithoutOther_categoriesInput, categoriesUncheckedCreateWithoutOther_categoriesInput>
+  export type product_categoriesCreateWithoutCategoriesInput = {
+    is_primary?: boolean
+    created_at?: Date | string
+    products: productsCreateNestedOneWithoutProduct_categoriesInput
+  }
+
+  export type product_categoriesUncheckedCreateWithoutCategoriesInput = {
+    product_id: bigint | number
+    is_primary?: boolean
+    created_at?: Date | string
+  }
+
+  export type product_categoriesCreateOrConnectWithoutCategoriesInput = {
+    where: product_categoriesWhereUniqueInput
+    create: XOR<product_categoriesCreateWithoutCategoriesInput, product_categoriesUncheckedCreateWithoutCategoriesInput>
+  }
+
+  export type product_categoriesCreateManyCategoriesInputEnvelope = {
+    data: product_categoriesCreateManyCategoriesInput | product_categoriesCreateManyCategoriesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type categoriesUpsertWithoutChildrenInput = {
+    update: XOR<categoriesUpdateWithoutChildrenInput, categoriesUncheckedUpdateWithoutChildrenInput>
+    create: XOR<categoriesCreateWithoutChildrenInput, categoriesUncheckedCreateWithoutChildrenInput>
     where?: categoriesWhereInput
   }
 
-  export type categoriesUpdateToOneWithWhereWithoutOther_categoriesInput = {
+  export type categoriesUpdateToOneWithWhereWithoutChildrenInput = {
     where?: categoriesWhereInput
-    data: XOR<categoriesUpdateWithoutOther_categoriesInput, categoriesUncheckedUpdateWithoutOther_categoriesInput>
+    data: XOR<categoriesUpdateWithoutChildrenInput, categoriesUncheckedUpdateWithoutChildrenInput>
   }
 
-  export type categoriesUpdateWithoutOther_categoriesInput = {
+  export type categoriesUpdateWithoutChildrenInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: categoriesUpdateOneWithoutOther_categoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    parent?: categoriesUpdateOneWithoutChildrenNestedInput
     users?: usersUpdateOneWithoutCategoriesNestedInput
-    products?: productsUpdateManyWithoutCategoriesNestedInput
+    category_translations?: category_translationsUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutCategoriesNestedInput
   }
 
-  export type categoriesUncheckedUpdateWithoutOther_categoriesInput = {
+  export type categoriesUncheckedUpdateWithoutChildrenInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    products?: productsUncheckedUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    category_translations?: category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
   }
 
-  export type categoriesUpsertWithWhereUniqueWithoutCategoriesInput = {
+  export type categoriesUpsertWithWhereUniqueWithoutParentInput = {
     where: categoriesWhereUniqueInput
-    update: XOR<categoriesUpdateWithoutCategoriesInput, categoriesUncheckedUpdateWithoutCategoriesInput>
-    create: XOR<categoriesCreateWithoutCategoriesInput, categoriesUncheckedCreateWithoutCategoriesInput>
+    update: XOR<categoriesUpdateWithoutParentInput, categoriesUncheckedUpdateWithoutParentInput>
+    create: XOR<categoriesCreateWithoutParentInput, categoriesUncheckedCreateWithoutParentInput>
   }
 
-  export type categoriesUpdateWithWhereUniqueWithoutCategoriesInput = {
+  export type categoriesUpdateWithWhereUniqueWithoutParentInput = {
     where: categoriesWhereUniqueInput
-    data: XOR<categoriesUpdateWithoutCategoriesInput, categoriesUncheckedUpdateWithoutCategoriesInput>
+    data: XOR<categoriesUpdateWithoutParentInput, categoriesUncheckedUpdateWithoutParentInput>
   }
 
-  export type categoriesUpdateManyWithWhereWithoutCategoriesInput = {
+  export type categoriesUpdateManyWithWhereWithoutParentInput = {
     where: categoriesScalarWhereInput
-    data: XOR<categoriesUpdateManyMutationInput, categoriesUncheckedUpdateManyWithoutCategoriesInput>
+    data: XOR<categoriesUpdateManyMutationInput, categoriesUncheckedUpdateManyWithoutParentInput>
   }
 
   export type categoriesScalarWhereInput = {
@@ -44280,6 +47249,8 @@ export namespace Prisma {
     iva?: DecimalNullableFilter<"categories"> | Decimal | DecimalJsLike | number | string | null
     parent_id?: BigIntNullableFilter<"categories"> | bigint | number | null
     created_at?: DateTimeFilter<"categories"> | Date | string
+    level?: IntFilter<"categories"> | number
+    name_unaccent?: StringNullableFilter<"categories"> | string | null
   }
 
   export type usersUpsertWithoutCategoriesInput = {
@@ -44353,36 +47324,56 @@ export namespace Prisma {
     verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type productsUpsertWithWhereUniqueWithoutCategoriesInput = {
-    where: productsWhereUniqueInput
-    update: XOR<productsUpdateWithoutCategoriesInput, productsUncheckedUpdateWithoutCategoriesInput>
-    create: XOR<productsCreateWithoutCategoriesInput, productsUncheckedCreateWithoutCategoriesInput>
+  export type category_translationsUpsertWithWhereUniqueWithoutCategoriesInput = {
+    where: category_translationsWhereUniqueInput
+    update: XOR<category_translationsUpdateWithoutCategoriesInput, category_translationsUncheckedUpdateWithoutCategoriesInput>
+    create: XOR<category_translationsCreateWithoutCategoriesInput, category_translationsUncheckedCreateWithoutCategoriesInput>
   }
 
-  export type productsUpdateWithWhereUniqueWithoutCategoriesInput = {
-    where: productsWhereUniqueInput
-    data: XOR<productsUpdateWithoutCategoriesInput, productsUncheckedUpdateWithoutCategoriesInput>
+  export type category_translationsUpdateWithWhereUniqueWithoutCategoriesInput = {
+    where: category_translationsWhereUniqueInput
+    data: XOR<category_translationsUpdateWithoutCategoriesInput, category_translationsUncheckedUpdateWithoutCategoriesInput>
   }
 
-  export type productsUpdateManyWithWhereWithoutCategoriesInput = {
-    where: productsScalarWhereInput
-    data: XOR<productsUpdateManyMutationInput, productsUncheckedUpdateManyWithoutCategoriesInput>
+  export type category_translationsUpdateManyWithWhereWithoutCategoriesInput = {
+    where: category_translationsScalarWhereInput
+    data: XOR<category_translationsUpdateManyMutationInput, category_translationsUncheckedUpdateManyWithoutCategoriesInput>
   }
 
-  export type productsScalarWhereInput = {
-    AND?: productsScalarWhereInput | productsScalarWhereInput[]
-    OR?: productsScalarWhereInput[]
-    NOT?: productsScalarWhereInput | productsScalarWhereInput[]
-    id?: BigIntFilter<"products"> | bigint | number
-    user_id?: UuidFilter<"products"> | string
-    name?: StringFilter<"products"> | string
-    title?: StringNullableFilter<"products"> | string | null
-    description?: StringNullableFilter<"products"> | string | null
-    iva?: DecimalFilter<"products"> | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFilter<"products"> | bigint | number
-    status?: IntFilter<"products"> | number
-    created_at?: DateTimeFilter<"products"> | Date | string
-    product_code?: StringFilter<"products"> | string
+  export type category_translationsScalarWhereInput = {
+    AND?: category_translationsScalarWhereInput | category_translationsScalarWhereInput[]
+    OR?: category_translationsScalarWhereInput[]
+    NOT?: category_translationsScalarWhereInput | category_translationsScalarWhereInput[]
+    category_id?: BigIntFilter<"category_translations"> | bigint | number
+    lang_code?: StringFilter<"category_translations"> | string
+    name?: StringFilter<"category_translations"> | string
+    name_unaccent?: StringNullableFilter<"category_translations"> | string | null
+  }
+
+  export type product_categoriesUpsertWithWhereUniqueWithoutCategoriesInput = {
+    where: product_categoriesWhereUniqueInput
+    update: XOR<product_categoriesUpdateWithoutCategoriesInput, product_categoriesUncheckedUpdateWithoutCategoriesInput>
+    create: XOR<product_categoriesCreateWithoutCategoriesInput, product_categoriesUncheckedCreateWithoutCategoriesInput>
+  }
+
+  export type product_categoriesUpdateWithWhereUniqueWithoutCategoriesInput = {
+    where: product_categoriesWhereUniqueInput
+    data: XOR<product_categoriesUpdateWithoutCategoriesInput, product_categoriesUncheckedUpdateWithoutCategoriesInput>
+  }
+
+  export type product_categoriesUpdateManyWithWhereWithoutCategoriesInput = {
+    where: product_categoriesScalarWhereInput
+    data: XOR<product_categoriesUpdateManyMutationInput, product_categoriesUncheckedUpdateManyWithoutCategoriesInput>
+  }
+
+  export type product_categoriesScalarWhereInput = {
+    AND?: product_categoriesScalarWhereInput | product_categoriesScalarWhereInput[]
+    OR?: product_categoriesScalarWhereInput[]
+    NOT?: product_categoriesScalarWhereInput | product_categoriesScalarWhereInput[]
+    product_id?: BigIntFilter<"product_categories"> | bigint | number
+    category_id?: BigIntFilter<"product_categories"> | bigint | number
+    is_primary?: BoolFilter<"product_categories"> | boolean
+    created_at?: DateTimeFilter<"product_categories"> | Date | string
   }
 
   export type chat_participantsCreateWithoutChat_panelsInput = {
@@ -44671,6 +47662,126 @@ export namespace Prisma {
     verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
   }
 
+  export type provincesCreateWithoutCitiesInput = {
+    name: string
+    name_local: string
+    directions?: directionsCreateNestedManyWithoutProvincesInput
+    countries: countriesCreateNestedOneWithoutProvincesInput
+  }
+
+  export type provincesUncheckedCreateWithoutCitiesInput = {
+    id?: number
+    country_iso: number
+    name: string
+    name_local: string
+    directions?: directionsUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type provincesCreateOrConnectWithoutCitiesInput = {
+    where: provincesWhereUniqueInput
+    create: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
+  }
+
+  export type directionsCreateWithoutCitiesInput = {
+    id?: bigint | number
+    type?: $Enums.AddressType
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    countries: countriesCreateNestedOneWithoutDirectionsInput
+    provinces: provincesCreateNestedOneWithoutDirectionsInput
+    users: usersCreateNestedOneWithoutDirectionsInput
+    orders?: ordersCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsUncheckedCreateWithoutCitiesInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    country_iso: number
+    province_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    orders?: ordersUncheckedCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsCreateOrConnectWithoutCitiesInput = {
+    where: directionsWhereUniqueInput
+    create: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput>
+  }
+
+  export type directionsCreateManyCitiesInputEnvelope = {
+    data: directionsCreateManyCitiesInput | directionsCreateManyCitiesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type provincesUpsertWithoutCitiesInput = {
+    update: XOR<provincesUpdateWithoutCitiesInput, provincesUncheckedUpdateWithoutCitiesInput>
+    create: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
+    where?: provincesWhereInput
+  }
+
+  export type provincesUpdateToOneWithWhereWithoutCitiesInput = {
+    where?: provincesWhereInput
+    data: XOR<provincesUpdateWithoutCitiesInput, provincesUncheckedUpdateWithoutCitiesInput>
+  }
+
+  export type provincesUpdateWithoutCitiesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUpdateManyWithoutProvincesNestedInput
+    countries?: countriesUpdateOneRequiredWithoutProvincesNestedInput
+  }
+
+  export type provincesUncheckedUpdateWithoutCitiesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    country_iso?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type directionsUpsertWithWhereUniqueWithoutCitiesInput = {
+    where: directionsWhereUniqueInput
+    update: XOR<directionsUpdateWithoutCitiesInput, directionsUncheckedUpdateWithoutCitiesInput>
+    create: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput>
+  }
+
+  export type directionsUpdateWithWhereUniqueWithoutCitiesInput = {
+    where: directionsWhereUniqueInput
+    data: XOR<directionsUpdateWithoutCitiesInput, directionsUncheckedUpdateWithoutCitiesInput>
+  }
+
+  export type directionsUpdateManyWithWhereWithoutCitiesInput = {
+    where: directionsScalarWhereInput
+    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutCitiesInput>
+  }
+
+  export type directionsScalarWhereInput = {
+    AND?: directionsScalarWhereInput | directionsScalarWhereInput[]
+    OR?: directionsScalarWhereInput[]
+    NOT?: directionsScalarWhereInput | directionsScalarWhereInput[]
+    id?: BigIntFilter<"directions"> | bigint | number
+    user_id?: UuidFilter<"directions"> | string
+    type?: EnumAddressTypeFilter<"directions"> | $Enums.AddressType
+    country_iso?: IntFilter<"directions"> | number
+    province_id?: IntFilter<"directions"> | number
+    city_id?: IntFilter<"directions"> | number
+    street?: StringFilter<"directions"> | string
+    zip_code?: StringFilter<"directions"> | string
+    latitude?: FloatNullableFilter<"directions"> | number | null
+    longitude?: FloatNullableFilter<"directions"> | number | null
+    created_at?: DateTimeFilter<"directions"> | Date | string
+    updated_at?: DateTimeNullableFilter<"directions"> | Date | string | null
+  }
+
   export type usersCreateWithoutConfigurationsInput = {
     id?: string
     user_id?: string | null
@@ -44805,6 +47916,215 @@ export namespace Prisma {
     products?: productsUncheckedUpdateManyWithoutUsersNestedInput
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
     verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type currenciesCreateWithoutCountriesInput = {
+    iso_numeric: number
+    iso_alpha3: string
+    symbol: string
+    decimal_digits: number
+  }
+
+  export type currenciesUncheckedCreateWithoutCountriesInput = {
+    iso_numeric: number
+    iso_alpha3: string
+    symbol: string
+    decimal_digits: number
+  }
+
+  export type currenciesCreateOrConnectWithoutCountriesInput = {
+    where: currenciesWhereUniqueInput
+    create: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
+  }
+
+  export type directionsCreateWithoutCountriesInput = {
+    id?: bigint | number
+    type?: $Enums.AddressType
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    cities: citiesCreateNestedOneWithoutDirectionsInput
+    provinces: provincesCreateNestedOneWithoutDirectionsInput
+    users: usersCreateNestedOneWithoutDirectionsInput
+    orders?: ordersCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsUncheckedCreateWithoutCountriesInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    province_id: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    orders?: ordersUncheckedCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsCreateOrConnectWithoutCountriesInput = {
+    where: directionsWhereUniqueInput
+    create: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput>
+  }
+
+  export type directionsCreateManyCountriesInputEnvelope = {
+    data: directionsCreateManyCountriesInput | directionsCreateManyCountriesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type provincesCreateWithoutCountriesInput = {
+    name: string
+    name_local: string
+    cities?: citiesCreateNestedManyWithoutProvincesInput
+    directions?: directionsCreateNestedManyWithoutProvincesInput
+  }
+
+  export type provincesUncheckedCreateWithoutCountriesInput = {
+    id?: number
+    name: string
+    name_local: string
+    cities?: citiesUncheckedCreateNestedManyWithoutProvincesInput
+    directions?: directionsUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type provincesCreateOrConnectWithoutCountriesInput = {
+    where: provincesWhereUniqueInput
+    create: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput>
+  }
+
+  export type provincesCreateManyCountriesInputEnvelope = {
+    data: provincesCreateManyCountriesInput | provincesCreateManyCountriesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type currenciesUpsertWithoutCountriesInput = {
+    update: XOR<currenciesUpdateWithoutCountriesInput, currenciesUncheckedUpdateWithoutCountriesInput>
+    create: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
+    where?: currenciesWhereInput
+  }
+
+  export type currenciesUpdateToOneWithWhereWithoutCountriesInput = {
+    where?: currenciesWhereInput
+    data: XOR<currenciesUpdateWithoutCountriesInput, currenciesUncheckedUpdateWithoutCountriesInput>
+  }
+
+  export type currenciesUpdateWithoutCountriesInput = {
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    decimal_digits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type currenciesUncheckedUpdateWithoutCountriesInput = {
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    decimal_digits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type directionsUpsertWithWhereUniqueWithoutCountriesInput = {
+    where: directionsWhereUniqueInput
+    update: XOR<directionsUpdateWithoutCountriesInput, directionsUncheckedUpdateWithoutCountriesInput>
+    create: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput>
+  }
+
+  export type directionsUpdateWithWhereUniqueWithoutCountriesInput = {
+    where: directionsWhereUniqueInput
+    data: XOR<directionsUpdateWithoutCountriesInput, directionsUncheckedUpdateWithoutCountriesInput>
+  }
+
+  export type directionsUpdateManyWithWhereWithoutCountriesInput = {
+    where: directionsScalarWhereInput
+    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutCountriesInput>
+  }
+
+  export type provincesUpsertWithWhereUniqueWithoutCountriesInput = {
+    where: provincesWhereUniqueInput
+    update: XOR<provincesUpdateWithoutCountriesInput, provincesUncheckedUpdateWithoutCountriesInput>
+    create: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput>
+  }
+
+  export type provincesUpdateWithWhereUniqueWithoutCountriesInput = {
+    where: provincesWhereUniqueInput
+    data: XOR<provincesUpdateWithoutCountriesInput, provincesUncheckedUpdateWithoutCountriesInput>
+  }
+
+  export type provincesUpdateManyWithWhereWithoutCountriesInput = {
+    where: provincesScalarWhereInput
+    data: XOR<provincesUpdateManyMutationInput, provincesUncheckedUpdateManyWithoutCountriesInput>
+  }
+
+  export type provincesScalarWhereInput = {
+    AND?: provincesScalarWhereInput | provincesScalarWhereInput[]
+    OR?: provincesScalarWhereInput[]
+    NOT?: provincesScalarWhereInput | provincesScalarWhereInput[]
+    id?: IntFilter<"provinces"> | number
+    country_iso?: IntFilter<"provinces"> | number
+    name?: StringFilter<"provinces"> | string
+    name_local?: StringFilter<"provinces"> | string
+  }
+
+  export type countriesCreateWithoutCurrenciesInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    directions?: directionsCreateNestedManyWithoutCountriesInput
+    provinces?: provincesCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesUncheckedCreateWithoutCurrenciesInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    directions?: directionsUncheckedCreateNestedManyWithoutCountriesInput
+    provinces?: provincesUncheckedCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesCreateOrConnectWithoutCurrenciesInput = {
+    where: countriesWhereUniqueInput
+    create: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput>
+  }
+
+  export type countriesCreateManyCurrenciesInputEnvelope = {
+    data: countriesCreateManyCurrenciesInput | countriesCreateManyCurrenciesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type countriesUpsertWithWhereUniqueWithoutCurrenciesInput = {
+    where: countriesWhereUniqueInput
+    update: XOR<countriesUpdateWithoutCurrenciesInput, countriesUncheckedUpdateWithoutCurrenciesInput>
+    create: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput>
+  }
+
+  export type countriesUpdateWithWhereUniqueWithoutCurrenciesInput = {
+    where: countriesWhereUniqueInput
+    data: XOR<countriesUpdateWithoutCurrenciesInput, countriesUncheckedUpdateWithoutCurrenciesInput>
+  }
+
+  export type countriesUpdateManyWithWhereWithoutCurrenciesInput = {
+    where: countriesScalarWhereInput
+    data: XOR<countriesUpdateManyMutationInput, countriesUncheckedUpdateManyWithoutCurrenciesInput>
+  }
+
+  export type countriesScalarWhereInput = {
+    AND?: countriesScalarWhereInput | countriesScalarWhereInput[]
+    OR?: countriesScalarWhereInput[]
+    NOT?: countriesScalarWhereInput | countriesScalarWhereInput[]
+    iso_alpha2?: StringFilter<"countries"> | string
+    iso_alpha3?: StringFilter<"countries"> | string
+    iso_numeric?: IntFilter<"countries"> | number
+    name?: StringFilter<"countries"> | string
+    name_local?: StringFilter<"countries"> | string
+    currency_id?: IntNullableFilter<"countries"> | number | null
   }
 
   export type usersCreateWithoutDeliveriesInput = {
@@ -45070,6 +48390,369 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type citiesCreateWithoutDirectionsInput = {
+    name: string
+    name_local: string
+    provinces: provincesCreateNestedOneWithoutCitiesInput
+  }
+
+  export type citiesUncheckedCreateWithoutDirectionsInput = {
+    id?: number
+    province_id: number
+    name: string
+    name_local: string
+  }
+
+  export type citiesCreateOrConnectWithoutDirectionsInput = {
+    where: citiesWhereUniqueInput
+    create: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
+  }
+
+  export type countriesCreateWithoutDirectionsInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currencies?: currenciesCreateNestedOneWithoutCountriesInput
+    provinces?: provincesCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesUncheckedCreateWithoutDirectionsInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currency_id?: number | null
+    provinces?: provincesUncheckedCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesCreateOrConnectWithoutDirectionsInput = {
+    where: countriesWhereUniqueInput
+    create: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
+  }
+
+  export type provincesCreateWithoutDirectionsInput = {
+    name: string
+    name_local: string
+    cities?: citiesCreateNestedManyWithoutProvincesInput
+    countries: countriesCreateNestedOneWithoutProvincesInput
+  }
+
+  export type provincesUncheckedCreateWithoutDirectionsInput = {
+    id?: number
+    country_iso: number
+    name: string
+    name_local: string
+    cities?: citiesUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type provincesCreateOrConnectWithoutDirectionsInput = {
+    where: provincesWhereUniqueInput
+    create: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
+  }
+
+  export type usersCreateWithoutDirectionsInput = {
+    id?: string
+    user_id?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    username?: string | null
+    password: string
+    email: string
+    telephone?: string | null
+    status?: $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    role: $Enums.UserRole
+    cif?: string | null
+    carts?: cartsCreateNestedManyWithoutUsersInput
+    categories?: categoriesCreateNestedManyWithoutUsersInput
+    chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
+    configurations?: configurationsCreateNestedOneWithoutUsersInput
+    deliveries?: deliveriesCreateNestedManyWithoutUsersInput
+    discounts?: discountsCreateNestedManyWithoutUsersInput
+    messages?: messagesCreateNestedManyWithoutUsersInput
+    notifications?: notificationsCreateNestedManyWithoutUsersInput
+    orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    products?: productsCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
+    verification_tokens?: verification_tokensCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutDirectionsInput = {
+    id?: string
+    user_id?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    username?: string | null
+    password: string
+    email: string
+    telephone?: string | null
+    status?: $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    role: $Enums.UserRole
+    cif?: string | null
+    carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
+    categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
+    chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
+    configurations?: configurationsUncheckedCreateNestedOneWithoutUsersInput
+    deliveries?: deliveriesUncheckedCreateNestedManyWithoutUsersInput
+    discounts?: discountsUncheckedCreateNestedManyWithoutUsersInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
+    orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
+    orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
+    products?: productsUncheckedCreateNestedManyWithoutUsersInput
+    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
+    verification_tokens?: verification_tokensUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutDirectionsInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
+  }
+
+  export type ordersCreateWithoutDirectionsInput = {
+    id?: bigint | number
+    status?: number
+    payment_method: number
+    notes?: string | null
+    discount_total: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    iva_total: Decimal | DecimalJsLike | number | string
+    discount_log: JsonNullValueInput | InputJsonValue
+    estimated_date?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    order_details?: order_detailsCreateNestedManyWithoutOrdersInput
+    users_orders_retailer_idTousers?: usersCreateNestedOneWithoutOrders_orders_retailer_idTousersInput
+    users_orders_wholesaler_idTousers?: usersCreateNestedOneWithoutOrders_orders_wholesaler_idTousersInput
+  }
+
+  export type ordersUncheckedCreateWithoutDirectionsInput = {
+    id?: bigint | number
+    retailer_id?: string | null
+    wholesaler_id?: string | null
+    status?: number
+    payment_method: number
+    notes?: string | null
+    discount_total: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    iva_total: Decimal | DecimalJsLike | number | string
+    discount_log: JsonNullValueInput | InputJsonValue
+    estimated_date?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    order_details?: order_detailsUncheckedCreateNestedManyWithoutOrdersInput
+  }
+
+  export type ordersCreateOrConnectWithoutDirectionsInput = {
+    where: ordersWhereUniqueInput
+    create: XOR<ordersCreateWithoutDirectionsInput, ordersUncheckedCreateWithoutDirectionsInput>
+  }
+
+  export type ordersCreateManyDirectionsInputEnvelope = {
+    data: ordersCreateManyDirectionsInput | ordersCreateManyDirectionsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type citiesUpsertWithoutDirectionsInput = {
+    update: XOR<citiesUpdateWithoutDirectionsInput, citiesUncheckedUpdateWithoutDirectionsInput>
+    create: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
+    where?: citiesWhereInput
+  }
+
+  export type citiesUpdateToOneWithWhereWithoutDirectionsInput = {
+    where?: citiesWhereInput
+    data: XOR<citiesUpdateWithoutDirectionsInput, citiesUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type citiesUpdateWithoutDirectionsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    provinces?: provincesUpdateOneRequiredWithoutCitiesNestedInput
+  }
+
+  export type citiesUncheckedUpdateWithoutDirectionsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type countriesUpsertWithoutDirectionsInput = {
+    update: XOR<countriesUpdateWithoutDirectionsInput, countriesUncheckedUpdateWithoutDirectionsInput>
+    create: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
+    where?: countriesWhereInput
+  }
+
+  export type countriesUpdateToOneWithWhereWithoutDirectionsInput = {
+    where?: countriesWhereInput
+    data: XOR<countriesUpdateWithoutDirectionsInput, countriesUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type countriesUpdateWithoutDirectionsInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currencies?: currenciesUpdateOneWithoutCountriesNestedInput
+    provinces?: provincesUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type countriesUncheckedUpdateWithoutDirectionsInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
+    provinces?: provincesUncheckedUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type provincesUpsertWithoutDirectionsInput = {
+    update: XOR<provincesUpdateWithoutDirectionsInput, provincesUncheckedUpdateWithoutDirectionsInput>
+    create: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
+    where?: provincesWhereInput
+  }
+
+  export type provincesUpdateToOneWithWhereWithoutDirectionsInput = {
+    where?: provincesWhereInput
+    data: XOR<provincesUpdateWithoutDirectionsInput, provincesUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type provincesUpdateWithoutDirectionsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    cities?: citiesUpdateManyWithoutProvincesNestedInput
+    countries?: countriesUpdateOneRequiredWithoutProvincesNestedInput
+  }
+
+  export type provincesUncheckedUpdateWithoutDirectionsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    country_iso?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    cities?: citiesUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type usersUpsertWithoutDirectionsInput = {
+    update: XOR<usersUpdateWithoutDirectionsInput, usersUncheckedUpdateWithoutDirectionsInput>
+    create: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
+    where?: usersWhereInput
+  }
+
+  export type usersUpdateToOneWithWhereWithoutDirectionsInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutDirectionsInput, usersUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type usersUpdateWithoutDirectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
+    carts?: cartsUpdateManyWithoutUsersNestedInput
+    categories?: categoriesUpdateManyWithoutUsersNestedInput
+    chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
+    configurations?: configurationsUpdateOneWithoutUsersNestedInput
+    deliveries?: deliveriesUpdateManyWithoutUsersNestedInput
+    discounts?: discountsUpdateManyWithoutUsersNestedInput
+    messages?: messagesUpdateManyWithoutUsersNestedInput
+    notifications?: notificationsUpdateManyWithoutUsersNestedInput
+    orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    products?: productsUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
+    verification_tokens?: verification_tokensUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutDirectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    telephone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    profile?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    cif?: NullableStringFieldUpdateOperationsInput | string | null
+    carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
+    categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
+    chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
+    configurations?: configurationsUncheckedUpdateOneWithoutUsersNestedInput
+    deliveries?: deliveriesUncheckedUpdateManyWithoutUsersNestedInput
+    discounts?: discountsUncheckedUpdateManyWithoutUsersNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
+    orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
+    orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
+    products?: productsUncheckedUpdateManyWithoutUsersNestedInput
+    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
+    verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type ordersUpsertWithWhereUniqueWithoutDirectionsInput = {
+    where: ordersWhereUniqueInput
+    update: XOR<ordersUpdateWithoutDirectionsInput, ordersUncheckedUpdateWithoutDirectionsInput>
+    create: XOR<ordersCreateWithoutDirectionsInput, ordersUncheckedCreateWithoutDirectionsInput>
+  }
+
+  export type ordersUpdateWithWhereUniqueWithoutDirectionsInput = {
+    where: ordersWhereUniqueInput
+    data: XOR<ordersUpdateWithoutDirectionsInput, ordersUncheckedUpdateWithoutDirectionsInput>
+  }
+
+  export type ordersUpdateManyWithWhereWithoutDirectionsInput = {
+    where: ordersScalarWhereInput
+    data: XOR<ordersUpdateManyMutationInput, ordersUncheckedUpdateManyWithoutDirectionsInput>
+  }
+
+  export type ordersScalarWhereInput = {
+    AND?: ordersScalarWhereInput | ordersScalarWhereInput[]
+    OR?: ordersScalarWhereInput[]
+    NOT?: ordersScalarWhereInput | ordersScalarWhereInput[]
+    id?: BigIntFilter<"orders"> | bigint | number
+    retailer_id?: UuidNullableFilter<"orders"> | string | null
+    wholesaler_id?: UuidNullableFilter<"orders"> | string | null
+    status?: IntFilter<"orders"> | number
+    payment_method?: IntFilter<"orders"> | number
+    shipping_address?: BigIntNullableFilter<"orders"> | bigint | number | null
+    notes?: StringNullableFilter<"orders"> | string | null
+    discount_total?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
+    total?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
+    iva_total?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
+    discount_log?: JsonFilter<"orders">
+    estimated_date?: DateTimeNullableFilter<"orders"> | Date | string | null
+    created_at?: DateTimeFilter<"orders"> | Date | string
+    updated_at?: DateTimeNullableFilter<"orders"> | Date | string | null
   }
 
   export type usersCreateWithoutDiscountsInput = {
@@ -45908,7 +49591,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     users_orders_retailer_idTousers?: usersCreateNestedOneWithoutOrders_orders_retailer_idTousersInput
-    direcction?: directionsCreateNestedOneWithoutOrdersInput
+    directions?: directionsCreateNestedOneWithoutOrdersInput
     users_orders_wholesaler_idTousers?: usersCreateNestedOneWithoutOrders_orders_wholesaler_idTousersInput
   }
 
@@ -46005,7 +49688,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users_orders_retailer_idTousers?: usersUpdateOneWithoutOrders_orders_retailer_idTousersNestedInput
-    direcction?: directionsUpdateOneWithoutOrdersNestedInput
+    directions?: directionsUpdateOneWithoutOrdersNestedInput
     users_orders_wholesaler_idTousers?: usersUpdateOneWithoutOrders_orders_wholesaler_idTousersNestedInput
   }
 
@@ -46498,29 +50181,166 @@ export namespace Prisma {
     verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type categoriesCreateWithoutProductsInput = {
+  export type categoriesCreateWithoutProduct_categoriesInput = {
     id?: bigint | number
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    categories?: categoriesCreateNestedOneWithoutOther_categoriesInput
-    other_categories?: categoriesCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    parent?: categoriesCreateNestedOneWithoutChildrenInput
+    children?: categoriesCreateNestedManyWithoutParentInput
     users?: usersCreateNestedOneWithoutCategoriesInput
+    category_translations?: category_translationsCreateNestedManyWithoutCategoriesInput
   }
 
-  export type categoriesUncheckedCreateWithoutProductsInput = {
+  export type categoriesUncheckedCreateWithoutProduct_categoriesInput = {
     id?: bigint | number
     user_id?: string | null
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     parent_id?: bigint | number | null
     created_at?: Date | string
-    other_categories?: categoriesUncheckedCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    children?: categoriesUncheckedCreateNestedManyWithoutParentInput
+    category_translations?: category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   }
 
-  export type categoriesCreateOrConnectWithoutProductsInput = {
+  export type categoriesCreateOrConnectWithoutProduct_categoriesInput = {
     where: categoriesWhereUniqueInput
-    create: XOR<categoriesCreateWithoutProductsInput, categoriesUncheckedCreateWithoutProductsInput>
+    create: XOR<categoriesCreateWithoutProduct_categoriesInput, categoriesUncheckedCreateWithoutProduct_categoriesInput>
+  }
+
+  export type productsCreateWithoutProduct_categoriesInput = {
+    id?: bigint | number
+    name: string
+    title?: string | null
+    description?: string | null
+    iva: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ProductStatus
+    created_at?: Date | string
+    product_code: string
+    users: usersCreateNestedOneWithoutProductsInput
+    products_files?: products_filesCreateNestedManyWithoutProductsInput
+    variant_products?: variant_productsCreateNestedManyWithoutProductsInput
+  }
+
+  export type productsUncheckedCreateWithoutProduct_categoriesInput = {
+    id?: bigint | number
+    user_id: string
+    name: string
+    title?: string | null
+    description?: string | null
+    iva: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ProductStatus
+    created_at?: Date | string
+    product_code: string
+    products_files?: products_filesUncheckedCreateNestedManyWithoutProductsInput
+    variant_products?: variant_productsUncheckedCreateNestedManyWithoutProductsInput
+  }
+
+  export type productsCreateOrConnectWithoutProduct_categoriesInput = {
+    where: productsWhereUniqueInput
+    create: XOR<productsCreateWithoutProduct_categoriesInput, productsUncheckedCreateWithoutProduct_categoriesInput>
+  }
+
+  export type categoriesUpsertWithoutProduct_categoriesInput = {
+    update: XOR<categoriesUpdateWithoutProduct_categoriesInput, categoriesUncheckedUpdateWithoutProduct_categoriesInput>
+    create: XOR<categoriesCreateWithoutProduct_categoriesInput, categoriesUncheckedCreateWithoutProduct_categoriesInput>
+    where?: categoriesWhereInput
+  }
+
+  export type categoriesUpdateToOneWithWhereWithoutProduct_categoriesInput = {
+    where?: categoriesWhereInput
+    data: XOR<categoriesUpdateWithoutProduct_categoriesInput, categoriesUncheckedUpdateWithoutProduct_categoriesInput>
+  }
+
+  export type categoriesUpdateWithoutProduct_categoriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    parent?: categoriesUpdateOneWithoutChildrenNestedInput
+    children?: categoriesUpdateManyWithoutParentNestedInput
+    users?: usersUpdateOneWithoutCategoriesNestedInput
+    category_translations?: category_translationsUpdateManyWithoutCategoriesNestedInput
+  }
+
+  export type categoriesUncheckedUpdateWithoutProduct_categoriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: categoriesUncheckedUpdateManyWithoutParentNestedInput
+    category_translations?: category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
+  }
+
+  export type productsUpsertWithoutProduct_categoriesInput = {
+    update: XOR<productsUpdateWithoutProduct_categoriesInput, productsUncheckedUpdateWithoutProduct_categoriesInput>
+    create: XOR<productsCreateWithoutProduct_categoriesInput, productsUncheckedCreateWithoutProduct_categoriesInput>
+    where?: productsWhereInput
+  }
+
+  export type productsUpdateToOneWithWhereWithoutProduct_categoriesInput = {
+    where?: productsWhereInput
+    data: XOR<productsUpdateWithoutProduct_categoriesInput, productsUncheckedUpdateWithoutProduct_categoriesInput>
+  }
+
+  export type productsUpdateWithoutProduct_categoriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    product_code?: StringFieldUpdateOperationsInput | string
+    users?: usersUpdateOneRequiredWithoutProductsNestedInput
+    products_files?: products_filesUpdateManyWithoutProductsNestedInput
+    variant_products?: variant_productsUpdateManyWithoutProductsNestedInput
+  }
+
+  export type productsUncheckedUpdateWithoutProduct_categoriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    product_code?: StringFieldUpdateOperationsInput | string
+    products_files?: products_filesUncheckedUpdateManyWithoutProductsNestedInput
+    variant_products?: variant_productsUncheckedUpdateManyWithoutProductsNestedInput
+  }
+
+  export type product_categoriesCreateWithoutProductsInput = {
+    is_primary?: boolean
+    created_at?: Date | string
+    categories: categoriesCreateNestedOneWithoutProduct_categoriesInput
+  }
+
+  export type product_categoriesUncheckedCreateWithoutProductsInput = {
+    category_id: bigint | number
+    is_primary?: boolean
+    created_at?: Date | string
+  }
+
+  export type product_categoriesCreateOrConnectWithoutProductsInput = {
+    where: product_categoriesWhereUniqueInput
+    create: XOR<product_categoriesCreateWithoutProductsInput, product_categoriesUncheckedCreateWithoutProductsInput>
+  }
+
+  export type product_categoriesCreateManyProductsInputEnvelope = {
+    data: product_categoriesCreateManyProductsInput | product_categoriesCreateManyProductsInput[]
+    skipDuplicates?: boolean
   }
 
   export type usersCreateWithoutProductsInput = {
@@ -46660,35 +50480,20 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type categoriesUpsertWithoutProductsInput = {
-    update: XOR<categoriesUpdateWithoutProductsInput, categoriesUncheckedUpdateWithoutProductsInput>
-    create: XOR<categoriesCreateWithoutProductsInput, categoriesUncheckedCreateWithoutProductsInput>
-    where?: categoriesWhereInput
+  export type product_categoriesUpsertWithWhereUniqueWithoutProductsInput = {
+    where: product_categoriesWhereUniqueInput
+    update: XOR<product_categoriesUpdateWithoutProductsInput, product_categoriesUncheckedUpdateWithoutProductsInput>
+    create: XOR<product_categoriesCreateWithoutProductsInput, product_categoriesUncheckedCreateWithoutProductsInput>
   }
 
-  export type categoriesUpdateToOneWithWhereWithoutProductsInput = {
-    where?: categoriesWhereInput
-    data: XOR<categoriesUpdateWithoutProductsInput, categoriesUncheckedUpdateWithoutProductsInput>
+  export type product_categoriesUpdateWithWhereUniqueWithoutProductsInput = {
+    where: product_categoriesWhereUniqueInput
+    data: XOR<product_categoriesUpdateWithoutProductsInput, product_categoriesUncheckedUpdateWithoutProductsInput>
   }
 
-  export type categoriesUpdateWithoutProductsInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: categoriesUpdateOneWithoutOther_categoriesNestedInput
-    other_categories?: categoriesUpdateManyWithoutCategoriesNestedInput
-    users?: usersUpdateOneWithoutCategoriesNestedInput
-  }
-
-  export type categoriesUncheckedUpdateWithoutProductsInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: NullableStringFieldUpdateOperationsInput | string | null
-    name?: StringFieldUpdateOperationsInput | string
-    iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    other_categories?: categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
+  export type product_categoriesUpdateManyWithWhereWithoutProductsInput = {
+    where: product_categoriesScalarWhereInput
+    data: XOR<product_categoriesUpdateManyMutationInput, product_categoriesUncheckedUpdateManyWithoutProductsInput>
   }
 
   export type usersUpsertWithoutProductsInput = {
@@ -46853,10 +50658,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
-    categories: categoriesCreateNestedOneWithoutProductsInput
+    product_categories?: product_categoriesCreateNestedManyWithoutProductsInput
     users: usersCreateNestedOneWithoutProductsInput
     variant_products?: variant_productsCreateNestedManyWithoutProductsInput
   }
@@ -46868,10 +50673,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    category_id: bigint | number
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutProductsInput
     variant_products?: variant_productsUncheckedCreateNestedManyWithoutProductsInput
   }
 
@@ -46934,10 +50739,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
-    categories?: categoriesUpdateOneRequiredWithoutProductsNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutProductsNestedInput
     users?: usersUpdateOneRequiredWithoutProductsNestedInput
     variant_products?: variant_productsUpdateManyWithoutProductsNestedInput
   }
@@ -46949,11 +50754,172 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
     variant_products?: variant_productsUncheckedUpdateManyWithoutProductsNestedInput
+  }
+
+  export type citiesCreateWithoutProvincesInput = {
+    name: string
+    name_local: string
+    directions?: directionsCreateNestedManyWithoutCitiesInput
+  }
+
+  export type citiesUncheckedCreateWithoutProvincesInput = {
+    id?: number
+    name: string
+    name_local: string
+    directions?: directionsUncheckedCreateNestedManyWithoutCitiesInput
+  }
+
+  export type citiesCreateOrConnectWithoutProvincesInput = {
+    where: citiesWhereUniqueInput
+    create: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type citiesCreateManyProvincesInputEnvelope = {
+    data: citiesCreateManyProvincesInput | citiesCreateManyProvincesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type directionsCreateWithoutProvincesInput = {
+    id?: bigint | number
+    type?: $Enums.AddressType
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    cities: citiesCreateNestedOneWithoutDirectionsInput
+    countries: countriesCreateNestedOneWithoutDirectionsInput
+    users: usersCreateNestedOneWithoutDirectionsInput
+    orders?: ordersCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsUncheckedCreateWithoutProvincesInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    country_iso: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    orders?: ordersUncheckedCreateNestedManyWithoutDirectionsInput
+  }
+
+  export type directionsCreateOrConnectWithoutProvincesInput = {
+    where: directionsWhereUniqueInput
+    create: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type directionsCreateManyProvincesInputEnvelope = {
+    data: directionsCreateManyProvincesInput | directionsCreateManyProvincesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type countriesCreateWithoutProvincesInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currencies?: currenciesCreateNestedOneWithoutCountriesInput
+    directions?: directionsCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesUncheckedCreateWithoutProvincesInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+    currency_id?: number | null
+    directions?: directionsUncheckedCreateNestedManyWithoutCountriesInput
+  }
+
+  export type countriesCreateOrConnectWithoutProvincesInput = {
+    where: countriesWhereUniqueInput
+    create: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type citiesUpsertWithWhereUniqueWithoutProvincesInput = {
+    where: citiesWhereUniqueInput
+    update: XOR<citiesUpdateWithoutProvincesInput, citiesUncheckedUpdateWithoutProvincesInput>
+    create: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type citiesUpdateWithWhereUniqueWithoutProvincesInput = {
+    where: citiesWhereUniqueInput
+    data: XOR<citiesUpdateWithoutProvincesInput, citiesUncheckedUpdateWithoutProvincesInput>
+  }
+
+  export type citiesUpdateManyWithWhereWithoutProvincesInput = {
+    where: citiesScalarWhereInput
+    data: XOR<citiesUpdateManyMutationInput, citiesUncheckedUpdateManyWithoutProvincesInput>
+  }
+
+  export type citiesScalarWhereInput = {
+    AND?: citiesScalarWhereInput | citiesScalarWhereInput[]
+    OR?: citiesScalarWhereInput[]
+    NOT?: citiesScalarWhereInput | citiesScalarWhereInput[]
+    id?: IntFilter<"cities"> | number
+    province_id?: IntFilter<"cities"> | number
+    name?: StringFilter<"cities"> | string
+    name_local?: StringFilter<"cities"> | string
+  }
+
+  export type directionsUpsertWithWhereUniqueWithoutProvincesInput = {
+    where: directionsWhereUniqueInput
+    update: XOR<directionsUpdateWithoutProvincesInput, directionsUncheckedUpdateWithoutProvincesInput>
+    create: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type directionsUpdateWithWhereUniqueWithoutProvincesInput = {
+    where: directionsWhereUniqueInput
+    data: XOR<directionsUpdateWithoutProvincesInput, directionsUncheckedUpdateWithoutProvincesInput>
+  }
+
+  export type directionsUpdateManyWithWhereWithoutProvincesInput = {
+    where: directionsScalarWhereInput
+    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutProvincesInput>
+  }
+
+  export type countriesUpsertWithoutProvincesInput = {
+    update: XOR<countriesUpdateWithoutProvincesInput, countriesUncheckedUpdateWithoutProvincesInput>
+    create: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
+    where?: countriesWhereInput
+  }
+
+  export type countriesUpdateToOneWithWhereWithoutProvincesInput = {
+    where?: countriesWhereInput
+    data: XOR<countriesUpdateWithoutProvincesInput, countriesUncheckedUpdateWithoutProvincesInput>
+  }
+
+  export type countriesUpdateWithoutProvincesInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currencies?: currenciesUpdateOneWithoutCountriesNestedInput
+    directions?: directionsUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type countriesUncheckedUpdateWithoutProvincesInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
+    directions?: directionsUncheckedUpdateManyWithoutCountriesNestedInput
   }
 
   export type usersCreateWithoutUser_sessionsInput = {
@@ -47119,9 +51085,12 @@ export namespace Prisma {
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    categories?: categoriesCreateNestedOneWithoutOther_categoriesInput
-    other_categories?: categoriesCreateNestedManyWithoutCategoriesInput
-    products?: productsCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    parent?: categoriesCreateNestedOneWithoutChildrenInput
+    children?: categoriesCreateNestedManyWithoutParentInput
+    category_translations?: category_translationsCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesCreateNestedManyWithoutCategoriesInput
   }
 
   export type categoriesUncheckedCreateWithoutUsersInput = {
@@ -47130,8 +51099,11 @@ export namespace Prisma {
     iva?: Decimal | DecimalJsLike | number | string | null
     parent_id?: bigint | number | null
     created_at?: Date | string
-    other_categories?: categoriesUncheckedCreateNestedManyWithoutCategoriesInput
-    products?: productsUncheckedCreateNestedManyWithoutCategoriesInput
+    level: number
+    name_unaccent?: string | null
+    children?: categoriesUncheckedCreateNestedManyWithoutParentInput
+    category_translations?: category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
   }
 
   export type categoriesCreateOrConnectWithoutUsersInput = {
@@ -47229,7 +51201,7 @@ export namespace Prisma {
     cities: citiesCreateNestedOneWithoutDirectionsInput
     countries: countriesCreateNestedOneWithoutDirectionsInput
     provinces: provincesCreateNestedOneWithoutDirectionsInput
-    orders?: ordersCreateNestedManyWithoutDirecctionInput
+    orders?: ordersCreateNestedManyWithoutDirectionsInput
   }
 
   export type directionsUncheckedCreateWithoutUsersInput = {
@@ -47244,7 +51216,7 @@ export namespace Prisma {
     longitude?: number | null
     created_at?: Date | string
     updated_at?: Date | string | null
-    orders?: ordersUncheckedCreateNestedManyWithoutDirecctionInput
+    orders?: ordersUncheckedCreateNestedManyWithoutDirectionsInput
   }
 
   export type directionsCreateOrConnectWithoutUsersInput = {
@@ -47365,7 +51337,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string | null
     order_details?: order_detailsCreateNestedManyWithoutOrdersInput
-    direcction?: directionsCreateNestedOneWithoutOrdersInput
+    directions?: directionsCreateNestedOneWithoutOrdersInput
     users_orders_wholesaler_idTousers?: usersCreateNestedOneWithoutOrders_orders_wholesaler_idTousersInput
   }
 
@@ -47412,7 +51384,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     order_details?: order_detailsCreateNestedManyWithoutOrdersInput
     users_orders_retailer_idTousers?: usersCreateNestedOneWithoutOrders_orders_retailer_idTousersInput
-    direcction?: directionsCreateNestedOneWithoutOrdersInput
+    directions?: directionsCreateNestedOneWithoutOrdersInput
   }
 
   export type ordersUncheckedCreateWithoutUsers_orders_wholesaler_idTousersInput = {
@@ -47449,10 +51421,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
-    categories: categoriesCreateNestedOneWithoutProductsInput
+    product_categories?: product_categoriesCreateNestedManyWithoutProductsInput
     products_files?: products_filesCreateNestedManyWithoutProductsInput
     variant_products?: variant_productsCreateNestedManyWithoutProductsInput
   }
@@ -47463,10 +51435,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    category_id: bigint | number
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutProductsInput
     products_files?: products_filesUncheckedCreateNestedManyWithoutProductsInput
     variant_products?: variant_productsUncheckedCreateNestedManyWithoutProductsInput
   }
@@ -47670,24 +51642,6 @@ export namespace Prisma {
     data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type directionsScalarWhereInput = {
-    AND?: directionsScalarWhereInput | directionsScalarWhereInput[]
-    OR?: directionsScalarWhereInput[]
-    NOT?: directionsScalarWhereInput | directionsScalarWhereInput[]
-    id?: BigIntFilter<"directions"> | bigint | number
-    user_id?: UuidFilter<"directions"> | string
-    type?: EnumAddressTypeFilter<"directions"> | $Enums.AddressType
-    country_iso?: IntFilter<"directions"> | number
-    province_id?: IntFilter<"directions"> | number
-    city_id?: IntFilter<"directions"> | number
-    street?: StringFilter<"directions"> | string
-    zip_code?: StringFilter<"directions"> | string
-    latitude?: FloatNullableFilter<"directions"> | number | null
-    longitude?: FloatNullableFilter<"directions"> | number | null
-    created_at?: DateTimeFilter<"directions"> | Date | string
-    updated_at?: DateTimeNullableFilter<"directions"> | Date | string | null
-  }
-
   export type discountsUpsertWithWhereUniqueWithoutUsersInput = {
     where: discountsWhereUniqueInput
     update: XOR<discountsUpdateWithoutUsersInput, discountsUncheckedUpdateWithoutUsersInput>
@@ -47781,27 +51735,6 @@ export namespace Prisma {
     data: XOR<ordersUpdateManyMutationInput, ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersInput>
   }
 
-  export type ordersScalarWhereInput = {
-    AND?: ordersScalarWhereInput | ordersScalarWhereInput[]
-    OR?: ordersScalarWhereInput[]
-    NOT?: ordersScalarWhereInput | ordersScalarWhereInput[]
-    id?: BigIntFilter<"orders"> | bigint | number
-    retailer_id?: UuidNullableFilter<"orders"> | string | null
-    wholesaler_id?: UuidNullableFilter<"orders"> | string | null
-    status?: IntFilter<"orders"> | number
-    payment_method?: IntFilter<"orders"> | number
-    shipping_address?: BigIntNullableFilter<"orders"> | bigint | number | null
-    notes?: StringNullableFilter<"orders"> | string | null
-    discount_total?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
-    subtotal?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
-    total?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
-    iva_total?: DecimalFilter<"orders"> | Decimal | DecimalJsLike | number | string
-    discount_log?: JsonFilter<"orders">
-    estimated_date?: DateTimeNullableFilter<"orders"> | Date | string | null
-    created_at?: DateTimeFilter<"orders"> | Date | string
-    updated_at?: DateTimeNullableFilter<"orders"> | Date | string | null
-  }
-
   export type ordersUpsertWithWhereUniqueWithoutUsers_orders_wholesaler_idTousersInput = {
     where: ordersWhereUniqueInput
     update: XOR<ordersUpdateWithoutUsers_orders_wholesaler_idTousersInput, ordersUncheckedUpdateWithoutUsers_orders_wholesaler_idTousersInput>
@@ -47832,6 +51765,21 @@ export namespace Prisma {
   export type productsUpdateManyWithWhereWithoutUsersInput = {
     where: productsScalarWhereInput
     data: XOR<productsUpdateManyMutationInput, productsUncheckedUpdateManyWithoutUsersInput>
+  }
+
+  export type productsScalarWhereInput = {
+    AND?: productsScalarWhereInput | productsScalarWhereInput[]
+    OR?: productsScalarWhereInput[]
+    NOT?: productsScalarWhereInput | productsScalarWhereInput[]
+    id?: BigIntFilter<"products"> | bigint | number
+    user_id?: UuidFilter<"products"> | string
+    name?: StringFilter<"products"> | string
+    title?: StringNullableFilter<"products"> | string | null
+    description?: StringNullableFilter<"products"> | string | null
+    iva?: DecimalFilter<"products"> | Decimal | DecimalJsLike | number | string
+    status?: EnumProductStatusFilter<"products"> | $Enums.ProductStatus
+    created_at?: DateTimeFilter<"products"> | Date | string
+    product_code?: StringFilter<"products"> | string
   }
 
   export type user_sessionsUpsertWithWhereUniqueWithoutUsersInput = {
@@ -47963,10 +51911,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
-    categories: categoriesCreateNestedOneWithoutProductsInput
+    product_categories?: product_categoriesCreateNestedManyWithoutProductsInput
     users: usersCreateNestedOneWithoutProductsInput
     products_files?: products_filesCreateNestedManyWithoutProductsInput
   }
@@ -47978,10 +51926,10 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    category_id: bigint | number
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutProductsInput
     products_files?: products_filesUncheckedCreateNestedManyWithoutProductsInput
   }
 
@@ -48039,10 +51987,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
-    categories?: categoriesUpdateOneRequiredWithoutProductsNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutProductsNestedInput
     users?: usersUpdateOneRequiredWithoutProductsNestedInput
     products_files?: products_filesUpdateManyWithoutProductsNestedInput
   }
@@ -48054,10 +52002,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
     products_files?: products_filesUncheckedUpdateManyWithoutProductsNestedInput
   }
 
@@ -48197,818 +52145,72 @@ export namespace Prisma {
     user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type provincesCreateWithoutCitiesInput = {
-    name: string
-    name_local: string
-    directions?: directionsCreateNestedManyWithoutProvincesInput
-    countries: countriesCreateNestedOneWithoutProvincesInput
-  }
-
-  export type provincesUncheckedCreateWithoutCitiesInput = {
-    id?: number
-    country_iso: number
-    name: string
-    name_local: string
-    directions?: directionsUncheckedCreateNestedManyWithoutProvincesInput
-  }
-
-  export type provincesCreateOrConnectWithoutCitiesInput = {
-    where: provincesWhereUniqueInput
-    create: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
-  }
-
-  export type directionsCreateWithoutCitiesInput = {
+  export type categoriesCreateWithoutCategory_translationsInput = {
     id?: bigint | number
-    type?: $Enums.AddressType
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
+    name: string
+    iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
-    updated_at?: Date | string | null
-    countries: countriesCreateNestedOneWithoutDirectionsInput
-    provinces: provincesCreateNestedOneWithoutDirectionsInput
-    users: usersCreateNestedOneWithoutDirectionsInput
-    orders?: ordersCreateNestedManyWithoutDirecctionInput
+    level: number
+    name_unaccent?: string | null
+    parent?: categoriesCreateNestedOneWithoutChildrenInput
+    children?: categoriesCreateNestedManyWithoutParentInput
+    users?: usersCreateNestedOneWithoutCategoriesInput
+    product_categories?: product_categoriesCreateNestedManyWithoutCategoriesInput
   }
 
-  export type directionsUncheckedCreateWithoutCitiesInput = {
+  export type categoriesUncheckedCreateWithoutCategory_translationsInput = {
     id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    country_iso: number
-    province_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    orders?: ordersUncheckedCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsCreateOrConnectWithoutCitiesInput = {
-    where: directionsWhereUniqueInput
-    create: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput>
-  }
-
-  export type directionsCreateManyCitiesInputEnvelope = {
-    data: directionsCreateManyCitiesInput | directionsCreateManyCitiesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type provincesUpsertWithoutCitiesInput = {
-    update: XOR<provincesUpdateWithoutCitiesInput, provincesUncheckedUpdateWithoutCitiesInput>
-    create: XOR<provincesCreateWithoutCitiesInput, provincesUncheckedCreateWithoutCitiesInput>
-    where?: provincesWhereInput
-  }
-
-  export type provincesUpdateToOneWithWhereWithoutCitiesInput = {
-    where?: provincesWhereInput
-    data: XOR<provincesUpdateWithoutCitiesInput, provincesUncheckedUpdateWithoutCitiesInput>
-  }
-
-  export type provincesUpdateWithoutCitiesInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUpdateManyWithoutProvincesNestedInput
-    countries?: countriesUpdateOneRequiredWithoutProvincesNestedInput
-  }
-
-  export type provincesUncheckedUpdateWithoutCitiesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    country_iso?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUncheckedUpdateManyWithoutProvincesNestedInput
-  }
-
-  export type directionsUpsertWithWhereUniqueWithoutCitiesInput = {
-    where: directionsWhereUniqueInput
-    update: XOR<directionsUpdateWithoutCitiesInput, directionsUncheckedUpdateWithoutCitiesInput>
-    create: XOR<directionsCreateWithoutCitiesInput, directionsUncheckedCreateWithoutCitiesInput>
-  }
-
-  export type directionsUpdateWithWhereUniqueWithoutCitiesInput = {
-    where: directionsWhereUniqueInput
-    data: XOR<directionsUpdateWithoutCitiesInput, directionsUncheckedUpdateWithoutCitiesInput>
-  }
-
-  export type directionsUpdateManyWithWhereWithoutCitiesInput = {
-    where: directionsScalarWhereInput
-    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutCitiesInput>
-  }
-
-  export type currenciesCreateWithoutCountriesInput = {
-    iso_numeric: number
-    iso_alpha3: string
-    symbol: string
-    decimal_digits: number
-  }
-
-  export type currenciesUncheckedCreateWithoutCountriesInput = {
-    iso_numeric: number
-    iso_alpha3: string
-    symbol: string
-    decimal_digits: number
-  }
-
-  export type currenciesCreateOrConnectWithoutCountriesInput = {
-    where: currenciesWhereUniqueInput
-    create: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
-  }
-
-  export type directionsCreateWithoutCountriesInput = {
-    id?: bigint | number
-    type?: $Enums.AddressType
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    cities: citiesCreateNestedOneWithoutDirectionsInput
-    provinces: provincesCreateNestedOneWithoutDirectionsInput
-    users: usersCreateNestedOneWithoutDirectionsInput
-    orders?: ordersCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsUncheckedCreateWithoutCountriesInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    province_id: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    orders?: ordersUncheckedCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsCreateOrConnectWithoutCountriesInput = {
-    where: directionsWhereUniqueInput
-    create: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput>
-  }
-
-  export type directionsCreateManyCountriesInputEnvelope = {
-    data: directionsCreateManyCountriesInput | directionsCreateManyCountriesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type provincesCreateWithoutCountriesInput = {
-    name: string
-    name_local: string
-    cities?: citiesCreateNestedManyWithoutProvincesInput
-    directions?: directionsCreateNestedManyWithoutProvincesInput
-  }
-
-  export type provincesUncheckedCreateWithoutCountriesInput = {
-    id?: number
-    name: string
-    name_local: string
-    cities?: citiesUncheckedCreateNestedManyWithoutProvincesInput
-    directions?: directionsUncheckedCreateNestedManyWithoutProvincesInput
-  }
-
-  export type provincesCreateOrConnectWithoutCountriesInput = {
-    where: provincesWhereUniqueInput
-    create: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput>
-  }
-
-  export type provincesCreateManyCountriesInputEnvelope = {
-    data: provincesCreateManyCountriesInput | provincesCreateManyCountriesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type currenciesUpsertWithoutCountriesInput = {
-    update: XOR<currenciesUpdateWithoutCountriesInput, currenciesUncheckedUpdateWithoutCountriesInput>
-    create: XOR<currenciesCreateWithoutCountriesInput, currenciesUncheckedCreateWithoutCountriesInput>
-    where?: currenciesWhereInput
-  }
-
-  export type currenciesUpdateToOneWithWhereWithoutCountriesInput = {
-    where?: currenciesWhereInput
-    data: XOR<currenciesUpdateWithoutCountriesInput, currenciesUncheckedUpdateWithoutCountriesInput>
-  }
-
-  export type currenciesUpdateWithoutCountriesInput = {
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    symbol?: StringFieldUpdateOperationsInput | string
-    decimal_digits?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type currenciesUncheckedUpdateWithoutCountriesInput = {
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    symbol?: StringFieldUpdateOperationsInput | string
-    decimal_digits?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type directionsUpsertWithWhereUniqueWithoutCountriesInput = {
-    where: directionsWhereUniqueInput
-    update: XOR<directionsUpdateWithoutCountriesInput, directionsUncheckedUpdateWithoutCountriesInput>
-    create: XOR<directionsCreateWithoutCountriesInput, directionsUncheckedCreateWithoutCountriesInput>
-  }
-
-  export type directionsUpdateWithWhereUniqueWithoutCountriesInput = {
-    where: directionsWhereUniqueInput
-    data: XOR<directionsUpdateWithoutCountriesInput, directionsUncheckedUpdateWithoutCountriesInput>
-  }
-
-  export type directionsUpdateManyWithWhereWithoutCountriesInput = {
-    where: directionsScalarWhereInput
-    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutCountriesInput>
-  }
-
-  export type provincesUpsertWithWhereUniqueWithoutCountriesInput = {
-    where: provincesWhereUniqueInput
-    update: XOR<provincesUpdateWithoutCountriesInput, provincesUncheckedUpdateWithoutCountriesInput>
-    create: XOR<provincesCreateWithoutCountriesInput, provincesUncheckedCreateWithoutCountriesInput>
-  }
-
-  export type provincesUpdateWithWhereUniqueWithoutCountriesInput = {
-    where: provincesWhereUniqueInput
-    data: XOR<provincesUpdateWithoutCountriesInput, provincesUncheckedUpdateWithoutCountriesInput>
-  }
-
-  export type provincesUpdateManyWithWhereWithoutCountriesInput = {
-    where: provincesScalarWhereInput
-    data: XOR<provincesUpdateManyMutationInput, provincesUncheckedUpdateManyWithoutCountriesInput>
-  }
-
-  export type provincesScalarWhereInput = {
-    AND?: provincesScalarWhereInput | provincesScalarWhereInput[]
-    OR?: provincesScalarWhereInput[]
-    NOT?: provincesScalarWhereInput | provincesScalarWhereInput[]
-    id?: IntFilter<"provinces"> | number
-    country_iso?: IntFilter<"provinces"> | number
-    name?: StringFilter<"provinces"> | string
-    name_local?: StringFilter<"provinces"> | string
-  }
-
-  export type citiesCreateWithoutDirectionsInput = {
-    name: string
-    name_local: string
-    provinces: provincesCreateNestedOneWithoutCitiesInput
-  }
-
-  export type citiesUncheckedCreateWithoutDirectionsInput = {
-    id?: number
-    province_id: number
-    name: string
-    name_local: string
-  }
-
-  export type citiesCreateOrConnectWithoutDirectionsInput = {
-    where: citiesWhereUniqueInput
-    create: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
-  }
-
-  export type countriesCreateWithoutDirectionsInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currencies?: currenciesCreateNestedOneWithoutCountriesInput
-    provinces?: provincesCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesUncheckedCreateWithoutDirectionsInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currency_id?: number | null
-    provinces?: provincesUncheckedCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesCreateOrConnectWithoutDirectionsInput = {
-    where: countriesWhereUniqueInput
-    create: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
-  }
-
-  export type provincesCreateWithoutDirectionsInput = {
-    name: string
-    name_local: string
-    cities?: citiesCreateNestedManyWithoutProvincesInput
-    countries: countriesCreateNestedOneWithoutProvincesInput
-  }
-
-  export type provincesUncheckedCreateWithoutDirectionsInput = {
-    id?: number
-    country_iso: number
-    name: string
-    name_local: string
-    cities?: citiesUncheckedCreateNestedManyWithoutProvincesInput
-  }
-
-  export type provincesCreateOrConnectWithoutDirectionsInput = {
-    where: provincesWhereUniqueInput
-    create: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
-  }
-
-  export type usersCreateWithoutDirectionsInput = {
-    id?: string
     user_id?: string | null
-    first_name?: string | null
-    last_name?: string | null
-    username?: string | null
-    password: string
-    email: string
-    telephone?: string | null
-    status?: $Enums.UserStatus
-    profile?: NullableJsonNullValueInput | InputJsonValue
+    name: string
+    iva?: Decimal | DecimalJsLike | number | string | null
+    parent_id?: bigint | number | null
     created_at?: Date | string
-    updated_at?: Date | string | null
-    role: $Enums.UserRole
-    cif?: string | null
-    carts?: cartsCreateNestedManyWithoutUsersInput
-    categories?: categoriesCreateNestedManyWithoutUsersInput
-    chat_participants?: chat_participantsCreateNestedManyWithoutUsersInput
-    configurations?: configurationsCreateNestedOneWithoutUsersInput
-    deliveries?: deliveriesCreateNestedManyWithoutUsersInput
-    discounts?: discountsCreateNestedManyWithoutUsersInput
-    messages?: messagesCreateNestedManyWithoutUsersInput
-    notifications?: notificationsCreateNestedManyWithoutUsersInput
-    orders_orders_retailer_idTousers?: ordersCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
-    orders_orders_wholesaler_idTousers?: ordersCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
-    products?: productsCreateNestedManyWithoutUsersInput
-    user_sessions?: user_sessionsCreateNestedManyWithoutUsersInput
-    verification_tokens?: verification_tokensCreateNestedManyWithoutUsersInput
+    level: number
+    name_unaccent?: string | null
+    children?: categoriesUncheckedCreateNestedManyWithoutParentInput
+    product_categories?: product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
   }
 
-  export type usersUncheckedCreateWithoutDirectionsInput = {
-    id?: string
-    user_id?: string | null
-    first_name?: string | null
-    last_name?: string | null
-    username?: string | null
-    password: string
-    email: string
-    telephone?: string | null
-    status?: $Enums.UserStatus
-    profile?: NullableJsonNullValueInput | InputJsonValue
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    role: $Enums.UserRole
-    cif?: string | null
-    carts?: cartsUncheckedCreateNestedManyWithoutUsersInput
-    categories?: categoriesUncheckedCreateNestedManyWithoutUsersInput
-    chat_participants?: chat_participantsUncheckedCreateNestedManyWithoutUsersInput
-    configurations?: configurationsUncheckedCreateNestedOneWithoutUsersInput
-    deliveries?: deliveriesUncheckedCreateNestedManyWithoutUsersInput
-    discounts?: discountsUncheckedCreateNestedManyWithoutUsersInput
-    messages?: messagesUncheckedCreateNestedManyWithoutUsersInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutUsersInput
-    orders_orders_retailer_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_retailer_idTousersInput
-    orders_orders_wholesaler_idTousers?: ordersUncheckedCreateNestedManyWithoutUsers_orders_wholesaler_idTousersInput
-    products?: productsUncheckedCreateNestedManyWithoutUsersInput
-    user_sessions?: user_sessionsUncheckedCreateNestedManyWithoutUsersInput
-    verification_tokens?: verification_tokensUncheckedCreateNestedManyWithoutUsersInput
+  export type categoriesCreateOrConnectWithoutCategory_translationsInput = {
+    where: categoriesWhereUniqueInput
+    create: XOR<categoriesCreateWithoutCategory_translationsInput, categoriesUncheckedCreateWithoutCategory_translationsInput>
   }
 
-  export type usersCreateOrConnectWithoutDirectionsInput = {
-    where: usersWhereUniqueInput
-    create: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
+  export type categoriesUpsertWithoutCategory_translationsInput = {
+    update: XOR<categoriesUpdateWithoutCategory_translationsInput, categoriesUncheckedUpdateWithoutCategory_translationsInput>
+    create: XOR<categoriesCreateWithoutCategory_translationsInput, categoriesUncheckedCreateWithoutCategory_translationsInput>
+    where?: categoriesWhereInput
   }
 
-  export type ordersCreateWithoutDirecctionInput = {
-    id?: bigint | number
-    status?: number
-    payment_method: number
-    notes?: string | null
-    discount_total: Decimal | DecimalJsLike | number | string
-    subtotal: Decimal | DecimalJsLike | number | string
-    total: Decimal | DecimalJsLike | number | string
-    iva_total: Decimal | DecimalJsLike | number | string
-    discount_log: JsonNullValueInput | InputJsonValue
-    estimated_date?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    order_details?: order_detailsCreateNestedManyWithoutOrdersInput
-    users_orders_retailer_idTousers?: usersCreateNestedOneWithoutOrders_orders_retailer_idTousersInput
-    users_orders_wholesaler_idTousers?: usersCreateNestedOneWithoutOrders_orders_wholesaler_idTousersInput
+  export type categoriesUpdateToOneWithWhereWithoutCategory_translationsInput = {
+    where?: categoriesWhereInput
+    data: XOR<categoriesUpdateWithoutCategory_translationsInput, categoriesUncheckedUpdateWithoutCategory_translationsInput>
   }
 
-  export type ordersUncheckedCreateWithoutDirecctionInput = {
-    id?: bigint | number
-    retailer_id?: string | null
-    wholesaler_id?: string | null
-    status?: number
-    payment_method: number
-    notes?: string | null
-    discount_total: Decimal | DecimalJsLike | number | string
-    subtotal: Decimal | DecimalJsLike | number | string
-    total: Decimal | DecimalJsLike | number | string
-    iva_total: Decimal | DecimalJsLike | number | string
-    discount_log: JsonNullValueInput | InputJsonValue
-    estimated_date?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    order_details?: order_detailsUncheckedCreateNestedManyWithoutOrdersInput
-  }
-
-  export type ordersCreateOrConnectWithoutDirecctionInput = {
-    where: ordersWhereUniqueInput
-    create: XOR<ordersCreateWithoutDirecctionInput, ordersUncheckedCreateWithoutDirecctionInput>
-  }
-
-  export type ordersCreateManyDirecctionInputEnvelope = {
-    data: ordersCreateManyDirecctionInput | ordersCreateManyDirecctionInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type citiesUpsertWithoutDirectionsInput = {
-    update: XOR<citiesUpdateWithoutDirectionsInput, citiesUncheckedUpdateWithoutDirectionsInput>
-    create: XOR<citiesCreateWithoutDirectionsInput, citiesUncheckedCreateWithoutDirectionsInput>
-    where?: citiesWhereInput
-  }
-
-  export type citiesUpdateToOneWithWhereWithoutDirectionsInput = {
-    where?: citiesWhereInput
-    data: XOR<citiesUpdateWithoutDirectionsInput, citiesUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type citiesUpdateWithoutDirectionsInput = {
+  export type categoriesUpdateWithoutCategory_translationsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    provinces?: provincesUpdateOneRequiredWithoutCitiesNestedInput
-  }
-
-  export type citiesUncheckedUpdateWithoutDirectionsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type countriesUpsertWithoutDirectionsInput = {
-    update: XOR<countriesUpdateWithoutDirectionsInput, countriesUncheckedUpdateWithoutDirectionsInput>
-    create: XOR<countriesCreateWithoutDirectionsInput, countriesUncheckedCreateWithoutDirectionsInput>
-    where?: countriesWhereInput
-  }
-
-  export type countriesUpdateToOneWithWhereWithoutDirectionsInput = {
-    where?: countriesWhereInput
-    data: XOR<countriesUpdateWithoutDirectionsInput, countriesUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type countriesUpdateWithoutDirectionsInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currencies?: currenciesUpdateOneWithoutCountriesNestedInput
-    provinces?: provincesUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesUncheckedUpdateWithoutDirectionsInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
-    provinces?: provincesUncheckedUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type provincesUpsertWithoutDirectionsInput = {
-    update: XOR<provincesUpdateWithoutDirectionsInput, provincesUncheckedUpdateWithoutDirectionsInput>
-    create: XOR<provincesCreateWithoutDirectionsInput, provincesUncheckedCreateWithoutDirectionsInput>
-    where?: provincesWhereInput
-  }
-
-  export type provincesUpdateToOneWithWhereWithoutDirectionsInput = {
-    where?: provincesWhereInput
-    data: XOR<provincesUpdateWithoutDirectionsInput, provincesUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type provincesUpdateWithoutDirectionsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    cities?: citiesUpdateManyWithoutProvincesNestedInput
-    countries?: countriesUpdateOneRequiredWithoutProvincesNestedInput
-  }
-
-  export type provincesUncheckedUpdateWithoutDirectionsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    country_iso?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    cities?: citiesUncheckedUpdateManyWithoutProvincesNestedInput
-  }
-
-  export type usersUpsertWithoutDirectionsInput = {
-    update: XOR<usersUpdateWithoutDirectionsInput, usersUncheckedUpdateWithoutDirectionsInput>
-    create: XOR<usersCreateWithoutDirectionsInput, usersUncheckedCreateWithoutDirectionsInput>
-    where?: usersWhereInput
-  }
-
-  export type usersUpdateToOneWithWhereWithoutDirectionsInput = {
-    where?: usersWhereInput
-    data: XOR<usersUpdateWithoutDirectionsInput, usersUncheckedUpdateWithoutDirectionsInput>
-  }
-
-  export type usersUpdateWithoutDirectionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    user_id?: NullableStringFieldUpdateOperationsInput | string | null
-    first_name?: NullableStringFieldUpdateOperationsInput | string | null
-    last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    telephone?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-    profile?: NullableJsonNullValueInput | InputJsonValue
+    iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    cif?: NullableStringFieldUpdateOperationsInput | string | null
-    carts?: cartsUpdateManyWithoutUsersNestedInput
-    categories?: categoriesUpdateManyWithoutUsersNestedInput
-    chat_participants?: chat_participantsUpdateManyWithoutUsersNestedInput
-    configurations?: configurationsUpdateOneWithoutUsersNestedInput
-    deliveries?: deliveriesUpdateManyWithoutUsersNestedInput
-    discounts?: discountsUpdateManyWithoutUsersNestedInput
-    messages?: messagesUpdateManyWithoutUsersNestedInput
-    notifications?: notificationsUpdateManyWithoutUsersNestedInput
-    orders_orders_retailer_idTousers?: ordersUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
-    orders_orders_wholesaler_idTousers?: ordersUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
-    products?: productsUpdateManyWithoutUsersNestedInput
-    user_sessions?: user_sessionsUpdateManyWithoutUsersNestedInput
-    verification_tokens?: verification_tokensUpdateManyWithoutUsersNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    parent?: categoriesUpdateOneWithoutChildrenNestedInput
+    children?: categoriesUpdateManyWithoutParentNestedInput
+    users?: usersUpdateOneWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutCategoriesNestedInput
   }
 
-  export type usersUncheckedUpdateWithoutDirectionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type categoriesUncheckedUpdateWithoutCategory_translationsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
-    first_name?: NullableStringFieldUpdateOperationsInput | string | null
-    last_name?: NullableStringFieldUpdateOperationsInput | string | null
-    username?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    telephone?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-    profile?: NullableJsonNullValueInput | InputJsonValue
+    name?: StringFieldUpdateOperationsInput | string
+    iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    cif?: NullableStringFieldUpdateOperationsInput | string | null
-    carts?: cartsUncheckedUpdateManyWithoutUsersNestedInput
-    categories?: categoriesUncheckedUpdateManyWithoutUsersNestedInput
-    chat_participants?: chat_participantsUncheckedUpdateManyWithoutUsersNestedInput
-    configurations?: configurationsUncheckedUpdateOneWithoutUsersNestedInput
-    deliveries?: deliveriesUncheckedUpdateManyWithoutUsersNestedInput
-    discounts?: discountsUncheckedUpdateManyWithoutUsersNestedInput
-    messages?: messagesUncheckedUpdateManyWithoutUsersNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutUsersNestedInput
-    orders_orders_retailer_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_retailer_idTousersNestedInput
-    orders_orders_wholesaler_idTousers?: ordersUncheckedUpdateManyWithoutUsers_orders_wholesaler_idTousersNestedInput
-    products?: productsUncheckedUpdateManyWithoutUsersNestedInput
-    user_sessions?: user_sessionsUncheckedUpdateManyWithoutUsersNestedInput
-    verification_tokens?: verification_tokensUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type ordersUpsertWithWhereUniqueWithoutDirecctionInput = {
-    where: ordersWhereUniqueInput
-    update: XOR<ordersUpdateWithoutDirecctionInput, ordersUncheckedUpdateWithoutDirecctionInput>
-    create: XOR<ordersCreateWithoutDirecctionInput, ordersUncheckedCreateWithoutDirecctionInput>
-  }
-
-  export type ordersUpdateWithWhereUniqueWithoutDirecctionInput = {
-    where: ordersWhereUniqueInput
-    data: XOR<ordersUpdateWithoutDirecctionInput, ordersUncheckedUpdateWithoutDirecctionInput>
-  }
-
-  export type ordersUpdateManyWithWhereWithoutDirecctionInput = {
-    where: ordersScalarWhereInput
-    data: XOR<ordersUpdateManyMutationInput, ordersUncheckedUpdateManyWithoutDirecctionInput>
-  }
-
-  export type citiesCreateWithoutProvincesInput = {
-    name: string
-    name_local: string
-    directions?: directionsCreateNestedManyWithoutCitiesInput
-  }
-
-  export type citiesUncheckedCreateWithoutProvincesInput = {
-    id?: number
-    name: string
-    name_local: string
-    directions?: directionsUncheckedCreateNestedManyWithoutCitiesInput
-  }
-
-  export type citiesCreateOrConnectWithoutProvincesInput = {
-    where: citiesWhereUniqueInput
-    create: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput>
-  }
-
-  export type citiesCreateManyProvincesInputEnvelope = {
-    data: citiesCreateManyProvincesInput | citiesCreateManyProvincesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type directionsCreateWithoutProvincesInput = {
-    id?: bigint | number
-    type?: $Enums.AddressType
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    cities: citiesCreateNestedOneWithoutDirectionsInput
-    countries: countriesCreateNestedOneWithoutDirectionsInput
-    users: usersCreateNestedOneWithoutDirectionsInput
-    orders?: ordersCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsUncheckedCreateWithoutProvincesInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    country_iso: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-    orders?: ordersUncheckedCreateNestedManyWithoutDirecctionInput
-  }
-
-  export type directionsCreateOrConnectWithoutProvincesInput = {
-    where: directionsWhereUniqueInput
-    create: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput>
-  }
-
-  export type directionsCreateManyProvincesInputEnvelope = {
-    data: directionsCreateManyProvincesInput | directionsCreateManyProvincesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type countriesCreateWithoutProvincesInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currencies?: currenciesCreateNestedOneWithoutCountriesInput
-    directions?: directionsCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesUncheckedCreateWithoutProvincesInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    currency_id?: number | null
-    directions?: directionsUncheckedCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesCreateOrConnectWithoutProvincesInput = {
-    where: countriesWhereUniqueInput
-    create: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
-  }
-
-  export type citiesUpsertWithWhereUniqueWithoutProvincesInput = {
-    where: citiesWhereUniqueInput
-    update: XOR<citiesUpdateWithoutProvincesInput, citiesUncheckedUpdateWithoutProvincesInput>
-    create: XOR<citiesCreateWithoutProvincesInput, citiesUncheckedCreateWithoutProvincesInput>
-  }
-
-  export type citiesUpdateWithWhereUniqueWithoutProvincesInput = {
-    where: citiesWhereUniqueInput
-    data: XOR<citiesUpdateWithoutProvincesInput, citiesUncheckedUpdateWithoutProvincesInput>
-  }
-
-  export type citiesUpdateManyWithWhereWithoutProvincesInput = {
-    where: citiesScalarWhereInput
-    data: XOR<citiesUpdateManyMutationInput, citiesUncheckedUpdateManyWithoutProvincesInput>
-  }
-
-  export type citiesScalarWhereInput = {
-    AND?: citiesScalarWhereInput | citiesScalarWhereInput[]
-    OR?: citiesScalarWhereInput[]
-    NOT?: citiesScalarWhereInput | citiesScalarWhereInput[]
-    id?: IntFilter<"cities"> | number
-    province_id?: IntFilter<"cities"> | number
-    name?: StringFilter<"cities"> | string
-    name_local?: StringFilter<"cities"> | string
-  }
-
-  export type directionsUpsertWithWhereUniqueWithoutProvincesInput = {
-    where: directionsWhereUniqueInput
-    update: XOR<directionsUpdateWithoutProvincesInput, directionsUncheckedUpdateWithoutProvincesInput>
-    create: XOR<directionsCreateWithoutProvincesInput, directionsUncheckedCreateWithoutProvincesInput>
-  }
-
-  export type directionsUpdateWithWhereUniqueWithoutProvincesInput = {
-    where: directionsWhereUniqueInput
-    data: XOR<directionsUpdateWithoutProvincesInput, directionsUncheckedUpdateWithoutProvincesInput>
-  }
-
-  export type directionsUpdateManyWithWhereWithoutProvincesInput = {
-    where: directionsScalarWhereInput
-    data: XOR<directionsUpdateManyMutationInput, directionsUncheckedUpdateManyWithoutProvincesInput>
-  }
-
-  export type countriesUpsertWithoutProvincesInput = {
-    update: XOR<countriesUpdateWithoutProvincesInput, countriesUncheckedUpdateWithoutProvincesInput>
-    create: XOR<countriesCreateWithoutProvincesInput, countriesUncheckedCreateWithoutProvincesInput>
-    where?: countriesWhereInput
-  }
-
-  export type countriesUpdateToOneWithWhereWithoutProvincesInput = {
-    where?: countriesWhereInput
-    data: XOR<countriesUpdateWithoutProvincesInput, countriesUncheckedUpdateWithoutProvincesInput>
-  }
-
-  export type countriesUpdateWithoutProvincesInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currencies?: currenciesUpdateOneWithoutCountriesNestedInput
-    directions?: directionsUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesUncheckedUpdateWithoutProvincesInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    currency_id?: NullableIntFieldUpdateOperationsInput | number | null
-    directions?: directionsUncheckedUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesCreateWithoutCurrenciesInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    directions?: directionsCreateNestedManyWithoutCountriesInput
-    provinces?: provincesCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesUncheckedCreateWithoutCurrenciesInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-    directions?: directionsUncheckedCreateNestedManyWithoutCountriesInput
-    provinces?: provincesUncheckedCreateNestedManyWithoutCountriesInput
-  }
-
-  export type countriesCreateOrConnectWithoutCurrenciesInput = {
-    where: countriesWhereUniqueInput
-    create: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput>
-  }
-
-  export type countriesCreateManyCurrenciesInputEnvelope = {
-    data: countriesCreateManyCurrenciesInput | countriesCreateManyCurrenciesInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type countriesUpsertWithWhereUniqueWithoutCurrenciesInput = {
-    where: countriesWhereUniqueInput
-    update: XOR<countriesUpdateWithoutCurrenciesInput, countriesUncheckedUpdateWithoutCurrenciesInput>
-    create: XOR<countriesCreateWithoutCurrenciesInput, countriesUncheckedCreateWithoutCurrenciesInput>
-  }
-
-  export type countriesUpdateWithWhereUniqueWithoutCurrenciesInput = {
-    where: countriesWhereUniqueInput
-    data: XOR<countriesUpdateWithoutCurrenciesInput, countriesUncheckedUpdateWithoutCurrenciesInput>
-  }
-
-  export type countriesUpdateManyWithWhereWithoutCurrenciesInput = {
-    where: countriesScalarWhereInput
-    data: XOR<countriesUpdateManyMutationInput, countriesUncheckedUpdateManyWithoutCurrenciesInput>
-  }
-
-  export type countriesScalarWhereInput = {
-    AND?: countriesScalarWhereInput | countriesScalarWhereInput[]
-    OR?: countriesScalarWhereInput[]
-    NOT?: countriesScalarWhereInput | countriesScalarWhereInput[]
-    iso_alpha2?: StringFilter<"countries"> | string
-    iso_alpha3?: StringFilter<"countries"> | string
-    iso_numeric?: IntFilter<"countries"> | number
-    name?: StringFilter<"countries"> | string
-    name_local?: StringFilter<"countries"> | string
-    currency_id?: IntNullableFilter<"countries"> | number | null
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: categoriesUncheckedUpdateManyWithoutParentNestedInput
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
   }
 
   export type cart_detailsCreateManyCartsInput = {
@@ -49039,92 +52241,98 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type categoriesCreateManyCategoriesInput = {
+  export type categoriesCreateManyParentInput = {
     id?: bigint | number
     user_id?: string | null
     name: string
     iva?: Decimal | DecimalJsLike | number | string | null
     created_at?: Date | string
+    level: number
+    name_unaccent?: string | null
   }
 
-  export type productsCreateManyCategoriesInput = {
-    id?: bigint | number
-    user_id: string
+  export type category_translationsCreateManyCategoriesInput = {
+    lang_code: string
     name: string
-    title?: string | null
-    description?: string | null
-    iva: Decimal | DecimalJsLike | number | string
-    status?: number
+    name_unaccent?: string | null
+  }
+
+  export type product_categoriesCreateManyCategoriesInput = {
+    product_id: bigint | number
+    is_primary?: boolean
     created_at?: Date | string
-    product_code: string
   }
 
-  export type categoriesUpdateWithoutCategoriesInput = {
+  export type categoriesUpdateWithoutParentInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    other_categories?: categoriesUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: categoriesUpdateManyWithoutParentNestedInput
     users?: usersUpdateOneWithoutCategoriesNestedInput
-    products?: productsUpdateManyWithoutCategoriesNestedInput
+    category_translations?: category_translationsUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutCategoriesNestedInput
   }
 
-  export type categoriesUncheckedUpdateWithoutCategoriesInput = {
+  export type categoriesUncheckedUpdateWithoutParentInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    other_categories?: categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
-    products?: productsUncheckedUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: categoriesUncheckedUpdateManyWithoutParentNestedInput
+    category_translations?: category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
   }
 
-  export type categoriesUncheckedUpdateManyWithoutCategoriesInput = {
+  export type categoriesUncheckedUpdateManyWithoutParentInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     user_id?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type productsUpdateWithoutCategoriesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+  export type category_translationsUpdateWithoutCategoriesInput = {
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    product_code?: StringFieldUpdateOperationsInput | string
-    users?: usersUpdateOneRequiredWithoutProductsNestedInput
-    products_files?: products_filesUpdateManyWithoutProductsNestedInput
-    variant_products?: variant_productsUpdateManyWithoutProductsNestedInput
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type productsUncheckedUpdateWithoutCategoriesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
+  export type category_translationsUncheckedUpdateWithoutCategoriesInput = {
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    product_code?: StringFieldUpdateOperationsInput | string
-    products_files?: products_filesUncheckedUpdateManyWithoutProductsNestedInput
-    variant_products?: variant_productsUncheckedUpdateManyWithoutProductsNestedInput
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type productsUncheckedUpdateManyWithoutCategoriesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
+  export type category_translationsUncheckedUpdateManyWithoutCategoriesInput = {
+    lang_code?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type product_categoriesUpdateWithoutCategoriesInput = {
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    product_code?: StringFieldUpdateOperationsInput | string
+    products?: productsUpdateOneRequiredWithoutProduct_categoriesNestedInput
+  }
+
+  export type product_categoriesUncheckedUpdateWithoutCategoriesInput = {
+    product_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type product_categoriesUncheckedUpdateManyWithoutCategoriesInput = {
+    product_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type chat_participantsCreateManyChat_panelsInput = {
@@ -49187,6 +52395,185 @@ export namespace Prisma {
     is_read?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type directionsCreateManyCitiesInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    country_iso: number
+    province_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type directionsUpdateWithoutCitiesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
+    provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
+    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
+    orders?: ordersUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateWithoutCitiesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    country_iso?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orders?: ordersUncheckedUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateManyWithoutCitiesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    country_iso?: IntFieldUpdateOperationsInput | number
+    province_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type directionsCreateManyCountriesInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    province_id: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type provincesCreateManyCountriesInput = {
+    id?: number
+    name: string
+    name_local: string
+  }
+
+  export type directionsUpdateWithoutCountriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
+    provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
+    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
+    orders?: ordersUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateWithoutCountriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    province_id?: IntFieldUpdateOperationsInput | number
+    city_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orders?: ordersUncheckedUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateManyWithoutCountriesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    province_id?: IntFieldUpdateOperationsInput | number
+    city_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type provincesUpdateWithoutCountriesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    cities?: citiesUpdateManyWithoutProvincesNestedInput
+    directions?: directionsUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type provincesUncheckedUpdateWithoutCountriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    cities?: citiesUncheckedUpdateManyWithoutProvincesNestedInput
+    directions?: directionsUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type provincesUncheckedUpdateManyWithoutCountriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type countriesCreateManyCurrenciesInput = {
+    iso_alpha2: string
+    iso_alpha3: string
+    iso_numeric: number
+    name: string
+    name_local: string
+  }
+
+  export type countriesUpdateWithoutCurrenciesInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUpdateManyWithoutCountriesNestedInput
+    provinces?: provincesUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type countriesUncheckedUpdateWithoutCurrenciesInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUncheckedUpdateManyWithoutCountriesNestedInput
+    provinces?: provincesUncheckedUpdateManyWithoutCountriesNestedInput
+  }
+
+  export type countriesUncheckedUpdateManyWithoutCurrenciesInput = {
+    iso_alpha2?: StringFieldUpdateOperationsInput | string
+    iso_alpha3?: StringFieldUpdateOperationsInput | string
+    iso_numeric?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
   export type delivery_timelineCreateManyDeliveriesInput = {
     id?: bigint | number
     status: $Enums.DeliveryStatus
@@ -49221,6 +52608,76 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     latitude?: FloatFieldUpdateOperationsInput | number
     longitude?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type ordersCreateManyDirectionsInput = {
+    id?: bigint | number
+    retailer_id?: string | null
+    wholesaler_id?: string | null
+    status?: number
+    payment_method: number
+    notes?: string | null
+    discount_total: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
+    total: Decimal | DecimalJsLike | number | string
+    iva_total: Decimal | DecimalJsLike | number | string
+    discount_log: JsonNullValueInput | InputJsonValue
+    estimated_date?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type ordersUpdateWithoutDirectionsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    status?: IntFieldUpdateOperationsInput | number
+    payment_method?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    iva_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount_log?: JsonNullValueInput | InputJsonValue
+    estimated_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    order_details?: order_detailsUpdateManyWithoutOrdersNestedInput
+    users_orders_retailer_idTousers?: usersUpdateOneWithoutOrders_orders_retailer_idTousersNestedInput
+    users_orders_wholesaler_idTousers?: usersUpdateOneWithoutOrders_orders_wholesaler_idTousersNestedInput
+  }
+
+  export type ordersUncheckedUpdateWithoutDirectionsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    retailer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    wholesaler_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: IntFieldUpdateOperationsInput | number
+    payment_method?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    iva_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount_log?: JsonNullValueInput | InputJsonValue
+    estimated_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    order_details?: order_detailsUncheckedUpdateManyWithoutOrdersNestedInput
+  }
+
+  export type ordersUncheckedUpdateManyWithoutDirectionsInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    retailer_id?: NullableStringFieldUpdateOperationsInput | string | null
+    wholesaler_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: IntFieldUpdateOperationsInput | number
+    payment_method?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    iva_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    discount_log?: JsonNullValueInput | InputJsonValue
+    estimated_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type message_filesCreateManyFilesInput = {
@@ -49391,6 +52848,12 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type product_categoriesCreateManyProductsInput = {
+    category_id: bigint | number
+    is_primary?: boolean
+    created_at?: Date | string
+  }
+
   export type products_filesCreateManyProductsInput = {
     id?: bigint | number
     file_id: bigint | number
@@ -49413,6 +52876,24 @@ export namespace Prisma {
     low_stock_threshold?: number
     sale_unit_qty?: number
     min_order_qty?: number
+  }
+
+  export type product_categoriesUpdateWithoutProductsInput = {
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    categories?: categoriesUpdateOneRequiredWithoutProduct_categoriesNestedInput
+  }
+
+  export type product_categoriesUncheckedUpdateWithoutProductsInput = {
+    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type product_categoriesUncheckedUpdateManyWithoutProductsInput = {
+    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
+    is_primary?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type products_filesUpdateWithoutProductsInput = {
@@ -49491,6 +52972,89 @@ export namespace Prisma {
     min_order_qty?: IntFieldUpdateOperationsInput | number
   }
 
+  export type citiesCreateManyProvincesInput = {
+    id?: number
+    name: string
+    name_local: string
+  }
+
+  export type directionsCreateManyProvincesInput = {
+    id?: bigint | number
+    user_id: string
+    type?: $Enums.AddressType
+    country_iso: number
+    city_id: number
+    street: string
+    zip_code: string
+    latitude?: number | null
+    longitude?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type citiesUpdateWithoutProvincesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUpdateManyWithoutCitiesNestedInput
+  }
+
+  export type citiesUncheckedUpdateWithoutProvincesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+    directions?: directionsUncheckedUpdateManyWithoutCitiesNestedInput
+  }
+
+  export type citiesUncheckedUpdateManyWithoutProvincesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    name_local?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type directionsUpdateWithoutProvincesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
+    countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
+    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
+    orders?: ordersUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateWithoutProvincesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    country_iso?: IntFieldUpdateOperationsInput | number
+    city_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    orders?: ordersUncheckedUpdateManyWithoutDirectionsNestedInput
+  }
+
+  export type directionsUncheckedUpdateManyWithoutProvincesInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
+    country_iso?: IntFieldUpdateOperationsInput | number
+    city_id?: IntFieldUpdateOperationsInput | number
+    street?: StringFieldUpdateOperationsInput | string
+    zip_code?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type cartsCreateManyUsersInput = {
     id?: bigint | number
     created_at?: Date | string
@@ -49502,6 +53066,8 @@ export namespace Prisma {
     iva?: Decimal | DecimalJsLike | number | string | null
     parent_id?: bigint | number | null
     created_at?: Date | string
+    level: number
+    name_unaccent?: string | null
   }
 
   export type chat_participantsCreateManyUsersInput = {
@@ -49606,8 +53172,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     iva: Decimal | DecimalJsLike | number | string
-    category_id: bigint | number
-    status?: number
+    status?: $Enums.ProductStatus
     created_at?: Date | string
     product_code: string
   }
@@ -49655,9 +53220,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    categories?: categoriesUpdateOneWithoutOther_categoriesNestedInput
-    other_categories?: categoriesUpdateManyWithoutCategoriesNestedInput
-    products?: productsUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    parent?: categoriesUpdateOneWithoutChildrenNestedInput
+    children?: categoriesUpdateManyWithoutParentNestedInput
+    category_translations?: category_translationsUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutCategoriesNestedInput
   }
 
   export type categoriesUncheckedUpdateWithoutUsersInput = {
@@ -49666,8 +53234,11 @@ export namespace Prisma {
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    other_categories?: categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
-    products?: productsUncheckedUpdateManyWithoutCategoriesNestedInput
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
+    children?: categoriesUncheckedUpdateManyWithoutParentNestedInput
+    category_translations?: category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
   }
 
   export type categoriesUncheckedUpdateManyWithoutUsersInput = {
@@ -49676,6 +53247,8 @@ export namespace Prisma {
     iva?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     parent_id?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    level?: IntFieldUpdateOperationsInput | number
+    name_unaccent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type chat_participantsUpdateWithoutUsersInput = {
@@ -49746,7 +53319,7 @@ export namespace Prisma {
     cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
     countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
     provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
-    orders?: ordersUpdateManyWithoutDirecctionNestedInput
+    orders?: ordersUpdateManyWithoutDirectionsNestedInput
   }
 
   export type directionsUncheckedUpdateWithoutUsersInput = {
@@ -49761,7 +53334,7 @@ export namespace Prisma {
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    orders?: ordersUncheckedUpdateManyWithoutDirecctionNestedInput
+    orders?: ordersUncheckedUpdateManyWithoutDirectionsNestedInput
   }
 
   export type directionsUncheckedUpdateManyWithoutUsersInput = {
@@ -49886,7 +53459,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     order_details?: order_detailsUpdateManyWithoutOrdersNestedInput
-    direcction?: directionsUpdateOneWithoutOrdersNestedInput
+    directions?: directionsUpdateOneWithoutOrdersNestedInput
     users_orders_wholesaler_idTousers?: usersUpdateOneWithoutOrders_orders_wholesaler_idTousersNestedInput
   }
 
@@ -49940,7 +53513,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     order_details?: order_detailsUpdateManyWithoutOrdersNestedInput
     users_orders_retailer_idTousers?: usersUpdateOneWithoutOrders_orders_retailer_idTousersNestedInput
-    direcction?: directionsUpdateOneWithoutOrdersNestedInput
+    directions?: directionsUpdateOneWithoutOrdersNestedInput
   }
 
   export type ordersUncheckedUpdateWithoutUsers_orders_wholesaler_idTousersInput = {
@@ -49984,10 +53557,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
-    categories?: categoriesUpdateOneRequiredWithoutProductsNestedInput
+    product_categories?: product_categoriesUpdateManyWithoutProductsNestedInput
     products_files?: products_filesUpdateManyWithoutProductsNestedInput
     variant_products?: variant_productsUpdateManyWithoutProductsNestedInput
   }
@@ -49998,10 +53571,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
+    product_categories?: product_categoriesUncheckedUpdateManyWithoutProductsNestedInput
     products_files?: products_filesUncheckedUpdateManyWithoutProductsNestedInput
     variant_products?: variant_productsUncheckedUpdateManyWithoutProductsNestedInput
   }
@@ -50012,8 +53585,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iva?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    category_id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
+    status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product_code?: StringFieldUpdateOperationsInput | string
   }
@@ -50163,338 +53735,6 @@ export namespace Prisma {
     discount_applied?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     attributes?: JsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type directionsCreateManyCitiesInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    country_iso: number
-    province_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-  }
-
-  export type directionsUpdateWithoutCitiesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
-    provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
-    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
-    orders?: ordersUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateWithoutCitiesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    country_iso?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    orders?: ordersUncheckedUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateManyWithoutCitiesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    country_iso?: IntFieldUpdateOperationsInput | number
-    province_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type directionsCreateManyCountriesInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    province_id: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-  }
-
-  export type provincesCreateManyCountriesInput = {
-    id?: number
-    name: string
-    name_local: string
-  }
-
-  export type directionsUpdateWithoutCountriesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
-    provinces?: provincesUpdateOneRequiredWithoutDirectionsNestedInput
-    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
-    orders?: ordersUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateWithoutCountriesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    province_id?: IntFieldUpdateOperationsInput | number
-    city_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    orders?: ordersUncheckedUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateManyWithoutCountriesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    province_id?: IntFieldUpdateOperationsInput | number
-    city_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type provincesUpdateWithoutCountriesInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    cities?: citiesUpdateManyWithoutProvincesNestedInput
-    directions?: directionsUpdateManyWithoutProvincesNestedInput
-  }
-
-  export type provincesUncheckedUpdateWithoutCountriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    cities?: citiesUncheckedUpdateManyWithoutProvincesNestedInput
-    directions?: directionsUncheckedUpdateManyWithoutProvincesNestedInput
-  }
-
-  export type provincesUncheckedUpdateManyWithoutCountriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ordersCreateManyDirecctionInput = {
-    id?: bigint | number
-    retailer_id?: string | null
-    wholesaler_id?: string | null
-    status?: number
-    payment_method: number
-    notes?: string | null
-    discount_total: Decimal | DecimalJsLike | number | string
-    subtotal: Decimal | DecimalJsLike | number | string
-    total: Decimal | DecimalJsLike | number | string
-    iva_total: Decimal | DecimalJsLike | number | string
-    discount_log: JsonNullValueInput | InputJsonValue
-    estimated_date?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-  }
-
-  export type ordersUpdateWithoutDirecctionInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    status?: IntFieldUpdateOperationsInput | number
-    payment_method?: IntFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    discount_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    iva_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discount_log?: JsonNullValueInput | InputJsonValue
-    estimated_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    order_details?: order_detailsUpdateManyWithoutOrdersNestedInput
-    users_orders_retailer_idTousers?: usersUpdateOneWithoutOrders_orders_retailer_idTousersNestedInput
-    users_orders_wholesaler_idTousers?: usersUpdateOneWithoutOrders_orders_wholesaler_idTousersNestedInput
-  }
-
-  export type ordersUncheckedUpdateWithoutDirecctionInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    retailer_id?: NullableStringFieldUpdateOperationsInput | string | null
-    wholesaler_id?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: IntFieldUpdateOperationsInput | number
-    payment_method?: IntFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    discount_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    iva_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discount_log?: JsonNullValueInput | InputJsonValue
-    estimated_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    order_details?: order_detailsUncheckedUpdateManyWithoutOrdersNestedInput
-  }
-
-  export type ordersUncheckedUpdateManyWithoutDirecctionInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    retailer_id?: NullableStringFieldUpdateOperationsInput | string | null
-    wholesaler_id?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: IntFieldUpdateOperationsInput | number
-    payment_method?: IntFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    discount_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    iva_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    discount_log?: JsonNullValueInput | InputJsonValue
-    estimated_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type citiesCreateManyProvincesInput = {
-    id?: number
-    name: string
-    name_local: string
-  }
-
-  export type directionsCreateManyProvincesInput = {
-    id?: bigint | number
-    user_id: string
-    type?: $Enums.AddressType
-    country_iso: number
-    city_id: number
-    street: string
-    zip_code: string
-    latitude?: number | null
-    longitude?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string | null
-  }
-
-  export type citiesUpdateWithoutProvincesInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUpdateManyWithoutCitiesNestedInput
-  }
-
-  export type citiesUncheckedUpdateWithoutProvincesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUncheckedUpdateManyWithoutCitiesNestedInput
-  }
-
-  export type citiesUncheckedUpdateManyWithoutProvincesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type directionsUpdateWithoutProvincesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    cities?: citiesUpdateOneRequiredWithoutDirectionsNestedInput
-    countries?: countriesUpdateOneRequiredWithoutDirectionsNestedInput
-    users?: usersUpdateOneRequiredWithoutDirectionsNestedInput
-    orders?: ordersUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateWithoutProvincesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    country_iso?: IntFieldUpdateOperationsInput | number
-    city_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    orders?: ordersUncheckedUpdateManyWithoutDirecctionNestedInput
-  }
-
-  export type directionsUncheckedUpdateManyWithoutProvincesInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    user_id?: StringFieldUpdateOperationsInput | string
-    type?: EnumAddressTypeFieldUpdateOperationsInput | $Enums.AddressType
-    country_iso?: IntFieldUpdateOperationsInput | number
-    city_id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    zip_code?: StringFieldUpdateOperationsInput | string
-    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type countriesCreateManyCurrenciesInput = {
-    iso_alpha2: string
-    iso_alpha3: string
-    iso_numeric: number
-    name: string
-    name_local: string
-  }
-
-  export type countriesUpdateWithoutCurrenciesInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUpdateManyWithoutCountriesNestedInput
-    provinces?: provincesUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesUncheckedUpdateWithoutCurrenciesInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
-    directions?: directionsUncheckedUpdateManyWithoutCountriesNestedInput
-    provinces?: provincesUncheckedUpdateManyWithoutCountriesNestedInput
-  }
-
-  export type countriesUncheckedUpdateManyWithoutCurrenciesInput = {
-    iso_alpha2?: StringFieldUpdateOperationsInput | string
-    iso_alpha3?: StringFieldUpdateOperationsInput | string
-    iso_numeric?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    name_local?: StringFieldUpdateOperationsInput | string
   }
 
 

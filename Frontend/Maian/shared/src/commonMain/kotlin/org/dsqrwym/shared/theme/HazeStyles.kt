@@ -76,17 +76,17 @@ object MyHazeStyles {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
         return HazeStyle(
-            blurRadius = 22.dp,
+            blurRadius = 24.dp,
             tints = listOf(
                 HazeTint(
                     color = if (isLight) {
                         SurfaceLight.copy(alpha = 0.70f)
                     } else {
-                        SurfaceDark.copy(alpha = 0.75f)
+                        SurfaceDark.copy(alpha = 0.70f)
                     }
                 )
             ),
-            noiseFactor = 0.15f
+            noiseFactor = 0.05f
         )
     }
 

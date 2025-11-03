@@ -47,6 +47,7 @@ fun NavGraphBuilder.menuNavGraph(
                 Text("Logout")
             }
         }
-
     }
+
+    categorieNavGraph(menuViewModel, navController, focusManager)
 }

@@ -222,6 +222,15 @@ export class LoginValidationStrategy {
       );
     }
 
+    let wholesalerId: string | undefined;
+    const enterprise: UserRole[] = [
+      UserRole.WHOLESALER,
+      UserRole.DELIVERY,
+      UserRole.SUPPORT,
+    ];
+    if (enterprise.includes(user.role)) {
+      wholesalerId = username?.split('@')[0];
+    }
     // Return authenticated user object that will be attached to request.user by Passport
     // 返回认证成功的用户对象，Passport 会将其附加到 request.user 上
     const result: UserPayload = {
@@ -230,6 +239,7 @@ export class LoginValidationStrategy {
       userStatus: user.status,
       deviceFinger: 'NONE',
       sessionId: 'NONE',
+      wholesalerId: wholesalerId,
     };
 
     return result;

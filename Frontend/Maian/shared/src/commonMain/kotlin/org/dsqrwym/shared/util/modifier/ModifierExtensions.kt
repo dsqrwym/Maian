@@ -1,8 +1,13 @@
 package org.dsqrwym.shared.util.modifier
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
+import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
+import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 
 fun Modifier.disableUserInput(disabled: Boolean): Modifier =
     if (disabled) {
@@ -16,3 +21,7 @@ fun Modifier.disableUserInput(disabled: Boolean): Modifier =
             }
         }
     } else this
+
+@Composable
+fun Modifier.paddingTopForMenu(): Modifier =
+    this.padding(top = if (calculateWindowSizeClass().widthSizeClass != WindowWidthSizeClass.Compact) 76.dp else 0.dp)

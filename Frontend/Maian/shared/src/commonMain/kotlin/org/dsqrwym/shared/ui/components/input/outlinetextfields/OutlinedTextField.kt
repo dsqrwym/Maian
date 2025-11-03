@@ -21,13 +21,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.icon_content_description_lock
+import maian.shared.generated.resources.icon_content_description_password_toggle_visibility
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Visibility
 import org.dsqrwym.shared.drawable.sharedicons.VisibilityOff
 import org.jetbrains.compose.resources.stringResource
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.icon_content_description_lock
-import maian.shared.generated.resources.icon_content_description_password_toggle_visibility
 
 /**
  * A reusable OutlinedTextField with icon support, password toggle, error states, and IME action handling.
@@ -80,6 +80,7 @@ import maian.shared.generated.resources.icon_content_description_password_toggle
  */
 @Composable
 fun MyOutlinedTextField(
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     value: String,
     onValueChange: (String) -> Unit,
@@ -112,7 +113,7 @@ fun MyOutlinedTextField(
 
     OutlinedTextField(
         enabled = enabled,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
             .semantics(properties = semanticsPropertyReceiver),

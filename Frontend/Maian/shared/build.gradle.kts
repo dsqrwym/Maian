@@ -107,6 +107,7 @@ kotlin {
 
             // Haze 核心库 利用各个平台API实现毛玻璃效果
             implementation(libs.haze)
+           // implementation(libs.haze.materials)
             // JSON处理
             implementation(libs.kotlinx.serialization.json)
             // 跨平台储存，防止在commonMain写很多代码

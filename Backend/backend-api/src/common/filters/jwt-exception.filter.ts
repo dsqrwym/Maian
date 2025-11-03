@@ -4,7 +4,7 @@ import {
   ExceptionFilter,
   Injectable,
 } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { PinoLogger } from 'nestjs-pino';
 import {
   JsonWebTokenError,
@@ -23,8 +23,7 @@ export class JwtExceptionFilter implements ExceptionFilter<JsonWebTokenError> {
 
   catch(exception: JsonWebTokenError, host: ArgumentsHost) {
     const reply = host.switchToHttp().getResponse<FastifyReply>();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const request = host.switchToHttp().getRequest();
+    const request: FastifyRequest = host.switchToHttp().getRequest();
 
     let message = 'Invalid token';
     if (exception instanceof TokenExpiredError) {
@@ -37,9 +36,7 @@ export class JwtExceptionFilter implements ExceptionFilter<JsonWebTokenError> {
       {
         name: exception.name,
         message: exception.message,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
         path: request?.url,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
         method: request?.method,
       },
       'JWT exception caught',

@@ -31,6 +31,7 @@ import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
 import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
+import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.navigation.isSameRoute
 
 /**
@@ -146,11 +147,11 @@ fun SharedRailWithTopBarLayout(
                 val selectedTabIndex by derivedStateOf {
                     primaryItems.indexOfFirst {
                         isSameRoute(currentRoute, it.item.route)
-                    }.coerceAtLeast(0)
+                    }.coerceAtLeast(-1)
                 }
                 PrimaryTabRow(
                     modifier = Modifier.hazeEffect(topNavigationHaze, topNavigationHazeStyle) {
-                        alpha = 0.98f
+                        alpha = 0.76f
                         progressive = HazeProgressive.verticalGradient(
                             startIntensity = 1.8f,
                             endIntensity = 0.18f
@@ -159,6 +160,7 @@ fun SharedRailWithTopBarLayout(
                     selectedTabIndex = selectedTabIndex,
                     containerColor = Color.Transparent,
                     indicator = {
+                        if (selectedTabIndex < 0) return@PrimaryTabRow
                         TabRowDefaults.PrimaryIndicator(
                             modifier = Modifier.tabIndicatorOffset(selectedTabIndex, matchContentSize = true),
                             width = Dp.Unspecified,
@@ -182,7 +184,7 @@ fun SharedRailWithTopBarLayout(
                                                 Int.MAX_VALUE,
                                                 MarqueeAnimationMode.Immediately
                                             ),
-                                        text = state.item.label,
+                                        text = state.item.label.asString() ?: "tab item label",
                                         style = MaterialTheme.typography.labelLarge,
                                         maxLines = 1
                                     )
@@ -191,7 +193,7 @@ fun SharedRailWithTopBarLayout(
                                     MyBadgedBox(state.showBadge, state.badgeCount) {
                                         SharedMenuIcon(
                                             imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                            contentDescription = state.item.iconContentDescription
+                                            contentDescription = state.item.iconContentDescription.asString() ?: "tab item icon"
                                         )
                                     }
                                 }

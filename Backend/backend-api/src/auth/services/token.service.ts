@@ -171,6 +171,7 @@ export class TokenService {
       deviceFinger: payload.deviceFinger,
       userRole: payload.userRole,
       userStatus: payload.userStatus,
+      wholesalerId: payload.wholesalerId,
     };
 
     const newAccessToken = await this.jwtService.signAsync(newPayload);

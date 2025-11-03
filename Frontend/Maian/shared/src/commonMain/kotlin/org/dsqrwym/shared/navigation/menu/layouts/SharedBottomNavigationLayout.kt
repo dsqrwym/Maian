@@ -20,6 +20,9 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.launch
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.menu_close_content_description
+import maian.shared.generated.resources.menu_open_content_description
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.theme.MyHazeStyles
@@ -27,11 +30,9 @@ import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
 import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
+import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.navigation.isSameRoute
 import org.jetbrains.compose.resources.stringResource
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.menu_close_content_description
-import maian.shared.generated.resources.menu_open_content_description
 
 /**
  * 底部导航布局 (用于手机竖屏 < 600dp)
@@ -76,9 +77,8 @@ fun SharedBottomNavigationLayout(
             if (drawerItems.isNotEmpty()) {
                 ModalDrawerSheet(
                     modifier = Modifier.fillMaxWidth(0.58f).hazeEffect(state = drawerHazeState) {
-                        // 使用标准样式，无渐进式模糊
                         style = drawerHazeStyle
-                        alpha = 1f
+                        alpha = 0.86f
                         progressive = HazeProgressive.horizontalGradient(
                             easing = LinearEasing,
                             startIntensity = 2f,
@@ -112,11 +112,11 @@ fun SharedBottomNavigationLayout(
                                         MyBadgedBox(state.showBadge, state.badgeCount) {
                                             SharedMenuIcon(
                                                 imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                                contentDescription = state.item.iconContentDescription
+                                                contentDescription = state.item.iconContentDescription.asString() ?: "menu item icon"
                                             )
                                         }
                                     },
-                                    label = { Text(state.item.label) },
+                                    label = { Text(state.item.label.asString() ?: "navigation item label") },
                                     selected = isSameRoute(currentRoute, state.item.route),
                                     onClick = {
                                         onNavigate(state.item.route)
@@ -134,7 +134,7 @@ fun SharedBottomNavigationLayout(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(currentItem?.item?.label ?: "") },
+                    title = { Text(currentItem?.item?.label.asString() ?: "title") },
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
@@ -199,12 +199,12 @@ fun SharedBottomNavigationLayout(
                                     MyBadgedBox(state.showBadge, state.badgeCount) {
                                         SharedMenuIcon(
                                             imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                            contentDescription = state.item.iconContentDescription
+                                            contentDescription = state.item.iconContentDescription.asString() ?: "menu item icon"
                                         )
                                     }
                                 }
                             },
-                            label = { Text(state.item.label) },
+                            label = { Text(state.item.label.asString() ?: "navigation item label") },
                             selected = isSameRoute(currentRoute, state.item.route),
                             onClick = { onNavigate(state.item.route) }
                         )

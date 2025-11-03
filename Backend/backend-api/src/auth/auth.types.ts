@@ -36,6 +36,8 @@ interface UserPayload {
    * 每次登录生成一个唯一的 sessionId，用于精确控制和撤销特定会话。
    */
   sessionId: string;
+
+  wholesalerId?: string;
 }
 
 /**

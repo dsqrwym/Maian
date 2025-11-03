@@ -16,17 +16,18 @@ import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
-import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
-import org.dsqrwym.shared.theme.MyHazeStyles
-import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
-import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
-import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
-import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
-import org.dsqrwym.shared.util.navigation.isSameRoute
-import org.jetbrains.compose.resources.stringResource
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.menu_close_content_description
 import maian.shared.generated.resources.menu_open_content_description
+import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
+import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
+import org.dsqrwym.shared.theme.MyHazeStyles
+import org.dsqrwym.shared.ui.components.containers.MyBadgedBox
+import org.dsqrwym.shared.ui.components.menu.SharedMenuIcon
+import org.dsqrwym.shared.ui.components.menu.SharedMenuTooltipBox
+import org.dsqrwym.shared.util.formatter.asString
+import org.dsqrwym.shared.util.navigation.isSameRoute
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Navigation Rail 布局 (用于平板、手机横屏 600-840dp)
@@ -71,7 +72,7 @@ fun SharedNavigationRailLayout(
                     }
                 },
                 title = {
-                    Text(currentItem?.item?.label ?: "")
+                    Text(currentItem?.item?.label.asString() ?: "title")
                 },
                 actions = {
                     menuConfig.topBarActions?.forEach {
@@ -85,7 +86,7 @@ fun SharedNavigationRailLayout(
                         preferPerformance = false // 设为 true 可提升性能但降低质量
                     )
                     style = topBarHazeStyle
-                    alpha = 0.95f
+                    alpha = 0.85f
                 }
             )
         },
@@ -156,12 +157,12 @@ fun SharedNavigationRailItem(
                     MyBadgedBox(state.showBadge, state.badgeCount) {
                         SharedMenuIcon(
                             imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                            contentDescription = state.item.iconContentDescription
+                            contentDescription = state.item.iconContentDescription.asString() ?: "menu item icon"
                         )
                     }
                 }
             },
-            label = { Text(state.item.label) },
+            label = { Text(state.item.label.asString() ?: "navigation item label") },
             selected = isSameRoute(currentRoute, state.item.route),
             onClick = { onNavigate(state.item.route) }
         )

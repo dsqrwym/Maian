@@ -6,9 +6,6 @@ import androidx.compose.material.icons.outlined.ShopTwo
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.dashboard
-import maian.shared.generated.resources.profile
 import maian.standard.generated.resources.StandardRes
 import maian.standard.generated.resources.chat
 import maian.standard.generated.resources.shopping_cart
@@ -31,7 +28,6 @@ import org.dsqrwym.standard.navigation.ChatScreen
 import org.dsqrwym.standard.navigation.SuppliersScreen
 import org.dsqrwym.standard.navigation.navhost.authNavGraph
 import org.dsqrwym.standard.navigation.navhost.menuNavGraph
-import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
 
 /**
@@ -72,55 +68,35 @@ fun App(
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
                 var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
                 val menuList = listOf(
-                    SharedMenuItemState(
-                        SharedMenuItem(
-                            SharedMenuItem.Dashboard.route,
-                            stringResource(SharedRes.string.dashboard),
-                            SharedMenuItem.Dashboard.description,
-                            SharedMenuItem.Dashboard.icon,
-                            stringResource(SharedRes.string.dashboard),
-                            SharedMenuItem.Dashboard.requiredRole,
-                            SharedMenuItem.Dashboard.isPrimary
-                        )
-                    ),
+                    SharedMenuItemState(SharedMenuItem.Dashboard),
                     SharedMenuItemState(
                         SharedMenuItem(
                             route = SuppliersScreen,
-                            label = stringResource(StandardRes.string.wholesalers),
+                            label = StandardRes.string.wholesalers,
                             icon = Icons.Outlined.ShopTwo,
-                            iconContentDescription = stringResource(StandardRes.string.wholesalers),
+                            iconContentDescription = StandardRes.string.wholesalers,
                             isPrimary = true
                         )
                     ),
                     SharedMenuItemState(
                         SharedMenuItem(
                             route = ChatScreen,
-                            label = stringResource(StandardRes.string.chat),
+                            label = StandardRes.string.chat,
                             icon = Icons.AutoMirrored.Outlined.Chat,
-                            iconContentDescription = stringResource(StandardRes.string.chat),
+                            iconContentDescription = StandardRes.string.chat,
                             isPrimary = true
                         )
                     ),
                     SharedMenuItemState(
                         SharedMenuItem(
                             route = BasketScreen,
-                            label = stringResource(StandardRes.string.shopping_cart),
+                            label = StandardRes.string.shopping_cart,
                             icon = Icons.Outlined.ShoppingCart,
-                            iconContentDescription = stringResource(StandardRes.string.shopping_cart),
+                            iconContentDescription = StandardRes.string.shopping_cart,
                             isPrimary = true
                         )
                     ),
-                    SharedMenuItemState(
-                        SharedMenuItem(
-                            SharedMenuItem.Profile.route,
-                            stringResource(SharedRes.string.profile),
-                            SharedMenuItem.Profile.description,
-                            SharedMenuItem.Profile.icon,
-                            stringResource(SharedRes.string.profile),
-                            SharedMenuItem.Profile.requiredRole,
-                            SharedMenuItem.Profile.isPrimary
-                        )
-                    ),
+                    SharedMenuItemState(SharedMenuItem.Profile),
                 )
                 val topBarActions: List<SharedMenuActions> = listOf(
                     SharedMenuActions.ThemeChangeIconButton,

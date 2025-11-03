@@ -32,6 +32,7 @@ import { CaslModule } from './casl/casl.module';
 import { UserModule } from './user/user.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { AdminModule } from './admin/admin.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -82,7 +83,8 @@ import { AdminModule } from './admin/admin.module';
     CaslModule,
     UserModule,
     EnterpriseModule,
-    AdminModule, // 认证模块
+    AdminModule,
+    CategoryModule, // 认证模块
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
   providers: [

@@ -15,16 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.status_completed_content_description
+import maian.shared.generated.resources.status_error_content_description
+import maian.shared.generated.resources.status_in_progress_content_description
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.InProgress
 import org.dsqrwym.shared.theme.AppExtraColors
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.jetbrains.compose.resources.stringResource
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.status_completed_content_description
-import maian.shared.generated.resources.status_error_content_description
-import maian.shared.generated.resources.status_in_progress_content_description
 
 /**
  * AuthStepCard
@@ -78,47 +78,7 @@ fun AuthStepCard(
                     else -> null
                 }
                 targetState?.let {
-                    when (it) {
-                        UiState.Error -> {
-                            AnimatedImgVector(
-                                imageVector = Icons.Outlined.Info,
-                                durationMillis = commonDurationMillis,
-                                strokeWidth = 0.1.dp.value,
-                                drawFillAfter = commonDrawFillAfter,
-                                tint = MaterialTheme.colorScheme.error,
-                                useOriginalStrokeColor = commonUseOriginalStrokeColor,
-                                contentDescription = stringResource(SharedRes.string.status_error_content_description),
-                                modifier = commonModifier
-                            )
-                        }
-
-                        UiState.Success -> {
-                            AnimatedImgVector(
-                                imageVector = Icons.Outlined.CheckCircle,
-                                durationMillis = commonDurationMillis,
-                                drawFillAfter = commonDrawFillAfter,
-                                tint = AppExtraColors.current.correct,
-                                useOriginalStrokeColor = commonUseOriginalStrokeColor,
-                                contentDescription = stringResource(SharedRes.string.status_completed_content_description),
-                                modifier = commonModifier
-                            )
-                        }
-
-                        UiState.Loading -> {
-                            AnimatedImgVector(
-                                imageVector = SharedIcons.InProgress,
-                                durationMillis = commonDurationMillis,
-                                drawFillAfter = commonDrawFillAfter,
-                                tint = MaterialTheme.colorScheme.secondary,
-                                strokeWidth = 0.3.dp.value,
-                                useOriginalStrokeColor = commonUseOriginalStrokeColor,
-                                contentDescription = stringResource(SharedRes.string.status_in_progress_content_description),
-                                modifier = commonModifier
-                            )
-                        }
-
-                        else -> {}
-                    }
+                    StatusIcon(it)
                 }
             }
             Box {
@@ -137,5 +97,60 @@ fun AuthStepCard(
                 }
             }
         }
+    }
+}
+
+
+/**
+ * Status icon component
+ * 状态图标组件
+ */
+@Composable
+fun StatusIcon(uiState: UiState) {
+    val commonDurationMillis = 380
+    val commonDrawFillAfter = false
+    val commonUseOriginalStrokeColor = false
+    val commonModifier = Modifier.size(24.dp)
+
+    when (uiState) {
+        UiState.Error -> {
+            AnimatedImgVector(
+                imageVector = Icons.Outlined.Info,
+                durationMillis = commonDurationMillis,
+                strokeWidth = 0.1.dp.value,
+                drawFillAfter = commonDrawFillAfter,
+                tint = MaterialTheme.colorScheme.error,
+                useOriginalStrokeColor = commonUseOriginalStrokeColor,
+                contentDescription = stringResource(SharedRes.string.status_error_content_description),
+                modifier = commonModifier
+            )
+        }
+
+        UiState.Success -> {
+            AnimatedImgVector(
+                imageVector = Icons.Outlined.CheckCircle,
+                durationMillis = commonDurationMillis,
+                drawFillAfter = commonDrawFillAfter,
+                tint = AppExtraColors.current.correct,
+                useOriginalStrokeColor = commonUseOriginalStrokeColor,
+                contentDescription = stringResource(SharedRes.string.status_completed_content_description),
+                modifier = commonModifier
+            )
+        }
+
+        UiState.Loading -> {
+            AnimatedImgVector(
+                imageVector = SharedIcons.InProgress,
+                durationMillis = commonDurationMillis,
+                drawFillAfter = commonDrawFillAfter,
+                tint = MaterialTheme.colorScheme.secondary,
+                strokeWidth = 0.3.dp.value,
+                useOriginalStrokeColor = commonUseOriginalStrokeColor,
+                contentDescription = stringResource(SharedRes.string.status_in_progress_content_description),
+                modifier = commonModifier
+            )
+        }
+
+        else -> {}
     }
 }

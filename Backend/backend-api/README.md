@@ -804,7 +804,7 @@ CREATE INDEX idx_users_status ON users(status);
 **user_configurations 表**
 ```sql
 CREATE TABLE user_configurations (
-  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  userId UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   language VARCHAR(15) NOT NULL DEFAULT 'es-ES',
   timezone VARCHAR(50) NOT NULL DEFAULT 'Europe/Madrid',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
@@ -816,7 +816,7 @@ CREATE TABLE user_configurations (
 ```sql
 CREATE TABLE addresses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  userId UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   type VARCHAR(20) NOT NULL,
   country_iso CHAR(2) NOT NULL,
   province_id INTEGER,
@@ -830,7 +830,7 @@ CREATE TABLE addresses (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_addresses_user_id ON addresses(user_id);
+CREATE INDEX idx_addresses_user_id ON addresses(userId);
 CREATE INDEX idx_addresses_type ON addresses(type);
 ```
 

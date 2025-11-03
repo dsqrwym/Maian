@@ -2,9 +2,6 @@ package org.dsqrwym.enterprise
 
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.dashboard
-import maian.shared.generated.resources.profile
 import org.dsqrwym.enterprise.navigation.navhost.authNavGraph
 import org.dsqrwym.enterprise.navigation.navhost.menuNavGraph
 import org.dsqrwym.shared.AppRoot
@@ -20,7 +17,6 @@ import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
-import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
 
 /**
@@ -61,34 +57,14 @@ fun App(
                 var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
                 val menuViewModel = currentKoinScope().get<SharedMenuViewModel>()
                 val menuList = listOf(
-                    SharedMenuItemState(
-                        SharedMenuItem(
-                            SharedMenuItem.Dashboard.route,
-                            stringResource(SharedRes.string.dashboard),
-                            SharedMenuItem.Dashboard.description,
-                            SharedMenuItem.Dashboard.icon,
-                            stringResource(SharedRes.string.dashboard),
-                            SharedMenuItem.Dashboard.requiredRole,
-                            SharedMenuItem.Dashboard.isPrimary
-                        )
-                    ),
-                    SharedMenuItemState(
-                        SharedMenuItem(
-                            SharedMenuItem.Profile.route,
-                            stringResource(SharedRes.string.profile),
-                            SharedMenuItem.Profile.description,
-                            SharedMenuItem.Profile.icon,
-                            stringResource(SharedRes.string.profile),
-                            SharedMenuItem.Profile.requiredRole,
-                            SharedMenuItem.Profile.isPrimary
-                        )
-                    ),
+                    SharedMenuItemState(SharedMenuItem.Dashboard),
+                    SharedMenuItemState(SharedMenuItem.Profile),
                 )
                 val topBarActions: List<SharedMenuActions> = listOf(
                     SharedMenuActions.ThemeChangeIconButton,
                     SharedMenuActions.LanguageSwitcherIconButton,
                 )
-                val userRole = UserRole.RETAILER
+                val userRole = UserRole.WHOLESALER
 
                 // 已登录 → 渲染主业务 Graph
                 BackgroundImage(SharedImages.background()) {

@@ -60,9 +60,12 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
   }
 
   private serializeData<T>(data: unknown): T | PaginatedData<T> {
+    const replacer = (_: string, value: unknown) =>
+      typeof value === 'bigint' ? value.toString() : value;
     if (isPaginated<T>(data)) {
       return {
-        items: data.items,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        items: JSON.parse(JSON.stringify(data.items, replacer)),
         pagination: data.meta,
       };
     }

@@ -10,9 +10,14 @@ interface PaginationMeta {
   limit: number;
 }
 
+interface ToPaginated {
+  items: any;
+  meta: PaginationMeta;
+}
+
 interface PaginatedData<T> {
   items: T[];
   pagination: PaginationMeta;
 }
 
-export { Response, PaginationMeta, PaginatedData };
+export { Response, PaginationMeta, PaginatedData, ToPaginated };
