@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, UserRole, UserStatus } from 'prisma/generated';
+import { Prisma, UserRole, UserStatus } from '@prisma/client';
 import {
   SendVerificationCodeDto,
   VerifyCodeDto,

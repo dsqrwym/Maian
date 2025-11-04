@@ -1,4 +1,4 @@
-import { UserRole } from '../../../prisma/generated';
+import { UserRole, UserStatus } from '@prisma/client';
 import { AbilityBuilder } from '@casl/ability';
 import { AppAbility } from '../casl-types';
 import { Action } from '../actions';
@@ -13,21 +13,36 @@ export class CaslAbilityFactory {
     switch (user?.userRole) {
       case UserRole.ADMIN:
         can(Action.Access, 'Admin');
-        can(Action.Create, 'Categories');
-        can(Action.Update, 'Categories');
-        can(Action.Read, 'Categories');
+        can(Action.Manage, 'users', {
+          role: { notIn: [UserRole.ADMIN, UserRole.SUPERADMIN] },
+        });
+        can(Action.Create, 'categories');
+        can(Action.Update, 'categories');
+        can(Action.Read, 'categories');
         break;
       case UserRole.SUPERADMIN:
         can(Action.Access, 'Admin');
-        can(Action.Manage, 'Categories');
+        can(Action.Manage, 'users');
+        can(Action.Manage, 'categories');
         break;
       case UserRole.RETAILER:
         can(Action.Access, 'Standard');
-        can(Action.Read, 'Categories');
+        can(Action.Read, 'users', {
+          role: UserRole.WHOLESALER,
+          status: {
+            notIn: [
+              UserStatus.INACTIVE,
+              UserStatus.BANNED,
+              UserStatus.PENDING_VERIFICATION,
+              UserStatus.PENDING_REVIEW,
+            ],
+          },
+        });
+        can(Action.Read, 'categories');
         break;
       case UserRole.WHOLESALER:
         can(Action.Access, 'Enterprise');
-        can(Action.Manage, 'Categories', { user_id: user?.userId });
+        can(Action.Manage, 'categories', { user_id: user?.userId });
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');
@@ -37,7 +52,7 @@ export class CaslAbilityFactory {
         break;
       case UserRole.WAREHOUSE: {
         can(Action.Access, 'Enterprise');
-        can(Action.Manage, 'Categories', { user_id: user.wholesalerId });
+        can(Action.Manage, 'categories', { user_id: user.wholesalerId });
         break;
       }
     }

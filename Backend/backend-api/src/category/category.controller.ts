@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/guard/auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '../common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from 'prisma/generated';
+import { UserRole } from '@prisma/client';
 import { FindCategoryDto } from './dto/find-category.dto';
 import {
   ApiBearerAuth,
@@ -27,21 +27,23 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
+import { seconds, Throttle } from '@nestjs/throttler';
 
 /**
  * Controller for managing product categories
  * @class CategoryController
  */
-@Controller('category')
 @ApiTags('Category Management')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
-@UseGuards(RolesGuard)
 @ApiResponse({ status: 401, description: 'Unauthorized' })
 @ApiResponse({
   status: 403,
   description: 'Forbidden. Insufficient permissions',
 })
+@Controller()
+@Throttle({ default: { limit: 2, ttl: seconds(1) } })
+@UseGuards(JwtAuthGuard)
+@UseGuards(RolesGuard)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
@@ -72,7 +74,11 @@ export class CategoryController {
     @Req() req: FastifyRequest,
     @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<void> {
-    return this.categoryService.create(createCategoryDto, req.ability);
+    return this.categoryService.create(
+      createCategoryDto,
+      req.ability,
+      req.user,
+    );
   }
 
   /**
@@ -119,7 +125,11 @@ export class CategoryController {
     @Req() req: FastifyRequest,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ): Promise<void> {
-    return this.categoryService.update(updateCategoryDto, req.ability);
+    return this.categoryService.update(
+      updateCategoryDto,
+      req.ability,
+      req.user,
+    );
   }
 
   /**

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRole, UserStatus } from '../../prisma/generated';
+import { UserRole, UserStatus } from '@prisma/client';
 import { reduceDay } from '../utils/date.utils';
 
 @Injectable()

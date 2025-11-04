@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -15,11 +9,9 @@ import {
 import { LocationsService } from './locations.service';
 import { CacheTTL } from '@nestjs/cache-manager';
 import { DAY } from '../utils/date.utils';
-import { RedisCacheInterceptor } from '../cache/redis/redis.cache.interceptor';
 
 @ApiTags('Locations')
 @Controller('locations')
-@UseInterceptors(RedisCacheInterceptor)
 @CacheTTL(DAY)
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}

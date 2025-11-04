@@ -10,7 +10,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { AddressType } from '../../../prisma/generated';
+import { AddressType } from '@prisma/client';
 import { Type } from 'class-transformer';
 
 /**

@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import {
-  CheckUserEmailQueryDto,
-  CheckUserUsernameQueryDto,
-} from '../dto/check-user-query.dto';
-import { UserRole, UserStatus } from 'prisma/generated';
-import { Prisma } from 'prisma/generated';
-import usersWhereUniqueInput = Prisma.usersWhereUniqueInput;
+import { CheckUserUsernameQueryDto } from '../dto/check-user-query.dto';
+import { UserRole, UserStatus } from '@prisma/client';
 import { makeUsername } from '../../utils/user.utils';
 
 @Injectable()

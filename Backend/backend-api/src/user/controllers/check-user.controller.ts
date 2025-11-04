@@ -19,7 +19,7 @@ import {
 @ApiTags('User')
 @Throttle({ default: { limit: 2, ttl: seconds(1) } })
 @CacheTTL(30 * SECOND)
-@Controller('user/check')
+@Controller('check')
 @ApiResponse({
   status: 200,
   description: 'Request processed successfully / 请求处理成功',

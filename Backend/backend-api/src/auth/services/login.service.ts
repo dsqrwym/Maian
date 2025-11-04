@@ -22,7 +22,7 @@ import {
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service';
-import { UserRole } from 'prisma/generated';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class LoginService {

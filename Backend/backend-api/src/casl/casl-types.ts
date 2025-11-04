@@ -1,9 +1,11 @@
 import { PureAbility } from '@casl/ability';
 import { Action } from './actions';
 import { PrismaQuery, Subjects } from '@casl/prisma';
+import { users } from '@prisma/client';
 
 export type PrismaModels = {
-  Categories: { user_id: string | undefined };
+  categories: { user_id: string | undefined };
+  users: users;
 };
 
 type PrismaSubjects = Subjects<PrismaModels>;

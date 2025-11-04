@@ -14,8 +14,9 @@ import { Action } from '../casl/actions';
 import { subject } from '@casl/ability';
 import { FindCategoryDto } from './dto/find-category.dto';
 import { accessibleBy } from '@casl/prisma';
-import { Prisma } from 'prisma/generated';
+import { Prisma } from '@prisma/client';
 import { ToPaginated } from '../common/types/response.type';
+import { UserPayload } from '../auth/auth.types';
 
 @Injectable()
 export class CategoryService {
@@ -24,10 +25,14 @@ export class CategoryService {
     private readonly logger: Logger,
   ) {}
 
-  async create(createCategoryDto: CreateCategoryDto, ability: AppAbility) {
+  async create(
+    createCategoryDto: CreateCategoryDto,
+    ability: AppAbility,
+    user: UserPayload,
+  ) {
     const { userId, name, parentId, iva, translations } = createCategoryDto;
     if (
-      !ability.can(Action.Create, subject('Categories', { user_id: userId }))
+      !ability.can(Action.Create, subject('categories', { user_id: userId }))
     ) {
       throw new ForbiddenException(
         'You do not have permission to create categories',
@@ -90,6 +95,7 @@ export class CategoryService {
             parent_id: parentId,
             level,
             iva,
+            created_by: user.userId,
             category_translations: {
               createMany: {
                 data:
@@ -118,6 +124,12 @@ export class CategoryService {
   }
 
   async search(query: FindCategoryDto, ability: AppAbility) {
+    if (!ability.can(Action.Read, 'categories')) {
+      throw new ForbiddenException(
+        'You do not have permission to search categories',
+      );
+    }
+
     const {
       langCode,
       search,
@@ -133,8 +145,7 @@ export class CategoryService {
     const permissionCondition: Prisma.categoriesWhereInput = accessibleBy(
       ability,
       Action.Read,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ).Categories as any as Prisma.categoriesWhereInput;
+    ).categories;
 
     this.logger.log('permissionCondition', permissionCondition);
 
@@ -226,7 +237,11 @@ export class CategoryService {
     return result;
   }
 
-  async update(updateCategoryDto: UpdateCategoryDto, ability: AppAbility) {
+  async update(
+    updateCategoryDto: UpdateCategoryDto,
+    ability: AppAbility,
+    user: UserPayload,
+  ) {
     const categoryUserId = await this.prisma.categories.findUnique({
       where: { id: updateCategoryDto.id },
       select: { user_id: true },
@@ -235,7 +250,7 @@ export class CategoryService {
     if (
       !ability.can(
         Action.Update,
-        subject('Categories', {
+        subject('categories', {
           user_id: categoryUserId?.user_id ?? undefined,
         }),
       )
@@ -253,6 +268,8 @@ export class CategoryService {
         data: {
           ...(name && { name }),
           ...(iva && { iva }),
+          updated_at: new Date(),
+          updated_by: user.userId,
         },
       });
 
@@ -274,9 +291,12 @@ export class CategoryService {
             translations.map(
               (t) => Prisma.sql`(${id}, ${t.langCode}, ${t.name})`,
             ),
-          )}
-          ON CONFLICT (category_id, lang_code)
-          DO UPDATE SET name = EXCLUDED.name;
+          )} ON CONFLICT (category_id, lang_code)
+          DO
+          UPDATE SET name = EXCLUDED.name,
+            updated_at = NOW(),
+            updated_by = ${user.userId}
+          ;
         `;
       }
     });
@@ -291,7 +311,7 @@ export class CategoryService {
     if (
       !ability.can(
         Action.Delete,
-        subject('Categories', {
+        subject('categories', {
           user_id: categoryUserId?.user_id ?? undefined,
         }),
       )

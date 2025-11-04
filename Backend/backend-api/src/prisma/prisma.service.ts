@@ -3,7 +3,7 @@ import {
   OnModuleInit,
   BeforeApplicationShutdown,
 } from '@nestjs/common';
-import { PrismaClient } from '../../prisma/generated';
+import { PrismaClient } from '@prisma/client';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
