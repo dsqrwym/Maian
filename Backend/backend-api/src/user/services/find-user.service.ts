@@ -20,7 +20,37 @@ export class FindUserService {
       Action.Read,
     ).users;
 
-    const { search, role, status, page, limit } = query;
+    const {
+      search,
+      role,
+      status,
+      selectUserStatus,
+      selectUserRole,
+      user_id,
+      username,
+      email,
+      first_name,
+      last_name,
+      telephone,
+      cif,
+      profile,
+      page,
+      limit,
+    } = query;
+
+    const select: Prisma.usersSelect = {
+      id: true,
+      ...(selectUserStatus && { status: true }),
+      ...(selectUserRole && { role: true }),
+      ...(user_id && { user_id: true }),
+      ...(username && { username: true }),
+      ...(email && { email: true }),
+      ...(first_name && { first_name: true }),
+      ...(last_name && { last_name: true }),
+      ...(telephone && { telephone: true }),
+      ...(cif && { cif: true }),
+      ...(profile && { profile: true }),
+    };
 
     const andClauses: usersWhereInput[] = [permissionCondition];
 
@@ -53,12 +83,10 @@ export class FindUserService {
     const [users, total] = await this.prismaService.$transaction([
       this.prismaService.users.findMany({
         where,
-        select: {
-          id: true,
-          username: true,
-          email: true,
+        select,
+        orderBy: {
+          [query.orderBy ?? 'created_at']: query.orderDir ?? 'desc',
         },
-        orderBy: { created_at: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
       }),

@@ -15,3 +15,12 @@ enum class UserRole {
     ADMIN,
     SUPERADMIN
 }
+
+enum class UserStatus {
+    PENDING_VERIFICATION,
+    INACTIVE,
+    ACTIVE,
+    PENDING_REVIEW,
+    APPROVED,
+    BANNED
+}

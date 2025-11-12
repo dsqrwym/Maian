@@ -408,6 +408,7 @@ model users {
   updated_at                              DateTime?             @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   role                                    UserRole
   cif                                     String?               @db.VarChar(20)
+  updated_by                              String?               @db.Uuid
   carts                                   carts[]
   categories_categories_created_byTousers categories[]          @relation("categories_created_byTousers")
   categories_categories_updated_byTousers categories[]          @relation("categories_updated_byTousers")

@@ -71,10 +71,17 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            // icons
             implementation(libs.material.icons.core)
             implementation(libs.material.icons.extended)
             // 官方导航
             implementation(libs.kmp.navigation.compose)
+            //implementation(libs.androidx.paging.runtime)
+            implementation(libs.androidx.paging.common)
+            implementation(libs.androidx.paging.compose)
+
+            // placeholder
+            implementation(libs.compose.placeholder.material3)
 
             // Koin
             implementation(libs.koin.core) // 或最新版本

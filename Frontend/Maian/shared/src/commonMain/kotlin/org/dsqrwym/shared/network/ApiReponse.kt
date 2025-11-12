@@ -44,3 +44,16 @@ data class ApiResponse<T>(
     @SerialName("data") val data: T? = null,
     @SerialName("error") val error: String? = null
 )
+
+@Serializable
+data class ApiResponseList<T>(
+    val items: List<T>,
+    val pagination: Pagination
+)
+
+@Serializable
+data class Pagination(
+    val total: Int,
+    val page: Int,
+    val limit: Int
+)

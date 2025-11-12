@@ -19,10 +19,6 @@ object ApiConfig {
 
         // Registration endpoints
         const val REGISTRATION_VERIFY_EMAIL = "${AUTH}/registration/verify-email"
-        const val REGISTRATION_RETAILER = "${AUTH}/registration/retailer"
-        const val REGISTRATION_RETAILER_COMPLETE = "${AUTH}/registration/retailer/complete"
-        const val REGISTRATION_WHOLESALER = "${AUTH}/registration/wholesaler"
-        const val REGISTRATION_WHOLESALER_COMPLETE = "${AUTH}/registration/wholesaler/complete"
 
         // Token endpoints
         const val TOKEN_REFRESH = "${AUTH}/token/refresh"
@@ -39,7 +35,7 @@ object ApiConfig {
     }
 
     object UserPath {
-        private const val USER = "${BASE_URL}/user"
+        const val USER = "${BASE_URL}/user"
         const val CHECK_MAIL = "${USER}/check/mail"
         const val CHECK_USERNAME = "${USER}/check/username"
     }
@@ -50,5 +46,9 @@ object ApiConfig {
         fun provincesByCountry(isoNumeric: Int) = "${LOCATIONS}/countries/${isoNumeric}/provinces"
         fun citiesByProvince(provinceId: Int) = "${LOCATIONS}/provinces/${provinceId}/cities"
         fun currencyByCountry(isoNumeric: Int) = "${LOCATIONS}/currencies/${isoNumeric}"
+    }
+
+    object CategoryPath {
+        const val CATEGORY = "${BASE_URL}/category"
     }
 }

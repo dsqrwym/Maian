@@ -50,6 +50,7 @@ fun SharedNavigationRailLayout(
     val currentItem = menuConfig.items.find { isSameRoute(it.item.route, currentRoute) }
 
     val topBarHazeState = rememberHazeState()
+    val railHazeState = rememberHazeState()
     val topBarHazeStyle = MyHazeStyles.topBar()
 
     Scaffold(
@@ -81,7 +82,7 @@ fun SharedNavigationRailLayout(
                 },
                 modifier = Modifier.fillMaxWidth().hazeEffect(state = topBarHazeState) {
                     progressive = HazeProgressive.verticalGradient(
-                        startIntensity = 10f,
+                        startIntensity = 0.8f,
                         endIntensity = 0f,
                         preferPerformance = false // 设为 true 可提升性能但降低质量
                     )
@@ -93,14 +94,36 @@ fun SharedNavigationRailLayout(
         containerColor = Color.Transparent,
         modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
-        Row(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // 主内容区
+            Box(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .hazeSource(state = topBarHazeState)
+                    .hazeSource(state = railHazeState),
+            ) {
+                content()
+            }
+
             AnimatedVisibility(
                 modifier = Modifier.fillMaxHeight().widthIn(max = 88.dp),
                 visible = isRailExpanded,
                 enter = androidx.compose.animation.expandHorizontally(),
                 exit = androidx.compose.animation.shrinkHorizontally()
             ) {
-                NavigationRail {
+                NavigationRail(
+                    containerColor = Color.Transparent,
+                    modifier = Modifier.hazeEffect(state = railHazeState) {
+                        progressive = HazeProgressive.horizontalGradient(
+                            startIntensity = 0.8f,
+                            endIntensity = 0f,
+                            preferPerformance = false // 设为 true 可提升性能但降低质量
+                        )
+                        style = topBarHazeStyle
+                        alpha = 1f
+                    }
+                ) {
                     Spacer(Modifier.height(paddingValues.calculateTopPadding()))
 
                     SharedNavigationRailItem(
@@ -125,16 +148,6 @@ fun SharedNavigationRailLayout(
                         )
                     }
                 }
-            }
-
-            // 主内容区
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-                    .hazeSource(state = topBarHazeState),
-            ) {
-                content()
             }
         }
     }

@@ -1,3 +1,4 @@
+
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -98,6 +99,10 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             // 官方导航
             implementation(libs.kmp.navigation.compose)
+
+            //implementation(libs.androidx.paging.runtime)
+            implementation(libs.androidx.paging.common)
+            implementation(libs.androidx.paging.compose)
             // Material图标扩展
             implementation(libs.material.icons.core)
             implementation(libs.material.icons.extended)

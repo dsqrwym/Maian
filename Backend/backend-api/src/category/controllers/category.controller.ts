@@ -10,15 +10,15 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { JwtAuthGuard } from '../auth/guard/auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
+import { CategoryService } from '../services/category.service';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { JwtAuthGuard } from '../../auth/guard/auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { FastifyRequest } from 'fastify';
-import { RolesAllowed } from '../common/guards/decorator/roles-allowed.decorator';
+import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
 import { UserRole } from '@prisma/client';
-import { FindCategoryDto } from './dto/find-category.dto';
+import { FindCategoryDto } from '../dto/find-category.dto';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -41,9 +41,8 @@ import { seconds, Throttle } from '@nestjs/throttler';
   description: 'Forbidden. Insufficient permissions',
 })
 @Controller()
-@Throttle({ default: { limit: 2, ttl: seconds(1) } })
-@UseGuards(JwtAuthGuard)
-@UseGuards(RolesGuard)
+@Throttle({ default: { limit: 10, ttl: seconds(1) } })
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

@@ -1,7 +1,6 @@
 package org.dsqrwym.shared.navigation.menu.layouts
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuOpen
@@ -78,11 +77,10 @@ fun SharedBottomNavigationLayout(
                 ModalDrawerSheet(
                     modifier = Modifier.fillMaxWidth(0.58f).hazeEffect(state = drawerHazeState) {
                         style = drawerHazeStyle
-                        alpha = 0.86f
+                        alpha = 1f
                         progressive = HazeProgressive.horizontalGradient(
-                            easing = LinearEasing,
-                            startIntensity = 2f,
-                            endIntensity = 0.1f
+                            startIntensity = 0.6f,
+                            endIntensity = 0f
                         )
                     },
                     drawerContainerColor = Color.Transparent,

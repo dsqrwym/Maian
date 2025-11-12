@@ -8,11 +8,9 @@ import org.dsqrwym.admin.navigation.Categories
 import org.dsqrwym.admin.navigation.CategoriesCreate
 import org.dsqrwym.admin.ui.screens.categories.CategoriesListScreen
 import org.dsqrwym.admin.ui.screens.categories.CategoryCreateScreen
-import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 
 fun NavGraphBuilder.categorieNavGraph(
-    menuViewModel: SharedMenuViewModel,
     navController: NavHostController,
     focusManager: FocusManager,
 ) {

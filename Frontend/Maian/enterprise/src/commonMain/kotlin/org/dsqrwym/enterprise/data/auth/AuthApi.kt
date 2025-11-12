@@ -6,8 +6,8 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import org.dsqrwym.enterprise.data.auth.dto.CompleteRegisterRequest
 import org.dsqrwym.enterprise.data.auth.dto.StartRegisterRequest
-import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiConfig.AuthPath.REGISTRATION_WHOLESALER
+import org.dsqrwym.enterprise.network.EnterpriseApi.AuthPath.REGISTRATION_WHOLESALER
+import org.dsqrwym.enterprise.network.EnterpriseApi.AuthPath.REGISTRATION_WHOLESALER_COMPLETE
 import org.dsqrwym.shared.network.ApiResponse
 
 class AuthApi(private val client: HttpClient) {
@@ -19,7 +19,7 @@ class AuthApi(private val client: HttpClient) {
     }
 
     suspend fun completeResister(dto: CompleteRegisterRequest): ApiResponse<Unit> {
-        return client.post(ApiConfig.AuthPath.REGISTRATION_WHOLESALER_COMPLETE) {
+        return client.post(REGISTRATION_WHOLESALER_COMPLETE) {
             contentType(ContentType.Application.Json)
             setBody(dto)
         }.body()

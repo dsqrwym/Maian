@@ -36,7 +36,7 @@ import { PaginatedResponseDto } from '../../utils/dto/pagination.dto';
   description: 'Too many requests, please try again later',
 })
 @UseGuards(JwtAuthGuard)
-@Throttle({ default: { limit: 2, ttl: seconds(1) } })
+@Throttle({ default: { limit: 10, ttl: seconds(1) } })
 @Controller()
 export class FindUserController {
   constructor(private readonly findUserService: FindUserService) {}

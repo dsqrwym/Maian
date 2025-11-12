@@ -5,18 +5,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 import { Logger } from 'nestjs-pino';
-import { AppAbility } from '../casl/casl-types';
-import { Action } from '../casl/actions';
+import { AppAbility } from '../../casl/casl-types';
+import { Action } from '../../casl/actions';
 import { subject } from '@casl/ability';
-import { FindCategoryDto } from './dto/find-category.dto';
+import { FindCategoryDto } from '../dto/find-category.dto';
 import { accessibleBy } from '@casl/prisma';
 import { Prisma } from '@prisma/client';
-import { ToPaginated } from '../common/types/response.type';
-import { UserPayload } from '../auth/auth.types';
+import { ToPaginated } from '../../common/types/response.type';
+import { UserPayload } from '../../auth/auth.types';
+import { CategorySelectField, CategoryType } from '../category.enums';
 
 @Injectable()
 export class CategoryService {
@@ -30,7 +31,10 @@ export class CategoryService {
     ability: AppAbility,
     user: UserPayload,
   ) {
-    const { userId, name, parentId, iva, translations } = createCategoryDto;
+    const { userId, name, iva, translations } = createCategoryDto;
+    const parentId = createCategoryDto.parentId
+      ? BigInt(createCategoryDto.parentId)
+      : undefined;
     if (
       !ability.can(Action.Create, subject('categories', { user_id: userId }))
     ) {
@@ -100,7 +104,7 @@ export class CategoryService {
               createMany: {
                 data:
                   translations?.map((translation) => ({
-                    lang_code: translation.langCode,
+                    lang_code: translation.lang_code,
                     name: translation.name,
                   })) ?? [],
                 skipDuplicates: true,
@@ -130,17 +134,13 @@ export class CategoryService {
       );
     }
 
-    const {
-      langCode,
-      search,
-      userId,
-      relations,
-      translation,
-      iva,
-      level,
-      page,
-      limit,
-    } = query;
+    const { langCode, search, userId, fields, type, page, limit } = query;
+    const parentId = query.parentId ? BigInt(query.parentId) : undefined;
+    const iva = fields?.includes(CategorySelectField.IVA);
+    const level = fields?.includes(CategorySelectField.LEVEL);
+    const user_id = fields?.includes(CategorySelectField.USER_ID);
+    const translations = fields?.includes(CategorySelectField.TRANSLATIONS);
+    const relations = fields?.includes(CategorySelectField.RELATIONS);
 
     const permissionCondition: Prisma.categoriesWhereInput = accessibleBy(
       ability,
@@ -152,11 +152,12 @@ export class CategoryService {
     const select: Prisma.categoriesSelect = {
       id: true,
       name: true,
+      user_id: true,
       created_at: true,
       ...(iva && { iva: true }),
       ...(level && { level: true }),
-      ...(userId && { user_id: true }),
-      ...(translation && {
+      ...(user_id && { user_id: true }),
+      ...(translations && {
         category_translations: {
           select: {
             name: true,
@@ -170,6 +171,8 @@ export class CategoryService {
           select: {
             id: true,
             name: true,
+            user_id: true,
+            parent: true,
             ...(iva && { iva: true }),
             ...(level && { level: true }),
           },
@@ -178,6 +181,7 @@ export class CategoryService {
           select: {
             id: true,
             name: true,
+            user_id: true,
             ...(iva && { iva: true }),
             ...(level && { level: true }),
           },
@@ -204,8 +208,24 @@ export class CategoryService {
       });
     }
 
-    if (userId && !permissionCondition.user_id) {
-      andClauses.push({ user_id: userId });
+    if (!permissionCondition.user_id) {
+      if (userId) {
+        andClauses.push({ user_id: userId });
+      } else if (type) {
+        if (type === CategoryType.PRIVATE) {
+          andClauses.push({ user_id: { not: null } });
+        } else if (type === CategoryType.PUBLIC) {
+          andClauses.push({ user_id: null });
+        }
+      }
+    }
+
+    if (parentId) {
+      andClauses.push({ parent_id: parentId });
+    }
+
+    if (query.maxLevel) {
+      andClauses.push({ level: { lt: query.maxLevel } });
     }
 
     // 最终 where
@@ -214,11 +234,11 @@ export class CategoryService {
     };
 
     // 查询
-    const [categories, total] = await this.prisma.$transaction([
+    const [categories, total] = await Promise.all([
       this.prisma.categories.findMany({
         where,
         select,
-        orderBy: { created_at: 'desc' },
+        orderBy: { name: 'asc' },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -289,7 +309,7 @@ export class CategoryService {
           INSERT INTO category_translations (category_id, lang_code, name)
           VALUES ${Prisma.join(
             translations.map(
-              (t) => Prisma.sql`(${id}, ${t.langCode}, ${t.name})`,
+              (t) => Prisma.sql`(${id}, ${t.lang_code}, ${t.name})`,
             ),
           )} ON CONFLICT (category_id, lang_code)
           DO

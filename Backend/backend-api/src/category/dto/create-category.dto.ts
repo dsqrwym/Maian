@@ -49,9 +49,8 @@ export class CreateCategoryDto {
     example: 1,
     required: false,
   })
-  @IsNumber()
   @IsOptional()
-  parentId?: bigint;
+  parentId?: string;
 
   @ApiProperty({
     description: 'Translation data for the category',

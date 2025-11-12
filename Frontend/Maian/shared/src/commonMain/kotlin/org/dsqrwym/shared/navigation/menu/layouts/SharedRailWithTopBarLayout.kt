@@ -153,7 +153,7 @@ fun SharedRailWithTopBarLayout(
                     modifier = Modifier.hazeEffect(topNavigationHaze, topNavigationHazeStyle) {
                         alpha = 0.76f
                         progressive = HazeProgressive.verticalGradient(
-                            startIntensity = 1.8f,
+                            startIntensity = 0.9f,
                             endIntensity = 0.18f
                         )
                     },

@@ -11,7 +11,7 @@ export class CategoryTranslationDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(10)
-  langCode: string;
+  lang_code: string;
 
   @ApiProperty({
     description: 'Translated name of the category',

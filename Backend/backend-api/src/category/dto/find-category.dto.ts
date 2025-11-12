@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsUUID } from 'class-validator';
-import { ToBoolean } from '../../utils/transform-validator';
+import {
+  IsString,
+  IsOptional,
+  IsUUID,
+  IsEnum,
+  IsNumber,
+  Max,
+} from 'class-validator';
 import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
+import { CategorySelectField, CategoryType } from '../category.enums';
 
 export class FindCategoryDto extends PaginationQueryDto {
   @ApiProperty({ description: 'Keywords for name search', required: false })
@@ -21,43 +28,44 @@ export class FindCategoryDto extends PaginationQueryDto {
     description: 'Filter by user_id',
     required: false,
   })
-  @IsOptional()
   @IsUUID()
+  @IsOptional()
   userId?: string;
 
   @ApiProperty({
-    description: 'Show categories with iva',
+    description: 'Filter by parent_id',
     required: false,
-    default: false,
   })
+  @IsString()
   @IsOptional()
-  @ToBoolean()
-  iva?: boolean;
+  parentId?: string;
 
   @ApiProperty({
-    description: 'Show categories with level',
+    description: 'Filter by max level',
     required: false,
-    default: false,
   })
   @IsOptional()
-  @ToBoolean()
-  level?: boolean;
+  @IsNumber()
+  @Max(3)
+  maxLevel?: number;
 
   @ApiProperty({
-    description: 'Show categories with relations: parent and children[]',
+    description: 'Filter by category type',
+    enum: CategoryType,
     required: false,
-    default: false,
   })
+  @IsEnum(CategoryType)
   @IsOptional()
-  @ToBoolean()
-  relations?: boolean;
+  type?: CategoryType;
 
   @ApiProperty({
-    description: 'Show categories with translations',
+    description: 'Selected fields',
+    enum: CategorySelectField,
     required: false,
-    default: false,
+  })
+  @IsEnum(CategorySelectField, {
+    each: true,
   })
   @IsOptional()
-  @ToBoolean()
-  translation?: boolean;
+  fields?: CategorySelectField[];
 }

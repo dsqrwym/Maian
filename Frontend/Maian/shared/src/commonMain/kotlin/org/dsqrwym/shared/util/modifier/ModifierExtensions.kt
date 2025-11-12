@@ -23,5 +23,10 @@ fun Modifier.disableUserInput(disabled: Boolean): Modifier =
     } else this
 
 @Composable
-fun Modifier.paddingTopForMenu(): Modifier =
-    this.padding(top = if (calculateWindowSizeClass().widthSizeClass != WindowWidthSizeClass.Compact) 76.dp else 0.dp)
+fun Modifier.paddingTopForMenu(): Modifier {
+    if (calculateWindowSizeClass().widthSizeClass == WindowWidthSizeClass.Compact) return this
+
+    return this.padding(
+        top = if (calculateWindowSizeClass().widthSizeClass == WindowWidthSizeClass.Expanded) 76.dp else 0.dp
+    )
+}
