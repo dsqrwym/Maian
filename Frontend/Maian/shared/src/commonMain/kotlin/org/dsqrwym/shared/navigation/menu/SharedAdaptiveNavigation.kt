@@ -9,7 +9,6 @@ import org.dsqrwym.shared.navigation.menu.layouts.SharedBottomNavigationLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedNavigationRailLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedRailWithTopBarLayout
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
-import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 import org.koin.compose.currentKoinScope
@@ -40,11 +39,10 @@ fun SharedAdaptiveNavigation(
     val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
 
     LaunchedEffect(Unit) {
-        menuViewModel.initMenu(menuConfig.items)
+        menuViewModel.initMenu(menuConfig)
     }
 
     val menuState by menuViewModel.menuStates.collectAsState()
-    SharedLog.log(message = "menuState: $menuState")
     val newMenuConfig = menuConfig.copy(items = menuState)
 
     when (windowSizeClass.widthSizeClass) {

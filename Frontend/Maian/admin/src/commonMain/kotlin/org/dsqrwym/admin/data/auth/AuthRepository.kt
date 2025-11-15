@@ -28,8 +28,8 @@ class AuthRepository(
             sharedAuthApi.login(
                 SharedLoginRequest(
                     password = password,
-                    email = if (isEmail) identifier else null,
-                    username = if (!isEmail) identifier else null,
+                    email = if (isEmail) identifier.trim() else null,
+                    username = if (!isEmail) identifier.trim() else null,
                     deviceName = deviceInfo.deviceName,
                     userAgent = deviceInfo.userAgent,
                 ),

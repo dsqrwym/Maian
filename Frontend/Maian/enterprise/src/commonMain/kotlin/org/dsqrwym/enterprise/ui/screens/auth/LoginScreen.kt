@@ -10,11 +10,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentType
@@ -27,6 +30,7 @@ import org.dsqrwym.enterprise.ui.viewmodels.auth.LoginType
 import org.dsqrwym.enterprise.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
@@ -146,6 +150,7 @@ fun EnterpriseLoginContent(
     onLoginClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
+    val focuesRequester = remember { FocusRequester() }
     Column(modifier = modifier.fillMaxHeight().verticalScroll(scrollState)) {
         AuthTopBar(onBackButtonClick = onBackButtonClick)
 
@@ -206,8 +211,14 @@ fun EnterpriseLoginContent(
             onImeAction = {
                 focusManager.clearFocus()
                 onLoginClick()
-            }
+            },
+            focusRequester = focuesRequester,
         )
+
+        LaunchedEffect(Unit) {
+            if (SharedUserPreferences.getUserLoginPreferences() == null) return@LaunchedEffect
+            focuesRequester.requestFocus()
+        }
 
         MyTextButton(
             modifier = Modifier.align(Alignment.End),

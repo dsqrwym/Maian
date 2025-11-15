@@ -99,7 +99,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             // 官方导航
             implementation(libs.kmp.navigation.compose)
-
+            // placeholder
+            implementation(libs.compose.placeholder.material3)
             //implementation(libs.androidx.paging.runtime)
             implementation(libs.androidx.paging.common)
             implementation(libs.androidx.paging.compose)

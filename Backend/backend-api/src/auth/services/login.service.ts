@@ -23,6 +23,7 @@ import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service';
 import { UserRole } from '@prisma/client';
+import { LoginResponseDto } from '../dto/login-response.dto';
 
 @Injectable()
 export class LoginService {
@@ -198,8 +199,13 @@ export class LoginService {
       { userId: user.userId, ip: req.ip, device: body.deviceName },
       '[AuthController] login',
     );
-    const { token } = await this.login(req, user, body);
-    return token;
+    const { token, payload } = await this.login(req, user, body);
+    const result: LoginResponseDto = {
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+      user: payload,
+    };
+    return result;
   }
 
   async loginWeb(
@@ -246,9 +252,10 @@ export class LoginService {
       secret: this.configService.get(ENV.CSRF_TOKEN_SECRET),
     });
 
-    const result: TokenResponseDto = {
+    const result: LoginResponseDto = {
       accessToken: token.accessToken,
       refreshToken: csrfToken,
+      user: payload,
     };
 
     return result;

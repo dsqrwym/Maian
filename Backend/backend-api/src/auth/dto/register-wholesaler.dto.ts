@@ -14,6 +14,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { DirectionDto } from './register.direction.dto';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 /**
  * Enum for Spanish company types
@@ -50,6 +51,7 @@ export class RegisterWholesalerDto {
     message: 'Email must be shorter than or equal to 100 characters',
   })
   @IsNotEmpty({ message: 'Email is required' })
+  @Trim()
   email: string;
 
   /**
@@ -98,6 +100,7 @@ export class RegisterWholesalerDto {
     message: 'Username must be shorter than or equal to 30 characters',
   })
   @NotContains('@', { message: 'Username cannot contain @ symbol' })
+  @Trim()
   username?: string;
 
   /**
@@ -112,6 +115,7 @@ export class RegisterWholesalerDto {
   @IsString({ message: 'Company name must be a string' })
   @IsNotEmpty({ message: 'Company name is required' })
   @MaxLength(100, { message: 'Company name cannot exceed 100 characters' })
+  @Trim()
   company_name: string;
 
   /**

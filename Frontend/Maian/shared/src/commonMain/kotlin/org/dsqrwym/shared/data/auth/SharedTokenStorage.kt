@@ -58,24 +58,3 @@ expect object SharedTokenStorage : CommonTokenStorageImpl {
     override fun getCsrf(): String?
     override fun clearCsrf()
 }
-
-/*
-object SharedTokenStorage {
-    private const val KEY_ACCESS = "auth_access_token"
-    private const val KEY_REFRESH = "auth_refresh_token"
-
-    private val secure = SharedSettingsProvider.secure
-
-    fun save(access: String, refresh: String) {
-        secure.putString(KEY_ACCESS, access)
-        secure.putString(KEY_REFRESH, refresh)
-    }
-
-    fun getAccess(): String? = secure.getStringOrNull(KEY_ACCESS)
-    fun getRefresh(): String? = secure.getStringOrNull(KEY_REFRESH)
-
-    fun clear() {
-        secure.remove(KEY_ACCESS)
-        secure.remove(KEY_REFRESH)
-    }
-}*/

@@ -1,7 +1,7 @@
 package org.dsqrwym.shared.data.auth.dto
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.dsqrwym.shared.data.user.SharedUserPayload
 
 /**
  * Data class representing a login request.
@@ -31,35 +31,13 @@ data class SharedLoginRequest(
  * 表示成功登录响应的数据类。
  *
  * @property accessToken The access token for authenticated requests. 用于认证请求的访问令牌。
- * @property refreshToken The refresh token for obtaining new access tokens (optional).
- *                        用于获取新访问令牌的刷新令牌（可选）。
+ * @property refreshToken The refresh token for obtaining new access tokens. 用于获取新访问令牌的刷新令牌。
+ * @property user The user payload。用户信息.
  */
 @Serializable
 data class SharedLoginResponse(
-    @SerialName("accessToken") val accessToken: String,
-    @SerialName("refreshToken") val refreshToken: String
+    val accessToken: String,
+    val refreshToken: String,
+    val user: SharedUserPayload,
 )
 
-/**
- * Data class representing a refresh token request.
- * 表示刷新令牌请求的数据类。
- *
- * @property refreshToken The refresh token used to obtain a new access token.
- *                       用于获取新访问令牌的刷新令牌。
- */
-@Serializable
-data class SharedRefreshTokenRequest(
-    @SerialName("refreshToken") val refreshToken: String
-)
-
-/**
- * Data class representing a refresh token response.
- * 表示刷新令牌响应的数据类。
- *
- * @property accessToken The new access token. 新的访问令牌。
- */
-@Serializable
-data class SharedRefreshTokenResponse(
-    @SerialName("accessToken") val accessToken: String,
-    @SerialName("refreshToken") val refreshToken: String
-)

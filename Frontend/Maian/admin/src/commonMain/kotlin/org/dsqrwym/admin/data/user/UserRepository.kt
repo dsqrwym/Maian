@@ -9,7 +9,7 @@ import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
 import org.dsqrwym.shared.data.user.dto.FindUserQueryOrderBy
 import org.dsqrwym.shared.network.ApiResponseList
 import org.dsqrwym.shared.network.SharedResponseResult
-import org.dsqrwym.shared.network.toSharedResponseResult
+import org.dsqrwym.shared.network.safeApiCall
 
 class UserRepository(val api: SharedUserApi) {
     suspend fun getWholesalers(
@@ -28,6 +28,6 @@ class UserRepository(val api: SharedUserApi) {
             userId = true,
             username = true,
         )
-        return api.getUsers<WholeSalerUserResponse>(query).toSharedResponseResult()
+        return safeApiCall { api.getUsers<WholeSalerUserResponse>(query) }
     }
 }

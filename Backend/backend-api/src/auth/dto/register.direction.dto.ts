@@ -12,6 +12,7 @@ import {
 } from 'class-validator';
 import { AddressType } from '@prisma/client';
 import { Type } from 'class-transformer';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 /**
  * DTO for address information
@@ -43,6 +44,7 @@ export class DirectionDto {
   })
   @IsString()
   @MaxLength(200)
+  @Trim()
   street: string;
 
   /**

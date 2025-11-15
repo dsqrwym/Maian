@@ -9,8 +9,8 @@ object Categories
 
 @Serializable
 @SerialName("Categories-Create")
-object CategoriesCreate
+object CategoryCreate
 
 @Serializable
 @SerialName("Categories-Edit")
-object CategoriesEdit
+data class CategoryEdit(val id: String)

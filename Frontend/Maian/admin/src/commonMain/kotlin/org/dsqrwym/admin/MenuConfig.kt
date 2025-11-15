@@ -2,8 +2,11 @@ package org.dsqrwym.admin
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
+import maian.admin.generated.resources.AdminRes
+import maian.admin.generated.resources.category_management
+import maian.admin.generated.resources.category_management_description
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.field_required
+import maian.shared.generated.resources.category
 import org.dsqrwym.admin.navigation.Categories
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.navigation.menu.SharedMenuActions
@@ -20,10 +23,10 @@ object MenuConfig {
         SharedMenuItemState(
             SharedMenuItem(
                 Categories,
-                SharedRes.string.field_required,
-                null,
+                AdminRes.string.category_management,
+                AdminRes.string.category_management_description,
                 Icons.Outlined.Category,
-                null,
+                SharedRes.string.category,
                 setOf(UserRole.ADMIN, UserRole.SUPERADMIN),
             )
         )

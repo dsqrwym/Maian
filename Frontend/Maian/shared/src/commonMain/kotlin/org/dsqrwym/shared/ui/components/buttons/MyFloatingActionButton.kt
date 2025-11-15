@@ -78,7 +78,7 @@ fun MyExtendedFloatingActionButton(
     enabled: Boolean = true,
     buttonState: UiState = UiState.Idle,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit,
+    icon: (@Composable () -> Unit)? = null,
     text: @Composable () -> Unit
 ) {
 
@@ -101,7 +101,7 @@ fun MyExtendedFloatingActionButton(
             }
         },
         icon = {
-            icon()
+            icon?.invoke()
         }
     )
 }

@@ -57,13 +57,6 @@ fun FormCard(
             .padding(vertical = 8.dp),
         elevation = CardDefaults.outlinedCardElevation(elevation),
         border = CardDefaults.outlinedCardBorder(enabled),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = if (enabled) {
-                MaterialTheme.colorScheme.surface
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            }
-        )
     ) {
         Column(
             modifier = Modifier

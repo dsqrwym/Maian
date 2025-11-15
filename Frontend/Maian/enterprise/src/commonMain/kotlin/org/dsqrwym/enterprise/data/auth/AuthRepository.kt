@@ -34,8 +34,8 @@ class AuthRepository(
             sharedAuthApi.login(
                 SharedLoginRequest(
                     password = password,
-                    email = if (isEmail) identifier else null,
-                    username = if (!isEmail) identifier else null,
+                    email = if (isEmail) identifier.trim() else null,
+                    username = if (!isEmail) identifier.trim() else null,
                     deviceName = deviceInfo.deviceName,
                     userAgent = deviceInfo.userAgent,
                     wholesalerId = wholesalerId
@@ -59,7 +59,7 @@ class AuthRepository(
 
     suspend fun startRegister(email: String): SharedResponseResult<Unit> {
         val req = StartRegisterRequest(
-            email = email,
+            email = email.trim(),
             language = LanguageManager.getCurrentLanguage(),
             timezone = TimezoneManager.getCurrentTimeZone(),
             deepLink = null
@@ -68,6 +68,14 @@ class AuthRepository(
     }
 
     suspend fun completeResister(dto: CompleteRegisterRequest): SharedResponseResult<Unit> {
-        return safeApiCall { authApi.completeResister(dto) }
+        return safeApiCall {
+            authApi.completeResister(
+                dto.copy(
+                    email = dto.email.trim(),
+                    username = dto.username?.trim(),
+                    companyName = dto.companyName.trim()
+                )
+            )
+        }
     }
 }

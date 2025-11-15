@@ -173,4 +173,33 @@
     <string name="phone_error_validation_failed">S\'ha produït un error en validar el número de telèfon</string>
 
     <string name="phone_hint_invalid_with_format">(Actualment analitzat com: %1$s)</string>
+
+    <string name="create">Crear</string>
+    <string name="add">Afegir</string>
+    <string name="update">Renovar</string>
+    <string name="not_found">No s'han trobat resultats</string>
+    <string name="load_failed">Error en carregar, toca per reintentar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="path">Ruta</string>
+    <string name="clear">Esborrar</string>
+    <string name="not_set">No establert</string>
+    <string name="all">Tot</string>
+    <string name="filter">Filtrar</string>
+    <string name="close">Tancar</string>
+    <string name="user">Usuari</string>
+
+    <string name="delete_success">S'ha eliminat correctament</string>
+    <string name="delete_failed">Error en eliminar</string>
+    <string name="create_success">Creat correctament</string>
+    <string name="create_failed">Error en crear</string>
+    <string name="update_success">Actualització correcta</string>
+    <string name="update_failed">L'actualització ha fallat</string>
+
+    <string name="category">Categoria</string>
+
+    <string name="cancel">Cancel·lar</string>
+    <string name="basic_info">Informació bàsica</string>
+
+    <string name="tax_rate">Taxa d'impost</string>
 </resources>

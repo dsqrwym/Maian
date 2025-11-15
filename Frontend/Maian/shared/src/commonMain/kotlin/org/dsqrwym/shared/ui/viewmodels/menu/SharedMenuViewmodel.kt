@@ -5,17 +5,21 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.util.navigation.isSameRoute
 
 class SharedMenuViewModel : ViewModel() {
-
     private val _menuStates = MutableStateFlow<List<SharedMenuItemState>>(emptyList())
     val menuStates = _menuStates.asStateFlow()
+    var menuConfiguration: SharedMenuConfiguration? = null
+    private set
 
-    fun initMenu(items: List<SharedMenuItemState>) {
+
+    fun initMenu(configuration: SharedMenuConfiguration) {
         if (_menuStates.value.isEmpty()) {
-            _menuStates.value = items
+            _menuStates.value = configuration.items
+            menuConfiguration = configuration
         }
     }
 

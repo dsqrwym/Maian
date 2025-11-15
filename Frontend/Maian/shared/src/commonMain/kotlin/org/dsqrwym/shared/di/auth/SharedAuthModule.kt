@@ -4,7 +4,6 @@ import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
-import org.dsqrwym.shared.util.log.SharedLog
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.qualifier.named
 import org.koin.core.scope.Scope
@@ -19,22 +18,12 @@ object SharedAuthScope : KoinScopeComponent {
 
     fun createScope(): Scope {
         if (_scope == null || !_scope!!.isNotClosed()) {
-            SharedLog.log(
-                tag = "SharedAuthScope",
-                message = "Creating new $SHARED_AUTH_SCOPE_ID"
-            )
             _scope = getKoin().getOrCreateScope(SHARED_AUTH_SCOPE_ID, named<SharedAuthScope>())
-        } else {
-            SharedLog.log(tag = "SharedAuthScope", message = "Using existing $SHARED_AUTH_SCOPE_ID")
         }
         return _scope!!
     }
 
     fun closeScope() {
-        SharedLog.log(
-            tag = "SharedAuthScope",
-            message = "Closing $SHARED_AUTH_SCOPE_ID"
-        )
         _scope?.close()
         _scope = null
     }

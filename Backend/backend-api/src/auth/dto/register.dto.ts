@@ -9,6 +9,7 @@ import {
 } from 'class-validator'; // 用于验证类属性的装饰器
 import { IsBCP47Language } from 'src/common/validators/decorator/is-bcp47-language.decorator';
 import { IsIANA } from 'src/common/validators/decorator/is-iana.decorator';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 /**
  * DTO for sending normal registration email
@@ -30,6 +31,7 @@ export class SendNormalRegisterMailDto {
     message: 'Email must be shorter than or equal to 100 characters',
   })
   @IsNotEmpty({ message: 'Email is required' })
+  @Trim()
   email: string;
 
   /**

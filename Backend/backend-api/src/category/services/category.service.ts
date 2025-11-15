@@ -257,13 +257,51 @@ export class CategoryService {
     return result;
   }
 
+  async getCategoryForUpdate(id: string, ability: AppAbility) {
+    const category = await this.prisma.categories.findUnique({
+      where: { id: BigInt(id) },
+      select: {
+        user_id: true,
+        name: true,
+        category_translations: {
+          select: {
+            name: true,
+            lang_code: true,
+          },
+        },
+      },
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    if (
+      !ability.can(
+        Action.Read,
+        subject('categories', {
+          user_id: category?.user_id ?? undefined,
+        }),
+      )
+    ) {
+      throw new ForbiddenException(
+        'You do not have permission to read categories',
+      );
+    }
+    return {
+      name: category.name,
+      translations: category.category_translations,
+    };
+  }
+
   async update(
     updateCategoryDto: UpdateCategoryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
+    const id = BigInt(updateCategoryDto.id);
     const categoryUserId = await this.prisma.categories.findUnique({
-      where: { id: updateCategoryDto.id },
+      where: { id },
       select: { user_id: true },
     });
 
@@ -279,8 +317,7 @@ export class CategoryService {
         'You do not have permission to update categories',
       );
     }
-    const { id, name, iva, translations, translationsToDelete } =
-      updateCategoryDto;
+    const { name, iva, translations, translationsToDelete } = updateCategoryDto;
 
     return this.prisma.$transaction(async (tx) => {
       await tx.categories.update({
@@ -315,7 +352,7 @@ export class CategoryService {
           DO
           UPDATE SET name = EXCLUDED.name,
             updated_at = NOW(),
-            updated_by = ${user.userId}
+            updated_by = ${user.userId}::uuid
           ;
         `;
       }

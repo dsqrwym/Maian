@@ -30,3 +30,9 @@ data class CategoryResponse(
         }.reversed().joinToString("@$separator@").split("@")
     }
 }
+
+@Serializable
+data class CategoryForUpdateResponseDto(
+    val name: String? = null,
+    val translations: List<SharedCategoryTranslation>? = null,
+)

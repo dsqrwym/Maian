@@ -1,0 +1,42 @@
+<resources>
+    <string name="select_wholesaler">Sélectionner un grossiste</string>
+    <string name="subcategories_count">%1$s sous-catégories</string>
+    <string name="parent_category">Catégorie parente</string>
+    <string name="base_category">Catégorie de base</string>
+    <string name="other_languages">Autres langues</string>
+    <string name="confirm_delete_category">Êtes-vous sûr de vouloir supprimer la catégorie "%1$s" ?</string>
+    <string name="delete_warning_with_children">Attention : Cela supprimera également %1$s sous-catégories et ne pourra pas être annulé.</string>
+    <string name="select_parent_category">Sélectionner la catégorie parente</string>
+    <string name="private_category">Catégorie privée</string>
+    <string name="search_category">Rechercher des catégories...</string>
+    <string name="platform_category">Catégorie de la plateforme</string>
+
+    <string name="input_language_translation">Saisir la traduction en %1$s...</string>
+    <string name="translate">Traduire</string>
+    <string name="add_language_translation">Ajouter une traduction</string>
+    <string name="all_languages_added">Toutes les langues prises en charge ont été ajoutées</string>
+
+    <string name="category_name_tax_setting">Nom de la catégorie et réglages de taxe</string>
+    <string name="category_name">Nom de la catégorie</string>
+    <string name="please_input_category_name">Veuillez saisir le nom de la catégorie</string>
+    <string name="empty_use_product_tax">Laisser vide pour utiliser la taxe du produit</string>
+
+    <string name="select_parent_category_to_create">Sélectionner une catégorie parente pour créer une sous-catégorie</string>
+    <string name="parent_category_selected">Catégorie parente sélectionnée</string>
+    <string name="category_type">Type de catégorie</string>
+    <string name="category_visibility">Définir la visibilité de la catégorie</string>
+    <string name="visible_to_all">Visible pour tous les utilisateurs</string>
+    <string name="visible_to_owner">Visible uniquement pour le propriétaire</string>
+    <string name="category_visible_to_all_tip">Cette catégorie sera accessible à tous les utilisateurs</string>
+    <string name="wholesaler_selected">Grossiste sélectionné</string>
+    <string name="add_multilingual_translation">Ajouter une traduction multilingue</string>
+    <string name="no_other_language_translation">Aucune autre traduction disponible</string>
+    <string name="translations_count">%1$s traductions ajoutées</string>
+
+    <string name="category_name_exists">Le nom de la catégorie existe déjà</string>
+    <string name="category_management">Gestion des catégories</string>
+    <string name="category_management_description">
+        Permet de consulter et rechercher des catégories, créer des catégories privées et globales pour les grossistes ou les utilisateurs de l’ensemble de la plateforme. Prend en charge la modification (nom, traduction) et la suppression (réservée aux super-administrateurs). Les catégories prennent en charge jusqu’à trois niveaux d’imbrication (1 → 2 → 3).
+    </string>
+
+</resources>

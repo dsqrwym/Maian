@@ -10,6 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,32 +25,36 @@ import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.eygraber.compose.placeholder.PlaceholderHighlight
-import com.eygraber.compose.placeholder.material3.placeholder
-import com.eygraber.compose.placeholder.material3.shimmer
+import maian.admin.generated.resources.*
+import maian.shared.generated.resources.*
 import org.dsqrwym.admin.data.categories.dto.CategoryResponse
-import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewmodel
+import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
-import org.dsqrwym.shared.ui.components.containers.HazeContainer
+import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.ConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
-import org.dsqrwym.shared.util.modifier.paddingTopForMenu
-import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
-import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
+import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
+import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
+import org.dsqrwym.shared.util.modifier.paddingWithoutTop
+import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesListScreen(
-    viewModel: CategoriesListViewmodel = koinViewModel(),
+    viewModel: CategoriesListViewModel = koinViewModel(),
+    menuViewModel: SharedMenuViewModel = koinViewModel(),
     onNavigateToCreate: () -> Unit = {},
-    onNavigateToEdit: (Long) -> Unit = {}
+    onNavigateToEdit: (String) -> Unit = {}
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val windowWidthSizeClass = calculateWindowSizeClass().widthSizeClass
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val userRole = menuViewModel.menuConfiguration?.userRole
 
     val lazyPagingItems = viewModel.pagedCategories.collectAsLazyPagingItems()
 
@@ -55,8 +62,9 @@ fun CategoriesListScreen(
     val showFilterDialog = viewModel.showFilterDialog
     val deleteCategory = viewModel.deleteCategory
 
-    HazeContainer(
-        isOverlayVisible = showFilterDialog || deleteCategory != null,
+    SharedTransparentScaffold(
+        topBarScrollBehavior = scrollBehavior,
+        showOverlayDialog = showFilterDialog || deleteCategory != null,
         overlayContent = {
             deleteCategory?.let { category ->
                 ConfirmDeleteCategories(
@@ -72,42 +80,68 @@ fun CategoriesListScreen(
             if (showFilterDialog) {
                 FilterDialog(viewModel)
             }
-        }
-    ) {
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize(),
-            containerColor = Color.Transparent,
-            topBar = {
-                CategoriesListTopBar(
-                    searchQuery = searchQuery,
-                    onQueryChange = { viewModel.updateSearchQuery(it) },
-                    onSearch = { viewModel.updateSearchQuery(it) },
-                    onFilterClick = { viewModel.updateShowFilterDialog(true) },
-                    onCreateClick = onNavigateToCreate,
-                    scrollBehavior = scrollBehavior,
-                    windowWidth = windowWidthSizeClass
+        },
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                SearchBarDefaults.InputField(
+                    modifier = Modifier.weight(0.8f),
+                    query = searchQuery,
+                    onQueryChange = viewModel::updateSearchQuery,
+                    onSearch = viewModel::updateSearchQuery,
+                    expanded = false,
+                    onExpandedChange = {},
+                    placeholder = { Text(stringResource(AdminRes.string.search_category)) },
+                    leadingIcon = { Icon(Icons.Outlined.Search, null) },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
+                                Icon(Icons.Outlined.Clear, stringResource(SharedRes.string.clear))
+                            }
+                        }
+                    }
                 )
+                IconButton(onClick = { viewModel.updateShowFilterDialog(true) }, modifier = Modifier.size(48.dp)) {
+                    Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
+                }
+            }
+        },
+        fabButtonState = SharedTransparentScaffoldFabButtonState(
+            buttonState = UiState.Idle,
+            buttonEnabled = true,
+            onButtonClick = onNavigateToCreate,
+            buttonText = stringResource(SharedRes.string.create),
+            buttonIcon = Icons.Outlined.Add,
+            buttonIconDescription = stringResource(SharedRes.string.create)
+        ),
+    )
+    { padding, scrollBehavior ->
+        val density = LocalDensity.current
+        var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
+        val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
+        val pullRefreshState = rememberPullToRefreshState()
+        PullToRefreshBox(
+            modifier = Modifier
+                .fillMaxSize()
+                .paddingWithoutTop(padding),
+            isRefreshing = isRefreshing,
+            state = pullRefreshState,
+            onRefresh = {
+                lazyPagingItems.refresh()
             },
-            floatingActionButton = {
-                if (windowWidthSizeClass != WindowWidthSizeClass.Compact) return@Scaffold
-                ExtendedFloatingActionButton(
-                    modifier = Modifier,
-                    icon = {
-                        Icon(Icons.Outlined.Add, "创建类别")
-                    },
-                    text = { Text("创建类别") }, onClick = onNavigateToCreate
+            indicator = {
+                PullToRefreshDefaults.Indicator(
+                    modifier = Modifier.padding(top = padding.calculateTopPadding()).align(Alignment.TopCenter),
+                    isRefreshing = isRefreshing,
+                    state = pullRefreshState,
                 )
             }
-        ) { padding ->
-            val density = LocalDensity.current
-            var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
-            Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-            ) {
-                if (lazyPagingItems.itemCount == 0 && lazyPagingItems.loadState.refresh !is LoadState.Loading) {
+        ) {
+            Column {
+                if (lazyPagingItems.itemCount == 0 && lazyPagingItems.loadState.isIdle) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -121,7 +155,7 @@ fun CategoriesListScreen(
                             )
                             Spacer(Modifier.height(16.dp))
                             Text(
-                                "没有找到类别",
+                                stringResource(SharedRes.string.not_found),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.outline
                             )
@@ -139,6 +173,7 @@ fun CategoriesListScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
+                            Spacer(Modifier.height(padding.calculateTopPadding()))
                             Spacer(Modifier.fillMaxWidth().height(filterFlowRowHeight).heightIn(min = 28.dp))
                         }
 
@@ -153,7 +188,8 @@ fun CategoriesListScreen(
                                                 isLoading = viewModel.isLoading,
                                                 categoriesListViewmodel = viewModel,
                                                 category = category,
-                                                onEdit = { onNavigateToEdit(category.id) },
+                                                userRole = userRole,
+                                                onEdit = { onNavigateToEdit(category.id.toString()) },
                                                 onDelete = { viewModel.updateShowDeleteDialog(category) }
                                             )
                                         }
@@ -187,7 +223,7 @@ fun CategoriesListScreen(
                                 loadState.append is LoadState.Error || loadState.prepend is LoadState.Error -> {
                                     item(span = { GridItemSpan(maxLineSpan) }) {
                                         Text(
-                                            "加载失败，点击重试",
+                                            stringResource(SharedRes.string.load_failed),
                                             modifier = Modifier.clickable { retry() }
                                         )
                                     }
@@ -212,11 +248,13 @@ fun CategoriesListScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryListItem(
     modifier: Modifier = Modifier,
-    categoriesListViewmodel: CategoriesListViewmodel = koinViewModel(),
+    categoriesListViewmodel: CategoriesListViewModel = koinViewModel(),
     category: CategoryResponse,
+    userRole: UserRole? = null,
     isLoading: Boolean = true,
     onEdit: () -> Unit,
     onDelete: () -> Unit
@@ -230,7 +268,7 @@ fun CategoryListItem(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
-                    .placeholder(visible = isLoading, highlight = PlaceholderHighlight.shimmer()),
+                    .placeholderWithShimmer(isLoading),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -251,7 +289,9 @@ fun CategoryListItem(
                             },
                             label = {
                                 Text(
-                                    if (category.isPublic()) "平台" else "私有",
+                                    if (category.isPublic()) stringResource(AdminRes.string.platform_category) else stringResource(
+                                        AdminRes.string.private_category
+                                    ),
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             }
@@ -263,19 +303,25 @@ fun CategoryListItem(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = if (category.getParentName() != null) "父类别: ${category.getParentName()}" else "基础类别",
+                            text = if (category.getParentName() != null) "${stringResource(AdminRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
+                                AdminRes.string.base_category
+                            ),
                             style = MaterialTheme.typography.bodySmall
                         )
 
                         Text(
-                            text = "IVA: ${if (category.iva != null) category.iva.toString() + "%" else "未设置"}",
+                            text = "IVA: ${
+                                if (category.iva != null) category.iva.toString() + "%" else stringResource(
+                                    SharedRes.string.not_set
+                                )
+                            }",
                             style = MaterialTheme.typography.bodySmall
                         )
 
                         val childrenCount = category.getChildrenCount()
                         if (childrenCount > 0) {
                             Text(
-                                text = "$childrenCount 个子类别",
+                                text = stringResource(AdminRes.string.subcategories_count, childrenCount),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -284,14 +330,14 @@ fun CategoryListItem(
                 }
 
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Outlined.Edit, "编辑")
+                    Icon(Icons.Outlined.Edit, stringResource(SharedRes.string.edit))
                 }
 
             }
 
             HorizontalDivider()
 
-            Row(Modifier.fillMaxWidth().placeholder(visible = isLoading, highlight = PlaceholderHighlight.shimmer())) {
+            Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -299,15 +345,28 @@ fun CategoryListItem(
                     category.categoryTranslations?.let { CategorieLanguages(it) }
                     CategoriePath(category.getPath(), category.name)
                 }
-                OutlinedButton(
-                    onClick = onDelete,
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                    tooltip = {
+                        if (userRole != UserRole.SUPERADMIN) {
+                            PlainTooltip {
+                                Text(stringResource(SharedRes.string.error_no_permission))
+                            }
+                        }
+                    },
+                    state = rememberTooltipState()
                 ) {
-                    Icon(Icons.Default.Delete, null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text("删除类别")
+                    OutlinedButton(
+                        onClick = onDelete,
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        ),
+                        enabled = userRole == UserRole.SUPERADMIN
+                    ) {
+                        Icon(Icons.Default.Delete, null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text(stringResource(SharedRes.string.delete))
+                    }
                 }
             }
         }
@@ -319,7 +378,7 @@ fun CategoriePath(path: List<String>, categoryName: String) {
     if (path.size < 2) return
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            "路径:",
+            "${stringResource(SharedRes.string.path)}: ",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -339,7 +398,7 @@ fun CategorieLanguages(languages: List<SharedCategoryTranslation>) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            "其他语言:",
+            "${stringResource(AdminRes.string.other_languages)}:",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -351,7 +410,7 @@ fun CategorieLanguages(languages: List<SharedCategoryTranslation>) {
         }
         languages.ifEmpty {
             Text(
-                "无",
+                " -- ",
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -364,10 +423,12 @@ fun ConfirmDeleteCategories(
     onDismiss: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
-    val content =
-        "确定要删除类别 \"${category.name}\" 吗？${if (category.getChildrenCount() > 0) "\n\n注意：这将同时删除 ${category.getChildrenCount()} 个子类别且" else "这将"} 无法恢复。"
+    val childrenCount = category.getChildrenCount()
+    val content = """${stringResource(AdminRes.string.confirm_delete_category, category.name)}
+        ${if (childrenCount > 0) stringResource(AdminRes.string.delete_warning_with_children, childrenCount) else ""}
+    """.trimIndent()
     ConfirmDeleteDialog(
-        title = "删除类别",
+        title = stringResource(SharedRes.string.delete),
         text = content,
         onDismissRequest = onDismiss,
         onConfirm = onConfirm,
@@ -377,7 +438,7 @@ fun ConfirmDeleteCategories(
 
 @Composable
 fun FilterDialog(
-    viewModel: CategoriesListViewmodel = koinViewModel()
+    viewModel: CategoriesListViewModel = koinViewModel()
 ) {
     val categoryType = viewModel.filterCategoryType
     val parentCategory by viewModel.parentCategories.collectAsState()
@@ -387,7 +448,7 @@ fun FilterDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 // 标题
-                Text("过滤类别:")
+                Text(stringResource(SharedRes.string.filter))
                 // 三个单选按钮并排的行
                 Row(
                     modifier = Modifier
@@ -401,7 +462,7 @@ fun FilterDialog(
                             selected = categoryType == null,
                             onClick = { viewModel.updateFilterCategoryType(null) }
                         )
-                        Text("全部")
+                        Text(stringResource(SharedRes.string.all))
                     }
 
                     // 选项2：平台类别
@@ -410,7 +471,7 @@ fun FilterDialog(
                             selected = categoryType == SharedCategoryType.PUBLIC,
                             onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PUBLIC) }
                         )
-                        Text("平台类别")
+                        Text(stringResource(AdminRes.string.platform_category))
                     }
 
                     // 选项3：私有类别
@@ -419,13 +480,13 @@ fun FilterDialog(
                             selected = categoryType == SharedCategoryType.PRIVATE,
                             onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PRIVATE) }
                         )
-                        Text("私有类别")
+                        Text(stringResource(AdminRes.string.private_category))
                     }
                 }
 
                 SearchableSelectorRemote(
                     config = RemoteSearchableSelectorConfig(
-                        label = "选择父类别",
+                        label = stringResource(AdminRes.string.select_parent_category),
                         error = null,
                         leadingIcon = Icons.Outlined.Category,
                         items = parentCategory,
@@ -449,9 +510,10 @@ fun FilterDialog(
                 )
 
                 AnimatedVisibility(visible = categoryType == SharedCategoryType.PRIVATE) {
+                    val usernameLabel = stringResource(SharedRes.string.field_username_label)
                     SearchableSelectorRemote(
                         config = RemoteSearchableSelectorConfig(
-                            label = "选择批发商",
+                            label = stringResource(AdminRes.string.select_wholesaler),
                             error = null,
                             leadingIcon = Icons.Outlined.PersonOutline,
                             items = wholesalers,
@@ -461,7 +523,7 @@ fun FilterDialog(
                             },
                             pageSize = 100,
                             itemToString = {
-                                "ID: ${it.userId}, 用户名: ${it.username}"
+                                "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
                             },
                             itemId = { it.userId },
                             semanticsPropertyReceiver = {
@@ -477,7 +539,7 @@ fun FilterDialog(
         },
         confirmButton = {
             TextButton(onClick = { viewModel.updateShowFilterDialog(false) }) {
-                Text("关闭")
+                Text(stringResource(SharedRes.string.close))
             }
         }
     )
@@ -485,7 +547,7 @@ fun FilterDialog(
 
 @Composable
 private fun FilterChipsRow(
-    viewModel: CategoriesListViewmodel,
+    viewModel: CategoriesListViewModel,
     modifier: Modifier = Modifier
 ) {
     FlowRow(
@@ -504,7 +566,7 @@ private fun FilterChipsRow(
             ElevatedFilterChip(
                 selected = true,
                 onClick = { viewModel.removeUserIdFilter() },
-                label = { Text("用户: ${it.username}") },
+                label = { Text("${stringResource(SharedRes.string.user)}: ${it.username}") },
                 trailingIcon = { Icon(Icons.Outlined.Close, null) }
             )
         }
@@ -512,68 +574,9 @@ private fun FilterChipsRow(
             ElevatedFilterChip(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
-                label = { Text("父类: ${it.name}") },
+                label = { Text("${stringResource(AdminRes.string.parent_category)}: ${it.name}") },
                 trailingIcon = { Icon(Icons.Outlined.Close, null) }
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CategoriesListTopBar(
-    searchQuery: String,
-    onQueryChange: (String) -> Unit,
-    onSearch: (String) -> Unit,
-    onFilterClick: () -> Unit,
-    onCreateClick: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
-    windowWidth: WindowWidthSizeClass
-) {
-    TopAppBar(
-        modifier = Modifier.paddingTopForMenu(),
-        scrollBehavior = scrollBehavior,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = Color.Transparent,
-        ),
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                SearchBarDefaults.InputField(
-                    modifier = Modifier.weight(0.8f),
-                    query = searchQuery,
-                    onQueryChange = onQueryChange,
-                    onSearch = onSearch,
-                    expanded = false,
-                    onExpandedChange = {},
-                    placeholder = { Text("搜索类别...") },
-                    leadingIcon = { Icon(Icons.Outlined.Search, null) },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { onQueryChange("") }) {
-                                Icon(Icons.Outlined.Clear, "清除")
-                            }
-                        }
-                    }
-                )
-                IconButton(onClick = onFilterClick, modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Outlined.FilterList, "过滤")
-                }
-            }
-        },
-        actions = {
-            if (windowWidth != WindowWidthSizeClass.Compact) {
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.padding(end = 16.dp),
-                    icon = { Icon(Icons.Outlined.Add, null) },
-                    text = { Text("创建类别") },
-                    onClick = onCreateClick
-                )
-            }
-        }
-    )
 }

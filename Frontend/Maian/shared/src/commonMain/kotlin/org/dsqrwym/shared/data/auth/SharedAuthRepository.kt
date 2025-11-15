@@ -30,7 +30,7 @@ import org.dsqrwym.shared.network.safeApiCall
 class SharedAuthRepository(private val api: SharedAuthApi) {
 
     suspend fun checkEmailExists(email: String): SharedResponseResult<Boolean> {
-        return safeApiCall { api.checkEmailExists(email) }
+        return safeApiCall { api.checkEmailExists(email.trim()) }
     }
 
     suspend fun checkUserNameExist(
@@ -38,18 +38,18 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
         wholesalerId: String? = null,
         isAdmin: Boolean = false
     ): SharedResponseResult<Boolean> {
-        return safeApiCall { api.checkUserNameExist(username, wholesalerId, isAdmin) }
+        return safeApiCall { api.checkUserNameExist(username.trim(), wholesalerId, isAdmin) }
     }
 
     suspend fun sendVerifyCode(sendVerificationCodeRequest: SharedSendVerificationCodeRequest): SharedResponseResult<Unit> {
-        return safeApiCall { api.sendCode(sendVerificationCodeRequest) }
+        return safeApiCall { api.sendCode(sendVerificationCodeRequest.copy(email = sendVerificationCodeRequest.email.trim())) }
     }
 
     suspend fun verifyOTPCode(
         verifyCodeRequest: SharedVerifyCodeRequest,
         verifyUrl: String
     ): SharedResponseResult<SharedVerifyCodeResponse> {
-        return safeApiCall { api.verifyOTPCode(verifyCodeRequest, verifyUrl) }
+        return safeApiCall { api.verifyOTPCode(verifyCodeRequest.copy(email = verifyCodeRequest.email.trim()), verifyUrl) }
     }
 
     suspend fun resetPassword(resetPasswordRequest: SharedResetPasswordRequest): SharedResponseResult<Unit> {

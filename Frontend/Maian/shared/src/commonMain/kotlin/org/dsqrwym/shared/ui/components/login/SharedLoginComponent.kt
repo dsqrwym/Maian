@@ -12,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import maian.shared.generated.resources.*
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.stringResource
@@ -30,7 +32,7 @@ fun UsernameOrEmailField(
     focusManager: FocusManager
 ) {
     var isEmail by remember { mutableStateOf(true) }
-
+    val focusRequester = remember { FocusRequester() }
     MyOutlinedTextField(
         value = value,
         onValueChange = {
@@ -51,7 +53,12 @@ fun UsernameOrEmailField(
         ),
         imeAction = ImeAction.Next,
         onImeAction = { focusManager.moveFocus(FocusDirection.Next) },
+        focusRequester = focusRequester,
     )
+    LaunchedEffect(Unit) {
+        if (SharedUserPreferences.getUserLoginPreferences() != null) return@LaunchedEffect
+        focusRequester.requestFocus()
+    }
 }
 
 

@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 import { CategoryTranslationDto } from './category-translation.dto';
 import { Type } from 'class-transformer';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 export class CreateCategoryDto {
   @ApiProperty({
@@ -29,6 +30,7 @@ export class CreateCategoryDto {
     required: true,
   })
   @IsString()
+  @Trim()
   name: string;
 
   @ApiProperty({

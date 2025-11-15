@@ -170,4 +170,33 @@
     <string name="phone_error_validation_failed">Une erreur est survenue lors de la validation du numéro de téléphone</string>
 
     <string name="phone_hint_invalid_with_format">(Actuellement analysé comme : %1$s)</string>
+
+    <string name="create">Créer</string>
+    <string name="add">Ajouter</string>
+    <string name="update">Renouveler</string>
+    <string name="not_found">Aucun résultat trouvé</string>
+    <string name="load_failed">Échec du chargement, cliquez pour réessayer</string>
+    <string name="edit">Modifier</string>
+    <string name="delete">Supprimer</string>
+    <string name="path">Chemin</string>
+    <string name="clear">Effacer</string>
+    <string name="not_set">Non défini</string>
+    <string name="all">Tout</string>
+    <string name="filter">Filtrer</string>
+    <string name="close">Fermer</string>
+    <string name="user">Utilisateur</string>
+
+    <string name="delete_success">Suppression réussie</string>
+    <string name="delete_failed">Échec de la suppression</string>
+    <string name="create_success">Création réussie</string>
+    <string name="create_failed">Échec de la création</string>
+    <string name="update_success">Mise à jour réussie</string>
+    <string name="update_failed">La mise à jour a échoué</string>
+
+    <string name="category">Catégorie</string>
+
+    <string name="cancel">Annuler</string>
+    <string name="basic_info">Informations de base</string>
+
+    <string name="tax_rate">Taux de taxe</string>
 </resources>

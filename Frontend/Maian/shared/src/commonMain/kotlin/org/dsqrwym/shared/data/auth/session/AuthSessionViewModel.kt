@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
+import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
+import org.dsqrwym.shared.data.local.SharedUserPreferences
+import org.dsqrwym.shared.data.user.SharedUserPayload
 import org.dsqrwym.shared.di.auth.SharedAuthScope
+import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
@@ -60,13 +64,17 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
     /** Determine initial state based on access token presence. */
     /** 根据是否存在 access token 判定初始状态 */
     private fun initialState(): AuthState =
-        if (SharedTokenStorage.getAccess().isNullOrBlank()) AuthState.Unauthenticated
+        if (SharedTokenStorage.getAccess()
+                .isNullOrBlank() || SharedUserPayloadStorage.get() == null
+        ) AuthState.Unauthenticated
         else AuthState.Authenticated
 
     /** Mark state as authenticated, typically after successful login. */
     /** 在成功登录后将状态标记为已认证 */
-    fun onLoggedIn() {
+    fun onLoggedIn(userPayload: SharedUserPayload, userLoginPreferences: String) {
         _state.value = AuthState.Authenticated
+        SharedUserPayloadStorage.save(userPayload)
+        SharedUserPreferences.setUserLoginPreferences(userLoginPreferences)
         SharedAuthScope.closeScope()
     }
 
@@ -74,17 +82,30 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
     /** 在登出或清理会话后将状态标记为未认证 */
     fun onLoggedOut() {
         _state.value = AuthState.Unauthenticated
+        SharedUserPayloadStorage.clear()
         SharedAuthScope.closeScope()
+    }
+
+    fun getUser(): SharedUserPayload? {
+        val payload = SharedUserPayloadStorage.get()
+        if (payload == null) {
+            logout()
+        }
+        return payload
     }
 
     fun logout() {
         viewModelScope.launch {
-            val result = authRepository.logout()
-            if (result is SharedResponseResult.Success) {
-                onLoggedOut()
-                mySnackbarViewModel.showSuccess(message = "logout")
-            } else {
-                mySnackbarViewModel.showError("Error")
+            when (val result = authRepository.logout()) {
+                is SharedResponseResult.Success -> {
+                    onLoggedOut()
+                }
+
+                is SharedResponseResult.Error -> {
+                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                        result.message?.let { mySnackbarViewModel.showError(it) }
+                    }
+                }
             }
         }
     }

@@ -7,8 +7,8 @@ import org.dsqrwym.admin.navigation.navhost.menuNavGraph
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.LocalAppFocusManager
 import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
-import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.navigation.SharedDashboardScreen
 import org.dsqrwym.shared.navigation.SharedInitialScreen
@@ -46,9 +46,14 @@ fun App(
             }
 
             is AuthState.Authenticated -> {
+                val sessionViewModel: AuthSessionViewModel = currentKoinScope().get()
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
                 var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
-                val userRole = UserRole.ADMIN
+                val user = sessionViewModel.getUser()
+                if (user == null){
+                    sessionViewModel.logout()
+                    return@AppRoot
+                }
 
                 // 已登录 → 渲染主业务 Graph
                 BackgroundImage(SharedImages.background()) {
@@ -56,7 +61,7 @@ fun App(
                         menuConfig = SharedMenuConfiguration(
                             MenuConfig.menuList,
                             MenuConfig.topBarActions,
-                            userRole
+                            user.userRole
                         ),
                         currentRoute = currentRoute,
                         onNavigate = {

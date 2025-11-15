@@ -66,10 +66,6 @@ fun AuthStepCard(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                 )
-                val commonDurationMillis = 380
-                val commonDrawFillAfter = false
-                val commonUseOriginalStrokeColor = false
-                val commonModifier = Modifier.size(24.dp)
 
                 val targetState = when {
                     hasError -> UiState.Error

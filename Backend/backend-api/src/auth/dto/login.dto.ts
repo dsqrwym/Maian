@@ -10,6 +10,7 @@ import {
   NotContains,
   IsOptional,
 } from 'class-validator';
+import { Trim } from 'src/utils/transform/trim.decorator';
 export class LoginDto {
   @ApiProperty({
     description:
@@ -36,6 +37,7 @@ export class LoginDto {
   @ValidateIf((o) => !o.username)
   @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
   @MaxLength(100)
+  @Trim()
   email?: string; // 邮箱地址
 
   @ApiPropertyOptional({
@@ -49,6 +51,7 @@ export class LoginDto {
   @MinLength(3) // 最小长度为3
   @MaxLength(30) // 最大长度为30
   @NotContains('@') // 不能包含 @
+  @Trim()
   username?: string; // 用户名
 
   @ApiPropertyOptional({

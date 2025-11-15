@@ -35,8 +35,8 @@ class AuthRepository(
             sharedAuthApi.login(
                 SharedLoginRequest(
                     password = password,
-                    email = if (isEmail) identifier else null,
-                    username = if (!isEmail) identifier else null,
+                    email = if (isEmail) identifier.trim() else null,
+                    username = if (!isEmail) identifier.trim() else null,
                     deviceName = deviceInfo.deviceName,
                     userAgent = deviceInfo.userAgent
                 )
@@ -57,7 +57,7 @@ class AuthRepository(
     }
     suspend fun startRegister(email: String): SharedResponseResult<Unit> {
         val req = StartRegisterRequest(
-            email = email,
+            email = email.trim(),
             language = LanguageManager.getCurrentLanguage(),
             timezone = TimezoneManager.getCurrentTimeZone(),
             deepLink = null
@@ -66,6 +66,6 @@ class AuthRepository(
     }
 
     suspend fun completeRegister(req: CompleteRegisterRequest): SharedResponseResult<Unit> {
-        return safeApiCall { authApi.completeRegister(req) }
+        return safeApiCall { authApi.completeRegister(req.copy(email = req.email.trim(), username = req.username?.trim())) }
     }
 }

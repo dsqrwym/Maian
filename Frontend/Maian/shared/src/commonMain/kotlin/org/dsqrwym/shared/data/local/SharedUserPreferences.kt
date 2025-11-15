@@ -18,6 +18,8 @@ object SharedUserPreferences {
     // 深色主题
     private const val IS_DARK_THEME_KEY = "user_is_dark_theme"
 
+    private const val USER_LOGIN_PREFERENCES_KEY = "user_login_preferences"
+
     // 主题变更通知流（带重放，确保订阅者能拿到最新的状态）
     private val _isDarkThemeFlow = MutableSharedFlow<Boolean?>(replay = 1, extraBufferCapacity = 1)
     val isDarkThemeFlow: SharedFlow<Boolean?> = _isDarkThemeFlow
@@ -54,5 +56,13 @@ object SharedUserPreferences {
 
     fun getIsDarkTheme(): Boolean? {
         return settings.getBooleanOrNull(IS_DARK_THEME_KEY)
+    }
+
+    fun getUserLoginPreferences(): String? {
+        return settings.getStringOrNull(USER_LOGIN_PREFERENCES_KEY)
+    }
+
+    fun setUserLoginPreferences(value: String) {
+        settings.putString(USER_LOGIN_PREFERENCES_KEY, value)
     }
 }

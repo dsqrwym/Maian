@@ -9,11 +9,13 @@ import {
 } from 'class-validator';
 import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { CategorySelectField, CategoryType } from '../category.enums';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 export class FindCategoryDto extends PaginationQueryDto {
   @ApiProperty({ description: 'Keywords for name search', required: false })
   @IsString()
   @IsOptional()
+  @Trim()
   search?: string; // 用于 name 和 lang 模糊搜索
 
   @ApiProperty({

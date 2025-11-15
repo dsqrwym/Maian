@@ -14,6 +14,7 @@ import maian.shared.generated.resources.login_error_username_or_password
 import maian.shared.generated.resources.login_success
 import org.dsqrwym.admin.data.auth.AuthRepository
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -36,7 +37,7 @@ class LoginViewModel(
     private val authSessionViewModel: AuthSessionViewModel
 ) : ViewModel() {
 
-    var email by mutableStateOf("")
+    var email by mutableStateOf(SharedUserPreferences.getUserLoginPreferences() ?: "")
     var emailError by mutableStateOf<StringResource?>(null)
 
     var password by mutableStateOf("")
@@ -73,7 +74,7 @@ class LoginViewModel(
                         mySnackbarViewModel.showSuccess(getString(SharedRes.string.login_success))
                         delay(delayMillis)
                         loginUiState = UiState.Idle
-                        authSessionViewModel.onLoggedIn()
+                        result.data?.user?.let { authSessionViewModel.onLoggedIn(it, email) }
                     }
 
                     is SharedResponseResult.Error -> {

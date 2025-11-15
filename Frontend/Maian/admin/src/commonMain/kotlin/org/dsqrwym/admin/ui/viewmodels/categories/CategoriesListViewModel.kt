@@ -11,6 +11,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.delete_failed
+import maian.shared.generated.resources.delete_success
 import org.dsqrwym.admin.data.categories.CategoryRepository
 import org.dsqrwym.admin.data.categories.dto.CategoryResponse
 import org.dsqrwym.admin.data.user.UserRepository
@@ -20,9 +23,10 @@ import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.jetbrains.compose.resources.getString
 
 
-class CategoriesListViewmodel(
+class CategoriesListViewModel(
     categoryRepository: CategoryRepository,
     userRepository: UserRepository,
     mySnackbarViewModel: MySnackbarViewModel
@@ -135,14 +139,16 @@ class CategoriesListViewmodel(
             when (val result = categoryRepository.deleteCategory(category.id.toString())) {
                 is SharedResponseResult.Success -> {
                     _refreshTrigger.emit(Unit)
-                    mySnackbarViewModel.showSuccess("删除成功")
+                    val message = getString(SharedRes.string.delete_success)
+                    mySnackbarViewModel.showSuccess(message)
                 }
 
                 is SharedResponseResult.Error -> {
                     if (ErrorMessageMapper.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
-                        mySnackbarViewModel.showError("删除失败")
+                        val message = getString(SharedRes.string.delete_failed)
+                        mySnackbarViewModel.showError(message)
                     }
                 }
             }

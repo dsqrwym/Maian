@@ -7,14 +7,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
@@ -173,6 +177,7 @@ fun PasswordField(
     focusManager: FocusManager,
     onLoginClick: () -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
     MyPasswordField(
         labelText = stringResource(SharedRes.string.field_password_label),
         placeholderText = stringResource(SharedRes.string.field_password_placeholder),
@@ -182,6 +187,12 @@ fun PasswordField(
         onImeAction = {
             focusManager.clearFocus()
             onLoginClick()
-        }
+        },
+        focusRequester = focusRequester,
     )
+
+    LaunchedEffect(Unit) {
+        if (SharedUserPreferences.getUserLoginPreferences() == null) return@LaunchedEffect
+        focusRequester.requestFocus()
+    }
 }

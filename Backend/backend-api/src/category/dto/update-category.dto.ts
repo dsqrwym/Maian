@@ -11,6 +11,7 @@ import {
 import { CategoryTranslationDto } from './category-translation.dto';
 import { Type } from 'class-transformer';
 import { AtLeastOneOf } from '../../common/validators/decorator/at-least-one-field.decorator';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 export class UpdateCategoryDto {
   @ApiProperty({
@@ -18,9 +19,8 @@ export class UpdateCategoryDto {
     example: 1,
     required: true,
   })
-  @IsNumber()
   @AtLeastOneOf(['name', 'iva', 'translations'])
-  id: bigint;
+  id: string;
 
   @ApiProperty({
     description: 'Name of the category',
@@ -29,6 +29,7 @@ export class UpdateCategoryDto {
     required: true,
   })
   @IsString()
+  @Trim()
   name?: string;
 
   @ApiProperty({

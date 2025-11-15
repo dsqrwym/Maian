@@ -100,6 +100,41 @@ export class CategoryController {
   }
 
   /**
+   * Get category data for update
+   * @param {string} id - Category ID
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<unknown>}
+   */
+  @Get(':id/update')
+  @ApiOperation({ summary: 'Get category data for update' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID of the category to fetch for update',
+    type: 'string',
+    example: '1234567890123456',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Category successfully retrieved for update',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Category not found',
+  })
+  @RolesAllowed(
+    UserRole.WHOLESALER,
+    UserRole.WAREHOUSE,
+    UserRole.ADMIN,
+    UserRole.SUPERADMIN,
+  )
+  async getForUpdate(
+    @Param('id') id: string,
+    @Req() req: FastifyRequest,
+  ): Promise<unknown> {
+    return this.categoryService.getCategoryForUpdate(id, req.ability);
+  }
+
+  /**
    * Update an existing category
    * @param {UpdateCategoryDto} updateCategoryDto - Category data to update
    * @param {FastifyRequest} req - Request object containing user ability

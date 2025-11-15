@@ -13,6 +13,7 @@ import {
 } from 'class-validator';
 import { DirectionDto } from './register.direction.dto';
 import { Type } from 'class-transformer';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 /**
  * DTO for retailer registration
@@ -36,6 +37,7 @@ export class RegisterRetailerDto {
     message: 'Email must be shorter than or equal to 100 characters',
   })
   @IsNotEmpty({ message: 'Email is required' })
+  @Trim()
   email: string;
 
   /**
@@ -84,6 +86,7 @@ export class RegisterRetailerDto {
     message: 'Username must be shorter than or equal to 30 characters',
   })
   @NotContains('@', { message: 'Username cannot contain @ symbol' })
+  @Trim()
   username?: string;
 
   /**

@@ -1,15 +1,13 @@
 package org.dsqrwym.admin.data.categories
 
-import org.dsqrwym.admin.data.categories.dto.CategoryResponse
-import org.dsqrwym.admin.data.categories.dto.CreateCategoryDto
-import org.dsqrwym.admin.data.categories.dto.ParentCategoryResponse
+import org.dsqrwym.admin.data.categories.dto.*
 import org.dsqrwym.shared.data.category.SharedCategoryApi
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
 import org.dsqrwym.shared.network.ApiResponseList
 import org.dsqrwym.shared.network.SharedResponseResult
-import org.dsqrwym.shared.network.toSharedResponseResult
+import org.dsqrwym.shared.network.safeApiCall
 
 class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: CategoryApi) {
     suspend fun getCategories(
@@ -22,7 +20,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         limit: Int = 100
     ): SharedResponseResult<ApiResponseList<CategoryResponse>> {
         val query = SharedFindCategoryDto(
-            search = search,
+            search = search?.trim(),
             type = type,
             langCode = langCode,
             userId = userId,
@@ -35,7 +33,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
             page = page,
             limit = limit
         )
-        return sharedApi.getCategories<CategoryResponse>(query).toSharedResponseResult()
+        return safeApiCall { sharedApi.getCategories<CategoryResponse>(query) }
     }
 
     suspend fun getParentCategories(
@@ -45,7 +43,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         limit: Int = 100
     ): SharedResponseResult<ApiResponseList<ParentCategoryResponse>> {
         val query = SharedFindCategoryDto(
-            search = search,
+            search = search?.trim(),
             userId = userId,
             maxLevel = 2,
             page = page,
@@ -54,14 +52,47 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
                 SharedCategorySelectField.TRANSLATIONS,
             )
         )
-        return sharedApi.getCategories<ParentCategoryResponse>(query).toSharedResponseResult()
+        return safeApiCall { sharedApi.getCategories<ParentCategoryResponse>(query) }
     }
 
     suspend fun createCategory(dto: CreateCategoryDto): SharedResponseResult<Unit> {
-        return api.createCategory(dto).toSharedResponseResult()
+        return safeApiCall {
+            api.createCategory(
+                dto.copy(
+                name = dto.name.trim(),
+                translations = dto.translations?.map { it.copy(name = it.name.trim()) }
+            ))
+        }
     }
 
     suspend fun deleteCategory(id: String): SharedResponseResult<Unit> {
-        return api.deleteCategory(id).toSharedResponseResult()
+        return safeApiCall { api.deleteCategory(id) }
+    }
+
+    suspend fun checkCategoryName(name: String, userId: String? = null): SharedResponseResult<Boolean> {
+        return safeApiCall { api.checkCategoryName(name.trim(), userId) }
+    }
+
+    suspend fun checkUpdateCategoryName(
+        name: String,
+        id: String,
+        userId: String? = null
+    ): SharedResponseResult<Boolean> {
+        return safeApiCall { api.checkUpdateCategoryName(name.trim(), id, userId) }
+    }
+
+    suspend fun getCategoryForUpdate(id: String): SharedResponseResult<CategoryForUpdateResponseDto> {
+        return safeApiCall { api.getCategoryForUpdate(id) }
+    }
+
+    suspend fun updateCategory(dto: UpdateCategoryDto): SharedResponseResult<Unit> {
+        return safeApiCall {
+            api.updateCategory(
+                dto.copy(
+                    name = dto.name?.trim(),
+                    translations = dto.translations?.map { it.copy(name = it.name.trim()) }
+                )
+            )
+        }
     }
 }

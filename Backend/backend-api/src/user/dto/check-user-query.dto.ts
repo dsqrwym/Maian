@@ -8,7 +8,7 @@ import {
   NotContains,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ToBoolean } from '../../utils/transform-validator';
+import { ToBoolean } from '../../utils/transform/to-boolean.decorator';
 
 /**
  * DTO for checking email availability

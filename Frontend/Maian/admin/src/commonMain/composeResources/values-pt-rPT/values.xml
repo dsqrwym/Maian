@@ -1,0 +1,42 @@
+<resources>
+    <string name="select_wholesaler">Selecionar Atacadista</string>
+    <string name="subcategories_count">%1$s subcategorias</string>
+    <string name="parent_category">Categoria principal</string>
+    <string name="base_category">Categoria base</string>
+    <string name="other_languages">Outros idiomas</string>
+    <string name="confirm_delete_category">Tem a certeza de que pretende eliminar a categoria "%1$s"?</string>
+    <string name="delete_warning_with_children">Aviso: Isto também irá eliminar %1$s subcategorias e não poderá ser desfeito.</string>
+    <string name="select_parent_category">Selecionar categoria principal</string>
+    <string name="private_category">Categoria privada</string>
+    <string name="search_category">Procurar categorias...</string>
+    <string name="platform_category">Categoria da plataforma</string>
+
+    <string name="input_language_translation">Insira a tradução em %1$s...</string>
+    <string name="translate">Traduzir</string>
+    <string name="add_language_translation">Adicionar tradução</string>
+    <string name="all_languages_added">Todos os idiomas suportados foram adicionados</string>
+
+    <string name="category_name_tax_setting">Nome da categoria e configuração de taxa</string>
+    <string name="category_name">Nome da categoria</string>
+    <string name="please_input_category_name">Insira o nome da categoria</string>
+    <string name="empty_use_product_tax">Deixe em branco para usar a taxa do produto</string>
+
+    <string name="select_parent_category_to_create">Selecione uma categoria principal para criar uma subcategoria</string>
+    <string name="parent_category_selected">Categoria principal selecionada</string>
+    <string name="category_type">Tipo de categoria</string>
+    <string name="category_visibility">Definir visibilidade da categoria</string>
+    <string name="visible_to_all">Visível para todos os utilizadores</string>
+    <string name="visible_to_owner">Visível apenas para o proprietário</string>
+    <string name="category_visible_to_all_tip">Esta categoria ficará acessível a todos os utilizadores</string>
+    <string name="wholesaler_selected">Grossista selecionado</string>
+    <string name="add_multilingual_translation">Adicionar tradução multilíngue</string>
+    <string name="no_other_language_translation">Sem traduções adicionais</string>
+    <string name="translations_count">%1$s traduções adicionadas</string>
+
+    <string name="category_name_exists">O nome da categoria já existe</string>
+    <string name="category_management">Gerenciamento de categorias</string>
+    <string name="category_management_description">
+        Permite visualizar e pesquisar categorias, criar categorias privadas e globais para grossistas ou utilizadores de toda a plataforma. Suporta edição (nome, tradução) e eliminação (apenas superadministradores podem eliminar). As categorias suportam até três níveis de aninhamento (1 → 2 → 3).
+    </string>
+
+</resources>

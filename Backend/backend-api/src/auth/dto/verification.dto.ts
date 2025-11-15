@@ -8,6 +8,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Trim } from 'src/utils/transform/trim.decorator';
 
 export class SendVerificationCodeDto {
   @ApiProperty({
@@ -17,6 +18,7 @@ export class SendVerificationCodeDto {
   })
   @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
   @MaxLength(100)
+  @Trim()
   email: string; // 邮箱地址
 
   @IsOptional()
@@ -40,6 +42,7 @@ export class VerifyCodeDto {
   })
   @IsEmail({ host_blacklist: ['example.com'] }) // 验证为邮箱格式，并排除example.com域名
   @MaxLength(100)
+  @Trim()
   email: string; // 邮箱地址
 }
 
