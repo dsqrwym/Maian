@@ -1,6 +1,5 @@
-package org.dsqrwym.admin.ui.screens.categories
+package org.dsqrwym.enterprise.ui.screens.categories
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -16,20 +15,17 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import maian.admin.generated.resources.*
+import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
-import org.dsqrwym.admin.data.categories.dto.CategoryResponse
-import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
-import org.dsqrwym.shared.data.category.SharedCategoryType
+import org.dsqrwym.enterprise.data.categories.dto.CategoryResponse
+import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -94,7 +90,7 @@ fun CategoriesListScreen(
                     onSearch = viewModel::updateSearchQuery,
                     expanded = false,
                     onExpandedChange = {},
-                    placeholder = { Text(stringResource(AdminRes.string.search_category)) },
+                    placeholder = { Text(stringResource(EnterpriseRes.string.search_category)) },
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
@@ -186,7 +182,6 @@ fun CategoriesListScreen(
                                         if (category != null) {
                                             CategoryListItem(
                                                 isLoading = viewModel.isLoading,
-                                                categoriesListViewmodel = viewModel,
                                                 category = category,
                                                 userRole = userRole,
                                                 onEdit = { onNavigateToEdit(category.id.toString()) },
@@ -201,7 +196,6 @@ fun CategoriesListScreen(
                                         item {
                                             CategoryListItem(
                                                 isLoading = true,
-                                                categoriesListViewmodel = viewModel,
                                                 category = CategoryResponse(
                                                     id = it.toLong(),
                                                     name = "",
@@ -253,7 +247,6 @@ fun CategoriesListScreen(
 @Composable
 fun CategoryListItem(
     modifier: Modifier = Modifier,
-    categoriesListViewmodel: CategoriesListViewModel = koinViewModel(),
     category: CategoryResponse,
     userRole: UserRole? = null,
     isLoading: Boolean = true,
@@ -283,16 +276,10 @@ fun CategoryListItem(
                             style = MaterialTheme.typography.titleMedium
                         )
                         AssistChip(
-                            onClick = {
-                                categoriesListViewmodel.updateFilterCategoryType(
-                                    if (category.isPublic()) SharedCategoryType.PUBLIC else SharedCategoryType.PRIVATE
-                                )
-                            },
+                            onClick = {},
                             label = {
                                 Text(
-                                    if (category.isPublic()) stringResource(AdminRes.string.platform_category) else stringResource(
-                                        AdminRes.string.private_category
-                                    ),
+                                    stringResource(EnterpriseRes.string.private_category),
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             }
@@ -304,8 +291,8 @@ fun CategoryListItem(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = if (category.getParentName() != null) "${stringResource(AdminRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
-                                AdminRes.string.base_category
+                            text = if (category.getParentName() != null) "${stringResource(EnterpriseRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
+                                EnterpriseRes.string.base_category
                             ),
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -322,7 +309,7 @@ fun CategoryListItem(
                         val childrenCount = category.childrenCount
                         if (childrenCount > 0) {
                             Text(
-                                text = stringResource(AdminRes.string.subcategories_count, childrenCount),
+                                text = stringResource(EnterpriseRes.string.subcategories_count, childrenCount),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.primary
                             )
@@ -362,7 +349,7 @@ fun CategoryListItem(
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
                         ),
-                        enabled = userRole == UserRole.SUPERADMIN
+                        enabled = true
                     ) {
                         Icon(
                             Icons.Default.Delete,
@@ -403,7 +390,7 @@ fun CategorieLanguages(languages: List<SharedCategoryTranslation>) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            "${stringResource(AdminRes.string.other_languages)}:",
+            "${stringResource(EnterpriseRes.string.other_languages)}:",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -435,8 +422,13 @@ fun ConfirmDeleteCategories(
     onConfirm: () -> Unit = {},
 ) {
     val childrenCount = category.childrenCount
-    val content = """${stringResource(AdminRes.string.confirm_delete_category, category.name)}
-        ${if (childrenCount > 0) stringResource(AdminRes.string.delete_warning_with_children, childrenCount) else ""}
+    val content = """${stringResource(EnterpriseRes.string.confirm_delete_category, category.name)}
+        ${
+        if (childrenCount > 0) stringResource(
+            EnterpriseRes.string.delete_warning_with_children,
+            childrenCount
+        ) else ""
+    }
     """.trimIndent()
     ConfirmDeleteDialog(
         title = stringResource(SharedRes.string.delete),
@@ -451,51 +443,16 @@ fun ConfirmDeleteCategories(
 fun FilterDialog(
     viewModel: CategoriesListViewModel = koinViewModel()
 ) {
-    val categoryType = viewModel.filterCategoryType
     AlertDialog(
         onDismissRequest = { viewModel.updateShowFilterDialog(false) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 // 标题
                 Text(stringResource(SharedRes.string.filter))
-                // 三个单选按钮并排的行
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // 选项1：全部
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = categoryType == null,
-                            onClick = { viewModel.updateFilterCategoryType(null) }
-                        )
-                        Text(stringResource(SharedRes.string.all))
-                    }
-
-                    // 选项2：平台类别
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = categoryType == SharedCategoryType.PUBLIC,
-                            onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PUBLIC) }
-                        )
-                        Text(stringResource(AdminRes.string.platform_category))
-                    }
-
-                    // 选项3：私有类别
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = categoryType == SharedCategoryType.PRIVATE,
-                            onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PRIVATE) }
-                        )
-                        Text(stringResource(AdminRes.string.private_category))
-                    }
-                }
 
                 SearchableSelectorRemote(
                     config = RemoteSearchableSelectorConfig(
-                        label = stringResource(AdminRes.string.select_parent_category),
+                        label = stringResource(EnterpriseRes.string.select_parent_category),
                         error = null,
                         leadingIcon = Icons.Outlined.Category,
                         selectedItem = viewModel.filterParentCategory,
@@ -515,31 +472,6 @@ fun FilterDialog(
                         }
                     )
                 )
-
-                AnimatedVisibility(visible = categoryType == SharedCategoryType.PRIVATE) {
-                    val usernameLabel = stringResource(SharedRes.string.field_username_label)
-                    SearchableSelectorRemote(
-                        config = RemoteSearchableSelectorConfig(
-                            label = stringResource(AdminRes.string.select_wholesaler),
-                            error = null,
-                            leadingIcon = Icons.Outlined.PersonOutline,
-                            selectedItem = viewModel.filterUser,
-                            onSelectedItemChange = {
-                                viewModel.updateFilterUser(it)
-                            },
-                            pageSize = 100,
-                            itemToString = {
-                                "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
-                            },
-                            semanticsPropertyReceiver = {
-                                contentType = ContentType.Username
-                            },
-                            onSearch = { query, page, limit ->
-                                viewModel.findWholesalers(query, page, limit)
-                            },
-                        )
-                    )
-                }
             }
         },
         confirmButton = {
@@ -559,33 +491,11 @@ private fun FilterChipsRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        viewModel.filterCategoryType?.let {
-            ElevatedFilterChip(
-                selected = true,
-                onClick = { viewModel.removeCategoryTypeFilter() },
-                label = {
-                    Text(
-                        if (it == SharedCategoryType.PUBLIC) stringResource(AdminRes.string.platform_category) else stringResource(
-                            AdminRes.string.private_category
-                        )
-                    )
-                },
-                trailingIcon = { Icon(Icons.Outlined.Close, null) }
-            )
-        }
-        viewModel.filterUser?.let {
-            ElevatedFilterChip(
-                selected = true,
-                onClick = { viewModel.removeUserIdFilter() },
-                label = { Text("${stringResource(SharedRes.string.user)}: ${it.username}") },
-                trailingIcon = { Icon(Icons.Outlined.Close, null) }
-            )
-        }
         viewModel.filterParentCategory?.let {
             ElevatedFilterChip(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
-                label = { Text("${stringResource(AdminRes.string.parent_category)}: ${it.name}") },
+                label = { Text("${stringResource(EnterpriseRes.string.parent_category)}: ${it.name}") },
                 trailingIcon = { Icon(Icons.Outlined.Close, null) }
             )
         }

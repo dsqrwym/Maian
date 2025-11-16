@@ -127,6 +127,61 @@ export class CategoryService {
     });
   }
 
+  async countDescendantsForCategories(
+    categoryIds: bigint[],
+  ): Promise<Record<string, number>> {
+    if (categoryIds.length === 0) return {};
+
+    const descendants = await this.prisma.categories.findMany({
+      where: {
+        OR: [
+          { parent_id: { in: categoryIds } }, // level 1
+          { parent: { parent_id: { in: categoryIds } } }, // level 2
+          { parent: { parent: { parent_id: { in: categoryIds } } } }, // level 3
+        ],
+      },
+      select: {
+        id: true,
+        parent_id: true,
+        parent: {
+          select: {
+            id: true,
+            parent_id: true,
+            parent: {
+              select: {
+                id: true,
+                parent_id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const map: Record<string, number> = {};
+    categoryIds.forEach((id) => (map[id.toString()] = 0));
+
+    descendants.forEach((item) => {
+      let p: bigint | null = item.parent_id ?? null;
+      const level1 = item.parent;
+      const level2 = level1?.parent ?? null;
+
+      // 最多向上走两层
+      for (let i = 0; i < 3; i++) {
+        if (!p) break;
+
+        if (categoryIds.includes(p)) {
+          map[p.toString()]++;
+        }
+
+        if (i === 0) p = level1?.parent_id ?? null;
+        else if (i === 1) p = level2?.parent_id ?? null;
+      }
+    });
+
+    return map;
+  }
+
   async search(query: FindCategoryDto, ability: AppAbility) {
     if (!ability.can(Action.Read, 'categories')) {
       throw new ForbiddenException(
@@ -152,8 +207,6 @@ export class CategoryService {
     const select: Prisma.categoriesSelect = {
       id: true,
       name: true,
-      user_id: true,
-      created_at: true,
       ...(iva && { iva: true }),
       ...(level && { level: true }),
       ...(user_id && { user_id: true }),
@@ -171,19 +224,27 @@ export class CategoryService {
           select: {
             id: true,
             name: true,
-            user_id: true,
-            parent: true,
+            parent: {
+              select: {
+                id: true,
+                name: true,
+                ...(iva && { iva: true }),
+                ...(level && { level: true }),
+                ...(user_id && { user_id: true }),
+              },
+            },
             ...(iva && { iva: true }),
             ...(level && { level: true }),
+            ...(user_id && { user_id: true }),
           },
         },
         children: {
           select: {
             id: true,
             name: true,
-            user_id: true,
             ...(iva && { iva: true }),
             ...(level && { level: true }),
+            ...(user_id && { user_id: true }),
           },
           where: { ...(userId && { user_id: userId }) },
         },
@@ -225,7 +286,7 @@ export class CategoryService {
     }
 
     if (query.maxLevel) {
-      andClauses.push({ level: { lt: query.maxLevel } });
+      andClauses.push({ level: { lte: query.maxLevel } });
     }
 
     // 最终 where
@@ -244,6 +305,26 @@ export class CategoryService {
       }),
       this.prisma.categories.count({ where }),
     ]);
+
+    const ids = categories.map((c) => BigInt(c.id));
+    const childrenMap = await this.countDescendantsForCategories(ids);
+
+    if (query.withChildrenCount) {
+      const itemsWithCount = categories.map((c) => ({
+        ...c,
+        childrenCount: childrenMap[c.id.toString()] ?? 0,
+      }));
+
+      const result: ToPaginated = {
+        items: itemsWithCount,
+        meta: {
+          total: total,
+          page: page,
+          limit: limit,
+        },
+      };
+      return result;
+    }
 
     const result: ToPaginated = {
       items: categories,

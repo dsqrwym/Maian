@@ -49,5 +49,5 @@ fun NavGraphBuilder.menuNavGraph(
         }
     }
 
-    categorieNavGraph( navController, focusManager)
+    categoryNavGraph(navController, focusManager)
 }

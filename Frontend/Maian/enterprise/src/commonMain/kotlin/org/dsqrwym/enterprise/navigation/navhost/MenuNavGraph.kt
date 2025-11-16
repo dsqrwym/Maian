@@ -37,7 +37,6 @@ fun NavGraphBuilder.menuNavGraph(
         }
     }
 
-
     composable<SharedProfileScreen> {
         val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -47,6 +46,7 @@ fun NavGraphBuilder.menuNavGraph(
                 Text("Logout")
             }
         }
-
     }
+
+    categoryNavGraph(navController, focusManager)
 }

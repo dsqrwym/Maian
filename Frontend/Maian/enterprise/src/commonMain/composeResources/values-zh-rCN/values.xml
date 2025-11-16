@@ -17,4 +17,39 @@
     <string name="field_company_type_label">公司类型</string>
     <string name="field_company_type_placeholder">请选择公司类型</string>
     <string name="icon_content_description_company">公司图标</string>
+
+    <string name="category_management">类别管理</string>
+    <string name="category_management_description">
+        查看与搜索类别，创建自己的商品类别，并管理多语言名称。
+        支持最多三层嵌套（1 → 2 → 3）。
+    </string>
+
+    <string name="category_name_tax_setting">类别的名称和税率设置</string>
+    <string name="category_name">类别名称</string>
+    <string name="please_input_category_name">请输入类别名称</string>
+    <string name="empty_use_product_tax">留空则使用产品的税率设置</string>
+    <string name="category_name_exists">类别名称已存在</string>
+
+    <string name="subcategories_count">%1$s个子类别</string>
+    <string name="parent_category">父类别</string>
+    <string name="base_category">基础类别</string>
+    <string name="other_languages">其他语言</string>
+    <string name="confirm_delete_category">确定要删除类别 "%1$s" 吗？</string>
+    <string name="delete_warning_with_children">注意：这将同时删除 %1$s 个子类别且无法恢复。</string>
+    <string name="select_parent_category">选择父类别</string>
+    <string name="private_category">私有类别</string>
+    <string name="search_category">搜索类别...</string>
+    <string name="platform_category">平台类别</string>
+
+
+    <string name="select_parent_category_to_create">选择父类别以创建子类别</string>
+    <string name="parent_category_selected">已选择父类别</string>
+
+    <string name="input_language_translation">输入 %1$s 翻译...</string>
+    <string name="translate">翻译</string>
+    <string name="add_language_translation">添加语言翻译</string>
+    <string name="all_languages_added">已添加所有支持的语言</string>
+    <string name="add_multilingual_translation">添加多语言翻译</string>
+    <string name="no_other_language_translation">暂无其他语言翻译</string>
+    <string name="translations_count">已添加%1$s种语言翻译</string>
 </resources>

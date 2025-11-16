@@ -13,7 +13,7 @@ import org.dsqrwym.admin.ui.screens.categories.CategoryCreateScreen
 import org.dsqrwym.admin.ui.screens.categories.CategoryEditScreen
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 
-fun NavGraphBuilder.categorieNavGraph(
+fun NavGraphBuilder.categoryNavGraph(
     navController: NavHostController,
     focusManager: FocusManager,
 ) {

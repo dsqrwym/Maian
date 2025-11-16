@@ -1,4 +1,4 @@
-package org.dsqrwym.admin.ui.viewmodels.categories
+package org.dsqrwym.enterprise.ui.viewmodels.categories
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
@@ -8,16 +8,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import maian.admin.generated.resources.AdminRes
-import maian.admin.generated.resources.category_name_exists
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.category_name_exists
 import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.create_failed
+import maian.shared.generated.resources.create_success
 import maian.shared.generated.resources.field_cannot_be_empty
-import maian.shared.generated.resources.update_failed
-import maian.shared.generated.resources.update_success
-import org.dsqrwym.admin.data.categories.CategoryRepository
-import org.dsqrwym.admin.data.categories.dto.UpdateCategoryDto
-import org.dsqrwym.admin.data.user.UserRepository
-import org.dsqrwym.admin.navigation.Categories
+import org.dsqrwym.enterprise.data.categories.CategoryRepository
+import org.dsqrwym.enterprise.navigation.Categories
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -31,70 +29,60 @@ import org.dsqrwym.shared.util.formatter.toFixed
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
+import kotlin.time.ExperimentalTime
 
 @OptIn(FlowPreview::class)
-class CategoriesEditViewModel(
+class CategoriesCreateViewModel(
     categoryRepository: CategoryRepository,
-    userRepository: UserRepository,
     mySnackbarViewModel: MySnackbarViewModel
 ) : BaseCategoryFilterViewmodel(
-    userRepository,
     categoryRepository,
     mySnackbarViewModel
 ), SharedNavigable by SharedNavigableDelegate() {
-    var isLoading by mutableStateOf(true)
-        private set
-
-    // 当前编辑的分类 ID
-    private var categoryId: String? = null
-
-    // 初始存在的翻译（用于计算删除列表）
-    private val initialLangCodes = mutableStateListOf<String>()
-
-    // 表单：名称
+    // Form state
     var categoryName by mutableStateOf("")
-        private set
-    var categoryIva by mutableStateOf("")
         private set
     var isCheckingCategoryName by mutableStateOf(false)
     var categoryNameExist by mutableStateOf(false)
     var categoryNameError by mutableStateOf<StringResource?>(null)
         private set
 
-    // 翻译
+    var categoryIva by mutableStateOf("")
+        private set
+
     var translations = mutableStateListOf<SharedCategoryTranslation>()
         private set
 
-    // UI
-    var updateButtonState by mutableStateOf(UiState.Idle)
+    // UI state
+    var createButtonState by mutableStateOf(UiState.Idle)
         private set
     val translationIsValid = derivedStateOf {
-        if (translations.isEmpty()) return@derivedStateOf true
         translations.all { it.name.isNotBlank() }
     }
-    val updateButtonEnabled = derivedStateOf {
+    var createButtonEnabled = derivedStateOf {
         translationIsValid.value
-                && updateButtonState != UiState.Loading
-                && validateCategoryName() && categoryId != null
+                && createButtonState != UiState.Loading
+                && validateCategoryName()
     }
     var showAddLanguageDialog by mutableStateOf(false)
         private set
 
     init {
-        // 名称去抖唯一性校验（更新接口）
         viewModelScope.launch {
-            snapshotFlow { categoryName }.debounce(600)
+            snapshotFlow { categoryName }
+                .debounce(600)
                 .distinctUntilChanged()
                 .collectLatest { name ->
-                    val id = categoryId ?: return@collectLatest
                     if (name.isBlank()) return@collectLatest
                     isCheckingCategoryName = true
-                    when (val result = categoryRepository.checkUpdateCategoryName(name, id, filterUser?.userId)) {
+                    when (val result = categoryRepository.checkCategoryName(name)) {
                         is SharedResponseResult.Success -> {
                             categoryNameExist = result.data == true
                             categoryNameError = if (categoryNameExist) {
-                                AdminRes.string.category_name_exists
-                            } else null
+                                EnterpriseRes.string.category_name_exists
+                            } else {
+                                null
+                            }
                         }
 
                         is SharedResponseResult.Error -> {
@@ -109,45 +97,21 @@ class CategoriesEditViewModel(
         }
     }
 
-    fun initWithCategory(categoryId: String) {
-        this@CategoriesEditViewModel.categoryId = categoryId
-        viewModelScope.launch {
-            when (val result = categoryRepository.getCategoryForUpdate(categoryId)) {
-                is SharedResponseResult.Success -> {
-                    categoryName = result.data?.name ?: ""
-                    result.data?.translations?.let {
-                        translations.clear()
-                        initialLangCodes.clear()
-                        translations.addAll(it)
-                        initialLangCodes.addAll(it.map { t -> t.langCode })
-                    }
-
-                    isLoading = false
-                }
-
-                is SharedResponseResult.Error -> {
-                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
-                        result.message?.let {
-                            mySnackbarViewModel.showError(it)
-                        }
-                    }
-                    emitNavigation(NavigationEvent.ToRoute(Categories))
-                }
-            }
-
-        }
-    }
-
+    // Update functions
     fun updateCategoryName(name: String) {
         val newName = name.take(50)
         categoryName = newName
         categoryNameError = if (newName.isBlank()) {
             SharedRes.string.field_cannot_be_empty
-        } else null
+        } else {
+            null
+        }
     }
 
     fun validateCategoryName(): Boolean {
-        return !categoryNameExist && categoryNameError == null && categoryName.isNotBlank()
+        return !categoryNameExist
+                && categoryNameError == null
+                && categoryName.isNotBlank()
     }
 
     fun showAddLanguageDialog(show: Boolean) {
@@ -175,46 +139,46 @@ class CategoriesEditViewModel(
         translations.find { it.langCode == langCode }?.let { translations.remove(it) }
     }
 
-    fun getAvailableLanguages(): List<LanguageManager.SupportedLanguages> {
-        return LanguageManager.SupportedLanguages.entries
-            .filter { it.code !in translations.map { translation -> translation.langCode } }
-    }
-
-    fun submitUpdate() {
-        val id = categoryId ?: return
-        if (!updateButtonEnabled.value) return
+    @OptIn(ExperimentalTime::class)
+    fun createCategory() {
+        if (!createButtonEnabled.value) return
         if (isCheckingCategoryName) return
         viewModelScope.launch {
-            updateButtonState = UiState.Loading
-            val currentLangCodes = translations.map { it.langCode }.toSet()
-            val toDelete = initialLangCodes.filter { it !in currentLangCodes }
-            val dto = UpdateCategoryDto(
-                id = id,
-                name = categoryName,
-                iva = categoryIva.toDoubleOrNull(),
-                translations = translations,
-                translationsToDelete = toDelete.ifEmpty { null }
-            )
-            when (val result = categoryRepository.updateCategory(dto)) {
+            createButtonState = UiState.Loading
+            when (val result = categoryRepository.createCategory(
+                categoryName,
+                categoryIva.toDoubleOrNull(),
+                filterParentCategory?.id?.toString(),
+                translations
+            )) {
                 is SharedResponseResult.Success -> {
-                    updateButtonState = UiState.Success
-                    val message = getString(SharedRes.string.update_success)
-                    mySnackbarViewModel.showSuccess(message)
+                    createButtonState = UiState.Success
+                    val message = getString(SharedRes.string.create_success)
+                    mySnackbarViewModel.showSuccess(
+                        message = message
+                    )
                     emitNavigation(NavigationEvent.ToRoute(Categories))
                 }
 
                 is SharedResponseResult.Error -> {
-                    updateButtonState = UiState.Error
+                    createButtonState = UiState.Error
                     if (ErrorMessageMapper.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
-                        val message = getString(SharedRes.string.update_failed)
+                        val message = getString(SharedRes.string.create_failed)
                         mySnackbarViewModel.showError(message)
                     }
                 }
             }
+
             delay(500)
-            updateButtonState = UiState.Idle
+            createButtonState = UiState.Idle
         }
+
+    }
+
+    fun getAvailableLanguages(): List<LanguageManager.SupportedLanguages> {
+        return LanguageManager.SupportedLanguages.entries
+            .filter { it.code !in translations.map { translation -> translation.langCode } }
     }
 }

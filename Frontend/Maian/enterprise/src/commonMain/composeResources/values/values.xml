@@ -17,4 +17,39 @@
     <string name="field_company_type_label">Company Type</string>
     <string name="field_company_type_placeholder">Select company type</string>
     <string name="icon_content_description_company">Company icon</string>
+
+    <string name="category_management">Category Management</string>
+    <string name="category_management_description">
+        View and search categories, create your own product categories, and manage multilingual names.
+        Supports up to three levels of nesting (1 → 2 → 3).
+    </string>
+
+    <string name="category_name_tax_setting">Category Name &amp; Tax Settings</string>
+    <string name="category_name">Category Name</string>
+    <string name="please_input_category_name">Please enter a category name</string>
+    <string name="empty_use_product_tax">Leave empty to use the product’s tax settings</string>
+    <string name="category_name_exists">Category name already exists</string>
+
+    <string name="subcategories_count">%1$s subcategories</string>
+    <string name="parent_category">Parent Category</string>
+    <string name="base_category">Base Category</string>
+    <string name="other_languages">Other Languages</string>
+    <string name="confirm_delete_category">Are you sure you want to delete the category "%1$s"?</string>
+    <string name="delete_warning_with_children">Note: This will also delete %1$s subcategories and cannot be undone.</string>
+    <string name="select_parent_category">Select Parent Category</string>
+    <string name="private_category">Private Category</string>
+    <string name="search_category">Search categories...</string>
+    <string name="platform_category">Platform Category</string>
+
+    <string name="select_parent_category_to_create">Select a parent category to create a subcategory</string>
+    <string name="parent_category_selected">Parent category selected</string>
+
+    <string name="input_language_translation">Enter %1$s translation...</string>
+    <string name="translate">Translate</string>
+    <string name="add_language_translation">Add Language Translation</string>
+    <string name="all_languages_added">All supported languages added</string>
+    <string name="add_multilingual_translation">Add Multilingual Translation</string>
+    <string name="no_other_language_translation">No other language translations</string>
+    <string name="translations_count">%1$s translations added</string>
+
 </resources>

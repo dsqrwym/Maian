@@ -4,7 +4,9 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import maian.admin.generated.resources.AdminRes
 import maian.admin.generated.resources.category_name_exists
@@ -42,8 +44,7 @@ class CategoriesCreateViewModel(
     mySnackbarViewModel
 ), SharedNavigable by SharedNavigableDelegate() {
     // Form state
-    private val _categoryName = MutableStateFlow("")
-    val categoryName = _categoryName.asStateFlow()
+    var categoryName by mutableStateOf("")
     var isCheckingCategoryName by mutableStateOf(false)
     var categoryNameExist by mutableStateOf(false)
     var categoryNameError by mutableStateOf<StringResource?>(null)
@@ -62,6 +63,7 @@ class CategoriesCreateViewModel(
     var createButtonState by mutableStateOf(UiState.Idle)
         private set
     val translationIsValid = derivedStateOf {
+        if (translations.isEmpty()) return@derivedStateOf true
         translations.all { it.name.isNotBlank() }
     }
     var createButtonEnabled = derivedStateOf {
@@ -74,7 +76,8 @@ class CategoriesCreateViewModel(
 
     init {
         viewModelScope.launch {
-            _categoryName.debounce(600)
+            snapshotFlow { categoryName }
+                .debounce(600)
                 .distinctUntilChanged()
                 .collectLatest { name ->
                     if (name.isBlank()) return@collectLatest
@@ -104,7 +107,7 @@ class CategoriesCreateViewModel(
     // Update functions
     fun updateCategoryName(name: String) {
         val newName = name.take(50)
-        _categoryName.value = newName
+        categoryName = newName
         categoryNameError = if (newName.isBlank()) {
             SharedRes.string.field_cannot_be_empty
         } else {
@@ -115,7 +118,7 @@ class CategoriesCreateViewModel(
     fun validateCategoryName(): Boolean {
         return !categoryNameExist
                 && categoryNameError == null
-                && categoryName.value.isNotBlank()
+                && categoryName.isNotBlank()
     }
 
     fun showAddLanguageDialog(show: Boolean) {
@@ -150,7 +153,7 @@ class CategoriesCreateViewModel(
         viewModelScope.launch {
             createButtonState = UiState.Loading
             val createDto = CreateCategoryDto(
-                name = categoryName.value,
+                name = categoryName,
                 translations = translations,
                 iva = categoryIva.toDoubleOrNull(),
                 userId = filterUser?.id,

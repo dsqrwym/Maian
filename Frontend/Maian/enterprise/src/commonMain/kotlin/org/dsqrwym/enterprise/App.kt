@@ -7,12 +7,13 @@ import org.dsqrwym.enterprise.navigation.navhost.menuNavGraph
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.LocalAppFocusManager
 import org.dsqrwym.shared.LocalNavHostController
+import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
-import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.navigation.SharedDashboardScreen
 import org.dsqrwym.shared.navigation.SharedInitialScreen
-import org.dsqrwym.shared.navigation.menu.*
+import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
+import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.navhost.SharedAppNavHost
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
@@ -54,25 +55,22 @@ fun App(
             }
 
             is AuthState.Authenticated -> {
+                val sessionViewModel: AuthSessionViewModel = currentKoinScope().get()
+                val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
                 var currentRoute by remember { mutableStateOf<Any>(SharedDashboardScreen) }
-                val menuViewModel = currentKoinScope().get<SharedMenuViewModel>()
-                val menuList = listOf(
-                    SharedMenuItemState(SharedMenuItem.Dashboard),
-                    SharedMenuItemState(SharedMenuItem.Profile),
-                )
-                val topBarActions: List<SharedMenuActions> = listOf(
-                    SharedMenuActions.ThemeChangeIconButton,
-                    SharedMenuActions.LanguageSwitcherIconButton,
-                )
-                val userRole = UserRole.WHOLESALER
+                val user = sessionViewModel.getUser()
+                if (user == null) {
+                    sessionViewModel.logout()
+                    return@AppRoot
+                }
 
                 // 已登录 → 渲染主业务 Graph
                 BackgroundImage(SharedImages.background()) {
                     SharedAdaptiveNavigation(
                         menuConfig = SharedMenuConfiguration(
-                            menuList,
-                            topBarActions,
-                            userRole
+                            MenuConfig.menuList,
+                            MenuConfig.topBarActions,
+                            user.userRole
                         ),
                         currentRoute = currentRoute,
                         onNavigate = {

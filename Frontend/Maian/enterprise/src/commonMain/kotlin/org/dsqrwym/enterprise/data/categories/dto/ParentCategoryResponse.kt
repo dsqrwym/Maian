@@ -1,4 +1,4 @@
-package org.dsqrwym.admin.data.categories.dto
+package org.dsqrwym.enterprise.data.categories.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -80,6 +80,9 @@ kotlin {
             // 官方导航
             implementation(libs.kmp.navigation.compose)
 
+            implementation(libs.androidx.paging.common)
+            implementation(libs.androidx.paging.compose)
+
             // Koin
             implementation(libs.koin.core) // 或最新版本
             implementation(libs.koin.compose.viewmodel)

@@ -6,10 +6,12 @@ import {
   IsEnum,
   IsNumber,
   Max,
+  IsBoolean,
 } from 'class-validator';
 import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { CategorySelectField, CategoryType } from '../category.enums';
 import { Trim } from 'src/utils/transform/trim.decorator';
+import { Type } from 'class-transformer';
 
 export class FindCategoryDto extends PaginationQueryDto {
   @ApiProperty({ description: 'Keywords for name search', required: false })
@@ -47,9 +49,19 @@ export class FindCategoryDto extends PaginationQueryDto {
     required: false,
   })
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Max(3)
   maxLevel?: number;
+
+  @ApiProperty({
+    description: 'With children count',
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  withChildrenCount?: boolean;
 
   @ApiProperty({
     description: 'Filter by category type',

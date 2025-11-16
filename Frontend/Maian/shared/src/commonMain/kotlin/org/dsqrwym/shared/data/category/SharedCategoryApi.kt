@@ -16,7 +16,9 @@ class SharedCategoryApi(val client: HttpClient) {
             query.userId?.let { parameter("userId", it) }
             query.parentId?.let { parameter("parentId", it) }
             query.type?.let { parameter("type", it) }
+            query.maxLevel?.let { parameter("maxLevel", it) }
             query.fields?.forEach { parameter("fields", it.toString().lowercase()) }
+            query.withChildrenCount?.let { parameter("withChildrenCount", it) }
             parameter("page", query.page)
             parameter("limit", query.limit)
         }.body()

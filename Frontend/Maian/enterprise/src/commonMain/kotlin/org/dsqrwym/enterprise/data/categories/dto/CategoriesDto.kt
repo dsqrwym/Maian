@@ -1,4 +1,4 @@
-package org.dsqrwym.admin.data.categories.dto
+package org.dsqrwym.enterprise.data.categories.dto
 
 import kotlinx.serialization.Serializable
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation

@@ -1,4 +1,4 @@
-package org.dsqrwym.admin.ui.screens.categories
+package org.dsqrwym.enterprise.ui.screens.categories
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
-import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesEditViewModel
+import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesEditViewModel
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold

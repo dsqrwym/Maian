@@ -17,4 +17,39 @@
     <string name="field_company_type_label">Tipo de empresa</string>
     <string name="field_company_type_placeholder">Seleccione el tipo de empresa</string>
     <string name="icon_content_description_company">Icono de empresa</string>
+
+    <string name="category_management">Gestión de categorías</string>
+    <string name="category_management_description">
+        Ver y buscar categorías, crear tus propias categorías de productos y gestionar nombres multilingües.
+        Compatible con hasta tres niveles de anidación (1 → 2 → 3).
+    </string>
+
+    <string name="category_name_tax_setting">Nombre de la categoría y ajustes de impuestos</string>
+    <string name="category_name">Nombre de la categoría</string>
+    <string name="please_input_category_name">Introduce el nombre de la categoría</string>
+    <string name="empty_use_product_tax">Déjalo vacío para usar la configuración fiscal del producto</string>
+    <string name="category_name_exists">El nombre de la categoría ya existe</string>
+
+    <string name="subcategories_count">%1$s subcategorías</string>
+    <string name="parent_category">Categoría principal</string>
+    <string name="base_category">Categoría base</string>
+    <string name="other_languages">Otros idiomas</string>
+    <string name="confirm_delete_category">¿Seguro que quieres eliminar la categoría "%1$s"?</string>
+    <string name="delete_warning_with_children">Atención: Esto también eliminará %1$s subcategorías y no se podrá deshacer.</string>
+    <string name="select_parent_category">Seleccionar categoría principal</string>
+    <string name="private_category">Categoría privada</string>
+    <string name="search_category">Buscar categoría...</string>
+    <string name="platform_category">Categoría de la plataforma</string>
+
+    <string name="select_parent_category_to_create">Selecciona una categoría principal para crear una subcategoría</string>
+    <string name="parent_category_selected">Categoría principal seleccionada</string>
+
+    <string name="input_language_translation">Introduce la traducción en %1$s...</string>
+    <string name="translate">Traducir</string>
+    <string name="add_language_translation">Añadir traducción de idioma</string>
+    <string name="all_languages_added">Se han añadido todos los idiomas compatibles</string>
+    <string name="add_multilingual_translation">Añadir traducción multilingüe</string>
+    <string name="no_other_language_translation">No hay otras traducciones disponibles</string>
+    <string name="translations_count">%1$s traducciones añadidas</string>
+
 </resources>

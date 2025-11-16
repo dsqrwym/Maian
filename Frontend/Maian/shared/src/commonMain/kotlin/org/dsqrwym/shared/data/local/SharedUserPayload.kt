@@ -12,20 +12,26 @@ object SharedUserPayloadStorage {
     private val json = Json {
         ignoreUnknownKeys = true
     }
+    private var cachedUser: SharedUserPayload? = null
 
     fun save(payload: SharedUserPayload) {
+        cachedUser = payload
         val jsonString = json.encodeToString(payload)
         val encoded = Base64.encode(xorBytes(jsonString.encodeToByteArray()))
         storage.putString(USER_PAYLOAD_KEY, encoded)
     }
 
     fun get(): SharedUserPayload? {
+        if (cachedUser != null) return cachedUser
         val jsonString = storage.getStringOrNull(USER_PAYLOAD_KEY) ?: return null
         val decoded = xorBytes(Base64.decode(jsonString))
-        return json.decodeFromString(decoded.decodeToString())
+        val user: SharedUserPayload = json.decodeFromString(decoded.decodeToString())
+        cachedUser = user
+        return user
     }
 
     fun clear() {
+        cachedUser = null
         storage.remove(USER_PAYLOAD_KEY)
     }
 }

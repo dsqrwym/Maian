@@ -1,6 +1,5 @@
-package org.dsqrwym.admin.ui.screens.categories
+package org.dsqrwym.enterprise.ui.screens.categories
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -27,15 +25,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import maian.admin.generated.resources.*
+import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
-import org.dsqrwym.admin.data.categories.dto.ParentCategoryResponse
-import org.dsqrwym.admin.data.user.dto.WholeSalerUserResponse
-import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesCreateViewModel
+import org.dsqrwym.enterprise.data.categories.dto.ParentCategoryResponse
+import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesCreateViewModel
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.cards.FormCard
@@ -66,7 +62,6 @@ fun CategoryCreateScreen(
     val categoryIva = viewModel.categoryIva
 
     val selectedParentCategory = viewModel.filterParentCategory
-    val selectedWholesaler = viewModel.filterUser
 
     val translations = viewModel.translations
     val translationsIsValid by viewModel.translationIsValid
@@ -76,8 +71,6 @@ fun CategoryCreateScreen(
     val cardEnabled by derivedStateOf {
         createStatus != UiState.Loading
     }
-
-    val isPlatformCategory = viewModel.isPlatformCategory
 
     LaunchedEffect(Unit) {
         viewModel.navigateEvent.collect {
@@ -136,19 +129,6 @@ fun CategoryCreateScreen(
                     viewModel::updateCategoryName,
                     viewModel::updateCategoryIva,
                     viewModel::formatIvaTwoDecimal,
-                )
-            }
-
-            // 类别类型
-            item {
-                CategoryTypeCard(
-                    isPlatformCategory,
-                    selectedWholesaler,
-                    cardEnabled,
-                    viewModel::toggleCategoryType,
-                    viewModel::updateFilterUser,
-                    viewModel::removeUserIdFilter,
-                    viewModel::findWholesalers,
                 )
             }
 
@@ -240,10 +220,10 @@ private fun LanguageTranslationItem(
                 focusRequester = focusRequester,
                 value = translation,
                 onValueChange = onEdit,
-                placeholderText = stringResource(AdminRes.string.input_language_translation, languageName),
+                placeholderText = stringResource(EnterpriseRes.string.input_language_translation, languageName),
                 modifier = Modifier.fillMaxWidth().placeholderWithShimmer(isLoading),
                 leadingIcon = Icons.Outlined.Translate,
-                leadingIconContentDescription = stringResource(AdminRes.string.translate),
+                leadingIconContentDescription = stringResource(EnterpriseRes.string.translate),
                 enabled = enabled,
                 imeAction = ImeAction.Next,
                 onImeAction = onImeAction,
@@ -271,7 +251,7 @@ internal fun AddLanguageDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Outlined.Language, contentDescription = "Language") },
-        title = { Text(stringResource(AdminRes.string.add_language_translation)) },
+        title = { Text(stringResource(EnterpriseRes.string.add_language_translation)) },
         text = {
             if (availableLanguages.isEmpty()) {
                 Column(
@@ -288,7 +268,7 @@ internal fun AddLanguageDialog(
                     )
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        stringResource(AdminRes.string.all_languages_added),
+                        stringResource(EnterpriseRes.string.all_languages_added),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -424,7 +404,7 @@ fun CategoryBasicInfoCard(
     FormCard(
         modifier = modifier,
         title = stringResource(SharedRes.string.basic_info),
-        subtitle = stringResource(AdminRes.string.category_name_tax_setting),
+        subtitle = stringResource(EnterpriseRes.string.category_name_tax_setting),
         uiState = if (categoryNameError != null) UiState.Error else UiState.Idle,
         enabled = enabled
     ) { isEnabled ->
@@ -436,8 +416,8 @@ fun CategoryBasicInfoCard(
                 leadingIcon = Icons.Outlined.Category,
                 leadingIconContentDescription = stringResource(SharedRes.string.category),
                 trailingIcon = { CheckingTrailingIcon(isChecking) },
-                labelText = "${stringResource(AdminRes.string.category_name)} (${stringResource(SharedRes.string.field_required)})",
-                placeholderText = stringResource(AdminRes.string.please_input_category_name),
+                labelText = "${stringResource(EnterpriseRes.string.category_name)} (${stringResource(SharedRes.string.field_required)})",
+                placeholderText = stringResource(EnterpriseRes.string.please_input_category_name),
                 enabled = isEnabled,
                 error = categoryNameError.asString(),
                 imeAction = ImeAction.Next,
@@ -453,7 +433,7 @@ fun CategoryBasicInfoCard(
                 value = categoryIva,
                 onValueChange = onIvaChange,
                 labelText = "${stringResource(SharedRes.string.tax_rate)}->IVA(%)",
-                placeholderText = stringResource(AdminRes.string.empty_use_product_tax),
+                placeholderText = stringResource(EnterpriseRes.string.empty_use_product_tax),
                 enabled = isEnabled,
                 keyBordType = KeyboardType.Decimal,
                 error = null,
@@ -482,14 +462,14 @@ private fun ParentCategoryCard(
 ) {
     FormCard(
         modifier = modifier,
-        title = stringResource(AdminRes.string.parent_category),
-        subtitle = "${stringResource(AdminRes.string.select_parent_category_to_create)}（${stringResource(SharedRes.string.field_optional)}）",
+        title = stringResource(EnterpriseRes.string.parent_category),
+        subtitle = "${stringResource(EnterpriseRes.string.select_parent_category_to_create)}（${stringResource(SharedRes.string.field_optional)}）",
         enabled = enabled
     ) { isEnabled ->
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             SearchableSelectorRemote(
                 config = RemoteSearchableSelectorConfig(
-                    label = stringResource(AdminRes.string.select_parent_category),
+                    label = stringResource(EnterpriseRes.string.select_parent_category),
                     error = null,
                     leadingIcon = Icons.Outlined.Category,
                     selectedItem = selectedParentCategory,
@@ -508,101 +488,11 @@ private fun ParentCategoryCard(
 
             SelectedInfoCard(
                 visible = selectedParentCategory != null,
-                title = stringResource(AdminRes.string.parent_category_selected),
+                title = stringResource(EnterpriseRes.string.parent_category_selected),
                 description = selectedParentCategory?.name ?: "",
                 onClear = onRemoveParent,
                 enabled = isEnabled
             )
-        }
-    }
-}
-
-@Composable
-private fun CategoryTypeCard(
-    isPlatformCategory: Boolean,
-    selectedWholesaler: WholeSalerUserResponse?,
-    enabled: Boolean,
-    onToggleCategoryType: (Boolean) -> Unit,
-    onWholesalerChange: (WholeSalerUserResponse?) -> Unit,
-    onRemoveWholesaler: () -> Unit,
-    onSearchWholesalers: suspend (String?, Int, Int) -> List<WholeSalerUserResponse>,
-    modifier: Modifier = Modifier
-) {
-    FormCard(
-        modifier = modifier,
-        title = stringResource(AdminRes.string.category_type),
-        subtitle = stringResource(AdminRes.string.category_visibility),
-        enabled = enabled
-    ) { isEnabled ->
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        if (isPlatformCategory) stringResource(AdminRes.string.platform_category) else stringResource(
-                            AdminRes.string.private_category
-                        ),
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Text(
-                        if (isPlatformCategory) stringResource(AdminRes.string.visible_to_all) else stringResource(
-                            AdminRes.string.visible_to_owner
-                        ),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                Switch(
-                    checked = isPlatformCategory,
-                    onCheckedChange = onToggleCategoryType,
-                    enabled = isEnabled
-                )
-            }
-
-            AnimatedContent(isPlatformCategory) { isPlatform ->
-                if (isPlatform) {
-                    SelectedInfoCard(
-                        visible = true,
-                        description = stringResource(AdminRes.string.category_visible_to_all_tip),
-                        icon = Icons.Outlined.Public,
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        enabled = false
-                    )
-                } else {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        val usernameLabel = stringResource(SharedRes.string.field_username_label)
-                        SearchableSelectorRemote(
-                            config = RemoteSearchableSelectorConfig(
-                                label = stringResource(AdminRes.string.select_wholesaler),
-                                error = null,
-                                leadingIcon = Icons.Outlined.PersonOutline,
-                                selectedItem = selectedWholesaler,
-                                onSelectedItemChange = onWholesalerChange,
-                                pageSize = 100,
-                                itemToString = {
-                                    "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
-                                },
-                                semanticsPropertyReceiver = {
-                                    contentType = ContentType.Username
-                                },
-                                onSearch = onSearchWholesalers,
-                            )
-                        )
-
-                        SelectedInfoCard(
-                            visible = selectedWholesaler != null,
-                            title = stringResource(AdminRes.string.wholesaler_selected),
-                            description = "ID: ${selectedWholesaler?.userId}, ${usernameLabel}: ${selectedWholesaler?.username}",
-                            onClear = onRemoveWholesaler,
-                            enabled = isEnabled
-                        )
-                    }
-                }
-            }
         }
     }
 }
@@ -622,8 +512,8 @@ internal fun TranslationCard(
 ) {
     FormCard(
         modifier = modifier,
-        title = stringResource(AdminRes.string.other_languages),
-        subtitle = "${stringResource(AdminRes.string.add_multilingual_translation)}（${stringResource(SharedRes.string.field_optional)}）",
+        title = stringResource(EnterpriseRes.string.other_languages),
+        subtitle = "${stringResource(EnterpriseRes.string.add_multilingual_translation)}（${stringResource(SharedRes.string.field_optional)}）",
         enabled = enabled
     ) { isEnabled ->
         val addLanguageEnabled by derivedStateOf {
@@ -643,12 +533,12 @@ internal fun TranslationCard(
             ) {
                 Icon(Icons.Outlined.Add, stringResource(SharedRes.string.add))
                 Spacer(Modifier.width(8.dp))
-                Text(stringResource(AdminRes.string.add_language_translation))
+                Text(stringResource(EnterpriseRes.string.add_language_translation))
             }
 
             if (translations.isEmpty()) {
                 Text(
-                    stringResource(AdminRes.string.no_other_language_translation),
+                    stringResource(EnterpriseRes.string.no_other_language_translation),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -682,7 +572,7 @@ internal fun TranslationCard(
 
             SelectedInfoCard(
                 visible = translations.isNotEmpty(),
-                description = stringResource(AdminRes.string.translations_count, translations.size),
+                description = stringResource(EnterpriseRes.string.translations_count, translations.size),
                 icon = Icons.Outlined.Info,
                 enabled = false,
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,

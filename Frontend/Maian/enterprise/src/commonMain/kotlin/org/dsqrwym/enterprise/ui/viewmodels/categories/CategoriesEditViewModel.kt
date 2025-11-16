@@ -1,4 +1,4 @@
-package org.dsqrwym.admin.ui.viewmodels.categories
+package org.dsqrwym.enterprise.ui.viewmodels.categories
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
@@ -8,16 +8,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import maian.admin.generated.resources.AdminRes
-import maian.admin.generated.resources.category_name_exists
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.category_name_exists
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.field_cannot_be_empty
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
-import org.dsqrwym.admin.data.categories.CategoryRepository
-import org.dsqrwym.admin.data.categories.dto.UpdateCategoryDto
-import org.dsqrwym.admin.data.user.UserRepository
-import org.dsqrwym.admin.navigation.Categories
+import org.dsqrwym.enterprise.data.categories.CategoryRepository
+import org.dsqrwym.enterprise.data.categories.dto.UpdateCategoryDto
+import org.dsqrwym.enterprise.navigation.Categories
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -35,10 +34,8 @@ import org.jetbrains.compose.resources.getString
 @OptIn(FlowPreview::class)
 class CategoriesEditViewModel(
     categoryRepository: CategoryRepository,
-    userRepository: UserRepository,
     mySnackbarViewModel: MySnackbarViewModel
 ) : BaseCategoryFilterViewmodel(
-    userRepository,
     categoryRepository,
     mySnackbarViewModel
 ), SharedNavigable by SharedNavigableDelegate() {
@@ -69,7 +66,6 @@ class CategoriesEditViewModel(
     var updateButtonState by mutableStateOf(UiState.Idle)
         private set
     val translationIsValid = derivedStateOf {
-        if (translations.isEmpty()) return@derivedStateOf true
         translations.all { it.name.isNotBlank() }
     }
     val updateButtonEnabled = derivedStateOf {
@@ -83,17 +79,18 @@ class CategoriesEditViewModel(
     init {
         // 名称去抖唯一性校验（更新接口）
         viewModelScope.launch {
-            snapshotFlow { categoryName }.debounce(600)
+            snapshotFlow { categoryName }
+                .debounce(600)
                 .distinctUntilChanged()
                 .collectLatest { name ->
                     val id = categoryId ?: return@collectLatest
                     if (name.isBlank()) return@collectLatest
                     isCheckingCategoryName = true
-                    when (val result = categoryRepository.checkUpdateCategoryName(name, id, filterUser?.userId)) {
+                    when (val result = categoryRepository.checkUpdateCategoryName(name, id)) {
                         is SharedResponseResult.Success -> {
                             categoryNameExist = result.data == true
                             categoryNameError = if (categoryNameExist) {
-                                AdminRes.string.category_name_exists
+                                EnterpriseRes.string.category_name_exists
                             } else null
                         }
 

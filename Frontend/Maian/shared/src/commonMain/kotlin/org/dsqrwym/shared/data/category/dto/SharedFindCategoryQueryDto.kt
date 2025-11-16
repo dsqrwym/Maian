@@ -14,6 +14,7 @@ data class SharedFindCategoryDto(
     val userId: String? = null,          // 按 user_id 过滤
     val parentId: String? = null,        // 按 parent_id 过滤
     val maxLevel: Int? = null,           // 最大嵌套等级
+    val withChildrenCount: Boolean? = null, // 放回计数
     val type: SharedCategoryType? = null,      // PRIVATE / PUBLIC / ALL = NULL
     val fields: List<SharedCategorySelectField>? = null,
     override val page: Int = 1,
