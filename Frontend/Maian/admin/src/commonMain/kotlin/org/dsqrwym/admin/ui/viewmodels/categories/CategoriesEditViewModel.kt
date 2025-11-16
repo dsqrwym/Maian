@@ -136,15 +136,15 @@ class CategoriesEditViewModel(
     }
 
     fun updateCategoryName(name: String) {
-        if (categoryName.value.length > 50) return
-        _categoryName.value = name
-        categoryNameError = if (name.isBlank()) {
+        val newName = name.take(50)
+        _categoryName.value = newName
+        categoryNameError = if (newName.isBlank()) {
             SharedRes.string.field_cannot_be_empty
         } else null
     }
 
     fun validateCategoryName(): Boolean {
-        return !categoryNameExist && !isCheckingCategoryName && categoryNameError == null && categoryName.value.isNotBlank()
+        return !categoryNameExist &&  categoryNameError == null && categoryName.value.isNotBlank()
     }
 
     fun showAddLanguageDialog(show: Boolean) {
@@ -163,8 +163,8 @@ class CategoriesEditViewModel(
 
     fun upsertTranslation(langCode: String, name: String) {
         translations.indexOfFirst { it.langCode == langCode }.let {
-            if (it != -1) translations[it] = translations[it].copy(name = name)
-            else translations.add(SharedCategoryTranslation(langCode = langCode, name = name))
+            if (it != -1) translations[it] = translations[it].copy(name = name.take(50))
+            else translations.add(SharedCategoryTranslation(langCode = langCode, name = name.take(50)))
         }
     }
 
@@ -180,6 +180,7 @@ class CategoriesEditViewModel(
     fun submitUpdate() {
         val id = categoryId ?: return
         if (!updateButtonEnabled.value) return
+        if (isCheckingCategoryName) return
         viewModelScope.launch {
             updateButtonState = UiState.Loading
             val currentLangCodes = translations.map { it.langCode }.toSet()

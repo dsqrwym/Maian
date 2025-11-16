@@ -140,7 +140,7 @@ fun CategoriesListScreen(
                 )
             }
         ) {
-            Column {
+            Box {
                 if (lazyPagingItems.itemCount == 0 && lazyPagingItems.loadState.isIdle) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -239,9 +239,10 @@ fun CategoriesListScreen(
                 // 过滤标签
                 FilterChipsRow(
                     viewModel,
-                    Modifier.padding(horizontal = 16.dp).onGloballyPositioned { coordinates ->
-                        filterFlowRowHeight = with(density) { coordinates.size.height.toDp() }
-                    }
+                    Modifier.padding(start = 8.dp, end = 8.dp, top = padding.calculateTopPadding())
+                        .onGloballyPositioned { coordinates ->
+                            filterFlowRowHeight = with(density) { coordinates.size.height.toDp() }
+                        }
                 )
             }
         }
@@ -310,7 +311,7 @@ fun CategoryListItem(
                         )
 
                         Text(
-                            text = "IVA: ${
+                            text = "${stringResource(SharedRes.string.tax_rate)}->IVA: ${
                                 if (category.iva != null) category.iva.toString() + "%" else stringResource(
                                     SharedRes.string.not_set
                                 )
@@ -363,7 +364,11 @@ fun CategoryListItem(
                         ),
                         enabled = userRole == UserRole.SUPERADMIN
                     ) {
-                        Icon(Icons.Default.Delete, null, modifier = Modifier.size(18.dp))
+                        Icon(
+                            Icons.Default.Delete,
+                            stringResource(SharedRes.string.delete),
+                            modifier = Modifier.size(18.dp)
+                        )
                         Spacer(Modifier.width(4.dp))
                         Text(stringResource(SharedRes.string.delete))
                     }
@@ -402,17 +407,23 @@ fun CategorieLanguages(languages: List<SharedCategoryTranslation>) {
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )
-        languages.forEach { (langCode, name) ->
-            Text(
-                "$langCode: $name",
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-        languages.ifEmpty {
-            Text(
-                " -- ",
-                style = MaterialTheme.typography.bodySmall
-            )
+        if (languages.isEmpty()) {
+            Text(" -- ", style = MaterialTheme.typography.bodySmall)
+        } else {
+            languages.forEachIndexed { index, (langCode, name) ->
+                Text(
+                    "$langCode: $name",
+                    style = MaterialTheme.typography.bodySmall
+                )
+
+                if (index != languages.lastIndex) {
+                    Text(
+                        "•",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
         }
     }
 }
@@ -441,8 +452,6 @@ fun FilterDialog(
     viewModel: CategoriesListViewModel = koinViewModel()
 ) {
     val categoryType = viewModel.filterCategoryType
-    val parentCategory by viewModel.parentCategories.collectAsState()
-    val wholesalers by viewModel.wholesalers.collectAsState()
     AlertDialog(
         onDismissRequest = { viewModel.updateShowFilterDialog(false) },
         text = {
@@ -489,7 +498,6 @@ fun FilterDialog(
                         label = stringResource(AdminRes.string.select_parent_category),
                         error = null,
                         leadingIcon = Icons.Outlined.Category,
-                        items = parentCategory,
                         selectedItem = viewModel.filterParentCategory,
                         onSelectedItemChange = {
                             viewModel.updateFilterParentCategory(it)
@@ -502,7 +510,6 @@ fun FilterDialog(
                                 } + ")" else ""
                             }"
                         },
-                        itemId = { it.id.toString() },
                         onSearch = { query, page, limit ->
                             viewModel.findParentCategories(query, page, limit)
                         }
@@ -516,7 +523,6 @@ fun FilterDialog(
                             label = stringResource(AdminRes.string.select_wholesaler),
                             error = null,
                             leadingIcon = Icons.Outlined.PersonOutline,
-                            items = wholesalers,
                             selectedItem = viewModel.filterUser,
                             onSelectedItemChange = {
                                 viewModel.updateFilterUser(it)
@@ -525,7 +531,6 @@ fun FilterDialog(
                             itemToString = {
                                 "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
                             },
-                            itemId = { it.userId },
                             semanticsPropertyReceiver = {
                                 contentType = ContentType.Username
                             },

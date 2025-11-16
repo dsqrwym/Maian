@@ -103,9 +103,9 @@ class CategoriesCreateViewModel(
 
     // Update functions
     fun updateCategoryName(name: String) {
-        if (categoryName.value.length > 50) return
-        _categoryName.value = name
-        categoryNameError = if (name.isBlank()) {
+        val newName = name.take(50)
+        _categoryName.value = newName
+        categoryNameError = if (newName.isBlank()) {
             SharedRes.string.field_cannot_be_empty
         } else {
             null
@@ -114,7 +114,6 @@ class CategoriesCreateViewModel(
 
     fun validateCategoryName(): Boolean {
         return !categoryNameExist
-                && !isCheckingCategoryName
                 && categoryNameError == null
                 && categoryName.value.isNotBlank()
     }
@@ -135,8 +134,8 @@ class CategoriesCreateViewModel(
 
     fun upsertTranslation(langCode: String, name: String) {
         translations.indexOfFirst { it.langCode == langCode }.let {
-            if (it != -1) translations[it] = translations[it].copy(name = name)
-            else translations.add(SharedCategoryTranslation(langCode = langCode, name = name))
+            if (it != -1) translations[it] = translations[it].copy(name = name.take(50))
+            else translations.add(SharedCategoryTranslation(langCode = langCode, name = name.take(50)))
         }
     }
 
@@ -147,6 +146,7 @@ class CategoriesCreateViewModel(
     @OptIn(ExperimentalTime::class)
     fun createCategory() {
         if (!createButtonEnabled.value) return
+        if (isCheckingCategoryName) return
         viewModelScope.launch {
             createButtonState = UiState.Loading
             val createDto = CreateCategoryDto(

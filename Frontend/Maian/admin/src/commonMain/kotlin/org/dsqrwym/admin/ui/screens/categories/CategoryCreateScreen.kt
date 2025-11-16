@@ -65,10 +65,7 @@ fun CategoryCreateScreen(
 
     val categoryIva = viewModel.categoryIva
 
-    val parentCategory by viewModel.parentCategories.collectAsState()
     val selectedParentCategory = viewModel.filterParentCategory
-
-    val wholesalers by viewModel.wholesalers.collectAsState()
     val selectedWholesaler = viewModel.filterUser
 
     val translations = viewModel.translations
@@ -146,7 +143,6 @@ fun CategoryCreateScreen(
             item {
                 CategoryTypeCard(
                     isPlatformCategory,
-                    wholesalers,
                     selectedWholesaler,
                     cardEnabled,
                     viewModel::toggleCategoryType,
@@ -159,7 +155,6 @@ fun CategoryCreateScreen(
             // 父类别选择
             item {
                 ParentCategoryCard(
-                    parentCategory,
                     selectedParentCategory,
                     cardEnabled,
                     viewModel::updateFilterParentCategory,
@@ -174,7 +169,7 @@ fun CategoryCreateScreen(
                     translations,
                     translationsIsValid,
                     cardEnabled,
-                    viewModel.getAvailableLanguages().isNotEmpty(),
+                    viewModel.translations.size < LanguageManager.SupportedLanguages.entries.size - 1,
                     viewModel::showAddLanguageDialog,
                     viewModel::removeTranslation,
                     viewModel::upsertTranslation,
@@ -478,12 +473,11 @@ fun CategoryBasicInfoCard(
 
 @Composable
 private fun ParentCategoryCard(
-    parentCategories: List<ParentCategoryResponse>, // 替换为实际类型
     selectedParentCategory: ParentCategoryResponse?, // 替换为实际类型
     enabled: Boolean,
     onParentCategoryChange: (ParentCategoryResponse?) -> Unit,
     onRemoveParent: () -> Unit,
-    onSearch: suspend (String?, Int, Int) -> Unit,
+    onSearch: suspend (String?, Int, Int) -> List<ParentCategoryResponse>,
     modifier: Modifier = Modifier
 ) {
     FormCard(
@@ -498,7 +492,6 @@ private fun ParentCategoryCard(
                     label = stringResource(AdminRes.string.select_parent_category),
                     error = null,
                     leadingIcon = Icons.Outlined.Category,
-                    items = parentCategories,
                     selectedItem = selectedParentCategory,
                     onSelectedItemChange = onParentCategoryChange,
                     pageSize = 100,
@@ -509,7 +502,6 @@ private fun ParentCategoryCard(
                             } + ")" else ""
                         }"
                     },
-                    itemId = { it.id.toString() },
                     onSearch = onSearch
                 )
             )
@@ -528,13 +520,12 @@ private fun ParentCategoryCard(
 @Composable
 private fun CategoryTypeCard(
     isPlatformCategory: Boolean,
-    wholesalers: List<WholeSalerUserResponse>,
     selectedWholesaler: WholeSalerUserResponse?,
     enabled: Boolean,
     onToggleCategoryType: (Boolean) -> Unit,
     onWholesalerChange: (WholeSalerUserResponse?) -> Unit,
     onRemoveWholesaler: () -> Unit,
-    onSearchWholesalers: suspend (String?, Int, Int) -> Unit,
+    onSearchWholesalers: suspend (String?, Int, Int) -> List<WholeSalerUserResponse>,
     modifier: Modifier = Modifier
 ) {
     FormCard(
@@ -589,14 +580,12 @@ private fun CategoryTypeCard(
                                 label = stringResource(AdminRes.string.select_wholesaler),
                                 error = null,
                                 leadingIcon = Icons.Outlined.PersonOutline,
-                                items = wholesalers,
                                 selectedItem = selectedWholesaler,
                                 onSelectedItemChange = onWholesalerChange,
                                 pageSize = 100,
                                 itemToString = {
                                     "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
                                 },
-                                itemId = { it.userId },
                                 semanticsPropertyReceiver = {
                                     contentType = ContentType.Username
                                 },

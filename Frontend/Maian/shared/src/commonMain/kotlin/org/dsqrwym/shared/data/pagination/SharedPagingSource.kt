@@ -5,13 +5,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 
-class SharedPagingSource<T : Any>(private val query: String?,private val fetchPage: suspend (page: Int, pageSize: Int, query: String?) -> List<T>) :
+class SharedPagingSource<T : Any>(
+    private val query: String?,
+    private val fetchPage: suspend (page: Int, pageSize: Int, query: String?) -> List<T>
+) :
     PagingSource<Int, T>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         val page = params.key ?: 1
         return try {
             val pageSize = params.loadSize
-            val items = fetchPage(page, pageSize,  query)
+            val items = fetchPage(page, pageSize, query)
             LoadResult.Page(
                 data = items,
                 prevKey = if (page == 1) null else page - 1,

@@ -18,6 +18,7 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesEditViewModel
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
@@ -122,7 +123,7 @@ fun CategoryEditScreen(
                     translations,
                     translationsIsValid,
                     cardEnabled,
-                    viewModel.getAvailableLanguages().isNotEmpty(),
+                    viewModel.translations.size < LanguageManager.SupportedLanguages.entries.size - 1, // 名字本身就是一种语言翻译
                     viewModel::showAddLanguageDialog,
                     viewModel::removeTranslation,
                     viewModel::upsertTranslation,
