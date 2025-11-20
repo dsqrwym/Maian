@@ -33,6 +33,8 @@ import { UserModule } from './user/user.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { AdminModule } from './admin/admin.module';
 import { CategoryModule } from './category/category.module';
+import { ProductsModule } from './products/products.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -84,7 +86,9 @@ import { CategoryModule } from './category/category.module';
     UserModule,
     EnterpriseModule,
     AdminModule,
-    CategoryModule, // 认证模块
+    CategoryModule,
+    ProductsModule,
+    FilesModule, // 认证模块
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
   providers: [

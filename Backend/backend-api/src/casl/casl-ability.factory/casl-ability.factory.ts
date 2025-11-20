@@ -7,10 +7,10 @@ import { createPrismaAbility } from '@casl/prisma';
 
 export class CaslAbilityFactory {
   constructor() {}
-  createForUser(user?: Partial<UserPayload>) {
+  createForUser(user: Partial<UserPayload>) {
     const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-    switch (user?.userRole) {
+    switch (user.userRole) {
       case UserRole.ADMIN:
         can(Action.Access, 'Admin');
         can(Action.Manage, 'users', {
@@ -19,11 +19,13 @@ export class CaslAbilityFactory {
         can(Action.Create, 'categories');
         can(Action.Update, 'categories');
         can(Action.Read, 'categories');
+        can(Action.Manage, 'products');
         break;
       case UserRole.SUPERADMIN:
         can(Action.Access, 'Admin');
         can(Action.Manage, 'users');
         can(Action.Manage, 'categories');
+        can(Action.Manage, 'products');
         break;
       case UserRole.RETAILER:
         can(Action.Access, 'Standard');
@@ -39,10 +41,12 @@ export class CaslAbilityFactory {
           },
         });
         can(Action.Read, 'categories');
+        can(Action.Read, 'products', { status: 'ACTIVE' });
         break;
       case UserRole.WHOLESALER:
         can(Action.Access, 'Enterprise');
-        can(Action.Manage, 'categories', { user_id: user?.userId });
+        can(Action.Manage, 'categories', { user_id: user.userId });
+        can(Action.Manage, 'products', { user_id: user.userId });
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');
@@ -53,6 +57,7 @@ export class CaslAbilityFactory {
       case UserRole.WAREHOUSE: {
         can(Action.Access, 'Enterprise');
         can(Action.Manage, 'categories', { user_id: user.wholesalerId });
+        can(Action.Manage, 'products', { user_id: user.wholesalerId });
         break;
       }
     }

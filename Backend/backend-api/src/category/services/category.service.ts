@@ -12,7 +12,7 @@ import { Logger } from 'nestjs-pino';
 import { AppAbility } from '../../casl/casl-types';
 import { Action } from '../../casl/actions';
 import { subject } from '@casl/ability';
-import { FindCategoryDto } from '../dto/find-category.dto';
+import { CategoryQueryDto } from '../dto/category-query.dto';
 import { accessibleBy } from '@casl/prisma';
 import { Prisma } from '@prisma/client';
 import { ToPaginated } from '../../common/types/response.type';
@@ -182,7 +182,7 @@ export class CategoryService {
     return map;
   }
 
-  async search(query: FindCategoryDto, ability: AppAbility) {
+  async search(query: CategoryQueryDto, ability: AppAbility) {
     if (!ability.can(Action.Read, 'categories')) {
       throw new ForbiddenException(
         'You do not have permission to search categories',
@@ -281,11 +281,11 @@ export class CategoryService {
       }
     }
 
-    if (parentId) {
+    if (parentId != undefined) {
       andClauses.push({ parent_id: parentId });
     }
 
-    if (query.maxLevel) {
+    if (query.maxLevel != undefined) {
       andClauses.push({ level: { lte: query.maxLevel } });
     }
 

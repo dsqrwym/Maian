@@ -41,6 +41,9 @@ export const ENV = {
   // 哈希算法配置（例如 bcrypt 的盐轮次）
   BCRYPT_SALT_ROUNDS: 'BCRYPT_SALT_ROUNDS',
 
+  //Files
+  FILE_UPLOAD_DIR: 'FILE_UPLOAD_DIR',
+
   // Redis
   REDIS_CACHE_URL: 'REDIS_CACHE_URL',
   REDIS_BULL_URL: 'REDIS_BULL_URL',

@@ -14,6 +14,7 @@ import * as process from 'node:process';
 import { useCors } from './config/cors.config';
 import { useCookie } from './config/cookie.config';
 import { GLOBAL_PREFIX } from './config/constants.config';
+import { useFastifyMultipart } from './config/fastify-multipart.config';
 
 // 用于 session 支持
 
@@ -47,6 +48,9 @@ export async function bootstrap() {
   useGlobalFilters(app); // 异常过滤器
 
   useGlobalPipes(app); // 校验管道
+
+  await useFastifyMultipart(app); // 添加文件接受
+
   console.log('Before app.listen');
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0'); // 必须为0.0.0.0 否则cloudflare tunnel 无法访问
   console.log('After app.listen'); // <-- 理论上不会执行

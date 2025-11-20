@@ -4,6 +4,7 @@ import { PrismaQuery, Subjects } from '@casl/prisma';
 import { users } from '@prisma/client';
 
 export type PrismaModels = {
+  products: { user_id: string };
   categories: { user_id: string | undefined };
   users: users;
 };

@@ -20,7 +20,10 @@ function hashWithCrypto(input: string | Buffer): string {
 }
 
 // crypto 比较
-function compareWithCrypto(input: string, hash: string): boolean {
+function compareWithCrypto(
+  input: string | Buffer,
+  hash: string | Buffer,
+): boolean {
   const hashed = hashWithCrypto(input);
   return hashed === hash;
 }

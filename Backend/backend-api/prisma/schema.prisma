@@ -215,10 +215,11 @@ model files {
   file_hash      String           @unique @db.VarChar(64)
   mime_type      String           @db.VarChar(128)
   file_size      BigInt
-  url            String
+  storage_key    String
   created_at     DateTime         @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  uploaded_by    BigInt           @default(-1)
+  uploaded_by    String?          @db.Uuid
   to_delete      Boolean          @default(false)
+  users          users?           @relation(fields: [uploaded_by], references: [id], onUpdate: NoAction)
   message_files  message_files[]
   products_files products_files[]
 
@@ -330,20 +331,29 @@ model product_categories {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model products {
-  id                 BigInt               @id @default(autoincrement())
-  user_id            String               @db.Uuid
-  name               String               @db.VarChar(50)
-  title              String?              @db.VarChar(100)
-  description        String?
-  iva                Decimal              @db.Decimal(5, 2)
-  status             ProductStatus        @default(ACTIVE)
-  created_at         DateTime             @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  product_code       String               @db.VarChar(50)
-  product_categories product_categories[]
-  users              users                @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  products_files     products_files[]
-  variant_products   variant_products[]
+  id                               BigInt                 @id @default(autoincrement())
+  user_id                          String                 @db.Uuid
+  name                             String                 @db.VarChar(50)
+  title                            String?                @db.VarChar(100)
+  description                      String?
+  iva                              Decimal                @db.Decimal(5, 2)
+  status                           ProductStatus          @default(ACTIVE)
+  created_at                       DateTime               @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  product_code                     String                 @db.VarChar(50)
+  updated_at                       DateTime?              @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  created_by                       String                 @db.Uuid
+  updated_by                       String?                @db.Uuid
+  name_unaccent                    String?                @default(dbgenerated("immutable_unaccent((name)::text)"))
+  title_unaccent                   String?                @default(dbgenerated("immutable_unaccent((title)::text)"))
+  product_categories               product_categories[]
+  product_translations             product_translations[]
+  users_products_created_byTousers users                  @relation("products_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_products_updated_byTousers users?                 @relation("products_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                            users                  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  products_files                   products_files[]
+  variant_products                 variant_products[]
 
   @@schema("public")
 }
@@ -394,62 +404,74 @@ model user_sessions {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model users {
-  id                                      String                @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id                                 String?               @unique
-  first_name                              String?               @db.VarChar(50)
-  last_name                               String?               @db.VarChar(60)
-  username                                String?               @unique @db.VarChar(50)
-  password                                String
-  email                                   String                @unique @db.VarChar(255)
-  telephone                               String?               @db.VarChar(25)
-  status                                  UserStatus            @default(PENDING_VERIFICATION)
-  profile                                 Json?
-  created_at                              DateTime              @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  updated_at                              DateTime?             @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  role                                    UserRole
-  cif                                     String?               @db.VarChar(20)
-  updated_by                              String?               @db.Uuid
-  carts                                   carts[]
-  categories_categories_created_byTousers categories[]          @relation("categories_created_byTousers")
-  categories_categories_updated_byTousers categories[]          @relation("categories_updated_byTousers")
-  categories                              categories[]
-  chat_participants                       chat_participants[]
-  configurations                          configurations?
-  deliveries                              deliveries[]
-  directions                              directions[]
-  discounts                               discounts[]
-  messages                                messages[]
-  notifications                           notifications[]
-  orders_orders_retailer_idTousers        orders[]              @relation("orders_retailer_idTousers")
-  orders_orders_wholesaler_idTousers      orders[]              @relation("orders_wholesaler_idTousers")
-  products                                products[]
-  user_sessions                           user_sessions[]
-  verification_tokens                     verification_tokens[]
+  id                                                  String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id                                             String?                 @unique
+  first_name                                          String?                 @db.VarChar(50)
+  last_name                                           String?                 @db.VarChar(60)
+  username                                            String?                 @unique @db.VarChar(50)
+  password                                            String
+  email                                               String                  @unique @db.VarChar(255)
+  telephone                                           String?                 @db.VarChar(25)
+  status                                              UserStatus              @default(PENDING_VERIFICATION)
+  profile                                             Json?
+  created_at                                          DateTime                @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  updated_at                                          DateTime?               @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  role                                                UserRole
+  cif                                                 String?                 @db.VarChar(20)
+  updated_by                                          String?                 @db.Uuid
+  carts                                               carts[]
+  categories_categories_created_byTousers             categories[]            @relation("categories_created_byTousers")
+  categories_categories_updated_byTousers             categories[]            @relation("categories_updated_byTousers")
+  categories                                          categories[]
+  category_translations                               category_translations[]
+  chat_participants                                   chat_participants[]
+  configurations                                      configurations?
+  deliveries                                          deliveries[]
+  directions                                          directions[]
+  discounts                                           discounts[]
+  files                                               files[]
+  messages                                            messages[]
+  notifications                                       notifications[]
+  orders_orders_retailer_idTousers                    orders[]                @relation("orders_retailer_idTousers")
+  orders_orders_wholesaler_idTousers                  orders[]                @relation("orders_wholesaler_idTousers")
+  product_translations                                product_translations[]
+  products_products_created_byTousers                 products[]              @relation("products_created_byTousers")
+  products_products_updated_byTousers                 products[]              @relation("products_updated_byTousers")
+  products                                            products[]
+  user_sessions                                       user_sessions[]
+  variant_products_variant_products_created_byTousers variant_products[]      @relation("variant_products_created_byTousers")
+  variant_products_variant_products_updated_byTousers variant_products[]      @relation("variant_products_updated_byTousers")
+  verification_tokens                                 verification_tokens[]
 
   @@schema("public")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model variant_products {
-  id                  BigInt          @id @default(autoincrement())
-  created_at          DateTime        @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  product_id          BigInt
-  type_sale           SaleVariant
-  price               Decimal         @db.Decimal(10, 2)
-  price_iva           Decimal         @db.Decimal(10, 2)
-  available_stock     Int
-  sort                Int             @db.SmallInt
-  attributes          Json?
-  status              Int             @db.SmallInt
-  iva                 Decimal         @db.Decimal(5, 2)
-  product_code        String          @db.VarChar(50)
-  reserved_stock      Int             @default(0)
-  low_stock_threshold Int             @default(0)
-  sale_unit_qty       Int             @default(1)
-  min_order_qty       Int             @default(1)
-  cart_details        cart_details[]
-  order_details       order_details[]
-  products            products        @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                                       BigInt          @id @default(autoincrement())
+  created_at                               DateTime        @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  product_id                               BigInt
+  type_sale                                SaleVariant
+  price                                    Decimal         @db.Decimal(10, 2)
+  price_iva                                Decimal         @db.Decimal(10, 2)
+  available_stock                          Int
+  sort                                     Int             @db.SmallInt
+  attributes                               Json?
+  status                                   ProductStatus   @default(ACTIVE)
+  iva                                      Decimal         @db.Decimal(5, 2)
+  product_code                             String          @db.VarChar(50)
+  reserved_stock                           Int             @default(0)
+  low_stock_threshold                      Int             @default(0)
+  sale_unit_qty                            Int             @default(1)
+  min_order_qty                            Int             @default(1)
+  updated_at                               DateTime?       @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  created_by                               String          @db.Uuid
+  updated_by                               String?         @db.Uuid
+  cart_details                             cart_details[]
+  order_details                            order_details[]
+  users_variant_products_created_byTousers users           @relation("variant_products_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  products                                 products        @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_variant_products_updated_byTousers users?          @relation("variant_products_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -479,10 +501,31 @@ model category_translations {
   name_unaccent String?    @default(dbgenerated("immutable_unaccent((name)::text)"))
   created_at    DateTime?  @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   updated_at    DateTime?  @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  updated_by    String?    @db.Uuid
+  users         users?     @relation(fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   categories    categories @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_category_translations_category_id")
 
   @@id([category_id, lang_code], map: "pk_category_translations")
   @@index([lang_code], map: "idx_category_translations_lang_code")
+  @@schema("public")
+}
+
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
+model product_translations {
+  product_id     BigInt
+  lang_code      String    @db.VarChar(10)
+  name           String    @db.VarChar(50)
+  title          String?   @db.VarChar(100)
+  description    String?
+  name_unaccent  String?   @default(dbgenerated("immutable_unaccent((name)::text)"))
+  title_unaccent String?   @default(dbgenerated("immutable_unaccent((title)::text)"))
+  created_at     DateTime  @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  updated_at     DateTime? @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  updated_by     String?   @db.Uuid
+  products       products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_product_translations_product_id")
+  users          users?    @relation(fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([product_id, lang_code], map: "pk_product_translations")
   @@schema("public")
 }
 

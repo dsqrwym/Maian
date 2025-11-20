@@ -32,7 +32,7 @@ export class HashService {
     return result as Promise<boolean>;
   }
 
-  async hashWithCrypto(input: string): Promise<string> {
+  async hashWithCrypto(input: string | Buffer): Promise<string> {
     const result = this.pool.run({
       type: 'hash',
       algorithm: 'crypto',
@@ -41,7 +41,10 @@ export class HashService {
     return result as Promise<string>;
   }
 
-  async compareCrypto(input: string, hash: string): Promise<boolean> {
+  async compareCrypto(
+    input: string | Buffer,
+    hash: string | Buffer,
+  ): Promise<boolean> {
     const result = this.pool.run({
       type: 'compare',
       algorithm: 'crypto',

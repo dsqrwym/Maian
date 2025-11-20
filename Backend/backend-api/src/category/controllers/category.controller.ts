@@ -18,7 +18,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
 import { UserRole } from '@prisma/client';
-import { FindCategoryDto } from '../dto/find-category.dto';
+import { CategoryQueryDto } from '../dto/category-query.dto';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -82,7 +82,7 @@ export class CategoryController {
 
   /**
    * Search and filter categories
-   * @param {FindCategoryDto} query - Search criteria
+   * @param {CategoryQueryDto} query - Search criteria
    * @param req
    */
   @Get()
@@ -91,9 +91,9 @@ export class CategoryController {
     status: 200,
     description: 'Successfully retrieved categories',
   })
-  @ApiQuery({ type: FindCategoryDto })
+  @ApiQuery({ type: CategoryQueryDto })
   async search(
-    @Query() query: FindCategoryDto,
+    @Query() query: CategoryQueryDto,
     @Req() req: FastifyRequest,
   ): Promise<unknown> {
     return this.categoryService.search(query, req.ability);
