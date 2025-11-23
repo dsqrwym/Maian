@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FilesController } from './files.controller';
 import { STORAGE_DRIVER } from './storage/storage-key';
 import { LocalStorageDriver } from './storage/local-storage.driver';
 
+@Global()
 @Module({
   controllers: [FilesController],
   providers: [
@@ -13,5 +14,6 @@ import { LocalStorageDriver } from './storage/local-storage.driver';
       useClass: LocalStorageDriver,
     },
   ],
+  exports: [FilesService, STORAGE_DRIVER],
 })
 export class FilesModule {}

@@ -17,7 +17,7 @@ import { ConfigService } from '@nestjs/config';
 import { MINUTE } from '../../utils/date.utils';
 import { ENV } from '../../config/constants.config';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
-import { UserRole, Prisma } from '@prisma/client';
+import { UserRole, Prisma } from 'src/generated/prisma/client';
 import usersWhereInput = Prisma.usersWhereInput;
 import { makeUsername } from '../../utils/user.utils';
 import { maskEmail } from '../../common/formatter/emial-format';

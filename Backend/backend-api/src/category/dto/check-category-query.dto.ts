@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
   IsNumberString,
+  IsNotEmpty,
 } from 'class-validator';
 import { Trim } from 'src/utils/transform/trim.decorator';
 
@@ -44,7 +45,8 @@ export class CheckCategoryNameUpdateQueryDto {
       'ID of the category being updated (to exclude itself in check)',
     example: '1234567890123456',
   })
-  @IsNumberString()
+  @IsString()
+  @IsNotEmpty()
   id: string;
 
   @ApiProperty({

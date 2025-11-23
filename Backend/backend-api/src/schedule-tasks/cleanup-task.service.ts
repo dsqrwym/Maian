@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { Logger } from 'nestjs-pino';
+import { PinoLogger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { reduceDay } from '../utils/date.utils';
 
 @Injectable()
 export class CleanupTask {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly logger: Logger,
-  ) {}
+    private readonly logger: PinoLogger,
+  ) {
+    this.logger.setContext(CleanupTask.name);
+  }
 
   private async cleanupSessions(now: Date) {
     const deleteDate = reduceDay(now, 30);
@@ -18,7 +20,7 @@ export class CleanupTask {
       const sessions = await this.prismaService.user_sessions.deleteMany({
         where: { last_active: { lt: deleteDate } },
       });
-      this.logger.log(`Deleted ${sessions.count} user sessions.`);
+      this.logger.info(`Deleted ${sessions.count} user sessions.`);
     } catch (e) {
       this.logger.error('Failed to delete old sessions', e);
     }
@@ -31,7 +33,7 @@ export class CleanupTask {
         OR: [{ is_used: true }],
       },
     });
-    this.logger.log(`Deleted: ${deleted.count} verification tokens.`);
+    this.logger.info(`Deleted: ${deleted.count} verification tokens.`);
   }
 
   private async cleanupUnverifiedUsers(now: Date) {
@@ -52,7 +54,7 @@ export class CleanupTask {
         },
       },
     });
-    this.logger.log(`Deleted: ${deleted.count} users.`);
+    this.logger.info(`Deleted: ${deleted.count} users.`);
   }
 
   private async cleanupIncompleteInformationUsers(now: Date) {
@@ -72,7 +74,7 @@ export class CleanupTask {
         ],
       },
     });
-    this.logger.log(`Deleted: ${deleted.count} users.`);
+    this.logger.info(`Deleted: ${deleted.count} users.`);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_3AM)
@@ -87,20 +89,5 @@ export class CleanupTask {
     await this.cleanupUnverifiedUsers(now);
     // 删除未填充信息的用户
     await this.cleanupIncompleteInformationUsers(now);
-  }
-
-  @Cron(CronExpression.EVERY_DAY_AT_5AM)
-  async handleFileCleanup() {
-    // 删除文件地址储存以及文件（谷歌API）
-    const deleted = await this.prismaService.files.deleteMany({
-      where: {
-        AND: [
-          { message_files: { none: {} } },
-          { products_files: { none: {} } },
-          // 将来新增引用表继续添加
-        ],
-      },
-    });
-    this.logger.log(`Cleaned up ${deleted.count} unreferenced files.`);
   }
 }

@@ -10,7 +10,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { AddressType } from '@prisma/client';
+import { AddressType } from 'src/generated/prisma/client';
 import { Type } from 'class-transformer';
 import { Trim } from 'src/utils/transform/trim.decorator';
 

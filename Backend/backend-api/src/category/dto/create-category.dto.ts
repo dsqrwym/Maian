@@ -8,6 +8,7 @@ import {
   Max,
   IsArray,
   ValidateNested,
+  IsNotEmpty,
 } from 'class-validator';
 import { CategoryTranslationDto } from './category-translation.dto';
 import { Type } from 'class-transformer';
@@ -51,6 +52,8 @@ export class CreateCategoryDto {
     example: 1,
     required: false,
   })
+  @IsString()
+  @IsNotEmpty()
   @IsOptional()
   parentId?: string;
 

@@ -14,7 +14,7 @@ import { Action } from '../../casl/actions';
 import { subject } from '@casl/ability';
 import { CategoryQueryDto } from '../dto/category-query.dto';
 import { accessibleBy } from '@casl/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 import { ToPaginated } from '../../common/types/response.type';
 import { UserPayload } from '../../auth/auth.types';
 import { CategorySelectField, CategoryType } from '../category.enums';
@@ -197,9 +197,11 @@ export class CategoryService {
     const translations = fields?.includes(CategorySelectField.TRANSLATIONS);
     const relations = fields?.includes(CategorySelectField.RELATIONS);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const permissionCondition: Prisma.categoriesWhereInput = accessibleBy(
       ability,
       Action.Read,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     ).categories;
 
     this.logger.log('permissionCondition', permissionCondition);

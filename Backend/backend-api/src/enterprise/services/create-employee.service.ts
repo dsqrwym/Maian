@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEmployeeDto } from '../dto/create-employee.dto';
-import { $Enums, UserRole } from '@prisma/client';
+import { $Enums, UserRole } from 'src/generated/prisma/client';
 import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '../../auth/auth.constants';
 import { HashService } from '../../common/hash/hash.service';
 import { addDays } from '../../utils/date.utils';

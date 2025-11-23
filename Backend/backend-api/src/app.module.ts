@@ -77,6 +77,7 @@ import { FilesModule } from './files/files.module';
     MyI18nModule, // 语言翻译
     MyThrottlerModule, // 限流模块
 
+    FilesModule, // 全局的模块
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
     MailModule, // 邮件模块
@@ -88,7 +89,6 @@ import { FilesModule } from './files/files.module';
     AdminModule,
     CategoryModule,
     ProductsModule,
-    FilesModule, // 认证模块
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
   providers: [

@@ -13,7 +13,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/auth.guard';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/generated/prisma/client';
 
 /**
  * Controller for creating new admin users

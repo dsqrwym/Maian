@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { StorageDriver } from './storage.driver';
 import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
@@ -8,6 +12,7 @@ import * as fs from 'node:fs';
 import { HashService } from '../../common/hash/hash.service';
 import * as crypto from 'crypto';
 import { fileTypeFromBuffer } from 'file-type';
+import { ALLOWED_MIMES } from '../../config/fastify-multipart.config';
 
 @Injectable()
 export class LocalStorageDriver implements StorageDriver {
@@ -15,6 +20,23 @@ export class LocalStorageDriver implements StorageDriver {
   private readonly baseDir: string;
   private readonly tempDir: string;
   private readonly STREAM_THRESHOLD = 50 * 1024 * 1024;
+
+  private readonly allowedExtensions = [
+    'jpg',
+    'jpeg',
+    'png',
+    'webp',
+    'gif',
+    'pdf',
+    'doc',
+    'docx',
+    'xls',
+    'xlsx',
+    'mp4',
+    'mpeg',
+    'webm',
+    'ogg',
+  ];
   constructor(
     private readonly config: ConfigService,
     private readonly hashService: HashService,
@@ -30,6 +52,10 @@ export class LocalStorageDriver implements StorageDriver {
     fs.mkdirSync(this.tempDir, { recursive: true });
   }
 
+  getTempDir(): string {
+    return this.tempDir;
+  }
+
   getPathKey(filePath: string): string {
     return path.relative(this.baseDir, filePath); // jpg/abc.jpg
   }
@@ -42,6 +68,15 @@ export class LocalStorageDriver implements StorageDriver {
     return path.join(finalDir, `${hash}.${ext}`);
   }
 
+  private validateFileType(ext: string, mime: string) {
+    if (!this.allowedExtensions.includes(ext)) {
+      throw new BadRequestException(`File extension '${ext}' is not allowed`);
+    }
+    if (!ALLOWED_MIMES.has(mime)) {
+      throw new BadRequestException(`File type '${mime}' is not allowed`);
+    }
+  }
+
   async upload(
     input: Buffer | Readable,
     filename: string,
@@ -52,7 +87,8 @@ export class LocalStorageDriver implements StorageDriver {
     mime_type: string;
     file_size: number;
   }> {
-    const ext = path.extname(filename).replace('.', '').toLowerCase();
+    const safeName = path.basename(filename);
+    const ext = path.extname(safeName).replace('.', '').toLowerCase();
 
     let result: {
       pathKey: string;
@@ -72,6 +108,7 @@ export class LocalStorageDriver implements StorageDriver {
       filePath = await this.generateFilePath(ext, hash);
       const type = await fileTypeFromBuffer(input);
       if (type) mime_type = type.mime;
+      this.validateFileType(ext, mime_type);
       file_size = input.length;
       result = {
         pathKey: this.getPathKey(filePath),
@@ -125,6 +162,7 @@ export class LocalStorageDriver implements StorageDriver {
             mimeChecked = true;
             void fileTypeFromBuffer(headerBuffer).then((ft) => {
               if (ft) mime_type = ft.mime;
+              this.validateFileType(ext, mime_type);
               resolveMimePromise();
             });
           }

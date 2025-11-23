@@ -1,7 +1,7 @@
 import { PureAbility } from '@casl/ability';
 import { Action } from './actions';
 import { PrismaQuery, Subjects } from '@casl/prisma';
-import { users } from '@prisma/client';
+import { users } from 'src/generated/prisma/client';
 
 export type PrismaModels = {
   products: { user_id: string };

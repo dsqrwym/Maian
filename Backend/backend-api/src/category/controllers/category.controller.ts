@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../../auth/guard/auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/generated/prisma/client';
 import { CategoryQueryDto } from '../dto/category-query.dto';
 import {
   ApiBearerAuth,

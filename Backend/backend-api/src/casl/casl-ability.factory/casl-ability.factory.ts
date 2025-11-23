@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { AbilityBuilder } from '@casl/ability';
 import { AppAbility } from '../casl-types';
 import { Action } from '../actions';
@@ -50,9 +50,11 @@ export class CaslAbilityFactory {
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');
+        can(Action.Read, 'products');
         break;
       case UserRole.SUPPORT:
         can(Action.Access, 'Enterprise');
+        can(Action.Read, 'products');
         break;
       case UserRole.WAREHOUSE: {
         can(Action.Access, 'Enterprise');

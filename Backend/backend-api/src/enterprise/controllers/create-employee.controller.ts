@@ -14,7 +14,7 @@ import {
 import { JwtAuthGuard } from '../../auth/guard/auth.guard';
 import { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/generated/prisma/client';
 import { minutes, Throttle } from '@nestjs/throttler';
 
 /**

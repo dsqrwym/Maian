@@ -24,7 +24,7 @@ function addSeconds(date: Date, seconds: number): Date {
 }
 
 /**
- * 在指定日期上加/减小时
+ * 在指定日期上加小时
  * @param date - 原始日期
  * @param hours - 要加/减的小时数，负数表示减
  * @returns 返回新的 Date 对象
@@ -32,7 +32,15 @@ function addSeconds(date: Date, seconds: number): Date {
 function addHours(date: Date, hours: number): Date {
   return new Date(date.getTime() + hours * HOUR); // 3,600,000 毫秒 = 1 小时
 }
-
+/**
+ * 在指定日期上减小时
+ * @param date - 原始日期
+ * @param hours - 要加/减的小时数，负数表示减
+ * @returns 返回新的 Date 对象
+ */
+function reduceHours(date: Date, hours: number): Date {
+  return addHours(date, -1 * hours);
+}
 /**
  * 在指定日期上加天数
  * @param date - 原始日期
@@ -53,14 +61,14 @@ function addDays(date: Date, days: number): Date {
  */
 function reduceDay(date: Date, days: number): Date {
   // 1 天 = 24 小时 * 60 分钟 * 60 秒 * 1000 毫秒
-  const milliseconds = days * DAY;
-  return new Date(date.getTime() - milliseconds);
+  return addDays(date, -1 * days);
 }
 
 export {
   addSeconds,
   addMinutes,
   addHours,
+  reduceHours,
   addDays,
   reduceDay,
   SECOND,

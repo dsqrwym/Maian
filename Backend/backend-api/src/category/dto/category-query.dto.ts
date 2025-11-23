@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsNumber,
   Max,
+  IsNotEmpty,
 } from 'class-validator';
 import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { CategorySelectField, CategoryType } from '../category.enums';
@@ -41,6 +42,7 @@ export class CategoryQueryDto extends PaginationQueryDto {
     required: false,
   })
   @IsString()
+  @IsNotEmpty()
   @IsOptional()
   parentId?: string;
 

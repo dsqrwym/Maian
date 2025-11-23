@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { HashService } from '../../common/hash/hash.service';
 import { CreateAdminDto } from '../dto/create-admin.dto';
 import { randomUUID } from 'node:crypto';

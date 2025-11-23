@@ -13,7 +13,7 @@ import { TokenResponseDto } from '../dto/token-response.dto';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { REFRESH_TOKEN_COOKIE_PATH } from '../../config/constants.config';
 import { AuthService } from '../auth.service';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/generated/prisma/client';
 
 @ApiTags('Authentication')
 @ApiExtraModels(LoginDto, TokenResponseDto)

@@ -15,7 +15,7 @@ import { FindUserService } from '../services/find-user.service';
 import { FindUserQueryDto } from '../dto/find-user-query.dto';
 import { FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '../../auth/guard/auth.guard';
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { PaginatedResponseDto } from '../../utils/dto/pagination.dto';
 
 @ApiTags('User')

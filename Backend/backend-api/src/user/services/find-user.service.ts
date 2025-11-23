@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { FindUserQueryDto } from '../dto/find-user-query.dto';
 import { AppAbility } from '../../casl/casl-types';
-import { Prisma } from '@prisma/client';
+import { Prisma } from 'src/generated/prisma/client';
 import { accessibleBy } from '@casl/prisma';
 import { Action } from '../../casl/actions';
 import usersWhereInput = Prisma.usersWhereInput;

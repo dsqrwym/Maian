@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsEnum, IsString, IsIn } from 'class-validator';
-import { UserStatus, UserRole } from '@prisma/client';
+import { UserStatus, UserRole } from 'src/generated/prisma/client';
 import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { ToBoolean } from '../../utils/transform/to-boolean.decorator'; // 假设你定义了这两个 enum
 

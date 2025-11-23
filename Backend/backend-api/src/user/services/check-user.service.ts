@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CheckUserUsernameQueryDto } from '../dto/check-user-query.dto';
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { makeUsername } from '../../utils/user.utils';
 
 @Injectable()

@@ -1,5 +1,5 @@
-import { Decimal } from '@prisma/client/runtime/edge';
-
+import { Prisma } from 'src/generated/prisma/client';
+const Decimal = Prisma.Decimal;
 // 使用Prisma的Decimal类型，其底层由decimal.js实现。 https://prisma.org.cn/docs/orm/prisma-client/special-fields-and-types
 /**
  * 计算价格（不含 IVA ↔ 含 IVA）。

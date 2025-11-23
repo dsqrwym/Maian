@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { $Enums, AddressType, UserRole } from '@prisma/client';
+import { $Enums, AddressType, UserRole } from 'src/generated/prisma/client';
 import { randomUUID } from 'node:crypto';
 import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
 import { VerificationService } from './verification.service';

@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 
 /**
  * UserPayload 是嵌入 JWT token 中的载荷（payload）结构。

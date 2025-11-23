@@ -3,7 +3,7 @@ import { Logger } from 'nestjs-pino';
 import { ENV } from '../../config/constants.config';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { HashService } from '../../common/hash/hash.service';
 import { makeUsername } from '../../utils/user.utils';
 

@@ -1,12 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-  schemas   = ["public"]
+  provider = "postgresql"
+  schemas  = ["public"]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -217,12 +216,12 @@ model files {
   file_size      BigInt
   storage_key    String
   created_at     DateTime         @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
-  uploaded_by    String?          @db.Uuid
   to_delete      Boolean          @default(false)
-  users          users?           @relation(fields: [uploaded_by], references: [id], onUpdate: NoAction)
   message_files  message_files[]
   products_files products_files[]
+  user_uploads   user_uploads[]
 
+  @@index([created_at], map: "idx_files_created_at")
   @@schema("public")
 }
 
@@ -235,6 +234,7 @@ model message_files {
   files      files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   messages   messages @relation(fields: [message_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
+  @@index([file_id], map: "idx_message_files_file_id")
   @@schema("public")
 }
 
@@ -367,6 +367,8 @@ model products_files {
   files      files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   products   products @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
+  @@index([file_id], map: "idx_products_files_file_id")
+  @@index([product_id], map: "idx_products_files_product_id")
   @@schema("public")
 }
 
@@ -429,7 +431,6 @@ model users {
   deliveries                                          deliveries[]
   directions                                          directions[]
   discounts                                           discounts[]
-  files                                               files[]
   messages                                            messages[]
   notifications                                       notifications[]
   orders_orders_retailer_idTousers                    orders[]                @relation("orders_retailer_idTousers")
@@ -439,6 +440,7 @@ model users {
   products_products_updated_byTousers                 products[]              @relation("products_updated_byTousers")
   products                                            products[]
   user_sessions                                       user_sessions[]
+  user_uploads                                        user_uploads[]
   variant_products_variant_products_created_byTousers variant_products[]      @relation("variant_products_created_byTousers")
   variant_products_variant_products_updated_byTousers variant_products[]      @relation("variant_products_updated_byTousers")
   verification_tokens                                 verification_tokens[]
@@ -526,6 +528,17 @@ model product_translations {
   users          users?    @relation(fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([product_id, lang_code], map: "pk_product_translations")
+  @@schema("public")
+}
+
+model user_uploads {
+  user_id    String   @db.Uuid
+  file_id    BigInt
+  created_at DateTime @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
+  files      files    @relation(fields: [file_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_id, file_id])
   @@schema("public")
 }
 

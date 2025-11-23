@@ -13,7 +13,7 @@ import { RegisterRetailerDto } from './dto/register-retailer.dto';
 import { SendVerificationCodeDto, VerifyCodeDto } from './dto/verification.dto';
 import { SendNormalRegisterMailDto } from './dto/register.dto';
 import { RegisterWholesalerDto } from './dto/register-wholesaler.dto';
-import { UserRole } from '@prisma/client';
+import { UserRole } from 'src/generated/prisma/client';
 
 @Injectable()
 export class AuthService {
