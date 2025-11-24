@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { STORAGE_DRIVER } from './storage/storage-key';
 import { StorageDriver } from './storage/storage.driver';
 import { Readable } from 'stream';
@@ -6,6 +11,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from '../auth/auth.types';
 import { UploadFileForWholesalerDto } from './upload-file-for-wholesaler.dto';
 import { UserRole } from '../generated/prisma/enums';
+import { ProductFilesQueryDto } from './dto/product-files-query.dto';
+import { AppAbility } from '../casl/casl-types';
+import { Action } from '../casl/actions';
+import { subject } from '@casl/ability';
 
 @Injectable()
 export class FilesService {
@@ -64,5 +73,50 @@ export class FilesService {
     });
 
     return { id: file.id.toString() };
+  }
+
+  async getProductFileById(query: ProductFilesQueryDto, ability: AppAbility) {
+    const { product_id, file_id } = query;
+    const file = await this.prisma.files.findUnique({
+      select: {
+        storage_key: true,
+        mime_type: true,
+        file_name: true,
+        products_files: {
+          select: { products: { select: { user_id: true } } },
+          where: { product_id: BigInt(product_id) },
+        },
+      },
+      where: {
+        id: BigInt(file_id),
+        products_files: {
+          some: {
+            product_id: BigInt(product_id),
+          },
+        },
+      },
+    });
+
+    if (!file) {
+      throw new NotFoundException(
+        'File not found or not associated with this product.',
+      );
+    }
+
+    const productOwnerId = file.products_files[0].products.user_id;
+
+    if (
+      !ability.can(
+        Action.Read,
+        subject('products_files', { user_id: productOwnerId }),
+      )
+    ) {
+      throw new ForbiddenException('You are not allowed to read this file');
+    }
+    return {
+      stream: this.storage.createReadStream(file.storage_key),
+      mime_type: file.mime_type,
+      filename: file.file_name,
+    };
   }
 }

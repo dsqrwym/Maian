@@ -16,6 +16,7 @@ export class ProductQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: 'Selected fields',
     enum: ProductSelectField,
+    type: 'array',
     required: false,
   })
   @IsEnum(ProductSelectField, {

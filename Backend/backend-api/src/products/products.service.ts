@@ -161,6 +161,22 @@ export class ProductsService {
         select: { lang_code: true, name: true },
         where: { ...(langCode && { lang_code: langCode }) },
       },
+      products_files: {
+        select: { files: { select: { id: true, mime_type: true } } },
+        where: { files: { mime_type: { startsWith: 'image/' } } },
+        orderBy: { sort: 'asc' },
+        take: 1,
+      },
+      variant_products: {
+        select: {
+          price: true,
+          price_iva: true,
+          available_stock: true,
+          min_order_qty: true,
+          sale_unit_qty: true,
+        },
+        orderBy: { price_iva: 'asc' },
+      },
       ...(iva && { iva }),
       ...(selectedStatus && { status: true }),
       ...(user_id && { user_id }),
@@ -172,6 +188,10 @@ export class ProductsService {
               select: {
                 id: true,
                 name: true,
+                category_translations: {
+                  select: { lang_code: true, name: true },
+                  where: { ...(langCode && { lang_code: langCode }) },
+                },
               },
             },
           },
@@ -188,6 +208,11 @@ export class ProductsService {
           { name_unaccent: { contains: search, mode: 'insensitive' } },
           { title_unaccent: { contains: search, mode: 'insensitive' } },
           { product_code: { contains: search, mode: 'insensitive' } },
+          {
+            variant_products: {
+              some: { product_code: { contains: search, mode: 'insensitive' } },
+            },
+          },
           {
             product_categories: {
               some: {
@@ -246,8 +271,28 @@ export class ProductsService {
       }),
     ]);
 
+    const resultProduct = products.map((product) => {
+      const { variant_products, ...productReset } = product;
+      const { price, price_iva } = variant_products[0];
+      const totalStock = variant_products.reduce(
+        (total, variant) =>
+          total + variant.available_stock * variant.sale_unit_qty,
+        0,
+      );
+      const minOrderQty = Math.min(
+        ...variant_products.map((v) => v.min_order_qty * v.sale_unit_qty),
+      );
+      return {
+        ...productReset,
+        minPrice: price,
+        minPriceIva: price_iva,
+        totalStock,
+        minOrderQty,
+      };
+    });
+
     const result: ToPaginated = {
-      items: products,
+      items: resultProduct,
       meta: { total: count, page, limit },
     };
 

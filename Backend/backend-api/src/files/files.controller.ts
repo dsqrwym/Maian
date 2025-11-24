@@ -1,18 +1,31 @@
 import {
   BadRequestException,
   Controller,
+  Get,
   Post,
   Query,
   Req,
+  StreamableFile,
   UseGuards,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FastifyRequest } from 'fastify';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiOperation,
+  ApiProduces,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/auth.guard';
 import { fileTypeFromBuffer } from 'file-type';
 import { ALLOWED_MIMES } from '../config/fastify-multipart.config';
 import { UploadFileForWholesalerDto } from './upload-file-for-wholesaler.dto';
+import { ProductFilesQueryDto } from './dto/product-files-query.dto';
+import { SkipResponseInterceptor } from 'src/common/guards/decorator/skip-response-interceptor.decorator';
 
 @ApiTags('File Management')
 @ApiBearerAuth()
@@ -62,5 +75,34 @@ export class FilesController {
       const user = req.user;
       return await this.filesService.uploadFile(file, filename, user, query);
     }
+  }
+
+  @ApiOperation({
+    summary: 'Get product file',
+    description:
+      'Returns the raw file (image, video, pdf, etc.) as a binary stream',
+  })
+  @ApiQuery({ type: ProductFilesQueryDto })
+  @ApiProduces('application/octet-stream')
+  @ApiOkResponse({
+    description: 'Binary file',
+    schema: {
+      type: 'string',
+      format: 'binary',
+    },
+  })
+  @Get('product-file')
+  @SkipResponseInterceptor()
+  async getProductFile(
+    @Query() query: ProductFilesQueryDto,
+    @Req() req: FastifyRequest,
+  ): Promise<StreamableFile> {
+    const { stream, mime_type, filename } =
+      await this.filesService.getProductFileById(query, req.ability);
+
+    return new StreamableFile(await stream, {
+      type: mime_type,
+      disposition: `inline; filename="${filename}"`,
+    });
   }
 }

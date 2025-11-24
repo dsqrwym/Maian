@@ -14,6 +14,7 @@ import {
   Response,
 } from '../types/response.type';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { SKIP_RESPONSE_INTERCEPTOR } from '../guards/decorator/skip-response-interceptor.decorator';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
@@ -26,6 +27,16 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
+    const skipInterceptor = this.reflector.get<boolean>(
+      SKIP_RESPONSE_INTERCEPTOR,
+      context.getHandler(),
+    );
+
+    // 如果设置了跳过标志，则直接返回原始 Observable，跳过 map/tap 封装
+    if (skipInterceptor) {
+      return next.handle() as any as Observable<Response<T>>; // 用于特殊情况不需要json化的跳过
+    }
+
     const defaultMessage = this.reflector.get<string>(
       'responseMessage',
       context.getHandler(),

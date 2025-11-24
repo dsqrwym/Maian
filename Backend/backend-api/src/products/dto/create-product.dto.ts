@@ -1,9 +1,11 @@
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
+  Matches,
   Max,
   MaxLength,
   Min,
@@ -78,9 +80,10 @@ export class CreateProductDto {
   // --- 关键关联字段 (分类) ---
   @ApiProperty({
     description: 'Primary category ID this product belongs to',
-    example: 'cat_123456',
+    example: '123456',
   })
   @IsNotEmpty()
+  @Matches(/^-?\d+$/, { message: 'must be an integer string' })
   @IsString()
   primary_category_id: string; // 必须选择一个主分类 (对应 product_categories.is_primary = TRUE)
   // (后续添加非主分类)

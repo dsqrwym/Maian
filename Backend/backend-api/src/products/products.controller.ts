@@ -17,7 +17,10 @@ import { JwtAuthGuard } from '../auth/guard/auth.guard';
 import { FastifyRequest } from 'fastify';
 import { ProductListQueryDto } from './dto/product-list-query.dto';
 import { ProductQueryDto } from './dto/product-query.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Product Management')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('products')
 export class ProductsController {

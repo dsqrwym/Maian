@@ -20,12 +20,14 @@ export class CaslAbilityFactory {
         can(Action.Update, 'categories');
         can(Action.Read, 'categories');
         can(Action.Manage, 'products');
+        can(Action.Manage, 'products_files');
         break;
       case UserRole.SUPERADMIN:
         can(Action.Access, 'Admin');
         can(Action.Manage, 'users');
         can(Action.Manage, 'categories');
         can(Action.Manage, 'products');
+        can(Action.Manage, 'products_files');
         break;
       case UserRole.RETAILER:
         can(Action.Access, 'Standard');
@@ -42,24 +44,29 @@ export class CaslAbilityFactory {
         });
         can(Action.Read, 'categories');
         can(Action.Read, 'products', { status: 'ACTIVE' });
+        can(Action.Read, 'products_files');
         break;
       case UserRole.WHOLESALER:
         can(Action.Access, 'Enterprise');
         can(Action.Manage, 'categories', { user_id: user.userId });
         can(Action.Manage, 'products', { user_id: user.userId });
+        can(Action.Manage, 'products_files', { user_id: user.userId });
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');
-        can(Action.Read, 'products');
+        can(Action.Read, 'products', { user_id: user.wholesalerId });
+        can(Action.Read, 'products_files', { user_id: user.wholesalerId });
         break;
       case UserRole.SUPPORT:
         can(Action.Access, 'Enterprise');
-        can(Action.Read, 'products');
+        can(Action.Read, 'products', { user_id: user.wholesalerId });
+        can(Action.Read, 'products_files', { user_id: user.wholesalerId });
         break;
       case UserRole.WAREHOUSE: {
         can(Action.Access, 'Enterprise');
         can(Action.Manage, 'categories', { user_id: user.wholesalerId });
         can(Action.Manage, 'products', { user_id: user.wholesalerId });
+        can(Action.Manage, 'products_files', { user_id: user.wholesalerId });
         break;
       }
     }

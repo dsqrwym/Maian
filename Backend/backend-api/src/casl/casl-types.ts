@@ -7,6 +7,7 @@ export type PrismaModels = {
   products: { user_id: string };
   categories: { user_id: string | undefined };
   users: users;
+  products_files: { user_id: string };
 };
 
 type PrismaSubjects = Subjects<PrismaModels>;

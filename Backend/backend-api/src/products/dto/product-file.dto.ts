@@ -1,11 +1,19 @@
-import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  Max,
+  Min,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class ProductFileDto {
   @ApiProperty({
     description: 'ID of the uploaded file associated with this product',
-    example: 'file_12345',
+    example: '12345',
   })
   @IsNotEmpty()
+  @Matches(/^-?\d+$/, { message: 'must be an integer string' })
   @IsString()
   file_id: string; // 对应 files.id 要先上传之后拿到id
 

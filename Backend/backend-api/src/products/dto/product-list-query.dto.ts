@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  Matches,
 } from 'class-validator';
 import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -32,8 +33,9 @@ export class ProductListQueryDto extends PaginationQueryDto {
     example: 'cat_123',
   })
   @IsOptional()
-  @IsString()
   @IsNotEmpty()
+  @Matches(/^-?\d+$/, { message: 'must be an integer string' })
+  @IsString()
   category_id?: string; // 按主分类或关联分类过滤
 
   @ApiPropertyOptional({

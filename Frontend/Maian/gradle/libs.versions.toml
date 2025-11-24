@@ -7,7 +7,7 @@ android-targetSdk = "35"
 androidx-activity = "1.12.0" #1.11.0
 androidx-lifecycle = "2.9.6" #2.9.5
 coilCompose = "3.3.0"
-composeHotReload = "1.0.0-rc03" # 1.0.0-rc02
+composeHotReload = "1.0.0" # 1.0.0-rc03
 composeMultiplatform = "1.9.3" #1.9.2
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
@@ -31,7 +31,6 @@ androidx-paging-common = { module = "androidx.paging:paging-common", version.ref
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 compose-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholderMaterial3" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
