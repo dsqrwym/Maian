@@ -22,7 +22,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 @ApiTags('Product Management')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('products')
+@Controller('product')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -39,7 +39,8 @@ export class ProductsController {
     @Query() query: ProductListQueryDto,
     @Req() req: FastifyRequest,
   ) {
-    return this.productsService.findAll(query, req.ability);
+    return this.productsService.findAllUseSql(query, req.ability, req.user);
+    // return this.productsService.findAll(query, req.ability); prisma 无法实现 我对关系聚合和排序的要求
   }
 
   @Get(':id')

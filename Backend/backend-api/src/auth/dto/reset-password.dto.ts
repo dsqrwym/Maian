@@ -2,10 +2,19 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsStrongPassword, IsUUID, MinLength } from 'class-validator';
 
 export class ResetPasswordDto {
+  @ApiProperty({
+    description:
+      'Unique identifier for the password reset verification process',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
   @IsString()
   @IsUUID()
   verification_id: string;
 
+  @ApiProperty({
+    description: 'JWT token to be used for password reset',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
   @IsString()
   @IsUUID()
   token: string;

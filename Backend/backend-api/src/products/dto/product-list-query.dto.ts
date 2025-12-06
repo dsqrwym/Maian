@@ -10,7 +10,7 @@ import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Trim } from '../../utils/transform/trim.decorator';
 import { ProductStatus } from 'src/generated/prisma/client';
-import { ProductListSelectField } from '../product.enums';
+import { ProductListSelectField, ProductSortField } from '../product.enums';
 
 export class ProductListQueryDto extends PaginationQueryDto {
   // --- 搜索和过滤 ---
@@ -53,8 +53,8 @@ export class ProductListQueryDto extends PaginationQueryDto {
   })
   @IsOptional()
   @IsString()
-  @IsEnum(['name', 'product_code', 'available_stock', 'price_iva', 'price'])
-  sort_by: string = 'name';
+  @IsEnum(ProductSortField)
+  sort_by?: ProductSortField;
 
   @ApiPropertyOptional({
     description: 'Sort order direction',
@@ -77,6 +77,7 @@ export class ProductListQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: 'Selected fields',
     enum: ProductListSelectField,
+    isArray: true,
     required: false,
   })
   @IsEnum(ProductListSelectField, {

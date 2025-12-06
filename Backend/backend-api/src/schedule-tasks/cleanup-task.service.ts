@@ -77,7 +77,7 @@ export class CleanupTask {
     this.logger.info(`Deleted: ${deleted.count} users.`);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  @Cron(CronExpression.EVERY_HOUR)
   async handleCleanup() {
     const now = new Date();
     // 清理 会话

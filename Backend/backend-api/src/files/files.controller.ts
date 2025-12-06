@@ -17,7 +17,6 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiProduces,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/auth.guard';
@@ -82,7 +81,6 @@ export class FilesController {
     description:
       'Returns the raw file (image, video, pdf, etc.) as a binary stream',
   })
-  @ApiQuery({ type: ProductFilesQueryDto })
   @ApiProduces('application/octet-stream')
   @ApiOkResponse({
     description: 'Binary file',

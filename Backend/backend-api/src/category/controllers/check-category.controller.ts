@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { CheckCategoryService } from '../services/check-category.service';
 import {
@@ -33,18 +33,6 @@ export class CheckCategoryController {
     description:
       'Checks whether a category name already exists under a specific user (if userId provided) or in public scope (userId is null). Returns true if already exists, false otherwise. / 检查类别名称在指定用户下（提供userId）或公共范围（userId为空）是否已存在。若已存在返回true，否则返回false。',
   })
-  @ApiQuery({
-    name: 'name',
-    required: true,
-    description: 'Category name to check / 待检查的类别名称',
-    example: 'Electronics',
-  })
-  @ApiQuery({
-    name: 'userId',
-    required: false,
-    description: 'Optional owner user ID / 可选的拥有者用户ID',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
   @ApiResponse({
     status: 200,
     description: 'Category name availability status / 类别名称可用性状态',
@@ -72,24 +60,6 @@ export class CheckCategoryController {
     summary: 'Check if category name already exists (update)',
     description:
       'Checks whether a category name already exists under the same scope excluding the current category ID. / 在相同范围内（用户或公共）检查类别名称是否已存在，排除当前类别ID。',
-  })
-  @ApiQuery({
-    name: 'id',
-    required: true,
-    description: 'Category ID to exclude / 需要排除的类别ID',
-    example: '1234567890123456',
-  })
-  @ApiQuery({
-    name: 'name',
-    required: true,
-    description: 'Category name to check / 待检查的类别名称',
-    example: 'Electronics',
-  })
-  @ApiQuery({
-    name: 'userId',
-    required: false,
-    description: 'Optional owner user ID / 可选的拥有者用户ID',
-    example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @ApiResponse({
     status: 200,

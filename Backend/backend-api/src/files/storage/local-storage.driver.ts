@@ -41,10 +41,12 @@ export class LocalStorageDriver implements StorageDriver {
     private readonly config: ConfigService,
     private readonly hashService: HashService,
   ) {
-    this.baseDir = path.resolve(
-      this.projectRoot,
-      this.config.get<string>(ENV.FILE_UPLOAD_DIR, 'uploads'),
-    );
+    const dir = this.config.get<string>(ENV.FILE_UPLOAD_DIR, 'uploads');
+    if (path.isAbsolute(dir)) {
+      this.baseDir = dir;
+    } else {
+      this.baseDir = path.resolve(this.projectRoot, dir);
+    }
     this.tempDir = path.join(this.baseDir, '_temp');
 
     // Ensure directories exist

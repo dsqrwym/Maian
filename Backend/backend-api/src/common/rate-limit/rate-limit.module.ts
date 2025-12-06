@@ -5,6 +5,7 @@ import { ENV } from '../../config/constants.config';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from '../guards/custom-throttler.guard';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
+import { IoRedisService } from '../../cache/redis/ioredis.cache.service';
 
 @Global()
 @Module({
@@ -17,20 +18,18 @@ import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis'
 
   imports: [
     ThrottlerModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      inject: [ConfigService, IoRedisService],
+      useFactory: (
+        configService: ConfigService,
+        ioRedisService: IoRedisService,
+      ) => ({
         throttlers: [
           {
             ttl: seconds(configService.get<number>(ENV.THROTTLER_TTL, 60)),
             limit: configService.get<number>(ENV.THROTTLER_LIMIT, 100),
           },
         ],
-        storage: new ThrottlerStorageRedisService(
-          configService.get<string>(
-            ENV.REDIS_CACHE_URL,
-            'redis://localhost:6379',
-          ),
-        ),
+        storage: new ThrottlerStorageRedisService(ioRedisService.getClient()),
       }),
     }),
   ],

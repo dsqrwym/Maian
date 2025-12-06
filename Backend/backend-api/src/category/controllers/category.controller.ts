@@ -25,7 +25,6 @@ import {
   ApiOperation,
   ApiResponse,
   ApiParam,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { seconds, Throttle } from '@nestjs/throttler';
 
@@ -91,7 +90,6 @@ export class CategoryController {
     status: 200,
     description: 'Successfully retrieved categories',
   })
-  @ApiQuery({ type: CategoryQueryDto })
   async search(
     @Query() query: CategoryQueryDto,
     @Req() req: FastifyRequest,

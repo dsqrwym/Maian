@@ -18,7 +18,7 @@ export class CleanupFilesService {
     this.logger.setContext(CleanupFilesService.name);
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_5_MINUTES)
   async cleanOldTempFiles() {
     const files = await fs.promises.readdir(this.storage.getTempDir());
     const now = Date.now();
@@ -54,7 +54,7 @@ export class CleanupFilesService {
     this.logger.info(`Mark up ${deleted.count} unreferenced files to delete.`);
   }
 
-  @Cron('5 * * * *')
+  @Cron('0 */15 * * * *') // 每 15 分钟执行一次)
   async handleFileCleanup() {
     const deleteDate = reduceHours(new Date(), 6);
     const batchSize = 500; // 每次从 DB 拉取多少条

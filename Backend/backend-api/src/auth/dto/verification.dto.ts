@@ -7,7 +7,7 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Trim } from 'src/utils/transform/trim.decorator';
 
 export class SendVerificationCodeDto {
@@ -21,6 +21,11 @@ export class SendVerificationCodeDto {
   @Trim()
   email: string; // 邮箱地址
 
+  @ApiPropertyOptional({
+    description: 'Deep link for mobile app redirection',
+    example: 'myapp://verification/code',
+    required: false,
+  })
   @IsOptional()
   @IsString()
   deepLink: string;

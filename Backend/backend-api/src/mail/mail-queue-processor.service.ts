@@ -1,6 +1,6 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import {
   ActiveAdminWithPasswordEmailJob,
@@ -17,7 +17,10 @@ import { VerifyAdminMailProcessorService } from './verification-processor/verify
 
 @Processor('mail')
 @Injectable()
-export class MailQueueProcessorService extends WorkerHost {
+export class MailQueueProcessorService
+  extends WorkerHost
+  implements OnApplicationBootstrap
+{
   constructor(
     private readonly verifyEmployeeMailProcessorService: VerifyEmployeeMailProcessorService,
     private readonly verificationMailProcessorService: VerifyRegistrationProcessorService,
@@ -26,6 +29,28 @@ export class MailQueueProcessorService extends WorkerHost {
     private readonly logger: PinoLogger,
   ) {
     super();
+    this.logger.setContext(MailQueueProcessorService.name);
+  }
+  onApplicationBootstrap() {
+    this.worker.on('error', (err) => {
+      this.logger.error({ err }, '[Mail Worker Error]');
+    });
+    this.worker.on('stalled', (jobId) => {
+      this.logger.warn({ jobId }, '[Mail Job Stalled]');
+    });
+    this.worker.on('paused', () => {
+      this.logger.info('[Mail Worker Paused]');
+    });
+    this.worker.on('resumed', () => {
+      this.logger.info('[Mail Worker Resumed]');
+    });
+    this.worker.on('failed', (job, err) => {
+      this.logger.error({ jobId: job?.id, err }, '[Mail Job Failed]');
+    });
+
+    this.worker.on('completed', (job) => {
+      this.logger.debug({ jobId: job.id }, '[Mail Job Completed]');
+    });
   }
 
   async process(job: Job): Promise<any> {

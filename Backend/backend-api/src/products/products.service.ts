@@ -16,7 +16,11 @@ import { ProductListQueryDto } from './dto/product-list-query.dto';
 import { accessibleBy } from '@casl/prisma';
 import { Prisma, UserRole } from 'src/generated/prisma/client';
 import { PinoLogger } from 'nestjs-pino';
-import { ProductListSelectField, ProductSelectField } from './product.enums';
+import {
+  ProductListSelectField,
+  ProductSelectField,
+  ProductSortField,
+} from './product.enums';
 import { ToPaginated } from '../common/types/response.type';
 import { ProductQueryDto } from './dto/product-query.dto';
 import { ConfigService } from '@nestjs/config';
@@ -130,18 +134,32 @@ export class ProductsService {
     });
   }
 
-  async findAll(query: ProductListQueryDto, ability: AppAbility) {
+  getReadListPermission(user: UserPayload) {
+    switch (user.userRole) {
+      case UserRole.ADMIN:
+      case UserRole.SUPERADMIN:
+      case UserRole.RETAILER:
+        return undefined;
+      case UserRole.WHOLESALER:
+        return user.userId;
+      case UserRole.DELIVERY:
+      case UserRole.SUPPORT:
+      case UserRole.WAREHOUSE:
+        return user.wholesalerId;
+    }
+  }
+
+  async findAllUseSql(
+    query: ProductListQueryDto,
+    ability: AppAbility,
+    user: UserPayload,
+  ) {
     if (!ability.can(Action.Read, 'products')) {
       throw new ForbiddenException(
         'You do not have permission to read products',
       );
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const permissionCondition: Prisma.productsWhereInput = accessibleBy(
-      ability,
-      Action.Read,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ).products;
+    const permissionCondition = this.getReadListPermission(user);
 
     this.logger.info('permissionCondition', permissionCondition);
 
@@ -152,148 +170,179 @@ export class ProductsService {
     const user_id = fields?.includes(ProductListSelectField.USER_ID);
     const category = fields?.includes(ProductListSelectField.CATEGORY);
 
-    const select: Prisma.productsSelect = {
-      id: true,
-      name: true,
-      title: true,
-      product_code: true,
-      product_translations: {
-        select: { lang_code: true, name: true },
-        where: { ...(langCode && { lang_code: langCode }) },
-      },
-      products_files: {
-        select: { files: { select: { id: true, mime_type: true } } },
-        where: { files: { mime_type: { startsWith: 'image/' } } },
-        orderBy: { sort: 'asc' },
-        take: 1,
-      },
-      variant_products: {
-        select: {
-          price: true,
-          price_iva: true,
-          available_stock: true,
-          min_order_qty: true,
-          sale_unit_qty: true,
-        },
-        orderBy: { price_iva: 'asc' },
-      },
-      ...(iva && { iva }),
-      ...(selectedStatus && { status: true }),
-      ...(user_id && { user_id }),
-      ...(category && { category }),
-      ...(category && {
-        product_categories: {
-          select: {
-            categories: {
-              select: {
-                id: true,
-                name: true,
-                category_translations: {
-                  select: { lang_code: true, name: true },
-                  where: { ...(langCode && { lang_code: langCode }) },
-                },
-              },
-            },
-          },
-          where: { is_primary: true },
-        },
-      }),
+    const { page, limit, sort_by, sort_order } = query;
+    const offset = (page - 1) * limit;
+    const sortMapping: Record<ProductSortField, string> = {
+      name: 'p.name',
+      title: 'p.title',
+      category: `(cat.main_category->>'name')`,
+      product_code: 'p.product_code',
+      min_order_qty: 'vp.min_order_qty',
+      available_stock: 'vp.total_stock',
+      price_iva: 'vp.min_price_iva',
+      price: 'vp.min_price',
     };
+    const sortField = sort_by ? sortMapping[sort_by] : undefined;
 
-    const andClauses: Prisma.productsWhereInput[] = [permissionCondition];
+    const selectFields = [
+      'p.id',
+      'p.name',
+      'p.title',
+      'p.product_code',
+      'vp.min_price',
+      'vp.min_price_iva',
+      'vp.total_stock',
+      'vp.min_order_qty',
+      'img.main_image',
+      category ? 'cat.main_category' : null,
+      iva ? 'p.iva' : null,
+      selectedStatus ? 'p.status' : null,
+      user_id ? 'p.user_id' : null,
+      `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'lang_code', pt.lang_code,
+        'name', pt.name,
+        'title', pt.title
+      )), '[]'::jsonb)
+      FROM product_translations pt
+      WHERE pt.product_id = p.id
+      ${langCode ? `AND pt.lang_code = '${langCode}'` : ''}) AS product_translations`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+
+    // 构建动态 SQL 参数数组
+    const params: string[] = [];
+    let paramIndex = 1; // $1, $2 ...
+
+    const whereClauses: string[] = ['1=1'];
+
+    if (permissionCondition) {
+      params.push(permissionCondition);
+      whereClauses.push(`p.user_id = $${paramIndex++}`);
+    }
 
     if (search) {
-      andClauses.push({
-        OR: [
-          { name_unaccent: { contains: search, mode: 'insensitive' } },
-          { title_unaccent: { contains: search, mode: 'insensitive' } },
-          { product_code: { contains: search, mode: 'insensitive' } },
-          {
-            variant_products: {
-              some: { product_code: { contains: search, mode: 'insensitive' } },
-            },
-          },
-          {
-            product_categories: {
-              some: {
-                categories: {
-                  name: { contains: search, mode: 'insensitive' },
-                  category_translations: {
-                    some: {
-                      name_unaccent: { contains: search, mode: 'insensitive' },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      });
+      params.push(`%${search}%`);
+      const searchIndex = paramIndex++;
+      whereClauses.push(`
+      (
+        p.name_unaccent ILIKE $${searchIndex} OR
+        p.title_unaccent ILIKE $${searchIndex} OR
+        p.product_code ILIKE $${searchIndex}
+        OR EXISTS (
+          SELECT 1 FROM variant_products vp
+          WHERE vp.product_id = p.id AND vp.product_code ILIKE $${searchIndex}
+        )
+        OR EXISTS (
+          SELECT 1
+          FROM product_categories pc
+          JOIN categories c ON c.id = pc.category_id
+          LEFT JOIN category_translations ct ON ct.category_id = c.id
+          WHERE pc.product_id = p.id
+          AND (c.name ILIKE $${searchIndex} OR ct.name_unaccent ILIKE $${searchIndex})
+        )
+        OR EXISTS (
+          SELECT 1
+          FROM product_translations pt
+          WHERE pt.product_id = p.id
+          AND (pt.name_unaccent ILIKE $${searchIndex} OR pt.title_unaccent ILIKE $${searchIndex})
+        )
+      )
+    `);
     }
 
-    if (category_id != undefined) {
-      andClauses.push({
-        product_categories: {
-          some: {
-            category_id: BigInt(category_id),
-          },
-        },
-      });
+    if (category_id != null) {
+      params.push(category_id);
+      whereClauses.push(`
+      EXISTS (
+        SELECT 1 FROM product_categories pc
+        WHERE pc.product_id = p.id AND pc.category_id = $${paramIndex++}
+      )
+    `);
     }
 
-    if (!permissionCondition.user_id && wholesaler_id != undefined) {
-      andClauses.push({
-        user_id: wholesaler_id,
-      });
+    if (!permissionCondition && wholesaler_id) {
+      params.push(wholesaler_id);
+      whereClauses.push(`p.user_id = $${paramIndex++}`);
     }
 
-    if (status != undefined) {
-      andClauses.push({ status });
+    if (status) {
+      params.push(status);
+      whereClauses.push(`p.status = $${paramIndex++}`);
     }
 
-    const { page, limit } = query;
-    const { sort_by, sort_order } = query;
+    const whereSql = whereClauses.join(' AND ');
 
-    const orderBy: Prisma.productsOrderByWithRelationInput = {
-      [sort_by]: sort_order,
-    };
+    const sql = `
+    SELECT ${selectFields}
+    FROM products p
+      -- 主图
+      LEFT JOIN LATERAL (
+        SELECT jsonb_build_object('id', f.id, 'mime_type', f.mime_type) AS main_image
+        FROM products_files pf
+        JOIN files f ON f.id = pf.file_id
+        WHERE pf.product_id = p.id AND f.mime_type LIKE 'image/%'
+        ORDER BY pf.sort ASC
+        LIMIT 1
+      ) img ON TRUE
+      -- 主分类
+      LEFT JOIN LATERAL (
+        SELECT jsonb_build_object(
+          'id', c.id,
+          'name', c.name,
+          'category_translations', (
+            SELECT COALESCE(jsonb_agg(jsonb_build_object(
+              'lang_code', ct.lang_code,
+              'name', ct.name
+            )), '[]'::jsonb)
+            FROM category_translations ct
+            WHERE ct.category_id = c.id
+            ${langCode ? `AND ct.lang_code = '${langCode}'` : ''}
+          )
+        ) AS main_category
+        FROM product_categories pc
+        JOIN categories c ON c.id = pc.category_id
+        WHERE pc.product_id = p.id AND pc.is_primary = true
+        LIMIT 1
+      ) cat ON TRUE
+      -- variant_products 聚合
+      LEFT JOIN LATERAL (
+        SELECT
+          MIN(vp.price_iva) AS min_price_iva,
+          MIN(vp.price) FILTER (
+            WHERE vp.price_iva = (
+              SELECT MIN(price_iva) FROM variant_products WHERE product_id = p.id
+            )
+          ) AS min_price,
+          SUM(vp.available_stock * vp.sale_unit_qty) AS total_stock,
+          MIN(vp.min_order_qty * vp.sale_unit_qty) AS min_order_qty
+        FROM variant_products vp
+        WHERE vp.product_id = p.id
+      ) vp ON TRUE
+    WHERE ${whereSql}
+    ORDER BY ${sortField} ${sort_order}
+    LIMIT $${paramIndex++}
+    OFFSET $${paramIndex++};
+  `;
+    const countParams = params.slice(); // 拷贝一份
+    params.push(limit + '', offset + '');
+
+    const countSql = `SELECT COUNT(*) AS total
+                      FROM products p WHERE ${whereSql}`;
 
     const [products, count] = await Promise.all([
-      this.prisma.products.findMany({
-        select,
-        where: { AND: andClauses },
-        orderBy,
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      this.prisma.products.count({
-        where: { AND: andClauses },
-      }),
+      this.prisma.$queryRawUnsafe(sql, ...params),
+      this.prisma.$queryRawUnsafe<[{ total: number }]>(
+        countSql,
+        ...countParams,
+      ),
     ]);
 
-    const resultProduct = products.map((product) => {
-      const { variant_products, ...productReset } = product;
-      const { price, price_iva } = variant_products[0];
-      const totalStock = variant_products.reduce(
-        (total, variant) =>
-          total + variant.available_stock * variant.sale_unit_qty,
-        0,
-      );
-      const minOrderQty = Math.min(
-        ...variant_products.map((v) => v.min_order_qty * v.sale_unit_qty),
-      );
-      return {
-        ...productReset,
-        minPrice: price,
-        minPriceIva: price_iva,
-        totalStock,
-        minOrderQty,
-      };
-    });
+    const total = Number(count[0].total);
 
     const result: ToPaginated = {
-      items: resultProduct,
-      meta: { total: count, page, limit },
+      items: products,
+      meta: { total, page, limit },
     };
 
     return result;

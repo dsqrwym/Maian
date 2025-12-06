@@ -55,7 +55,11 @@ import { Logger } from 'nestjs-pino';
           },
         },
         defaults: {
-          from: `"MaiAn" <${configService.get<string>(ENV.FROM_EMAIL, 'noreply@dsqrwym.com')}>`,
+          name: 'MaiAn',
+          from: configService.get<string>(
+            ENV.FROM_EMAIL,
+            'noreply@dsqrwym.com',
+          ),
         },
         template: {
           dir: join(process.cwd(), 'src', 'mail', 'templates'),
