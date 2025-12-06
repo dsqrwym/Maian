@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "pnpm": {
     "overrides": {
-      "html-minifier": "npm:html-minifier-terser@^6.1.0"
+      "html-minifier": "npm:html-minifier-terser@^6.1.0",
+      "nodemailer": "7.0.11"
     }
   },
   "scripts": {
