@@ -1,23 +1,22 @@
-package org.dsqrwym.shared.data.category.dto
+package org.dsqrwym.shared.data.products.dto
 
 import kotlinx.serialization.Serializable
-import org.dsqrwym.shared.data.category.SharedCategorySelectField
-import org.dsqrwym.shared.data.category.SharedCategoryType
+import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.pagination.PaginationQuery
+import org.dsqrwym.shared.data.products.SharedProductListSelectField
+import org.dsqrwym.shared.data.products.SharedProductSortField
+import org.dsqrwym.shared.data.products.SharedProductStatus
 
-// isPrivate = false -> userID = not null
-// userID = null or value
 @Serializable
-data class SharedFindCategoryDto(
-    val search: String? = null,          // name/lang 模糊搜索关键字
-    val langCode: String? = null,        // 语言代码 (e.g. "en", "es")
-    val userId: String? = null,          // 按 user_id 过滤
-    val parentId: String? = null,        // 按 parent_id 过滤
-    val maxLevel: Int? = null,           // 最大嵌套等级
-    val withChildrenCount: Boolean? = null, // 放回计数
-    val type: SharedCategoryType? = null,      // PRIVATE / PUBLIC / ALL = NULL
-    val fields: List<SharedCategorySelectField>? = null,
+data class SharedFindProductDto(
+    val search: String? = null,                  // name/title/product_code 模糊搜索关键字
+    val langCode: String? = null,                // 指定返回语言字段 (e.g., "en", "es")
+    val categoryId: String? = null, // 分类过滤（主分类或关联分类）
+    val wholesalerId: String? = null,            // 批发商 ID 过滤 (UUID)
+    val sortBy: SharedProductSortField? = SharedProductSortField.NAME, // 排序字段: name/product_code/available_stock/price_iva/price
+    val sortOrder: OrderDir? = OrderDir.ASC,              // asc / desc
+    val status: SharedProductStatus? = null,     // 产品状态过滤
+    val fields: List<SharedProductListSelectField>? = null, // 选择返回字段
     override val page: Int = 1,
     override val limit: Int = 50,
 ) : PaginationQuery
-

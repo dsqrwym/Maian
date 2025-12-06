@@ -1,7 +1,7 @@
 package org.dsqrwym.enterprise.di.categories
 
-import org.dsqrwym.enterprise.data.categories.CategoryApi
-import org.dsqrwym.enterprise.data.categories.CategoryRepository
+import org.dsqrwym.enterprise.data.category.CategoryApi
+import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesCreateViewModel
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesEditViewModel
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel

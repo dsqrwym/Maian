@@ -48,7 +48,17 @@ object ApiConfig {
         fun currencyByCountry(isoNumeric: Int) = "${LOCATIONS}/currencies/${isoNumeric}"
     }
 
+    object FilePath {
+        private const val FILES = "${BASE_URL}/files"
+        const val UPLOAD_FILE_RAW = "${FILES}/upload-raw"
+
+        const val PRODUCT_FILE = "${FILES}/product-file"
+    }
     object CategoryPath {
         const val CATEGORY = "${BASE_URL}/category"
+    }
+
+    object ProductPath {
+        const val PRODUCT = "${BASE_URL}/product"
     }
 }

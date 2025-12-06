@@ -12,6 +12,7 @@ import org.dsqrwym.enterprise.ui.screens.categories.CategoriesListScreen
 import org.dsqrwym.enterprise.ui.screens.categories.CategoryCreateScreen
 import org.dsqrwym.enterprise.ui.screens.categories.CategoryEditScreen
 import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
+import org.dsqrwym.shared.util.navigation.popBackStackWithKeyboardDismiss
 
 fun NavGraphBuilder.categoryNavGraph(
     navController: NavHostController,
@@ -29,16 +30,22 @@ fun NavGraphBuilder.categoryNavGraph(
     }
     composable<CategoryCreate> {
         CategoryCreateScreen(
+            onNavigate = { route ->
+                navController.navigateWithKeyboardDismiss(route, focusManager = focusManager)
+            },
             onNavigateBack = {
-                navController.navigateWithKeyboardDismiss(Categories, focusManager = focusManager)
+                navController.popBackStackWithKeyboardDismiss(focusManager = focusManager)
             },
         )
     }
     composable<CategoryEdit> {
         CategoryEditScreen(
             categoryId = it.toRoute<CategoryEdit>().id,
+            onNavigate = { route ->
+                navController.navigateWithKeyboardDismiss(route, focusManager = focusManager)
+            },
             onNavigateBack = {
-                navController.navigateWithKeyboardDismiss(Categories, focusManager = focusManager)
+                navController.popBackStackWithKeyboardDismiss(focusManager = focusManager)
             }
         )
     }

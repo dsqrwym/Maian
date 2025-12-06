@@ -20,8 +20,10 @@ import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.network.InitCol
 import org.dsqrwym.shared.theme.*
 import org.dsqrwym.shared.ui.components.containers.SnackbarScaffold
+import org.dsqrwym.shared.ui.overlay.OverlayHost
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.settings.initSharedSettingsProvider
 import org.jetbrains.compose.resources.getString
@@ -48,18 +50,19 @@ val LocalNavHostController = staticCompositionLocalOf<NavHostController> {
     error("No NavHostController provided")
 }
 
+/**
+ * AppRoot
+ *
+ * EN: Root composable that initializes theme, localization, and global providers, then
+ * hosts a Scaffold with a shared Snackbar. Place your feature navigation/content inside.
+ *
+ * ZH: 应用根部件，初始化主题、语言与全局提供者，并提供全局 Snackbar 的 Scaffold。把功能导航/内容放入其中。
+ */
 @Composable
-        /**
-         * AppRoot
-         *
-         * EN: Root composable that initializes theme, localization, and global providers, then
-         * hosts a Scaffold with a shared Snackbar. Place your feature navigation/content inside.
-         *
-         * ZH: 应用根部件，初始化主题、语言与全局提供者，并提供全局 Snackbar 的 Scaffold。把功能导航/内容放入其中。
-         */
 fun AppRoot(
     content: @Composable (state: AuthState) -> Unit
 ) {
+    InitCol()
     initSharedSettingsProvider()
 
     val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
@@ -125,7 +128,9 @@ fun AppRoot(
                         maxSnackbars = mySnackbarViewModel.maxSnackbars.value,
                         viewModel = mySnackbarViewModel
                     ) {
-                        content(state)
+                        OverlayHost {
+                            content(state)
+                        }
                     }
                 }
             }

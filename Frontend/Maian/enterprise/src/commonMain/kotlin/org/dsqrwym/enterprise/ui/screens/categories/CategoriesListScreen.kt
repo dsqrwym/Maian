@@ -1,6 +1,5 @@
 package org.dsqrwym.enterprise.ui.screens.categories
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -24,10 +23,10 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
-import org.dsqrwym.enterprise.data.categories.dto.CategoryResponse
+import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
-import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.ConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
@@ -35,7 +34,6 @@ import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
-import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
@@ -45,12 +43,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CategoriesListScreen(
     viewModel: CategoriesListViewModel = koinViewModel(),
-    menuViewModel: SharedMenuViewModel = koinViewModel(),
     onNavigateToCreate: () -> Unit = {},
     onNavigateToEdit: (String) -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val userRole = menuViewModel.menuConfiguration?.userRole
 
     val lazyPagingItems = viewModel.pagedCategories.collectAsLazyPagingItems()
 
@@ -183,7 +179,6 @@ fun CategoriesListScreen(
                                             CategoryListItem(
                                                 isLoading = viewModel.isLoading,
                                                 category = category,
-                                                userRole = userRole,
                                                 onEdit = { onNavigateToEdit(category.id.toString()) },
                                                 onDelete = { viewModel.updateShowDeleteDialog(category) }
                                             )
@@ -216,10 +211,7 @@ fun CategoriesListScreen(
 
                                 loadState.append is LoadState.Error || loadState.prepend is LoadState.Error -> {
                                     item(span = StaggeredGridItemSpan.FullLine) {
-                                        Text(
-                                            stringResource(SharedRes.string.load_failed),
-                                            modifier = Modifier.clickable { retry() }
-                                        )
+                                       SharedRetryButton(retry = { retry() })
                                     }
                                 }
                             }
@@ -248,7 +240,6 @@ fun CategoriesListScreen(
 fun CategoryListItem(
     modifier: Modifier = Modifier,
     category: CategoryResponse,
-    userRole: UserRole? = null,
     isLoading: Boolean = true,
     onEdit: () -> Unit,
     onDelete: () -> Unit
@@ -333,32 +324,20 @@ fun CategoryListItem(
                     category.categoryTranslations?.let { CategorieLanguages(it) }
                     CategoriePath(category.getPath(), category.name)
                 }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-                    tooltip = {
-                        if (userRole != UserRole.SUPERADMIN) {
-                            PlainTooltip {
-                                Text(stringResource(SharedRes.string.error_no_permission))
-                            }
-                        }
-                    },
-                    state = rememberTooltipState()
+                OutlinedButton(
+                    onClick = onDelete,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    ),
+                    enabled = true
                 ) {
-                    OutlinedButton(
-                        onClick = onDelete,
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.error
-                        ),
-                        enabled = true
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            stringResource(SharedRes.string.delete),
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(stringResource(SharedRes.string.delete))
-                    }
+                    Icon(
+                        Icons.Default.Delete,
+                        stringResource(SharedRes.string.delete),
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(SharedRes.string.delete))
                 }
             }
         }

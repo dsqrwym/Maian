@@ -1,19 +1,16 @@
-package org.dsqrwym.enterprise.data.categories
+package org.dsqrwym.enterprise.data.category
 
-import io.ktor.http.*
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.session_not_found
-import org.dsqrwym.enterprise.data.categories.dto.*
+import org.dsqrwym.enterprise.data.category.dto.*
 import org.dsqrwym.shared.data.category.SharedCategoryApi
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategoryType
+import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
-import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.network.ApiResponseList
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
-import org.jetbrains.compose.resources.getString
+import org.dsqrwym.shared.network.withAuthOrError
 
 class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: CategoryApi) {
     suspend fun getCategories(
@@ -23,12 +20,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         parentId: String? = null,
         page: Int = 1,
         limit: Int = 100
-    ): SharedResponseResult<ApiResponseList<CategoryResponse>> {
-        val userId = SharedUserPayloadStorage.get()
-        if (userId == null) {
-            val message = getString(SharedRes.string.session_not_found)
-            return SharedResponseResult.Error(type = HttpStatusCode.Unauthorized, message = message)
-        }
+    ): SharedResponseResult<ApiResponseList<CategoryResponse>> = withAuthOrError { userId ->
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             type = type,
@@ -44,22 +36,17 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
             page = page,
             limit = limit
         )
-        return safeApiCall { sharedApi.getCategories<CategoryResponse>(query) }
+        safeApiCall { sharedApi.getCategories<CategoryResponse>(query) }
     }
 
     suspend fun getParentCategories(
         search: String? = null,
         page: Int = 1,
         limit: Int = 100
-    ): SharedResponseResult<ApiResponseList<ParentCategoryResponse>> {
-        val userId = SharedUserPayloadStorage.get()
-        if (userId == null) {
-            val message = getString(SharedRes.string.session_not_found)
-            return SharedResponseResult.Error(type = HttpStatusCode.Unauthorized, message = message)
-        }
+    ): SharedResponseResult<ApiResponseList<ReducedCategoryResponse>> = withAuthOrError { user ->
         val query = SharedFindCategoryDto(
             search = search?.trim(),
-            userId = userId.userId,
+            userId = user.userId,
             maxLevel = 2,
             page = page,
             limit = limit,
@@ -67,7 +54,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
                 SharedCategorySelectField.TRANSLATIONS,
             )
         )
-        return safeApiCall { sharedApi.getCategories<ParentCategoryResponse>(query) }
+        safeApiCall { sharedApi.getCategories<ReducedCategoryResponse>(query) }
     }
 
     suspend fun createCategory(
@@ -75,47 +62,30 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         iva: Double? = null,
         parentId: String? = null,
         translations: List<SharedCategoryTranslation>? = null,
-    ): SharedResponseResult<Unit> {
-        val userId = SharedUserPayloadStorage.get()
-        if (userId == null) {
-            val message = getString(SharedRes.string.session_not_found)
-            return SharedResponseResult.Error(type = HttpStatusCode.Unauthorized, message = message)
-        }
+    ): SharedResponseResult<Unit> = withAuthOrError { user ->
         val dto = CreateCategoryDto(
-            userId = userId.userId,
+            userId = user.userId,
             name = name.trim(),
             iva = iva,
             parentId = parentId,
             translations = translations?.map { it.copy(name = it.name.trim()) }
         )
-        return safeApiCall {
-            api.createCategory(dto)
-        }
+        safeApiCall { api.createCategory(dto) }
     }
 
     suspend fun deleteCategory(id: String): SharedResponseResult<Unit> {
         return safeApiCall { api.deleteCategory(id) }
     }
 
-    suspend fun checkCategoryName(name: String): SharedResponseResult<Boolean> {
-        val userId = SharedUserPayloadStorage.get()
-        if (userId == null) {
-            val message = getString(SharedRes.string.session_not_found)
-            return SharedResponseResult.Error(type = HttpStatusCode.Unauthorized, message = message)
-        }
-        return safeApiCall { api.checkCategoryName(name.trim(), userId.userId) }
+    suspend fun checkCategoryName(name: String): SharedResponseResult<Boolean> = withAuthOrError { user ->
+        safeApiCall { api.checkCategoryName(name.trim(), user.userId) }
     }
 
     suspend fun checkUpdateCategoryName(
         name: String,
         id: String,
-    ): SharedResponseResult<Boolean> {
-        val userId = SharedUserPayloadStorage.get()
-        if (userId == null) {
-            val message = getString(SharedRes.string.session_not_found)
-            return SharedResponseResult.Error(type = HttpStatusCode.Unauthorized, message = message)
-        }
-        return safeApiCall { api.checkUpdateCategoryName(name.trim(), id, userId.userId) }
+    ): SharedResponseResult<Boolean> = withAuthOrError { user ->
+        safeApiCall { api.checkUpdateCategoryName(name.trim(), id, user.userId) }
     }
 
     suspend fun getCategoryForUpdate(id: String): SharedResponseResult<CategoryForUpdateResponseDto> {

@@ -20,7 +20,6 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -83,9 +82,17 @@ kotlin {
             implementation(libs.androidx.paging.common)
             implementation(libs.androidx.paging.compose)
 
+            implementation(libs.datatable.material3)
+            implementation(libs.table.core)
             // Koin
             implementation(libs.koin.core) // 或最新版本
             implementation(libs.koin.compose.viewmodel)
+
+            // kotlin 高性能持久化不可变集合库， table依赖需要
+            implementation(libs.kotlinx.collections.immutable)
+
+            implementation(libs.coil.compose)
+            implementation(libs.zoomable)
 
             implementation(project(":shared"))
         }

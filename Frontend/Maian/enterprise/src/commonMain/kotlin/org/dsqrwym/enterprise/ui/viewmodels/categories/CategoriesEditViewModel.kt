@@ -14,8 +14,8 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.field_cannot_be_empty
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
-import org.dsqrwym.enterprise.data.categories.CategoryRepository
-import org.dsqrwym.enterprise.data.categories.dto.UpdateCategoryDto
+import org.dsqrwym.enterprise.data.category.CategoryRepository
+import org.dsqrwym.enterprise.data.category.dto.UpdateCategoryDto
 import org.dsqrwym.enterprise.navigation.Categories
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager

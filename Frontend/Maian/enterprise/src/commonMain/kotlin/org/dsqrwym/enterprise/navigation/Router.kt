@@ -18,3 +18,7 @@ object CategoryCreate
 @Serializable
 @SerialName("Categories-Edit")
 data class CategoryEdit(val id: String)
+
+@Serializable
+@SerialName("Products")
+object Products

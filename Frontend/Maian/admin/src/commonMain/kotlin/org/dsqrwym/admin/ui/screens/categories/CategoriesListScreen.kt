@@ -1,7 +1,6 @@
 package org.dsqrwym.admin.ui.screens.categories
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -32,6 +31,7 @@ import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.ConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
@@ -222,10 +222,7 @@ fun CategoriesListScreen(
 
                                 loadState.append is LoadState.Error || loadState.prepend is LoadState.Error -> {
                                     item(span = StaggeredGridItemSpan.FullLine) {
-                                        Text(
-                                            stringResource(SharedRes.string.load_failed),
-                                            modifier = Modifier.clickable { retry() }
-                                        )
+                                        SharedRetryButton { retry() }
                                     }
                                 }
                             }
@@ -504,11 +501,7 @@ fun FilterDialog(
                         },
                         pageSize = 100,
                         itemToString = {
-                            "${it.name} ${
-                                if (it.translation.isNotEmpty()) ", (" + it.translation.joinToString(", ") { translation ->
-                                    "${translation.langCode}: ${translation.name}"
-                                } + ")" else ""
-                            }"
+                            "${it.name} • ${it.translationString}"
                         },
                         onSearch = { query, page, limit ->
                             viewModel.findParentCategories(query, page, limit)

@@ -33,9 +33,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import maian.admin.generated.resources.*
 import maian.shared.generated.resources.*
-import org.dsqrwym.admin.data.categories.dto.ParentCategoryResponse
 import org.dsqrwym.admin.data.user.dto.WholeSalerUserResponse
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesCreateViewModel
+import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.cards.FormCard
@@ -473,11 +473,11 @@ fun CategoryBasicInfoCard(
 
 @Composable
 private fun ParentCategoryCard(
-    selectedParentCategory: ParentCategoryResponse?, // 替换为实际类型
+    selectedParentCategory: ReducedCategoryResponse?, // 替换为实际类型
     enabled: Boolean,
-    onParentCategoryChange: (ParentCategoryResponse?) -> Unit,
+    onParentCategoryChange: (ReducedCategoryResponse?) -> Unit,
     onRemoveParent: () -> Unit,
-    onSearch: suspend (String?, Int, Int) -> List<ParentCategoryResponse>,
+    onSearch: suspend (String?, Int, Int) -> List<ReducedCategoryResponse>,
     modifier: Modifier = Modifier
 ) {
     FormCard(
@@ -496,11 +496,7 @@ private fun ParentCategoryCard(
                     onSelectedItemChange = onParentCategoryChange,
                     pageSize = 100,
                     itemToString = {
-                        "${it.name} ${
-                            if (it.translation.isNotEmpty()) " • (" + it.translation.joinToString(", ") { translation ->
-                                "${translation.langCode}: ${translation.name}"
-                            } + ")" else ""
-                        }"
+                        "${it.name} • ${it.translationString}"
                     },
                     onSearch = onSearch
                 )

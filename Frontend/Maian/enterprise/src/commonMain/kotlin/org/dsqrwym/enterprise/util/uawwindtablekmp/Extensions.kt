@@ -1,20 +1,21 @@
-package org.dsqrwym.enterprise.uawwindtablekmp
+package org.dsqrwym.enterprise.util.uawwindtablekmp
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ua.wwind.table.ReadonlyColumnBuilder
 
-@Composable
 fun <T : Any, C, E> ReadonlyColumnBuilder<T, C, E>.cellWithModifier(
-    modifier: Modifier = Modifier,
-    content: @Composable BoxScope.(T) -> Unit
+    modifier: @Composable BoxScope.(item: T) -> Modifier = { Modifier },
+    contentAlignment: Alignment = Alignment.Center,
+    content: @Composable BoxScope.(item: T) -> Unit
 ) {
-    cell {
-        Box(
-            modifier = modifier,
-            content = { content(it) }
-        )
+    cell { item ->
+        Box(modifier = modifier(item), contentAlignment = contentAlignment) {
+            content(item)
+        }
     }
 }
+

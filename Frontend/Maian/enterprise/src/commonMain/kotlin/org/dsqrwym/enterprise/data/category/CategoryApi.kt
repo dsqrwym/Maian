@@ -1,12 +1,12 @@
-package org.dsqrwym.enterprise.data.categories
+package org.dsqrwym.enterprise.data.category
 
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import org.dsqrwym.enterprise.data.categories.dto.CategoryForUpdateResponseDto
-import org.dsqrwym.enterprise.data.categories.dto.CreateCategoryDto
-import org.dsqrwym.enterprise.data.categories.dto.UpdateCategoryDto
+import org.dsqrwym.enterprise.data.category.dto.CategoryForUpdateResponseDto
+import org.dsqrwym.enterprise.data.category.dto.CreateCategoryDto
+import org.dsqrwym.enterprise.data.category.dto.UpdateCategoryDto
 import org.dsqrwym.enterprise.network.EnterpriseApi
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.ApiResponse

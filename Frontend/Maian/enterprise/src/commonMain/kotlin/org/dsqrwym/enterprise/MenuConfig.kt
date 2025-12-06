@@ -17,9 +17,7 @@ object MenuConfig {
     val menuList = listOf(
         SharedMenuItemState(SharedMenuItem.Dashboard),
         SharedMenuItemState(SharedMenuItem.Profile),
-
         // 二级
-
         SharedMenuItemState(
             SharedMenuItem(
                 Categories,

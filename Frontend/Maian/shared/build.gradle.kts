@@ -27,7 +27,7 @@ kotlin {
 
     // iOS多目标配置（X64模拟器/ARM64真机）
     listOf(
-        iosX64(),               // Intel模拟器
+        //iosX64(),               // Intel模拟器 有些库不支持所以可以不要了
         iosArm64(),             // 真机设备
         iosSimulatorArm64()     // M系列芯片模拟器
     ).forEach { iosTarget ->
@@ -130,7 +130,15 @@ kotlin {
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.serialization.kotlinx.json)
 
+            // 通知
+            implementation(libs.alert.kmp)
+
+            // coil image
             implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
+
+            // 图片放大操作
+            implementation(libs.zoomable)
         }
 
         // 公共测试源码集

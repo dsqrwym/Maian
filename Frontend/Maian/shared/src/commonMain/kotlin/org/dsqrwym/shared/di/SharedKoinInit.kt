@@ -4,6 +4,7 @@ import org.dsqrwym.shared.di.auth.sharedAuthModule
 import org.dsqrwym.shared.di.category.sharedCategoryModule
 import org.dsqrwym.shared.di.location.sharedLocationModule
 import org.dsqrwym.shared.di.menu.sharedMenuModule
+import org.dsqrwym.shared.di.product.sharedProductModule
 import org.dsqrwym.shared.di.user.sharedUserModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -24,6 +25,7 @@ fun sharedInitKoin(callback: (KoinApplication.() -> Unit)? = null) {
         modules(sharedLocationModule)
         modules(sharedCategoryModule)
         modules(sharedUserModule)
+        modules(sharedProductModule)
         callback?.invoke(this)
     }
 }

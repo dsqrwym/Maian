@@ -4,12 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import dev.chrisbanes.haze.hazeEffect
-import dev.chrisbanes.haze.hazeSource
-import dev.chrisbanes.haze.rememberHazeState
-import org.dsqrwym.shared.theme.MyHazeStyles
+import org.dsqrwym.shared.ui.overlay.LocalOverlayState
 
 @Composable
 fun HazeContainer(
@@ -17,35 +15,30 @@ fun HazeContainer(
     overlayContent: @Composable BoxScope.() -> Unit,  // 浮层内容
     content: @Composable () -> Unit   // 底层主内容
 ) {
-    val hazeState = rememberHazeState()
-    val hazeStyle = MyHazeStyles.thin()
+    val overlayHost = LocalOverlayState.current
 
-    Box {
-        // 底层
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .hazeSource(hazeState)
-        ) {
-            content()
-        }
-
-        // 浮层
+    // 将浮层交给全局 Overlay Host，在根部渲染（避免每次重组重复调用）
+    DisposableEffect(isOverlayVisible, overlayContent) {
         if (isOverlayVisible) {
-            // 背景模糊
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .hazeEffect(hazeState, hazeStyle) {
-                        alpha = 0.68f
-                    }
-            )
-
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-                content = overlayContent
-            )
+            overlayHost.show {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                    content = overlayContent
+                )
+            }
+        } else {
+            overlayHost.hide()
         }
+        onDispose {
+            if (isOverlayVisible) overlayHost.hide()
+        }
+    }
+
+    // 普通内容
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        content()
     }
 }

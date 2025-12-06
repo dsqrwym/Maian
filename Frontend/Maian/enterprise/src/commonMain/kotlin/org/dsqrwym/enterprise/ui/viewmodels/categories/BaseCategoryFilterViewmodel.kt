@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import org.dsqrwym.enterprise.data.categories.CategoryRepository
-import org.dsqrwym.enterprise.data.categories.dto.ParentCategoryResponse
+import org.dsqrwym.enterprise.data.category.CategoryRepository
+import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -15,13 +15,13 @@ abstract class BaseCategoryFilterViewmodel(
     protected val mySnackbarViewModel: MySnackbarViewModel
 ) : ViewModel() {
 
-    var filterParentCategory by mutableStateOf<ParentCategoryResponse?>(null)
+    var filterParentCategory by mutableStateOf<ReducedCategoryResponse?>(null)
         protected set
 
     /**
      * 获取父分类列表（带分页）
      */
-    open suspend fun findParentCategories(query: String?, page: Int, limit: Int): List<ParentCategoryResponse> {
+    open suspend fun findParentCategories(query: String?, page: Int, limit: Int): List<ReducedCategoryResponse> {
         when (val result = categoryRepository.getParentCategories(query, page, limit)) {
             is SharedResponseResult.Success -> {
                 return result.data?.items ?: emptyList()
@@ -41,7 +41,7 @@ abstract class BaseCategoryFilterViewmodel(
         filterParentCategory = null
     }
 
-    open fun updateFilterParentCategory(parentCategory: ParentCategoryResponse?) {
+    open fun updateFilterParentCategory(parentCategory: ReducedCategoryResponse?) {
         filterParentCategory = parentCategory
     }
 }

@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.delete_failed
 import maian.shared.generated.resources.delete_success
-import org.dsqrwym.enterprise.data.categories.CategoryRepository
-import org.dsqrwym.enterprise.data.categories.dto.CategoryResponse
+import org.dsqrwym.enterprise.data.category.CategoryRepository
+import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult

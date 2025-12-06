@@ -19,6 +19,7 @@ import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesEditViewModel
 import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
@@ -31,6 +32,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun CategoryEditScreen(
     categoryId: String,
     viewModel: CategoriesEditViewModel = koinViewModel(),
+    onNavigate: (Any) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val isLoading = viewModel.isLoading
@@ -41,7 +43,11 @@ fun CategoryEditScreen(
     // 初始化 VM
     LaunchedEffect(categoryId) {
         viewModel.initWithCategory(categoryId)
-        viewModel.navigateEvent.collect { onNavigateBack() }
+        viewModel.navigateEvent.collect {
+            if (it is NavigationEvent.ToRoute<*>) {
+                onNavigate(it.route)
+            }
+        }
     }
 
     val categoryName = viewModel.categoryName

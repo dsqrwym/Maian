@@ -43,7 +43,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         userId: String? = null,
         page: Int = 1,
         limit: Int = 100
-    ): SharedResponseResult<ApiResponseList<ParentCategoryResponse>> {
+    ): SharedResponseResult<ApiResponseList<ReducedCategoryResponse>> {
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             userId = userId,
@@ -55,7 +55,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
                 SharedCategorySelectField.USER_ID,
             )
         )
-        return safeApiCall { sharedApi.getCategories<ParentCategoryResponse>(query) }
+        return safeApiCall { sharedApi.getCategories<ReducedCategoryResponse>(query) }
     }
 
     suspend fun createCategory(dto: CreateCategoryDto): SharedResponseResult<Unit> {
