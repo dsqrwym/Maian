@@ -57,7 +57,5 @@ export async function bootstrap() {
 
   await useFastifyMultipart(app); // 添加文件接受
 
-  console.log('Before app.listen');
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0'); // 必须为0.0.0.0 否则cloudflare tunnel 无法访问
-  console.log('After app.listen'); // <-- 理论上不会执行
 }

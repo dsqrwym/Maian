@@ -9,14 +9,17 @@ androidx-activity = "1.12.1" #1.12.0
 androidx-lifecycle = "2.9.6" #2.9.5
 coilCompose = "3.3.0"
 composeHotReload = "1.0.0" # 1.0.0-rc03
-composeMultiplatform = "1.9.3" #1.9.3
+#composeMultiplatform = "1.9.3" #1.9.3
+composeMultiplatform = "1.11.0-alpha01"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
+compottieLite = "2.0.2"
 datatableMaterial3 = "0.11.7"
+filekitCore = "0.12.0"
 haze = "1.7.1" #1.6.10
 jmail = "2.1.0" #2.0.2
 koinCore = "4.1.1" #4.1.0
-kotlin = "2.2.21" #2.2.20
+kotlin = "2.3.0" #2.2.21
 kotlinx-coroutines = "1.10.2"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxDatetime = "0.7.1"
@@ -27,8 +30,9 @@ materialIconsCore = "1.7.3"
 multiplatformSettings = "1.3.0"
 navigationCompose = "2.9.1" #2.9.1
 pagingRuntime = "3.4.0-alpha04"
+reorderable = "3.0.0"
 securityCrypto = "1.1.0"
-tableCore = "1.7.1"
+tableCore = "1.7.3"
 zoomable = "2.9.0"
 
 [libraries]
@@ -40,7 +44,11 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCo
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 compose-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholderMaterial3" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
+compottie-lite = { module = "io.github.alexzhirkevich:compottie-lite", version.ref = "compottieLite" }
 datatable-material3 = { module = "com.seanproctor:datatable-material3", version.ref = "datatableMaterial3" }
+filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "filekitCore" }
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekitCore" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCore" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 jmail = { module = "com.sanctionco.jmail:jmail", version.ref = "jmail" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinCore" }
@@ -57,6 +65,7 @@ libphonenumber = { module = "io.github.luca992.libphonenumber-kotlin:libphonenum
 material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 kmp-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 
 # Ktor core & plugins

@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CheckingTrailingIcon(isChecking: Boolean) {
     if (isChecking) {
-        MyCircularProgressIndicator(
+        SharedCircularProgressIndicator(
             size = 18.dp,
             progressStrokeWith = 2.dp
         )

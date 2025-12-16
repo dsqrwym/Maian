@@ -4,21 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("register")
+@SerialName("Register")
 object RegisterScreen
-
-@Serializable
-@SerialName("Categories")
-object Categories
-
-@Serializable
-@SerialName("Categories-Create")
-object CategoryCreate
-
-@Serializable
-@SerialName("Categories-Edit")
-data class CategoryEdit(val id: String)
 
 @Serializable
 @SerialName("Products")
 object Products
+
+@Serializable
+@SerialName("Product-Create")
+object ProductCreate

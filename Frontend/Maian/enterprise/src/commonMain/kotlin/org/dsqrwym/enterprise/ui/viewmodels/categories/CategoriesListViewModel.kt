@@ -100,6 +100,11 @@ class CategoriesListViewModel(
         deleteCategory = category
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            _refreshTrigger.emit(Unit)
+        }
+    }
     // 删除类别
     fun deleteCategory(category: CategoryResponse) {
         viewModelScope.launch {

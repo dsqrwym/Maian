@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import maian.enterprise.generated.resources.EnterpriseRes
-import maian.enterprise.generated.resources.category_name_exists
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.category_name_exists
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.create_failed
 import maian.shared.generated.resources.create_success
 import maian.shared.generated.resources.field_cannot_be_empty
+import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.enterprise.data.category.CategoryRepository
-import org.dsqrwym.enterprise.navigation.Categories
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -79,7 +79,7 @@ class CategoriesCreateViewModel(
                         is SharedResponseResult.Success -> {
                             categoryNameExist = result.data == true
                             categoryNameError = if (categoryNameExist) {
-                                EnterpriseRes.string.category_name_exists
+                                BusinessRes.string.category_name_exists
                             } else {
                                 null
                             }

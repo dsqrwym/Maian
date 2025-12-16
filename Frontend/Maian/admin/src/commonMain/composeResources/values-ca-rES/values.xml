@@ -1,42 +1,16 @@
 <resources>
-    <string name="select_wholesaler">Selecciona majorista</string>
-    <string name="subcategories_count">%1$s subcategories</string>
-    <string name="parent_category">Categoria pare</string>
-    <string name="base_category">Categoria base</string>
-    <string name="other_languages">Altres idiomes</string>
-    <string name="confirm_delete_category">Esteu segur que voleu eliminar la categoria "%1$s"?</string>
-    <string name="delete_warning_with_children">Atenció: Això també eliminarà %1$s subcategories i no es podrà recuperar.</string>
-    <string name="select_parent_category">Selecciona categoria pare</string>
-    <string name="private_category">Categoria privada</string>
-    <string name="search_category">Cerca categories...</string>
+    <string name="select_wholesaler">Selecciona un majorista</string>
     <string name="platform_category">Categoria de la plataforma</string>
 
-    <string name="input_language_translation">Introdueix la traducció en %1$s...</string>
-    <string name="translate">Traduir</string>
-    <string name="add_language_translation">Afegir traducció</string>
-    <string name="all_languages_added">S'han afegit tots els idiomes compatibles</string>
-
-    <string name="category_name_tax_setting">Nom i configuració de l'impost de la categoria</string>
-    <string name="category_name">Nom de la categoria</string>
-    <string name="please_input_category_name">Introdueix el nom de la categoria</string>
-    <string name="empty_use_product_tax">Deixa-ho en blanc per usar l'impost del producte</string>
-
-    <string name="select_parent_category_to_create">Selecciona una categoria pare per crear una subcategoria</string>
-    <string name="parent_category_selected">Categoria pare seleccionada</string>
     <string name="category_type">Tipus de categoria</string>
-    <string name="category_visibility">Configurar visibilitat de la categoria</string>
+    <string name="category_visibility">Configura la visibilitat de la categoria</string>
     <string name="visible_to_all">Visible per a tots els usuaris</string>
-    <string name="visible_to_owner">Només visible pel propietari</string>
-    <string name="category_visible_to_all_tip">Aquesta categoria serà visible per a tots els usuaris</string>
+    <string name="visible_to_owner">Visible només per al propietari</string>
+    <string name="category_visible_to_all_tip">Aquesta categoria estarà disponible per a tots els usuaris</string>
     <string name="wholesaler_selected">Majorista seleccionat</string>
-    <string name="add_multilingual_translation">Afegir traducció multilingüe</string>
-    <string name="no_other_language_translation">No hi ha altres traduccions</string>
-    <string name="translations_count">S'han afegit %1$s traduccions</string>
 
-    <string name="category_name_exists">El nom de la categoria ja existeix</string>
-    <string name="category_management">Gestió de categories</string>
     <string name="category_management_description">
-        Permet veure i cercar categories, crear categories privades i globals per a majoristes o usuaris de tota la plataforma. Admet editar (nom, traducció) i suprimir (només els superadministradors poden suprimir). Les categories admeten fins a tres nivells de niament (1 → 2 → 3).
+        Consulta i cerca categories, i crea categories privades o de plataforma per a majoristes o per a tots els usuaris.
+        Permet editar (nom, traduccions) i suprimir (només els superadministradors poden suprimir). Les categories poden tenir fins a tres nivells (1 → 2 → 3).
     </string>
-
 </resources>

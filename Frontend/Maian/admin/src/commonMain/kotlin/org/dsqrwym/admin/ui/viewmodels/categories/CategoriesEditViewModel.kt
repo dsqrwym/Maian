@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import maian.admin.generated.resources.AdminRes
-import maian.admin.generated.resources.category_name_exists
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.category_name_exists
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.field_cannot_be_empty
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
 import org.dsqrwym.admin.data.categories.CategoryRepository
-import org.dsqrwym.admin.data.categories.dto.UpdateCategoryDto
 import org.dsqrwym.admin.data.user.UserRepository
-import org.dsqrwym.admin.navigation.Categories
+import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
+import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -93,7 +93,7 @@ class CategoriesEditViewModel(
                         is SharedResponseResult.Success -> {
                             categoryNameExist = result.data == true
                             categoryNameError = if (categoryNameExist) {
-                                AdminRes.string.category_name_exists
+                                BusinessRes.string.category_name_exists
                             } else null
                         }
 
@@ -188,7 +188,7 @@ class CategoriesEditViewModel(
             updateButtonState = UiState.Loading
             val currentLangCodes = translations.map { it.langCode }.toSet()
             val toDelete = initialLangCodes.filter { it !in currentLangCodes }
-            val dto = UpdateCategoryDto(
+            val dto = BusinessUpdateCategoryDto(
                 id = id,
                 name = categoryName,
                 iva = categoryIva.toDoubleOrNull(),

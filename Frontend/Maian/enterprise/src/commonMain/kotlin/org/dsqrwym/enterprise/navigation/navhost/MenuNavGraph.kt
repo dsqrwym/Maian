@@ -10,6 +10,8 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import org.dsqrwym.enterprise.navigation.ProductCreate
+import org.dsqrwym.enterprise.ui.screens.products.ProductCreateScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductsListScreen
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.navigation.SharedDashboardScreen
@@ -23,9 +25,14 @@ fun NavGraphBuilder.menuNavGraph(
     focusManager: FocusManager,
 ) {
     composable<SharedDashboardScreen> {
-        ProductsListScreen()
+        ProductsListScreen(){
+            navController.navigate(ProductCreate)
+        }
     }
 
+    composable<ProductCreate> {
+        ProductCreateScreen()
+    }
     composable<SharedProfileScreen> {
         val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

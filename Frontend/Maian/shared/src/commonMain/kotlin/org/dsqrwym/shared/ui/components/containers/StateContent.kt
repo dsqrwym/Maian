@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.CircleError
 import org.dsqrwym.shared.theme.AppExtraColors
-import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 import org.jetbrains.compose.resources.stringResource
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.status_completed_content_description
@@ -105,7 +105,7 @@ fun StateContent(
 
             // Show loading indicator during async operations
             // 加载状态显示进度指示器
-            UiState.Loading -> MyCircularProgressIndicator(size, progressStrokeWith)
+            UiState.Loading -> SharedCircularProgressIndicator(size, progressStrokeWith)
 
             // Success state with a bouncing checkmark animation
             // 成功状态显示带弹跳动画的勾选图标

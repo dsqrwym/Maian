@@ -1,15 +1,20 @@
 package org.dsqrwym.admin.data.categories
 
-import org.dsqrwym.admin.data.categories.dto.*
+import org.dsqrwym.admin.data.categories.dto.CategoryResponse
+import org.dsqrwym.business.data.category.BusinessCategoryApi
+import org.dsqrwym.business.data.category.BusinessCategoryRepository
+import org.dsqrwym.business.data.category.dto.BusinessCreateCategoryDto
+import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
 import org.dsqrwym.shared.data.category.SharedCategoryApi
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategoryType
+import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
 import org.dsqrwym.shared.network.ApiResponseList
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 
-class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: CategoryApi) {
+class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi) : BusinessCategoryRepository(api) {
     suspend fun getCategories(
         search: String? = null,
         type: SharedCategoryType? = null,
@@ -58,7 +63,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         return safeApiCall { sharedApi.getCategories<ReducedCategoryResponse>(query) }
     }
 
-    suspend fun createCategory(dto: CreateCategoryDto): SharedResponseResult<Unit> {
+    suspend fun createCategory(dto: BusinessCreateCategoryDto): SharedResponseResult<Unit> {
         return safeApiCall {
             api.createCategory(
                 dto.copy(
@@ -66,10 +71,6 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
                 translations = dto.translations?.map { it.copy(name = it.name.trim()) }
             ))
         }
-    }
-
-    suspend fun deleteCategory(id: String): SharedResponseResult<Unit> {
-        return safeApiCall { api.deleteCategory(id) }
     }
 
     suspend fun checkCategoryName(name: String, userId: String? = null): SharedResponseResult<Boolean> {
@@ -84,11 +85,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         return safeApiCall { api.checkUpdateCategoryName(name.trim(), id, userId) }
     }
 
-    suspend fun getCategoryForUpdate(id: String): SharedResponseResult<CategoryForUpdateResponseDto> {
-        return safeApiCall { api.getCategoryForUpdate(id) }
-    }
-
-    suspend fun updateCategory(dto: UpdateCategoryDto): SharedResponseResult<Unit> {
+    suspend fun updateCategory(dto: BusinessUpdateCategoryDto): SharedResponseResult<Unit> {
         return safeApiCall {
             api.updateCategory(
                 dto.copy(

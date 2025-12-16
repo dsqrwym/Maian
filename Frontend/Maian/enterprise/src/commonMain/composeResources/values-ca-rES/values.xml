@@ -18,38 +18,8 @@
     <string name="field_company_type_placeholder">Seleccioneu el tipus d'empresa</string>
     <string name="icon_content_description_company">Icona d'empresa</string>
 
-    <string name="category_management">Gestió de categories</string>
     <string name="category_management_description">
         Veure i cercar categories, crear les teves pròpies categories de productes i gestionar noms multilingües.
         Admet fins a tres nivells de nidificació (1 → 2 → 3).
     </string>
-
-    <string name="category_name_tax_setting">Nom de la categoria i configuració d'impostos</string>
-    <string name="category_name">Nom de la categoria</string>
-    <string name="please_input_category_name">Introdueix el nom de la categoria</string>
-    <string name="empty_use_product_tax">Deixa-ho en blanc per utilitzar la configuració fiscal del producte</string>
-    <string name="category_name_exists">El nom de la categoria ja existeix</string>
-
-    <string name="subcategories_count">%1$s subcategories</string>
-    <string name="parent_category">Categoria pare</string>
-    <string name="base_category">Categoria base</string>
-    <string name="other_languages">Altres idiomes</string>
-    <string name="confirm_delete_category">Segur que vols eliminar la categoria "%1$s"?</string>
-    <string name="delete_warning_with_children">Atenció: També s'eliminaran %1$s subcategories i no es podrà desfer.</string>
-    <string name="select_parent_category">Seleccionar categoria pare</string>
-    <string name="private_category">Categoria privada</string>
-    <string name="search_category">Cercar categoria...</string>
-    <string name="platform_category">Categoria de la plataforma</string>
-
-    <string name="select_parent_category_to_create">Selecciona una categoria pare per crear una subcategoria</string>
-    <string name="parent_category_selected">Categoria pare seleccionada</string>
-
-    <string name="input_language_translation">Introdueix la traducció en %1$s...</string>
-    <string name="translate">Traduir</string>
-    <string name="add_language_translation">Afegir traducció d'idioma</string>
-    <string name="all_languages_added">Tots els idiomes compatibles han estat afegits</string>
-    <string name="add_multilingual_translation">Afegir traducció multilingüe</string>
-    <string name="no_other_language_translation">No hi ha altres traduccions disponibles</string>
-    <string name="translations_count">%1$s traduccions afegides</string>
-
 </resources>

@@ -156,8 +156,9 @@
     <string name="dashboard">首页</string>
     <string name="profile">我的</string>
 
-    <string name="change_to_light_mode">切换到浅色模式</string>
-    <string name="change_to_dark_mode">切换到深色模式</string>
+    <string name="theme_light_mode">浅色模式</string>
+    <string name="theme_dark_mode">深色模式</string>
+    <string name="theme_follow_system">跟随系统</string>
 
     <string name="field_telephone_label">电话号码</string>
     <string name="field_telephone_placeholder">请输入电话号码</string>
@@ -204,4 +205,20 @@
     <string name="basic_info">基本信息</string>
 
     <string name="tax_rate">税率</string>
+    
+    <!-- ===================== 公共操作（Shared） ===================== -->
+    <string name="copy">复制</string>
+    <string name="save">保存</string>
+
+    <!-- 复制/剪贴板 通知 -->
+    <string name="unable_to_copy_resource">无法复制该资源</string>
+    <string name="copied_to_clipboard">已复制到粘贴板</string>
+    <string name="copied_files_to_clipboard">已复制文件到粘贴板</string>
+    <string name="copied_image_to_clipboard">已复制图片到粘贴板</string>
+    <string name="copied_text_to_clipboard_with_value">已复制“%1$s”到粘贴板</string>
+    <string name="copy_failed">复制失败</string>
+
+    <!-- 图片保存 通知 -->
+    <string name="image_saved_with_name">已保存图片“%1$s”</string>
+    <string name="image_saved_to_gallery_with_name">已保存图片“%1$s”至图库</string>
 </resources>

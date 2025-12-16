@@ -155,8 +155,9 @@
     <string name="dashboard">Home</string>
     <string name="profile">My Account</string>
 
-    <string name="change_to_light_mode">Turn on Light Mode</string>
-    <string name="change_to_dark_mode">Turn on Dark Mode</string>
+    <string name="theme_light_mode">Light Mode</string>
+    <string name="theme_dark_mode">Dark Mode</string>
+    <string name="theme_follow_system">Follow system</string>
 
     <string name="field_telephone_label">Phone Number</string>
     <string name="field_telephone_placeholder">Enter phone number</string>
@@ -202,4 +203,20 @@
     <string name="basic_info">Basic Info</string>
 
     <string name="tax_rate">Tax rate</string>
+    
+    <!-- ===================== Common Actions (Shared) ===================== -->
+    <string name="copy">Copy</string>
+    <string name="save">Save</string>
+
+    <!-- Copy/Clipboard notifications -->
+    <string name="unable_to_copy_resource">Unable to copy this resource</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="copied_files_to_clipboard">Files copied to clipboard</string>
+    <string name="copied_image_to_clipboard">Image copied to clipboard</string>
+    <string name="copied_text_to_clipboard_with_value">Copied "%1$s" to clipboard</string>
+    <string name="copy_failed">Copy failed</string>
+
+    <!-- Image save notifications -->
+    <string name="image_saved_with_name">Saved image "%1$s"</string>
+    <string name="image_saved_to_gallery_with_name">Saved image "%1$s" to gallery</string>
 </resources>

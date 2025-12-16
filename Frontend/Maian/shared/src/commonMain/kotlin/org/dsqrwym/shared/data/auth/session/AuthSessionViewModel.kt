@@ -21,13 +21,13 @@ import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
  * Responsibilities 职责：
  * - Expose current auth state (Authenticated/Unauthenticated)
  *   暴露当前认证态（已认证/未认证）
- * - React to AuthEvents and update state + emit one-shot effects for UI messages
+ * - React to AuthEvents and update state and emit one-shot effects for UI messages
  *   响应 AuthEvents 更新状态，同时通过一次性副作用流发出提示给 UI
  * - Provide small helpers for login/logout transitions
  *   提供登录/登出时的状态更新辅助
  *
- * Note: We keep this class simple and platform-agnostic; actual navigation
- * should be performed by platform UI when state changes.
+ * Note: We keep this class simple and platform-agnostic; platform UI
+ * should perform actual navigation when the state changes.
  * 说明：该类保持简单与平台无关；实际导航由各平台 UI 在状态变化时执行。
  */
 class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnackbarViewModel: MySnackbarViewModel) :
@@ -61,7 +61,7 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
         }
     }
 
-    /** Determine initial state based on access token presence. */
+    /** Determine the initial state based on access token presence. */
     /** 根据是否存在 access token 判定初始状态 */
     private fun initialState(): AuthState =
         if (SharedTokenStorage.getAccess()

@@ -6,24 +6,28 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.multiplatform.webview.util.addTempDirectoryRemovalHook
 import dev.datlag.kcef.KCEF
+import io.github.vinceglb.filekit.FileKit
 import org.dsqrwym.admin.di.adminInitKoin
 import org.dsqrwym.shared.localization.getAppDisplayName
 import org.dsqrwym.shared.main.SharedInitDesktop
 
 @OptIn(ExperimentalFoundationApi::class)
-fun main() = application {
-    ComposeFoundationFlags.isNewContextMenuEnabled = true
-    addTempDirectoryRemovalHook()
-    adminInitKoin()
-    Window(
-        onCloseRequest = {
-            KCEF.disposeBlocking()
-            exitApplication()
-        },
-        title = getAppDisplayName(),
-    ) {
-        SharedInitDesktop {
-            App()
+fun main() {
+    FileKit.init(appId = "MaiAn")
+    application {
+        ComposeFoundationFlags.isNewContextMenuEnabled = true
+        addTempDirectoryRemovalHook()
+        adminInitKoin()
+        Window(
+            onCloseRequest = {
+                KCEF.disposeBlocking()
+                exitApplication()
+            },
+            title = getAppDisplayName(),
+        ) {
+            SharedInitDesktop(this) {
+                App()
+            }
         }
     }
 }

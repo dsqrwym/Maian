@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "adminComposeApp"
             isStatic = true
         }
     }
@@ -55,37 +55,12 @@ kotlin {
     sourceSets {
         val androidMain by getting
         androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
         }
 
         val commonMain by getting
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-
-            // icons
-            implementation(libs.material.icons.core)
-            implementation(libs.material.icons.extended)
-            // 官方导航
-            implementation(libs.kmp.navigation.compose)
-            //implementation(libs.androidx.paging.runtime)
-            implementation(libs.androidx.paging.common)
-            implementation(libs.androidx.paging.compose)
-
-            // placeholder
-            implementation(libs.compose.placeholder.material3)
-
-            // Koin
-            implementation(libs.koin.core) // 或最新版本
-            implementation(libs.koin.compose.viewmodel)
             implementation(project(":shared"))
+            implementation(project(":business"))
         }
         val desktopMain by getting
         desktopMain.dependencies {
@@ -110,6 +85,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        proguardFiles("proguard-rules.pro")
     }
     packaging {
         resources {
@@ -134,7 +110,7 @@ dependencies {
 compose.resources {
     publicResClass = true
     nameOfResClass = "AdminRes"
-    generateResClass = auto
+    generateResClass = always
 }
 
 compose.desktop {

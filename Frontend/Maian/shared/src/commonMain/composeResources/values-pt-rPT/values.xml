@@ -152,8 +152,9 @@
     <string name="dashboard">Início</string>
     <string name="profile">A minha conta</string>
 
-    <string name="change_to_light_mode">Ativar modo claro</string>
-    <string name="change_to_dark_mode">Ativar modo escuro</string>
+    <string name="theme_light_mode">Modo claro</string>
+    <string name="theme_dark_mode">Modo escuro</string>
+    <string name="theme_follow_system">Seguir o sistema</string>
 
     <string name="field_telephone_label">Número de telefone</string>
     <string name="field_telephone_placeholder">Insira o número de telefone</string>
@@ -199,5 +200,21 @@
     <string name="basic_info">Informações básicas</string>
 
     <string name="tax_rate">Taxa</string>
+    
+    <!-- ===================== Ações comuns (Shared) ===================== -->
+    <string name="copy">Copiar</string>
+    <string name="save">Guardar</string>
+
+    <!-- Notificações de cópia/área de transferência -->
+    <string name="unable_to_copy_resource">Não é possível copiar este recurso</string>
+    <string name="copied_to_clipboard">Copiado para a área de transferência</string>
+    <string name="copied_files_to_clipboard">Ficheiros copiados para a área de transferência</string>
+    <string name="copied_image_to_clipboard">Imagem copiada para a área de transferência</string>
+    <string name="copied_text_to_clipboard_with_value">Copiado "%1$s" para a área de transferência</string>
+    <string name="copy_failed">Falha ao copiar</string>
+
+    <!-- Notificações de guardar imagem -->
+    <string name="image_saved_with_name">Imagem "%1$s" guardada</string>
+    <string name="image_saved_to_gallery_with_name">Imagem "%1$s" guardada na galeria</string>
 
 </resources>

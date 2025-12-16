@@ -153,8 +153,9 @@
     <string name="dashboard">首頁</string>
     <string name="profile">我的</string>
 
-    <string name="change_to_light_mode">切換到淺色模式</string>
-    <string name="change_to_dark_mode">切換到深色模式</string>
+    <string name="theme_light_mode">淺色模式</string>
+    <string name="theme_dark_mode">深色模式</string>
+    <string name="theme_follow_system">跟隨系統</string>
 
     <string name="field_telephone_label">電話號碼</string>
     <string name="field_telephone_placeholder">請輸入電話號碼</string>
@@ -200,4 +201,20 @@
     <string name="basic_info">基本資訊</string>
 
     <string name="tax_rate">稅率</string>
+    
+    <!-- ===================== 常用操作（Shared） ===================== -->
+    <string name="copy">複製</string>
+    <string name="save">儲存</string>
+
+    <!-- 複製/剪貼簿 通知 -->
+    <string name="unable_to_copy_resource">無法複製該資源</string>
+    <string name="copied_to_clipboard">已複製到剪貼簿</string>
+    <string name="copied_files_to_clipboard">已複製檔案到剪貼簿</string>
+    <string name="copied_image_to_clipboard">已複製圖片到剪貼簿</string>
+    <string name="copied_text_to_clipboard_with_value">已複製「%1$s」到剪貼簿</string>
+    <string name="copy_failed">複製失敗</string>
+
+    <!-- 圖片儲存 通知 -->
+    <string name="image_saved_with_name">已儲存圖片「%1$s」</string>
+    <string name="image_saved_to_gallery_with_name">已將圖片「%1$s」儲存到相簿</string>
 </resources>

@@ -3,6 +3,7 @@
 package org.dsqrwym.shared.ui.components.input.selector
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.address_no_match
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
-import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 import org.dsqrwym.shared.ui.viewmodels.component.SearchableSelectorRemoteViewModel
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.min
@@ -145,7 +146,7 @@ fun <T> SearchableSelector(
                 placeholderText = config.placeholder,
                 trailingIcon = {
                     if (searching) {
-                        MyCircularProgressIndicator(
+                        SharedCircularProgressIndicator(
                             size = 18.dp,
                             progressStrokeWith = 2.dp
                         )
@@ -320,7 +321,7 @@ fun <T : Any> SearchableSelectorRemote(
                 placeholderText = config.placeholder,
                 trailingIcon = {
                     if (isLoading) {
-                        MyCircularProgressIndicator(size = 18.dp, progressStrokeWith = 2.dp)
+                        SharedCircularProgressIndicator(size = 18.dp, progressStrokeWith = 2.dp)
                     } else {
                         IconButton(
                             enabled = config.enabled,
@@ -356,7 +357,7 @@ fun <T : Any> SearchableSelectorRemote(
                             text = { Text(stringResource(SharedRes.string.address_no_match)) },
                             onClick = { /* no-op */ })
                     } else if (loadState.isIdle) {
-                        this.itemSnapshotList.items.forEach { item ->
+                        this.itemSnapshotList.items.forEachIndexed { index, item ->
                             DropdownMenuItem(
                                 text = { Text(config.itemToString(item)) },
                                 onClick = {
@@ -366,6 +367,10 @@ fun <T : Any> SearchableSelectorRemote(
                                     expanded = false
                                 }
                             )
+
+                            if (index != this.itemSnapshotList.items.lastIndex) {
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp))
+                            }
                         }
                     }
                 }

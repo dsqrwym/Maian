@@ -161,14 +161,16 @@ export class ProductsService {
     }
     const permissionCondition = this.getReadListPermission(user);
 
-    this.logger.info('permissionCondition', permissionCondition);
-
     const { search, langCode, category_id, wholesaler_id, status } = query;
     const fields = query.fields;
     const iva = fields?.includes(ProductListSelectField.IVA);
     const selectedStatus = fields?.includes(ProductListSelectField.STATUS);
     const user_id = fields?.includes(ProductListSelectField.USER_ID);
     const category = fields?.includes(ProductListSelectField.CATEGORY);
+
+    // 构建动态 SQL 参数数组
+    const params: string[] = [];
+    let paramIndex = 1; // $1, $2 ...
 
     const { page, limit, sort_by, sort_order } = query;
     const offset = (page - 1) * limit;
@@ -183,6 +185,8 @@ export class ProductsService {
       price: 'vp.min_price',
     };
     const sortField = sort_by ? sortMapping[sort_by] : undefined;
+
+    if (langCode) params.push(langCode);
 
     const selectFields = [
       'p.id',
@@ -205,14 +209,10 @@ export class ProductsService {
       )), '[]'::jsonb)
       FROM product_translations pt
       WHERE pt.product_id = p.id
-      ${langCode ? `AND pt.lang_code = '${langCode}'` : ''}) AS product_translations`,
+      ${langCode ? `AND pt.lang_code = $${paramIndex++}` : ''}) AS product_translations`,
     ]
       .filter(Boolean)
       .join(', ');
-
-    // 构建动态 SQL 参数数组
-    const params: string[] = [];
-    let paramIndex = 1; // $1, $2 ...
 
     const whereClauses: string[] = ['1=1'];
 
@@ -614,34 +614,56 @@ export class ProductsService {
       // 对于翻译，数据量小，Upsert 是最优雅的 XD。
       if (translations && translations.length > 0) {
         await tx.$queryRaw`
-          INSERT INTO product_translations (
-            product_id,
-            lang_code,
-            name,
-            title,
-            description,
-            updated_by
-          )
-          VALUES ${Prisma.join(
-            translations.map(
-              (t) => Prisma.sql`(
-                ${id}::bigint,
-                ${t.lang_code},
-                ${t.name},
-                ${t.title},
-                ${t.description},
-                ${user.userId}::uuid
-              )`,
-            ),
-          )}
-          ON CONFLICT (product_id, lang_code)
-          DO UPDATE SET
-            name = EXCLUDED.name,
-            title = EXCLUDED.title,
-            description = EXCLUDED.description,
-            updated_by = ${user.userId}::uuid,
-            updated_at = NOW()
-          ;
+            INSERT INTO product_translations
+            (product_id,
+             lang_code,
+             name,
+             title,
+             description,
+             updated_by)
+            SELECT ${productId} AS product_id,
+                   p.lang_code,
+                   p.name,
+                   p.title,
+                   p.description,
+                   ${user.userId}::uuid
+            FROM unnest(
+                         ARRAY[
+                             ${Prisma.join(
+                               translations.map(
+                                 (t) => Prisma.sql`${t.lang_code}`,
+                               ),
+                               ',',
+                             )}
+                        ]::text[],
+                         ARRAY[
+                             ${Prisma.join(
+                               translations.map((t) => Prisma.sql`${t.name}`),
+                               ',',
+                             )}
+                        ]::text[],
+                         ARRAY[
+                             ${Prisma.join(
+                               translations.map((t) => Prisma.sql`${t.title}`),
+                               ',',
+                             )}
+                        ]::text[],
+                         ARRAY[
+                             ${Prisma.join(
+                               translations.map(
+                                 (t) => Prisma.sql`${t.description}`,
+                               ),
+                               ',',
+                             )}
+                        ]::text[]
+                 ) AS p(lang_code, name, title, description) 
+                 ON CONFLICT (product_id, lang_code) DO
+                 UPDATE SET
+                    name = EXCLUDED.name,
+                    title = EXCLUDED.title,
+                    description = EXCLUDED.description,
+                    updated_by = ${user.userId}::uuid,
+                    updated_at = NOW();
         `;
       }
 

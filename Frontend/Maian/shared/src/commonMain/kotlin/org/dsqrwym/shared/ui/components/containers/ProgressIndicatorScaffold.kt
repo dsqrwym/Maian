@@ -21,7 +21,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 
 /**
  * A scaffold that shows a loading indicator overlay with optional blur effect.
@@ -67,7 +67,7 @@ fun ProgressIndicatorScaffold(
             ) {
                 // Centered loading indicator, ensures it's above the blur layer
                 // 居中的加载指示器，确保它在模糊层之上
-                MyCircularProgressIndicator()
+                SharedCircularProgressIndicator()
             }
         }
     }

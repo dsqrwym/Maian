@@ -1,38 +1,16 @@
 <resources>
-    <string name="select_wholesaler">Select Wholesaler</string>
-    <string name="subcategories_count">%1$s subcategories</string>
-    <string name="parent_category">Parent Category</string>
-    <string name="base_category">Base Category</string>
-    <string name="other_languages">Other Languages</string>
-    <string name="confirm_delete_category">Are you sure you want to delete the category "%1$s"?</string>
-    <string name="delete_warning_with_children">Warning: This will also delete %1$s subcategories and cannot be undone.</string>
-    <string name="select_parent_category">Select Parent Category</string>
-    <string name="private_category">Private Category</string>
-    <string name="search_category">Search categories...</string>
-    <string name="platform_category">Platform Category</string>
+    <string name="select_wholesaler">Select wholesaler</string>
+    <string name="platform_category">Platform category</string>
 
-    <string name="input_language_translation">Enter %1$s translation...</string>
-    <string name="translate">Translate</string>
-    <string name="add_language_translation">Add language translation</string>
-    <string name="all_languages_added">All supported languages have been added</string>
-
-    <string name="category_name_tax_setting">Category name and tax rate settings</string>
-    <string name="category_name">Category Name</string>
-    <string name="please_input_category_name">Please enter category name</string>
-    <string name="empty_use_product_tax">Leave empty to use product’s tax rate</string>
-
-    <string name="select_parent_category_to_create">Select a parent category to create a subcategory</string>
-    <string name="parent_category_selected">Parent category selected</string>
     <string name="category_type">Category type</string>
     <string name="category_visibility">Set category visibility</string>
     <string name="visible_to_all">Visible to all users</string>
-    <string name="visible_to_owner">Visible only to the owner</string>
-    <string name="category_visible_to_all_tip">This category will be available to all users</string>
+    <string name="visible_to_owner">Visible to owner only</string>
+    <string name="category_visible_to_all_tip">This category will be accessible to all users</string>
     <string name="wholesaler_selected">Wholesaler selected</string>
-    <string name="add_multilingual_translation">Add multilingual translation</string>
-    <string name="no_other_language_translation">No other language translations yet</string>
-    <string name="translations_count">%1$s translations added</string>
 
-    <string name="category_name_exists">Category name already exists</string>
-    <string name="category_management">Category management</string>
+    <string name="category_management_description">
+        View and search categories, and create private or platform-wide categories for wholesalers or all platform users.
+        Supports editing (name, translations) and deleting (only super administrators can delete). Categories can have up to three levels (1 → 2 → 3).
+    </string>
 </resources>

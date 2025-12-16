@@ -9,16 +9,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.FrameWindowScope
 import dev.datlag.kcef.KCEF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.util.log.SharedLog
+import java.awt.Dimension
 import java.io.File
 import kotlin.math.max
 
 @Composable
-fun SharedInitDesktop(app: @Composable () -> Unit) {
+fun SharedInitDesktop(frameWindowScope: FrameWindowScope, app: @Composable () -> Unit) {
+    frameWindowScope.window.minimumSize = Dimension(320, 600)
     var downloadProgress by remember { mutableStateOf(-1F) }
     var initialized by remember { mutableStateOf(false) } // if true, KCEF can be used to create clients, browsers etc
     var restartRequired by remember { mutableStateOf(false) }
@@ -60,19 +63,21 @@ fun SharedInitDesktop(app: @Composable () -> Unit) {
             KCEF.disposeBlocking()
         }
     }
-    when {
-        restartRequired -> {
-            RestartRequiredScreen()
-        }
-
-        initialized -> {
-            app() // 正式启动主应用 / Launch main app
-        }
-
-        else -> {
-            RunApp(downloadProgress)
-        }
-    }
+    app()
+    // WEB浏览器出问题，先临时不用
+//    when {
+//        restartRequired -> {
+//            RestartRequiredScreen()
+//        }
+//
+//        initialized -> {
+//            app() // 正式启动主应用 / Launch main app
+//        }
+//
+//        else -> {
+//            RunApp(downloadProgress)
+//        }
+//    }
 }
 
 @Composable

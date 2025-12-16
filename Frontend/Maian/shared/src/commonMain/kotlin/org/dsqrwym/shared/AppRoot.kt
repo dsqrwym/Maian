@@ -10,9 +10,6 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
@@ -20,15 +17,16 @@ import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
-import org.dsqrwym.shared.network.InitCol
+import org.dsqrwym.shared.network.InitCoil
 import org.dsqrwym.shared.theme.*
 import org.dsqrwym.shared.ui.components.containers.SnackbarScaffold
 import org.dsqrwym.shared.ui.overlay.OverlayHost
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.navigation.WindowSizeClass
+import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 import org.dsqrwym.shared.util.settings.initSharedSettingsProvider
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
-import kotlin.time.ExperimentalTime
 
 /**
  * EN: CompositionLocal flag indicating whether the app is currently in dark theme.
@@ -50,6 +48,10 @@ val LocalNavHostController = staticCompositionLocalOf<NavHostController> {
     error("No NavHostController provided")
 }
 
+val LocalWindowSizeClass = staticCompositionLocalOf<WindowSizeClass> {
+    error("No WindowSizeClass provided")
+}
+
 /**
  * AppRoot
  *
@@ -62,14 +64,15 @@ val LocalNavHostController = staticCompositionLocalOf<NavHostController> {
 fun AppRoot(
     content: @Composable (state: AuthState) -> Unit
 ) {
-    InitCol()
+    InitCoil()
     initSharedSettingsProvider()
 
     val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
     val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
 
     // 通过 UserPreferences 的 SharedFlow 监听主题变化
-    val userIsDarkTheme by SharedUserPreferences.isDarkThemeFlow.collectAsState(initial = SharedUserPreferences.getIsDarkTheme())
+    val init = remember { SharedUserPreferences.getIsDarkTheme() }
+    val userIsDarkTheme by SharedUserPreferences.isDarkThemeFlow.collectAsState(initial = init)
     val systemIsDarkTheme = isSystemInDarkTheme()
     val isDarkTheme by derivedStateOf { userIsDarkTheme ?: systemIsDarkTheme }
 
@@ -79,6 +82,8 @@ fun AppRoot(
     val navController = rememberNavController()
 
     val state by authSessionViewModel.state.collectAsState()
+
+    val windowSizeClass by rememberUpdatedState(calculateWindowSizeClass())
 
     LaunchedEffect(Unit) {
         if (state is AuthState.Unauthenticated) {
@@ -91,6 +96,7 @@ fun AppRoot(
         LocalIsDarkTheme provides isDarkTheme,
         LocalAppFocusManager provides focusManager,
         LocalNavHostController provides navController,
+        LocalWindowSizeClass provides windowSizeClass,
     ) {
         AppEnvironment {
             MyMaterialTheme(
@@ -136,18 +142,4 @@ fun AppRoot(
             }
         }
     }
-}
-
-/**
- * EN: Get current local date-time as a compact string (yyyy-MM-ddHH:mm:ss…), replacing 'T'.
- * ZH: 获取当前本地日期时间的紧凑字符串（将 'T' 去掉）。
- */
-@OptIn(ExperimentalTime::class)
-fun todayDate(): String {
-    fun LocalDateTime.format() = toString()
-
-    val now = kotlin.time.Clock.System.now()
-    val zone = TimeZone.currentSystemDefault()
-
-    return now.toLocalDateTime(zone).format().replace("T", "")
 }

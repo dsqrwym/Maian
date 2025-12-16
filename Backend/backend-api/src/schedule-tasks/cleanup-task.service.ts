@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { PinoLogger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { reduceDay } from '../utils/date.utils';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CleanupTask {
@@ -29,8 +29,7 @@ export class CleanupTask {
   private async cleanupVerificationTokens(now: Date) {
     const deleted = await this.prismaService.verification_tokens.deleteMany({
       where: {
-        expires_at: { lt: now },
-        OR: [{ is_used: true }],
+        OR: [{ expires_at: { lt: now } }, { is_used: true }]
       },
     });
     this.logger.info(`Deleted: ${deleted.count} verification tokens.`);

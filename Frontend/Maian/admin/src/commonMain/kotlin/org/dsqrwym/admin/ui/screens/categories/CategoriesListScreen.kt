@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -24,19 +23,24 @@ import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import maian.admin.generated.resources.*
+import maian.admin.generated.resources.AdminRes
+import maian.admin.generated.resources.platform_category
+import maian.admin.generated.resources.select_wholesaler
+import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.admin.data.categories.dto.CategoryResponse
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
+import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
+import org.dsqrwym.business.ui.components.category.BusinessCategorieLanguages
+import org.dsqrwym.business.ui.components.category.BusinessCategoriePath
+import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
 import org.dsqrwym.shared.data.category.SharedCategoryType
-import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
-import org.dsqrwym.shared.ui.components.dialog.ConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
-import org.dsqrwym.shared.ui.components.progressindicators.MyCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
@@ -67,14 +71,11 @@ fun CategoriesListScreen(
         showOverlayDialog = showFilterDialog || deleteCategory != null,
         overlayContent = {
             deleteCategory?.let { category ->
-                ConfirmDeleteCategories(
-                    category = category,
-                    onDismiss = {
-                        viewModel.updateShowDeleteDialog(null)
-                    },
-                    onConfirm = {
-                        viewModel.deleteCategory(category)
-                    }
+                BusinessConfirmDeleteCategories(
+                    category.name,
+                    category.childrenCount,
+                    { viewModel.updateShowDeleteDialog(null) },
+                    { viewModel.deleteCategory(category) }
                 )
             }
             if (showFilterDialog) {
@@ -91,10 +92,10 @@ fun CategoriesListScreen(
                     modifier = Modifier.weight(0.8f),
                     query = searchQuery,
                     onQueryChange = viewModel::updateSearchQuery,
-                    onSearch = viewModel::updateSearchQuery,
+                    onSearch = { viewModel.refresh() },
                     expanded = false,
                     onExpandedChange = {},
-                    placeholder = { Text(stringResource(AdminRes.string.search_category)) },
+                    placeholder = { Text(stringResource(BusinessRes.string.search_category)) },
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
@@ -215,7 +216,7 @@ fun CategoriesListScreen(
 
                                 loadState.prepend is LoadState.Loading || loadState.append is LoadState.Loading -> {
                                     item(span = StaggeredGridItemSpan.FullLine) {
-                                        MyCircularProgressIndicator()
+                                        SharedCircularProgressIndicator()
                                     }
                                 }
 
@@ -270,63 +271,64 @@ fun CategoryListItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = category.name,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        AssistChip(
-                            onClick = {
-                                categoriesListViewmodel.updateFilterCategoryType(
-                                    if (category.isPublic()) SharedCategoryType.PUBLIC else SharedCategoryType.PRIVATE
-                                )
-                            },
-                            label = {
+                SelectionContainer(modifier = Modifier.weight(1f)) {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = category.name,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            AssistChip(
+                                onClick = {
+                                    categoriesListViewmodel.updateFilterCategoryType(
+                                        if (category.isPublic()) SharedCategoryType.PUBLIC else SharedCategoryType.PRIVATE
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        if (category.isPublic()) stringResource(BusinessRes.string.platform_category) else stringResource(
+                                            BusinessRes.string.private_category
+                                        ),
+                                        style = MaterialTheme.typography.labelSmall
+                                    )
+                                }
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = if (category.getParentName() != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
+                                    BusinessRes.string.base_category
+                                ),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+
+                            Text(
+                                text = "${stringResource(SharedRes.string.tax_rate)}->IVA: ${
+                                    if (category.iva != null) category.iva.toString() + "%" else stringResource(
+                                        SharedRes.string.not_set
+                                    )
+                                }",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+
+                            val childrenCount = category.childrenCount
+                            if (childrenCount > 0) {
                                 Text(
-                                    if (category.isPublic()) stringResource(AdminRes.string.platform_category) else stringResource(
-                                        AdminRes.string.private_category
-                                    ),
-                                    style = MaterialTheme.typography.labelSmall
+                                    text = stringResource(BusinessRes.string.subcategories_count, childrenCount),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
-                        )
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = if (category.getParentName() != null) "${stringResource(AdminRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
-                                AdminRes.string.base_category
-                            ),
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        Text(
-                            text = "${stringResource(SharedRes.string.tax_rate)}->IVA: ${
-                                if (category.iva != null) category.iva.toString() + "%" else stringResource(
-                                    SharedRes.string.not_set
-                                )
-                            }",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        val childrenCount = category.childrenCount
-                        if (childrenCount > 0) {
-                            Text(
-                                text = stringResource(AdminRes.string.subcategories_count, childrenCount),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
                         }
                     }
                 }
-
                 IconButton(onClick = onEdit) {
                     Icon(Icons.Outlined.Edit, stringResource(SharedRes.string.edit))
                 }
@@ -336,113 +338,34 @@ fun CategoryListItem(
             HorizontalDivider()
 
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    category.categoryTranslations?.let { CategorieLanguages(it) }
-                    CategoriePath(category.getPath(), category.name)
+                SelectionContainer(modifier = Modifier.weight(1f)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        category.categoryTranslations?.let { BusinessCategorieLanguages(it) }
+                        BusinessCategoriePath(category.getPath(), category.name)
+                    }
                 }
                 TooltipBox(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = {
                         if (userRole != UserRole.SUPERADMIN) {
                             PlainTooltip {
-                                Text(stringResource(SharedRes.string.error_no_permission))
+                                SelectionContainer {
+                                    Text(stringResource(SharedRes.string.error_no_permission))
+                                }
                             }
                         }
                     },
                     state = rememberTooltipState()
                 ) {
-                    OutlinedButton(
-                        onClick = onDelete,
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.error
-                        ),
-                        enabled = userRole == UserRole.SUPERADMIN
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            stringResource(SharedRes.string.delete),
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        Text(stringResource(SharedRes.string.delete))
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun CategoriePath(path: List<String>, categoryName: String) {
-    if (path.size < 2) return
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            "${stringResource(SharedRes.string.path)}: ",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        path.forEach {
-            Text(
-                it,
-                color = if (it != categoryName) Color.Unspecified else MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-    }
-}
-
-@Composable
-fun CategorieLanguages(languages: List<SharedCategoryTranslation>) {
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            "${stringResource(AdminRes.string.other_languages)}:",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        if (languages.isEmpty()) {
-            Text(" -- ", style = MaterialTheme.typography.bodySmall)
-        } else {
-            languages.forEachIndexed { index, (langCode, name) ->
-                Text(
-                    "$langCode: $name",
-                    style = MaterialTheme.typography.bodySmall
-                )
-
-                if (index != languages.lastIndex) {
-                    Text(
-                        "•",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    BusinessOutlinedDeleteButton(
+                        enabled = userRole == UserRole.SUPERADMIN,
+                        onDelete = onDelete
                     )
                 }
             }
         }
     }
 }
-
-@Composable
-fun ConfirmDeleteCategories(
-    category: CategoryResponse,
-    onDismiss: () -> Unit = {},
-    onConfirm: () -> Unit = {},
-) {
-    val childrenCount = category.childrenCount
-    val content = """${stringResource(AdminRes.string.confirm_delete_category, category.name)}
-        ${if (childrenCount > 0) stringResource(AdminRes.string.delete_warning_with_children, childrenCount) else ""}
-    """.trimIndent()
-    ConfirmDeleteDialog(
-        title = stringResource(SharedRes.string.delete),
-        text = content,
-        onDismissRequest = onDismiss,
-        onConfirm = onConfirm,
-    )
-}
-
 
 @Composable
 fun FilterDialog(
@@ -452,86 +375,88 @@ fun FilterDialog(
     AlertDialog(
         onDismissRequest = { viewModel.updateShowFilterDialog(false) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                // 标题
-                Text(stringResource(SharedRes.string.filter))
-                // 三个单选按钮并排的行
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // 选项1：全部
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = categoryType == null,
-                            onClick = { viewModel.updateFilterCategoryType(null) }
-                        )
-                        Text(stringResource(SharedRes.string.all))
-                    }
-
-                    // 选项2：平台类别
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = categoryType == SharedCategoryType.PUBLIC,
-                            onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PUBLIC) }
-                        )
-                        Text(stringResource(AdminRes.string.platform_category))
-                    }
-
-                    // 选项3：私有类别
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = categoryType == SharedCategoryType.PRIVATE,
-                            onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PRIVATE) }
-                        )
-                        Text(stringResource(AdminRes.string.private_category))
-                    }
-                }
-
-                SearchableSelectorRemote(
-                    config = RemoteSearchableSelectorConfig(
-                        label = stringResource(AdminRes.string.select_parent_category),
-                        error = null,
-                        leadingIcon = Icons.Outlined.Category,
-                        selectedItem = viewModel.filterParentCategory,
-                        onSelectedItemChange = {
-                            viewModel.updateFilterParentCategory(it)
-                        },
-                        pageSize = 100,
-                        itemToString = {
-                            "${it.name} • ${it.translationString}"
-                        },
-                        onSearch = { query, page, limit ->
-                            viewModel.findParentCategories(query, page, limit)
+            SelectionContainer {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    // 标题
+                    Text(stringResource(SharedRes.string.filter))
+                    // 三个单选按钮并排的行
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // 选项1：全部
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = categoryType == null,
+                                onClick = { viewModel.updateFilterCategoryType(null) }
+                            )
+                            Text(stringResource(SharedRes.string.all))
                         }
-                    )
-                )
 
-                AnimatedVisibility(visible = categoryType == SharedCategoryType.PRIVATE) {
-                    val usernameLabel = stringResource(SharedRes.string.field_username_label)
+                        // 选项2：平台类别
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = categoryType == SharedCategoryType.PUBLIC,
+                                onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PUBLIC) }
+                            )
+                            Text(stringResource(BusinessRes.string.platform_category))
+                        }
+
+                        // 选项3：私有类别
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = categoryType == SharedCategoryType.PRIVATE,
+                                onClick = { viewModel.updateFilterCategoryType(SharedCategoryType.PRIVATE) }
+                            )
+                            Text(stringResource(BusinessRes.string.private_category))
+                        }
+                    }
+
                     SearchableSelectorRemote(
                         config = RemoteSearchableSelectorConfig(
-                            label = stringResource(AdminRes.string.select_wholesaler),
+                            label = stringResource(BusinessRes.string.select_parent_category),
                             error = null,
-                            leadingIcon = Icons.Outlined.PersonOutline,
-                            selectedItem = viewModel.filterUser,
+                            leadingIcon = Icons.Outlined.Category,
+                            selectedItem = viewModel.filterParentCategory,
                             onSelectedItemChange = {
-                                viewModel.updateFilterUser(it)
+                                viewModel.updateFilterParentCategory(it)
                             },
                             pageSize = 100,
                             itemToString = {
-                                "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
-                            },
-                            semanticsPropertyReceiver = {
-                                contentType = ContentType.Username
+                                "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
                             },
                             onSearch = { query, page, limit ->
-                                viewModel.findWholesalers(query, page, limit)
-                            },
+                                viewModel.findParentCategories(query, page, limit)
+                            }
                         )
                     )
+
+                    AnimatedVisibility(visible = categoryType == SharedCategoryType.PRIVATE) {
+                        val usernameLabel = stringResource(SharedRes.string.field_username_label)
+                        SearchableSelectorRemote(
+                            config = RemoteSearchableSelectorConfig(
+                                label = stringResource(AdminRes.string.select_wholesaler),
+                                error = null,
+                                leadingIcon = Icons.Outlined.PersonOutline,
+                                selectedItem = viewModel.filterUser,
+                                onSelectedItemChange = {
+                                    viewModel.updateFilterUser(it)
+                                },
+                                pageSize = 100,
+                                itemToString = {
+                                    "ID: ${it.userId}, ${usernameLabel}: ${it.username}"
+                                },
+                                semanticsPropertyReceiver = {
+                                    contentType = ContentType.Username
+                                },
+                                onSearch = { query, page, limit ->
+                                    viewModel.findWholesalers(query, page, limit)
+                                },
+                            )
+                        )
+                    }
                 }
             }
         },
@@ -559,7 +484,7 @@ private fun FilterChipsRow(
                 label = {
                     Text(
                         if (it == SharedCategoryType.PUBLIC) stringResource(AdminRes.string.platform_category) else stringResource(
-                            AdminRes.string.private_category
+                            BusinessRes.string.private_category
                         )
                     )
                 },
@@ -578,7 +503,7 @@ private fun FilterChipsRow(
             ElevatedFilterChip(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
-                label = { Text("${stringResource(AdminRes.string.parent_category)}: ${it.name}") },
+                label = { Text("${stringResource(BusinessRes.string.parent_category)}: ${it.name}") },
                 trailingIcon = { Icon(Icons.Outlined.Close, null) }
             )
         }

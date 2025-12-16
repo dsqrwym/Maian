@@ -12,7 +12,7 @@ fun <T : Any, C, E> ReadonlyColumnBuilder<T, C, E>.cellWithModifier(
     contentAlignment: Alignment = Alignment.Center,
     content: @Composable BoxScope.(item: T) -> Unit
 ) {
-    cell { item ->
+    cell { item, _ ->
         Box(modifier = modifier(item), contentAlignment = contentAlignment) {
             content(item)
         }

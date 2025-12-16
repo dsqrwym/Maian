@@ -76,6 +76,7 @@ export class CategoryQueryDto extends PaginationQueryDto {
   @ApiProperty({
     description: 'Selected fields',
     enum: CategorySelectField,
+    isArray: true,
     required: false,
   })
   @IsEnum(CategorySelectField, {

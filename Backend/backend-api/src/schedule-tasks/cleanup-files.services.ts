@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import * as fs from 'fs';
 import * as path from 'path';
 import { HOUR, reduceHours } from '../utils/date.utils';
@@ -7,6 +6,7 @@ import { STORAGE_DRIVER } from '../files/storage/storage-key';
 import { LocalStorageDriver } from '../files/storage/local-storage.driver';
 import { PrismaService } from '../prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class CleanupFilesService {
@@ -88,7 +88,7 @@ export class CleanupFilesService {
         while (idx < files.length) {
           const current = files[idx++];
           try {
-            // storage.delete 可能抛错 --- 我们处理 ENOENT 为可忽略
+            // storage.delete 可能抛错 --- 处理 ENOENT 为可忽略
             await this.storage
               .delete(current.storage_key)
               .catch((err: unknown) => {

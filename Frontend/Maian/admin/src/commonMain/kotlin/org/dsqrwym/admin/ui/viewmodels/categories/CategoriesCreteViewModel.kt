@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import maian.admin.generated.resources.AdminRes
-import maian.admin.generated.resources.category_name_exists
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.category_name_exists
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.create_failed
 import maian.shared.generated.resources.create_success
 import maian.shared.generated.resources.field_cannot_be_empty
 import org.dsqrwym.admin.data.categories.CategoryRepository
-import org.dsqrwym.admin.data.categories.dto.CreateCategoryDto
 import org.dsqrwym.admin.data.user.UserRepository
-import org.dsqrwym.admin.navigation.Categories
+import org.dsqrwym.business.data.category.dto.BusinessCreateCategoryDto
+import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -86,7 +86,7 @@ class CategoriesCreateViewModel(
                         is SharedResponseResult.Success -> {
                             categoryNameExist = result.data == true
                             categoryNameError = if (categoryNameExist) {
-                                AdminRes.string.category_name_exists
+                                BusinessRes.string.category_name_exists
                             } else {
                                 null
                             }
@@ -152,7 +152,7 @@ class CategoriesCreateViewModel(
         if (isCheckingCategoryName) return
         viewModelScope.launch {
             createButtonState = UiState.Loading
-            val createDto = CreateCategoryDto(
+            val createDto = BusinessCreateCategoryDto(
                 name = categoryName,
                 translations = translations,
                 iva = categoryIva.toDoubleOrNull(),

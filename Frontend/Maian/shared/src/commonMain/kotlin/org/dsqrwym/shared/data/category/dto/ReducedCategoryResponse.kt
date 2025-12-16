@@ -16,10 +16,10 @@ data class ReducedCategoryResponse(
             val currentCode = LanguageManager.getCurrent().code
             return this.translation.find { it.langCode == currentCode }?.name ?: this.name
         }
-    val translationString: String
+    val translationString: String?
         get() {
             return if (translation.isNotEmpty()) "(" + translation.joinToString(", ") { translation ->
                 "${translation.langCode}: ${translation.name}"
-            } + ")" else ""
+            } + ")" else null
         }
 }

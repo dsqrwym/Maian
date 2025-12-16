@@ -7,13 +7,13 @@ import {
 import { Reflector } from '@nestjs/core';
 import { PinoLogger } from 'nestjs-pino';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   PaginatedData,
   PaginationMeta,
   Response,
 } from '../types/response.type';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply } from 'fastify';
 import { SKIP_RESPONSE_INTERCEPTOR } from '../guards/decorator/skip-response-interceptor.decorator';
 
 @Injectable()
@@ -21,7 +21,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
   constructor(
     private readonly reflector: Reflector,
     private readonly logger: PinoLogger,
-  ) {}
+  ) {
+    this.logger.setContext(ResponseInterceptor.name);
+  }
 
   intercept(
     context: ExecutionContext,
@@ -42,9 +44,6 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
       context.getHandler(),
     );
 
-    const request = context.switchToHttp().getRequest<FastifyRequest>();
-    const now = Date.now();
-
     return next.handle().pipe(
       map(
         (data: T) =>
@@ -55,18 +54,6 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
             data: this.serializeData(data),
           }) as Response<T>,
       ),
-      tap(({ statusCode, message }) => {
-        this.logger.debug(
-          {
-            path: request.url,
-            method: request.method,
-            responseTime: `${Date.now() - now}ms`,
-            statusCode,
-            message,
-          },
-          'Response sent',
-        );
-      }),
     );
   }
 

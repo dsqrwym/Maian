@@ -20,38 +20,8 @@
     <string name="field_company_type_placeholder">Sélectionnez le type d'entreprise</string>
     <string name="icon_content_description_company">Icône de l'entreprise</string>
 
-    <string name="category_management">Gestion des catégories</string>
     <string name="category_management_description">
         Voir et rechercher des catégories, créer vos propres catégories de produits et gérer les noms multilingues.
         Prend en charge jusqu'à trois niveaux d'imbrication (1 → 2 → 3).
     </string>
-
-    <string name="category_name_tax_setting">Nom de la catégorie et réglages fiscaux</string>
-    <string name="category_name">Nom de la catégorie</string>
-    <string name="please_input_category_name">Veuillez saisir le nom de la catégorie</string>
-    <string name="empty_use_product_tax">Laisser vide pour utiliser les réglages fiscaux du produit</string>
-    <string name="category_name_exists">Le nom de la catégorie existe déjà</string>
-
-    <string name="subcategories_count">%1$s sous-catégories</string>
-    <string name="parent_category">Catégorie parente</string>
-    <string name="base_category">Catégorie de base</string>
-    <string name="other_languages">Autres langues</string>
-    <string name="confirm_delete_category">Êtes-vous sûr de vouloir supprimer la catégorie « %1$s » ?</string>
-    <string name="delete_warning_with_children">Attention : cela supprimera également %1$s sous-catégories et sera irréversible.</string>
-    <string name="select_parent_category">Sélectionner une catégorie parente</string>
-    <string name="private_category">Catégorie privée</string>
-    <string name="search_category">Rechercher une catégorie...</string>
-    <string name="platform_category">Catégorie de la plateforme</string>
-
-    <string name="select_parent_category_to_create">Sélectionnez une catégorie parente pour créer une sous-catégorie</string>
-    <string name="parent_category_selected">Catégorie parente sélectionnée</string>
-
-    <string name="input_language_translation">Saisissez la traduction en %1$s...</string>
-    <string name="translate">Traduire</string>
-    <string name="add_language_translation">Ajouter une traduction</string>
-    <string name="all_languages_added">Toutes les langues prises en charge ont été ajoutées</string>
-    <string name="add_multilingual_translation">Ajouter une traduction multilingue</string>
-    <string name="no_other_language_translation">Aucune autre traduction disponible</string>
-    <string name="translations_count">%1$s traductions ajoutées</string>
-
 </resources>

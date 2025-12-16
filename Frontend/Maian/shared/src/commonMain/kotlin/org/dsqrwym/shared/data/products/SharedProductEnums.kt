@@ -4,7 +4,7 @@ enum class SharedProductStatus {
     ACTIVE, INACTIVE
 }
 
-enum class SharedProductListSelectField() {
+enum class SharedProductListSelectField {
     IVA,
     USER_ID,
     STATUS,

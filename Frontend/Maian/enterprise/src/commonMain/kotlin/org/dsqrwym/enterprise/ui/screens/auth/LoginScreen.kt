@@ -150,7 +150,7 @@ fun EnterpriseLoginContent(
     onLoginClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val focuesRequester = remember { FocusRequester() }
+    val focusRequester = remember { FocusRequester() }
     Column(modifier = modifier.fillMaxHeight().verticalScroll(scrollState)) {
         AuthTopBar(onBackButtonClick = onBackButtonClick)
 
@@ -212,12 +212,12 @@ fun EnterpriseLoginContent(
                 focusManager.clearFocus()
                 onLoginClick()
             },
-            focusRequester = focuesRequester,
+            focusRequester = focusRequester,
         )
 
         LaunchedEffect(Unit) {
             if (SharedUserPreferences.getUserLoginPreferences() == null) return@LaunchedEffect
-            focuesRequester.requestFocus()
+            focusRequester.requestFocus()
         }
 
         MyTextButton(

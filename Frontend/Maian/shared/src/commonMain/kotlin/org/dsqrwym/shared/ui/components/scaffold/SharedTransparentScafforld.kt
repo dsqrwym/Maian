@@ -13,13 +13,13 @@ import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
+import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.theme.MyHazeStyles
 import org.dsqrwym.shared.ui.components.buttons.MyExtendedFloatingActionButton
 import org.dsqrwym.shared.ui.components.containers.HazeContainer
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.util.modifier.paddingTopForMenu
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
-import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 
 data class SharedTransparentScaffoldFabButtonState(
     val buttonState: UiState,
@@ -42,7 +42,7 @@ fun SharedTransparentScaffold(
     fabButtonState: SharedTransparentScaffoldFabButtonState,
     content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit
 ) {
-    val windowWidthSizeClass = calculateWindowSizeClass().widthSizeClass
+    val windowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass
     val hazeState = rememberHazeState()
     val hazeStyle = MyHazeStyles.topBar()
 

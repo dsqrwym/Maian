@@ -152,8 +152,9 @@
     <string name="dashboard">Accueil</string>
     <string name="profile">Mon compte</string>
 
-    <string name="change_to_light_mode">Passer en mode clair</string>
-    <string name="change_to_dark_mode">Passer en mode sombre</string>
+    <string name="theme_light_mode">Mode clair</string>
+    <string name="theme_dark_mode">Mode sombre</string>
+    <string name="theme_follow_system">Suivre le système</string>
 
     <string name="field_telephone_label">Numéro de téléphone</string>
     <string name="field_telephone_placeholder">Entrez le numéro de téléphone</string>
@@ -199,4 +200,20 @@
     <string name="basic_info">Informations de base</string>
 
     <string name="tax_rate">Taux de taxe</string>
+    
+    <!-- ===================== Actions communes (Shared) ===================== -->
+    <string name="copy">Copier</string>
+    <string name="save">Enregistrer</string>
+
+    <!-- Notifications de copie/presse-papiers -->
+    <string name="unable_to_copy_resource">Impossible de copier cette ressource</string>
+    <string name="copied_to_clipboard">Copié dans le presse-papiers</string>
+    <string name="copied_files_to_clipboard">Fichiers copiés dans le presse-papiers</string>
+    <string name="copied_image_to_clipboard">Image copiée dans le presse-papiers</string>
+    <string name="copied_text_to_clipboard_with_value">« %1$s » copié dans le presse-papiers</string>
+    <string name="copy_failed">Échec de la copie</string>
+
+    <!-- Notifications d'enregistrement d'image -->
+    <string name="image_saved_with_name">Image « %1$s » enregistrée</string>
+    <string name="image_saved_to_gallery_with_name">Image « %1$s » enregistrée dans la galerie</string>
 </resources>

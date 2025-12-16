@@ -1,0 +1,31 @@
+<resources>
+    <string name="category_management">Gestión de categorías</string>
+
+    <string name="category_name_tax_setting">Configuración del nombre y del tipo impositivo de la categoría</string>
+    <string name="category_name">Nombre de la categoría</string>
+    <string name="please_input_category_name">Introduce el nombre de la categoría</string>
+    <string name="empty_use_product_tax">Si se deja en blanco, se utilizará el tipo impositivo del producto</string>
+    <string name="category_name_exists">El nombre de la categoría ya existe</string>
+
+    <string name="subcategories_count">%1$s subcategorías</string>
+    <string name="parent_category">Categoría padre</string>
+    <string name="base_category">Categoría base</string>
+    <string name="other_languages">Otros idiomas</string>
+    <string name="confirm_delete_category">¿Seguro que deseas eliminar la categoría "%1$s"?</string>
+    <string name="delete_warning_with_children">Atención: Esto también eliminará %1$s subcategorías y no se podrá recuperar.</string>
+    <string name="select_parent_category">Seleccionar categoría padre</string>
+    <string name="private_category">Categoría privada</string>
+    <string name="search_category">Buscar categoría...</string>
+    <string name="platform_category">Categoría de plataforma</string>
+
+    <string name="select_parent_category_to_create">Selecciona una categoría padre para crear una subcategoría</string>
+    <string name="parent_category_selected">Categoría padre seleccionada</string>
+
+    <string name="input_language_translation">Introduce la traducción en %1$s...</string>
+    <string name="translate">Traducir</string>
+    <string name="add_language_translation">Añadir traducción</string>
+    <string name="all_languages_added">Se han añadido todos los idiomas compatibles</string>
+    <string name="add_multilingual_translation">Añadir traducción multilingüe</string>
+    <string name="no_other_language_translation">No hay traducciones en otros idiomas</string>
+    <string name="translations_count">%1$s idiomas añadidos</string>
+</resources>

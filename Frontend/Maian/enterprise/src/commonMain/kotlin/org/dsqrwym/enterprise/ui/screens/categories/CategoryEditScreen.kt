@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
+import org.dsqrwym.business.ui.components.category.BusinessCategoryBasicInfoCard
+import org.dsqrwym.business.ui.components.category.BusinessTranslationCard
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesEditViewModel
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -111,7 +113,7 @@ fun CategoryEditScreen(
             }
             // 基本信息卡片
             item {
-                CategoryBasicInfoCard(
+                BusinessCategoryBasicInfoCard(
                     categoryName,
                     categoryNameError,
                     isCheckingCategoryName,
@@ -125,7 +127,7 @@ fun CategoryEditScreen(
             }
 
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                TranslationCard(
+                BusinessTranslationCard(
                     translations,
                     translationsIsValid,
                     cardEnabled,

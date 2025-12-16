@@ -155,8 +155,9 @@
     <string name="dashboard">Inici</string>
     <string name="profile">El meu</string>
 
-    <string name="change_to_light_mode">Activa el mode clar</string>
-    <string name="change_to_dark_mode">Activa el mode fosc</string>
+    <string name="theme_light_mode">Mode clar</string>
+    <string name="theme_dark_mode">Mode fosc</string>
+    <string name="theme_follow_system">Seguir el sistema</string>
 
     <string name="field_telephone_label">Número de telèfon</string>
     <string name="field_telephone_placeholder">Introduïu el número de telèfon</string>
@@ -202,4 +203,20 @@
     <string name="basic_info">Informació bàsica</string>
 
     <string name="tax_rate">Taxa d'impost</string>
+    
+    <!-- ===================== Accions comunes (Shared) ===================== -->
+    <string name="copy">Copiar</string>
+    <string name="save">Desar</string>
+
+    <!-- Notificacions de còpia/porta-retalls -->
+    <string name="unable_to_copy_resource">No es pot copiar aquest recurs</string>
+    <string name="copied_to_clipboard">Copiat al porta-retalls</string>
+    <string name="copied_files_to_clipboard">Fitxers copiats al porta-retalls</string>
+    <string name="copied_image_to_clipboard">Imatge copiada al porta-retalls</string>
+    <string name="copied_text_to_clipboard_with_value">S'ha copiat "%1$s" al porta-retalls</string>
+    <string name="copy_failed">Error en copiar</string>
+
+    <!-- Notificacions de desament d'imatge -->
+    <string name="image_saved_with_name">Imatge "%1$s" desada</string>
+    <string name="image_saved_to_gallery_with_name">Imatge "%1$s" desada a la galeria</string>
 </resources>

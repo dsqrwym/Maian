@@ -94,7 +94,8 @@ export class CategoryController {
     @Query() query: CategoryQueryDto,
     @Req() req: FastifyRequest,
   ): Promise<unknown> {
-    return this.categoryService.search(query, req.ability);
+    return this.categoryService.findAllUseSql(query, req.ability, req.user);
+    //return this.categoryService.search(query, req.ability);
   }
 
   /**

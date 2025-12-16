@@ -5,12 +5,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.navigation.menu.layouts.SharedBottomNavigationLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedNavigationRailLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedRailWithTopBarLayout
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
-import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 import org.koin.compose.currentKoinScope
 
 /**
@@ -35,7 +35,7 @@ fun SharedAdaptiveNavigation(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val windowSizeClass = calculateWindowSizeClass()
+    val windowSizeClass = LocalWindowSizeClass.current
     val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
 
     LaunchedEffect(Unit) {

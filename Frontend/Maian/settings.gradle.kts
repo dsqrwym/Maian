@@ -35,4 +35,4 @@ plugins {// 插件定义
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0" // 自动配置JDK hot Reload toolchain
 }
 
-include(":shared", ":standard", ":enterprise", ":admin") // 包含的模块
+include(":shared", ":business", ":standard", ":enterprise", ":admin") // 包含的模块

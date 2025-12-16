@@ -5,9 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import org.dsqrwym.admin.navigation.Categories
-import org.dsqrwym.admin.navigation.CategoryCreate
-import org.dsqrwym.admin.navigation.CategoryEdit
+import org.dsqrwym.business.navigation.Categories
+import org.dsqrwym.business.navigation.CategoryCreate
+import org.dsqrwym.business.navigation.CategoryEdit
 import org.dsqrwym.admin.ui.screens.categories.CategoriesListScreen
 import org.dsqrwym.admin.ui.screens.categories.CategoryCreateScreen
 import org.dsqrwym.admin.ui.screens.categories.CategoryEditScreen

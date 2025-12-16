@@ -6,7 +6,6 @@ export function useCors(app: NestFastifyApplication) {
       'https://api.dsqrwym.es',
       'http://localhost:8081',
       'https://maian.dsqrwym.es',
-      'https://www.kirehub.com',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,

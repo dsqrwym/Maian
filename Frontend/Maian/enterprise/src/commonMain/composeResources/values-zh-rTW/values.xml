@@ -18,37 +18,8 @@
     <string name="field_company_type_placeholder">請選擇公司類型</string>
     <string name="icon_content_description_company">公司圖標</string>
 
-    <string name="category_management">類別管理</string>
     <string name="category_management_description">
         查看與搜尋類別、建立自己的商品類別，並管理多語言名稱。
         支援最多三層巢狀（1 → 2 → 3）。
     </string>
-
-    <string name="category_name_tax_setting">類別名稱與稅率設定</string>
-    <string name="category_name">類別名稱</string>
-    <string name="please_input_category_name">請輸入類別名稱</string>
-    <string name="empty_use_product_tax">留空則使用商品的稅率設定</string>
-    <string name="category_name_exists">類別名稱已存在</string>
-
-    <string name="subcategories_count">%1$s 個子類別</string>
-    <string name="parent_category">父類別</string>
-    <string name="base_category">基礎類別</string>
-    <string name="other_languages">其他語言</string>
-    <string name="confirm_delete_category">確定要刪除類別「%1$s」嗎？</string>
-    <string name="delete_warning_with_children">注意：這將同時刪除 %1$s 個子類別且無法復原。</string>
-    <string name="select_parent_category">選擇父類別</string>
-    <string name="private_category">私有類別</string>
-    <string name="search_category">搜尋類別...</string>
-    <string name="platform_category">平台類別</string>
-
-    <string name="select_parent_category_to_create">選擇父類別以建立子類別</string>
-    <string name="parent_category_selected">已選擇父類別</string>
-
-    <string name="input_language_translation">輸入 %1$s 翻譯...</string>
-    <string name="translate">翻譯</string>
-    <string name="add_language_translation">新增語言翻譯</string>
-    <string name="all_languages_added">已新增所有支援的語言</string>
-    <string name="add_multilingual_translation">新增多語言翻譯</string>
-    <string name="no_other_language_translation">暫無其他語言翻譯</string>
-    <string name="translations_count">已新增 %1$s 種語言翻譯</string>
 </resources>

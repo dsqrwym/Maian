@@ -113,7 +113,7 @@ fun SharedNavigationRailLayout(
                 exit = androidx.compose.animation.shrinkHorizontally()
             ) {
                 NavigationRail(
-                    containerColor = Color.Transparent,
+                    containerColor = Color.Transparent.copy(alpha = 0.5f),
                     modifier = Modifier.hazeEffect(state = railHazeState) {
                         progressive = HazeProgressive.horizontalGradient(
                             startIntensity = 0.8f,

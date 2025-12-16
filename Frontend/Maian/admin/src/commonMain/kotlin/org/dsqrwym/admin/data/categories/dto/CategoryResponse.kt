@@ -13,6 +13,7 @@ data class CategoryResponse(
     val iva: Double? = null,
     val parent: CategoryResponse? = null,
     val children: List<CategoryResponse>? = null,
+    @SerialName("children_count")
     val childrenCount: Int = 0,
     @SerialName("category_translations") val categoryTranslations: List<SharedCategoryTranslation>? = null,
 ) {
@@ -29,9 +30,3 @@ data class CategoryResponse(
         }.reversed().joinToString("@$separator@").split("@")
     }
 }
-
-@Serializable
-data class CategoryForUpdateResponseDto(
-    val name: String? = null,
-    val translations: List<SharedCategoryTranslation>? = null,
-)

@@ -52,7 +52,7 @@ import { FilesModule } from './files/files.module';
         transport:
           process.env.NODE_ENV !== 'production'
             ? {
-                target: 'pino-pretty', // 生产环境使用 pino-pretty 格式化日志
+                target: 'pino-pretty', // 开发环境使用 pino-pretty 格式化日志
                 options: {
                   colorize: true, // 彩色输出
                   translateTime: 'SYS:standard', // 使用系统时间格式化
@@ -60,6 +60,13 @@ import { FilesModule } from './files/files.module';
               }
             : undefined,
         level: process.env.NODE_ENV === 'production' ? 'error' : 'debug', // 设置日志级别
+        redact:
+          process.env.NODE_ENV === 'production'
+            ? [
+                'req.headers.authorization', // Bearer token
+                'req.headers.cookie',
+              ]
+            : undefined,
       },
     }),
     JwtModule.registerAsync({

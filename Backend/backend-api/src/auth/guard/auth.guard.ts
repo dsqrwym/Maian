@@ -13,7 +13,6 @@ export class JwtAuthGuard extends AuthGuard('my-jwt') {
     if (!result) return result;
     const request: FastifyRequest = context.switchToHttp().getRequest();
     request.ability = this.abilityFactory.createForUser(request.user);
-    console.log('Auth Guard', request.ability);
     return true;
   }
 }

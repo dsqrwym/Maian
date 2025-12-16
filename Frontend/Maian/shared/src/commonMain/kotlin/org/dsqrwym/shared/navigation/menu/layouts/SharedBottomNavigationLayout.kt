@@ -83,7 +83,7 @@ fun SharedBottomNavigationLayout(
                             endIntensity = 0f
                         )
                     },
-                    drawerContainerColor = Color.Transparent,
+                    drawerContainerColor = Color.Transparent.copy(alpha = 0.5f),
                 ) {
                     Column(
                         modifier = Modifier

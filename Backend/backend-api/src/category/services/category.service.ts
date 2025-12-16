@@ -13,8 +13,7 @@ import { AppAbility } from '../../casl/casl-types';
 import { Action } from '../../casl/actions';
 import { subject } from '@casl/ability';
 import { CategoryQueryDto } from '../dto/category-query.dto';
-import { accessibleBy } from '@casl/prisma';
-import { Prisma } from 'src/generated/prisma/client';
+import { Prisma, UserRole } from 'src/generated/prisma/client';
 import { ToPaginated } from '../../common/types/response.type';
 import { UserPayload } from '../../auth/auth.types';
 import { CategorySelectField, CategoryType } from '../category.enums';
@@ -127,67 +126,32 @@ export class CategoryService {
     });
   }
 
-  async countDescendantsForCategories(
-    categoryIds: bigint[],
-  ): Promise<Record<string, number>> {
-    if (categoryIds.length === 0) return {};
-
-    const descendants = await this.prisma.categories.findMany({
-      where: {
-        OR: [
-          { parent_id: { in: categoryIds } }, // level 1
-          { parent: { parent_id: { in: categoryIds } } }, // level 2
-          { parent: { parent: { parent_id: { in: categoryIds } } } }, // level 3
-        ],
-      },
-      select: {
-        id: true,
-        parent_id: true,
-        parent: {
-          select: {
-            id: true,
-            parent_id: true,
-            parent: {
-              select: {
-                id: true,
-                parent_id: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    const map: Record<string, number> = {};
-    categoryIds.forEach((id) => (map[id.toString()] = 0));
-
-    descendants.forEach((item) => {
-      let p: bigint | null = item.parent_id ?? null;
-      const level1 = item.parent;
-      const level2 = level1?.parent ?? null;
-
-      // 最多向上走两层
-      for (let i = 0; i < 3; i++) {
-        if (!p) break;
-
-        if (categoryIds.includes(p)) {
-          map[p.toString()]++;
-        }
-
-        if (i === 0) p = level1?.parent_id ?? null;
-        else if (i === 1) p = level2?.parent_id ?? null;
-      }
-    });
-
-    return map;
+  getReadListPermission(user: UserPayload) {
+    switch (user.userRole) {
+      case UserRole.ADMIN:
+      case UserRole.SUPERADMIN:
+      case UserRole.RETAILER:
+        return undefined;
+      case UserRole.WHOLESALER:
+        return user.userId;
+      case UserRole.DELIVERY:
+      case UserRole.SUPPORT:
+      case UserRole.WAREHOUSE:
+        return user.wholesalerId;
+    }
   }
 
-  async search(query: CategoryQueryDto, ability: AppAbility) {
+  async findAllUseSql(
+    query: CategoryQueryDto,
+    ability: AppAbility,
+    user: UserPayload,
+  ) {
     if (!ability.can(Action.Read, 'categories')) {
       throw new ForbiddenException(
         'You do not have permission to search categories',
       );
     }
+    const permissionCondition = this.getReadListPermission(user);
 
     const { langCode, search, userId, fields, type, page, limit } = query;
     const parentId = query.parentId ? BigInt(query.parentId) : undefined;
@@ -197,136 +161,183 @@ export class CategoryService {
     const translations = fields?.includes(CategorySelectField.TRANSLATIONS);
     const relations = fields?.includes(CategorySelectField.RELATIONS);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const permissionCondition: Prisma.categoriesWhereInput = accessibleBy(
-      ability,
-      Action.Read,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ).categories;
+    const params: string[] = [];
+    let paramIndex = 1;
 
-    this.logger.log('permissionCondition', permissionCondition);
+    const whereClauses: string[] = ['1=1'];
 
-    const select: Prisma.categoriesSelect = {
-      id: true,
-      name: true,
-      ...(iva && { iva: true }),
-      ...(level && { level: true }),
-      ...(user_id && { user_id: true }),
-      ...(translations && {
-        category_translations: {
-          select: {
-            name: true,
-            lang_code: true,
-          },
-          where: { ...(langCode && { lang_code: langCode }) },
-        },
-      }),
-      ...(relations && {
-        parent: {
-          select: {
-            id: true,
-            name: true,
-            parent: {
-              select: {
-                id: true,
-                name: true,
-                ...(iva && { iva: true }),
-                ...(level && { level: true }),
-                ...(user_id && { user_id: true }),
-              },
-            },
-            ...(iva && { iva: true }),
-            ...(level && { level: true }),
-            ...(user_id && { user_id: true }),
-          },
-        },
-        children: {
-          select: {
-            id: true,
-            name: true,
-            ...(iva && { iva: true }),
-            ...(level && { level: true }),
-            ...(user_id && { user_id: true }),
-          },
-          where: { ...(userId && { user_id: userId }) },
-        },
-      }),
-    };
-
-    const andClauses: Prisma.categoriesWhereInput[] = [permissionCondition];
-
-    if (search) {
-      andClauses.push({
-        OR: [
-          { name_unaccent: { contains: search, mode: 'insensitive' } },
-          {
-            category_translations: {
-              some: {
-                name_unaccent: { contains: search, mode: 'insensitive' },
-                ...(langCode && { lang_code: langCode }),
-              },
-            },
-          },
-        ],
-      });
+    if (permissionCondition) {
+      params.push(permissionCondition);
+      whereClauses.push(`c.user_id = $${paramIndex++}`);
     }
 
-    if (!permissionCondition.user_id) {
+    if (search) {
+      params.push(`%${search}%`);
+      const searchIndex = paramIndex++;
+      whereClauses.push(`
+        (
+          c.name_unaccent ILIKE $${searchIndex}
+          OR EXISTS (
+            SELECT 1 FROM category_translations ct
+            WHERE ct.category_id = c.id
+            AND ct.name_unaccent ILIKE $${searchIndex}
+          )
+        )
+      `);
+    }
+
+    if (permissionCondition === undefined) {
       if (userId) {
-        andClauses.push({ user_id: userId });
+        params.push(userId);
+        whereClauses.push(`c.user_id = $${paramIndex++}`);
       } else if (type) {
         if (type === CategoryType.PRIVATE) {
-          andClauses.push({ user_id: { not: null } });
+          whereClauses.push(`c.user_id IS NOT NULL`);
         } else if (type === CategoryType.PUBLIC) {
-          andClauses.push({ user_id: null });
+          whereClauses.push(`c.user_id IS NULL`);
         }
       }
     }
 
     if (parentId != undefined) {
-      andClauses.push({ parent_id: parentId });
+      params.push(parentId.toString());
+      whereClauses.push(`c.parent_id = $${paramIndex++}`);
     }
 
     if (query.maxLevel != undefined) {
-      andClauses.push({ level: { lte: query.maxLevel } });
+      params.push(query.maxLevel.toString());
+      whereClauses.push(`c.level <= $${paramIndex++}`);
     }
 
     // 最终 where
-    const where: Prisma.categoriesWhereInput = {
-      AND: andClauses,
-    };
+    const whereSql = whereClauses.join(' AND ');
 
-    // 查询
-    const [categories, total] = await Promise.all([
-      this.prisma.categories.findMany({
-        where,
-        select,
-        orderBy: { name: 'asc' },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      this.prisma.categories.count({ where }),
+    const countParams = params.slice();
+    const countSql = `SELECT COUNT(*) AS total FROM categories c WHERE ${whereSql}`;
+
+    const offset = (page - 1) * limit;
+    const limitParamIndex = paramIndex++;
+    const offsetParamIndex = paramIndex++;
+    params.push(limit + '', offset + '');
+
+    if (translations && langCode) params.push(langCode);
+    if (relations && userId) params.push(userId);
+
+    const selectFields = [
+      'c.id',
+      'c.name',
+      iva ? 'c.iva' : null,
+      level ? 'c.level' : null,
+      user_id ? 'c.user_id' : null,
+
+      translations
+        ? `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'lang_code', ct.lang_code,
+        'name', ct.name
+      )), '[]'::jsonb)
+      FROM category_translations ct
+      WHERE ct.category_id = c.id
+      ${langCode ? `AND ct.lang_code = $${paramIndex++}` : ''}) AS category_translations`
+        : null,
+
+      relations
+        ? `
+    (
+      SELECT jsonb_build_object(
+        'id', p.id,
+        'name', p.name,
+        ${iva ? `'iva', p.iva,` : ''}
+        ${level ? `'level', p.level,` : ''}
+        ${user_id ? `'user_id', p.user_id,` : ''}
+        'parent',
+        (
+          SELECT jsonb_build_object(
+            'id', pp.id,
+            'name', pp.name
+            ${iva ? `, 'iva', pp.iva` : ''}
+            ${level ? `, 'level', pp.level` : ''}
+            ${user_id ? `, 'user_id', pp.user_id` : ''}
+          )
+          FROM categories pp
+          WHERE pp.id = p.parent_id
+         )
+      )
+      FROM categories p
+      WHERE p.id = c.parent_id
+      ) AS parent
+    `
+        : null,
+
+      // children
+      relations
+        ? `
+    (
+      SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'id', ch.id,
+        'name', ch.name
+        ${iva ? `, 'iva', ch.iva` : ''}
+        ${level ? `, 'level', ch.level` : ''}
+        ${user_id ? `, 'user_id', ch.user_id` : ''}
+      )), '[]'::jsonb)
+      FROM categories ch
+      WHERE ch.parent_id = c.id
+      ${userId ? `AND ch.user_id = $${paramIndex++}` : ''}
+    ) AS children
+    `
+        : null,
+    ]
+      .filter(Boolean)
+      .join(', ');
+
+    const sql = query.withChildrenCount
+      ? `
+    -- CTE + 分页 + 动态字段查询说明
+    -- page_categories CTE
+    -- 先筛选出符合 WHERE 条件的分类，并按分页 LIMIT/OFFSET 返回 id
+    -- 为什么只取 id？：
+    -- 避免对全表执行 translations / parent / children 子查询
+    -- 分页前就执行全部子查询会导致大量计算（尤其是表大时）
+    -- 如果把 translations / relations / parent / children 也放在 CTE 内：
+    -- PostgreSQL 可能对 CTE 执行 MATERIALIZED 或非优化 inline
+    
+    WITH page_categories AS (
+      SELECT id
+      FROM categories c
+      WHERE ${whereSql}
+      ORDER BY c.name
+      LIMIT $${limitParamIndex} 
+      OFFSET $${offsetParamIndex}
+    ),
+    children_counts AS (
+      SELECT c.parent_id AS root_id, COUNT(*) AS children_count
+      FROM categories c
+      WHERE c.parent_id IN (SELECT id FROM page_categories)
+      GROUP BY c.parent_id
+    )
+    SELECT ${selectFields}, COALESCE(cc.children_count, 0) AS children_count
+    FROM categories c
+    JOIN page_categories pc ON pc.id = c.id
+    LEFT JOIN children_counts cc ON cc.root_id = c.id
+    ORDER BY c.name;
+  `
+      : `
+    SELECT ${selectFields}
+    FROM categories c
+    WHERE ${whereSql}
+    ORDER BY c.name
+    LIMIT $${limitParamIndex} 
+    OFFSET $${offsetParamIndex}
+    `;
+
+    const [categories, count] = await Promise.all([
+      this.prisma.$queryRawUnsafe(sql, ...params),
+      this.prisma.$queryRawUnsafe<[{ total: number }]>(
+        countSql,
+        ...countParams,
+      ),
     ]);
 
-    const ids = categories.map((c) => BigInt(c.id));
-    const childrenMap = await this.countDescendantsForCategories(ids);
-
-    if (query.withChildrenCount) {
-      const itemsWithCount = categories.map((c) => ({
-        ...c,
-        childrenCount: childrenMap[c.id.toString()] ?? 0,
-      }));
-
-      const result: ToPaginated = {
-        items: itemsWithCount,
-        meta: {
-          total: total,
-          page: page,
-          limit: limit,
-        },
-      };
-      return result;
-    }
+    const total = Number(count[0].total);
 
     const result: ToPaginated = {
       items: categories,
@@ -426,17 +437,36 @@ export class CategoryService {
 
       if (translations && translations.length > 0) {
         await tx.$queryRaw`
-          INSERT INTO category_translations (category_id, lang_code, name)
-          VALUES ${Prisma.join(
-            translations.map(
-              (t) => Prisma.sql`(${id}, ${t.lang_code}, ${t.name})`,
-            ),
-          )} ON CONFLICT (category_id, lang_code)
-          DO
-          UPDATE SET name = EXCLUDED.name,
-            updated_at = NOW(),
-            updated_by = ${user.userId}::uuid
-          ;
+            INSERT INTO category_translations 
+            (category_id,
+            lang_code,
+            name,
+            updated_by)
+            SELECT ${id} AS category_id,
+                   x.lang_code,
+                   x.name,
+                   ${user.userId}::uuid AS updated_by
+            FROM unnest(
+                         ARRAY [
+                             ${Prisma.join(
+                               translations.map(
+                                 (t) => Prisma.sql`${t.lang_code}`,
+                               ),
+                               ',',
+                             )}
+                             ],
+                         ARRAY [
+                             ${Prisma.join(
+                               translations.map((t) => Prisma.sql`${t.name}`),
+                               ',',
+                             )}
+                             ]
+                 ) AS x(lang_code, name)
+            ON CONFLICT (category_id, lang_code)
+                DO UPDATE SET 
+                name       = EXCLUDED.name,
+                updated_at = NOW(),
+                updated_by = ${user.userId}::uuid;
         `;
       }
     });
