@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.add_language_translation
 import maian.business.generated.resources.all_languages_added
@@ -33,6 +34,7 @@ import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -41,7 +43,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CategoryCreateScreen(
     viewModel: CategoriesCreateViewModel = koinViewModel(),
-    onNavigate: (Any) -> Unit,
+    onNavigate: (NavKey) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val categoryName = viewModel.categoryName
@@ -63,7 +65,7 @@ fun CategoryCreateScreen(
 
     LaunchedEffect(Unit) {
         viewModel.navigateEvent.collect {
-            if (it is NavigationEvent.ToRoute<*>) {
+            if (it is NavigationEvent.ToRoute) {
                 onNavigate(it.route)
             }
         }
@@ -103,8 +105,8 @@ fun CategoryCreateScreen(
                 .paddingWithoutTop(padding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             columns = StaggeredGridCells.Adaptive(minSize = 360.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(SharedLazyGridLayout.Padding),
+            horizontalArrangement = SharedLazyGridLayout.arrangement,
         ) {
             item(span = StaggeredGridItemSpan.FullLine) {
                 Spacer(Modifier.height(padding.calculateTopPadding()))

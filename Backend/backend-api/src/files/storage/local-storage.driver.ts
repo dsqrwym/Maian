@@ -21,22 +21,6 @@ export class LocalStorageDriver implements StorageDriver {
   private readonly tempDir: string;
   private readonly STREAM_THRESHOLD = 50 * 1024 * 1024;
 
-  private readonly allowedExtensions = [
-    'jpg',
-    'jpeg',
-    'png',
-    'webp',
-    'gif',
-    'pdf',
-    'doc',
-    'docx',
-    'xls',
-    'xlsx',
-    'mp4',
-    'mpeg',
-    'webm',
-    'ogg',
-  ];
   constructor(
     private readonly config: ConfigService,
     private readonly hashService: HashService,
@@ -70,10 +54,7 @@ export class LocalStorageDriver implements StorageDriver {
     return path.join(finalDir, `${hash}.${ext}`);
   }
 
-  private validateFileType(ext: string, mime: string) {
-    if (!this.allowedExtensions.includes(ext)) {
-      throw new BadRequestException(`File extension '${ext}' is not allowed`);
-    }
+  private validateFileType(mime: string) {
     if (!ALLOWED_MIMES.has(mime)) {
       throw new BadRequestException(`File type '${mime}' is not allowed`);
     }
@@ -110,7 +91,7 @@ export class LocalStorageDriver implements StorageDriver {
       filePath = await this.generateFilePath(ext, hash);
       const type = await fileTypeFromBuffer(input);
       if (type) mime_type = type.mime;
-      this.validateFileType(ext, mime_type);
+      this.validateFileType(mime_type);
       file_size = input.length;
       result = {
         pathKey: this.getPathKey(filePath),
@@ -164,7 +145,7 @@ export class LocalStorageDriver implements StorageDriver {
             mimeChecked = true;
             void fileTypeFromBuffer(headerBuffer).then((ft) => {
               if (ft) mime_type = ft.mime;
-              this.validateFileType(ext, mime_type);
+              this.validateFileType(mime_type);
               resolveMimePromise();
             });
           }

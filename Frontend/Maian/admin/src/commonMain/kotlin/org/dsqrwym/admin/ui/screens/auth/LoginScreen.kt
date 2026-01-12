@@ -15,12 +15,12 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.button_forget_password
 import maian.shared.generated.resources.field_password_label
 import maian.shared.generated.resources.field_password_placeholder
 import org.dsqrwym.admin.ui.viewmodels.auth.LoginViewModel
-import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
@@ -32,7 +32,6 @@ import org.dsqrwym.shared.ui.components.login.LoginTitleSection
 import org.dsqrwym.shared.ui.components.login.UsernameOrEmailField
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
-import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.stringResource
 
@@ -41,9 +40,9 @@ import org.jetbrains.compose.resources.stringResource
 fun LoginScreen(
     loginViewModel: LoginViewModel = SharedAuthScope.scope.get<LoginViewModel>(),
     onBackButtonClick: () -> Unit = {},
+    onNavigate: (NavKey) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
-    val navController = LocalNavHostController.current
 
     val usernameOrEmail = loginViewModel.email
     val password = loginViewModel.password
@@ -72,9 +71,8 @@ fun LoginScreen(
         onBackButtonClick = onBackButtonClick,
         onForgetPasswordClick = {
             focusManager.clearFocus()
-            navController.navigateWithKeyboardDismiss(
+            onNavigate(
                 SharedResetPasswordScreen(email = if (validateEmail(usernameOrEmail)) usernameOrEmail else null),
-                focusManager = focusManager
             )
         },
         onLoginClick = {

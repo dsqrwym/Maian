@@ -215,6 +215,7 @@
 
     <!-- Notificações de guardar imagem -->
     <string name="image_saved_with_name">Imagem "%1$s" guardada</string>
+    <string name="file_saved_with_name">Ficheiro "%1$s" guardado</string>
     <string name="image_saved_to_gallery_with_name">Imagem "%1$s" guardada na galeria</string>
 
 </resources>

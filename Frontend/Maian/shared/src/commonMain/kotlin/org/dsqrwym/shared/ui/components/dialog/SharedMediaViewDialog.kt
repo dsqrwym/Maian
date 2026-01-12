@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -18,10 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.close
-import org.dsqrwym.shared.ui.components.image.SharedAsyncImage
-import org.jetbrains.compose.resources.stringResource
+import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
+import org.dsqrwym.shared.ui.media.SharedAsyncImage
 
 
 @Composable
@@ -77,9 +72,7 @@ fun SharedMediaViewDialog(
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = stringResource(SharedRes.string.close),
+                SharedCloseIcon(
                     modifier = Modifier.size(32.dp),
                     tint = MaterialTheme.colorScheme.onBackground
                 )

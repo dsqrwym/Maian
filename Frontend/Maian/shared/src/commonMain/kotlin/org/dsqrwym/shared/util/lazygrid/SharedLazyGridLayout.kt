@@ -8,9 +8,9 @@ import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 
 object SharedLazyGridLayout {
-    val horizontalArrangement = Arrangement.spacedBy(12.dp)
+    val arrangement = Arrangement.spacedBy(12.dp)
     val verticalItemSpacing = 12.dp
-    val horizontalPadding = 16.dp
+    val Padding = 16.dp
 
     fun LazyStaggeredGridScope.appendLoadingIndicator() {
         item(span = StaggeredGridItemSpan.FullLine) {

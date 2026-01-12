@@ -8,8 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
@@ -44,10 +42,6 @@ val LocalAppFocusManager = staticCompositionLocalOf<FocusManager> {
     error("No FocusManager provided")
 }
 
-val LocalNavHostController = staticCompositionLocalOf<NavHostController> {
-    error("No NavHostController provided")
-}
-
 val LocalWindowSizeClass = staticCompositionLocalOf<WindowSizeClass> {
     error("No WindowSizeClass provided")
 }
@@ -79,7 +73,6 @@ fun AppRoot(
     val focusManager = LocalFocusManager.current
 
     val appColors = if (isDarkTheme) DarkExtraColorScheme else LightExtraColorScheme
-    val navController = rememberNavController()
 
     val state by authSessionViewModel.state.collectAsState()
 
@@ -95,7 +88,6 @@ fun AppRoot(
         AppExtraColors provides appColors,
         LocalIsDarkTheme provides isDarkTheme,
         LocalAppFocusManager provides focusManager,
-        LocalNavHostController provides navController,
         LocalWindowSizeClass provides windowSizeClass,
     ) {
         AppEnvironment {

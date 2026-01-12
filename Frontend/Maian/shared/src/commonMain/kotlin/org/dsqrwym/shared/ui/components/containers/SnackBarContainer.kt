@@ -13,7 +13,6 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.CircleError
+import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
 /**
@@ -261,7 +261,7 @@ fun SnackbarScaffold(
                         dismissAction = {
                             if (data.visuals.withDismissAction) {
                                 IconButton(onClick = { data.dismiss() }) {
-                                    Icon(Icons.Outlined.Close, "Dismiss")
+                                    SharedCloseIcon()
                                 }
                             }
                         },
@@ -519,7 +519,7 @@ fun SnackbarScaffold(
                             dismissAction = {
                                 if (event.withDismissAction) {
                                     IconButton(onClick = { viewModel?.dismiss(item.id) }) {
-                                        Icon(Icons.Outlined.Close, "Dismiss")
+                                        SharedCloseIcon()
                                     }
                                 }
                             },

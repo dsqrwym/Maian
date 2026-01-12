@@ -5,11 +5,12 @@ android-compileSdk = "36"
 android-minSdk = "24"
 #noinspection OldTargetApi
 android-targetSdk = "35"
-androidx-activity = "1.12.1" #1.12.0
+androidx-activity = "1.12.2" #1.12.1
 androidx-lifecycle = "2.9.6" #2.9.5
 coilCompose = "3.3.0"
 composeHotReload = "1.0.0" # 1.0.0-rc03
 #composeMultiplatform = "1.9.3" #1.9.3
+composemediaplayer = "0.8.7" #0.8.6
 composeMultiplatform = "1.11.0-alpha01"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
@@ -28,15 +29,19 @@ ktor = "3.3.3" #3.3.2
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
 multiplatformSettings = "1.3.0"
+navigation3Runtime = "1.1.0-alpha01"
+navigation3Ui = "1.1.0-alpha01"
 navigationCompose = "2.9.1" #2.9.1
-pagingRuntime = "3.4.0-alpha04"
+pagingRuntime = "3.4.0-beta01" #3.4.0-alpha04
 reorderable = "3.0.0"
 securityCrypto = "1.1.0"
-tableCore = "1.7.3"
+tableCore = "1.7.11" #1.7.10
+uiTooling = "1.11.0-alpha01"
 zoomable = "2.9.0"
 
 [libraries]
 alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3Runtime" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingRuntime" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
@@ -44,6 +49,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCo
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 compose-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholderMaterial3" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
+composemediaplayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composemediaplayer" }
 compottie-lite = { module = "io.github.alexzhirkevich:compottie-lite", version.ref = "compottieLite" }
 datatable-material3 = { module = "com.seanproctor:datatable-material3", version.ref = "datatableMaterial3" }
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "filekitCore" }
@@ -65,6 +71,7 @@ libphonenumber = { module = "io.github.luca992.libphonenumber-kotlin:libphonenum
 material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 kmp-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3Ui" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 
@@ -81,10 +88,12 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 table-core = { module = "ua.wwind.table-kmp:table-core", version.ref = "tableCore" }
+ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTooling" }
 zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+#android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }

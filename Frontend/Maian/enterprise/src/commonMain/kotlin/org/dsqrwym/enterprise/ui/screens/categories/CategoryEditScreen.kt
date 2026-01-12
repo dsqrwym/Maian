@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
@@ -25,6 +26,7 @@ import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -34,7 +36,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun CategoryEditScreen(
     categoryId: String,
     viewModel: CategoriesEditViewModel = koinViewModel(),
-    onNavigate: (Any) -> Unit,
+    onNavigate: (NavKey) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val isLoading = viewModel.isLoading
@@ -46,7 +48,7 @@ fun CategoryEditScreen(
     LaunchedEffect(categoryId) {
         viewModel.initWithCategory(categoryId)
         viewModel.navigateEvent.collect {
-            if (it is NavigationEvent.ToRoute<*>) {
+            if (it is NavigationEvent.ToRoute) {
                 onNavigate(it.route)
             }
         }
@@ -105,8 +107,8 @@ fun CategoryEditScreen(
                 .paddingWithoutTop(padding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             columns = GridCells.Adaptive(minSize = 380.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(SharedLazyGridLayout.Padding),
+            horizontalArrangement = SharedLazyGridLayout.arrangement,
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Spacer(Modifier.height(padding.calculateTopPadding()))

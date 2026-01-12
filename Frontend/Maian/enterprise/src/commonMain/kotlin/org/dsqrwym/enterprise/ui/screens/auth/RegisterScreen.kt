@@ -26,11 +26,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.data.auth.dto.SpanishCompanyType
 import org.dsqrwym.enterprise.ui.viewmodels.auth.RegisterViewModel
-import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
@@ -50,11 +50,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RegisterScreen(
     registerViewModel: RegisterViewModel = SharedAuthScope.scope.get<RegisterViewModel>(),
+    onNavigate: (NavKey) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val navHostController = LocalNavHostController.current
 
     val maxStep = registerViewModel.maxStep
     val currentStep = registerViewModel.currentStep
@@ -68,8 +68,8 @@ fun RegisterScreen(
 
     LaunchedEffect(Unit) {
         registerViewModel.navigateEvent.collect { event ->
-            if (event is NavigationEvent.ToRoute<*>) {
-                navHostController.navigate(event.route)
+            if (event is NavigationEvent.ToRoute) {
+                onNavigate(event.route)
             }
         }
     }

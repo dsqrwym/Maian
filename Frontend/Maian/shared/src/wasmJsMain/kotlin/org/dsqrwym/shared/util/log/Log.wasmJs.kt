@@ -22,7 +22,7 @@ actual object SharedLog {
         SharedLogLevel.ERROR to "color: red; font-weight: bold"
     )
 
-    actual fun log(level: SharedLogLevel, tag: String, message: String) {
+    actual fun log(message: String, level: SharedLogLevel, tag: String) {
         val formattedMessage = "%c[$level][$tag]: $message"
         val style = styleMap[level] ?: "color: black"
         // :: 是 Kotlin 的 函数引用操作符，它用来引用函数本身

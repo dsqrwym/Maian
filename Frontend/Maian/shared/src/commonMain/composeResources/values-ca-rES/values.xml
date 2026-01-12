@@ -218,5 +218,6 @@
 
     <!-- Notificacions de desament d'imatge -->
     <string name="image_saved_with_name">Imatge "%1$s" desada</string>
+    <string name="file_saved_with_name">Fitxer "%1$s" desat</string>
     <string name="image_saved_to_gallery_with_name">Imatge "%1$s" desada a la galeria</string>
 </resources>

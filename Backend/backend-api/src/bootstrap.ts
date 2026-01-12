@@ -14,13 +14,7 @@ import * as process from 'node:process';
 import { useCors } from './config/cors.config';
 import { useCookie } from './config/cookie.config';
 import { GLOBAL_PREFIX } from './config/constants.config';
-import {
-  ALLOWED_MIMES,
-  useFastifyMultipart,
-} from './config/fastify-multipart.config';
-import { FastifyRequest } from 'fastify';
-import { fileTypeFromBuffer } from 'file-type';
-import { BadRequestException } from '@nestjs/common';
+import { useFastifyMultipart } from './config/fastify-multipart.config';
 
 // 用于 session 支持
 

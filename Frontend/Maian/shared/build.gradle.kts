@@ -103,6 +103,9 @@ kotlin {
             api(libs.kotlinx.datetime)
             // 官方导航
             api(libs.kmp.navigation.compose)
+            // Navigation3
+            api(libs.androidx.navigation3.runtime)
+            api(libs.navigation3.ui)
             // placeholder
             api(libs.compose.placeholder.material3)
 
@@ -140,6 +143,8 @@ kotlin {
             // coil image
             api(libs.coil.compose)
             api(libs.coil.network.ktor3)
+
+            api(libs.composemediaplayer)
 
             // 图片放大操作
             api(libs.zoomable)
@@ -218,7 +223,7 @@ android {
 dependencies {
     implementation(libs.ktor.client.auth)
     //debugImplementation(compose.uiTooling) // Compose UI调试工具
-    debugImplementation("org.jetbrains.compose.ui:ui-tooling:1.11.0-alpha01") // Compose UI调试工具
+    debugImplementation(libs.ui.tooling) // Compose UI调试工具
 }
 
 // ---------------------------

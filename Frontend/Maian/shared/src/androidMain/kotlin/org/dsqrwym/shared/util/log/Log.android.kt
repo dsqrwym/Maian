@@ -3,7 +3,7 @@ package org.dsqrwym.shared.util.log
 import android.util.Log
 
 actual object SharedLog {
-    actual fun log(level: SharedLogLevel, tag: String, message: String) {
+    actual fun log(message: String, level: SharedLogLevel, tag: String) {
         when (level) {
             SharedLogLevel.DEBUG -> Log.d(tag, message)
             SharedLogLevel.INFO -> Log.i(tag, message)

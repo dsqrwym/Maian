@@ -220,5 +220,6 @@
 
     <!-- 图片保存 通知 -->
     <string name="image_saved_with_name">已保存图片“%1$s”</string>
+    <string name="file_saved_with_name">已保存文件“%1$s”</string>
     <string name="image_saved_to_gallery_with_name">已保存图片“%1$s”至图库</string>
 </resources>

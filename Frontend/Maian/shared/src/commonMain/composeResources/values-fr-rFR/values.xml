@@ -215,5 +215,6 @@
 
     <!-- Notifications d'enregistrement d'image -->
     <string name="image_saved_with_name">Image « %1$s » enregistrée</string>
+    <string name="file_saved_with_name">Fichier « %1$s » enregistré</string>
     <string name="image_saved_to_gallery_with_name">Image « %1$s » enregistrée dans la galerie</string>
 </resources>

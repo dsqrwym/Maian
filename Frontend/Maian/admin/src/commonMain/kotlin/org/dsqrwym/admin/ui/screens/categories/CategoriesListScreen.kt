@@ -38,6 +38,7 @@ import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
+import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
@@ -488,7 +489,7 @@ private fun FilterChipsRow(
                         )
                     )
                 },
-                trailingIcon = { Icon(Icons.Outlined.Close, null) }
+                trailingIcon = { SharedCloseIcon() }
             )
         }
         viewModel.filterUser?.let {
@@ -496,7 +497,7 @@ private fun FilterChipsRow(
                 selected = true,
                 onClick = { viewModel.removeUserIdFilter() },
                 label = { Text("${stringResource(SharedRes.string.user)}: ${it.username}") },
-                trailingIcon = { Icon(Icons.Outlined.Close, null) }
+                trailingIcon = { SharedCloseIcon() }
             )
         }
         viewModel.filterParentCategory?.let {
@@ -504,7 +505,7 @@ private fun FilterChipsRow(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
                 label = { Text("${stringResource(BusinessRes.string.parent_category)}: ${it.name}") },
-                trailingIcon = { Icon(Icons.Outlined.Close, null) }
+                trailingIcon = { SharedCloseIcon() }
             )
         }
     }

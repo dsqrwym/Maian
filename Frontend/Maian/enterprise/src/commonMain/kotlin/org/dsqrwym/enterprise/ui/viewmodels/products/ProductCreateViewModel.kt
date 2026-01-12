@@ -1,19 +1,19 @@
 package org.dsqrwym.enterprise.ui.viewmodels.products
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import io.github.vinceglb.filekit.PlatformFile
+import androidx.lifecycle.viewModelScope
+import org.dsqrwym.business.ui.media.MediaPickerViewModel
+import org.dsqrwym.shared.data.file.SharedUploadRepository
+import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
+class ProductCreateViewModel(
+    private val uploadRepository: SharedUploadRepository,
+    private val snackbarViewModel: MySnackbarViewModel
+) : ViewModel() {
+    val mediaPicker = MediaPickerViewModel(
+        uploadRepository = uploadRepository,
+        coroutineScope = viewModelScope,
+        snackbarViewModel = snackbarViewModel
+    )
 
-class ProductCreateViewModel : ViewModel() {
-    private val _localUploaderFile = mutableStateListOf<PlatformFile>()
-    val localUploaderFile: List<PlatformFile> = _localUploaderFile
-
-    fun addLocalFile(file: PlatformFile) {
-        _localUploaderFile.add(file)
-    }
-
-    fun removeLocalFile(file: PlatformFile) {
-        _localUploaderFile.remove(file)
-    }
 }

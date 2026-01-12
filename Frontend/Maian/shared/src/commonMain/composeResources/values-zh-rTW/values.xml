@@ -216,5 +216,6 @@
 
     <!-- 圖片儲存 通知 -->
     <string name="image_saved_with_name">已儲存圖片「%1$s」</string>
+    <string name="file_saved_with_name">已儲存檔案「%1$s」</string>
     <string name="image_saved_to_gallery_with_name">已將圖片「%1$s」儲存到相簿</string>
 </resources>

@@ -65,7 +65,8 @@ kotlin {
 
             // 拖拽
             implementation(libs.reorderable)
-
+            //implementation(libs.androidx.navigation3.runtime)
+            //implementation(libs.navigation3.ui)
             implementation(project(":shared"))
             implementation(project(":business"))
         }
@@ -117,7 +118,8 @@ android {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    //debugImplementation(compose.uiTooling)
+    debugImplementation(libs.ui.tooling)
 }
 
 compose.resources {

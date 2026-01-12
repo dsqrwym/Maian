@@ -27,7 +27,6 @@ data class SearchQuery(
     val sortDir: OrderDir?
 )
 
-
 class ProductsListViewModel(private val repository: ProductRepository, mySnackbarHostState: MySnackbarViewModel) :
     ViewModel() {
     private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 0)

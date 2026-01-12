@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
@@ -41,8 +42,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SharedNavigationRailLayout(
     menuConfig: SharedMenuConfiguration,
-    currentRoute: Any,
-    onNavigate: (Any) -> Unit,
+    currentRoute: NavKey,
+    onNavigate: (NavKey) -> Unit,
     content: @Composable () -> Unit
 ) {
     var isRailExpanded by remember { mutableStateOf(false) }
@@ -158,7 +159,7 @@ fun SharedNavigationRailLayout(
 fun SharedNavigationRailItem(
     items: List<SharedMenuItemState>,
     currentRoute: Any,
-    onNavigate: (Any) -> Unit,
+    onNavigate: (NavKey) -> Unit,
 ) {
     items.forEach { state ->
         NavigationRailItem(

@@ -29,6 +29,7 @@ import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategori
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.shared.ui.components.containers.UiState
+import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
@@ -141,9 +142,9 @@ fun CategoriesListScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .padding(horizontal = SharedLazyGridLayout.horizontalPadding),
+                        .padding(horizontal = SharedLazyGridLayout.Padding),
                     columns = StaggeredGridCells.Adaptive(minSize = 380.dp),
-                    horizontalArrangement = SharedLazyGridLayout.horizontalArrangement,
+                    horizontalArrangement = SharedLazyGridLayout.arrangement,
                     verticalItemSpacing = SharedLazyGridLayout.verticalItemSpacing,
                 ) {
                     item(span = StaggeredGridItemSpan.FullLine) {
@@ -364,7 +365,7 @@ private fun FilterChipsRow(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
                 label = { Text("${stringResource(BusinessRes.string.parent_category)}: ${it.name}") },
-                trailingIcon = { Icon(Icons.Outlined.Close, null) }
+                trailingIcon = { SharedCloseIcon() }
             )
         }
     }

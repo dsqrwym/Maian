@@ -11,6 +11,7 @@ pluginManagement {// 插件管理
             }
         }
         mavenCentral()
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
         gradlePluginPortal()
     }
 }
@@ -25,6 +26,7 @@ dependencyResolutionManagement {// 依赖解析管理
             }
         }
         mavenCentral()
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
         maven {
             url = uri("https://jogamp.org/deployment/maven/")
         }

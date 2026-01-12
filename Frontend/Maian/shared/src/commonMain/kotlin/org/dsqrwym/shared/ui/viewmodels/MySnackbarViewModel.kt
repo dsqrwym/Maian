@@ -150,7 +150,7 @@ class MySnackbarViewModel : ViewModel() {
                     }
                 }
                 .retry { e ->
-                    SharedLog.log(SharedLogLevel.WARN, "SNACKBAR", "Failed to show snackbar: $e")
+                    SharedLog.log("Failed to show snackbar: $e", SharedLogLevel.WARN, "SNACKBAR")
                     true // retry forever
                 }
                 .collect()

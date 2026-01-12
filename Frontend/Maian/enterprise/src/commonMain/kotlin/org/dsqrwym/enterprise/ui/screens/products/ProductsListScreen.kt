@@ -31,20 +31,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import ua.wwind.table.ExperimentalTableApi
 
-enum class ProductColumn {
-    Image,          // 图片
-    Name,           // 名称
-    Title,          // 标题
-    Code,           // 编码
-    Category,       // 类别
-    TotalStock,     // 总库存
-    Price,          // 含税价
-    PriceIva,       // 不含税价
-    MinOrderQty,    // 起订量
-    Status,         // 状态
-    Actions         // 操作
-}
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class)
 @Composable
 fun ProductsListScreen(

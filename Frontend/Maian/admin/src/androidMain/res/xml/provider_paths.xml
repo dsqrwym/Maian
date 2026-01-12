@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 代表 context.cacheDir -->
+    <cache-path name="cache_images" path="." />
+
+    <!-- 代表 context.filesDir -->
+    <files-path name="app_files" path="." />
+
+    <!-- 代表 External Storage (分享下载目录里的视频) -->
+    <external-path name="external_files" path="." />
+</paths>

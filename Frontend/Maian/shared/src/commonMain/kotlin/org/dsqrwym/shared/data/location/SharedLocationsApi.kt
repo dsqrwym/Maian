@@ -51,10 +51,10 @@ class SharedLocationsApi(private val client: HttpClient) {
                 client?.get(url)?.body() ?: IpApiResponse(null)
             } catch (e: Exception) {
                 SharedLog.log(
-                    tag = "Detected", message = """
+                    message = """
                     URL $url Failed : $e 
                     ${client?.get(url)?.bodyAsText()}
-                """.trimIndent()
+                """.trimIndent(), tag = "Detected"
                 )
                 continue
             }

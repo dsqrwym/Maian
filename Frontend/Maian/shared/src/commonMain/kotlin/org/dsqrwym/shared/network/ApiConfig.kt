@@ -2,9 +2,9 @@ package org.dsqrwym.shared.network
 
 object ApiConfig {
     const val BASE_URL: String = "https://api.dsqrwym.es/maian"
-    const val CONNECT_TIMEOUT_MILLIS = 15_000L
-    const val REQUEST_TIMEOUT_MILLIS = 20_000L
-    const val ENABLE_LOGGING = true
+    const val CONNECT_TIMEOUT_MILLIS = 10_000L
+    const val REQUEST_TIMEOUT_MILLIS = 38_000L
+    const val ENABLE_LOGGING = false
 
     object AuthPath {
         const val AUTH = "${BASE_URL}/auth"

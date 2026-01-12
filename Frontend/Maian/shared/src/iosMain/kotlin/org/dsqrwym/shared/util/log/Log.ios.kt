@@ -11,7 +11,7 @@ private fun colorFor(level: SharedLogLevel): String = when (level) {
     SharedLogLevel.ERROR -> "\u001B[31m"
 }
 actual object SharedLog {
-    actual fun log(level: SharedLogLevel, tag: String, message: String) {
+    actual fun log(message: String, level: SharedLogLevel, tag: String) {
         val color = colorFor(level)
         NSLog("$color[$level][$tag]: $message$reset")
     }

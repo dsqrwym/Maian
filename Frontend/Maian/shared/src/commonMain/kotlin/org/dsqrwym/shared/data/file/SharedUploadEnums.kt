@@ -1,8 +1,7 @@
 package org.dsqrwym.shared.data.file
 
-enum class SharedUploadState {
-    Idle,
-    Uploading,
-    Success,
-    Failed
+sealed interface SharedUploadEvent {
+    data class Progress(val value: Float) : SharedUploadEvent
+    data class Success(val serverFileId: String) : SharedUploadEvent
+    data class Error(val message: String?) : SharedUploadEvent
 }

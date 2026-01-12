@@ -218,5 +218,6 @@
 
     <!-- Image save notifications -->
     <string name="image_saved_with_name">Saved image "%1$s"</string>
+    <string name="file_saved_with_name">Saved file "%1$s"</string>
     <string name="image_saved_to_gallery_with_name">Saved image "%1$s" to gallery</string>
 </resources>

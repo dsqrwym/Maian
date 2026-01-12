@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import androidx.navigation.ExperimentalBrowserHistoryApi
-import androidx.navigation.bindToBrowserNavigation
 import org.dsqrwym.enterprise.di.enterpriseInitKoin
 import org.dsqrwym.shared.localization.getLocaleLanguage
 import org.dsqrwym.shared.main.SharedInitWasmJs
@@ -22,9 +21,7 @@ fun main() {
             initializingApp(language)
         }) {
         SharedInitWasmJs {
-            App { navController ->
-                navController.bindToBrowserNavigation()
-            }
+            App()
         }
     }
 }

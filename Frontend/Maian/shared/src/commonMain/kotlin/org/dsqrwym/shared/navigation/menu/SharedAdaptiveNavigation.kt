@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavKey
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.navigation.menu.layouts.SharedBottomNavigationLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedNavigationRailLayout
@@ -30,8 +31,8 @@ import org.koin.compose.currentKoinScope
 @Composable
 fun SharedAdaptiveNavigation(
     menuConfig: SharedMenuConfiguration,
-    currentRoute: Any,
-    onNavigate: (Any) -> Unit,
+    currentRoute: NavKey,
+    onNavigate: (NavKey) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {

@@ -31,7 +31,8 @@ import org.dsqrwym.enterprise.data.product.dto.ProductResponse
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
-import org.dsqrwym.shared.ui.components.image.SharedAsyncImage
+import org.dsqrwym.shared.ui.components.containers.SharedOverlayContentBox
+import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
@@ -89,12 +90,12 @@ fun ProductWaterfallView(
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(minSize = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) 166.dp else 200.dp),
                 state = state,
-                horizontalArrangement = SharedLazyGridLayout.horizontalArrangement,
+                horizontalArrangement = SharedLazyGridLayout.arrangement,
                 verticalItemSpacing = SharedLazyGridLayout.verticalItemSpacing,
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .padding(horizontal = SharedLazyGridLayout.horizontalPadding)
+                    .padding(horizontal = SharedLazyGridLayout.Padding)
             ) {
                 item(span = StaggeredGridItemSpan.FullLine) {
                     Spacer(Modifier.height(padding.calculateTopPadding()))
@@ -179,47 +180,47 @@ fun ProductGridItem(
     ) {
         Column {
             // --- 1. 图片区域 (带状态标签) ---
-            Box(contentAlignment = Alignment.TopEnd) {
-                if (isLoading) {
+            SharedOverlayContentBox(
+                isLoading,
+                loadingContent = {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(230.dp) // 骨架屏固定高度
                             .placeholderWithShimmer(true)
                     )
-                } else {
-                    product.let {
-                        SharedAsyncImage(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .clickable(onClick = onImageClick),
-                            model = it.mainImage.getUrl(it.id),
-                            contentDescription = it.name,
-                            placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
-                            zoomable = false,
-                            enableContextMenu = false,
-                            contentScale = if (platform.type == PlatformType.Android) ContentScale.FillWidth else ContentScale.Fit,
-                        )
-
-                        // 状态标签 (悬浮在图片右上角)
-                        Surface(
-                            shape = RoundedCornerShape(bottomStart = 8.dp),
-                            color = if (it.totalStock > 0) MaterialTheme.colorScheme.primaryContainer
-                            else MaterialTheme.colorScheme.errorContainer,
-                            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
-                        ) {
-                            SelectionContainer {
-                                Text(
-                                    text = if (it.totalStock > 0) "库存: ${it.totalStock}" else "缺货",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                    color = if (it.totalStock > 0) MaterialTheme.colorScheme.onPrimaryContainer
-                                    else MaterialTheme.colorScheme.onErrorContainer
-                                )
-                            }
+                },
+                overlaySurfaceColor = product?.let {
+                    if (it.totalStock > 0) MaterialTheme.colorScheme.primaryContainer else
+                        MaterialTheme.colorScheme.errorContainer
+                } ?: MaterialTheme.colorScheme.errorContainer,
+                topEndOverlay = {
+                    product?.let {
+                        SelectionContainer {
+                            Text(
+                                text = if (it.totalStock > 0) "库存: ${it.totalStock}" else "缺货",
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                color = if (it.totalStock > 0) MaterialTheme.colorScheme.onPrimaryContainer
+                                else MaterialTheme.colorScheme.onErrorContainer
+                            )
                         }
                     }
+                },
+            ) {
+                product?.let {
+                    SharedAsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .clickable(onClick = onImageClick),
+                        model = it.mainImage.getUrl(it.id),
+                        contentDescription = it.name,
+                        placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
+                        zoomable = false,
+                        enableContextMenu = false,
+                        contentScale = if (platform.type == PlatformType.Android) ContentScale.FillWidth else ContentScale.Fit,
+                    )
                 }
             }
 

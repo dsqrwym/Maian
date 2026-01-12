@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.collections.immutable.toPersistentList
 import org.dsqrwym.enterprise.data.product.dto.ProductResponse
-import org.dsqrwym.enterprise.ui.screens.products.ProductColumn
 import org.dsqrwym.enterprise.util.uawwindtablekmp.cellWithModifier
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.SharedProductSortField
@@ -24,7 +23,7 @@ import org.dsqrwym.shared.data.products.SharedProductSortField.*
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.buttons.MyTextButton
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
-import org.dsqrwym.shared.ui.components.image.SharedAsyncImage
+import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
 import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.modifier.copyOnInteraction
@@ -39,6 +38,19 @@ import ua.wwind.table.state.rememberTableState
 import ua.wwind.table.tableColumns
 
 
+enum class ProductColumn {
+    Image,          // 图片
+    Name,           // 名称
+    Title,          // 标题
+    Code,           // 编码
+    Category,       // 类别
+    TotalStock,     // 总库存
+    Price,          // 含税价
+    PriceIva,       // 不含税价
+    MinOrderQty,    // 起订量
+    Status,         // 状态
+    Actions         // 操作
+}
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class)
 @Composable
 fun ProductTableView(
@@ -285,6 +297,7 @@ fun ProductTableView(
     val tableState = rememberTableState(
         columns = columns.map { it.key }.toPersistentList(),
         settings = TableSettings(
+            enableTextSelection = true,
             isDragEnabled = true,
             stripedRows = true,
             selectionMode = SelectionMode.None,

@@ -27,7 +27,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import org.dsqrwym.shared.LocalNavHostController
+import androidx.navigation3.runtime.NavKey
+import maian.shared.generated.resources.*
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.button_register_new_account
+import maian.standard.generated.resources.register_account_title
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
@@ -43,19 +47,15 @@ import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.standard.ui.viewmodels.auth.RegisterViewModel
 import org.jetbrains.compose.resources.stringResource
-import maian.shared.generated.resources.*
-import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.button_register_new_account
-import maian.standard.generated.resources.register_account_title
 
 @Composable
 fun RegisterScreen(
     registerViewModel: RegisterViewModel = SharedAuthScope.scope.get<RegisterViewModel>(),
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    onNavigate: (NavKey) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
-    val navHostController = LocalNavHostController.current
 
     val maxStep = registerViewModel.maxStep
     val currentStep = registerViewModel.currentStep
@@ -69,8 +69,8 @@ fun RegisterScreen(
 
     LaunchedEffect(Unit) {
         registerViewModel.navigateEvent.collect { event ->
-            if (event is NavigationEvent.ToRoute<*>) {
-                navHostController.navigate(event.route)
+            if (event is NavigationEvent.ToRoute) {
+                onNavigate(event.route)
             }
         }
     }

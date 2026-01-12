@@ -1,7 +1,7 @@
 package org.dsqrwym.shared.navigation.core
 
-import kotlinx.serialization.Serializable
+import androidx.navigation3.runtime.NavKey
 
 sealed class NavigationEvent {
-    data class ToRoute<T : @Serializable Any>(val route: T) : NavigationEvent()
+    data class ToRoute(val route: NavKey) : NavigationEvent()
 }

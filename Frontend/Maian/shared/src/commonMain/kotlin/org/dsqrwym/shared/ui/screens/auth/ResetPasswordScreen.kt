@@ -21,8 +21,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import maian.shared.generated.resources.*
-import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.buttons.MyFloatingActionButton
@@ -40,10 +40,10 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun ResetPasswordScreen(
     resetPasswordViewModel: SharedResetPasswordViewModel = SharedAuthScope.scope.get<SharedResetPasswordViewModel>(),
+    onNavigate: (NavKey) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val navHostController = LocalNavHostController.current
     val scrollState = rememberScrollState()
     val repeatPasswordFocusRequester = remember { FocusRequester() }
 
@@ -63,8 +63,8 @@ fun ResetPasswordScreen(
 
     LaunchedEffect(Unit) {
         resetPasswordViewModel.navigateEvent.collect { event ->
-            if (event is NavigationEvent.ToRoute<*>) {
-                navHostController.navigate(event.route)
+            if (event is NavigationEvent.ToRoute) {
+                onNavigate(event.route)
             }
         }
     }

@@ -24,12 +24,12 @@ import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.ui.viewmodels.auth.LoginType
 import org.dsqrwym.enterprise.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.shared.LocalIsDarkTheme
-import org.dsqrwym.shared.LocalNavHostController
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
@@ -45,7 +45,6 @@ import org.dsqrwym.shared.ui.components.login.LoginTitleSection
 import org.dsqrwym.shared.ui.components.login.UsernameOrEmailField
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
-import org.dsqrwym.shared.util.navigation.navigateWithKeyboardDismiss
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.stringResource
 
@@ -53,10 +52,10 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel = SharedAuthScope.scope.get<LoginViewModel>(),
+    onNavigate: (NavKey) -> Unit,
     onBackButtonClick: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
-    val navController = LocalNavHostController.current
 
     val selectedLoginType = loginViewModel.selectedLoginType
 
@@ -118,10 +117,7 @@ fun LoginScreen(
             onBackButtonClick = onBackButtonClick,
             onForgetPasswordClick = {
                 focusManager.clearFocus()
-                navController.navigateWithKeyboardDismiss(
-                    SharedResetPasswordScreen(email = if (validateEmail(usernameOrEmail)) usernameOrEmail else null),
-                    focusManager = focusManager
-                )
+                onNavigate(SharedResetPasswordScreen(email = if (validateEmail(usernameOrEmail)) usernameOrEmail else null))
             },
             onLoginClick = { loginViewModel.login() }
         )
