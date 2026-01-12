@@ -43,4 +43,4 @@ RUN pnpm install --prod --frozen-lockfile
 EXPOSE 3000
 
 # 启动命令
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
