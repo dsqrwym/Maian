@@ -35,6 +35,9 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 # 从 builder 阶段把编译好的代码 (dist) 复制过来
 COPY --from=builder /app/dist ./dist
+# i18n
+COPY --from=builder /app/src/i18n/generated ./src/i18n/generated
+COPY --from=builder /app/src/i18n/locales ./src/i18n/locales
 
 # 生产环境只需安装生产依赖
 RUN pnpm install --prod --frozen-lockfile
