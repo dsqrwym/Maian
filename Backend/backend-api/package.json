@@ -26,6 +26,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.968.0",
+    "@aws-sdk/lib-storage": "^3.968.0",
     "@casl/ability": "^6.7.5",
     "@casl/prisma": "^1.6.0",
     "@fastify/cookie": "^11.0.2",
@@ -86,7 +88,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.7",
+    "@types/node": "^24.10.8",
     "@types/nodemailer": "^7.0.5",
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",

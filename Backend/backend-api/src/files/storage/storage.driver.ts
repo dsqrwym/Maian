@@ -1,6 +1,7 @@
 import { Readable } from 'stream';
 
 export interface StorageDriver {
+  readonly STREAM_THRESHOLD: number;
   /**
    * 上传文件
    * @param buffer 文件内容 Buffer
@@ -8,7 +9,7 @@ export interface StorageDriver {
    * @returns
    */
   upload(
-    buffer: Buffer | Readable, // 限制在300MB 内存占用就不会太严重了
+    buffer: Buffer | Readable, // 限制在200MB 内存占用就不会太严重了
     filename: string,
   ): Promise<{
     pathKey: string;

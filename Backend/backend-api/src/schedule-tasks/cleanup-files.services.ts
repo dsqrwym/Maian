@@ -7,11 +7,13 @@ import { LocalStorageDriver } from '../files/storage/local-storage.driver';
 import { PrismaService } from '../prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { StorageDriver } from '../files/storage/storage.driver';
 
 @Injectable()
 export class CleanupFilesService {
   constructor(
-    @Inject(STORAGE_DRIVER) private readonly storage: LocalStorageDriver,
+    private readonly localDriver: LocalStorageDriver,
+    @Inject(STORAGE_DRIVER) private readonly storage: StorageDriver,
     private readonly prismaService: PrismaService,
     private readonly logger: PinoLogger,
   ) {
@@ -20,12 +22,12 @@ export class CleanupFilesService {
 
   @Cron(CronExpression.EVERY_5_MINUTES)
   async cleanOldTempFiles() {
-    const files = await fs.promises.readdir(this.storage.getTempDir());
+    const files = await fs.promises.readdir(this.localDriver.getTempDir());
     const now = Date.now();
     const tasks: Promise<void>[] = [];
 
     for (const file of files) {
-      const full = path.join(this.storage.getTempDir(), file);
+      const full = path.join(this.localDriver.getTempDir(), file);
       const stat = await fs.promises.stat(full);
 
       if (now - stat.mtimeMs > 6 * HOUR) {
@@ -75,6 +77,7 @@ export class CleanupFilesService {
         take: batchSize,
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (files.length === 0) break;
 
       // 并发限流执行 storage.delete，收集成功或可忽略的 id
@@ -85,11 +88,14 @@ export class CleanupFilesService {
       const runners: Promise<void>[] = [];
       let idx = 0;
       const runNext = async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         while (idx < files.length) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
           const current = files[idx++];
           try {
             // storage.delete 可能抛错 --- 处理 ENOENT 为可忽略
             await this.storage
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
               .delete(current.storage_key)
               .catch((err: unknown) => {
                 const e = err as
@@ -97,6 +103,7 @@ export class CleanupFilesService {
                   | { code?: string; message?: string };
                 if (e && (e.code === 'ENOENT' || e.code === 'NotFound')) {
                   this.logger.debug(
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                     `Storage missing for ${current.storage_key}, will remove DB record.`,
                   );
                   return;
@@ -105,11 +112,13 @@ export class CleanupFilesService {
               });
 
             // 如果 storage.delete 成功或文件本就不存在，加入批量删除名单
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
             idsToDeleteFromDb.push(current.id);
           } catch (err) {
             failedThisBatch++;
             this.logger.error(
               { err },
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               `Failed to delete storage for ${current.storage_key}`,
             );
             // 不把这个 id 加入 idsToDeleteFromDb，这样不会删除 DB（保留做重试）
@@ -137,6 +146,7 @@ export class CleanupFilesService {
 
       totalFailed += failedThisBatch;
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
       lastId = files[files.length - 1].id;
     }
 
