@@ -13,6 +13,7 @@ import { HashService } from '../../common/hash/hash.service';
 import * as crypto from 'crypto';
 import { fileTypeFromBuffer } from 'file-type';
 import { ALLOWED_MIMES } from '../../config/fastify-multipart.config';
+import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class LocalStorageDriver implements StorageDriver {
@@ -22,9 +23,12 @@ export class LocalStorageDriver implements StorageDriver {
   readonly STREAM_THRESHOLD = 10 * 1024 * 1024; // 10 MB
 
   constructor(
+    private readonly logger: PinoLogger,
     private readonly config: ConfigService,
     private readonly hashService: HashService,
   ) {
+    this.logger.setContext(LocalStorageDriver.name);
+
     const dir = this.config.get<string>(ENV.FILE_UPLOAD_DIR, 'uploads');
     if (path.isAbsolute(dir)) {
       this.baseDir = dir;
@@ -36,6 +40,11 @@ export class LocalStorageDriver implements StorageDriver {
     // Ensure directories exist
     fs.mkdirSync(this.baseDir, { recursive: true });
     fs.mkdirSync(this.tempDir, { recursive: true });
+
+    this.logger.info(
+      { baseDir: this.baseDir, tempDir: this.tempDir },
+      'Local storage directories initialized',
+    );
   }
 
   getTempDir(): string {
@@ -43,7 +52,7 @@ export class LocalStorageDriver implements StorageDriver {
   }
 
   getPathKey(filePath: string): string {
-    return path.relative(this.baseDir, filePath); // jpg/abc.jpg
+    return path.relative(this.baseDir, filePath).split(path.sep).join('/'); // jpg/abc.jpg
   }
 
   async writeToTemp(input: Buffer | Readable): Promise<{
@@ -91,8 +100,17 @@ export class LocalStorageDriver implements StorageDriver {
 
       stream.pipe(writeStream);
       writeStream.on('finish', resolve);
-      writeStream.on('error', reject);
-      stream.on('error', reject);
+      writeStream.on('error', (err) => {
+        this.logger.error(
+          { err, tempFilePath },
+          'Error writing temporary file',
+        );
+        reject(err);
+      });
+      stream.on('error', (err) => {
+        this.logger.error({ err, tempFilePath }, 'Error reading input stream');
+        reject(err);
+      });
     });
 
     // 处理极小文件没达到 4100 字节的情况
@@ -178,8 +196,13 @@ export class LocalStorageDriver implements StorageDriver {
         await fileHandle.close();
       } catch (err: unknown) {
         const error = err as NodeJS.ErrnoException;
-        if (error.code !== 'EEXIST') throw error;
-        // 文件已存在，直接返回
+        if (error.code !== 'EEXIST') {
+          this.logger.error({ err, filePath }, 'Failed to write small file');
+          throw error;
+        } else {
+          // 文件已存在，直接返回
+          this.logger.info({ filePath }, 'File already exists, skipping write');
+        }
       }
       return result;
     }
@@ -195,7 +218,12 @@ export class LocalStorageDriver implements StorageDriver {
       const error = err as NodeJS.ErrnoException;
       if (error.code === 'EEXIST') {
         await fs.promises.unlink(tempFilePath); // 文件已存在，不覆盖，删除临时文件
+        this.logger.info({ filePath }, 'Large file exists, deleted temp file');
       } else {
+        this.logger.error(
+          { err, tempFilePath, filePath },
+          'Failed to move large file',
+        );
         throw error;
       }
     } finally {
@@ -221,33 +249,46 @@ export class LocalStorageDriver implements StorageDriver {
   }
 
   async delete(pathOrKey: string): Promise<void> {
-    const fullPath = path.join(this.baseDir, pathOrKey);
+    const nativePath = pathOrKey.split('/').join(path.sep);
+    const fullPath = path.join(this.baseDir, nativePath);
     try {
       await fs.promises.unlink(fullPath);
     } catch (err: unknown) {
       const error = err as NodeJS.ErrnoException;
       if (error.code === 'ENOENT') {
         // 文件不存在
+        this.logger.warn({ fullPath }, 'File not found for deletion');
         throw new NotFoundException('File not found');
       }
+      this.logger.error({ err, fullPath }, 'Failed to delete file');
       throw err;
     }
   }
 
   createReadStream(pathOrKey: string): Readable {
-    const fullPath = path.join(this.baseDir, pathOrKey);
+    const nativePath = pathOrKey.split('/').join(path.sep);
+    const fullPath = path.join(this.baseDir, nativePath);
     try {
       const stream = fs.createReadStream(fullPath);
       stream.on('error', (err) => {
         const e = err as NodeJS.ErrnoException;
         if (e.code === 'ENOENT') {
+          this.logger.warn(
+            { fullPath },
+            'File not found when creating read stream',
+          );
           stream.destroy(new NotFoundException('File not found'));
         } else {
+          this.logger.error({ err, fullPath }, 'Error reading file stream');
           stream.destroy(err);
         }
       });
       return stream;
     } catch {
+      this.logger.warn(
+        { fullPath },
+        'File not found when creating read stream (catch)',
+      );
       throw new NotFoundException('File not found');
     }
   }
