@@ -15,6 +15,7 @@ import * as fs from 'node:fs';
 import { HashService } from '../../common/hash/hash.service';
 import { fileTypeFromBuffer } from 'file-type';
 import { ENV } from '../../config/constants.config';
+import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class CloudflareStorageDriver implements StorageDriver {
@@ -23,6 +24,7 @@ export class CloudflareStorageDriver implements StorageDriver {
   readonly STREAM_THRESHOLD: number = 5 * 1024 * 1024; // 5MB
 
   constructor(
+    private readonly logger: PinoLogger,
     private readonly config: ConfigService,
     private readonly hashService: HashService,
     private readonly localDriver: LocalStorageDriver,
@@ -49,6 +51,8 @@ export class CloudflareStorageDriver implements StorageDriver {
         ),
       },
     });
+
+    this.logger.setContext(CloudflareStorageDriver.name);
   }
 
   /**
@@ -62,10 +66,17 @@ export class CloudflareStorageDriver implements StorageDriver {
         new HeadObjectCommand({ Bucket: this.bucket, Key: pathKey }),
       );
       return true;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (err.name === 'NotFound' || err.$metadata?.httpStatusCode === 404)
         return false;
+
+      this.logger.error(
+        { err, pathKey },
+        'Error checking file existence in R2',
+      );
       throw err;
     }
   }
@@ -83,6 +94,8 @@ export class CloudflareStorageDriver implements StorageDriver {
     const safeName = path.basename(filename);
     const ext = path.extname(safeName).replace('.', '').toLowerCase();
 
+    this.logger.info({ filename: safeName, ext }, 'Starting file upload to R2');
+
     // 小文件直接内存处理，不写磁盘
     if (Buffer.isBuffer(input) && input.length <= this.STREAM_THRESHOLD) {
       const hash = await this.hashService.hashWithCrypto(input);
@@ -92,6 +105,10 @@ export class CloudflareStorageDriver implements StorageDriver {
       this.localDriver.validateFileType(mime_type);
 
       if (await this.existsInCloud(pathKey)) {
+        this.logger.info(
+          { pathKey },
+          'File already exists in R2, skipping upload',
+        );
         return {
           pathKey,
           file_hash: hash,
@@ -149,7 +166,10 @@ export class CloudflareStorageDriver implements StorageDriver {
       });
 
       await upload.done();
-
+      this.logger.info(
+        { pathKey, file_size },
+        'Large file uploaded successfully to R2',
+      );
       return {
         pathKey,
         file_hash: hash,
@@ -157,6 +177,9 @@ export class CloudflareStorageDriver implements StorageDriver {
         mime_type,
         file_size,
       };
+    } catch (err) {
+      this.logger.error({ err, pathKey }, 'Failed to upload large file to R2');
+      throw err;
     } finally {
       // 无论成功失败，上传尝试后立即删除临时文件
       await fs.promises.unlink(tempFilePath).catch(() => {});
@@ -164,12 +187,14 @@ export class CloudflareStorageDriver implements StorageDriver {
   }
 
   async delete(pathOrKey: string): Promise<void> {
-    await this.client.send(
-      new DeleteObjectCommand({
-        Bucket: this.bucket,
-        Key: pathOrKey,
-      }),
-    );
+    try {
+      await this.client.send(
+        new DeleteObjectCommand({ Bucket: this.bucket, Key: pathOrKey }),
+      );
+    } catch (err) {
+      this.logger.error({ err, pathOrKey }, 'Failed to delete file from R2');
+      throw err;
+    }
   }
 
   /**
@@ -190,7 +215,16 @@ export class CloudflareStorageDriver implements StorageDriver {
 
       // SDK v3 的 Body 是一个能够转换为 Node.js Readable 的流
       return response.Body as Readable;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      this.logger.error(
+        {
+          err,
+          pathOrKey,
+          bucket: this.bucket,
+        },
+        'Error creating read stream from R2',
+      );
+
       if (err instanceof NotFoundException) {
         throw err;
       }
