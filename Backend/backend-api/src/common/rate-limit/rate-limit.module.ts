@@ -25,8 +25,10 @@ import { IoRedisService } from '../../cache/redis/ioredis.cache.service';
       ) => ({
         throttlers: [
           {
-            ttl: seconds(configService.get<number>(ENV.THROTTLER_TTL, 60)),
-            limit: configService.get<number>(ENV.THROTTLER_LIMIT, 100),
+            ttl: seconds(
+              Number(configService.get<number>(ENV.THROTTLER_TTL, 60)),
+            ),
+            limit: Number(configService.get<number>(ENV.THROTTLER_LIMIT, 100)),
           },
         ],
         storage: new ThrottlerStorageRedisService(ioRedisService.getClient()),

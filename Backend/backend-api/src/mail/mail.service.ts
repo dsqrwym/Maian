@@ -26,10 +26,10 @@ export class MailService {
     @InjectQueue('mail') private readonly mailQueue: Queue,
   ) {
     this.mailJobsOption = {
-      attempts: this.config.get<number>(ENV.SMTP_RETRIES, 3),
+      attempts: Number(this.config.get<number>(ENV.SMTP_RETRIES, 3)),
       backoff: {
         type: 'fixed',
-        delay: this.config.get<number>(ENV.SMTP_DELAY_TIME, 60000),
+        delay: Number(this.config.get<number>(ENV.SMTP_DELAY_TIME, 60000)),
       }, // 每次失败后延迟 60s
       removeOnComplete: true,
       removeOnFail: false,

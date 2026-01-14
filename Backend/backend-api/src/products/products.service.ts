@@ -65,9 +65,8 @@ export class ProductsService {
       );
     }
 
-    const maxVariantsForProduct = this.configService.get<number>(
-      ENV.PRODUCT_MAX_VARIANTS,
-      50,
+    const maxVariantsForProduct = Number(
+      this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
     );
 
     if (variants.length > Number(maxVariantsForProduct)) {

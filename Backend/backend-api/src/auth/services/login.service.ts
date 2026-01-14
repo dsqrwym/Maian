@@ -88,9 +88,8 @@ export class LoginService {
         select: { session_id: true },
       });
 
-      const maxSessions = this.configService.get<number>(
-        ENV.MAX_SESSIONS_PER_USER,
-        3,
+      const maxSessions = Number(
+        this.configService.get<number>(ENV.MAX_SESSIONS_PER_USER, 3),
       );
 
       if (existingSessions.length >= maxSessions) {

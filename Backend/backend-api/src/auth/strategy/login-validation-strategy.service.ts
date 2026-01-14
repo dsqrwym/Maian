@@ -47,13 +47,11 @@ export class LoginValidationStrategy {
   ) {
     // Initialize configuration from environment variables with defaults
     // 从环境变量初始化配置，带有默认值
-    this.MAX_ATTEMPTS = this.configService.get<number>(
-      ENV.LOGIN_MAX_ATTEMPTS,
-      3,
+    this.MAX_ATTEMPTS = Number(
+      this.configService.get<number>(ENV.LOGIN_MAX_ATTEMPTS, 3),
     );
-    const lockMinutes = this.configService.get<number>(
-      ENV.LOGIN_LOCK_MINUTES,
-      15,
+    const lockMinutes = Number(
+      this.configService.get<number>(ENV.LOGIN_LOCK_MINUTES, 15),
     );
     this.LOCK_TIME = lockMinutes * MINUTE;
 
