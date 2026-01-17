@@ -22,9 +22,10 @@ RUN pnpm install --frozen-lockfile
 
 # 复制源代码
 COPY . .
-
 # 执行 NestJS 构建
 RUN pnpm run build
+ # 清理 devDependencies
+RUN pnpm prune --prod
 
 # --- 运行 ---
 FROM base AS runner

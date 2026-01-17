@@ -45,6 +45,8 @@ export const ALLOWED_MIMES = new Set([
 ]);
 
 export async function useFastifyMultipart(app: NestFastifyApplication) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   await app.register(fastifyMultipart, {
     limits: {
       fieldSize: 1024 * 10, // 非文件字段最大 10KB
