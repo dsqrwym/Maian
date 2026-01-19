@@ -33,8 +33,4 @@ dependencyResolutionManagement {// 依赖解析管理
     }
 }
 
-plugins {// 插件定义
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0" // 自动配置JDK hot Reload toolchain
-}
-
 include(":shared", ":business", ":standard", ":enterprise", ":admin") // 包含的模块

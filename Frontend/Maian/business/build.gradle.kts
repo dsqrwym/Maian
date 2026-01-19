@@ -138,7 +138,7 @@ android {
 // ---------------------------
 dependencies {
     implementation(libs.ktor.client.auth)
-    debugImplementation(compose.uiTooling) // Compose UI调试工具
+    debugImplementation(libs.ui.tooling) // Compose UI调试工具
 }
 
 // ---------------------------

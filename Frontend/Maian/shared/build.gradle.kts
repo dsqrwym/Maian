@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.androidLibrary)          // 用来表明自己是Android库模块插件
     alias(libs.plugins.composeMultiplatform)    // Compose跨平台UI框架
     alias(libs.plugins.composeCompiler)         // Compose编译器集成
-    alias(libs.plugins.composeHotReload)        // 热重载， 但是应该没用
     alias(libs.plugins.kotlinxSerialization)
 }
 
@@ -63,6 +62,12 @@ kotlin {
 
         iosMain.dependencies {
             api(libs.ktor.client.darwin) // Ktor 引擎
+
+
+            api(libs.camerak)
+            api(libs.github.image.saver.plugin)
+            api(libs.github.qr.scanner.plugin)
+            api(libs.github.ocr.plugin)
         }
 
         // Android主源码集
@@ -71,6 +76,12 @@ kotlin {
             api(libs.jmail) // 邮箱验证密数据
             api(libs.androidx.security.crypto) //安卓安全加密
             api(libs.ktor.client.okhttp) // Ktor 引擎
+
+
+            api(libs.camerak)
+            api(libs.github.image.saver.plugin)
+            api(libs.github.qr.scanner.plugin)
+            api(libs.github.ocr.plugin)
         }
 
         // 公共主源码集（跨平台共享）
@@ -80,20 +91,26 @@ kotlin {
 
         commonMain.dependencies {
             // Compose基础库
+            api("org.jetbrains.compose.runtime:runtime:1.10.0") // 运行时核心
             //api(compose.runtime)         // 运行时核心
-            api("org.jetbrains.compose.runtime:runtime:1.11.0-alpha01")         // 运行时核心
+            //api("org.jetbrains.compose.runtime:runtime:1.11.0-alpha01")         // 运行时核心
+            api("org.jetbrains.compose.foundation:foundation:1.10.0")      // 基础布局组件
             //api(compose.foundation)      // 基础布局组件
-            api("org.jetbrains.compose.foundation:foundation:1.11.0-alpha01")      // 基础布局组件
-            //api(compose.material3)       // Material3设计
+            //api("org.jetbrains.compose.foundation:foundation:1.11.0-alpha01")      // 基础布局组件
             api("org.jetbrains.compose.material3:material3:1.9.0")       // Material3设计
+            //api(compose.material3)       // Material3设计
+            //api("org.jetbrains.compose.material3:material3:1.9.0") // Material3设计.
+            api("org.jetbrains.compose.ui:ui:1.10.0")              // UI组件工具集
             //api(compose.ui)              // UI组件工具集
-            api("org.jetbrains.compose.ui:ui:1.11.0-alpha01")              // UI组件工具集
+            //api("org.jetbrains.compose.ui:ui:1.11.0-alpha01")              // UI组件工具集
 
             // 资源管理
+            api("org.jetbrains.compose.components:components-resources:1.10.0")        // 跨平台资源支持
             //api(compose.components.resources)        // 跨平台资源支持
-            api("org.jetbrains.compose.components:components-resources:1.11.0-alpha01")        // 跨平台资源支持
+            //api("org.jetbrains.compose.components:components-resources:1.11.0-alpha01")        // 跨平台资源支持
+            api("org.jetbrains.compose.ui:ui-tooling-preview:1.10.0") // 预览工具
             //api(compose.components.uiToolingPreview) // 预览工具
-            api("org.jetbrains.compose.ui:ui-tooling-preview:1.11.0-alpha01") // 预览工具
+            //api("org.jetbrains.compose.ui:ui-tooling-preview:1.11.0-alpha01") // 预览工具
 
             // Android生命周期组件（跨平台）
             api(libs.androidx.lifecycle.viewmodel)       // ViewModel
@@ -156,6 +173,16 @@ kotlin {
 
             // Lottie 动画
             api(libs.compottie.lite)
+
+            // 回国
+            api(libs.compose.multiplatform.media.player)
+            api(libs.richeditor.compose)
+            api(libs.chart)
+            api(libs.sonner)
+            api(libs.ui.tiles)
+            api(libs.ui.tiles.extended)
+            api(libs.ui.tiles.expressive)
+            api(libs.cloudy)
         }
 
         // 公共测试源码集
@@ -169,6 +196,12 @@ kotlin {
             api(libs.kotlinx.coroutinesSwing)         // 协程Swing支持
             api(libs.jmail) // 邮箱验证
             api(libs.ktor.client.cio) // Ktor 引擎
+
+
+            api(libs.camerak)
+            api(libs.github.image.saver.plugin)
+            api(libs.github.qr.scanner.plugin)
+            api(libs.github.ocr.plugin)
         }
 
         // 根据KMP官网教程 在网页端添加处理日期的跨平台库

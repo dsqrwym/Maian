@@ -7,16 +7,22 @@ android-minSdk = "24"
 android-targetSdk = "35"
 androidx-activity = "1.12.2" #1.12.1
 androidx-lifecycle = "2.9.6" #2.9.5
+camerak = "0.0.12"
+chart = "1.1.0"
+cloudy = "0.5.0"
 coilCompose = "3.3.0"
-composeHotReload = "1.0.0" # 1.0.0-rc03
 #composeMultiplatform = "1.9.3" #1.9.3
 composemediaplayer = "0.8.7" #0.8.6
-composeMultiplatform = "1.11.0-alpha01"
+composeMultiplatform = "1.10.0" #1.11.0-alpha01
+composeMultiplatformMediaPlayer = "1.0.52"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
 compottieLite = "2.0.2"
-datatableMaterial3 = "0.11.7"
+datatableMaterial3 = "0.12.0" #0.11.7
 filekitCore = "0.12.0"
+githubImage_saver_plugin = "0.0.7"
+githubOcr_plugin = "0.0.3"
+githubQr_scanner_plugin = "0.0.8"
 haze = "1.7.1" #1.6.10
 jmail = "2.1.0" #2.0.2
 koinCore = "4.1.1" #4.1.0
@@ -29,14 +35,17 @@ ktor = "3.3.3" #3.3.2
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
 multiplatformSettings = "1.3.0"
-navigation3Runtime = "1.1.0-alpha01"
+navigation3Runtime = "1.1.0-alpha02" #1.1.0-alpha01
 navigation3Ui = "1.1.0-alpha01"
 navigationCompose = "2.9.1" #2.9.1
-pagingRuntime = "3.4.0-beta01" #3.4.0-alpha04
+pagingRuntime = "3.4.0-rc01" #3.4.0-beta01
 reorderable = "3.0.0"
+richeditorCompose = "1.0.0-rc13"
 securityCrypto = "1.1.0"
+sonner = "0.3.8"
 tableCore = "1.7.11" #1.7.10
-uiTooling = "1.11.0-alpha01"
+uiTilesExtended = "2.24.0"
+uiTooling = "1.10.0" #1.11.0-alpha01
 zoomable = "2.9.0"
 
 [libraries]
@@ -45,8 +54,12 @@ androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runt
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingRuntime" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
+camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camerak" }
+chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
+cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
+compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "composeMultiplatformMediaPlayer" }
 compose-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholderMaterial3" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
 composemediaplayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composemediaplayer" }
@@ -55,6 +68,9 @@ datatable-material3 = { module = "com.seanproctor:datatable-material3", version.
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "filekitCore" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekitCore" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCore" }
+github-image_saver_plugin = { module = "io.github.kashif-mehmood-km:image_saver_plugin", version.ref = "githubImage_saver_plugin" }
+github-ocr_plugin = { module = "io.github.kashif-mehmood-km:ocr_plugin", version.ref = "githubOcr_plugin" }
+github-qr_scanner_plugin = { module = "io.github.kashif-mehmood-km:qr_scanner_plugin", version.ref = "githubQr_scanner_plugin" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 jmail = { module = "com.sanctionco.jmail:jmail", version.ref = "jmail" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinCore" }
@@ -73,6 +89,7 @@ kmp-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigatio
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
 navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3Ui" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
+richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 
 # Ktor core & plugins
@@ -87,7 +104,11 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+sonner = { module = "io.github.dokar3:sonner", version.ref = "sonner" }
 table-core = { module = "ua.wwind.table-kmp:table-core", version.ref = "tableCore" }
+ui-tiles = { module = "com.github.alorma.compose-settings:ui-tiles", version.ref = "uiTilesExtended" }
+ui-tiles-expressive = { module = "com.github.alorma.compose-settings:ui-tiles-expressive", version.ref = "uiTilesExtended" }
+ui-tiles-extended = { module = "com.github.alorma.compose-settings:ui-tiles-extended", version.ref = "uiTilesExtended" }
 ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTooling" }
 zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 
@@ -95,7 +116,6 @@ zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 #android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

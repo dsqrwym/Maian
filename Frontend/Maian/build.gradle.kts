@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     //alias(libs.plugins.android.kotlin.multiplatform.library) apply false 之后再改
 
-    alias(libs.plugins.composeHotReload) apply false
     kotlin("jvm") version "2.2.0" apply false
 }
 

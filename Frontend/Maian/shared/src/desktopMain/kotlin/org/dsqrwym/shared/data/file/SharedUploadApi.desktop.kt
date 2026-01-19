@@ -14,7 +14,6 @@ import io.ktor.utils.io.*
 import org.dsqrwym.shared.data.file.dto.SharedUploadFileResponse
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.ApiResponse
-import org.dsqrwym.shared.util.log.SharedLog
 
 actual class SharedUploadApi actual constructor(val client: HttpClient) {
     @OptIn(InternalAPI::class)
@@ -24,7 +23,6 @@ actual class SharedUploadApi actual constructor(val client: HttpClient) {
         onProgress: (sent: Long, total: Long) -> Unit
     ): ApiResponse<SharedUploadFileResponse> {
         val totalSize = file.size()
-        SharedLog.log(message = "Uploading file: ${file.name}")
         val response = client.submitFormWithBinaryData(
             url = ApiConfig.FilePath.UPLOAD_FILE_RAW,
             formData = formData {
@@ -33,6 +31,7 @@ actual class SharedUploadApi actual constructor(val client: HttpClient) {
                     value = ChannelProvider {
                         // desktop 用的 CIO 引擎更加适配Channel
                         file.file.readChannel()
+                        //file.source().buffered().inputStream().toByteReadChannel()
                     },
                     headers = Headers.build {
                         append(
