@@ -99,7 +99,15 @@ fun ProductCreateScreen(
                 .paddingWithoutTop(SharedFormLayout.Padding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
-            FormCard(title = "基础信息") {
+            /*FormCard(title = "基础信息") {
+                FlowRow {
+                    ProductMediaUploader(
+                        mediaPicker
+                    )
+                }
+            }*/
+
+            FormCard(title = "媒体文件") {
                 FlowRow {
                     ProductMediaUploader(
                         mediaPicker
@@ -136,7 +144,6 @@ fun ProductMediaUploader(
     val launcher = rememberFilePickerLauncher(
         type = filekitType,
         mode = fileKitMode,
-        title = "选择图片（最大数量${mediaPicker.maxImage}）或者视频（最大数量${mediaPicker.maxVideo}）单个文件不超过 ${maxSize}MB",
     ) { files ->
         files?.let(mediaPicker::addLocalFiles)
     }
@@ -159,7 +166,7 @@ fun ProductMediaUploader(
         verticalArrangement = SharedLazyGridLayout.arrangement,
     ) {
         Text(
-            text = "媒体文件 (长按拖拽排序，首张图片为主图) 单个文件不超过 ${maxSize}MB",
+            text = "长按拖拽排序，首张图片为主图。单个文件不超过 ${maxSize}MB",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -204,7 +211,9 @@ fun ProductMediaUploader(
                         }
                     }
                 }
-            }// 3. 渲染媒体列表
+            }
+
+            // 3. 渲染媒体列表
             itemsIndexed(mediaList, key = { _, item -> item.localId }) { index, item ->
                 ReorderableItem(
                     state = reorderableState,

@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.dsqrwym.admin.navigation.AdminNavSerializersModule
 import org.dsqrwym.admin.navigation.naventry.authNavEntry
 import org.dsqrwym.admin.navigation.naventry.categoryNavEntry
 import org.dsqrwym.shared.AppRoot
@@ -33,8 +34,15 @@ fun App() {
     AppRoot { authState ->
         val navViewModel = remember(authState) {
             when (authState) {
-                is AuthState.Unauthenticated -> SharedNavigationViewModel(if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen)
-                is AuthState.Authenticated -> SharedNavigationViewModel(SharedDashboardScreen)
+                is AuthState.Unauthenticated -> SharedNavigationViewModel(
+                    initRoute = if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen,
+                    extraSerializersModule = AdminNavSerializersModule
+                )
+
+                is AuthState.Authenticated -> SharedNavigationViewModel(
+                    initRoute = SharedDashboardScreen,
+                    extraSerializersModule = AdminNavSerializersModule
+                )
             }
         }
 

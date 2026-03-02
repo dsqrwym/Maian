@@ -122,7 +122,10 @@ kotlin {
             api(libs.kmp.navigation.compose)
             // Navigation3
             api(libs.androidx.navigation3.runtime)
-            api(libs.navigation3.ui)
+            //api(libs.navigation3.ui)
+            api(libs.jetbrains.navigation3.ui)
+            api(libs.jetbrains.material3.adaptiveNavigation3)
+            api(libs.jetbrains.lifecycle.viewmodelNavigation3)
             // placeholder
             api(libs.compose.placeholder.material3)
 
@@ -177,12 +180,10 @@ kotlin {
             // 回国
             api(libs.compose.multiplatform.media.player)
             api(libs.richeditor.compose)
-            api(libs.chart)
             api(libs.sonner)
             api(libs.ui.tiles)
             api(libs.ui.tiles.extended)
             api(libs.ui.tiles.expressive)
-            api(libs.cloudy)
         }
 
         // 公共测试源码集

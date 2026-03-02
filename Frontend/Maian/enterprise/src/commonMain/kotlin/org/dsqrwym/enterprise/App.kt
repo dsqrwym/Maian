@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.dsqrwym.enterprise.navigation.EnterpriseSerializersModule
 import org.dsqrwym.enterprise.navigation.ProductCreate
 import org.dsqrwym.enterprise.navigation.naventry.authNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.categoryNavEntry
@@ -18,6 +19,7 @@ import org.dsqrwym.enterprise.ui.screens.products.ProductsListScreen
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
+import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.navigation.*
@@ -26,6 +28,7 @@ import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.util.log.SharedLog
 import org.koin.compose.currentKoinScope
 
 /**
@@ -43,10 +46,21 @@ fun App() {
         val navViewModel = remember(authState) {
             when (authState) {
                 is AuthState.Unauthenticated ->
-                    SharedNavigationViewModel(if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen)
+                    SharedNavigationViewModel(
+                        initRoute = if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen,
+                        stackKey = "auth",
+                        extraSerializersModule = EnterpriseSerializersModule
+                    )
 
-                is AuthState.Authenticated ->
-                    SharedNavigationViewModel(SharedDashboardScreen)
+                is AuthState.Authenticated -> {
+                    val userId = SharedUserPayloadStorage.get()?.userId ?: "unknown"
+                    SharedLog.log("Debug: Loading navigation stack for user: $userId")
+                    SharedNavigationViewModel(
+                        initRoute = SharedDashboardScreen,
+                        stackKey = "main_$userId",
+                        extraSerializersModule = EnterpriseSerializersModule
+                    )
+                }
             }
         }
 

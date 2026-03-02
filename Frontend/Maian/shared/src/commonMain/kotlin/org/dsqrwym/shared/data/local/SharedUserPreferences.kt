@@ -20,6 +20,8 @@ object SharedUserPreferences {
 
     private const val USER_LOGIN_PREFERENCES_KEY = "user_login_preferences"
 
+    private const val NAVIGATION_STACK_KEY_PREFIX = "nav_stack_"
+
     // 主题变更通知流（带重放，确保订阅者能拿到最新的状态）
     private val _isDarkThemeFlow = MutableSharedFlow<Boolean?>(replay = 1, extraBufferCapacity = 1)
     val isDarkThemeFlow: SharedFlow<Boolean?> = _isDarkThemeFlow
@@ -64,5 +66,17 @@ object SharedUserPreferences {
 
     fun setUserLoginPreferences(value: String) {
         settings.putString(USER_LOGIN_PREFERENCES_KEY, value)
+    }
+
+    fun saveNavigationStack(key: String, json: String) {
+        settings.putString(NAVIGATION_STACK_KEY_PREFIX + key, json)
+    }
+
+    fun getNavigationStack(key: String): String? {
+        return settings.getStringOrNull(NAVIGATION_STACK_KEY_PREFIX + key)
+    }
+
+    fun clearNavigationStack(key: String) {
+        settings.remove(NAVIGATION_STACK_KEY_PREFIX + key)
     }
 }

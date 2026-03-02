@@ -122,7 +122,7 @@ android {
     // 构建类型配置
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true   // 同时触发 Shrinking + Optimization + Obfuscation
+            isMinifyEnabled = false   // 同时触发 Shrinking + Optimization + Obfuscation
         }
     }
 

@@ -5,48 +5,49 @@ android-compileSdk = "36"
 android-minSdk = "24"
 #noinspection OldTargetApi
 android-targetSdk = "35"
-androidx-activity = "1.12.2" #1.12.1
+androidx-activity = "1.12.4" #1.12.4
 androidx-lifecycle = "2.9.6" #2.9.5
-camerak = "0.0.12"
+camerak = "0.2.0"
 chart = "1.1.0"
-cloudy = "0.5.0"
-coilCompose = "3.3.0"
+coilCompose = "3.4.0" #3.3.0
 #composeMultiplatform = "1.9.3" #1.9.3
 composemediaplayer = "0.8.7" #0.8.6
-composeMultiplatform = "1.10.0" #1.11.0-alpha01
-composeMultiplatformMediaPlayer = "1.0.52"
+compose-multiplatform-adaptive = "1.3.0-alpha05"
+compose-multiplatform-lifecycle = "2.10.0-alpha08"
+composeMultiplatform = "1.10.1" #1.10.0
+composeMultiplatformMediaPlayer = "1.0.53" #1.0.52
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
-compottieLite = "2.0.2"
+compottieLite = "2.0.3" #2.0.3
 datatableMaterial3 = "0.12.0" #0.11.7
-filekitCore = "0.12.0"
-githubImage_saver_plugin = "0.0.7"
-githubOcr_plugin = "0.0.3"
-githubQr_scanner_plugin = "0.0.8"
-haze = "1.7.1" #1.6.10
+filekitCore = "0.13.0" #0.12.0
+githubImage_saver_plugin = "0.2.0"
+githubOcr_plugin = "0.2.0"
+githubQr_scanner_plugin = "0.2.0"
+haze = "1.7.2" #1.7.2
 jmail = "2.1.0" #2.0.2
 koinCore = "4.1.1" #4.1.0
-kotlin = "2.3.0" #2.2.21
+kotlin = "2.3.10" #2.3.0
 kotlinx-coroutines = "1.10.2"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxDatetime = "0.7.1"
-kotlinxSerializationJson = "1.9.0"
-ktor = "3.3.3" #3.3.2
+kotlinxSerializationJson = "1.10.0" #1.9.0
+ktor = "3.4.0" #3.3.3
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
 multiplatformSettings = "1.3.0"
-navigation3Runtime = "1.1.0-alpha02" #1.1.0-alpha01
-navigation3Ui = "1.1.0-alpha01"
-navigationCompose = "2.9.1" #2.9.1
-pagingRuntime = "3.4.0-rc01" #3.4.0-beta01
+navigation3Runtime = "1.1.0-alpha05" #1.1.0-alpha04
+multiplatform-nav3-ui = "1.0.0-alpha06"
+navigationCompose = "2.9.2" #2.9.1
+pagingRuntime = "3.4.1" #3.4.0-rc01
 reorderable = "3.0.0"
 richeditorCompose = "1.0.0-rc13"
 securityCrypto = "1.1.0"
-sonner = "0.3.8"
-tableCore = "1.7.11" #1.7.10
-uiTilesExtended = "2.24.0"
-uiTooling = "1.10.0" #1.11.0-alpha01
-zoomable = "2.9.0"
+sonner = "0.3.9"
+tableCore = "1.7.13" #1.7.12
+uiTilesExtended = "2.26.0"
+uiTooling = "1.10.1" #1.10.1
+zoomable = "2.11.1" #2.9.0
 
 [libraries]
 alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
@@ -56,7 +57,6 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camerak" }
 chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
-cloudy = { module = "com.github.skydoves:cloudy", version.ref = "cloudy" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "composeMultiplatformMediaPlayer" }
@@ -87,7 +87,9 @@ libphonenumber = { module = "io.github.luca992.libphonenumber-kotlin:libphonenum
 material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 kmp-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3Ui" }
+jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatform-nav3-ui" }
+jetbrains-material3-adaptiveNavigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "compose-multiplatform-adaptive" }
+jetbrains-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "compose-multiplatform-lifecycle" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }

@@ -1,4 +1,8 @@
 package org.dsqrwym.admin.navigation
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.SerializersModule
+import org.dsqrwym.business.navigation.BusinessNavSerializersModule
+
+val AdminNavSerializersModule = SerializersModule {
+    include(BusinessNavSerializersModule)
+}

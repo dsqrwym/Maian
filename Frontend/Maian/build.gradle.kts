@@ -7,12 +7,5 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     //alias(libs.plugins.android.kotlin.multiplatform.library) apply false 之后再改
-
-    kotlin("jvm") version "2.2.0" apply false
-}
-
-buildscript {
-    dependencies {
-        classpath(kotlin("gradle-plugin", version = "2.2.0"))
-    }
+    // apply false 代表声明插件给子模块定义版本而不是将自己变为插件
 }

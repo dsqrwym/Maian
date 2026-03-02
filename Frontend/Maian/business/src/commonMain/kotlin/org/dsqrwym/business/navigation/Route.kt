@@ -3,7 +3,16 @@ package org.dsqrwym.business.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 
+val BusinessNavSerializersModule = SerializersModule {
+    polymorphic(NavKey::class){
+        subclass(Categories::class, Categories.serializer())
+        subclass(CategoryCreate::class, CategoryCreate.serializer())
+        subclass(CategoryEdit::class, CategoryEdit.serializer())
+    }
+}
 
 @Serializable
 @SerialName("Categories")

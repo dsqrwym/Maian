@@ -12,6 +12,10 @@ import maian.standard.generated.resources.StandardRes
 import maian.standard.generated.resources.chat
 import maian.standard.generated.resources.shopping_cart
 import maian.standard.generated.resources.wholesalers
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
@@ -44,11 +48,28 @@ import org.koin.compose.currentKoinScope
  */
 @Composable
 fun App() {
+    val standardSerializersModule = remember {
+        SerializersModule {
+            polymorphic(NavKey::class) {
+                subclass(org.dsqrwym.standard.navigation.RegisterScreen::class)
+                subclass(SuppliersScreen::class)
+                subclass(BasketScreen::class)
+                subclass(ChatScreen::class)
+            }
+        }
+    }
+
     AppRoot { authState ->
         val navViewModel = remember(authState) {
             when (authState) {
-                is AuthState.Unauthenticated -> SharedNavigationViewModel(if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen)
-                is AuthState.Authenticated -> SharedNavigationViewModel(SharedDashboardScreen)
+                is AuthState.Unauthenticated -> SharedNavigationViewModel(
+                    initRoute = if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen,
+                    extraSerializersModule = standardSerializersModule
+                )
+                is AuthState.Authenticated -> SharedNavigationViewModel(
+                    initRoute = SharedDashboardScreen,
+                    extraSerializersModule = standardSerializersModule
+                )
             }
         }
 

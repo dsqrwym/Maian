@@ -3,6 +3,21 @@ package org.dsqrwym.shared.navigation
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+
+val SharedNavSerializersModule = SerializersModule {
+    polymorphic(NavKey::class) {
+        subclass(SharedInitialScreen::class)
+        subclass(SharedLoginScreen::class)
+        subclass(SharedResetPasswordScreen::class)
+        subclass(SharedPrivacyPolicy::class)
+        subclass(SharedUserAgreement::class)
+        subclass(SharedDashboardScreen::class)
+        subclass(SharedProfileScreen::class)
+    }
+}
 
 // 起始页面
 @Serializable

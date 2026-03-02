@@ -92,13 +92,7 @@ fun SharedRailWithTopBarLayout(
                         Spacer(Modifier.weight(1f))
                     }
                     menuConfig.topBarActions?.forEach { action ->
-                        NavigationRailItem(
-                            selected = false,
-                            icon = {
-                                action.content(TooltipAnchorPosition.Right)
-                            },
-                            onClick = { /* no op */ }
-                        )
+                        action.content(TooltipAnchorPosition.Right)
                     }
                 }
             }
@@ -194,7 +188,8 @@ fun SharedRailWithTopBarLayout(
                                     MyBadgedBox(state.showBadge, state.badgeCount) {
                                         SharedMenuIcon(
                                             imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                            contentDescription = state.item.iconContentDescription.asString() ?: "tab item icon"
+                                            contentDescription = state.item.iconContentDescription.asString()
+                                                ?: "tab item icon"
                                         )
                                     }
                                 }
