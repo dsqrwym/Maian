@@ -21,7 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/auth.guard';
 import { fileTypeFromBuffer } from 'file-type';
-import { ALLOWED_MIMES } from '../config/fastify-multipart.config';
+import { ALLOWED_MIMES, CHUNK_SIZE } from '../config/fastify-multipart.config';
 import { UploadFileForWholesalerDto } from './upload-file-for-wholesaler.dto';
 import { ProductFilesQueryDto } from './dto/product-files-query.dto';
 import { SkipResponseInterceptor } from 'src/common/guards/decorator/skip-response-interceptor.decorator';
@@ -53,7 +53,6 @@ export class FilesController {
     const multipart = await req.file();
     if (!multipart) throw new BadRequestException('File is required.');
     const { file, filename } = multipart;
-    const CHUNK_SIZE = 4100; // 足够检测大部分文件类型
     const chunk = (await file.read(CHUNK_SIZE)) as Buffer | null;
 
     if (!chunk || chunk.length === 0) {
@@ -100,7 +99,7 @@ export class FilesController {
 
     return new StreamableFile(await stream, {
       type: mime_type,
-      disposition: `inline; filename="${filename}"`,
+      disposition: `inline; filename="${encodeURIComponent(filename)}"`,
     });
   }
 }

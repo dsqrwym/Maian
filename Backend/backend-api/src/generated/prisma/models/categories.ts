@@ -310,11 +310,12 @@ export type categoriesOrderByWithRelationInput = {
 
 export type categoriesWhereUniqueInput = Prisma.AtLeast<{
   id?: bigint | number
+  name?: string
+  user_id_name?: Prisma.categoriesUser_idNameCompoundUniqueInput
   AND?: Prisma.categoriesWhereInput | Prisma.categoriesWhereInput[]
   OR?: Prisma.categoriesWhereInput[]
   NOT?: Prisma.categoriesWhereInput | Prisma.categoriesWhereInput[]
   user_id?: Prisma.UuidNullableFilter<"categories"> | string | null
-  name?: Prisma.StringFilter<"categories"> | string
   iva?: Prisma.DecimalNullableFilter<"categories"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   parent_id?: Prisma.BigIntNullableFilter<"categories"> | bigint | number | null
   created_at?: Prisma.DateTimeFilter<"categories"> | Date | string
@@ -330,7 +331,7 @@ export type categoriesWhereUniqueInput = Prisma.AtLeast<{
   users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   category_translations?: Prisma.Category_translationsListRelationFilter
   product_categories?: Prisma.Product_categoriesListRelationFilter
-}, "id">
+}, "id" | "name" | "user_id_name">
 
 export type categoriesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -487,6 +488,11 @@ export type CategoriesListRelationFilter = {
 
 export type categoriesOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type categoriesUser_idNameCompoundUniqueInput = {
+  user_id: string
+  name: string
 }
 
 export type categoriesCountOrderByAggregateInput = {

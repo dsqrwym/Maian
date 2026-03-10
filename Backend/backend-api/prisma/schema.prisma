@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["partialIndexes"]
 }
 
 datasource db {
@@ -41,7 +42,7 @@ model carts {
 model categories {
   id                                 BigInt                  @id @default(autoincrement())
   user_id                            String?                 @db.Uuid
-  name                               String                  @db.VarChar(50)
+  name                               String                  @unique(map: "categories_name_unique_public", where: raw("(user_id IS NULL)")) @db.VarChar(50)
   iva                                Decimal?                @db.Decimal(5, 2)
   parent_id                          BigInt?
   created_at                         DateTime                @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
@@ -58,6 +59,7 @@ model categories {
   category_translations              category_translations[]
   product_categories                 product_categories[]
 
+  @@unique([user_id, name], map: "categories_user_name_unique_private", where: raw("(user_id IS NOT NULL)"))
   @@schema("public")
 }
 
