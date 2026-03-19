@@ -8,6 +8,7 @@ import org.dsqrwym.shared.localization.LanguageManager
 data class ReducedCategoryResponse(
     val id: Long,
     val name: String,
+    val iva: String? = null,
     @SerialName("category_translations")
     val translation: List<SharedCategoryTranslation> = listOf()
 ) {

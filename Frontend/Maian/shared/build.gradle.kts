@@ -19,7 +19,7 @@ kotlin {
     // Android目标配置
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)     // 强制使用Java 11字节码， 官方推荐
+            jvmTarget.set(JvmTarget.JVM_17)     // 强制使用Java 11字节码， 官方推荐
         }
     }
 
@@ -36,22 +36,16 @@ kotlin {
     }
 
     // Desktop目标配置（JVM）
-    jvm("desktop")      // // 隐式继承项目的Java版本配置
+    jvm("desktop")
 
     // ---------------------------
     // WebAssembly (Wasm) 配置
     // ---------------------------
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        outputModuleName = "sharedComposeModule"    // 输出的ES模块名称
-        browser {
-            commonWebpackConfig {
-                outputFileName = "sharedComposeApp.js"  // 生成的JS入口文件， 必要的
-            }
-        }
-        binaries.library()  // 生成库模式（非可执行文件）
-        generateTypeScriptDefinitions()
-        outputModuleName = "shared"
+        browser()
+        /*binaries.library()  // 生成库模式（非可执行文件）
+        generateTypeScriptDefinitions()*/
     }
     // ---------------------------
     // 依赖管理
@@ -60,14 +54,10 @@ kotlin {
         // 桌面平台专属配置
         val desktopMain by getting
 
-        iosMain.dependencies {
+        nativeMain.dependencies {
             api(libs.ktor.client.darwin) // Ktor 引擎
 
-
-            api(libs.camerak)
-            api(libs.github.image.saver.plugin)
-            api(libs.github.qr.scanner.plugin)
-            api(libs.github.ocr.plugin)
+            implementation(libs.kscan) // 扫描条码
         }
 
         // Android主源码集
@@ -77,11 +67,7 @@ kotlin {
             api(libs.androidx.security.crypto) //安卓安全加密
             api(libs.ktor.client.okhttp) // Ktor 引擎
 
-
-            api(libs.camerak)
-            api(libs.github.image.saver.plugin)
-            api(libs.github.qr.scanner.plugin)
-            api(libs.github.ocr.plugin)
+            implementation(libs.journeyapps.zxing.android.embedded) // 扫描条码
         }
 
         // 公共主源码集（跨平台共享）
@@ -91,24 +77,24 @@ kotlin {
 
         commonMain.dependencies {
             // Compose基础库
-            api("org.jetbrains.compose.runtime:runtime:1.10.0") // 运行时核心
+            api("org.jetbrains.compose.runtime:runtime:1.10.2") // 运行时核心
             //api(compose.runtime)         // 运行时核心
             //api("org.jetbrains.compose.runtime:runtime:1.11.0-alpha01")         // 运行时核心
-            api("org.jetbrains.compose.foundation:foundation:1.10.0")      // 基础布局组件
+            api("org.jetbrains.compose.foundation:foundation:1.10.2")      // 基础布局组件
             //api(compose.foundation)      // 基础布局组件
             //api("org.jetbrains.compose.foundation:foundation:1.11.0-alpha01")      // 基础布局组件
             api("org.jetbrains.compose.material3:material3:1.9.0")       // Material3设计
             //api(compose.material3)       // Material3设计
             //api("org.jetbrains.compose.material3:material3:1.9.0") // Material3设计.
-            api("org.jetbrains.compose.ui:ui:1.10.0")              // UI组件工具集
+            api("org.jetbrains.compose.ui:ui:1.10.2")              // UI组件工具集
             //api(compose.ui)              // UI组件工具集
             //api("org.jetbrains.compose.ui:ui:1.11.0-alpha01")              // UI组件工具集
 
             // 资源管理
-            api("org.jetbrains.compose.components:components-resources:1.10.0")        // 跨平台资源支持
+            api("org.jetbrains.compose.components:components-resources:1.10.2")        // 跨平台资源支持
             //api(compose.components.resources)        // 跨平台资源支持
             //api("org.jetbrains.compose.components:components-resources:1.11.0-alpha01")        // 跨平台资源支持
-            api("org.jetbrains.compose.ui:ui-tooling-preview:1.10.0") // 预览工具
+            api("org.jetbrains.compose.ui:ui-tooling-preview:1.10.2") // 预览工具
             //api(compose.components.uiToolingPreview) // 预览工具
             //api("org.jetbrains.compose.ui:ui-tooling-preview:1.11.0-alpha01") // 预览工具
 
@@ -160,6 +146,9 @@ kotlin {
             // 平台原生通知
             api(libs.alert.kmp)
 
+            // sonner toaster
+            api(libs.sonner)
+
             // coil image
             api(libs.coil.compose)
             api(libs.coil.network.ktor3)
@@ -179,12 +168,8 @@ kotlin {
 
             // 回国
             api(libs.compose.multiplatform.media.player)
-            api(libs.richeditor.compose)
-            api(libs.sonner)
-            api(libs.ui.tiles)
-            api(libs.ui.tiles.extended)
-            api(libs.ui.tiles.expressive)
-        }
+
+                   }
 
         // 公共测试源码集
         commonTest.dependencies {
@@ -198,15 +183,13 @@ kotlin {
             api(libs.jmail) // 邮箱验证
             api(libs.ktor.client.cio) // Ktor 引擎
 
-
-            api(libs.camerak)
-            api(libs.github.image.saver.plugin)
-            api(libs.github.qr.scanner.plugin)
-            api(libs.github.ocr.plugin)
+            implementation(libs.zxing.core) // 解析条码二维码
+            implementation(libs.zxing.javase) // BufferedImageLuminanceSource
+            implementation(libs.webcam.capture) // 使用摄像头
         }
 
         // 根据KMP官网教程 在网页端添加处理日期的跨平台库
-        wasmJsMain.dependencies {
+        webMain.dependencies {
             // JS-Joda时区支持
             api(npm("@js-joda/timezone", "2.3.0")) //项中包含对必要 npm 包的引用
             api(libs.ktor.client.js) // Ktor 引擎
@@ -246,8 +229,8 @@ android {
 
     // Java版本兼容性
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,16 +23,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
+import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
+import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.formatter.asString
+import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -64,18 +67,34 @@ fun BusinessTranslationCard(
         val focusRequester = remember { FocusRequester() }
         Column(
             modifier = Modifier.heightIn(max = 500.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = SharedColumnLayout.arrangement
         ) {
-            OutlinedButton(
-                onClick = {
-                    onShowAddDialog(true)
-                },
-                modifier = Modifier.align(Alignment.End).placeholderWithShimmer(isLoading),
-                enabled = addLanguageEnabled
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = SharedLazyGridLayout.arrangement,
+                itemVerticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Outlined.Add, stringResource(SharedRes.string.add))
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(BusinessRes.string.add_language_translation))
+                BusinessSelectedInfoCard(
+                    modifier = Modifier.weight(1f, false).widthIn(max = 336.dp),
+                    visible = translations.isNotEmpty(),
+                    description = stringResource(BusinessRes.string.translations_count, translations.size),
+                    icon = Icons.Outlined.Info,
+                    enabled = false,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                OutlinedButton(
+                    onClick = {
+                        onShowAddDialog(true)
+                    },
+                    modifier = Modifier.placeholderWithShimmer(isLoading),
+                    enabled = addLanguageEnabled
+                ) {
+                    Icon(Icons.Outlined.Add, stringResource(SharedRes.string.add))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(BusinessRes.string.add_language_translation))
+                }
             }
 
             if (translations.isEmpty()) {
@@ -88,8 +107,8 @@ fun BusinessTranslationCard(
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 280.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = SharedLazyGridLayout.arrangement,
+                    horizontalArrangement = SharedLazyGridLayout.arrangement,
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f, fill = false)
@@ -111,15 +130,6 @@ fun BusinessTranslationCard(
                     }
                 }
             }
-
-            BusinessSelectedInfoCard(
-                visible = translations.isNotEmpty(),
-                description = stringResource(BusinessRes.string.translations_count, translations.size),
-                icon = Icons.Outlined.Info,
-                enabled = false,
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }
@@ -136,18 +146,14 @@ fun BusinessSelectedInfoCard(
     contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(visible = visible) {
+    AnimatedVisibility(visible = visible, modifier = modifier) {
         Surface(
             color = containerColor,
             shape = MaterialTheme.shapes.small,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
+                modifier = Modifier.padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -182,16 +188,10 @@ fun BusinessSelectedInfoCard(
                 }
 
                 if (enabled && onClear != null) {
-                    IconButton(
+                    SharedCloseButton(
                         onClick = onClear,
                         modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            Icons.Outlined.Clear,
-                            contentDescription = stringResource(SharedRes.string.clear),
-                            tint = contentColor
-                        )
-                    }
+                    )
                 }
             }
         }
@@ -216,8 +216,8 @@ private fun BusinessLanguageTranslationItem(
         modifier = modifier.fillMaxWidth(),
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(SharedColumnLayout.padding),
+            verticalArrangement = SharedColumnLayout.arrangement
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -229,8 +229,8 @@ private fun BusinessLanguageTranslationItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        Icons.Default.Language,
-                        null,
+                        Icons.Outlined.Language,
+                        "$languageName ($languageCode)",
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(Modifier.width(8.dp))
@@ -240,17 +240,7 @@ private fun BusinessLanguageTranslationItem(
                     )
                 }
                 if (enabled) {
-                    IconButton(
-                        onClick = onRemove,
-                        modifier = Modifier.size(32.dp).placeholderWithShimmer(isLoading)
-                    ) {
-                        Icon(
-                            Icons.Outlined.Delete,
-                            stringResource(SharedRes.string.delete),
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                    }
+                    BusinessDeleteIconButton { onRemove() }
                 }
             }
 
@@ -301,7 +291,7 @@ fun BusinessCategoryBasicInfoCard(
         uiState = if (categoryNameError != null) UiState.Error else UiState.Idle,
         enabled = enabled
     ) { isEnabled ->
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(verticalArrangement = SharedColumnLayout.arrangement) {
             MyOutlinedTextField(
                 modifier = Modifier.placeholderWithShimmer(isLoading),
                 value = categoryName,
@@ -332,8 +322,8 @@ fun BusinessCategoryBasicInfoCard(
                 error = null,
                 trailingIcon = {
                     if (categoryIva.isNotBlank() && isEnabled) {
-                        IconButton(onClick = { onIvaChange("") }) {
-                            Icon(Icons.Outlined.Clear, stringResource(SharedRes.string.clear))
+                        SharedCloseButton {
+                            onIvaChange("")
                         }
                     }
                 },
@@ -345,7 +335,7 @@ fun BusinessCategoryBasicInfoCard(
 }
 
 @Composable
- fun BusinessParentCategoryCard(
+fun BusinessParentCategoryCard(
     selectedParentCategory: ReducedCategoryResponse?, // 替换为实际类型
     enabled: Boolean,
     onParentCategoryChange: (ReducedCategoryResponse?) -> Unit,
@@ -359,7 +349,7 @@ fun BusinessCategoryBasicInfoCard(
         subtitle = "${stringResource(BusinessRes.string.select_parent_category_to_create)}（${stringResource(SharedRes.string.field_optional)}）",
         enabled = enabled
     ) { isEnabled ->
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(verticalArrangement = SharedColumnLayout.arrangement) {
             SearchableSelectorRemote(
                 config = RemoteSearchableSelectorConfig(
                     label = stringResource(BusinessRes.string.select_parent_category),

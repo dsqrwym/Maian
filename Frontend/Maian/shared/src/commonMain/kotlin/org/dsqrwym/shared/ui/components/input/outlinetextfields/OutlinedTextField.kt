@@ -7,6 +7,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -24,9 +26,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.icon_content_description_lock
 import maian.shared.generated.resources.icon_content_description_password_toggle_visibility
-import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.shared.drawable.sharedicons.Visibility
-import org.dsqrwym.shared.drawable.sharedicons.VisibilityOff
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -81,19 +80,22 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun MyOutlinedTextField(
     modifier: Modifier = Modifier,
+    modifierFillMaxWidth: Boolean = true,
+    readOnly: Boolean = false,
     enabled: Boolean = true,
     value: String,
     onValueChange: (String) -> Unit,
-    error: String?,
-    labelText: String,
-    placeholderText: String,
+    error: String? = null,
+    singleLine: Boolean = true,
+    labelText: String? = null,
+    placeholderText: String? = null,
     leadingIcon: ImageVector? = null,
     leadingIconContentDescription: String? = null,
-    trailingIcon: (@Composable (() -> Unit))? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     isPassword: Boolean = false,
     passwordVisibility: Boolean = false,
     visualTransformation: VisualTransformation? = null,
-    imeAction: ImeAction,
+    imeAction: ImeAction = ImeAction.Unspecified,
     onImeAction: () -> Unit = {},
     keyBordType: KeyboardType? = null,
     semanticsPropertyReceiver: SemanticsPropertyReceiver.() -> Unit = {},
@@ -113,27 +115,34 @@ fun MyOutlinedTextField(
 
     OutlinedTextField(
         enabled = enabled,
+        readOnly = readOnly,
         modifier = modifier
-            .fillMaxWidth()
+            .then(if (modifierFillMaxWidth) Modifier.fillMaxWidth() else Modifier)
             .focusRequester(focusRequester)
             .semantics(properties = semanticsPropertyReceiver),
         value = value,
         onValueChange = onValueChange,
-        label = { Text(labelText) },
-        placeholder = { Text(placeholderText) },
-        leadingIcon = {
+        label = labelText?.let { { Text(it) } },
+        placeholder = placeholderText?.let { { Text(it) } },
+        leadingIcon =
             leadingIcon?.let {
-                Icon(imageVector = leadingIcon, contentDescription = leadingIconContentDescription, tint = iconColor)
-            }
-        },
+                {
+                    Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = leadingIconContentDescription,
+                        tint = iconColor
+                    )
+                }
+            },
         trailingIcon = trailingIcon,
         isError = error != null,
-        singleLine = true,
-        supportingText = {
+        singleLine = singleLine,
+        supportingText =
             error?.let {
-                Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
-        },
+                {
+                    Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                }
+            },
         visualTransformation = if (isPassword) visualTransformation else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyBordType ?: if (isPassword) KeyboardType.Password else KeyboardType.Email,
@@ -215,7 +224,7 @@ fun MyPasswordField(
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
-                    imageVector = if (passwordVisible) SharedIcons.Visibility else SharedIcons.VisibilityOff,
+                    imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                     contentDescription = stringResource(SharedRes.string.icon_content_description_password_toggle_visibility), // "切换密码可见性"
                     tint = if (passwordVisible) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline
                 )

@@ -16,7 +16,9 @@ import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
 
-class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi) : BusinessCategoryRepository(api) {
+class CategoryRepository(
+    private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi
+) : BusinessCategoryRepository(api) {
     suspend fun getCategories(
         search: String? = null,
         type: SharedCategoryType? = null,
@@ -43,20 +45,23 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         safeApiCall { sharedApi.getCategories<CategoryResponse>(query) }
     }
 
-    suspend fun getParentCategories(
+    suspend fun getCategoriesByLevel(
         search: String? = null,
         page: Int = 1,
-        limit: Int = 100
+        limit: Int = 100,
+        needIva: Boolean = false,
+        maxLevel: Int = 3,
     ): SharedResponseResult<ApiResponseList<ReducedCategoryResponse>> = withAuthOrError { user ->
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             userId = user.userId,
-            maxLevel = 2,
+            maxLevel = maxLevel,
             page = page,
             limit = limit,
-            fields = listOf(
-                SharedCategorySelectField.TRANSLATIONS,
-            )
+            fields = buildList {
+                add(SharedCategorySelectField.TRANSLATIONS)
+                if (needIva) add(SharedCategorySelectField.IVA)
+            }
         )
         safeApiCall { sharedApi.getCategories<ReducedCategoryResponse>(query) }
     }

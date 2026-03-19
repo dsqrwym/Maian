@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maian</title>
+    <link type="text/css" rel="stylesheet" href="styles.css">
+    <link rel="preload"
+          href="../../../build/kotlin-multiplatform-resources/aggregated-resources/wasmJs/composeResources/maian.shared.generated.resources/font/Roboto-Regular.ttf"
+          as="fetch" type="font/ttf" crossorigin/>
+    <link rel="preload"
+          href="../../../build/kotlin-multiplatform-resources/aggregated-resources/wasmJs/composeResources/maian.shared.generated.resources/font/MiSansVF.ttf"
+          as="fetch" type="font/ttf" crossorigin/>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <script>
+        const currentLanguagesImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
+        const newLanguagesImplementation = Object.assign({}, currentLanguagesImplementation, {
+            get: function () {
+                if (window.__customLocale) {
+                    return [window.__customLocale];
+                } else {
+                    return currentLanguagesImplementation.get.apply(this);
+                }
+            }
+        });
+
+        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementation)
+    </script>
+    <script type="application/javascript"
+            src="../../../../shared/src/webMain/resources/html5-qrcode.min.js"><!--扫码库--></script>
+    <script src="adminComposeApp"></script>
+</head>
+<body>
+<div id="compose-root"></div>
+<div id="reader"></div>
+</body>
+</html>

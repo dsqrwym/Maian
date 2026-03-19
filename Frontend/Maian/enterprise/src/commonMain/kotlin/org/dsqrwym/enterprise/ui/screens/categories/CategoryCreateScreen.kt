@@ -52,7 +52,7 @@ fun CategoryCreateScreen(
 
     val categoryIva = viewModel.categoryIva
 
-    val selectedParentCategory = viewModel.filterParentCategory
+    val selectedParentCategory = viewModel.filterCategory
 
     val translations = viewModel.translations
     val translationsIsValid by viewModel.translationIsValid
@@ -130,9 +130,9 @@ fun CategoryCreateScreen(
                 BusinessParentCategoryCard(
                     selectedParentCategory,
                     cardEnabled,
-                    viewModel::updateFilterParentCategory,
-                    viewModel::removeParentIdFilter,
-                    viewModel::findParentCategories,
+                    viewModel::updateFilterCategory,
+                    viewModel::removeFilterCategory,
+                    viewModel::findCategories,
                 )
             }
 

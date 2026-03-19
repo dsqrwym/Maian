@@ -1,5 +1,4 @@
 import {
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -75,6 +74,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
+  @Matches(/^[A-Z0-9/_-]+$/, {
+    message:
+      'Product code can only contain uppercase letters, numbers, /, _, or -',
+  })
   product_code: string; // 主产品编码
 
   // --- 关键关联字段 (分类) ---

@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  Matches,
   Max,
   MaxLength,
   Min,
@@ -75,6 +76,10 @@ export class CreateVariantDto {
   })
   @IsNotEmpty()
   @MaxLength(50)
+  @Matches(/^[A-Z0-9/_-]+$/, {
+    message:
+      'Product code can only contain uppercase letters, numbers, /, _, or -',
+  })
   product_code: string; // 变体的编码
   // --- 库存和销售配置字段 (variant_products) ---
 

@@ -1,5 +1,36 @@
 package org.dsqrwym.shared.ui.components.containers
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dokar.sonner.LocalToastContentColor
+import com.dokar.sonner.Toast
+import com.dokar.sonner.ToastType.*
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.ToasterState
+import org.dsqrwym.shared.LocalIsDarkTheme
+import org.dsqrwym.shared.drawable.SharedIcons
+import org.dsqrwym.shared.drawable.sharedicons.CircleError
+import org.dsqrwym.shared.theme.AppExtraColors
+import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
+import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+
 /**
  * Components for displaying snackbar notifications and toasts.
  * 用于显示 Snackbar 通知和提示的组件。
@@ -8,30 +39,178 @@ package org.dsqrwym.shared.ui.components.containers
  * with different styles and animations for success, error, and information states.
  * 该文件包含的组件通过临时消息提供用户反馈，支持成功、错误、信息等不同状态的样式和动画。
  */
+/**
+ * 基于sonner更改为自己的样式
+ * */
+@Composable
+fun SnackbarScaffold(
+    viewModel: MySnackbarViewModel = viewModel(),
+    content: @Composable () -> Unit
+) {
+    val maxVisibleToasts = viewModel.maxSnackbarsVisibility
 
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.shared.drawable.sharedicons.CircleError
-import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
-import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+    Box(modifier = Modifier.fillMaxSize()) {
+        content()
 
+        MySnackbarViewModel.ToastPosition.entries.forEach { position ->
+            viewModel.toasterStates[position]?.let { state ->
+                SharedToaster(
+                    state = state,
+                    maxVisibleToasts = maxVisibleToasts,
+                    position = position
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SharedToaster(
+    state: ToasterState,
+    maxVisibleToasts: Int,
+    position: MySnackbarViewModel.ToastPosition
+) {
+    val isDarkTheme = LocalIsDarkTheme.current
+    Toaster(
+        state = state,
+        richColors = true,
+        darkTheme = isDarkTheme,
+        maxVisibleToasts = maxVisibleToasts,
+        contentPadding = { PaddingValues(2.dp) },
+        actionSlot = { toast ->
+            if (toast.action == true) {
+                IconButton(onClick = { state.dismiss(toast) }) {
+                    SharedCloseIcon(
+                        tint = when (toast.type) {
+                            Error -> MaterialTheme.colorScheme.onErrorContainer
+                            Normal -> contentColor(toast, isDarkTheme)
+                            Info,
+                            Success -> MaterialTheme.colorScheme.onPrimaryContainer
+
+                            Warning -> contentColor(toast, isDarkTheme)
+                        }
+                    )
+                }
+            }
+        },
+        contentColor = { toast ->
+            return@Toaster when (toast.type) {
+                Error -> MaterialTheme.colorScheme.onErrorContainer
+                Normal -> contentColor(toast, isDarkTheme)
+                Info,
+                Success -> MaterialTheme.colorScheme.onPrimaryContainer
+
+                Warning -> contentColor(toast, isDarkTheme)
+            }
+        },
+        background = { toast ->
+            return@Toaster when (toast.type) {
+                Error -> SolidColor(MaterialTheme.colorScheme.errorContainer)
+                Normal -> SolidColor(backgroundColor(toast, isDarkTheme))
+                Info,
+                Success -> SolidColor(MaterialTheme.colorScheme.primaryContainer)
+
+                Warning -> SolidColor(backgroundColor(toast, isDarkTheme))
+            }
+        },
+        border = { toast ->
+            return@Toaster BorderStroke(
+                width = 0.8.dp,
+                brush = when (toast.type) {
+                    Error -> SolidColor(MaterialTheme.colorScheme.errorContainer)
+                    Normal -> SolidColor(backgroundColor(toast, isDarkTheme))
+                    Info,
+                    Success -> SolidColor(MaterialTheme.colorScheme.primaryContainer)
+
+                    Warning -> SolidColor(backgroundColor(toast, isDarkTheme))
+                },
+            )
+        },
+        iconSlot = { toast ->
+            Spacer(Modifier.padding(end = 16.dp))
+            when (toast.type) {
+                Normal -> {}
+                Success -> {
+                    Icon(
+                        imageVector = Icons.Outlined.CheckCircle,
+                        contentDescription = "Success icon",
+                        modifier = Modifier.size(20.dp),
+                        tint = AppExtraColors.current.correct
+                    )
+                }
+
+                Info -> {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = "Info icon",
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+
+                Warning -> {
+                    Image(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = "Warning icon",
+                        modifier = Modifier.size(20.dp),
+                        colorFilter = ColorFilter.tint(contentColor(toast, isDarkTheme)),
+                    )
+                }
+
+                Error -> {
+                    Icon(
+                        imageVector = SharedIcons.CircleError,
+                        contentDescription = "Error icon",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
+            }
+            if (toast.type != Normal) {
+                Spacer(Modifier.padding(end = 16.dp))
+            }
+        },
+        messageSlot = { toast ->
+            val contentColor = LocalToastContentColor.current
+            Text(
+                text = toast.message.toString(),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                color = contentColor,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        },
+        alignment = position.alignment,
+    )
+}
+
+private fun contentColor(
+    toast: Toast,
+    darkTheme: Boolean
+): Color {
+    return if (toast.type == Normal) {
+        if (darkTheme)
+            Color(0xfffcfcfc)
+        else Color(0xff171717)
+    } else {
+        if (darkTheme) Color(0xfff3cf58) else Color(0xffdc7609)
+    }
+}
+
+private fun backgroundColor(
+    toast: Toast,
+    darkTheme: Boolean
+): Color {
+    return if (toast.type == Normal) {
+        if (darkTheme)
+            Color.Black
+        else Color.White
+    } else {
+        if (darkTheme) Color(0xff1d1f00) else Color(0xfffffcf0)
+    }
+}
+
+/*
+之前的实现
 /**
  * A global scaffold wrapper that hosts a Material3 SnackbarHost with enhanced animations.
  * 一个全局的脚手架容器，内置 Material3 的 SnackbarHost，并提供增强的动画效果。
@@ -62,7 +241,7 @@ fun SnackbarScaffold(
     viewModel: MySnackbarViewModel? = null,
     // EN: Fallback maximum number of visible items when ViewModel is absent.
     // ZH: 当未提供 ViewModel 时的最大可见数量备用值。
-    maxSnackbars: Int = 2,
+    maxSnackbars: Int = 3,
     // EN: Screen content slot.
     // ZH: 屏幕主体内容槽。
     content: @Composable () -> Unit
@@ -577,3 +756,5 @@ fun getDurationMillis(duration: SnackbarDuration): Long = when (duration) {
     SnackbarDuration.Long -> 10000L
     SnackbarDuration.Indefinite -> 60000L
 }
+
+*/

@@ -22,6 +22,7 @@ import org.dsqrwym.enterprise.ui.components.product.ProductTableView
 import org.dsqrwym.enterprise.ui.components.product.ProductWaterfallView
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductsListViewModel
 import org.dsqrwym.shared.LocalWindowSizeClass
+import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
@@ -67,12 +68,10 @@ fun ProductsListScreen(
                     expanded = false,
                     onExpandedChange = {},
                     placeholder = { Text("搜索产品") },
-                    leadingIcon = { Icon(Icons.Outlined.Search, null) },
+                    leadingIcon = { Icon(Icons.Outlined.Search, "搜索") },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
-                                Icon(Icons.Outlined.Clear, stringResource(SharedRes.string.clear))
-                            }
+                            SharedCloseButton { viewModel.updateSearchQuery("") }
                         }
                     }
                 )

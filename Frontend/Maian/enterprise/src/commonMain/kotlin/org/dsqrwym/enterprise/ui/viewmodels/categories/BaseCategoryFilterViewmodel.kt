@@ -15,14 +15,15 @@ abstract class BaseCategoryFilterViewmodel(
     protected val mySnackbarViewModel: MySnackbarViewModel
 ) : ViewModel() {
 
-    var filterParentCategory by mutableStateOf<ReducedCategoryResponse?>(null)
+    var filterCategory by mutableStateOf<ReducedCategoryResponse?>(null)
         protected set
 
     /**
      * 获取父分类列表（带分页）
      */
-    open suspend fun findParentCategories(query: String?, page: Int, limit: Int): List<ReducedCategoryResponse> {
-        when (val result = categoryRepository.getParentCategories(query, page, limit)) {
+    open suspend fun findCategories(query: String?, page: Int, limit: Int): List<ReducedCategoryResponse> {
+        // maxLevel 2 保证都是父元素
+        when (val result = categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 2)) {
             is SharedResponseResult.Success -> {
                 return result.data?.items ?: emptyList()
             }
@@ -37,11 +38,11 @@ abstract class BaseCategoryFilterViewmodel(
     }
 
 
-    open fun removeParentIdFilter() {
-        filterParentCategory = null
+    open fun removeFilterCategory() {
+        filterCategory = null
     }
 
-    open fun updateFilterParentCategory(parentCategory: ReducedCategoryResponse?) {
-        filterParentCategory = parentCategory
+    open fun updateFilterCategory(category: ReducedCategoryResponse?) {
+        filterCategory = category
     }
 }

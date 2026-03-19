@@ -36,6 +36,7 @@ import org.dsqrwym.business.ui.components.category.BusinessCategoriePath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
@@ -45,6 +46,7 @@ import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgres
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
+import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
@@ -100,8 +102,8 @@ fun CategoriesListScreen(
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
-                                Icon(Icons.Outlined.Clear, stringResource(SharedRes.string.clear))
+                            SharedCloseButton {
+                                viewModel.updateSearchQuery("")
                             }
                         }
                     }
@@ -340,7 +342,7 @@ fun CategoryListItem(
 
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(verticalArrangement = SharedColumnLayout.arrangement) {
                         category.categoryTranslations?.let { BusinessCategorieLanguages(it) }
                         BusinessCategoriePath(category.getPath(), category.name)
                     }

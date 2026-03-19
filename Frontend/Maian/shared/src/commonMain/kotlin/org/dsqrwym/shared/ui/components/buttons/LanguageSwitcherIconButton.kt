@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.icon_content_description_language
 import org.dsqrwym.shared.data.local.SharedUserPreferences
-import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
 import org.jetbrains.compose.resources.stringResource
 
@@ -53,7 +53,7 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
             Spacer(modifier = Modifier.padding(horizontal = 2.dp))
 
             Icon(
-                imageVector = SharedIcons.Language,
+                imageVector = Icons.Outlined.Language,
                 contentDescription = stringResource(SharedRes.string.icon_content_description_language),
                 tint = MaterialTheme.colorScheme.onBackground
             )

@@ -8,21 +8,26 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.automirrored.outlined.Label
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -31,8 +36,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.mohamedrejeb.richeditor.model.RichTextState
 import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
@@ -40,25 +49,47 @@ import dev.chrisbanes.haze.rememberHazeState
 import io.github.vinceglb.filekit.dialogs.FileKitMode
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.create
-import maian.shared.generated.resources.status_error_content_description
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.add_language_translation
+import maian.business.generated.resources.parent_category_selected
+import maian.business.generated.resources.translations_count
+import maian.shared.generated.resources.*
+import org.dsqrwym.business.drawable.sharedicons.Barcode
+import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
+import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
+import org.dsqrwym.business.ui.components.richtext.BusinessRichTextEditor
 import org.dsqrwym.business.ui.media.MediaPickerViewModel
 import org.dsqrwym.business.ui.media.model.MediaType
 import org.dsqrwym.business.ui.media.model.UploadMediaItem
 import org.dsqrwym.business.ui.media.model.UploadState
+import org.dsqrwym.enterprise.ui.screens.categories.AddLanguageDialog
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductCreateViewModel
+import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
+import org.dsqrwym.shared.data.products.SharedProductStatus
+import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
+import org.dsqrwym.shared.drawable.SharedIcons
+import org.dsqrwym.shared.drawable.sharedicons.InProgress
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.theme.MyHazeStyles
+import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
+import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.containers.SharedOverlayContentBox
 import org.dsqrwym.shared.ui.components.containers.UiState
+import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
+import org.dsqrwym.shared.ui.components.input.selector.SearchableSelector
+import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorDefaults
+import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.ui.media.SharedVideoPlayer
-import org.dsqrwym.shared.util.form.SharedFormLayout
+import org.dsqrwym.shared.util.colum.SharedColumnLayout
+import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
@@ -71,13 +102,33 @@ fun ProductCreateScreen(
     onNavigateBack: () -> Unit = {},
     viewModel: ProductCreateViewModel = koinViewModel()
 ) {
+
+    val mediaPicker = viewModel.mediaPicker
+    val translationTabs = viewModel.translationTabs
+    val currentLanguageIndex = viewModel.selectedLanguageIndex
+
+    val productCode = viewModel.productCode
+    val productIva = viewModel.productIva
+    val productStatus = viewModel.productStatus
+
+    val selectedCategory = viewModel.filterCategory
+
     SharedTransparentScaffold(
         onNavigateBack = onNavigateBack,
-        showOverlayDialog = false,
-        overlayContent = {},
+        showOverlayDialog = viewModel.showAddLanguageDialog,
+        overlayContent = {
+            AddLanguageDialog(
+                availableLanguages = viewModel.getAvailableLanguages(),
+                onDismiss = { viewModel.showAddLanguageDialog(false) },
+                onAdd = { langCode, _ ->
+                    viewModel.upsertTranslation(langCode, "", "")
+                    viewModel.showAddLanguageDialog(false)
+                }
+            )
+        },
         title = {
             Row {
-                Icon(Icons.AutoMirrored.Outlined.Article, "产品")
+                Icon(Icons.Outlined.ShoppingBag, "产品")
                 Text(stringResource(SharedRes.string.create))
             }
         },
@@ -90,31 +141,292 @@ fun ProductCreateScreen(
             stringResource(SharedRes.string.create)
         )
     ) { padding, scrollBehavior ->
-        val mediaPicker = viewModel.mediaPicker
-
-        Column(
+        LazyVerticalStaggeredGrid(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .paddingWithoutTop(SharedFormLayout.Padding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .paddingWithoutTop(padding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            columns = StaggeredGridCells.Adaptive(minSize = 399.dp),
+            contentPadding = PaddingValues(SharedLazyGridLayout.Padding),
+            horizontalArrangement = SharedLazyGridLayout.arrangement,
         ) {
-            /*FormCard(title = "基础信息") {
-                FlowRow {
-                    ProductMediaUploader(
-                        mediaPicker
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Spacer(Modifier.height(padding.calculateTopPadding()))
+            }
+            item {
+                FormCard(title = "媒体文件") {
+                    ProductMediaUploader(mediaPicker)
+                }
+            }
+            item {
+                FormCard(title = "产品信息（多语言）") {
+                    ProductTranslationTabs(
+                        translationTabs,
+                        null,
+                        currentLanguageIndex,
+                        viewModel::changeLanguageIndex,
+                        viewModel::upsertTranslation,
+                        viewModel::removeTranslation,
+                        viewModel::showAddLanguageDialog,
+                        viewModel::getAvailableLanguages
                     )
                 }
-            }*/
-
-            FormCard(title = "媒体文件") {
-                FlowRow {
-                    ProductMediaUploader(
-                        mediaPicker
+            }
+            item {
+                FormCard(title = "产品属性") {
+                    ProductMetaFields(
+                        selectedCategory = selectedCategory,
+                        onSelectedCategoryChange = viewModel::updateFilterCategory,
+                        onSearchCategory = viewModel::findCategories,
+                        onRemoveCategory = viewModel::removeFilterCategory,
+                        productCode = productCode,
+                        onProductCodeChange = viewModel::updateProductCode,
+                        productIva = productIva,
+                        onIvaChange = viewModel::updateProductIva,
+                        onIvaBlur = viewModel::formatIvaTwoDecimal,
+                        productStatus = productStatus,
+                        onProductStatusChange = viewModel::updateProductStatus,
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ProductMetaFields(
+    selectedCategory: ReducedCategoryResponse?,
+    onSelectedCategoryChange: (ReducedCategoryResponse?) -> Unit,
+    onSearchCategory: suspend (String?, Int, Int) -> List<ReducedCategoryResponse>,
+    onRemoveCategory: () -> Unit,
+    productCode: String = "",
+    onProductCodeChange: (String) -> Unit = {},
+    productIva: String = "",
+    onIvaChange: (String) -> Unit = {},
+    onIvaBlur: () -> Unit = {},
+    productStatus: SharedProductStatus = SharedProductStatus.ACTIVE,
+    onProductStatusChange: (SharedProductStatus) -> Unit = {},
+) {
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = SharedColumnLayout.arrangement,
+    ) {
+        SearchableSelectorRemote(
+            config = RemoteSearchableSelectorConfig(
+                label = "选择产品主类别",
+                error = null,
+                leadingIcon = Icons.Outlined.Category,
+                selectedItem = selectedCategory,
+                onSelectedItemChange = onSelectedCategoryChange,
+                pageSize = 100,
+                itemToString = {
+                    "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
+                },
+                onSearch = onSearchCategory,
+            )
+        )
+
+        BusinessSelectedInfoCard(
+            visible = selectedCategory != null,
+            title = stringResource(BusinessRes.string.parent_category_selected),
+            description = selectedCategory?.name ?: "",
+            onClear = onRemoveCategory,
+            enabled = true
+        )
+
+
+        MyOutlinedTextField(
+            value = productCode,
+            onValueChange = onProductCodeChange,
+            leadingIcon = SharedIcons.Barcode,
+            leadingIconContentDescription = "产品编码",
+            trailingIcon = {
+                if (productCode.isBlank()) {
+                    SharedScannerButton(onProductCodeChange)
+                } else SharedCloseButton { onProductCodeChange("") }
+            },
+            labelText = "产品编码 (${stringResource(SharedRes.string.field_required)})",
+            placeholderText = "请输入产品编码",
+            error = null,
+            keyBordType = KeyboardType.Uri,
+            imeAction = ImeAction.Next,
+            onImeAction = { focusManager.moveFocus(FocusDirection.Next) }
+        )
+
+        MyOutlinedTextField(
+            value = productIva,
+            onValueChange = onIvaChange,
+            modifier = Modifier.onFocusChanged {
+                if (!it.isFocused) onIvaBlur()
+            },
+            leadingIcon = Icons.Outlined.Percent,
+            leadingIconContentDescription = stringResource(SharedRes.string.tax_rate),
+            labelText = "${stringResource(SharedRes.string.tax_rate)}->IVA(%)",
+            placeholderText = "请输入产品税率",
+            keyBordType = KeyboardType.Decimal,
+            error = null,
+            trailingIcon = {
+                if (productIva.isNotBlank()) {
+                    SharedCloseButton {
+                        onIvaChange("")
+                    }
+                }
+            },
+            imeAction = ImeAction.Next,
+            onImeAction = { focusManager.moveFocus(FocusDirection.Next) }
+        )
+
+        SearchableSelector(
+            items = SharedProductStatus.entries,
+            itemToString = { it.name },
+            itemId = { it.name },
+            config = SearchableSelectorDefaults(
+                label = "状态",
+                placeholder = "请设置产品状态",
+                readOnly = true,
+                selectedItemId = productStatus.name,
+                leadingIcon = SharedIcons.InProgress,
+                onSelectedItemIdChange = {
+                    it?.let { onProductStatusChange(SharedProductStatus.valueOf(it)) }
+                }
+            )
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProductTranslationTabs(
+    translationTabs: SnapshotStateList<Pair<SharedProductTranslation, RichTextState>>,
+    currentProductNameError: StringResource?,
+    currentLanguageIndex: Int,
+    changeLanguageIndex: (Int) -> Unit,
+    upsertTranslation: (
+        String,
+        String,
+        String?,
+        String?
+    ) -> Unit,
+    removeTranslation: (String) -> Unit,
+    showAddLanguageDialog: (Boolean) -> Unit,
+    getAvailableLanguages: () -> List<LanguageManager.SupportedLanguages>,
+) {
+    val focusManager = LocalFocusManager.current
+    val selectedLanguageIndex =
+        currentLanguageIndex.coerceIn(minimumValue = 0, maximumValue = translationTabs.lastIndex)
+    val currentTranslation = translationTabs[selectedLanguageIndex].first
+    val currentDescription = translationTabs[selectedLanguageIndex].second
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = SharedColumnLayout.arrangement,
+    ) {
+        Text(
+            text = "这是一个测试时",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
+        BusinessSelectedInfoCard(
+            visible = true,
+            description = stringResource(BusinessRes.string.translations_count, translationTabs.size),
+            icon = Icons.Outlined.Info,
+            enabled = false,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = SharedLazyGridLayout.arrangement,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            PrimaryScrollableTabRow(
+                selectedTabIndex = selectedLanguageIndex,
+                modifier = Modifier.weight(1f),
+            ) {
+                translationTabs.forEachIndexed { index, lang ->
+                    val language = LanguageManager.SupportedLanguages.fromCode(lang.first.langCode)
+                    val content = "${language.displayName} (${language.code})"
+                    LeadingIconTab(
+                        selected = selectedLanguageIndex == index,
+                        onClick = {
+                            changeLanguageIndex(index)
+                        },
+                        icon = {
+                            Icon(Icons.Outlined.Language, content, modifier = Modifier.size(20.dp))
+                        },
+                        text = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(1.dp)
+                            ) {
+                                Text(content, style = MaterialTheme.typography.labelLarge)
+                                if (index > 0) {
+                                    BusinessDeleteIconButton { removeTranslation(lang.first.langCode) }
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+            OutlinedButton(
+                onClick = {
+                    showAddLanguageDialog(true)
+                },
+                enabled = getAvailableLanguages().isNotEmpty()
+            ) {
+                Icon(Icons.Outlined.Add, stringResource(SharedRes.string.add))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(BusinessRes.string.add_language_translation))
+            }
+        }
+
+        MyOutlinedTextField(
+            value = currentTranslation.name,
+            onValueChange = {
+                upsertTranslation(
+                    currentTranslation.langCode,
+                    it,
+                    currentTranslation.title,
+                    currentTranslation.description
+                )
+            },
+            leadingIcon = Icons.AutoMirrored.Outlined.Label,
+            leadingIconContentDescription = "",
+            labelText = "产品名称",
+            placeholderText = "请输入产品名称",
+            imeAction = ImeAction.Next,
+            error = currentProductNameError.asString(),
+            onImeAction = { focusManager.moveFocus(FocusDirection.Next) },
+        )
+
+        MyOutlinedTextField(
+            value = currentTranslation.title ?: "",
+            onValueChange = {
+                upsertTranslation(
+                    currentTranslation.langCode,
+                    currentTranslation.name,
+                    it,
+                    currentTranslation.description
+                )
+            },
+            leadingIcon = Icons.AutoMirrored.Outlined.Article,
+            leadingIconContentDescription = "",
+            labelText = "产品标题",
+            placeholderText = "请输入产品名称，用于进行简短的介绍",
+            imeAction = ImeAction.Next,
+            error = null,
+            onImeAction = { focusManager.moveFocus(FocusDirection.Next) },
+        )
+
+        BusinessRichTextEditor(
+            label = "产品详情",
+            placeholder = "请输入详细的产品介绍",
+            state = currentDescription
+        )
     }
 }
 

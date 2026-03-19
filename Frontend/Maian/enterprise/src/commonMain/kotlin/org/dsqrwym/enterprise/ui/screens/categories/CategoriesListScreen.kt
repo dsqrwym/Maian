@@ -28,6 +28,7 @@ import org.dsqrwym.business.ui.components.category.BusinessCategoriePath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
+import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
@@ -92,9 +93,7 @@ fun CategoriesListScreen(
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
-                                Icon(Icons.Outlined.Clear, stringResource(SharedRes.string.clear))
-                            }
+                            SharedCloseButton { viewModel.updateSearchQuery("") }
                         }
                     }
                 )
@@ -327,16 +326,16 @@ fun FilterDialog(
                             label = stringResource(BusinessRes.string.select_parent_category),
                             error = null,
                             leadingIcon = Icons.Outlined.Category,
-                            selectedItem = viewModel.filterParentCategory,
+                            selectedItem = viewModel.filterCategory,
                             onSelectedItemChange = {
-                                viewModel.updateFilterParentCategory(it)
+                                viewModel.updateFilterCategory(it)
                             },
                             pageSize = 100,
                             itemToString = {
                                 "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
                             },
                             onSearch = { query, page, limit ->
-                                viewModel.findParentCategories(query, page, limit)
+                                viewModel.findCategories(query, page, limit)
                             }
                         )
                     )
@@ -360,10 +359,10 @@ private fun FilterChipsRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        viewModel.filterParentCategory?.let {
+        viewModel.filterCategory?.let {
             ElevatedFilterChip(
                 selected = true,
-                onClick = { viewModel.removeParentIdFilter() },
+                onClick = { viewModel.removeFilterCategory() },
                 label = { Text("${stringResource(BusinessRes.string.parent_category)}: ${it.name}") },
                 trailingIcon = { SharedCloseIcon() }
             )

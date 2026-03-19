@@ -19,7 +19,7 @@ kotlin {
     // Android目标配置
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)     // 强制使用Java 11字节码， 官方推荐
+            jvmTarget.set(JvmTarget.JVM_17)     // 强制使用Java 11字节码， 官方推荐
         }
     }
 
@@ -60,7 +60,7 @@ kotlin {
         // 桌面平台专属配置
         val desktopMain by getting
 
-        iosMain.dependencies {
+        nativeMain.dependencies {
             implementation(project(":shared"))
         }
 
@@ -76,7 +76,10 @@ kotlin {
             api(libs.table.core)
             // kotlin 高性能持久化不可变集合库， table依赖需要
             api(libs.kotlinx.collections.immutable)
-
+            // 富文本编辑器
+            api(libs.richeditor.compose)
+            // 颜色选择器
+            api(libs.composePipette)
             implementation(project(":shared"))
         }
 
@@ -92,7 +95,7 @@ kotlin {
         }
 
         // 根据KMP官网教程 在网页端添加处理日期的跨平台库
-        wasmJsMain.dependencies {
+        webMain.dependencies {
             implementation(project(":shared"))
         }
     }
@@ -128,8 +131,8 @@ android {
 
     // Java版本兼容性
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

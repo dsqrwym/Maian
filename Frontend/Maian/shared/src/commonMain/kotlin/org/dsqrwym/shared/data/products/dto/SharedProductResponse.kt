@@ -51,5 +51,6 @@ data class SharedProductTranslation(
     @SerialName("lang_code")
     val langCode: String,
     val name: String,
-    val title: String
+    val title: String? = null,
+    val description: String? = null,
 )

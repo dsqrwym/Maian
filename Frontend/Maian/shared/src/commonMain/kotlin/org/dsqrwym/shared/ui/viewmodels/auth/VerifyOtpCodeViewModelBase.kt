@@ -10,6 +10,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
@@ -18,7 +19,6 @@ import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import maian.shared.generated.resources.*
 import kotlin.time.ExperimentalTime
 
 /**

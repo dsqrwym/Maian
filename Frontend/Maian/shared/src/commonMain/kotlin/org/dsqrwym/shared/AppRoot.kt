@@ -122,8 +122,6 @@ fun AppRoot(
                         .windowInsetsPadding(WindowInsets.systemBars)
                 ) {
                     SnackbarScaffold(
-                        snackbarHostState = mySnackbarViewModel.snackbarHostState,
-                        maxSnackbars = mySnackbarViewModel.maxSnackbars.value,
                         viewModel = mySnackbarViewModel
                     ) {
                         OverlayHost {

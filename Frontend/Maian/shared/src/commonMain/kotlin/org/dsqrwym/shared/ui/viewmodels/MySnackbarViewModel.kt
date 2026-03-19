@@ -1,15 +1,145 @@
 package org.dsqrwym.shared.ui.viewmodels
 
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dokar.sonner.ToastType
+import com.dokar.sonner.ToasterDefaults
+import com.dokar.sonner.ToasterState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import org.dsqrwym.shared.util.log.SharedLog
-import org.dsqrwym.shared.util.log.SharedLogLevel
+import kotlin.time.Duration.Companion.milliseconds
 
+
+class MySnackbarViewModel(maxSnackbars: Int = 3) : ViewModel() {
+    enum class ToastPosition(val alignment: Alignment) {
+        Top(Alignment.TopCenter),
+        TopStart(Alignment.TopStart),
+        TopEnd(Alignment.TopEnd),
+
+        Center(Alignment.Center),
+        CenterStart(Alignment.CenterStart),
+        CenterEnd(Alignment.CenterEnd),
+
+        Bottom(Alignment.BottomCenter),
+        BottomStart(Alignment.BottomStart),
+        BottomEnd(Alignment.BottomEnd)
+    }
+
+    var maxSnackbarsVisibility: Int by mutableIntStateOf(maxSnackbars)
+        private set
+
+    val toasterStates: Map<ToastPosition, ToasterState> =
+        ToastPosition.entries.associateWith {
+            ToasterState(viewModelScope)
+        }
+
+    /**
+     * EN: Update the maximum number of visible snackbars.
+     * ZH: 更新同时可见的 snackbar 最大数量.
+     */
+    fun updateMaxSnackbars(maxSnackbars: Int) {
+        if (maxSnackbars < 1) return
+        maxSnackbarsVisibility = maxSnackbars
+    }
+
+    /**
+     * EN: General API to enqueue a toast.
+     * ZH: 通用的入队显示接口.
+     *
+     * EN behavior:
+     *  - If dismissPrevious is true, clears current queue/stack and dismisses current Snackbar.
+     *  - Emits a ToastEvent into the SharedFlow for the consumer coroutine.
+     *
+     * ZH 行为：
+     *  - 若 dismissPrevious 为真，先清空当前队列/堆栈并关闭当前 Snackbar.
+     *  - 将 ToastEvent 发射到 SharedFlow，由消费协程处理.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun show(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        type: ToastType = ToastType.Info,
+        position: ToastPosition = ToastPosition.Top,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        if (dismissPrevious) {
+            toasterStates[position]?.dismissAll()
+        }
+        val targetState = toasterStates[position]
+            ?: error("No ToasterState for position: $position")
+
+        targetState.show(
+            message = message,
+            duration = when (duration) {
+                SnackbarDuration.Short -> ToasterDefaults.DurationDefault
+                SnackbarDuration.Long -> ToasterDefaults.DurationLong
+                else -> Long.MAX_VALUE.milliseconds
+            },
+            action = withDismissAction,
+            type = type
+        )
+    }
+
+    /**
+     * EN: Convenience API for success toast.
+     * ZH: 便捷的成功提示接口.
+     */
+    fun showSuccess(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Success, position, withDismissAction, dismissPrevious)
+    }
+
+    /**
+     * EN: Convenience API for error toast.
+     * ZH: 便捷的错误提示接口.
+     */
+    fun showError(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Error, position, withDismissAction, dismissPrevious)
+    }
+
+    /**
+     * EN: Convenience API for info toast.
+     * ZH: 便捷的信息提示接口.
+     */
+    fun showInfo(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Info, position, withDismissAction, dismissPrevious)
+    }
+
+    fun showWarning(
+        message: String,
+        duration: SnackbarDuration = SnackbarDuration.Short,
+        position: ToastPosition = ToastPosition.Top,
+        withDismissAction: Boolean = true,
+        dismissPrevious: Boolean = false
+    ) {
+        show(message, duration, ToastType.Warning, position, withDismissAction, dismissPrevious)
+    }
+
+}
+/*
+之前的实现
 /**
  * MySnackbarViewModel
  *
@@ -23,13 +153,13 @@ import org.dsqrwym.shared.util.log.SharedLogLevel
  * StateFlow 向 UI 暴露当前事件的元信息，以便 UI 根据类型与位置调整样式与摆放。
  *
  * EN: This ViewModel supports two display modes:
- *  - Single mode: maxSnackbars <= 1. Delegates to Material's SnackbarHostState sequential queue.
- *  - Stacked mode: maxSnackbars > 1. Keeps an internal stack of items so the UI can render
+ *  - Single mode: maxSnackbarsVisibility <= 1. Delegates to Material's SnackbarHostState sequential queue.
+ *  - Stacked mode: maxSnackbarsVisibility > 1. Keeps an internal stack of items so the UI can render
  *    multiple toasts concurrently with custom animations and positioning.
  *
  * ZH: 本 ViewModel 支持两种展示模式：
- *  - 单条模式：maxSnackbars <= 1。委托给 Material 的 SnackbarHostState 顺序展示队列。
- *  - 堆叠模式：maxSnackbars > 1。维护内部堆栈，交由 UI 同时渲染多条并自定义动画与定位。
+ *  - 单条模式：maxSnackbarsVisibility <= 1。委托给 Material 的 SnackbarHostState 顺序展示队列。
+ *  - 堆叠模式：maxSnackbarsVisibility > 1。维护内部堆栈，交由 UI 同时渲染多条并自定义动画与定位。
  */
 class MySnackbarViewModel : ViewModel() {
 
@@ -108,8 +238,8 @@ class MySnackbarViewModel : ViewModel() {
     val currentEvent: StateFlow<ToastEvent?> = _currentEvent
 
     /**
-     * EN: Stack of toast items when stacked mode is enabled (maxSnackbars > 1).
-     * ZH: 当启用堆叠模式（maxSnackbars > 1）时的提示项栈.
+     * EN: Stack of toast items when stacked mode is enabled (maxSnackbarsVisibility > 1).
+     * ZH: 当启用堆叠模式（maxSnackbarsVisibility > 1）时的提示项栈.
      *
      * EN: The UI will render these items in a visual stack and run per-item animations
      *     with promotion (back-to-front) and timed auto-dismiss.
@@ -269,3 +399,4 @@ class MySnackbarViewModel : ViewModel() {
         _stack.value = emptyList()
     }
 }
+*/

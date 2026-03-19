@@ -47,7 +47,7 @@ class CategoriesCreateViewModel(
     var categoryNameError by mutableStateOf<StringResource?>(null)
         private set
 
-    var categoryIva by mutableStateOf("")
+    var categoryIva by mutableStateOf("21")
         private set
 
     var translations = mutableStateListOf<SharedCategoryTranslation>()
@@ -148,7 +148,7 @@ class CategoriesCreateViewModel(
             when (val result = categoryRepository.createCategory(
                 categoryName,
                 categoryIva.toDoubleOrNull(),
-                filterParentCategory?.id?.toString(),
+                filterCategory?.id?.toString(),
                 translations
             )) {
                 is SharedResponseResult.Success -> {

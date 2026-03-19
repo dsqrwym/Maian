@@ -1,6 +1,7 @@
 package org.dsqrwym.enterprise
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -27,6 +28,7 @@ import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
+import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
 import org.dsqrwym.shared.util.log.SharedLog
 import org.koin.compose.currentKoinScope
@@ -109,12 +111,28 @@ fun App() {
                                 ProductCreateScreen()
                             }
                             entry<SharedProfileScreen> {
+                                val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
                                 val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
-                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                     ElevatedButton(onClick = {
                                         authSessionViewModel.logout()
                                     }) {
                                         Text("Logout")
+                                    }
+
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showInfo("这是INFO") }) {
+                                        Text("INFO")
+                                    }
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showError("这是ERROR") }) {
+                                        Text("ERROR")
+                                    }
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showSuccess("这是SUCCESS") }) {
+                                        Text("SUCCESS")
                                     }
                                 }
                             }

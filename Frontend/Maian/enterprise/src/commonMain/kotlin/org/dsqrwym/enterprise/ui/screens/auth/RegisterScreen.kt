@@ -143,7 +143,11 @@ fun RegisterScreen(
                             registerViewModel.sendCode()
                             registerViewModel.startResentCodeCountDown()
                         },
-                        errorMessage = registerViewModel.codeError.asString()
+                        errorMessage = registerViewModel.codeError.asString(),
+                        onDone = {
+                            registerViewModel.updateCode(true)
+                            focusManager.clearFocus()
+                        }
                     ) { otp, isComplete ->
                         registerViewModel.updateCode(otp)
                         if (isComplete) {

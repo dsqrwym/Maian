@@ -20,3 +20,11 @@ fun sanitizeIvaInput(input: String): String? {
 
     return filtered
 }
+
+fun sanitizeProductCode(input: String): String {
+    if (input.isBlank()) return ""
+    return input
+        .uppercase()
+        .replace(Regex("[^A-Z0-9/_-]"), "")
+        .take(50)
+}

@@ -54,6 +54,7 @@ data class SearchableSelectorDefaults(
     val placeholder: String = "",
     val error: String? = null,
     val enabled: Boolean = true,
+    val readOnly: Boolean = false,
     val leadingIcon: ImageVector = Icons.Outlined.Search,
     val isSearching: Boolean? = null,
     val onSearchingChange: ((Boolean) -> Unit)? = null,
@@ -123,6 +124,7 @@ fun <T> SearchableSelector(
             MyOutlinedTextField(
                 leadingIcon = config.leadingIcon,
                 enabled = config.enabled,
+                readOnly = config.readOnly,
                 value = text,
                 onValueChange = {
                     text = it

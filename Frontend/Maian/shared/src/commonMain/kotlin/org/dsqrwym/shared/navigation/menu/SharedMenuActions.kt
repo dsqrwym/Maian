@@ -1,17 +1,16 @@
 package org.dsqrwym.shared.navigation.menu
 
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.ModeNight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.*
-import androidx.compose.foundation.text.selection.SelectionContainer
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.local.SharedUserPreferences
-import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.shared.drawable.sharedicons.Language
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.LanguageMenuItem
 import org.jetbrains.compose.resources.stringResource
@@ -41,7 +40,7 @@ open class SharedMenuActions(
             ) {
                 IconButton(onClick = onClick) {
                     Icon(
-                        imageVector = SharedIcons.Language,
+                        imageVector = Icons.Outlined.Language,
                         contentDescription = stringResource(SharedRes.string.icon_content_description_language),
                     )
                 }

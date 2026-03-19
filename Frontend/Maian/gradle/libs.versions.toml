@@ -5,49 +5,48 @@ android-compileSdk = "36"
 android-minSdk = "24"
 #noinspection OldTargetApi
 android-targetSdk = "35"
-androidx-activity = "1.12.4" #1.12.4
+androidx-activity = "1.13.0" #1.12.4
 androidx-lifecycle = "2.9.6" #2.9.5
-camerak = "0.2.0"
-chart = "1.1.0"
 coilCompose = "3.4.0" #3.3.0
 #composeMultiplatform = "1.9.3" #1.9.3
 composemediaplayer = "0.8.7" #0.8.6
-compose-multiplatform-adaptive = "1.3.0-alpha05"
-compose-multiplatform-lifecycle = "2.10.0-alpha08"
-composeMultiplatform = "1.10.1" #1.10.0
+compose-multiplatform-adaptive = "1.3.0-alpha06"
+compose-multiplatform-lifecycle = "2.10.0-beta01"
+composeMultiplatform = "1.10.3" #1.10.2
 composeMultiplatformMediaPlayer = "1.0.53" #1.0.52
+composePipette = "2.0.0"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
-compottieLite = "2.0.3" #2.0.3
+compottieLite = "2.1.0" #2.0.3
 datatableMaterial3 = "0.12.0" #0.11.7
 filekitCore = "0.13.0" #0.12.0
-githubImage_saver_plugin = "0.2.0"
-githubOcr_plugin = "0.2.0"
-githubQr_scanner_plugin = "0.2.0"
 haze = "1.7.2" #1.7.2
 jmail = "2.1.0" #2.0.2
-koinCore = "4.1.1" #4.1.0
-kotlin = "2.3.10" #2.3.0
+koinCore = "4.2.0" #4.1.1
+kotlin = "2.3.20" #2.3.0
 kotlinx-coroutines = "1.10.2"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxDatetime = "0.7.1"
 kotlinxSerializationJson = "1.10.0" #1.9.0
-ktor = "3.4.0" #3.3.3
+kscan = "0.7.1"
+ktor = "3.4.1" #3.4.0
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
 multiplatformSettings = "1.3.0"
-navigation3Runtime = "1.1.0-alpha05" #1.1.0-alpha04
+navigation3Runtime = "1.1.0-beta01" #1.1.0-alpha04
 multiplatform-nav3-ui = "1.0.0-alpha06"
 navigationCompose = "2.9.2" #2.9.1
-pagingRuntime = "3.4.1" #3.4.0-rc01
+pagingRuntime = "3.4.2" #3.4.0-rc01
 reorderable = "3.0.0"
 richeditorCompose = "1.0.0-rc13"
 securityCrypto = "1.1.0"
 sonner = "0.3.9"
-tableCore = "1.7.13" #1.7.12
-uiTilesExtended = "2.26.0"
-uiTooling = "1.10.1" #1.10.1
+tableCore = "1.7.15" #1.7.12
+uiTooling = "1.10.2" #1.10.1
+webcam = "0.3.12"
 zoomable = "2.11.1" #2.9.0
+zxing = "3.5.4"
+zxingAndroid = "4.3.0"
 
 [libraries]
 alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
@@ -55,22 +54,18 @@ androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runt
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingRuntime" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
-camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camerak" }
-chart = { module = "io.github.thechance101:chart", version.ref = "chart" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "composeMultiplatformMediaPlayer" }
 compose-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholderMaterial3" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
+composePipette = { module = "dev.zt64.compose.pipette:compose-pipette", version.ref = "composePipette" }
 composemediaplayer = { module = "io.github.kdroidfilter:composemediaplayer", version.ref = "composemediaplayer" }
 compottie-lite = { module = "io.github.alexzhirkevich:compottie-lite", version.ref = "compottieLite" }
 datatable-material3 = { module = "com.seanproctor:datatable-material3", version.ref = "datatableMaterial3" }
 filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "filekitCore" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekitCore" }
 filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCore" }
-github-image_saver_plugin = { module = "io.github.kashif-mehmood-km:image_saver_plugin", version.ref = "githubImage_saver_plugin" }
-github-ocr_plugin = { module = "io.github.kashif-mehmood-km:ocr_plugin", version.ref = "githubOcr_plugin" }
-github-qr_scanner_plugin = { module = "io.github.kashif-mehmood-km:qr_scanner_plugin", version.ref = "githubQr_scanner_plugin" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 jmail = { module = "com.sanctionco.jmail:jmail", version.ref = "jmail" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinCore" }
@@ -83,16 +78,21 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kmp-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+kscan = { module = "io.github.ismai117:KScan", version.ref = "kscan" }
 libphonenumber = { module = "io.github.luca992.libphonenumber-kotlin:libphonenumber", version.ref = "libphonenumber" }
 material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCore" }
-kmp-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
 jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatform-nav3-ui" }
 jetbrains-material3-adaptiveNavigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "compose-multiplatform-adaptive" }
 jetbrains-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "compose-multiplatform-lifecycle" }
+journeyapps-zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref= "zxingAndroid"}
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
+webcam-capture = { module = "com.github.sarxos:webcam-capture", version.ref = "webcam" }
+zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxing" }
 
 # Ktor core & plugins
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -108,9 +108,6 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 sonner = { module = "io.github.dokar3:sonner", version.ref = "sonner" }
 table-core = { module = "ua.wwind.table-kmp:table-core", version.ref = "tableCore" }
-ui-tiles = { module = "com.github.alorma.compose-settings:ui-tiles", version.ref = "uiTilesExtended" }
-ui-tiles-expressive = { module = "com.github.alorma.compose-settings:ui-tiles-expressive", version.ref = "uiTilesExtended" }
-ui-tiles-extended = { module = "com.github.alorma.compose-settings:ui-tiles-extended", version.ref = "uiTilesExtended" }
 ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTooling" }
 zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 

@@ -38,7 +38,7 @@ class CategoriesListViewModel(
         private set
     private val pagingTrigger = combine(
         snapshotFlow { searchQuery },
-        snapshotFlow { filterParentCategory },
+        snapshotFlow { filterCategory },
     ) { query, parent ->
         Pair(query, parent?.id)
     }
