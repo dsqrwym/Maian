@@ -4,12 +4,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { reduceDay } from '../utils/date.utils';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { DistributedLockService } from './distributed-lock.service';
+
+const CLEANUP_TASK_LOCK_KEY = 'cron:cleanup:users';
+const CLEANUP_TASK_LOCK_TTL_MS = 10 * 60 * 1000;
 
 @Injectable()
 export class CleanupTask {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly logger: PinoLogger,
+    private readonly distributedLockService: DistributedLockService,
   ) {
     this.logger.setContext(CleanupTask.name);
   }
@@ -78,15 +83,21 @@ export class CleanupTask {
 
   @Cron(CronExpression.EVERY_HOUR)
   async handleCleanup() {
-    const now = new Date();
-    // 清理 会话
-    await this.cleanupSessions(now);
-    // 清理 验证token
-    await this.cleanupVerificationTokens(now);
+    await this.distributedLockService.runWithLock(
+      CLEANUP_TASK_LOCK_KEY,
+      CLEANUP_TASK_LOCK_TTL_MS,
+      async () => {
+        const now = new Date();
+        // 清理 会话
+        await this.cleanupSessions(now);
+        // 清理 验证token
+        await this.cleanupVerificationTokens(now);
 
-    // 删除用户
-    await this.cleanupUnverifiedUsers(now);
-    // 删除未填充信息的用户
-    await this.cleanupIncompleteInformationUsers(now);
+        // 删除用户
+        await this.cleanupUnverifiedUsers(now);
+        // 删除未填充信息的用户
+        await this.cleanupIncompleteInformationUsers(now);
+      },
+    );
   }
 }

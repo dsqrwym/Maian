@@ -12,23 +12,7 @@ Sitio oficial de Codex/OpenAI: [https://openai.com/](https://openai.com/)
 
 MaiAn es una plataforma B2B multiplataforma orientada a la relacion comercial entre distribuidores mayoristas y minoristas. Segun la propuesta del proyecto, la solucion debe combinar aplicaciones cliente para distintos perfiles con un backend centralizado, seguro, escalable y preparado para crecer con nuevas funciones de negocio.
 
-Este documento resume el estado actual real del repositorio a partir de una revision de solo lectura. No se han modificado archivos existentes del proyecto. La unica intervencion realizada anteriormente fue la creacion de este archivo, y en esta actualizacion solo se ha modificado `README_ESTADO_ACTUAL.md`.
-
-Ademas, se tiene en cuenta la observacion actual del proyecto: en `Backend/backend-api` se esta realizando una migracion progresiva de `class-validator` a `typia`.
-
-## 2. Fuentes revisadas para este documento
-
-Se ha consolidado informacion de:
-
-- `Readme.md` del raiz
-- `Backend/backend-api`
-- `Frontend/Maian`
-- `Base_de_datos`
-- `tools/spain-cities-importer`
-- `docker-compose.yml`
-- configuraciones y scripts visibles en el repositorio
-
-## 3. Resumen ejecutivo
+## 2. Resumen ejecutivo
 
 ### Ya implementado o claramente operativo
 
@@ -61,9 +45,9 @@ Se ha consolidado informacion de:
 - Paneles de estadisticas o historicos de venta visibles en la interfaz.
 - Geolocalizacion y mapas, coherente con la propuesta de dejarlo para una ampliacion futura.
 
-## 4. Estado actual del backend
+## 3. Estado actual del backend
 
-## 4.1 Arquitectura general
+## 3.1 Arquitectura general
 
 El backend principal se encuentra en `Backend/backend-api` y utiliza una arquitectura modular basada en NestJS. El `AppModule` integra modulos reales y conectados entre si, entre ellos:
 
@@ -85,7 +69,7 @@ El backend principal se encuentra en `Backend/backend-api` y utiliza una arquite
 
 Tambien se observan filtros globales, interceptor de respuesta, logger estructurado y configuracion JWT centralizada.
 
-## 4.2 Funcionalidades visibles del backend
+## 3.2 Funcionalidades visibles del backend
 
 ### Autenticacion y sesiones
 
@@ -150,7 +134,7 @@ Tambien se observan filtros globales, interceptor de respuesta, logger estructur
 - Ciudades por provincia.
 - Monedas por codigo ISO numerico.
 
-## 4.3 Tecnologia y dependencias del backend
+## 3.3 Tecnologia y dependencias del backend
 
 ### Stack principal del backend
 
@@ -244,7 +228,7 @@ Tambien se observan filtros globales, interceptor de respuesta, logger estructur
 - Prisma CLI
 - ts-patch
 
-## 4.4 Situacion de la migracion `class-validator -> typia`
+## 3.4 Situacion de la migracion `class-validator -> typia`
 
 La migracion esta realmente en curso, no solo planificada.
 
@@ -260,7 +244,7 @@ La migracion esta realmente en curso, no solo planificada.
 - `class-validator` y `class-transformer` siguen presentes.
 - El backend debe considerarse en transicion, no completamente migrado.
 
-## 4.5 Norma de desarrollo del backend sobre validacion y saneamiento
+## 3.5 Norma de desarrollo del backend sobre validacion y saneamiento
 
 Para mantener coherencia funcional y evitar efectos secundarios innecesarios, el backend sigue una distincion clara entre campos introducidos por personas usuarias y campos de tipo tecnico o de sistema.
 
@@ -321,7 +305,7 @@ En resumen:
 - campos de creacion: validacion obligatoria
 - campos tecnicos o de sistema: sin saneamiento semantico y con validacion mas flexible o relajada
 
-## 5. Estado actual de la base de datos
+## 4. Estado actual de la base de datos
 
 La carpeta `Base_de_datos` y `prisma/schema.prisma` muestran una base de datos considerablemente avanzada.
 
@@ -355,7 +339,7 @@ La carpeta `Base_de_datos` y `prisma/schema.prisma` muestran una base de datos c
 - Hay generacion automatica de `user_id` segun rol.
 - La base de datos va por delante de algunas partes de la capa cliente.
 
-## 6. Estado actual del frontend
+## 5. Estado actual del frontend
 
 El frontend esta en `Frontend/Maian` y usa Kotlin Multiplatform + Compose Multiplatform.
 
@@ -376,7 +360,7 @@ El frontend esta en `Frontend/Maian` y usa Kotlin Multiplatform + Compose Multip
 - Web
 - Wasm
 
-## 6.1 Estado funcional por modulo
+## 5.1 Estado funcional por modulo
 
 ### `shared`
 
@@ -450,7 +434,7 @@ Modulo de negocio reutilizable con:
 - editor de texto enriquecido
 - gestion de medios y media picker
 
-## 6.2 Tecnologia y dependencias del frontend
+## 5.2 Tecnologia y dependencias del frontend
 
 Aqui se integran tanto los hallazgos del codigo actual como el contenido del `Readme.md` del raiz.
 
@@ -549,7 +533,7 @@ Aqui se integran tanto los hallazgos del codigo actual como el contenido del `Re
 - Edicion enriquecida:
   - `com.mohamedrejeb.richeditor:richeditor-compose`
 
-## 6.3 Recursos y atribuciones integradas desde el `Readme.md` del raiz
+## 5.3 Recursos y atribuciones integradas desde el `Readme.md` del raiz
 
 El `Readme.md` del raiz documenta ademas varios puntos sobre recursos y origen de librerias del frontend:
 
@@ -567,7 +551,7 @@ En consecuencia, el frontend no solo tiene estructura multiplataforma, sino tamb
 - internacionalizacion
 - experiencia de escritorio y web
 
-## 7. Infraestructura y despliegue
+## 6. Infraestructura y despliegue
 
 ### Elementos visibles
 
@@ -583,7 +567,7 @@ En consecuencia, el frontend no solo tiene estructura multiplataforma, sino tamb
 - El backend tiene estructura adecuada para despliegue cloud.
 - La propuesta menciona Supabase, Redis, Northflank, Cloudflare R2 y posibles migraciones futuras. En el repositorio se observan piezas compatibles con esa direccion, pero no toda la infraestructura esta totalmente automatizada desde el compose local.
 
-## 8. Relacion entre la propuesta original y el estado actual
+## 7. Relacion entre la propuesta original y el estado actual
 
 ### Objetivos con avance fuerte
 
@@ -610,32 +594,6 @@ En consecuencia, el frontend no solo tiene estructura multiplataforma, sino tamb
 - Notificaciones visibles y conectadas en toda la aplicacion.
 - Estadisticas comerciales en interfaz final.
 
-## 9. Valoracion general
-
-El proyecto ya no se encuentra en fase de maqueta. La base tecnica es solida y coherente con la propuesta original. Destacan especialmente:
-
-- la madurez del backend de autenticacion y seguridad
-- la existencia real de multirol empresarial
-- la gestion de categorias y productos
-- la estructura multiplataforma del frontend
-- una base de datos muy trabajada y preparada para seguir creciendo
-
-La impresion general es que el nucleo arquitectonico ya esta construido y que los siguientes pasos deben centrarse en:
-
-- cerrar los modulos de negocio pendientes
-- completar la integracion end-to-end de pedidos, mensajeria y notificaciones
-- consolidar el cliente minorista
-- terminar la migracion de `class-validator` a `typia`
-
-## 10. Nota de alcance y restricciones respetadas
-
-Durante esta revision se ha respetado la restriccion indicada por el autor del proyecto:
-
-- no se ha modificado ningun archivo existente fuera de este README
-- no se ha tocado ningun archivo de tipos
-- no se ha alterado el contenido del proyecto salvo `README_ESTADO_ACTUAL.md`
-- toda la informacion nueva se ha obtenido mediante lectura y analisis del repositorio
-
 ---
 
 # 中文版本
@@ -648,19 +606,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 
 另外，需要特别说明：`Backend/backend-api` 当前正在进行从 `class-validator` 到 `typia` 的逐步迁移。
 
-## 2. 本文档参考了哪些内容
-
-本文综合整理了以下内容：
-
-- 根目录 `Readme.md`
-- `Backend/backend-api`
-- `Frontend/Maian`
-- `Base_de_datos`
-- `tools/spain-cities-importer`
-- `docker-compose.yml`
-- 仓库中可见的配置与脚本
-
-## 3. 当前整体状态概览
+## 2. 当前整体状态概览
 
 ### 已实现或明显已经可用的部分
 
@@ -693,9 +639,9 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 销售统计或分析看板。
 - 地图与地理定位扩展功能。
 
-## 4. 后端现状
+## 3. 后端现状
 
-## 4.1 后端总体架构
+## 3.1 后端总体架构
 
 后端位于 `Backend/backend-api`，采用 NestJS 模块化设计。`AppModule` 中已经接入多个真实模块：
 
@@ -722,7 +668,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - Pino 日志
 - JWT 统一配置
 
-## 4.2 后端已经可见的功能
+## 3.2 后端已经可见的功能
 
 ### 认证与会话
 
@@ -787,7 +733,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 省份下城市
 - 根据 ISO 数值代码查询货币
 
-## 4.3 后端技术栈与依赖
+## 3.3 后端技术栈与依赖
 
 ### 后端主技术栈
 
@@ -880,7 +826,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - Prisma CLI
 - ts-patch
 
-## 4.4 `class-validator -> typia` 迁移状态
+## 3.4 `class-validator -> typia` 迁移状态
 
 这个迁移不是计划阶段，而是已经进入实际执行阶段。
 
@@ -897,7 +843,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - `class-validator` 与 `class-transformer` 仍然保留
 - 因此当前应视为“迁移进行中”，而不是“迁移完成”
 
-## 4.5 后端开发规范：校验与数据清洗
+## 3.5 后端开发规范：校验与数据清洗
 
 为了保证系统行为一致，同时避免不必要的副作用，后端需要明确区分“用户输入字段”和“系统输入字段”。
 
@@ -958,7 +904,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 创建字段：必须校验
 - 系统字段：不做语义清洗，校验可以放宽或按兼容性处理
 
-## 5. 数据库现状
+## 4. 数据库现状
 
 `Base_de_datos` 与 `prisma/schema.prisma` 显示数据库设计已经非常完整。
 
@@ -992,7 +938,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 存在根据角色自动生成 `user_id` 的逻辑
 - 数据库模型的推进程度甚至领先于部分前端或 API 暴露层
 
-## 6. 前端现状
+## 5. 前端现状
 
 前端位于 `Frontend/Maian`，使用 Kotlin Multiplatform 与 Compose Multiplatform。
 
@@ -1013,7 +959,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - Web
 - Wasm
 
-## 6.1 各模块功能状态
+## 5.1 各模块功能状态
 
 ### `shared`
 
@@ -1087,7 +1033,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 富文本编辑器
 - 媒体选择与媒体管理
 
-## 6.2 前端技术栈与依赖
+## 5.2 前端技术栈与依赖
 
 这一部分整合了当前代码中的实际依赖，以及根目录 `Readme.md` 中已有的前端说明内容。
 
@@ -1186,7 +1132,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 富文本：
   - `richeditor-compose`
 
-## 6.3 从根目录 `Readme.md` 合并进来的补充信息
+## 5.3 从根目录 `Readme.md` 合并进来的补充信息
 
 根目录原有 `Readme.md` 还提供了前端方面的补充说明，现已并入本文件，主要包括：
 
@@ -1205,7 +1151,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 导航与可复用组件体系
 - 本地化、多语言与时区支持
 
-## 7. 基础设施与部署
+## 6. 基础设施与部署
 
 ### 仓库中能看到的内容
 
@@ -1221,7 +1167,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - backend 具备云部署结构
 - 项目提案中提到的 Supabase、Redis、Northflank、Cloudflare R2 等方向，与仓库结构是匹配的，但本地一键编排尚未完全体现
 
-## 8. 与原始项目目标的对应关系
+## 7. 与原始项目目标的对应关系
 
 ### 推进较强的目标
 
@@ -1247,34 +1193,6 @@ MaiAn 是一个面向批发商与零售商关系管理的 B2B 多平台项目。
 - 内部消息系统
 - 通知系统成品
 - 销售统计看板
-
-## 9. 综合评价
-
-这个项目已经明显超过“原型”或“空架子”的阶段。其核心架构已经建立，并且后端安全、商品目录、多端前端与数据库设计都具备较强的基础。
-
-目前最值得肯定的部分包括：
-
-- 后端认证与安全体系较成熟
-- 企业多角色模型已经真实存在
-- 分类与商品模块已经成型
-- 前端多平台结构清晰
-- 数据库设计相当完整
-
-后续最重要的工作方向大致是：
-
-- 完成剩余业务模块的闭环
-- 打通订单、消息、通知等端到端流程
-- 继续完善零售端客户端
-- 完成 `class-validator -> typia` 迁移
-
-## 10. 本次操作遵守的限制
-
-本次处理严格遵守了你的要求：
-
-- 没有修改任何项目文件，除了 `README_ESTADO_ACTUAL.md`
-- 没有修改任何类型文件
-- 没有修改 backend、frontend、database 或配置内容
-- 所有新增内容都来自对仓库的读取、整理与归纳
 
 ---
 

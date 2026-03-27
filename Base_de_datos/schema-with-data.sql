@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 0rtHhVHFL9iygndazXATmqFEyL6zkexdNZGT08MD5fUi0DlDur0QwgKfW8kVxiE
+\restrict CDf1hfz7NksPfbHJWa7A7YAgI03acaAc5jA8gcakWevA12axcFgK7c8eGZeTUns
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -272,6 +272,7 @@ CREATE TABLE public.categories (
     updated_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text),
     created_by uuid,
     updated_by uuid,
+    CONSTRAINT categories_iva_check CHECK ((iva >= (0)::numeric)),
     CONSTRAINT categories_level_check CHECK (((level >= 1) AND (level <= 3)))
 );
 
@@ -1023,7 +1024,8 @@ CREATE TABLE public.products (
     created_by uuid NOT NULL,
     updated_by uuid,
     name_unaccent text GENERATED ALWAYS AS (public.immutable_unaccent((name)::text)) STORED,
-    title_unaccent text GENERATED ALWAYS AS (public.immutable_unaccent((title)::text)) STORED
+    title_unaccent text GENERATED ALWAYS AS (public.immutable_unaccent((title)::text)) STORED,
+    CONSTRAINT products_iva_check CHECK ((iva >= (0)::numeric))
 );
 
 
@@ -1321,7 +1323,16 @@ CREATE TABLE public.variant_products (
     min_order_qty integer DEFAULT 1 NOT NULL,
     updated_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text),
     created_by uuid NOT NULL,
-    updated_by uuid
+    updated_by uuid,
+    CONSTRAINT variant_available_stock_check CHECK ((available_stock >= 0)),
+    CONSTRAINT variant_iva_check CHECK ((iva >= (0)::numeric)),
+    CONSTRAINT variant_low_stock_threshold_check CHECK ((low_stock_threshold >= 0)),
+    CONSTRAINT variant_min_order_qty_check CHECK ((min_order_qty >= 1)),
+    CONSTRAINT variant_price_check CHECK ((price >= (0)::numeric)),
+    CONSTRAINT variant_price_iva_check CHECK ((price_iva >= (0)::numeric)),
+    CONSTRAINT variant_reserved_stock_check CHECK ((reserved_stock >= 0)),
+    CONSTRAINT variant_sale_unit_qty_check CHECK ((sale_unit_qty >= 1)),
+    CONSTRAINT variant_sort_check CHECK ((sort >= 0))
 );
 
 
@@ -1447,13 +1458,13 @@ COPY public.categories (id, user_id, name, iva, parent_id, created_at, level, up
 27	\N	玩具与儿童用品	21.00	\N	2025-11-15 23:15:12.191811	1	2025-11-15 23:15:12.191811	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 28	\N	汽车与五金用品	21.00	\N	2025-11-15 23:19:28.985827	1	2025-11-15 23:19:28.985827	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 29	\N	宠物用品	21.00	\N	2025-11-15 23:22:40.557093	1	2025-11-15 23:22:40.557093	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
-30	\N	体育与户外用品	21.00	\N	2025-11-15 23:25:10.591277	1	2025-11-15 23:25:10.591277	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 31	\N	手机设备	21.00	22	2025-11-15 23:56:08.961821	2	2025-11-15 23:56:08.961821	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
-33	d4d56d10-7f27-416d-91a4-7b7824770e55	测试	21.00	\N	2025-11-16 11:43:24.454671	1	2025-11-16 13:09:59.698	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
 38	d4d56d10-7f27-416d-91a4-7b7824770e55	电子产品	21.00	\N	2025-11-24 19:39:40.217416	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
 39	d4d56d10-7f27-416d-91a4-7b7824770e55	智能手机	21.00	38	2025-11-24 19:39:40.217416	2	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
-40	d4d56d10-7f27-416d-91a4-7b7824770e55	食品饮料	10.00	\N	2025-11-24 19:39:40.217416	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
-41	d4d56d10-7f27-416d-91a4-7b7824770e55	测试2	12.00	40	2025-11-29 10:13:59.284434	2	2025-12-27 00:03:19.849	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+40	d4d56d10-7f27-416d-91a4-7b7824770e55	食品饮料	16.90	\N	2025-11-24 19:39:40.217416	1	2026-03-26 11:48:33.675	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+41	d4d56d10-7f27-416d-91a4-7b7824770e55	a测试2	12.80	40	2025-11-29 10:13:59.284434	2	2026-03-26 11:49:03.285	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+33	d4d56d10-7f27-416d-91a4-7b7824770e55	测试	21.00	\N	2025-11-16 11:43:24.454671	1	2026-03-26 12:49:54.69	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+46	d4d56d10-7f27-416d-91a4-7b7824770e55	dewi	21.01	33	2026-03-26 11:48:48.578015	2	2026-03-27 10:49:26.866	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
 \.
 
 
@@ -1462,11 +1473,6 @@ COPY public.categories (id, user_id, name, iva, parent_id, created_at, level, up
 --
 
 COPY public.category_translations (category_id, lang_code, name, created_at, updated_at, updated_by) FROM stdin;
-30	zh-TW	體育與戶外用品	2025-11-15 23:25:10.591277	2025-11-15 23:25:10.591277	\N
-30	es-ES	Deportes y Aire Libre	2025-11-15 23:25:10.591277	2025-11-15 23:25:10.591277	\N
-30	ca-ES	Esports i Aire Lliure	2025-11-15 23:25:10.591277	2025-11-15 23:25:10.591277	\N
-30	pt-PT	Desporto e Ar Livre	2025-11-15 23:25:10.591277	2025-11-15 23:25:10.591277	\N
-30	fr-FR	Sports et Plein Air	2025-11-15 23:25:10.591277	2025-11-15 23:25:10.591277	\N
 21	es-ES	Alimentos y Bebidas	2025-11-15 20:04:20.160739	2025-11-15 20:04:20.160739	\N
 21	en	Food & Beverages	2025-11-15 20:04:20.160739	2025-11-15 20:04:20.160739	\N
 21	ca-ES	Aliments i Begudes	2025-11-15 20:04:20.160739	2025-11-15 20:04:20.160739	\N
@@ -1521,22 +1527,22 @@ COPY public.category_translations (category_id, lang_code, name, created_at, upd
 29	pt-PT	Produtos para Animais	2025-11-15 23:22:40.557093	2025-11-15 23:22:40.557093	\N
 29	fr-FR	Articles pour Animaux	2025-11-15 23:22:40.557093	2025-11-15 23:22:40.557093	\N
 29	en	Pet Supplies	2025-11-15 23:22:40.557093	2025-11-15 23:22:40.557093	\N
-30	en	Sports & Outdoors	2025-11-15 23:25:10.591277	2025-11-15 23:25:10.591277	\N
 31	zh-TW	手機設備	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	en	Mobile Devices	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	es-ES	Dispositivos Móviles	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	ca-ES	Dispositius Mòbils	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	pt-PT	Dispositivos Móveis	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	fr-FR	Appareils Mobiles	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
-33	ca-ES	测试2	2025-11-16 11:43:55.303232	2025-11-16 13:09:58.918964	d4d56d10-7f27-416d-91a4-7b7824770e55
-33	pt-PT	国土局7	2025-11-16 13:09:58.918964	2025-11-16 13:09:58.918964	\N
+33	ca-ES	测试2	2025-11-16 11:43:55.303232	2026-03-26 12:49:54.591808	d4d56d10-7f27-416d-91a4-7b7824770e55
 38	en	Electronics	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
 38	es	Electrónica	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
 39	en	Smartphones	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
 39	es	Teléfonos Inteligentes	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
-40	en	Food & Beverage	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
-40	es	Alimentos y Bebidas	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
-41	es-ES	hgj	2025-12-27 00:03:18.313562	2025-12-27 00:03:18.313562	d4d56d10-7f27-416d-91a4-7b7824770e55
+33	pt-PT	国土局7	2025-11-16 13:09:58.918964	2026-03-26 12:49:54.591808	d4d56d10-7f27-416d-91a4-7b7824770e55
+40	en	Food & Beverage	2025-11-24 19:39:40.217416	2026-03-26 11:48:33.637772	d4d56d10-7f27-416d-91a4-7b7824770e55
+40	es	Alimentos y Bebidas	2025-11-24 19:39:40.217416	2026-03-26 11:48:33.637772	d4d56d10-7f27-416d-91a4-7b7824770e55
+41	es-ES	hgj	2025-12-27 00:03:18.313562	2026-03-26 11:49:03.162469	d4d56d10-7f27-416d-91a4-7b7824770e55
+46	pt-PT	dwed	2026-03-26 11:48:48.578015	2026-03-27 10:49:25.531206	d4d56d10-7f27-416d-91a4-7b7824770e55
 \.
 
 
@@ -5331,6 +5337,8 @@ COPY public.cities (id, province_id, name, name_local) FROM stdin;
 --
 
 COPY public.configurations (user_id, language, timezone) FROM stdin;
+c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	zh-CN	Europe/Madrid
+dbacf819-ab39-4943-834a-3a2b3a30428a	zh-CN	Europe/Madrid
 d4d56d10-7f27-416d-91a4-7b7824770e55	es-ES	Europe/Madrid
 52b8dfae-2880-464a-a24e-d81773bc2dc5	zh-CN	Europe/Madrid
 79c50819-3971-4ebf-9b0c-be3d63489fba	zh-CN	Europe/Madrid
@@ -5382,6 +5390,7 @@ COPY public.directions (id, user_id, type, country_iso, province_id, city_id, st
 7	d4d56d10-7f27-416d-91a4-7b7824770e55	STORE	724	32	1745	Avenida Cuenta1	90836	\N	\N	2025-10-23 22:41:00.781982	\N
 8	52b8dfae-2880-464a-a24e-d81773bc2dc5	STORE	724	7	1416	jgjj	8742266	\N	\N	2025-12-07 19:44:17.589252	\N
 9	79c50819-3971-4ebf-9b0c-be3d63489fba	STORE	724	7	48	TEST	05689	\N	\N	2025-12-20 09:26:00.618639	\N
+10	c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	STORE	724	8	1731	dqw	dwq	\N	\N	2026-03-22 22:00:49.352298	\N
 \.
 
 
@@ -5550,10 +5559,13 @@ COPY public.provinces (id, country_iso, name, name_local) FROM stdin;
 --
 
 COPY public.user_sessions (session_id, user_id, device_name, device_finger, user_agent, revoked, last_ip, refresh_token, created_at, last_active) FROM stdin;
-1c82e8ae-d662-47d5-9b86-932a605361e1	d4d56d10-7f27-416d-91a4-7b7824770e55	POCO F7	268210137bb084a45c117d138ca7cafdbc03c25bcf9d76e5fc6c2b574799bf59	25053PC47G	f	87.125.224.190	43256e4215c6d33e508884e3b700899a57deff8d442ae8f55a7f9f584a0fd36d	2026-01-11 17:58:24.398529	2026-01-17 09:48:27.904
-f7d98cab-f3a0-4222-8085-2f32a98c69a8	d4d56d10-7f27-416d-91a4-7b7824770e55	DSQRWYM	e689701d4ae4fdcc95df453548eee8015988b64a838d72b32f3afa7675b73f4c	29CD2FA4-1509-4AC3-9C84-E036BDB90B82	f	87.125.224.190	e551737e96b2137275561f0e964f229ec8bd0a99d2fd4e724ffb8aefaf704f23	2025-12-20 09:29:55.620392	2026-01-17 11:12:09.857
-4ec04a6e-b008-4803-9186-533a96eb34bf	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/143.0.0.0 SAFARI/537.36 EDG/143.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	t	5.40.3.196	2ae19c106528dec0a1390ee2c1905860aea5438cefb9295daf0d1acf836cb9a9	2025-12-17 19:46:12.655632	2025-12-20 07:30:42.03
-cf19ff6a-0b1b-4b4b-979a-b8318124561c	79c50819-3971-4ebf-9b0c-be3d63489fba	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/143.0.0.0 SAFARI/537.36 EDG/143.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	t	31.4.149.75	fa35fe195cfbda3ded5934aaa2437309038ffe8b92b769459c1660ef212eefbd	2025-12-20 09:26:13.674127	2025-12-20 09:35:31.371
+1119162d-643a-4cd8-950d-b044198ea5e7	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	POCO F7	268210137bb084a45c117d138ca7cafdbc03c25bcf9d76e5fc6c2b574799bf59	25053PC47G	f	87.125.224.99	53d56fcad7365f21dd7796aebc67d0ef437c183a0b39a9337913965f13b75109	2026-03-25 14:22:13.122269	2026-03-25 14:22:13.122269
+225f3751-9cf6-4afd-ab51-5766c03a8ab2	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/146.0.0.0 SAFARI/537.36 EDG/146.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	f	127.0.0.1	d34c015924c4587c90114d841a2df9a6f53160125bf48a74dd60cc9688403a43	2026-03-25 18:40:50.844782	2026-03-25 19:14:27.245
+b46ed0c8-4429-4409-b8d6-cb368ad79e20	c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	DSQRWYM	e689701d4ae4fdcc95df453548eee8015988b64a838d72b32f3afa7675b73f4c	29CD2FA4-1509-4AC3-9C84-E036BDB90B82	f	87.125.224.99	a2d58396d680bbbbdb87fdf4d1d69fe268a23d578169d09ea8c8455cbb98dfc8	2026-03-22 22:00:58.329444	2026-03-25 19:50:21.15
+eeaf8370-79a2-41be-a125-33aece4450fe	d4d56d10-7f27-416d-91a4-7b7824770e55	FEWFCVWEVQB REQBVWBVRQEBVRQEWVWERCDVWERVEW WECEWVQ RRQ3 BEB ERBER	4c8d2be2415cec66a713a799ab53948400da579641a798d3b2794b3d29f19fab	MOZILLA/5.0 (WINDOWS MT 10.0; WIN64; X64)	f	127.0.0.1	67cf5ea2199cd686499e26b241f89c02461a39ba37ea777a51dd8e0e321be665	2026-03-27 10:06:47.517756	2026-03-27 10:06:47.517756
+01a6f5c0-6225-495c-b4fb-435740cbc89a	d4d56d10-7f27-416d-91a4-7b7824770e55	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/146.0.0.0 SAFARI/537.36 EDG/146.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	t	127.0.0.1	feec3d19ae532c61063c5940196598fd03f40aad74c9332068fd773c6db0f60e	2026-03-25 18:08:31.324942	2026-03-27 10:49:32.314
+f2386654-d46c-4af9-8ba8-f646bde04865	79c50819-3971-4ebf-9b0c-be3d63489fba	CHROME_BROWSER-QWEWQEWQ	958b2c6f020a7f07dcbc5aa0e454fea5460997b2e38bf8c6e8e8c20675ba2577	MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)-EQWEWQEWQE	f	127.0.0.1	6a440771d9e8eef81f0e3e71441708b4957effb4942c48861ffaaaf083085bb2	2026-03-22 11:43:03.108924	2026-03-22 11:43:03.108924
+8d9fc01e-3c5f-4e1f-af7a-d8a9643fd58c	79c50819-3971-4ebf-9b0c-be3d63489fba	CHROME_BROWSER	c088e7dbf5c06889a622a22ff55b87040de34ad31f1114c5baafa8591bcc08e2	MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)	f	127.0.0.1	efec526d217c32e16e5ed17ed50952f986e10b17c1e1e5708a7c289556f181d6	2026-03-22 19:13:07.620034	2026-03-24 20:45:21.831
 \.
 
 
@@ -5574,10 +5586,12 @@ d4d56d10-7f27-416d-91a4-7b7824770e55	11	2026-01-10 21:13:59.158
 --
 
 COPY public.users (id, user_id, first_name, last_name, username, password, email, telephone, status, profile, created_at, updated_at, role, cif, updated_by) FROM stdin;
-d4d56d10-7f27-416d-91a4-7b7824770e55	WHO003	\N	\N	Dsqrwym	$2b$10$l36gwACfDbxrxFUYaf9v3unEf9fmLRVn4MYXiiSjodWT/C0BDnik.	dsqrwym@gmail.com	+34 609 87 89 97	APPROVED	{"company_name": "Ds", "company_type": "Sociedad Civil"}	2025-10-22 16:02:22.060009	2025-10-22 16:02:22.060009	WHOLESALER	\N	\N
 d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N	\N	\N	ADMIN@superadmin	$2b$10$SAc6wuTvxQFpBQ818msnPeyytjBtZXb8/FK5MayAfW7wtfCBq8NQa	superadmin@dsqrwym.com	\N	APPROVED	\N	2025-10-11 17:30:47.368	2025-10-11 17:30:47.368	SUPERADMIN	\N	\N
 52b8dfae-2880-464a-a24e-d81773bc2dc5	WHO004	\N	\N	yuxi	$2b$10$.MG6haV98uEsVi/dJ.vKoOBRkVrWPyu4vUo6ua/cRDMpJN/kvIKdu	yuxi6678hmj@gmail.com	+34 688 52 32 63	APPROVED	{"company_name": "大神", "company_type": "Cooperativa"}	2025-12-07 19:38:44.060644	2025-12-07 19:38:44.060644	WHOLESALER	\N	\N
 79c50819-3971-4ebf-9b0c-be3d63489fba	RET014	\N	\N	零售商	$2b$10$mDLOghe28jV/oSvlmhMsoemahSv.REq0ob0B1TYytuxzbYPMXDdX2	yuzhang5002@163.com	\N	ACTIVE	\N	2025-12-20 09:08:54.467068	2025-12-20 09:08:54.467068	RETAILER	\N	\N
+d4d56d10-7f27-416d-91a4-7b7824770e55	WHO003	\N	\N	Dsqrwym	$2b$10$n9j4b4nP28MlGAUOHwBZqOJbneMk5ilndHtaKIl/fpzVNbCw9V9Gm	dsqrwym@gmail.com	+34 609 87 89 97	APPROVED	{"company_name": "Ds", "company_type": "Sociedad Civil"}	2025-10-22 16:02:22.060009	2025-10-22 16:02:22.060009	WHOLESALER	\N	\N
+c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	WHO005	\N	\N	yuz	$2b$10$ik7VW4lG1PQC99bSYnA/GeGuXyAe0ReuCv8.UAO6kzYYqAyNk6wWq	yuzhang502@gmail.com	+86 190 1678 3456	ACTIVE	{"company_name": "test112", "company_type": "Autónomo"}	2026-03-22 21:57:28.205006	2026-03-22 21:57:28.205006	WHOLESALER	\N	\N
+dbacf819-ab39-4943-834a-3a2b3a30428a	\N	\N	\N	\N	50d9882d-8226-4c72-ac24-01594f64a578	yuxi6678@gmail.com	\N	PENDING_VERIFICATION	\N	2026-03-27 10:49:55.808957	2026-03-27 10:49:55.808957	WHOLESALER	\N	\N
 \.
 
 
@@ -5619,7 +5633,7 @@ SELECT pg_catalog.setval('public.cart_id_seq', 1, false);
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 41, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 47, true);
 
 
 --
@@ -5654,7 +5668,7 @@ SELECT pg_catalog.setval('public.delivery_timeline_id_seq', 1, false);
 -- Name: directions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.directions_id_seq', 9, true);
+SELECT pg_catalog.setval('public.directions_id_seq', 10, true);
 
 
 --
@@ -5668,7 +5682,7 @@ SELECT pg_catalog.setval('public.discounts_id_seq', 1, false);
 -- Name: files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.files_id_seq', 175, true);
+SELECT pg_catalog.setval('public.files_id_seq', 230, true);
 
 
 --
@@ -5773,7 +5787,7 @@ SELECT pg_catalog.setval('public.seq_warehouse_id', 1, false);
 -- Name: seq_wholesaler_id; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.seq_wholesaler_id', 4, true);
+SELECT pg_catalog.setval('public.seq_wholesaler_id', 5, true);
 
 
 --
@@ -6682,5 +6696,5 @@ ALTER TABLE public.verification_tokens ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 0rtHhVHFL9iygndazXATmqFEyL6zkexdNZGT08MD5fUi0DlDur0QwgKfW8kVxiE
+\unrestrict CDf1hfz7NksPfbHJWa7A7YAgI03acaAc5jA8gcakWevA12axcFgK7c8eGZeTUns
 

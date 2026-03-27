@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict K41jTq3OH2P6w64lqc8iH0MuUV5AOJ4Ffih3kc21HsHtgb1NqnSrqfEXQqQWqBG
+\restrict St9V470xGPT8kLJn40ExradKSo8NLCKlkZya9xQyFrXDEQ627nWqCYDK5FPhrye
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -272,6 +272,7 @@ CREATE TABLE public.categories (
     updated_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text),
     created_by uuid,
     updated_by uuid,
+    CONSTRAINT categories_iva_check CHECK ((iva >= (0)::numeric)),
     CONSTRAINT categories_level_check CHECK (((level >= 1) AND (level <= 3)))
 );
 
@@ -1023,7 +1024,8 @@ CREATE TABLE public.products (
     created_by uuid NOT NULL,
     updated_by uuid,
     name_unaccent text GENERATED ALWAYS AS (public.immutable_unaccent((name)::text)) STORED,
-    title_unaccent text GENERATED ALWAYS AS (public.immutable_unaccent((title)::text)) STORED
+    title_unaccent text GENERATED ALWAYS AS (public.immutable_unaccent((title)::text)) STORED,
+    CONSTRAINT products_iva_check CHECK ((iva >= (0)::numeric))
 );
 
 
@@ -1321,7 +1323,16 @@ CREATE TABLE public.variant_products (
     min_order_qty integer DEFAULT 1 NOT NULL,
     updated_at timestamp without time zone DEFAULT (now() AT TIME ZONE 'utc'::text),
     created_by uuid NOT NULL,
-    updated_by uuid
+    updated_by uuid,
+    CONSTRAINT variant_available_stock_check CHECK ((available_stock >= 0)),
+    CONSTRAINT variant_iva_check CHECK ((iva >= (0)::numeric)),
+    CONSTRAINT variant_low_stock_threshold_check CHECK ((low_stock_threshold >= 0)),
+    CONSTRAINT variant_min_order_qty_check CHECK ((min_order_qty >= 1)),
+    CONSTRAINT variant_price_check CHECK ((price >= (0)::numeric)),
+    CONSTRAINT variant_price_iva_check CHECK ((price_iva >= (0)::numeric)),
+    CONSTRAINT variant_reserved_stock_check CHECK ((reserved_stock >= 0)),
+    CONSTRAINT variant_sale_unit_qty_check CHECK ((sale_unit_qty >= 1)),
+    CONSTRAINT variant_sort_check CHECK ((sort >= 0))
 );
 
 
@@ -2316,5 +2327,5 @@ ALTER TABLE public.verification_tokens ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict K41jTq3OH2P6w64lqc8iH0MuUV5AOJ4Ffih3kc21HsHtgb1NqnSrqfEXQqQWqBG
+\unrestrict St9V470xGPT8kLJn40ExradKSo8NLCKlkZya9xQyFrXDEQ627nWqCYDK5FPhrye
 
