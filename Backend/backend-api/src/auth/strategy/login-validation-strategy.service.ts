@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { HashService } from 'src/common/hash/hash.service';
-import { LoginDto } from '../dto/login.dto';
+import { ILoginDto } from '../dto/login.dto';
 import { UserPayload } from '../auth.types';
 import { Logger } from 'nestjs-pino';
 import type { Cache } from 'cache-manager';
@@ -96,7 +96,7 @@ export class LoginValidationStrategy {
    * @returns User object if found, otherwise throws an exception
    * @throws {BadRequestException} When both username and email are missing
    */
-  async findUserForLogin(body: LoginDto, allowedRoles: UserRole[]) {
+  async findUserForLogin(body: ILoginDto, allowedRoles: UserRole[]) {
     const { email, username, wholesalerId } = body;
     if (email) {
       return this.findUserBy({ email });
@@ -135,7 +135,7 @@ export class LoginValidationStrategy {
    * @throws {UnauthorizedException} When credentials are invalid, user not found, or account is inactive | 凭证无效、用户不存在或账户未激活
    * @throws {BadRequestException} When required credentials are missing | 缺少必要的凭证信息
    */
-  async validate(dto: LoginDto, allowedUsers: UserRole[]) {
+  async validate(dto: ILoginDto, allowedUsers: UserRole[]) {
     const { username, email, password } = dto;
     this.logger.debug(
       `[Login Validation Strategy] Validating user: ${maskEmail(email ?? 'unknow') || 'N/A'}, username: ${username || 'N/A'}`,

@@ -6,7 +6,7 @@ import { Prisma } from 'src/generated/prisma/client';
 import { accessibleBy } from '@casl/prisma';
 import { Action } from '../../casl/actions';
 import usersWhereInput = Prisma.usersWhereInput;
-import { ToPaginated } from '../../common/types/response.type';
+import { PaginatedData } from '../../common/types-interfaces/response.interface';
 
 @Injectable()
 export class FindUserService {
@@ -93,9 +93,9 @@ export class FindUserService {
       this.prismaService.users.count({ where }),
     ]);
 
-    const result: ToPaginated = {
+    const result: PaginatedData = {
       items: users,
-      meta: {
+      pagination: {
         total: total,
         page: page,
         limit: limit,

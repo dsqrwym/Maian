@@ -1,20 +1,18 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { DirectionDto, validateDirection } from './register.direction.dto';
 import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsStrongPassword,
-  IsUUID,
-  MaxLength,
-  MinLength,
-  NotContains,
-  ValidateNested,
-  IsPhoneNumber,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { DirectionDto } from './register.direction.dto';
-import { Trim } from 'src/utils/transform/trim.decorator';
+  TagsEmail,
+  TagsStrongPassword,
+  TagsUsername,
+  TagsUuid,
+} from '../../utils/typia/validators/auth.validator';
+import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
+import typia, { tags } from 'typia';
+import parsePhoneNumberFromString from 'libphonenumber-js';
+import { BadRequestException } from '@nestjs/common';
+import { isObject } from '../../utils/is.util';
+import { cleanString } from '../../utils/string.util';
+import { TagsBasicTelephone } from '../../utils/typia/validators/telephone.validator';
+import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**
  * Enum for Spanish company types
@@ -33,152 +31,89 @@ export enum SpanishCompanyType {
  * DTO for wholesaler registration
  * 批发商注册数据传输对象
  */
-export class RegisterWholesalerDto {
+export interface IRegisterWholesalerDto {
   /**
    * User's email address
    * 用户邮箱地址
    */
-  @ApiProperty({
-    description: 'The email address for the wholesaler account',
-    example: 'wholesaler@example.com',
-    required: true,
-  })
-  @IsEmail(
-    { host_blacklist: ['example.com'] },
-    { message: 'Invalid email format' },
-  )
-  @MaxLength(100, {
-    message: 'Email must be shorter than or equal to 100 characters',
-  })
-  @IsNotEmpty({ message: 'Email is required' })
-  @Trim()
-  email: string;
+  email: string & TagsEmail;
 
   /**
    * User's password
    * 用户密码
    */
-  @ApiProperty({
-    description:
-      'The password for the account. Must be 6-50 characters long and include at least one uppercase letter, one lowercase letter, and one number.',
-    example: 'StrongPass123!',
-    required: true,
-    minLength: 6,
-    maxLength: 50,
-  })
-  @IsString({ message: 'Password must be a string' })
-  @IsStrongPassword(
-    {
-      minLength: 6,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 0,
-    },
-    {
-      message:
-        'Password is too weak. It must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, and one number.',
-    },
-  )
-  password: string;
+  password: string & TagsStrongPassword;
 
   /**
    * Username (optional)
    * 用户名（可选）
    */
-  @ApiPropertyOptional({
-    description: 'The username for the wholesaler account (optional)',
-    example: 'wholesaler_001',
-    required: false,
-    minLength: 3,
-    maxLength: 30,
-  })
-  @IsOptional()
-  @IsString({ message: 'Username must be a string' })
-  @MinLength(3, { message: 'Username must be at least 3 characters long' })
-  @MaxLength(30, {
-    message: 'Username must be shorter than or equal to 30 characters',
-  })
-  @NotContains('@', { message: 'Username cannot contain @ symbol' })
-  @Trim()
-  username?: string;
+  username?: TagsUsername;
 
   /**
    * Company's legal name
    * 公司名称
    */
-  @ApiProperty({
-    description: 'The registered company name of the wholesaler',
-    example: 'Distribuciones Mediterráneo S.L.',
-    required: true,
-  })
-  @IsString({ message: 'Company name must be a string' })
-  @IsNotEmpty({ message: 'Company name is required' })
-  @MaxLength(100, { message: 'Company name cannot exceed 100 characters' })
-  @Trim()
-  company_name: string;
+  company_name: TagsNotBlank & tags.MaxLength<100>;
 
   /**
    * Company type (Spain)
    * 公司类型（西班牙）
    */
-  @ApiProperty({
-    description:
-      'Type of the company according to Spanish business classification',
-    example: SpanishCompanyType.SL,
-    required: true,
-    enum: SpanishCompanyType,
-    enumName: 'CompanyType',
-  })
-  @IsNotEmpty({ message: 'Company type is required' })
   company_type: SpanishCompanyType;
 
   /**
    * Telephone number
    * 联系电话
    */
-  @ApiProperty({
-    description: 'Contact phone number (Spain format supported)',
-    example: '+34 612 345 678',
-    required: true,
-  })
-  @IsPhoneNumber(undefined, { message: 'Invalid Spanish phone number format' })
-  telephone: string;
+  telephone: TagsBasicTelephone;
 
   /**
    * Business address
    * 经营地址
    */
-  @ApiProperty({
-    description: 'The business address for the wholesaler',
-    type: () => DirectionDto,
-    required: true,
-  })
-  @Type(() => DirectionDto)
-  @ValidateNested({ each: true })
-  @IsNotEmpty({ message: 'Business address is required' })
   address: DirectionDto;
 
   /**
    * Verification ID
    * 验证ID
    */
-  @ApiProperty({
-    description: 'Unique identifier for the verification process',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @IsUUID()
-  verification_id: string;
+  verification_id: TagsUuid;
 
   /**
    * JWT token used for verification
    * 用于验证的JWT令牌
    */
-  @ApiProperty({
-    description: 'JWT token to verify the registration request',
-    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-  })
-  @IsString()
-  @IsNotEmpty()
-  token: string;
+  token: TagsNotBlank;
 }
+
+export const validateRegisterWholesaler: IRequestBodyValidator.IAssert<IRegisterWholesalerDto> =
+  {
+    type: 'assert',
+    assert: (input: unknown) => {
+      if (isObject(input)) {
+        const obj = input;
+        if (typeof obj.email === 'string') {
+          obj.email = cleanString(obj.email);
+        }
+        if (typeof obj.username === 'string') {
+          obj.username = cleanString(obj.username);
+        }
+        if (typeof obj.company_name === 'string') {
+          obj.company_name = cleanString(obj.company_name);
+        }
+        if (typeof obj.telephone === 'string') {
+          obj.telephone = cleanString(obj.telephone);
+        }
+        obj.address = validateDirection(obj.address);
+      }
+      const typedBody = typia.assertEquals<IRegisterWholesalerDto>(input);
+
+      const phoneNumber = parsePhoneNumberFromString(typedBody.telephone);
+      if (!phoneNumber || !phoneNumber.isValid()) {
+        throw new BadRequestException('Invalid phone number format');
+      }
+
+      return typedBody;
+    },
+  };

@@ -7,10 +7,10 @@ import { Logger } from 'nestjs-pino';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma, UserRole, UserStatus } from 'src/generated/prisma/client';
 import {
-  SendVerificationCodeDto,
-  VerifyCodeDto,
+  ISendVerificationCodeDto,
+  IVerifyCodeDto,
+  IVerifyEmailQueryDto,
   VerifyCodeResponseDto,
-  VerifyEmailQueryDto,
 } from '../dto/verification.dto';
 import { maskEmail } from '../../common/formatter/emial-format';
 import { addMinutes } from '../../utils/date.utils';
@@ -40,7 +40,7 @@ export class VerificationService {
   ) {}
 
   async sendVerificationCode(
-    sendVerificationDto: SendVerificationCodeDto,
+    sendVerificationDto: ISendVerificationCodeDto,
     emailType: VerificationEmailType,
   ) {
     const email = sendVerificationDto.email;
@@ -96,7 +96,7 @@ export class VerificationService {
         const registerEmailJob: RegisterEmailJob = {
           to: email,
           lang: user.configurations?.language,
-          link: sendVerificationDto.deepLink,
+          link: sendVerificationDto.deepLink ?? '',
           code: code,
         };
         await this.mailService.sendNormalRegisterEmail(registerEmailJob);
@@ -118,7 +118,7 @@ export class VerificationService {
     );
   }
 
-  async verifyCode(verifyCode: VerifyCodeDto, expiresMinutes: number = 10) {
+  async verifyCode(verifyCode: IVerifyCodeDto, expiresMinutes: number = 10) {
     const [userCode] = await Promise.all([
       this.prismaService.users.findUnique({
         where: {
@@ -224,7 +224,7 @@ export class VerificationService {
   }
 
   async verifyEmailVerificationToken(
-    dto: VerifyEmailQueryDto,
+    dto: IVerifyEmailQueryDto,
     reply: FastifyReply,
   ) {
     const now = new Date();

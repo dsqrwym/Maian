@@ -6,5 +6,6 @@ import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 @Serializable
 data class BusinessCategoryForUpdateResponseDto(
     val name: String? = null,
+    val iva: Double? = null,
     val translations: List<SharedCategoryTranslation>? = null,
 )

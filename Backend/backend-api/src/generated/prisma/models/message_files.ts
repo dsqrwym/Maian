@@ -1263,6 +1263,11 @@ export type message_filesFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` message_files.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of message_files.
+   */
   distinct?: Prisma.Message_filesScalarFieldEnum | Prisma.Message_filesScalarFieldEnum[]
 }
 

@@ -1,87 +1,35 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsOptional,
-  IsUUID,
-  IsEnum,
-  IsNumber,
-  Max,
-  IsNotEmpty,
-} from 'class-validator';
-import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
+import { IPaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { CategorySelectField, CategoryType } from '../category.enums';
-import { Trim } from 'src/utils/transform/trim.decorator';
-import { Type } from 'class-transformer';
-import { ToBoolean } from '../../utils/transform/to-boolean.decorator';
+import typia, { tags } from 'typia';
+import { TagsUuid } from '../../utils/typia/validators/auth.validator';
+import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
+import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import { cleanString } from '../../utils/string.util';
 
-export class CategoryQueryDto extends PaginationQueryDto {
-  @ApiProperty({ description: 'Keywords for name search', required: false })
-  @IsString()
-  @IsOptional()
-  @Trim()
-  search?: string; // 用于 name 和 lang 模糊搜索
+export interface ICategoryQueryDto extends IPaginationQueryDto {
+  search?: string & tags.Example<'Keywords for name search'>; // 用于 name 和 lang 模糊搜索
 
-  @ApiProperty({
-    description: 'Filter by language code (e.g., en, es)',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  langCode?: string; // 用于指定返回 lang 中的哪个字段
+  langCode?: string & tags.MaxLength<15> & tags.Example<'zh-CH'>; // 用于指定返回 lang 中的哪个字段，不验证因为不影响系统逻辑
 
-  @ApiProperty({
-    description: 'Filter by user_id',
-    required: false,
-  })
-  @IsUUID()
-  @IsOptional()
-  userId?: string;
+  userId?: TagsUuid;
 
-  @ApiProperty({
-    description: 'Filter by parent_id',
-    required: false,
-  })
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  parentId?: string;
+  parentId?: TagsNotBlank;
 
-  @ApiProperty({
-    description: 'Filter by max level',
-    required: false,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  @Max(3)
-  maxLevel?: number;
+  maxLevel?: number & tags.Minimum<0> & tags.Maximum<3> & tags.Example<3>;
 
-  @ApiProperty({
-    description: 'With children count',
-    required: false,
-  })
-  @IsOptional()
-  @ToBoolean()
   withChildrenCount?: boolean;
 
-  @ApiProperty({
-    description: 'Filter by category type',
-    enum: CategoryType,
-    required: false,
-  })
-  @IsEnum(CategoryType)
-  @IsOptional()
   type?: CategoryType;
 
-  @ApiProperty({
-    description: 'Selected fields',
-    enum: CategorySelectField,
-    isArray: true,
-    required: false,
-  })
-  @IsEnum(CategorySelectField, {
-    each: true,
-  })
-  @IsOptional()
   fields?: CategorySelectField[];
 }
+export const validateCategoryQuery: IRequestQueryValidator.IAssert<ICategoryQueryDto> =
+  {
+    type: 'assert',
+    assert: (input): ICategoryQueryDto => {
+      const search = input.get('search');
+      if (search) input.set('search', cleanString(search));
+
+      return typia.http.assertQuery<ICategoryQueryDto>(input);
+    },
+  };

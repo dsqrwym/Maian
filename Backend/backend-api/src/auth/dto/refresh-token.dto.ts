@@ -1,13 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
+import { tags } from 'typia';
 
-export class RefreshTokenDto {
-  @ApiProperty({
-    description:
-      'Non-web endpoint: provide the real refresh token. Web endpoint: provide the CSRF token bound to session/device.',
-    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-  })
-  @IsString()
-  @IsNotEmpty()
-  refreshToken: string;
+export interface IRefreshTokenDto {
+  refreshToken: string &
+    TagsNotBlank &
+    tags.Example<'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'>;
 }

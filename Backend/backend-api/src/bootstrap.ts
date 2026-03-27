@@ -7,7 +7,6 @@ import {
 } from '@nestjs/platform-fastify';
 import { useSwagger } from './config/swagger.config';
 import { useGlobalFilters } from './config/global-filters.config';
-import { useGlobalPipes } from './config/global-pipes.config';
 import { useGlobalInterceptors } from './config/global-interceptors.config';
 import { useLogger } from './config/logger.config';
 import * as process from 'node:process';
@@ -41,13 +40,13 @@ export async function bootstrap() {
   // 添加cookie
   await useCookie(app);
 
-  useSwagger(app); // Swagger 文档
+  await useSwagger(app); // Swagger 文档
 
   useGlobalInterceptors(app); // 拦截器
 
   useGlobalFilters(app); // 异常过滤器
 
-  useGlobalPipes(app); // 校验管道
+  //useGlobalPipes(app); // 校验管道
 
   await useFastifyMultipart(app); // 添加文件接受
 

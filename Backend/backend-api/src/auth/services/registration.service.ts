@@ -8,12 +8,12 @@ import { $Enums, AddressType, UserRole } from 'src/generated/prisma/client';
 import { randomUUID } from 'node:crypto';
 import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
 import { VerificationService } from './verification.service';
-import { VerifyCodeDto } from '../dto/verification.dto';
-import { RegisterRetailerDto } from '../dto/register-retailer.dto';
+import { IVerifyCodeDto } from '../dto/verification.dto';
+import { IRegisterRetailerDto } from '../dto/register-retailer.dto';
 import UserStatus = $Enums.UserStatus;
 import { HashService } from 'src/common/hash/hash.service';
-import { SendNormalRegisterMailDto } from '../dto/register.dto';
-import { RegisterWholesalerDto } from '../dto/register-wholesaler.dto';
+import { ISendNormalRegisterMailDto } from '../dto/register.dto';
+import { IRegisterWholesalerDto } from '../dto/register-wholesaler.dto';
 import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile.type';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class RegistrationService {
   ) {}
 
   private async beginNormalRegistration(
-    dto: SendNormalRegisterMailDto,
+    dto: ISendNormalRegisterMailDto,
     role: UserRole,
   ) {
     await this.prismaService.$transaction(async (tx) => {
@@ -63,15 +63,15 @@ export class RegistrationService {
     });
 
     await this.verificationService.sendVerificationCode(
-      dto,
+      { email: dto.email, deepLink: dto.deepLink ?? '' },
       VerificationEmailType.NORMAL_REGISTER,
     );
   }
-  async beginRetailerRegistration(dto: SendNormalRegisterMailDto) {
+  async beginRetailerRegistration(dto: ISendNormalRegisterMailDto) {
     return this.beginNormalRegistration(dto, UserRole.RETAILER);
   }
 
-  async completeRetailerRegistration(dto: RegisterRetailerDto) {
+  async completeRetailerRegistration(dto: IRegisterRetailerDto) {
     await this.prismaService.$transaction(async (tx) => {
       await this.verificationService.verifyAndConsumeToken(
         tx,
@@ -110,11 +110,11 @@ export class RegistrationService {
     });
   }
 
-  async beginWholesalerRegistration(dto: SendNormalRegisterMailDto) {
+  async beginWholesalerRegistration(dto: ISendNormalRegisterMailDto) {
     return this.beginNormalRegistration(dto, UserRole.WHOLESALER);
   }
 
-  async completeWholesalerRegistration(dto: RegisterWholesalerDto) {
+  async completeWholesalerRegistration(dto: IRegisterWholesalerDto) {
     await this.prismaService.$transaction(async (tx) => {
       await this.verificationService.verifyAndConsumeToken(
         tx,
@@ -161,7 +161,7 @@ export class RegistrationService {
     });
   }
 
-  async verifyCode(verifyCodeDto: VerifyCodeDto) {
+  async verifyCode(verifyCodeDto: IVerifyCodeDto) {
     return this.verificationService.verifyCode(verifyCodeDto, 30);
   }
 }

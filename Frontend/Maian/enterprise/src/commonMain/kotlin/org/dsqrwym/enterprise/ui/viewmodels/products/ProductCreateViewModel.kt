@@ -181,7 +181,7 @@ class ProductCreateViewModel(
 
         // 没有被用户改过自动填充
         if (!isIvaManuallyEdited) {
-            productIva = iva
+            productIva = iva.toString()
         }
     }
 }

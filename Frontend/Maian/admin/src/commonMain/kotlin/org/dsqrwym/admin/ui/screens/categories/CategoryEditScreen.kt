@@ -9,7 +9,10 @@ import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -36,10 +39,6 @@ fun CategoryEditScreen(
     onNavigateBack: () -> Unit,
 ) {
     val isLoading = viewModel.isLoading
-    var isInitialized by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        isInitialized = true
-    }
     // 初始化 VM
     LaunchedEffect(categoryId) {
         viewModel.initWithCategory(categoryId)
@@ -129,7 +128,6 @@ fun CategoryEditScreen(
                     viewModel::showAddLanguageDialog,
                     viewModel::removeTranslation,
                     viewModel::upsertTranslation,
-                    requestFocus = isInitialized,
                     modifier = Modifier.fillMaxWidth(),
                     isLoading = isLoading
                 )

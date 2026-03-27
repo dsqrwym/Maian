@@ -25,13 +25,11 @@ export interface VerifyEmployeeEmailJob extends BaseEmailJobWithLink {
   position: string;
 }
 
-export interface ActiveEmployeeWithPasswordEmailJob
-  extends BaseEmailJovWithTemporaryPassword {
+export interface ActiveEmployeeWithPasswordEmailJob extends BaseEmailJovWithTemporaryPassword {
   employeeName: string;
   companyName: string;
 }
 
-export interface ActiveAdminWithPasswordEmailJob
-  extends BaseEmailJovWithTemporaryPassword {
+export interface ActiveAdminWithPasswordEmailJob extends BaseEmailJovWithTemporaryPassword {
   adminName: string;
 }

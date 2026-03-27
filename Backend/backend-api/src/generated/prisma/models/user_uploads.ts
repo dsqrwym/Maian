@@ -1210,6 +1210,11 @@ export type user_uploadsFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` user_uploads.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of user_uploads.
+   */
   distinct?: Prisma.User_uploadsScalarFieldEnum | Prisma.User_uploadsScalarFieldEnum[]
 }
 

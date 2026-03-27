@@ -2,8 +2,6 @@ import {
   BadRequestException,
   Controller,
   Get,
-  Post,
-  Query,
   Req,
   StreamableFile,
   UseGuards,
@@ -14,17 +12,19 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiOkResponse,
-  ApiOperation,
   ApiProduces,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/auth.guard';
 import { fileTypeFromBuffer } from 'file-type';
 import { ALLOWED_MIMES, CHUNK_SIZE } from '../config/fastify-multipart.config';
-import { UploadFileForWholesalerDto } from './upload-file-for-wholesaler.dto';
-import { ProductFilesQueryDto } from './dto/product-files-query.dto';
+import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
+import { IProductFilesQueryDto } from './dto/product-files-query.dto';
 import { SkipResponseInterceptor } from 'src/common/guards/decorator/skip-response-interceptor.decorator';
+import * as mime from 'mime-types';
+import * as path from 'path';
+import { TypedQuery, TypedRoute } from '@nestia/core';
+import { PassThrough } from 'node:stream';
 
 @ApiTags('File Management')
 @ApiBearerAuth()
@@ -45,53 +45,87 @@ export class FilesController {
       },
     },
   })
-  @Post('upload-raw')
+  @TypedRoute.Post('upload-raw')
   async uploadRawFile(
     @Req() req: FastifyRequest,
-    @Query() query: UploadFileForWholesalerDto,
-  ) {
+    @TypedQuery() query: IUploadFileForWholesalerDto,
+  ): Promise<{ id: string }> {
     const multipart = await req.file();
     if (!multipart) throw new BadRequestException('File is required.');
     const { file, filename } = multipart;
-    const chunk = (await file.read(CHUNK_SIZE)) as Buffer | null;
 
-    if (!chunk || chunk.length === 0) {
-      throw new BadRequestException('Empty file');
-    }
+    let isProcessed = false; // 标记位：是否已成功交给 service
 
-    // 使用 file-type 检测真实 mime
-    const type = await fileTypeFromBuffer(chunk);
-    const detectedMime = type?.mime ?? multipart.mimetype;
+    // try finally 在结束时使用 resume() 读完释放资源，不使用destroy() 因为会直接中断整个响应链
+    try {
+      const chunk = (await file.read(CHUNK_SIZE)) as Buffer | null;
 
-    if (!ALLOWED_MIMES.has(detectedMime)) {
-      throw new BadRequestException(`File type not allowed: ${detectedMime}`);
-    }
+      if (!chunk || chunk.length === 0) {
+        throw new BadRequestException('Empty file');
+      }
 
-    // 合法文件，把 chunk 放回流中
-    if (file.unshift) {
-      file.unshift(chunk);
+      // filename.png
+      const extWithDot = path.extname(filename); // ".png"
+      let ext = extWithDot.slice(1).toLowerCase(); // "png"
+      let baseName = path.basename(filename, extWithDot); // suffix – optionally, an extension to remove from the result.
+      // basename = filename.png -> filename
+
+      // 使用 file-type 检测真实 mime
+      const type = await fileTypeFromBuffer(chunk);
+      const detectedMime = type?.mime ?? multipart.mimetype;
+
+      if (!ALLOWED_MIMES.has(detectedMime)) {
+        file.resume();
+        throw new BadRequestException(`File type not allowed: ${detectedMime}`);
+      }
+
+      // 只用 file-type 推断的 mime 再 type-mimes 投映对应的ext
+      ext = mime.extension(detectedMime) || 'bin';
+
+      // 清理非法字符
+      baseName = baseName.replace(/[/\\:*?"<>|]/g, '_');
+
+      const newFilename = `${baseName}.${ext}`.slice(0, 255);
+
       const user = req.user;
-      return await this.filesService.uploadFile(file, filename, user, query);
+      // 合法文件，把 chunk 放回流中
+      if (file.unshift) {
+        file.unshift(chunk);
+        // 标记成功
+        isProcessed = true;
+        return await this.filesService.uploadFile(
+          file,
+          newFilename,
+          user,
+          query,
+        );
+      } else {
+        const fullStream = new PassThrough();
+        fullStream.write(chunk);
+        file.pipe(fullStream);
+        isProcessed = true;
+        return await this.filesService.uploadFile(
+          fullStream,
+          newFilename,
+          user,
+          query,
+        );
+      }
+    } finally {
+      if (!isProcessed) {
+        file.resume();
+      }
     }
   }
 
-  @ApiOperation({
-    summary: 'Get product file',
-    description:
-      'Returns the raw file (image, video, pdf, etc.) as a binary stream',
-  })
+  /**
+   * @ignore
+   */
   @ApiProduces('application/octet-stream')
-  @ApiOkResponse({
-    description: 'Binary file',
-    schema: {
-      type: 'string',
-      format: 'binary',
-    },
-  })
   @Get('product-file')
   @SkipResponseInterceptor()
   async getProductFile(
-    @Query() query: ProductFilesQueryDto,
+    @TypedQuery() query: IProductFilesQueryDto,
     @Req() req: FastifyRequest,
   ): Promise<StreamableFile> {
     const { stream, mime_type, filename } =

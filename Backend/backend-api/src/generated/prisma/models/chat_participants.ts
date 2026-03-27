@@ -1210,6 +1210,11 @@ export type chat_participantsFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` chat_participants.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of chat_participants.
+   */
   distinct?: Prisma.Chat_participantsScalarFieldEnum | Prisma.Chat_participantsScalarFieldEnum[]
 }
 

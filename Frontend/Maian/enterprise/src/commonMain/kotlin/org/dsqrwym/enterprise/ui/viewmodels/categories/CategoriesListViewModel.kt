@@ -43,14 +43,11 @@ class CategoriesListViewModel(
         Pair(query, parent?.id)
     }
 
-    private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 0)
-    private val refreshTrigger = _refreshTrigger.asSharedFlow()
-
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val pagedCategories: Flow<PagingData<CategoryResponse>> = combine(
         pagingTrigger.debounce(600)
             .distinctUntilChanged(),
-        refreshTrigger.onStart { emit(Unit) } // 刷新触发器
+        categoryRepository.updateEvents.onStart { emit(Unit) }
     ) { (query, parent), _ ->
         Pair(query, parent)
     }
@@ -102,16 +99,16 @@ class CategoriesListViewModel(
 
     fun refresh() {
         viewModelScope.launch {
-            _refreshTrigger.emit(Unit)
+            categoryRepository.notifyUpdated()
         }
     }
+
     // 删除类别
     fun deleteCategory(category: CategoryResponse) {
         viewModelScope.launch {
             isLoading = true
             when (val result = categoryRepository.deleteCategory(category.id.toString())) {
                 is SharedResponseResult.Success -> {
-                    _refreshTrigger.emit(Unit)
                     val message = getString(SharedRes.string.delete_success)
                     mySnackbarViewModel.showSuccess(message)
                 }

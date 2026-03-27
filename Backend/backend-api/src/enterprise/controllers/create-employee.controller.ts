@@ -1,21 +1,17 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Req, UseGuards } from '@nestjs/common';
 import { CreateEmployeeService } from '../services/create-employee.service';
-import { CreateEmployeeDto } from '../dto/create-employee.dto';
 import {
-  ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiConflictResponse,
-  ApiForbiddenResponse,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+  ICreateEmployeeDto,
+  validateICreateEmployee,
+} from '../dto/create-employee.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/auth.guard';
 import { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
 import { UserRole } from 'src/generated/prisma/client';
 import { minutes, Throttle } from '@nestjs/throttler';
+import { TypedBody } from '../../utils/typia/typed-body.typia';
+import { TypedRoute } from '@nestia/core';
 
 /**
  * Controller for creating different types of employee accounts
@@ -44,61 +40,12 @@ export class CreateEmployeeController {
    * @param dto - Employee details including email, name, and contact information
    * @returns Empty response with 201 status code on success
    */
-  @ApiOperation({
-    summary: 'Create a support employee',
-    description: `Creates a support employee account with PENDING_VERIFICATION status.
-    The employee will receive a verification email with a link to activate their account.
-    The username is automatically generated.`,
-  })
-  @ApiResponse({
-    status: 201,
-    description:
-      'Support employee created successfully. Verification email sent.',
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid input data',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: ['email must be an email'],
-        error: 'Bad Request',
-      },
-    },
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or invalid JWT token',
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
-  @ApiForbiddenResponse({
-    description: 'User does not have WHOLESALER role',
-    schema: {
-      example: {
-        statusCode: 403,
-        message: 'Forbidden resource',
-        error: 'Forbidden',
-      },
-    },
-  })
-  @ApiConflictResponse({
-    description: 'Email already exists in the system',
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'Email already exists',
-        error: 'Conflict',
-      },
-    },
-  })
-  @Post('support')
+  @TypedRoute.Post('support')
   async createEmployee(
     @Req() req: FastifyRequest,
-    @Body() dto: CreateEmployeeDto,
-  ) {
+    @TypedBody(validateICreateEmployee)
+    dto: ICreateEmployeeDto,
+  ): Promise<void> {
     const wholesalerId = req.user.userId;
     return this.wholesalerService.createSupportEmployee(wholesalerId, dto);
   }
@@ -114,61 +61,12 @@ export class CreateEmployeeController {
    * @param dto - Employee details including email, name, and contact information
    * @returns Empty response with 201 status code on success
    */
-  @ApiOperation({
-    summary: 'Create a delivery employee',
-    description: `Creates a delivery employee account with PENDING_VERIFICATION status.
-    The employee will receive a verification email with a link to activate their account.
-    The username is automatically generated.`,
-  })
-  @ApiResponse({
-    status: 201,
-    description:
-      'Delivery employee created successfully. Verification email sent.',
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid input data',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: ['email must be an email'],
-        error: 'Bad Request',
-      },
-    },
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or invalid JWT token',
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
-  @ApiForbiddenResponse({
-    description: 'User does not have WHOLESALER role',
-    schema: {
-      example: {
-        statusCode: 403,
-        message: 'Forbidden resource',
-        error: 'Forbidden',
-      },
-    },
-  })
-  @ApiConflictResponse({
-    description: 'Email already exists in the system',
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'Email already exists',
-        error: 'Conflict',
-      },
-    },
-  })
-  @Post('delivery')
+  @TypedRoute.Post('delivery')
   async createDeliveryEmployee(
     @Req() req: FastifyRequest,
-    @Body() dto: CreateEmployeeDto,
-  ) {
+    @TypedBody(validateICreateEmployee)
+    dto: ICreateEmployeeDto,
+  ): Promise<void> {
     const wholesalerId = req.user.userId;
     return this.wholesalerService.createDeliveryEmployee(wholesalerId, dto);
   }
@@ -184,61 +82,12 @@ export class CreateEmployeeController {
    * @param dto - Employee details including email, name, and contact information
    * @returns Empty response with 201 status code on success
    */
-  @ApiOperation({
-    summary: 'Create a warehouse employee',
-    description: `Creates a warehouse employee account with PENDING_VERIFICATION status.
-    The employee will receive a verification email with a link to activate their account.
-    The username is automatically generated.`,
-  })
-  @ApiResponse({
-    status: 201,
-    description:
-      'Warehouse employee created successfully. Verification email sent.',
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid input data',
-    schema: {
-      example: {
-        statusCode: 400,
-        message: ['email must be an email'],
-        error: 'Bad Request',
-      },
-    },
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or invalid JWT token',
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
-  @ApiForbiddenResponse({
-    description: 'User does not have WHOLESALER role',
-    schema: {
-      example: {
-        statusCode: 403,
-        message: 'Forbidden resource',
-        error: 'Forbidden',
-      },
-    },
-  })
-  @ApiConflictResponse({
-    description: 'Email already exists in the system',
-    schema: {
-      example: {
-        statusCode: 409,
-        message: 'Email already exists',
-        error: 'Conflict',
-      },
-    },
-  })
-  @Post('warehouse')
+  @TypedRoute.Post('warehouse')
   async createWarehouseEmployee(
     @Req() req: FastifyRequest,
-    @Body() dto: CreateEmployeeDto,
-  ) {
+    @TypedBody(validateICreateEmployee)
+    dto: ICreateEmployeeDto,
+  ): Promise<void> {
     const wholesalerId = req.user.userId;
     return this.wholesalerService.createWarehouseEmployee(wholesalerId, dto);
   }

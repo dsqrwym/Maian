@@ -12,7 +12,7 @@ import type { Cache } from 'cache-manager';
 import { Logger } from 'nestjs-pino';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CSRFPayload, UserPayload } from '../auth.types';
-import { LoginDto } from '../dto/login.dto';
+import { ILoginDto } from '../dto/login.dto';
 import { randomUUID } from 'node:crypto';
 import {
   ENV,
@@ -36,7 +36,7 @@ export class LoginService {
     @Inject(REDIS_CACHE) private readonly redisCache: Cache,
     private readonly logger: Logger,
   ) {}
-  private async login(req: FastifyRequest, user: UserPayload, dto: LoginDto) {
+  private async login(req: FastifyRequest, user: UserPayload, dto: ILoginDto) {
     const { deviceName, userAgent } = dto;
 
     this.logger.debug({ userId: user.userId }, '[Login] Password validated');
@@ -186,7 +186,7 @@ export class LoginService {
 
   async loginNative(
     req: FastifyRequest,
-    body: LoginDto,
+    body: ILoginDto,
     allowedUsers: UserRole[],
   ) {
     const user: UserPayload = await this.loginValidationStrategy.validate(
@@ -210,7 +210,7 @@ export class LoginService {
   async loginWeb(
     req: FastifyRequest,
     res: FastifyReply,
-    body: LoginDto,
+    body: ILoginDto,
     allowedUsers: UserRole[],
   ) {
     const user: UserPayload = await this.loginValidationStrategy.validate(

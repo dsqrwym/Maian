@@ -111,6 +111,7 @@ class CategoriesEditViewModel(
 
     fun initWithCategory(categoryId: String) {
         this@CategoriesEditViewModel.categoryId = categoryId
+        isLoading = true
         viewModelScope.launch {
             when (val result = categoryRepository.getCategoryForUpdate(categoryId)) {
                 is SharedResponseResult.Success -> {
@@ -121,8 +122,7 @@ class CategoriesEditViewModel(
                         translations.addAll(it)
                         initialLangCodes.addAll(it.map { t -> t.langCode })
                     }
-
-                    isLoading = false
+                    categoryIva = result.data?.iva?.toString() ?: ""
                 }
 
                 is SharedResponseResult.Error -> {
@@ -134,7 +134,7 @@ class CategoriesEditViewModel(
                     emitNavigation(NavigationEvent.ToRoute(Categories))
                 }
             }
-
+            isLoading = false
         }
     }
 

@@ -79,7 +79,7 @@ class CategoryRepository(
             parentId = parentId,
             translations = translations?.map { it.copy(name = it.name.trim()) }
         )
-        safeApiCall { api.createCategory(dto) }
+        return@withAuthOrError safeApiCall { api.createCategory(dto) }.notifyUpdated()
     }
 
     suspend fun checkCategoryName(name: String): SharedResponseResult<Boolean> = withAuthOrError { user ->
@@ -101,6 +101,6 @@ class CategoryRepository(
                     translations = dto.translations?.map { it.copy(name = it.name.trim()) }
                 )
             )
-        }
+        }.notifyUpdated()
     }
 }

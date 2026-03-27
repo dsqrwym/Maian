@@ -9,9 +9,9 @@ import { StorageDriver } from './storage/storage.driver';
 import { Readable } from 'stream';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from '../auth/auth.types';
-import { UploadFileForWholesalerDto } from './upload-file-for-wholesaler.dto';
+import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
 import { UserRole } from '../generated/prisma/enums';
-import { ProductFilesQueryDto } from './dto/product-files-query.dto';
+import { IProductFilesQueryDto } from './dto/product-files-query.dto';
 import { AppAbility } from '../casl/casl-types';
 import { Action } from '../casl/actions';
 import { subject } from '@casl/ability';
@@ -27,7 +27,7 @@ export class FilesService {
     buffer: Buffer | Readable,
     filename: string,
     user: UserPayload,
-    query: UploadFileForWholesalerDto,
+    query: IUploadFileForWholesalerDto,
   ) {
     const { pathKey, file_hash, file_name, mime_type, file_size } =
       await this.storage.upload(buffer, filename);
@@ -75,7 +75,7 @@ export class FilesService {
     return { id: file.id.toString() };
   }
 
-  async getProductFileById(query: ProductFilesQueryDto, ability: AppAbility) {
+  async getProductFileById(query: IProductFilesQueryDto, ability: AppAbility) {
     const { product_id, file_id } = query;
     const file = await this.prisma.files.findUnique({
       select: {

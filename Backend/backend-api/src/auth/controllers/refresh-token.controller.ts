@@ -1,9 +1,7 @@
 import {
   BadRequestException,
-  Body,
   Controller,
   HttpCode,
-  Post,
   Req,
   Res,
   UnauthorizedException,
@@ -18,24 +16,19 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { seconds, Throttle } from '@nestjs/throttler';
-import {
-  ApiBody,
-  ApiCookieAuth,
-  ApiExtraModels,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
-import { RefreshTokenDto } from '../dto/refresh-token.dto';
+import { ApiCookieAuth, ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { IRefreshTokenDto } from '../dto/refresh-token.dto';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { AUTH_ERROR } from '../auth.constants';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CSRFPayload } from '../auth.types';
+import { TypedRoute } from '@nestia/core';
+import { TypedBody } from '../../utils/typia/typed-body.typia';
+import typia from 'typia';
 
 @Controller('token')
 @ApiTags('RefreshToken')
-@ApiExtraModels(RefreshTokenDto, TokenResponseDto)
+@ApiExtraModels(TokenResponseDto)
 export class RefreshTokenController {
   private static ACCESS_TOKEN_TTL = Number(
     process.env[ENV.ACCESS_TOKEN_EXPIRES_IN],
@@ -47,7 +40,7 @@ export class RefreshTokenController {
     private readonly jwtService: JwtService,
   ) {}
 
-  @Post('refresh')
+  @TypedRoute.Post('refresh')
   @HttpCode(200)
   @Throttle({
     default: {
@@ -55,72 +48,13 @@ export class RefreshTokenController {
       ttl: seconds(RefreshTokenController.ACCESS_TOKEN_TTL),
     },
   })
-  @ApiOperation({
-    summary: 'Refresh tokens (body-only)',
-    description:
-      'Non-web clients: provide { refreshToken } in the request body. Cookies are not involved.',
-  })
-  @ApiBody({
-    description:
-      'For non-browser clients, provide refreshToken in the request body.',
-    type: RefreshTokenDto,
-    examples: {
-      bodyExample: {
-        summary: 'Provide refreshToken in request body',
-        value: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
-      },
-    },
-  })
-  @ApiOkResponse({
-    description: 'Returns new accessToken and refreshToken.',
-    type: TokenResponseDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized. See examples for possible error codes.',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number', example: 401 },
-            message: {
-              type: 'string',
-              description: 'Error code (for frontend handling)',
-              example: AUTH_ERROR.SESSION_NOT_FOUND,
-            },
-            error: { type: 'string', example: 'Unauthorized' },
-          },
-        },
-        examples: {
-          sessionNotFound: {
-            summary: 'Session not found/kicked/expired/refresh invalid',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.SESSION_NOT_FOUND,
-              error: 'Unauthorized',
-            },
-          },
-          sessionRevoked: {
-            summary: 'Session revoked (user logout)',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.SESSION_REVOKED,
-              error: 'Unauthorized',
-            },
-          },
-          invalidRefresh: {
-            summary: 'Refresh token invalid (possible reuse/mismatch)',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.INVALID_REFRESH_TOKEN,
-              error: 'Unauthorized',
-            },
-          },
-        },
-      },
-    },
-  })
-  async getAccessToken(@Body() body: RefreshTokenDto) {
+  async getAccessToken(
+    @TypedBody({
+      type: 'assert',
+      assert: typia.createAssertEquals<IRefreshTokenDto>(),
+    })
+    body: IRefreshTokenDto,
+  ): Promise<TokenResponseDto> {
     const refreshToken = body?.refreshToken;
     if (!refreshToken) {
       this.logger.warn({}, '[AuthController] refresh-token missing');
@@ -132,7 +66,7 @@ export class RefreshTokenController {
     return result.token;
   }
 
-  @Post('refresh-web')
+  @TypedRoute.Post('refresh-web')
   @HttpCode(200)
   @Throttle({
     default: {
@@ -140,94 +74,16 @@ export class RefreshTokenController {
       ttl: seconds(RefreshTokenController.ACCESS_TOKEN_TTL),
     },
   })
-  @ApiOperation({
-    summary:
-      'Web refresh: Cookie + CSRF (Body.refreshToken) with refresh_token rotation',
-    description:
-      'Browser flow: read the real refresh_token from cookies; the request body refreshToken carries the CSRF token (bound to the session). After validation, a new refresh_token is set via Set-Cookie (rotation) and the response body returns a new accessToken and new CSRF token (still in refreshToken field).',
-  })
-  @ApiBody({
-    description:
-      'Web refresh must pass the CSRF token in Body.refreshToken. The real refresh_token is sent automatically via Cookie (name: refresh_token).',
-    type: RefreshTokenDto,
-    examples: {
-      webRefresh: {
-        summary:
-          'Web refresh (cookie carries refresh_token; body carries CSRF)',
-        value: { refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.CSRF...' },
-      },
-    },
-  })
-  @ApiOkResponse({
-    description:
-      'Returns new accessToken and refreshToken. If using cookies, a rotated refresh_token is set via Set-Cookie.',
-    type: TokenResponseDto,
-    headers: {
-      'Set-Cookie': {
-        description: `When cookies are included, a new refresh_token is returned; HttpOnly; Secure; SameSite=None; Path='${REFRESH_TOKEN_COOKIE_PATH}'`,
-        schema: { type: 'string' },
-      },
-    },
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized. See examples for possible error codes.',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number', example: 401 },
-            message: {
-              type: 'string',
-              description: 'Error code (for frontend handling)',
-              example: AUTH_ERROR.SESSION_NOT_FOUND,
-            },
-            error: { type: 'string', example: 'Unauthorized' },
-          },
-        },
-        examples: {
-          csrfInvalid: {
-            summary: 'CSRF verification failed',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.CSRF_INVALID,
-              error: 'Unauthorized',
-            },
-          },
-          sessionNotFound: {
-            summary: 'Session not found/kicked/expired/refresh invalid',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.SESSION_NOT_FOUND,
-              error: 'Unauthorized',
-            },
-          },
-          sessionRevoked: {
-            summary: 'Session revoked (user logout)',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.SESSION_REVOKED,
-              error: 'Unauthorized',
-            },
-          },
-          invalidRefresh: {
-            summary: 'Refresh token invalid (possible reuse/mismatch)',
-            value: {
-              statusCode: 401,
-              message: AUTH_ERROR.INVALID_REFRESH_TOKEN,
-              error: 'Unauthorized',
-            },
-          },
-        },
-      },
-    },
-  })
   @ApiCookieAuth(REFRESH_COOKIE_NAME)
   async getAccessTokenWeb(
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
-    @Body() body: RefreshTokenDto,
-  ) {
+    @TypedBody({
+      type: 'assert',
+      assert: typia.createAssertEquals<IRefreshTokenDto>(),
+    })
+    body: IRefreshTokenDto,
+  ): Promise<TokenResponseDto> {
     // 解析 cookie
     const cookies = req.cookies;
     const refreshToken = cookies[REFRESH_COOKIE_NAME];

@@ -16,6 +16,9 @@ plugins {
 // Kotlin多平台配置
 // ---------------------------
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
     // Android目标配置
     androidTarget {
         compilerOptions {

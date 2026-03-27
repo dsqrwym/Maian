@@ -33,7 +33,10 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
     // JSON serialization; ignore unknown fields to be forward-compatible
     // JSON 序列化；忽略未知字段以提升前向兼容性
     install(ContentNegotiation) {
-        json(Json { ignoreUnknownKeys = true })
+        json(Json {
+            ignoreUnknownKeys = true
+            explicitNulls = false
+        })
     }
     // Timeouts to avoid hanging requests
     // 配置连接与请求超时，避免请求长时间挂起

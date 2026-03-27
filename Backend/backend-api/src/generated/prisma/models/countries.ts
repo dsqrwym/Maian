@@ -1430,6 +1430,11 @@ export type countriesFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` countries.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of countries.
+   */
   distinct?: Prisma.CountriesScalarFieldEnum | Prisma.CountriesScalarFieldEnum[]
 }
 

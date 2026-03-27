@@ -173,15 +173,15 @@ fun EnterpriseLoginContent(
                     error = wholesalerIdError,
                     focusManager = focusManager
                 )
-
-                Spacer(
-                    modifier = Modifier
-                        .heightIn(max = 20.dp)
-                        .fillMaxHeight()
-                        .weight(1f, fill = false)
-                )
             }
-
+        }
+        if (selectedLoginType == LoginType.EMPLOYEE) {
+            Spacer(
+                modifier = Modifier
+                    .heightIn(max = 20.dp)
+                    .fillMaxHeight()
+                    .weight(1f, fill = false)
+            )
         }
 
         UsernameOrEmailField(
@@ -275,12 +275,14 @@ fun LoginTypeTabs(
 
 @Composable
 fun WholesalerIdField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     error: String?,
     focusManager: FocusManager
 ) {
     MyOutlinedTextField(
+        modifier = modifier,
         value = value,
         onValueChange = onValueChange,
         semanticsPropertyReceiver = {

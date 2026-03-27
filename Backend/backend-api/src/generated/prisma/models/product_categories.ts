@@ -1216,6 +1216,11 @@ export type product_categoriesFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` product_categories.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of product_categories.
+   */
   distinct?: Prisma.Product_categoriesScalarFieldEnum | Prisma.Product_categoriesScalarFieldEnum[]
 }
 

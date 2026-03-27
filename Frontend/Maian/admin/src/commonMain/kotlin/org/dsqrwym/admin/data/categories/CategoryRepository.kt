@@ -14,7 +14,8 @@ import org.dsqrwym.shared.network.ApiResponseList
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 
-class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi) : BusinessCategoryRepository(api) {
+class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi) :
+    BusinessCategoryRepository(api) {
     suspend fun getCategories(
         search: String? = null,
         type: SharedCategoryType? = null,
@@ -67,10 +68,10 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         return safeApiCall {
             api.createCategory(
                 dto.copy(
-                name = dto.name.trim(),
-                translations = dto.translations?.map { it.copy(name = it.name.trim()) }
-            ))
-        }
+                    name = dto.name.trim(),
+                    translations = dto.translations?.map { it.copy(name = it.name.trim()) }
+                ))
+        }.notifyUpdated()
     }
 
     suspend fun checkCategoryName(name: String, userId: String? = null): SharedResponseResult<Boolean> {
@@ -93,6 +94,6 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
                     translations = dto.translations?.map { it.copy(name = it.name.trim()) }
                 )
             )
-        }
+        }.notifyUpdated()
     }
 }

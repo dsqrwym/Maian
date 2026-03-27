@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { HashService } from '../../common/hash/hash.service';
-import { CreateAdminDto } from '../dto/create-admin.dto';
+import { ICreateAdminDto } from '../dto/create-admin.dto';
 import { randomUUID } from 'node:crypto';
 import { addDays } from '../../utils/date.utils';
 import { AUTH_VERIFY_EMAIL_PATH } from '../../auth/auth.constants';
@@ -17,7 +17,7 @@ export class CreateAdminService {
     private readonly hashService: HashService,
   ) {}
 
-  async createAdmin(dto: CreateAdminDto) {
+  async createAdmin(dto: ICreateAdminDto) {
     const { email, username } = dto;
     const result = await this.prismaService.$transaction(async (tx) => {
       const adminUsername = makeUsername(

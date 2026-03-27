@@ -1,74 +1,41 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsString,
-  IsNumber,
-  IsOptional,
-  IsUUID,
-  Min,
-  Max,
-  IsArray,
-  ValidateNested,
-  IsNotEmpty,
-} from 'class-validator';
-import { CategoryTranslationDto } from './category-translation.dto';
-import { Type } from 'class-transformer';
-import { Trim } from 'src/utils/transform/trim.decorator';
+  ICategoryTranslationDto,
+  validateCategoryTranslation,
+} from './category-translation.dto';
+import { TagsUuid } from '../../utils/typia/validators/auth.validator';
+import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
+import typia, { tags } from 'typia';
+import { TagsCategoryName } from '../../utils/typia/validators/category.validator';
+import { isObject } from '../../utils/is.util';
+import { cleanString } from '../../utils/string.util';
+import { TagsIva } from '../../utils/typia/validators/product.validator';
+import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
-export class CreateCategoryDto {
-  @ApiProperty({
-    description: 'User ID who owns this category',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    required: false,
-  })
-  @IsUUID()
-  @IsOptional()
-  userId?: string;
+export interface ICreateCategoryDto {
+  userId?: TagsUuid;
 
-  @ApiProperty({
-    description: 'Name of the category',
-    example: 'Electronics',
-    maxLength: 50,
-    required: true,
-  })
-  @IsString()
-  @Trim()
-  name: string;
+  name: TagsCategoryName;
 
-  @ApiProperty({
-    description: 'VAT/IVA rate for the category',
-    example: 21.0,
-    minimum: 0,
-    maximum: 100,
-    required: false,
-  })
-  @IsNumber()
-  @Min(0)
-  @Max(100)
-  @IsOptional()
-  iva?: number;
+  iva?: TagsIva;
 
-  @ApiProperty({
-    description: 'Parent category ID for subcategories',
-    example: 1,
-    required: false,
-  })
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  parentId?: string;
+  parentId?: TagsIntegerString;
 
-  @ApiProperty({
-    description: 'Translation data for the category',
-    type: [CategoryTranslationDto],
-    example: [
-      { langCode: 'zh-CH', name: '电子产品' },
-      { langCode: 'en-US', name: 'Electronics' },
-      { langCode: 'es-ES', name: 'Electrónica' },
-    ],
-    required: false,
-  })
-  @IsArray()
-  @ValidateNested({ each: true }) // 验证所有
-  @Type(() => CategoryTranslationDto)
-  translations?: CategoryTranslationDto[];
+  translations?: ICategoryTranslationDto[] &
+    tags.Examples<{ langCode: 'es-ES'; name: 'Electrónica' }>;
 }
+export const validateCreateCategory: IRequestBodyValidator.IAssert<ICreateCategoryDto> =
+  {
+    type: 'assert',
+    assert: (input: unknown) => {
+      if (isObject(input)) {
+        if (typeof input.name === 'string')
+          input.name = cleanString(input.name);
+        if (Array.isArray(input.translations)) {
+          input.translations = input.translations.map(
+            validateCategoryTranslation,
+          );
+        }
+      }
+      return typia.assertEquals<ICreateCategoryDto>(input);
+    },
+  };

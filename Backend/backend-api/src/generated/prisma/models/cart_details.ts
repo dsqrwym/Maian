@@ -1334,6 +1334,11 @@ export type cart_detailsFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` cart_details.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of cart_details.
+   */
   distinct?: Prisma.Cart_detailsScalarFieldEnum | Prisma.Cart_detailsScalarFieldEnum[]
 }
 

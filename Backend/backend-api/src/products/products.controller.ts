@@ -1,23 +1,23 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Req,
-  Query,
-} from '@nestjs/common';
+import { Controller, UseGuards, Req } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  ICreateProductDto,
+  validateICreateProduct,
+} from './dto/create-product.dto';
+import {
+  IUpdateProductDto,
+  validateIUpdateProduct,
+} from './dto/update-product.dto';
 import { JwtAuthGuard } from '../auth/guard/auth.guard';
 import { FastifyRequest } from 'fastify';
-import { ProductListQueryDto } from './dto/product-list-query.dto';
-import { ProductQueryDto } from './dto/product-query.dto';
+import {
+  IProductListQueryDto,
+  validateProductListQuery,
+} from './dto/product-list-query.dto';
+import { IProductQueryDto } from './dto/product-query.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
+import { TypedBody } from '../utils/typia/typed-body.typia';
 
 @ApiTags('Product Management')
 @ApiBearerAuth()
@@ -26,38 +26,38 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Post()
+  @TypedRoute.Post()
   create(
-    @Body() createProductDto: CreateProductDto,
+    @TypedBody(validateICreateProduct) createProductDto: ICreateProductDto,
     @Req() req: FastifyRequest,
-  ) {
+  ): Promise<void> {
     return this.productsService.create(createProductDto, req.ability, req.user);
   }
 
-  @Get()
+  @TypedRoute.Get()
   async findAll(
-    @Query() query: ProductListQueryDto,
+    @TypedQuery(validateProductListQuery) query: IProductListQueryDto,
     @Req() req: FastifyRequest,
   ) {
     return this.productsService.findAllUseSql(query, req.ability, req.user);
     // return this.productsService.findAll(query, req.ability); prisma 无法实现 我对关系聚合和排序的要求
   }
 
-  @Get(':id')
+  @TypedRoute.Get(':id')
   findOne(
-    @Param('id') id: string,
+    @TypedParam('id') id: string,
     @Req() req: FastifyRequest,
-    @Query() query: ProductQueryDto,
+    @TypedQuery() query: IProductQueryDto,
   ) {
     return this.productsService.findOne(id, query, req.ability, req.user);
   }
 
-  @Patch(':id')
+  @TypedRoute.Patch(':id')
   update(
-    @Param('id') id: string,
-    @Body() updateProductDto: UpdateProductDto,
+    @TypedParam('id') id: string,
+    @TypedBody(validateIUpdateProduct) updateProductDto: IUpdateProductDto,
     @Req() req: FastifyRequest,
-  ) {
+  ): Promise<void> {
     return this.productsService.update(
       id,
       updateProductDto,
@@ -66,8 +66,11 @@ export class ProductsController {
     );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string, @Req() req: FastifyRequest) {
+  @TypedRoute.Delete(':id')
+  remove(
+    @TypedParam('id') id: string,
+    @Req() req: FastifyRequest,
+  ): Promise<void> {
     return this.productsService.remove(id, req.ability);
   }
 }

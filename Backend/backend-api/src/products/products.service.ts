@@ -4,15 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { ICreateProductDto } from './dto/create-product.dto';
+import { IUpdateProductDto } from './dto/update-product.dto';
 import { AppAbility } from '../casl/casl-types';
 import { Action } from '../casl/actions';
 import { subject } from '@casl/ability';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from '../auth/auth.types';
 import { computePrice } from '../utils/calculate/computePrice';
-import { ProductListQueryDto } from './dto/product-list-query.dto';
+import { IProductListQueryDto } from './dto/product-list-query.dto';
 import { accessibleBy } from '@casl/prisma';
 import { Prisma, UserRole } from 'src/generated/prisma/client';
 import { PinoLogger } from 'nestjs-pino';
@@ -21,8 +21,8 @@ import {
   ProductSelectField,
   ProductSortField,
 } from './product.enums';
-import { ToPaginated } from '../common/types/response.type';
-import { ProductQueryDto } from './dto/product-query.dto';
+import { PaginatedData } from '../common/types-interfaces/response.interface';
+import { IProductQueryDto } from './dto/product-query.dto';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '../config/constants.config';
 import {
@@ -30,7 +30,7 @@ import {
   IMAGE_MIME_TYPES,
   VIDEO_MIME_TYPES,
 } from '../config/fastify-multipart.config';
-import { ProductFileDto } from './dto/product-file.dto';
+import { IProductFileDto } from './dto/product-file.dto';
 
 @Injectable()
 export class ProductsService {
@@ -42,7 +42,7 @@ export class ProductsService {
     this.logger.setContext(ProductsService.name);
   }
   async create(
-    createProductDto: CreateProductDto,
+    createProductDto: ICreateProductDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
@@ -117,6 +117,7 @@ export class ProductsService {
             create: translations.map((translation) => ({
               lang_code: translation.lang_code,
               name: translation.name,
+              title: translation.title,
               description: translation.description,
             })),
           },
@@ -148,8 +149,31 @@ export class ProductsService {
     }
   }
 
+  getSortField(sortBy?: ProductSortField): string | undefined {
+    switch (sortBy) {
+      case ProductSortField.NAME:
+        return 'p.name';
+      case ProductSortField.TITLE:
+        return 'p.title';
+      case ProductSortField.CATEGORY:
+        return `(cat.main_category->>'name')`;
+      case ProductSortField.PRODUCT_CODE:
+        return 'p.product_code';
+      case ProductSortField.MIN_ORDER_QTY:
+        return 'vp.min_order_qty';
+      case ProductSortField.AVAILABLE_STOCK:
+        return 'vp.total_stock';
+      case ProductSortField.PRICE_IVA:
+        return 'vp.min_price_iva';
+      case ProductSortField.PRICE:
+        return 'vp.min_price';
+      default:
+        return undefined;
+    }
+  }
+
   async findAllUseSql(
-    query: ProductListQueryDto,
+    query: IProductListQueryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
@@ -173,17 +197,8 @@ export class ProductsService {
 
     const { page, limit, sort_by, sort_order } = query;
     const offset = (page - 1) * limit;
-    const sortMapping: Record<ProductSortField, string> = {
-      name: 'p.name',
-      title: 'p.title',
-      category: `(cat.main_category->>'name')`,
-      product_code: 'p.product_code',
-      min_order_qty: 'vp.min_order_qty',
-      available_stock: 'vp.total_stock',
-      price_iva: 'vp.min_price_iva',
-      price: 'vp.min_price',
-    };
-    const sortField = sort_by ? sortMapping[sort_by] : undefined;
+
+    const sortField = this.getSortField(sort_by);
 
     if (langCode) params.push(langCode);
 
@@ -319,7 +334,7 @@ export class ProductsService {
         WHERE vp.product_id = p.id
       ) vp ON TRUE
     WHERE ${whereSql}
-    ORDER BY ${sortField} ${sort_order}
+    ${sortField ? `ORDER BY ${sortField} ${sort_order}` : ''}
     LIMIT $${paramIndex++}
     OFFSET $${paramIndex++};
   `;
@@ -330,7 +345,7 @@ export class ProductsService {
                       FROM products p WHERE ${whereSql}`;
 
     const [products, count] = await Promise.all([
-      this.prisma.$queryRawUnsafe(sql, ...params),
+      this.prisma.$queryRawUnsafe<any[]>(sql, ...params),
       this.prisma.$queryRawUnsafe<[{ total: number }]>(
         countSql,
         ...countParams,
@@ -339,9 +354,9 @@ export class ProductsService {
 
     const total = Number(count[0].total);
 
-    const result: ToPaginated = {
+    const result: PaginatedData = {
       items: products,
-      meta: { total, page, limit },
+      pagination: { total, page, limit },
     };
 
     return result;
@@ -349,7 +364,7 @@ export class ProductsService {
 
   async findOne(
     id: string,
-    query: ProductQueryDto,
+    query: IProductQueryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
@@ -441,7 +456,7 @@ export class ProductsService {
 
   async update(
     id: string,
-    updateProductDto: UpdateProductDto,
+    updateProductDto: IUpdateProductDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
@@ -709,7 +724,7 @@ export class ProductsService {
   }
 
   private async validateAndCheckFiles(
-    filesDTO: ProductFileDto[] | undefined,
+    filesDTO: IProductFileDto[] | undefined,
     user: UserPayload,
     productOwnerId?: string,
   ) {

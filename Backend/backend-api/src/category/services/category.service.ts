@@ -5,18 +5,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateCategoryDto } from '../dto/create-category.dto';
-import { UpdateCategoryDto } from '../dto/update-category.dto';
+import { ICreateCategoryDto } from '../dto/create-category.dto';
+import { IUpdateCategoryDto } from '../dto/update-category.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Logger } from 'nestjs-pino';
 import { AppAbility } from '../../casl/casl-types';
 import { Action } from '../../casl/actions';
 import { subject } from '@casl/ability';
-import { CategoryQueryDto } from '../dto/category-query.dto';
+import { ICategoryQueryDto } from '../dto/category-query.dto';
 import { Prisma, UserRole } from 'src/generated/prisma/client';
-import { ToPaginated } from '../../common/types/response.type';
+import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
 import { UserPayload } from '../../auth/auth.types';
 import { CategorySelectField, CategoryType } from '../category.enums';
+import { ICategoryResponse } from '../dto/category-response.dto';
 
 @Injectable()
 export class CategoryService {
@@ -26,7 +27,7 @@ export class CategoryService {
   ) {}
 
   async create(
-    createCategoryDto: CreateCategoryDto,
+    createCategoryDto: ICreateCategoryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
@@ -142,7 +143,7 @@ export class CategoryService {
   }
 
   async findAllUseSql(
-    query: CategoryQueryDto,
+    query: ICategoryQueryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
@@ -330,7 +331,7 @@ export class CategoryService {
     `;
 
     const [categories, count] = await Promise.all([
-      this.prisma.$queryRawUnsafe(sql, ...params),
+      this.prisma.$queryRawUnsafe<ICategoryResponse[]>(sql, ...params),
       this.prisma.$queryRawUnsafe<[{ total: number }]>(
         countSql,
         ...countParams,
@@ -339,9 +340,9 @@ export class CategoryService {
 
     const total = Number(count[0].total);
 
-    const result: ToPaginated = {
+    const result: PaginatedDataWithT<ICategoryResponse> = {
       items: categories,
-      meta: {
+      pagination: {
         total: total,
         page: page,
         limit: limit,
@@ -357,6 +358,7 @@ export class CategoryService {
       select: {
         user_id: true,
         name: true,
+        iva: true,
         category_translations: {
           select: {
             name: true,
@@ -384,12 +386,13 @@ export class CategoryService {
     }
     return {
       name: category.name,
+      iva: category.iva,
       translations: category.category_translations,
     };
   }
 
   async update(
-    updateCategoryDto: UpdateCategoryDto,
+    updateCategoryDto: IUpdateCategoryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {

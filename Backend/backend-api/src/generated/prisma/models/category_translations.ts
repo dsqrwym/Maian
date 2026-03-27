@@ -1374,6 +1374,11 @@ export type category_translationsFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` category_translations.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of category_translations.
+   */
   distinct?: Prisma.Category_translationsScalarFieldEnum | Prisma.Category_translationsScalarFieldEnum[]
 }
 

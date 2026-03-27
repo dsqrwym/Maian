@@ -2464,6 +2464,11 @@ export type variant_productsFindManyArgs<ExtArgs extends runtime.Types.Extension
    * Skip the first `n` variant_products.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of variant_products.
+   */
   distinct?: Prisma.Variant_productsScalarFieldEnum | Prisma.Variant_productsScalarFieldEnum[]
 }
 

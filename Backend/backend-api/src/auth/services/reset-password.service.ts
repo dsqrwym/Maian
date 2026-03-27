@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { IResetPasswordDto } from '../dto/reset-password.dto';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { ENV } from '../../config/constants.config';
 import { Logger } from 'nestjs-pino';
@@ -10,8 +10,8 @@ import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
 import { VerificationService } from './verification.service';
 import {
-  SendVerificationCodeDto,
-  VerifyCodeDto,
+  ISendVerificationCodeDto,
+  IVerifyCodeDto,
 } from '../dto/verification.dto';
 import { VerificationEmailType } from '../auth.constants';
 
@@ -26,18 +26,18 @@ export class ResetPasswordService {
     private readonly logger: Logger,
   ) {}
 
-  async sendVerificationCode(sendVerificationDto: SendVerificationCodeDto) {
+  async sendVerificationCode(sendVerificationDto: ISendVerificationCodeDto) {
     return this.verificationService.sendVerificationCode(
       sendVerificationDto,
       VerificationEmailType.RESET_PASSWORD,
     );
   }
 
-  async verifyCode(verifyCode: VerifyCodeDto) {
+  async verifyCode(verifyCode: IVerifyCodeDto) {
     return this.verificationService.verifyCode(verifyCode);
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(resetPasswordDto: IResetPasswordDto) {
     let userId: string | null = null;
     const sessions = await this.prismaService.$transaction(async (tx) => {
       const VerificationUserId =

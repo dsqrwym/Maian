@@ -1303,6 +1303,11 @@ export type user_sessionsFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` user_sessions.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of user_sessions.
+   */
   distinct?: Prisma.User_sessionsScalarFieldEnum | Prisma.User_sessionsScalarFieldEnum[]
 }
 

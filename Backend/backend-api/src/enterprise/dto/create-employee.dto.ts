@@ -1,116 +1,57 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  MaxLength,
-  MinLength,
-  NotContains,
-} from 'class-validator';
+  TagsEmail,
+  TagsUsername,
+} from '../../utils/typia/validators/auth.validator';
+import typia, { tags } from 'typia';
+import { TagsBasicTelephone } from '../../utils/typia/validators/telephone.validator';
+import { isObject } from '../../utils/is.util';
+import { cleanString } from '../../utils/string.util';
+import parsePhoneNumberFromString from 'libphonenumber-js';
+import { BadRequestException } from '@nestjs/common';
+import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**
  * 批发商系统创建新员工的数据传输对象
  * 包含注册员工账户所需的所有必要信息
  *
- * @class CreateEmployeeDto
+ * @interface ICreateEmployeeDto
  */
-export class CreateEmployeeDto {
+export interface ICreateEmployeeDto {
   /**
    * 员工账户的唯一电子邮箱地址
    * 必须是有效格式且不在黑名单域名中
    *
    * @example 'employee.manager@company.com'
    */
-  @ApiProperty({
-    description: 'Unique email address for the employee account',
-    example: 'employee.manager@company.com',
-    required: true,
-    maxLength: 100,
-    format: 'email',
-  })
-  @IsEmail(
-    { host_blacklist: ['example.com'] },
-    { message: 'Please provide a valid email address from a trusted domain' },
-  )
-  @MaxLength(100, {
-    message: 'Email address cannot be longer than 100 characters',
-  })
-  @IsNotEmpty({ message: 'Email address is required' })
-  email: string;
+  email: TagsEmail;
 
   /**
    * 员工的名字
    *
    * @example 'María'
    */
-  @ApiPropertyOptional({
-    description: 'Legal first name of the employee',
-    example: 'María',
-    maxLength: 50,
-    required: false,
-  })
-  @IsString({ message: 'First name must be a text value' })
-  @MaxLength(50, {
-    message: 'First name cannot exceed 50 characters',
-  })
-  first_name: string;
+  first_name: string & tags.MaxLength<50>;
 
   /**
    * 员工的姓氏
    *
    * @example 'García López'
    */
-  @ApiPropertyOptional({
-    description: 'Legal last name(s) of the employee',
-    example: 'García López',
-    maxLength: 60,
-    required: false,
-  })
-  @IsOptional()
-  @IsString({ message: 'Last name must be a text value' })
-  @MaxLength(60, {
-    message: 'Last name cannot exceed 60 characters',
-  })
-  last_name?: string;
+  last_name?: string & tags.MaxLength<60>;
 
   /**
-   * 西班牙格式的联系电话
+   * 联系电话
    *
    * @example '+34 600 123 456'
    */
-  @ApiPropertyOptional({
-    description: 'Contact phone number in Spanish format',
-    example: '+34 600 123 456',
-    pattern: '^\\+34\\s?[67]\\d{1,2}\\s?\\d{3}\\s?\\d{3}$',
-    required: false,
-  })
-  @IsOptional()
-  @IsPhoneNumber('ES', {
-    message:
-      'Please provide a valid Spanish phone number (e.g., +34 600 123 456)',
-  })
-  telephone?: string;
+  telephone?: TagsBasicTelephone;
 
   /**
    * 西班牙税务识别号 (CIF/NIF/NIE)
    *
    * @example 'B12345678'
    */
-  @ApiPropertyOptional({
-    description: 'Spanish tax identification number (CIF/NIF/NIE)',
-    example: 'B12345678',
-    maxLength: 20,
-    pattern: '^[A-Z]?\\d{7,8}[A-Z]?$',
-    required: false,
-  })
-  @IsOptional()
-  @IsString({ message: 'Tax ID must be a text value' })
-  @MaxLength(20, {
-    message: 'Tax ID cannot exceed 20 characters',
-  })
-  cif?: string;
+  cif?: string & tags.MaxLength<20> & tags.Pattern<'^[A-Z]?\\d{7,8}[A-Z]?$'>;
 
   /**
    * 系统登录用的唯一用户名
@@ -118,24 +59,39 @@ export class CreateEmployeeDto {
    *
    * @example 'mgarciam'
    */
-  @ApiPropertyOptional({
-    description: 'Unique username for system authentication',
-    example: 'mgarciam',
-    minLength: 3,
-    maxLength: 30,
-    pattern: '^[^@]+$',
-    required: false,
-  })
-  @IsOptional()
-  @IsString({ message: 'Username must be a text value' })
-  @MinLength(3, {
-    message: 'Username must be at least 3 characters long',
-  })
-  @MaxLength(30, {
-    message: 'Username cannot exceed 30 characters',
-  })
-  @NotContains('@', {
-    message: 'Username cannot contain the @ symbol',
-  })
-  username?: string;
+  username?: TagsUsername;
 }
+
+export const validateICreateEmployee: IRequestBodyValidator.IAssert<ICreateEmployeeDto> =
+  {
+    type: 'assert',
+    assert: (input: unknown) => {
+      if (isObject(input)) {
+        const obj = input;
+        if (typeof obj.email === 'string') {
+          obj.email = cleanString(obj.email);
+        }
+        if (typeof obj.username === 'string') {
+          obj.username = cleanString(obj.username);
+        }
+        if (typeof obj.first_name === 'string') {
+          obj.first_name = cleanString(obj.first_name);
+        }
+        if (typeof obj.last_name === 'string') {
+          obj.last_name = cleanString(obj.last_name);
+        }
+        if (typeof obj.telephone === 'string') {
+          const phone: string = cleanString(obj.telephone);
+          const phoneNumber = parsePhoneNumberFromString(phone);
+          if (!phoneNumber || !phoneNumber.isValid()) {
+            throw new BadRequestException('Invalid phone number format');
+          }
+          obj.telephone = phone;
+        }
+        if (typeof obj.cif === 'string') {
+          obj.cif = cleanString(obj.cif);
+        }
+      }
+      return typia.assertEquals<ICreateEmployeeDto>(input);
+    },
+  };

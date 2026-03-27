@@ -71,12 +71,6 @@ class SharedNavigationViewModel(
             null
         }
 
-        SharedLog.log(
-            """
-            stackkey: $stackKey
-            json saved: $json
-        """.trimIndent()
-        )
         if (stackKey == null || json == null) return
 
         try {

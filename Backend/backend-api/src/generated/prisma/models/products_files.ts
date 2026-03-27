@@ -1263,6 +1263,11 @@ export type products_filesFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` products_files.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of products_files.
+   */
   distinct?: Prisma.Products_filesScalarFieldEnum | Prisma.Products_filesScalarFieldEnum[]
 }
 

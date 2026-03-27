@@ -1255,6 +1255,11 @@ export type delivery_timelineFindManyArgs<ExtArgs extends runtime.Types.Extensio
    * Skip the first `n` delivery_timelines.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of delivery_timelines.
+   */
   distinct?: Prisma.Delivery_timelineScalarFieldEnum | Prisma.Delivery_timelineScalarFieldEnum[]
 }
 

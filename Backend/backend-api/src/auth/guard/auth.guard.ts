@@ -3,6 +3,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { CaslAbilityFactory } from '../../casl/casl-ability.factory/casl-ability.factory';
 import { FastifyRequest } from 'fastify';
 
+/**
+ * JWT Guard
+ * 验证用户是否登录，以及基于登录用户数据的权限
+ */
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('my-jwt') {
   constructor(private readonly abilityFactory: CaslAbilityFactory) {

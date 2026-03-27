@@ -1310,6 +1310,11 @@ export type discountsFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` discounts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of discounts.
+   */
   distinct?: Prisma.DiscountsScalarFieldEnum | Prisma.DiscountsScalarFieldEnum[]
 }
 

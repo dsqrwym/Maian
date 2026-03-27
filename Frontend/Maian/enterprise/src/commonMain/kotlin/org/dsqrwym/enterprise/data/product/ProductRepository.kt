@@ -22,7 +22,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
         langCode: String? = null,
         categoryId: String? = null,
         sortBy: SharedProductSortField? = SharedProductSortField.NAME,
-        sortOrder: OrderDir? = OrderDir.ASC,
+        sortOrder: OrderDir = OrderDir.ASC,
         status: SharedProductStatus? = null,
         page: Int = 1,
         limit: Int = 50

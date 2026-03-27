@@ -52,7 +52,6 @@ fun BusinessTranslationCard(
     onRemoveTranslation: (String) -> Unit,
     onEditTranslation: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    requestFocus: Boolean = true,
     isLoading: Boolean = false,
 ) {
     FormCard(
@@ -64,7 +63,20 @@ fun BusinessTranslationCard(
         val addLanguageEnabled by derivedStateOf {
             isEnabled && hasAvailableLanguages && translationsIsValid
         }
-        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        var previousList by remember { mutableStateOf<List<String>>(emptyList()) }
+        var newlyAddedLangCode by remember { mutableStateOf<String?>(null) }
+
+
+        LaunchedEffect(translations.size) {
+            val current = translations.map { it.langCode }
+            val added = current - previousList.toSet()
+            if (added.isNotEmpty()) {
+                newlyAddedLangCode = added.first()
+            }
+            previousList = current
+        }
+
         Column(
             modifier = Modifier.heightIn(max = 500.dp),
             verticalArrangement = SharedColumnLayout.arrangement
@@ -115,8 +127,12 @@ fun BusinessTranslationCard(
                 ) {
                     items(translations, key = { it.langCode }) { (langCode, translation) ->
                         BusinessLanguageTranslationItem(
-                            requestFocus = requestFocus,
-                            focusRequester = focusRequester,
+                            requestFocus = (langCode == newlyAddedLangCode),
+                            onFocusConsumed = {
+                                if (newlyAddedLangCode == langCode) {
+                                    newlyAddedLangCode = null
+                                }
+                            },
                             languageCode = langCode,
                             languageName = LanguageManager.SupportedLanguages
                                 .fromCode(langCode).displayName,
@@ -124,7 +140,11 @@ fun BusinessTranslationCard(
                             enabled = isEnabled,
                             onRemove = { onRemoveTranslation(langCode) },
                             onEdit = { newText -> onEditTranslation(langCode, newText) },
-                            onImeAction = { if (addLanguageEnabled) onShowAddDialog(true) },
+                            onImeAction = {
+                                if (addLanguageEnabled) onShowAddDialog(true) else focusManager.moveFocus(
+                                    FocusDirection.Next
+                                )
+                            },
                             isLoading = isLoading
                         )
                     }
@@ -201,8 +221,8 @@ fun BusinessSelectedInfoCard(
 @Composable
 private fun BusinessLanguageTranslationItem(
     modifier: Modifier = Modifier,
-    focusRequester: FocusRequester,
-    requestFocus: Boolean = true,
+    requestFocus: Boolean,
+    onFocusConsumed: () -> Unit,
     languageCode: String,
     languageName: String,
     translation: String,
@@ -212,6 +232,7 @@ private fun BusinessLanguageTranslationItem(
     onEdit: (String) -> Unit,
     isLoading: Boolean = false,
 ) {
+    val focusRequester = remember { FocusRequester() }
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -260,9 +281,10 @@ private fun BusinessLanguageTranslationItem(
                 labelText = languageName,
             )
 
-            LaunchedEffect(Unit) {
+            LaunchedEffect(requestFocus) {
                 if (requestFocus) {
                     focusRequester.requestFocus()
+                    onFocusConsumed()
                 }
             }
         }

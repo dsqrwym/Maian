@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateEmployeeDto } from '../dto/create-employee.dto';
+import { ICreateEmployeeDto } from '../dto/create-employee.dto';
 import { $Enums, UserRole } from 'src/generated/prisma/client';
 import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '../../auth/auth.constants';
 import { HashService } from '../../common/hash/hash.service';
@@ -22,7 +22,7 @@ export class CreateEmployeeService {
 
   async createEmployee(
     wholesalerId: string,
-    dto: CreateEmployeeDto,
+    dto: ICreateEmployeeDto,
     userRole: UserRole,
   ) {
     const result = await this.prismaService.$transaction(async (tx) => {
@@ -100,15 +100,15 @@ export class CreateEmployeeService {
     });
   }
 
-  async createSupportEmployee(wholesalerId: string, dto: CreateEmployeeDto) {
+  async createSupportEmployee(wholesalerId: string, dto: ICreateEmployeeDto) {
     return this.createEmployee(wholesalerId, dto, UserRole.SUPPORT);
   }
 
-  async createDeliveryEmployee(wholesalerId: string, dto: CreateEmployeeDto) {
+  async createDeliveryEmployee(wholesalerId: string, dto: ICreateEmployeeDto) {
     return this.createEmployee(wholesalerId, dto, UserRole.DELIVERY);
   }
 
-  async createWarehouseEmployee(wholesalerId: string, dto: CreateEmployeeDto) {
+  async createWarehouseEmployee(wholesalerId: string, dto: ICreateEmployeeDto) {
     return this.createEmployee(wholesalerId, dto, UserRole.WAREHOUSE);
   }
 }

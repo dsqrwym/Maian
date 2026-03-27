@@ -9,6 +9,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { Prisma } from 'src/generated/prisma/client';
 import { PinoLogger } from 'nestjs-pino';
 import { extractPrismaMeta } from '../../utils/meta.utils';
+import { ErrorResponse } from '../types-interfaces/response.interface';
 
 @Injectable()
 @Catch(Prisma.PrismaClientKnownRequestError)
@@ -66,21 +67,23 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         break;
     }
 
+    const errorResponse: ErrorResponse = {
+      statusCode: status,
+      message,
+      error: 'Database Error',
+    };
+
     this.logger.error(
       {
         errorCode: exception.code,
         meta: exception.meta,
         path: request.url,
         method: request.method,
-        message,
+        errorResponse,
       },
       'Prisma error caught',
     );
 
-    response.status(status).send({
-      statusCode: status,
-      message,
-      error: 'Database Error',
-    });
+    response.status(status).send(errorResponse);
   }
 }

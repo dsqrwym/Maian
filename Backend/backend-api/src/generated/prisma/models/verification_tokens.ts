@@ -1236,6 +1236,11 @@ export type verification_tokensFindManyArgs<ExtArgs extends runtime.Types.Extens
    * Skip the first `n` verification_tokens.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of verification_tokens.
+   */
   distinct?: Prisma.Verification_tokensScalarFieldEnum | Prisma.Verification_tokensScalarFieldEnum[]
 }
 

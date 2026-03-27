@@ -24,7 +24,7 @@ data class SearchQuery(
     val query: String,
     val categoryId: String?,
     val sortBy: SharedProductSortField?,
-    val sortDir: OrderDir?
+    val sortDir: OrderDir
 )
 
 class ProductsListViewModel(private val repository: ProductRepository, mySnackbarHostState: MySnackbarViewModel) :

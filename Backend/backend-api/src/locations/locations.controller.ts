@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -9,6 +9,7 @@ import {
 import { LocationsService } from './locations.service';
 import { CacheTTL } from '@nestjs/cache-manager';
 import { DAY } from '../utils/date.utils';
+import { TypedParam, TypedRoute } from '@nestia/core';
 
 @ApiTags('Locations')
 @Controller('locations')
@@ -16,7 +17,7 @@ import { DAY } from '../utils/date.utils';
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
-  @Get('countries')
+  @TypedRoute.Get('countries')
   @ApiOperation({
     summary: 'Get all countries',
     description:
@@ -67,7 +68,7 @@ export class LocationsController {
     return this.locationsService.findAllCountries();
   }
 
-  @Get('countries/:isoNumeric/provinces')
+  @TypedRoute.Get('countries/:isoNumeric/provinces')
   @ApiOperation({
     summary: 'Get provinces by country',
     description:
@@ -77,7 +78,7 @@ export class LocationsController {
     name: 'isoNumeric',
     description: 'Numeric ISO country code',
     type: Number,
-    example: 840,
+    example: 724,
   })
   @ApiOkResponse({
     description: 'Successfully retrieved list of provinces',
@@ -97,11 +98,11 @@ export class LocationsController {
     status: 404,
     description: 'Country not found with the specified ISO numeric code',
   })
-  async getProvinces(@Param('isoNumeric', ParseIntPipe) isoNumeric: number) {
+  async getProvinces(@TypedParam('isoNumeric') isoNumeric: number) {
     return this.locationsService.findProvincesByCountryIsoNumeric(isoNumeric);
   }
 
-  @Get('provinces/:provinceId/cities')
+  @TypedRoute.Get('provinces/:provinceId/cities')
   @ApiOperation({
     summary: 'Get cities by province',
     description:
@@ -131,11 +132,11 @@ export class LocationsController {
     status: 404,
     description: 'Province not found with the specified ID',
   })
-  async getCities(@Param('provinceId', ParseIntPipe) provinceId: number) {
+  async getCities(@TypedParam('provinceId') provinceId: number) {
     return this.locationsService.findCitiesByProvinceId(provinceId);
   }
 
-  @Get('currencies/:isoNumeric')
+  @TypedRoute.Get('currencies/:isoNumeric')
   @ApiOperation({
     summary: 'Get currency details',
     description: 'Retrieves currency information using its ISO numeric code',
@@ -161,7 +162,7 @@ export class LocationsController {
     status: 404,
     description: 'Currency not found with the specified ISO numeric code',
   })
-  async getCurrency(@Param('isoNumeric', ParseIntPipe) isoNumeric: number) {
+  async getCurrency(@TypedParam('isoNumeric') isoNumeric: number) {
     return this.locationsService.getCurrencyByIsoNumeric(isoNumeric);
   }
 }

@@ -74,7 +74,7 @@ fun SharedAsyncImage(
     var isLongPressMenu by remember { mutableStateOf(false) }
     var menuOffset by remember { mutableStateOf(Offset.Zero) }
 
-    Box {
+    Box(contentAlignment = Alignment.Center) {
         AsyncImage(
             model = model,
             error = error,

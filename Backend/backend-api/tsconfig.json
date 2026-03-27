@@ -4,46 +4,79 @@
   "compilerOptions": {
     // Specify module code generation / 指定模块代码生成
     // Options: 'None', 'CommonJS', 'AMD', 'System', 'UMD', 'ES6'/'ES2015', 'ES2020', 'ESNext', 'Node16', 'NodeNext'
-    "module": "commonjs",  // 使用 CommonJS 模块系统，适用于 Node.js 环境
+    "module": "commonjs", // 使用 CommonJS 模块系统，适用于 Node.js 环境
     // Generate .d.ts files from project references / 从项目引用生成 .d.ts 文件
-    "declaration": true,  // 生成相应的 .d.ts 文件
+    "declaration": true, // 生成相应的 .d.ts 文件
     // Remove comments from output / 删除输出中的注释
-    "removeComments": true,  // 删除编译后的 JavaScript 文件中的注释
+    "removeComments": true, // 删除编译后的 JavaScript 文件中的注释
     // Emit design-type metadata for decorated declarations in source / 为装饰器提供元数据支持
-    "emitDecoratorMetadata": true,  // 为装饰器提供元数据支持，常用于类验证器(如 class-validator)和依赖注入
+    "emitDecoratorMetadata": true, // 为装饰器提供元数据支持，常用于类验证器(如 class-validator)和依赖注入
     // Enable experimental support for TC39 stage 2 draft decorators / 启用实验性的装饰器支持
-    "experimentalDecorators": true,  // 启用实验性的装饰器支持，NestJS 需要此选项
+    "experimentalDecorators": true, // 启用实验性的装饰器支持，NestJS 需要此选项
     // Allow default imports from modules with no default export / 允许从没有默认导出的模块中默认导入
-    "allowSyntheticDefaultImports": true,  // 允许从没有默认导出的模块中默认导入，提高与 CommonJS 模块的互操作性
+    "allowSyntheticDefaultImports": true, // 允许从没有默认导出的模块中默认导入，提高与 CommonJS 模块的互操作性
     // Set the JavaScript language version for emitted JavaScript / 指定 ECMAScript 目标版本
     // Options: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', 'ES2022', 'ESNext'
-    "target": "ES2023",  // 编译后的 JavaScript 将符合 ES2023 标准
+    "target": "ES2023", // 编译后的 JavaScript 将符合 ES2023 标准
     // Generate source map files / 生成 source map 文件
-    "sourceMap": true,  // 生成对应的 .map 文件，用于调试
+    "sourceMap": true, // 生成对应的 .map 文件，用于调试
     // Enable all strict type checking options / 启用所有严格类型检查选项
-    "strict": true,  // 启用所有严格的类型检查选项，包括 strictNullChecks, strictFunctionTypes 等
+    "strict": true, // 启用所有严格的类型检查选项，包括 strictNullChecks, strictFunctionTypes 等
     // Check for class properties that are declared but not set in the constructor / 检查类中未初始化的属性
-    "strictPropertyInitialization": false,  // 禁用对类中未初始化属性的严格检查
+    "strictPropertyInitialization": false, // 禁用对类中未初始化属性的严格检查
     // Output directory for compiled files / 编译输出目录
-    "outDir": "./dist",  // 编译后的 JavaScript 文件输出到 dist 目录
+    "outDir": "./dist", // 编译后的 JavaScript 文件输出到 dist 目录
     // Base directory to resolve non-absolute module names / 解析非绝对模块名的基目录
-    "baseUrl": "./",  // 设置模块解析的基准目录
+    "baseUrl": "./", // 设置模块解析的基准目录
     // Save .tsbuildinfo files to allow for incremental compilation / 启用增量编译
-    "incremental": true,  // 启用增量编译，提高后续编译速度
+    "incremental": true, // 启用增量编译，提高后续编译速度
     // Skip type checking of declaration files / 跳过声明文件的类型检查
-    "skipLibCheck": true,  // 跳过所有 .d.ts 文件的类型检查，提高编译速度
+    "skipLibCheck": true, // 跳过所有 .d.ts 文件的类型检查，提高编译速度
     // Enable strict null checks / 启用严格的 null 检查
-    "strictNullChecks": true,  // 在严格的 null 检查模式下，null 和 undefined 值不包含在任何类型中
+    "strictNullChecks": true, // 在严格的 null 检查模式下，null 和 undefined 值不包含在任何类型中
     // Ensure that casing is correct in imports / 确保导入语句中的文件名大小写正确
-    "forceConsistentCasingInFileNames": true,  // 强制区分文件大小写，确保跨平台一致性
+    "forceConsistentCasingInFileNames": true, // 强制区分文件大小写，确保跨平台一致性
     // Enable error reporting for expressions and declarations with an implied 'any' type / 对隐含的 any 类型报错
-    "noImplicitAny": false,  // 不禁用隐式的 any 类型，允许不明确指定类型
+    "noImplicitAny": false, // 不禁用隐式的 any 类型，允许不明确指定类型
     // Enable stricter checking of the 'bind', 'call', and 'apply' methods / 对 bind/call/apply 方法进行更严格的类型检查
-    "strictBindCallApply": false,  // 禁用对 bind/call/apply 方法的严格类型检查
+    "strictBindCallApply": false, // 禁用对 bind/call/apply 方法的严格类型检查
     // Enable error reporting for fallthrough cases in switch statements / 报告 switch 语句中的 fallthrough 错误
-    "noFallthroughCasesInSwitch": false,  // 不报告 switch 语句中的 fallthrough 错误
+    "noFallthroughCasesInSwitch": false, // 不报告 switch 语句中的 fallthrough 错误
     // Specifies what to do with imports that are only used for types / 指定如何处理仅用于类型的导入
     // Options: 'remove' (default), 'preserve', 'error'
-    "importsNotUsedAsValues": "remove"  // 移除仅用于类型的导入语句
+    "importsNotUsedAsValues": "remove", // 移除仅用于类型的导入语句
+    "plugins": [
+      {
+        "transform": "@nestia/core/lib/transform",
+        /**
+         * Validate request body.
+         * 
+         *   - "assert": Use typia.assert() function
+         *   - "is": Use typia.is() function
+         *   - "validate": Use typia.validate() function
+         *   - "assertEquals": Use typia.assertEquals() function
+         *   - "equals": Use typia.equals() function
+         *   - "validateEquals": Use typia.validateEquals() function
+         */
+        "validate": "assertEquals",
+        /**
+         * Validate JSON typed response body.
+         * 
+         *   - "assert": Use typia.assertStringify() function
+         *   - "is": Use typia.isStringify() function
+         *   - "validate": Use typia.validateStringify() function
+         *   - "validate.log": typia.validateStringify(), but do not throw and just log it
+         *   - "stringify": Use typia.stringify() function, but dangerous
+         *   - null: Just use JSON.stringify() function, without boosting
+         */
+        "stringify": "stringify"
+      },
+      {
+        "transform": "@nestia/sdk/lib/transform"
+      },
+      {
+        "transform": "typia/lib/transform"
+      }
+    ]
   }
 }

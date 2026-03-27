@@ -1,88 +1,41 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Matches,
-} from 'class-validator';
-import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Trim } from '../../utils/transform/trim.decorator';
+import { IPaginationQueryDto } from '../../utils/dto/pagination.dto';
 import { ProductStatus } from 'src/generated/prisma/client';
 import { ProductListSelectField, ProductSortField } from '../product.enums';
+import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
+import { TagsUuid } from '../../utils/typia/validators/auth.validator';
+import typia, { tags } from 'typia';
+import { OrderByEnum } from '../../common/enums/sort.enum';
+import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import { cleanString } from '../../utils/string.util';
 
-export class ProductListQueryDto extends PaginationQueryDto {
-  // --- 搜索和过滤 ---
-  @ApiProperty({ description: 'Keywords for name search', required: false })
-  @IsString()
-  @IsOptional()
-  @Trim()
+export interface IProductListQueryDto extends IPaginationQueryDto {
   search?: string; // 搜索关键字 (用于 name, title, product_code)
 
-  @ApiProperty({
-    description: 'Filter by language code (e.g., en, es)',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
   langCode?: string; // 用于指定返回 lang 中的哪个字段
 
-  @ApiPropertyOptional({
-    description: 'Filter by primary or related category ID',
-    example: 'cat_123',
-  })
-  @IsOptional()
-  @IsNotEmpty()
-  @Matches(/^-?\d+$/, { message: 'must be an integer string' })
-  @IsString()
-  category_id?: string; // 按主分类或关联分类过滤
+  category_id?: TagsIntegerString; // 按主分类或关联分类过滤
 
-  @ApiPropertyOptional({
-    description: 'Filter products by wholesaler ID (UUID)',
-    format: 'uuid',
-  })
-  @IsOptional()
-  @IsUUID()
-  wholesaler_id?: string; // 零售商想过滤特定批发商的产品 (仅对零售商开放)
+  wholesaler_id?: TagsUuid; // 零售商想过滤特定批发商的产品 (仅对零售商开放)
 
-  @ApiPropertyOptional({
-    description: 'Field to sort by',
-    enum: ['name', 'product_code', 'available_stock', 'price_iva', 'price'],
-    default: 'name',
-  })
-  @IsOptional()
-  @IsString()
-  @IsEnum(ProductSortField)
-  sort_by?: ProductSortField;
+  sort_by?: ProductSortField &
+    tags.Example<
+      ['name', 'product_code', 'available_stock', 'price_iva', 'price']
+    >;
 
-  @ApiPropertyOptional({
-    description: 'Sort order direction',
-    enum: ['asc', 'desc'],
-    default: 'asc',
-  })
-  @IsOptional()
-  @IsEnum(['asc', 'desc'])
-  sort_order: 'asc' | 'desc' = 'asc';
+  sort_order: OrderByEnum & tags.Example<'asc'>;
 
-  @ApiPropertyOptional({
-    description: 'Filter by product status',
-    enum: ProductStatus,
-  })
-  @IsOptional()
-  @IsEnum(ProductStatus)
-  status?: ProductStatus;
+  status?: ProductStatus & tags.Example<'ACTIVE'>;
 
-  // select
-  @ApiProperty({
-    description: 'Selected fields',
-    enum: ProductListSelectField,
-    isArray: true,
-    required: false,
-  })
-  @IsEnum(ProductListSelectField, {
-    each: true,
-  })
-  @IsOptional()
-  fields?: ProductListSelectField[];
+  fields?: ProductListSelectField[] &
+    tags.Example<['iva', 'status', 'user_id', 'category']>;
 }
+export const validateProductListQuery: IRequestQueryValidator.IAssert<IProductListQueryDto> =
+  {
+    type: 'assert',
+    assert: (input): IProductListQueryDto => {
+      const search = input.get('search');
+      if (search) input.set('search', cleanString(search));
+
+      return typia.http.assertQuery<IProductListQueryDto>(input);
+    },
+  };

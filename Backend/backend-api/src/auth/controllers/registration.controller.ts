@@ -1,23 +1,28 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
-  ApiBadRequestResponse,
-  ApiBody,
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-  ApiTooManyRequestsResponse,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
-import { SendNormalRegisterMailDto } from '../dto/register.dto';
-import { AUTH_ERROR } from '../auth.constants';
+  ISendNormalRegisterMailDto,
+  validateSendNormalRegisterMail,
+} from '../dto/register.dto';
 import { maskEmail } from '../../common/formatter/emial-format';
 import { AuthService } from '../auth.service';
 import { Logger } from 'nestjs-pino';
-import { RegisterRetailerDto } from '../dto/register-retailer.dto';
+import {
+  IRegisterRetailerDto,
+  validateRegisterRetailer,
+} from '../dto/register-retailer.dto';
 import { minutes, seconds, Throttle } from '@nestjs/throttler';
-import { VerifyCodeDto, VerifyCodeResponseDto } from '../dto/verification.dto';
-import { RegisterWholesalerDto } from '../dto/register-wholesaler.dto';
+import {
+  IVerifyCodeDto,
+  validateVerifyCode,
+  VerifyCodeResponseDto,
+} from '../dto/verification.dto';
+import {
+  IRegisterWholesalerDto,
+  validateRegisterWholesaler,
+} from '../dto/register-wholesaler.dto';
+import { TypedRoute } from '@nestia/core';
+import { TypedBody } from 'src/utils/typia/typed-body.typia';
 
 @Controller('registration')
 @Throttle({ default: { limit: 1, ttl: minutes(1) } })
@@ -27,74 +32,20 @@ export class RegistrationController {
     private readonly authService: AuthService,
     private readonly logger: Logger,
   ) {}
-  @Post('verify-email')
+
+  @TypedRoute.Post('verify-email')
   @Throttle({ default: { limit: 3, ttl: seconds(60) } })
-  @ApiOperation({ summary: 'Verify code and return temporary reset token' })
-  @ApiBody({
-    description: 'Request body for verification code validation',
-    type: VerifyCodeDto,
-    examples: {
-      example: {
-        summary: 'Submit email and verification code',
-        value: { email: 'user@example.com', code: '123456' },
-      },
-    },
-  })
-  @ApiOkResponse({
-    description: 'Code verified, reset token issued',
-    type: VerifyCodeResponseDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Incorrect verification code',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number', example: 401 },
-            message: {
-              type: 'string',
-              example: AUTH_ERROR.VERIFICATION_CODE_INCORRECT,
-            },
-            error: { type: 'string', example: 'Unauthorized' },
-          },
-        },
-      },
-    },
-  })
-  @ApiBadRequestResponse({ description: 'Invalid request body' })
-  @ApiNotFoundResponse({
-    description: 'Verification code not found or expired',
-  })
-  @ApiTooManyRequestsResponse({
-    description: 'Too many attempts. Code is blocked.',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number', example: 429 },
-            message: {
-              type: 'string',
-              example: AUTH_ERROR.VERIFICATION_CODE_TOO_MANY_ATTEMPTS,
-            },
-            error: { type: 'string', example: 'Too Many Requests' },
-          },
-        },
-      },
-    },
-  })
-  async verifyEmail(@Body() dto: VerifyCodeDto) {
+  async verifyEmail(
+    @TypedBody(validateVerifyCode) dto: IVerifyCodeDto,
+  ): Promise<VerifyCodeResponseDto> {
     return this.authService.verifyRegisterEmail(dto);
   }
 
-  @Post('retailer')
-  @ApiOperation({ summary: 'Register new retailer' })
-  @ApiBody({
-    description: 'Retailer registration payload',
-    type: SendNormalRegisterMailDto,
-  })
-  async beginRetailerRegistration(@Body() body: SendNormalRegisterMailDto) {
+  @TypedRoute.Post('retailer')
+  async beginRetailerRegistration(
+    @TypedBody(validateSendNormalRegisterMail)
+    body: ISendNormalRegisterMailDto,
+  ): Promise<void> {
     this.logger.debug(
       { email: maskEmail(body.email) },
       '[AuthController] retailer-register',
@@ -102,13 +53,10 @@ export class RegistrationController {
     return this.authService.beginRetailerRegistration(body);
   }
 
-  @Post('retailer/complete')
-  @ApiOperation({ summary: 'Complete retailer registration' })
-  @ApiBody({
-    description: 'Retailer registration payload',
-    type: RegisterRetailerDto,
-  })
-  async completeRetailerRegistration(@Body() body: RegisterRetailerDto) {
+  @TypedRoute.Post('retailer/complete')
+  async completeRetailerRegistration(
+    @TypedBody(validateRegisterRetailer) body: IRegisterRetailerDto,
+  ): Promise<void> {
     this.logger.debug(
       { email: maskEmail(body.email) },
       '[AuthController] retailer-register',
@@ -116,13 +64,11 @@ export class RegistrationController {
     return this.authService.completeRetailerRegistration(body);
   }
 
-  @Post('wholesaler')
-  @ApiOperation({ summary: 'Register new wholesaler' })
-  @ApiBody({
-    description: 'Wholesaler registration payload',
-    type: SendNormalRegisterMailDto,
-  })
-  async beginWholesalerRegistration(@Body() body: SendNormalRegisterMailDto) {
+  @TypedRoute.Post('wholesaler')
+  async beginWholesalerRegistration(
+    @TypedBody(validateSendNormalRegisterMail)
+    body: ISendNormalRegisterMailDto,
+  ): Promise<void> {
     this.logger.debug(
       { email: maskEmail(body.email) },
       '[AuthController] wholesaler-register',
@@ -130,13 +76,10 @@ export class RegistrationController {
     return this.authService.beginWholesalerRegistration(body);
   }
 
-  @Post('wholesaler/complete')
-  @ApiOperation({ summary: 'Complete wholesaler registration' })
-  @ApiBody({
-    description: 'Wholesaler registration payload',
-    type: RegisterWholesalerDto,
-  })
-  async completeWholesalerRegistration(@Body() body: RegisterWholesalerDto) {
+  @TypedRoute.Post('wholesaler/complete')
+  async completeWholesalerRegistration(
+    @TypedBody(validateRegisterWholesaler) body: IRegisterWholesalerDto,
+  ): Promise<void> {
     this.logger.debug(
       { email: maskEmail(body.email) },
       '[AuthController] wholesaler-register',

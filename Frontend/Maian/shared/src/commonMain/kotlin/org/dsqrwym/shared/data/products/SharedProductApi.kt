@@ -17,7 +17,7 @@ class SharedProductApi(val client: HttpClient) {
             query.categoryId?.let { parameter("category_id", it) }
             query.wholesalerId?.let { parameter("wholesaler_id", it) }
             query.sortBy?.let { parameter("sort_by", it.toString().lowercase()) }
-            query.sortOrder?.let { parameter("sort_order", it.value) }
+            parameter("sort_order", query.sortOrder.value)
             query.fields?.forEach { parameter("fields", it.toString().lowercase()) }
             parameter("page", query.page)
             parameter("limit", query.limit)

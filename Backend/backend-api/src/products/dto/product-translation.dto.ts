@@ -1,39 +1,29 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { TagsBCP47Language } from '../../utils/typia/validators/language.validator';
+import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
+import { tags } from 'typia';
+import { isObject } from '../../utils/is.util';
+import { cleanString } from 'src/utils/string.util';
 
-export class ProductTranslationDto {
-  @ApiProperty({
-    description: 'Language code (e.g., es, en)',
-    maxLength: 10,
-    example: 'en',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(10)
-  lang_code: string; // 语言代码，例如 'es', 'en'
+export interface IProductTranslationDto {
+  lang_code: string & TagsBCP47Language; // 语言代码，例如 'es', 'en'
 
-  @ApiProperty({
-    description: 'Translated name of the product',
-    maxLength: 50,
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  name: string;
+  name: string &
+    TagsNotBlank &
+    tags.MaxLength<50> &
+    tags.Example<'Product Name'>;
 
-  @ApiPropertyOptional({
-    description: 'Translated short title of the product',
-    maxLength: 100,
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  title?: string;
+  title?: string & tags.MaxLength<100> & tags.Example<'Product Name'>;
 
-  @ApiPropertyOptional({
-    description: 'Translated detailed description of the product',
-  })
-  @IsOptional()
-  @IsString()
-  description?: string;
+  description?: string &
+    tags.Example<'Translated detailed description of the product'>;
 }
+export const validateProductTranslationDto = (dto: unknown) => {
+  if (isObject(dto)) {
+    if (typeof dto.name === 'string') {
+      dto.name = cleanString(dto.name);
+    }
+    if (typeof dto.title === 'string') {
+      dto.title = cleanString(dto.title);
+    }
+  }
+};

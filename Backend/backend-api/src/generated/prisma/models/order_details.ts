@@ -1623,6 +1623,11 @@ export type order_detailsFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` order_details.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of order_details.
+   */
   distinct?: Prisma.Order_detailsScalarFieldEnum | Prisma.Order_detailsScalarFieldEnum[]
 }
 

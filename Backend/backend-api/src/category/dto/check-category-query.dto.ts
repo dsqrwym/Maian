@@ -1,72 +1,46 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  MinLength,
-  IsNumberString,
-  IsNotEmpty,
-} from 'class-validator';
-import { Trim } from 'src/utils/transform/trim.decorator';
+import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
+import typia, { tags } from 'typia';
+import { TagsUuid } from '../../utils/typia/validators/auth.validator';
+import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import { cleanString } from '../../utils/string.util';
 
 /**
  * DTO for checking category name availability when creating
  */
-export class CheckCategoryNameCreateQueryDto {
-  @ApiProperty({
-    description: 'Category name to check',
-    example: 'Electronics',
-    maxLength: 50,
-  })
-  @IsString()
-  @MinLength(1)
-  @MaxLength(50)
-  @Trim()
-  name: string;
+export interface ICheckCategoryNameCreateQueryDto {
+  name: string &
+    tags.MinLength<1> &
+    tags.MaxLength<50> &
+    tags.Example<'Electronics'>;
 
-  @ApiPropertyOptional({
-    description:
-      'Owner user ID. If omitted, checks public categories (user_id IS NULL).',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    required: false,
-  })
-  @IsOptional()
-  @IsUUID()
-  userId?: string;
+  userId?: string & TagsUuid;
 }
+export const validateCheckCategoryNameCreateQuery: IRequestQueryValidator.IAssert<ICheckCategoryNameCreateQueryDto> =
+  {
+    type: 'assert',
+    assert: (input: URLSearchParams): ICheckCategoryNameCreateQueryDto => {
+      const name = input.get('name');
+      if (name) {
+        input.set('name', cleanString(name));
+      }
+      return typia.http.assertQuery<ICheckCategoryNameCreateQueryDto>(input);
+    },
+  };
 
 /**
  * DTO for checking category name availability when updating
  */
-export class CheckCategoryNameUpdateQueryDto {
-  @ApiProperty({
-    description:
-      'ID of the category being updated (to exclude itself in check)',
-    example: '1234567890123456',
-  })
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
-  @ApiProperty({
-    description: 'Category name to check',
-    example: 'Electronics',
-    maxLength: 50,
-  })
-  @IsString()
-  @MinLength(1)
-  @MaxLength(50)
-  @Trim()
-  name: string;
-
-  @ApiPropertyOptional({
-    description:
-      'Owner user ID. If omitted, checks public categories (user_id IS NULL).',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-    required: false,
-  })
-  @IsOptional()
-  @IsUUID()
-  userId?: string;
+export interface ICheckCategoryNameUpdateQueryDto extends ICheckCategoryNameCreateQueryDto {
+  id: TagsIntegerString;
 }
+export const validateCheckCategoryNameUpdateQuery: IRequestQueryValidator.IAssert<ICheckCategoryNameUpdateQueryDto> =
+  {
+    type: 'assert',
+    assert: (input: URLSearchParams): ICheckCategoryNameUpdateQueryDto => {
+      const name = input.get('name');
+      if (name) {
+        input.set('name', cleanString(name));
+      }
+      return typia.http.assertQuery<ICheckCategoryNameUpdateQueryDto>(input);
+    },
+  };

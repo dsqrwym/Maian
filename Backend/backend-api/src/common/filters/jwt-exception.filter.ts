@@ -11,6 +11,7 @@ import {
   NotBeforeError,
   TokenExpiredError,
 } from '@nestjs/jwt';
+import { ErrorResponse } from '../types-interfaces/response.interface';
 
 /**
  * Global JWT exception filter
@@ -42,10 +43,12 @@ export class JwtExceptionFilter implements ExceptionFilter<JsonWebTokenError> {
       'JWT exception caught',
     );
 
-    reply.status(401).send({
+    const errorResponse: ErrorResponse = {
       statusCode: 401,
       message,
       error: 'Unauthorized',
-    });
+    };
+
+    reply.status(401).send(errorResponse);
   }
 }

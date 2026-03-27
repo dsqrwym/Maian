@@ -1150,6 +1150,11 @@ export type chat_panelsFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` chat_panels.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of chat_panels.
+   */
   distinct?: Prisma.Chat_panelsScalarFieldEnum | Prisma.Chat_panelsScalarFieldEnum[]
 }
 

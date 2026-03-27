@@ -9,7 +9,7 @@ import { AUTH_ERROR } from '../auth.constants';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { ENV } from '../../config/constants.config';
 import { Logger } from 'nestjs-pino';
-import { DeleteSessionDto } from '../dto/delete.session.dto';
+import { IDeleteSessionDto } from '../dto/delete.session.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
@@ -64,7 +64,7 @@ export class SessionService {
     return { message: 'Session successfully revoked' };
   }
 
-  async deleteSession(deleteSessionDto: DeleteSessionDto, userId: string) {
+  async deleteSession(deleteSessionDto: IDeleteSessionDto, userId: string) {
     const deleted = await this.prismaService.$transaction(async (tx) => {
       const session = await tx.user_sessions.findUnique({
         where: { session_id: deleteSessionDto.sessionId, user_id: userId },

@@ -1,6 +1,5 @@
 import { Global, Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 import { MailService } from './mail.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -13,6 +12,7 @@ import { VerifyResetPasswordProcessorService } from './verification-processor/ve
 import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service';
 import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service';
 import { Logger } from 'nestjs-pino';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
 
 @Global()
 @Module({
