@@ -31,8 +31,8 @@ import maian.shared.generated.resources.*
 import org.dsqrwym.admin.data.categories.dto.CategoryResponse
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
-import org.dsqrwym.business.ui.components.category.BusinessCategorieLanguages
-import org.dsqrwym.business.ui.components.category.BusinessCategoriePath
+import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
+import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.user.UserRole
@@ -343,8 +343,8 @@ fun CategoryListItem(
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
                     Column(verticalArrangement = SharedColumnLayout.arrangement) {
-                        category.categoryTranslations?.let { BusinessCategorieLanguages(it) }
-                        BusinessCategoriePath(category.getPath(), category.name)
+                        category.categoryTranslations?.let { BusinessCategoryLanguages(it) }
+                        BusinessCategoryPath(category.getPath(), category.name)
                     }
                 }
                 TooltipBox(

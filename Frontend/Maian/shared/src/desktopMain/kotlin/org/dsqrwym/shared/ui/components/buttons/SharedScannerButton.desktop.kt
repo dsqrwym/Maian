@@ -25,8 +25,10 @@ import kotlinx.coroutines.launch
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.BarcodeScanner
 import org.dsqrwym.shared.ui.components.buttons.DesktopScannerManager.SCAN_RATIO
+import org.dsqrwym.shared.ui.components.buttons.DesktopScannerManager.isOpen
 import org.dsqrwym.shared.util.validation.sanitizeProductCode
 import java.awt.image.BufferedImage
+import kotlin.time.Duration.Companion.milliseconds
 
 object DesktopScannerManager {
     const val SCAN_RATIO = 0.6f
@@ -45,13 +47,14 @@ object DesktopScannerManager {
 
 @Composable
 actual fun SharedScannerButton(onResult: (String) -> Unit) {
-    DesktopScannerWindow()
-
-    IconButton(onClick = {
-        DesktopScannerManager.open {
-            onResult(sanitizeProductCode(it))
-        }
-    }) {
+    IconButton(
+        enabled = !isOpen,
+        onClick = {
+            if (isOpen) return@IconButton
+            DesktopScannerManager.open {
+                onResult(sanitizeProductCode(it))
+            }
+        }) {
         Icon(
             SharedIcons.BarcodeScanner,
             contentDescription = SharedIcons.BarcodeScanner.name
@@ -61,7 +64,8 @@ actual fun SharedScannerButton(onResult: (String) -> Unit) {
 
 @Composable
 fun DesktopScannerWindow() {
-    if (!DesktopScannerManager.isOpen) return
+    if (!isOpen) return
+
     val state = rememberWindowState(
         width = 640.dp,
         height = 480.dp,
@@ -115,7 +119,7 @@ fun ScannerContent() {
                 } catch (_: NotFoundException) {
                 }
 
-                delay(30) // ~33 FPS
+                delay(30.milliseconds) // ~33 FPS
             }
         }
 

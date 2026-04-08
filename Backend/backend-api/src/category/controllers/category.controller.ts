@@ -86,7 +86,7 @@ export class CategoryController {
    * @param {IUpdateCategoryDto} updateCategoryDto - Category data to update
    * @param {FastifyRequest} req - Request object containing user ability
    */
-  @TypedRoute.Patch()
+  @TypedRoute.Put()
   @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async update(
     @Req() req: FastifyRequest,

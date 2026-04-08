@@ -462,7 +462,6 @@ model variant_products {
   sort                                     Int             @db.SmallInt
   attributes                               Json?
   status                                   ProductStatus   @default(ACTIVE)
-  iva                                      Decimal         @db.Decimal(5, 2)
   product_code                             String          @db.VarChar(50)
   reserved_stock                           Int             @default(0)
   low_stock_threshold                      Int             @default(0)

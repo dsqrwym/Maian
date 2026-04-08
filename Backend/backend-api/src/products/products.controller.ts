@@ -52,7 +52,7 @@ export class ProductsController {
     return this.productsService.findOne(id, query, req.ability, req.user);
   }
 
-  @TypedRoute.Patch(':id')
+  @TypedRoute.Put(':id')
   update(
     @TypedParam('id') id: string,
     @TypedBody(validateIUpdateProduct) updateProductDto: IUpdateProductDto,

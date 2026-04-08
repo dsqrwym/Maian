@@ -6,20 +6,20 @@ interface ICategoryTranslation {
 interface ICategoryChild {
   id: string | number;
   name: string;
-  iva?: string | number | null;
+  iva?: string | null;
 }
 
 interface ICategoryParent {
   id: string | number;
   name: string;
-  iva?: string | number | null;
+  iva?: string | null;
   parent?: ICategoryParent | null;
 }
 
 export interface ICategoryResponse {
   id: bigint;
   name: string;
-  iva?: number;
+  iva?: string | null;
   category_translations?: ICategoryTranslation[];
   parent?: ICategoryParent | null;
   children?: ICategoryChild[];

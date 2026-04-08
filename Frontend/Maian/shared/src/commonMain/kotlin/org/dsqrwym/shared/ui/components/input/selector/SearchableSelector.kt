@@ -22,11 +22,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.address_no_match
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 import org.dsqrwym.shared.ui.viewmodels.component.SearchableSelectorRemoteViewModel
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.min
+import kotlin.time.Duration.Companion.milliseconds
 
 data class RemoteSearchableSelectorConfig<T : Any>(
     val modifier: Modifier = Modifier,
@@ -46,7 +47,7 @@ data class RemoteSearchableSelectorConfig<T : Any>(
 )
 
 
-data class SearchableSelectorDefaults(
+data class SearchableSelectorConfig(
     val modifier: Modifier = Modifier,
     val label: String = "",
     val selectedItemId: String? = null,
@@ -68,7 +69,7 @@ fun <T> SearchableSelector(
     items: List<T>,
     itemToString: (T) -> String,
     itemId: (T) -> String = { itemToString(it) },
-    config: SearchableSelectorDefaults = SearchableSelectorDefaults()
+    config: SearchableSelectorConfig = SearchableSelectorConfig()
 ) {
     val isControlled = config.onSelectedItemIdChange != null
 
@@ -135,7 +136,7 @@ fun <T> SearchableSelector(
                         if (config.isSearching == null) internalSearching = true
                         config.onSearchingChange?.invoke(true)
 
-                        delay(500)
+                        delay(500.milliseconds)
                         filteredList = filtered(it)
                         expanded = true
 

@@ -189,7 +189,7 @@ export type CitiesGroupByOutputType = {
   _max: CitiesMaxAggregateOutputType | null
 }
 
-type GetCitiesGroupByPayload<T extends citiesGroupByArgs> = Prisma.PrismaPromise<
+export type GetCitiesGroupByPayload<T extends citiesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CitiesGroupByOutputType, T['by']> &
       {

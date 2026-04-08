@@ -1,9 +1,10 @@
-
+package org.dsqrwym.shared.util.formatter
+import maian.shared.generated.resources.*
 import org.jetbrains.compose.resources.getPluralString
 import org.jetbrains.compose.resources.getString
-import maian.shared.generated.resources.*
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * 格式化验证码过期时间，返回多语言友好的文本
@@ -17,7 +18,7 @@ import kotlin.time.ExperimentalTime
  */
 @OptIn(ExperimentalTime::class)
 suspend fun formatExpireDurationFromSeconds(
-    expiresAt: kotlin.time.Instant,
+    expiresAt: Instant,
     formattedAbsolute: String? = null,
 ): String {
     val seconds = (expiresAt.epochSeconds - Clock.System.now().epochSeconds).coerceAtLeast(0L)

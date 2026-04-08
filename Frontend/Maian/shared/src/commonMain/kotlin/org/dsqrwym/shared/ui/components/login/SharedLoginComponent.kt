@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.local.SharedUserPreferences
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.stringResource
 
@@ -31,7 +31,7 @@ fun UsernameOrEmailField(
     error: String?,
     focusManager: FocusManager
 ) {
-    var isEmail by remember { mutableStateOf(true) }
+    var isEmail by remember { mutableStateOf(validateEmail(value)) }
     val focusRequester = remember { FocusRequester() }
     MyOutlinedTextField(
         value = value,

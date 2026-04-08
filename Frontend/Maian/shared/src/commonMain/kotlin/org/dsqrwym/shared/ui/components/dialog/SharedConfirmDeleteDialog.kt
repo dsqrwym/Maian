@@ -7,6 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.cancel
+import maian.shared.generated.resources.delete
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SharedConfirmDeleteDialog(
@@ -20,12 +24,12 @@ fun SharedConfirmDeleteDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         title = {
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.DeleteForever,
-                    contentDescription = "删除图标",
+                    contentDescription = stringResource(SharedRes.string.delete),
                     tint = MaterialTheme.colorScheme.error
                 )
                 Text(title)
@@ -35,16 +39,21 @@ fun SharedConfirmDeleteDialog(
             Text(text)
         },
         confirmButton = {
-            TextButton(onClick = {
-                onConfirm()
-                onDismissRequest()
-            }) {
+            FilledTonalButton(
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                ),
+                onClick = {
+                    onConfirm()
+                    onDismissRequest()
+                }
+            ) {
                 Text("确认")
             }
         },
         dismissButton = {
             ElevatedButton(onClick = onDismissRequest) {
-                Text("取消")
+                Text(stringResource(SharedRes.string.cancel))
             }
         }
     )

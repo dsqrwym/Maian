@@ -11,6 +11,8 @@ val BusinessNavSerializersModule = SerializersModule {
         subclass(Categories::class, Categories.serializer())
         subclass(CategoryCreate::class, CategoryCreate.serializer())
         subclass(CategoryEdit::class, CategoryEdit.serializer())
+        subclass(ProductWorkspaceMainPane::class, ProductWorkspaceMainPane.serializer())
+        subclass(ProductWorkspaceAuxPane::class, ProductWorkspaceAuxPane.serializer())
     }
 }
 

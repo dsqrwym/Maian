@@ -38,10 +38,10 @@ import org.dsqrwym.shared.ui.components.MyHorizontalDivider
 import org.dsqrwym.shared.ui.components.buttons.MyFloatingActionButton
 import org.dsqrwym.shared.ui.components.cards.AuthStepCard
 import org.dsqrwym.shared.ui.components.input.MyOtpInputField
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyPasswordField
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelector
-import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorDefaults
+import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.util.formatter.asString
@@ -282,7 +282,7 @@ private fun AddressInputSection(
             }
         },          // 显示国家名
         itemId = { it.isoNumeric.toString() },          // 国家唯一ID
-        config = SearchableSelectorDefaults(
+        config = SearchableSelectorConfig(
             modifier = Modifier,
             label = stringResource(SharedRes.string.address_country),
             placeholder = stringResource(SharedRes.string.address_search_or_select_country),
@@ -310,7 +310,7 @@ private fun AddressInputSection(
             }
         },
         itemId = { it.id.toString() },
-        config = SearchableSelectorDefaults(
+        config = SearchableSelectorConfig(
             enabled = enabled,
             label = stringResource(SharedRes.string.address_state_or_province),
             placeholder = stringResource(SharedRes.string.address_input_or_select_state_or_province),
@@ -339,7 +339,7 @@ private fun AddressInputSection(
             }
         },
         itemId = { it.id.toString() },
-        config = SearchableSelectorDefaults(
+        config = SearchableSelectorConfig(
             enabled = enabled, label = stringResource(SharedRes.string.address_city),
             placeholder = stringResource(SharedRes.string.address_state_or_province),
             leadingIcon = Icons.Outlined.LocationCity,

@@ -1,24 +1,41 @@
 import { tags } from 'typia';
-import { TagsTowDecimal, TagsUNumeric10_2 } from '../tags/number.tags';
+import {
+  TagsMaxNumberString,
+  TagsUNumeric10_2_String,
+} from '../tags/number.tags';
 
 /**
  *  税率百分比验证，最大100，最少0，最多两位小数
  */
-export type TagsIva = number &
-  tags.Minimum<0> &
-  tags.Maximum<100> &
-  TagsTowDecimal &
-  tags.Example<21.0>;
+export type TagsIvaString = string &
+  tags.TagBase<{
+    kind: 'string.iva';
+    target: 'string';
+    value: undefined;
+    validate: `
+      (() => {
+        if (!/^\\d+(\\.\\d{1,2})?$/.test($input)) return false;
+
+        const n = Number($input);
+        return n >= 0 && n <= 100;
+      })()
+    `;
+  }> &
+  tags.Example<'21.00'>;
 
 /**
- * 价格验证，最大9999999999.99，最少0，最多两位小数
+ * 价格验证，最大一千万，最少0，最多两位小数
  */
-export type TagsPrice = TagsUNumeric10_2 & tags.Example<10.0>;
+export type TagsPrice = TagsUNumeric10_2_String &
+  TagsMaxNumberString<10000000.0> &
+  tags.Example<'10.0'>;
 
 /**
- * 含税价格验证，最大9999999999.99，最少0，最多两位小数
+ * 含税价格验证，最大两千万，最少0，最多两位小数
  */
-export type TagsPriceIva = TagsUNumeric10_2 & tags.Example<10.21>;
+export type TagsPriceIva = TagsUNumeric10_2_String &
+  TagsMaxNumberString<20000000.0> &
+  tags.Example<'10.21'>;
 
 /**
  * ProductCode 类型：

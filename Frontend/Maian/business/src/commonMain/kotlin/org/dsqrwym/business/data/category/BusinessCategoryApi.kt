@@ -21,7 +21,7 @@ class BusinessCategoryApi(
         }.body()
 
     suspend fun updateCategory(dto: BusinessUpdateCategoryDto): ApiResponse<Unit> =
-        client.patch(ApiConfig.CategoryPath.CATEGORY) {
+        client.put(ApiConfig.CategoryPath.CATEGORY) {
             contentType(ContentType.Application.Json)
             setBody(dto)
         }.body()

@@ -178,7 +178,7 @@ export type User_uploadsGroupByOutputType = {
   _max: User_uploadsMaxAggregateOutputType | null
 }
 
-type GetUser_uploadsGroupByPayload<T extends user_uploadsGroupByArgs> = Prisma.PrismaPromise<
+export type GetUser_uploadsGroupByPayload<T extends user_uploadsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<User_uploadsGroupByOutputType, T['by']> &
       {

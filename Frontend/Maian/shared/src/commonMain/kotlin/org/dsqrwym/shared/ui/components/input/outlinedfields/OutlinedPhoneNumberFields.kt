@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.ui.components.input.outlinetextfields
+package org.dsqrwym.shared.ui.components.input.outlinedfields
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Phone

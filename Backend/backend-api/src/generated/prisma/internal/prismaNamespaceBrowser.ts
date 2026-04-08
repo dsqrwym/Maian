@@ -445,7 +445,6 @@ export const Variant_productsScalarFieldEnum = {
   sort: 'sort',
   attributes: 'attributes',
   status: 'status',
-  iva: 'iva',
   product_code: 'product_code',
   reserved_stock: 'reserved_stock',
   low_stock_threshold: 'low_stock_threshold',

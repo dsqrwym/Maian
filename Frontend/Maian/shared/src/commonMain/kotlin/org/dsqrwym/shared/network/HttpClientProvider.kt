@@ -34,8 +34,9 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
     // JSON 序列化；忽略未知字段以提升前向兼容性
     install(ContentNegotiation) {
         json(Json {
-            ignoreUnknownKeys = true
-            explicitNulls = false
+            ignoreUnknownKeys = true // 忽略未知字段
+            explicitNulls = false // 如果为null 就不向JSON输出字段 等于JavaScript的undefined
+            encodeDefaults = true // 默认值也写入JSON
         })
     }
     // Timeouts to avoid hanging requests

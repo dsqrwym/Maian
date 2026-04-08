@@ -29,6 +29,7 @@ import org.dsqrwym.shared.util.formatter.toFixed
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @OptIn(FlowPreview::class)
@@ -47,7 +48,7 @@ class CategoriesCreateViewModel(
     var categoryNameError by mutableStateOf<StringResource?>(null)
         private set
 
-    var categoryIva by mutableStateOf("21")
+    var categoryIva: String? by mutableStateOf("21")
         private set
 
     var translations = mutableStateListOf<SharedCategoryTranslation>()
@@ -70,7 +71,7 @@ class CategoriesCreateViewModel(
     init {
         viewModelScope.launch {
             snapshotFlow { categoryName }
-                .debounce(600)
+                .debounce(600.milliseconds)
                 .distinctUntilChanged()
                 .collectLatest { name ->
                     if (name.isBlank()) return@collectLatest
@@ -118,14 +119,13 @@ class CategoriesCreateViewModel(
         showAddLanguageDialog = show
     }
 
-    fun updateCategoryIva(iva: String) {
-        val result = sanitizeIvaInput(iva) ?: return
+    fun updateCategoryIva(iva: String?) {
+        val result = iva?.let { sanitizeIvaInput(iva) }
         categoryIva = result
     }
 
     fun formatIvaTwoDecimal() {
-        if (categoryIva.isBlank()) return
-        categoryIva = categoryIva.toDoubleOrNull()?.toFixed(2) ?: "0.00"
+        categoryIva = categoryIva?.toDoubleOrNull()?.toFixed(2)
     }
 
     fun upsertTranslation(langCode: String, name: String) {
@@ -147,7 +147,7 @@ class CategoriesCreateViewModel(
             createButtonState = UiState.Loading
             when (val result = categoryRepository.createCategory(
                 categoryName,
-                categoryIva.toDoubleOrNull(),
+                categoryIva,
                 filterCategory?.id?.toString(),
                 translations
             )) {
@@ -171,7 +171,7 @@ class CategoriesCreateViewModel(
                 }
             }
 
-            delay(500)
+            delay(500.milliseconds)
             createButtonState = UiState.Idle
         }
 

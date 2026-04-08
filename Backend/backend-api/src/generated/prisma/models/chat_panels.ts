@@ -178,7 +178,7 @@ export type Chat_panelsGroupByOutputType = {
   _max: Chat_panelsMaxAggregateOutputType | null
 }
 
-type GetChat_panelsGroupByPayload<T extends chat_panelsGroupByArgs> = Prisma.PrismaPromise<
+export type GetChat_panelsGroupByPayload<T extends chat_panelsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Chat_panelsGroupByOutputType, T['by']> &
       {

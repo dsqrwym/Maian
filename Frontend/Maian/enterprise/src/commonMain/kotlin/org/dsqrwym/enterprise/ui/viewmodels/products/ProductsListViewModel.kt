@@ -19,6 +19,7 @@ import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import kotlin.time.Duration.Companion.milliseconds
 
 data class SearchQuery(
     val query: String,
@@ -48,7 +49,7 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val pagedProducts = combine(
         snapshotFlow { searchQuery }
-            .debounce(600)
+            .debounce(600.milliseconds)
             .distinctUntilChanged(),
         snapshotFlow { filterCategoryId }
             .distinctUntilChanged(),

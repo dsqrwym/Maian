@@ -8,7 +8,7 @@ import typia, { tags } from 'typia';
 import { TagsCategoryName } from '../../utils/typia/validators/category.validator';
 import { isObject } from '../../utils/is.util';
 import { cleanString } from '../../utils/string.util';
-import { TagsIva } from '../../utils/typia/validators/product.validator';
+import { TagsIvaString } from '../../utils/typia/validators/product.validator';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 export interface ICreateCategoryDto {
@@ -16,7 +16,7 @@ export interface ICreateCategoryDto {
 
   name: TagsCategoryName;
 
-  iva?: TagsIva;
+  iva?: TagsIvaString;
 
   parentId?: TagsIntegerString;
 

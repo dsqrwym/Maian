@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.mohamedrejeb.richeditor.model.RichTextState
 import dev.zt64.compose.pipette.CircularColorPicker
 import dev.zt64.compose.pipette.HsvColor
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 
 
 @Composable

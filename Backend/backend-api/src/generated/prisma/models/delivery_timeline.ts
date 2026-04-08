@@ -219,7 +219,7 @@ export type Delivery_timelineGroupByOutputType = {
   _max: Delivery_timelineMaxAggregateOutputType | null
 }
 
-type GetDelivery_timelineGroupByPayload<T extends delivery_timelineGroupByArgs> = Prisma.PrismaPromise<
+export type GetDelivery_timelineGroupByPayload<T extends delivery_timelineGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Delivery_timelineGroupByOutputType, T['by']> &
       {

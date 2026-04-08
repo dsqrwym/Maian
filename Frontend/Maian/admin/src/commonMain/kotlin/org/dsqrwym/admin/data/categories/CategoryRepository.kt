@@ -90,7 +90,7 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         return safeApiCall {
             api.updateCategory(
                 dto.copy(
-                    name = dto.name?.trim(),
+                    name = dto.name.trim(),
                     translations = dto.translations?.map { it.copy(name = it.name.trim()) }
                 )
             )

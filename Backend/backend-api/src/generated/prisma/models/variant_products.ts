@@ -33,7 +33,6 @@ export type Variant_productsAvgAggregateOutputType = {
   price_iva: runtime.Decimal | null
   available_stock: number | null
   sort: number | null
-  iva: runtime.Decimal | null
   reserved_stock: number | null
   low_stock_threshold: number | null
   sale_unit_qty: number | null
@@ -47,7 +46,6 @@ export type Variant_productsSumAggregateOutputType = {
   price_iva: runtime.Decimal | null
   available_stock: number | null
   sort: number | null
-  iva: runtime.Decimal | null
   reserved_stock: number | null
   low_stock_threshold: number | null
   sale_unit_qty: number | null
@@ -64,7 +62,6 @@ export type Variant_productsMinAggregateOutputType = {
   available_stock: number | null
   sort: number | null
   status: $Enums.ProductStatus | null
-  iva: runtime.Decimal | null
   product_code: string | null
   reserved_stock: number | null
   low_stock_threshold: number | null
@@ -85,7 +82,6 @@ export type Variant_productsMaxAggregateOutputType = {
   available_stock: number | null
   sort: number | null
   status: $Enums.ProductStatus | null
-  iva: runtime.Decimal | null
   product_code: string | null
   reserved_stock: number | null
   low_stock_threshold: number | null
@@ -107,7 +103,6 @@ export type Variant_productsCountAggregateOutputType = {
   sort: number
   attributes: number
   status: number
-  iva: number
   product_code: number
   reserved_stock: number
   low_stock_threshold: number
@@ -127,7 +122,6 @@ export type Variant_productsAvgAggregateInputType = {
   price_iva?: true
   available_stock?: true
   sort?: true
-  iva?: true
   reserved_stock?: true
   low_stock_threshold?: true
   sale_unit_qty?: true
@@ -141,7 +135,6 @@ export type Variant_productsSumAggregateInputType = {
   price_iva?: true
   available_stock?: true
   sort?: true
-  iva?: true
   reserved_stock?: true
   low_stock_threshold?: true
   sale_unit_qty?: true
@@ -158,7 +151,6 @@ export type Variant_productsMinAggregateInputType = {
   available_stock?: true
   sort?: true
   status?: true
-  iva?: true
   product_code?: true
   reserved_stock?: true
   low_stock_threshold?: true
@@ -179,7 +171,6 @@ export type Variant_productsMaxAggregateInputType = {
   available_stock?: true
   sort?: true
   status?: true
-  iva?: true
   product_code?: true
   reserved_stock?: true
   low_stock_threshold?: true
@@ -201,7 +192,6 @@ export type Variant_productsCountAggregateInputType = {
   sort?: true
   attributes?: true
   status?: true
-  iva?: true
   product_code?: true
   reserved_stock?: true
   low_stock_threshold?: true
@@ -310,7 +300,6 @@ export type Variant_productsGroupByOutputType = {
   sort: number
   attributes: runtime.JsonValue | null
   status: $Enums.ProductStatus
-  iva: runtime.Decimal
   product_code: string
   reserved_stock: number
   low_stock_threshold: number
@@ -326,7 +315,7 @@ export type Variant_productsGroupByOutputType = {
   _max: Variant_productsMaxAggregateOutputType | null
 }
 
-type GetVariant_productsGroupByPayload<T extends variant_productsGroupByArgs> = Prisma.PrismaPromise<
+export type GetVariant_productsGroupByPayload<T extends variant_productsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Variant_productsGroupByOutputType, T['by']> &
       {
@@ -355,7 +344,6 @@ export type variant_productsWhereInput = {
   sort?: Prisma.IntFilter<"variant_products"> | number
   attributes?: Prisma.JsonNullableFilter<"variant_products">
   status?: Prisma.EnumProductStatusFilter<"variant_products"> | $Enums.ProductStatus
-  iva?: Prisma.DecimalFilter<"variant_products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFilter<"variant_products"> | string
   reserved_stock?: Prisma.IntFilter<"variant_products"> | number
   low_stock_threshold?: Prisma.IntFilter<"variant_products"> | number
@@ -382,7 +370,6 @@ export type variant_productsOrderByWithRelationInput = {
   sort?: Prisma.SortOrder
   attributes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   product_code?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
@@ -412,7 +399,6 @@ export type variant_productsWhereUniqueInput = Prisma.AtLeast<{
   sort?: Prisma.IntFilter<"variant_products"> | number
   attributes?: Prisma.JsonNullableFilter<"variant_products">
   status?: Prisma.EnumProductStatusFilter<"variant_products"> | $Enums.ProductStatus
-  iva?: Prisma.DecimalFilter<"variant_products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFilter<"variant_products"> | string
   reserved_stock?: Prisma.IntFilter<"variant_products"> | number
   low_stock_threshold?: Prisma.IntFilter<"variant_products"> | number
@@ -439,7 +425,6 @@ export type variant_productsOrderByWithAggregationInput = {
   sort?: Prisma.SortOrder
   attributes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   product_code?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
@@ -469,7 +454,6 @@ export type variant_productsScalarWhereWithAggregatesInput = {
   sort?: Prisma.IntWithAggregatesFilter<"variant_products"> | number
   attributes?: Prisma.JsonNullableWithAggregatesFilter<"variant_products">
   status?: Prisma.EnumProductStatusWithAggregatesFilter<"variant_products"> | $Enums.ProductStatus
-  iva?: Prisma.DecimalWithAggregatesFilter<"variant_products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringWithAggregatesFilter<"variant_products"> | string
   reserved_stock?: Prisma.IntWithAggregatesFilter<"variant_products"> | number
   low_stock_threshold?: Prisma.IntWithAggregatesFilter<"variant_products"> | number
@@ -490,7 +474,6 @@ export type variant_productsCreateInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -515,7 +498,6 @@ export type variant_productsUncheckedCreateInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -538,7 +520,6 @@ export type variant_productsUpdateInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -563,7 +544,6 @@ export type variant_productsUncheckedUpdateInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -587,7 +567,6 @@ export type variant_productsCreateManyInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -608,7 +587,6 @@ export type variant_productsUpdateManyMutationInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -628,7 +606,6 @@ export type variant_productsUncheckedUpdateManyInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -670,7 +647,6 @@ export type variant_productsCountOrderByAggregateInput = {
   sort?: Prisma.SortOrder
   attributes?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   product_code?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
@@ -688,7 +664,6 @@ export type variant_productsAvgOrderByAggregateInput = {
   price_iva?: Prisma.SortOrder
   available_stock?: Prisma.SortOrder
   sort?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
   sale_unit_qty?: Prisma.SortOrder
@@ -705,7 +680,6 @@ export type variant_productsMaxOrderByAggregateInput = {
   available_stock?: Prisma.SortOrder
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   product_code?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
@@ -726,7 +700,6 @@ export type variant_productsMinOrderByAggregateInput = {
   available_stock?: Prisma.SortOrder
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   product_code?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
@@ -744,7 +717,6 @@ export type variant_productsSumOrderByAggregateInput = {
   price_iva?: Prisma.SortOrder
   available_stock?: Prisma.SortOrder
   sort?: Prisma.SortOrder
-  iva?: Prisma.SortOrder
   reserved_stock?: Prisma.SortOrder
   low_stock_threshold?: Prisma.SortOrder
   sale_unit_qty?: Prisma.SortOrder
@@ -921,7 +893,6 @@ export type variant_productsCreateWithoutCart_detailsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -945,7 +916,6 @@ export type variant_productsUncheckedCreateWithoutCart_detailsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -983,7 +953,6 @@ export type variant_productsUpdateWithoutCart_detailsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1007,7 +976,6 @@ export type variant_productsUncheckedUpdateWithoutCart_detailsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1029,7 +997,6 @@ export type variant_productsCreateWithoutOrder_detailsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1053,7 +1020,6 @@ export type variant_productsUncheckedCreateWithoutOrder_detailsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1091,7 +1057,6 @@ export type variant_productsUpdateWithoutOrder_detailsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1115,7 +1080,6 @@ export type variant_productsUncheckedUpdateWithoutOrder_detailsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1137,7 +1101,6 @@ export type variant_productsCreateWithoutProductsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1160,7 +1123,6 @@ export type variant_productsUncheckedCreateWithoutProductsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1213,7 +1175,6 @@ export type variant_productsScalarWhereInput = {
   sort?: Prisma.IntFilter<"variant_products"> | number
   attributes?: Prisma.JsonNullableFilter<"variant_products">
   status?: Prisma.EnumProductStatusFilter<"variant_products"> | $Enums.ProductStatus
-  iva?: Prisma.DecimalFilter<"variant_products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFilter<"variant_products"> | string
   reserved_stock?: Prisma.IntFilter<"variant_products"> | number
   low_stock_threshold?: Prisma.IntFilter<"variant_products"> | number
@@ -1234,7 +1195,6 @@ export type variant_productsCreateWithoutUsers_variant_products_created_byTouser
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1258,7 +1218,6 @@ export type variant_productsUncheckedCreateWithoutUsers_variant_products_created
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1290,7 +1249,6 @@ export type variant_productsCreateWithoutUsers_variant_products_updated_byTouser
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1314,7 +1272,6 @@ export type variant_productsUncheckedCreateWithoutUsers_variant_products_updated
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1378,7 +1335,6 @@ export type variant_productsCreateManyProductsInput = {
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1399,7 +1355,6 @@ export type variant_productsUpdateWithoutProductsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1422,7 +1377,6 @@ export type variant_productsUncheckedUpdateWithoutProductsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1445,7 +1399,6 @@ export type variant_productsUncheckedUpdateManyWithoutProductsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1467,7 +1420,6 @@ export type variant_productsCreateManyUsers_variant_products_created_byTousersIn
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1488,7 +1440,6 @@ export type variant_productsCreateManyUsers_variant_products_updated_byTousersIn
   sort: number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: $Enums.ProductStatus
-  iva: runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code: string
   reserved_stock?: number
   low_stock_threshold?: number
@@ -1508,7 +1459,6 @@ export type variant_productsUpdateWithoutUsers_variant_products_created_byTouser
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1532,7 +1482,6 @@ export type variant_productsUncheckedUpdateWithoutUsers_variant_products_created
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1555,7 +1504,6 @@ export type variant_productsUncheckedUpdateManyWithoutUsers_variant_products_cre
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1575,7 +1523,6 @@ export type variant_productsUpdateWithoutUsers_variant_products_updated_byTouser
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1599,7 +1546,6 @@ export type variant_productsUncheckedUpdateWithoutUsers_variant_products_updated
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1622,7 +1568,6 @@ export type variant_productsUncheckedUpdateManyWithoutUsers_variant_products_upd
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   attributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
-  iva?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   product_code?: Prisma.StringFieldUpdateOperationsInput | string
   reserved_stock?: Prisma.IntFieldUpdateOperationsInput | number
   low_stock_threshold?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1683,7 +1628,6 @@ export type variant_productsSelect<ExtArgs extends runtime.Types.Extensions.Inte
   sort?: boolean
   attributes?: boolean
   status?: boolean
-  iva?: boolean
   product_code?: boolean
   reserved_stock?: boolean
   low_stock_threshold?: boolean
@@ -1711,7 +1655,6 @@ export type variant_productsSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   sort?: boolean
   attributes?: boolean
   status?: boolean
-  iva?: boolean
   product_code?: boolean
   reserved_stock?: boolean
   low_stock_threshold?: boolean
@@ -1736,7 +1679,6 @@ export type variant_productsSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   sort?: boolean
   attributes?: boolean
   status?: boolean
-  iva?: boolean
   product_code?: boolean
   reserved_stock?: boolean
   low_stock_threshold?: boolean
@@ -1761,7 +1703,6 @@ export type variant_productsSelectScalar = {
   sort?: boolean
   attributes?: boolean
   status?: boolean
-  iva?: boolean
   product_code?: boolean
   reserved_stock?: boolean
   low_stock_threshold?: boolean
@@ -1772,7 +1713,7 @@ export type variant_productsSelectScalar = {
   updated_by?: boolean
 }
 
-export type variant_productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "created_at" | "product_id" | "type_sale" | "price" | "price_iva" | "available_stock" | "sort" | "attributes" | "status" | "iva" | "product_code" | "reserved_stock" | "low_stock_threshold" | "sale_unit_qty" | "min_order_qty" | "updated_at" | "created_by" | "updated_by", ExtArgs["result"]["variant_products"]>
+export type variant_productsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "created_at" | "product_id" | "type_sale" | "price" | "price_iva" | "available_stock" | "sort" | "attributes" | "status" | "product_code" | "reserved_stock" | "low_stock_threshold" | "sale_unit_qty" | "min_order_qty" | "updated_at" | "created_by" | "updated_by", ExtArgs["result"]["variant_products"]>
 export type variant_productsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cart_details?: boolean | Prisma.variant_products$cart_detailsArgs<ExtArgs>
   order_details?: boolean | Prisma.variant_products$order_detailsArgs<ExtArgs>
@@ -1812,7 +1753,6 @@ export type $variant_productsPayload<ExtArgs extends runtime.Types.Extensions.In
     sort: number
     attributes: runtime.JsonValue | null
     status: $Enums.ProductStatus
-    iva: runtime.Decimal
     product_code: string
     reserved_stock: number
     low_stock_threshold: number
@@ -2259,7 +2199,6 @@ export interface variant_productsFieldRefs {
   readonly sort: Prisma.FieldRef<"variant_products", 'Int'>
   readonly attributes: Prisma.FieldRef<"variant_products", 'Json'>
   readonly status: Prisma.FieldRef<"variant_products", 'ProductStatus'>
-  readonly iva: Prisma.FieldRef<"variant_products", 'Decimal'>
   readonly product_code: Prisma.FieldRef<"variant_products", 'String'>
   readonly reserved_stock: Prisma.FieldRef<"variant_products", 'Int'>
   readonly low_stock_threshold: Prisma.FieldRef<"variant_products", 'Int'>

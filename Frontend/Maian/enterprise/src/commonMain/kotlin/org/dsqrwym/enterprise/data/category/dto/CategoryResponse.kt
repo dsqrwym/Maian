@@ -8,7 +8,7 @@ import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 data class CategoryResponse(
     val id: Long,
     val name: String,
-    val iva: Double? = null,
+    val iva: String? = null,
     val parent: CategoryResponse? = null,
     val children: List<CategoryResponse>? = null,
     @SerialName("children_count")

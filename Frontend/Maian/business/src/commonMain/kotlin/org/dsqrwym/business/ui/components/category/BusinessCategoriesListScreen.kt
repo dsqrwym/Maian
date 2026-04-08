@@ -20,7 +20,7 @@ import org.dsqrwym.shared.ui.components.dialog.SharedConfirmDeleteDialog
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun BusinessCategoriePath(path: List<String>, categoryName: String) {
+fun BusinessCategoryPath(path: List<String>, categoryName: String) {
     if (path.size < 2) return
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
@@ -39,7 +39,7 @@ fun BusinessCategoriePath(path: List<String>, categoryName: String) {
 }
 
 @Composable
-fun BusinessCategorieLanguages(languages: List<SharedCategoryTranslation>) {
+fun BusinessCategoryLanguages(languages: List<SharedCategoryTranslation>) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {

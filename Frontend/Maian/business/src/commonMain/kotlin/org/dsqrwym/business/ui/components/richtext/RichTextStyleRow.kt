@@ -2,6 +2,7 @@ package org.dsqrwym.business.ui.components.richtext
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FormatAlignLeft
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -25,6 +27,175 @@ import com.mohamedrejeb.richeditor.annotation.ExperimentalRichTextApi
 import com.mohamedrejeb.richeditor.model.RichTextState
 import org.dsqrwym.business.drawable.sharedicons.Markdown
 import org.dsqrwym.shared.drawable.SharedIcons
+import org.dsqrwym.shared.util.log.SharedLog
+
+sealed interface RichTextItem {
+    data class Action(
+        val icon: ImageVector,
+        val onClick: (RichTextState) -> Unit,
+        val isSelected: (RichTextState) -> Boolean,
+        val enabled: Boolean = true,
+    ) : RichTextItem
+
+    data object Divider : RichTextItem
+
+    data class Custom(
+        val content: @Composable (RichTextState) -> Unit
+    ) : RichTextItem
+}
+
+fun defaultRichTextItems(
+    isEnabled: Boolean = true,
+    editorMode: RichTextEditorState,
+    toggleEditorMode: (RichTextEditorState) -> Unit
+): List<RichTextItem> = listOf(
+
+    // 对齐
+    RichTextItem.Action(
+        icon = Icons.AutoMirrored.Outlined.FormatAlignLeft,
+        enabled = isEnabled,
+        onClick = {
+            it.addParagraphStyle(ParagraphStyle(textAlign = TextAlign.Left))
+        },
+        isSelected = { it.currentParagraphStyle.textAlign == TextAlign.Left }
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatAlignCenter,
+        enabled = isEnabled,
+        onClick = {
+            it.addParagraphStyle(ParagraphStyle(textAlign = TextAlign.Center))
+        },
+        isSelected = { it.currentParagraphStyle.textAlign == TextAlign.Center }
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.AutoMirrored.Outlined.FormatAlignRight,
+        enabled = isEnabled,
+        onClick = {
+            it.addParagraphStyle(ParagraphStyle(textAlign = TextAlign.Right))
+        },
+        isSelected = { it.currentParagraphStyle.textAlign == TextAlign.Right }
+    ),
+
+    RichTextItem.Divider,
+
+    // Bold
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatBold,
+        enabled = isEnabled,
+        onClick = { it.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold)) },
+        isSelected = { it.currentSpanStyle.fontWeight == FontWeight.Bold }
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatItalic,
+        enabled = isEnabled,
+        onClick = { it.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic)) },
+        isSelected = { it.currentSpanStyle.fontStyle == FontStyle.Italic }
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatUnderlined,
+        enabled = isEnabled,
+        onClick = { it.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline)) },
+        isSelected = { it.currentSpanStyle.textDecoration?.contains(TextDecoration.Underline) == true }
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatStrikethrough,
+        onClick = { it.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) },
+        enabled = isEnabled,
+        isSelected = { it.currentSpanStyle.textDecoration?.contains(TextDecoration.LineThrough) == true },
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatSize,
+        onClick = { it.toggleSpanStyle(SpanStyle(fontSize = 28.sp)) },
+        enabled = isEnabled,
+        isSelected = { it.currentSpanStyle.fontSize == 28.sp },
+    ),
+
+    RichTextItem.Divider,
+
+    // 自定义 composable
+    RichTextItem.Custom {
+        RichTextColorButton(it, enabled = isEnabled)
+    },
+
+    RichTextItem.Custom {
+        RichTextBackgroundButton(it, enabled = isEnabled)
+    },
+
+    RichTextItem.Divider,
+
+    RichTextItem.Action(
+        icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
+        enabled = isEnabled,
+        onClick = { it.toggleUnorderedList() },
+        isSelected = { it.isUnorderedList },
+    ),
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.FormatListNumbered,
+        enabled = isEnabled,
+        onClick = { it.toggleOrderedList() },
+        isSelected = { it.isOrderedList },
+    ),
+
+    RichTextItem.Custom {
+        if (it.canIncreaseListLevel) {
+            RichTextStyleButton(
+                onClick = { it.increaseListLevel() },
+                icon = Icons.Outlined.TextIncrease,
+            )
+        }
+    },
+
+    RichTextItem.Custom {
+        if (it.canDecreaseListLevel) {
+            RichTextStyleButton(
+                onClick = { it.decreaseListLevel() },
+                icon = Icons.Outlined.TextDecrease,
+            )
+        }
+    },
+
+    RichTextItem.Divider,
+
+    RichTextItem.Action(
+        icon = Icons.Outlined.Code,
+        enabled = isEnabled,
+        onClick = { it.toggleCodeSpan() },
+        isSelected = { it.isCodeSpan },
+    ),
+
+    RichTextItem.Action(
+        onClick = {
+            SharedLog.log(editorMode.name)
+            if (editorMode == RichTextEditorState.HTML) {
+                toggleEditorMode(RichTextEditorState.NORMAL)
+                SharedLog.log("TO NORMAL")
+                return@Action
+            }
+            toggleEditorMode(RichTextEditorState.HTML)
+        },
+        isSelected = { editorMode == RichTextEditorState.HTML },
+        icon = Icons.Outlined.Html,
+    ),
+
+    RichTextItem.Action(
+        onClick = {
+            if (editorMode == RichTextEditorState.MARKDOWN) {
+                toggleEditorMode(RichTextEditorState.NORMAL)
+                return@Action
+            }
+            toggleEditorMode(RichTextEditorState.MARKDOWN)
+        },
+        isSelected = { editorMode == RichTextEditorState.MARKDOWN },
+        icon = SharedIcons.Markdown,
+    )
+)
 
 @OptIn(ExperimentalRichTextApi::class)
 @Composable
@@ -34,222 +205,36 @@ fun RichTextStyleRow(
     editorMode: RichTextEditorState = RichTextEditorState.NORMAL,
     toggleEditorMode: (RichTextEditorState) -> Unit = { },
     enabled: Boolean = true,
+    items: List<RichTextItem> = defaultRichTextItems(enabled, editorMode, toggleEditorMode),
+    extraItems: LazyListScope.() -> Unit = {},
 ) {
     LazyRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.focusProperties { canFocus = false },
     ) {
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.addParagraphStyle(
-                        ParagraphStyle(
-                            textAlign = TextAlign.Left,
+        extraItems()
+        items.forEach { item ->
+            when (item) {
+
+                is RichTextItem.Action -> {
+                    item {
+                        RichTextStyleButton(
+                            onClick = { item.onClick(state) },
+                            enabled = item.enabled,
+                            isSelected = item.isSelected(state),
+                            icon = item.icon
                         )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentParagraphStyle.textAlign == TextAlign.Left,
-                icon = Icons.AutoMirrored.Outlined.FormatAlignLeft
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.addParagraphStyle(
-                        ParagraphStyle(
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentParagraphStyle.textAlign == TextAlign.Center,
-                icon = Icons.Outlined.FormatAlignCenter
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.addParagraphStyle(
-                        ParagraphStyle(
-                            textAlign = TextAlign.Right
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentParagraphStyle.textAlign == TextAlign.Right,
-                icon = Icons.AutoMirrored.Outlined.FormatAlignRight
-            )
-        }
-
-        item { VerticalDivider(Modifier.height(24.dp).width(1.dp)) }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleSpanStyle(
-                        SpanStyle(
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentSpanStyle.fontWeight == FontWeight.Bold,
-                icon = Icons.Outlined.FormatBold
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleSpanStyle(
-                        SpanStyle(
-                            fontStyle = FontStyle.Italic
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentSpanStyle.fontStyle == FontStyle.Italic,
-                icon = Icons.Outlined.FormatItalic
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleSpanStyle(
-                        SpanStyle(
-                            textDecoration = TextDecoration.Underline
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentSpanStyle.textDecoration?.contains(TextDecoration.Underline) == true,
-                icon = Icons.Outlined.FormatUnderlined
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleSpanStyle(
-                        SpanStyle(
-                            textDecoration = TextDecoration.LineThrough
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentSpanStyle.textDecoration?.contains(TextDecoration.LineThrough) == true,
-                icon = Icons.Outlined.FormatStrikethrough
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleSpanStyle(
-                        SpanStyle(
-                            fontSize = 28.sp
-                        )
-                    )
-                },
-                enabled = enabled,
-                isSelected = state.currentSpanStyle.fontSize == 28.sp,
-                icon = Icons.Outlined.FormatSize
-            )
-        }
-
-        item { VerticalDivider(Modifier.height(24.dp).width(1.dp)) }
-
-        item { RichTextColorButton(state, enabled) }
-
-        item { RichTextBackgroundButton(state, enabled) }
-
-        item { VerticalDivider(Modifier.height(24.dp).width(1.dp)) }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleUnorderedList()
-                },
-                enabled = enabled,
-                isSelected = state.isUnorderedList,
-                icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleOrderedList()
-                },
-                isSelected = state.isOrderedList,
-                icon = Icons.Outlined.FormatListNumbered,
-            )
-        }
-
-        if (state.canIncreaseListLevel) {
-            item {
-                RichTextStyleButton(
-                    onClick = {
-                        state.increaseListLevel()
-                    },
-                    icon = Icons.Outlined.TextIncrease,
-                )
-            }
-        }
-
-        if (state.canDecreaseListLevel) {
-            item {
-                RichTextStyleButton(
-                    onClick = {
-                        state.decreaseListLevel()
-                    },
-                    icon = Icons.Outlined.TextDecrease,
-                )
-            }
-        }
-
-        item { VerticalDivider(Modifier.height(24.dp).width(1.dp)) }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    state.toggleCodeSpan()
-                },
-                isSelected = state.isCodeSpan,
-                icon = Icons.Outlined.Code,
-            )
-        }
-
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    if (editorMode == RichTextEditorState.HTML) {
-                        toggleEditorMode(RichTextEditorState.NORMAL)
-                        return@RichTextStyleButton
                     }
-                    toggleEditorMode(RichTextEditorState.HTML)
-                },
-                isSelected = editorMode == RichTextEditorState.HTML,
-                icon = Icons.Outlined.Html,
-            )
-        }
+                }
 
-        item {
-            RichTextStyleButton(
-                onClick = {
-                    if (editorMode == RichTextEditorState.MARKDOWN) {
-                        toggleEditorMode(RichTextEditorState.NORMAL)
-                        return@RichTextStyleButton
-                    }
-                    toggleEditorMode(RichTextEditorState.MARKDOWN)
-                },
-                isSelected = editorMode == RichTextEditorState.MARKDOWN,
-                icon = SharedIcons.Markdown,
-            )
+                is RichTextItem.Divider -> {
+                    item { VerticalDivider(Modifier.height(24.dp).width(1.dp)) }
+                }
+
+                is RichTextItem.Custom -> {
+                    item { item.content(state) }
+                }
+            }
         }
     }
 }

@@ -28,8 +28,8 @@ import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.buttons.MyFloatingActionButton
 import org.dsqrwym.shared.ui.components.cards.AuthStepCard
 import org.dsqrwym.shared.ui.components.input.MyOtpInputField
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyPasswordField
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel

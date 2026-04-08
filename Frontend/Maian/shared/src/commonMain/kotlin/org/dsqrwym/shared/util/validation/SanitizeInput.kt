@@ -1,28 +1,81 @@
 package org.dsqrwym.shared.util.validation
 
+import org.dsqrwym.shared.util.formatter.toFixed
+
 fun sanitizeIvaInput(input: String): String? {
-    if (input.isBlank()) return ""
-
-    // 仅保留数字和 .
-    val filtered = input.filter { it.isDigit() || it == '.' }
-
-    // 只允许一个小数点
-    if (filtered.count { it == '.' } > 1) return null
-
-    // 转 Double
-    val value = filtered.toDoubleOrNull() ?: return null
-
-    // 范围 0~100
-    if (value !in 0.0..100.0) return null
-
-    // 最长 5 位（比如 100.0）
-    if (value.toString().length > 5) return null
-
-    return filtered
+    return sanitizeDecimalInput(
+        input = input,
+        allowNegative = false,
+        min = 0.00,
+        max = 100.00,
+        maxLength = 5
+    )
 }
 
 fun sanitizeProductCode(input: String): String {
     if (input.isBlank()) return ""
     return input.replace(Regex("[^A-Za-z0-9/_.-]"), "")
         .take(50)
+}
+
+fun sanitizeDecimalInput(
+    input: String,
+    allowNegative: Boolean = false,
+    min: Double? = null,
+    max: Double? = null,
+    decimals: Int = 2,
+    maxLength: Int? = null,
+): String? {
+    if (input.isBlank()) return null
+
+    var counter = 0
+    var existingDecimals = 0
+
+    val filtered = buildString {
+        input.forEachIndexed { index, c ->
+            when {
+                c.isDigit() -> {
+                    if (counter < 1) {
+                        append(c)
+                    } else if (existingDecimals < decimals) {
+                        append(c)
+                        existingDecimals++
+                    }
+                }
+
+                c == '.' -> {
+                    if (counter < 1) {
+                        append(c)
+                        counter++
+                    }
+                }
+
+                c == '-' && allowNegative && index == 0 -> append(c)
+            }
+        }
+    }
+
+    val value = filtered.toDoubleOrNull()?.coerceIn(min, max)?.toFixed(decimals) ?: return null
+
+    // 长度限制（基于 toString）
+    if (maxLength != null && value.length > maxLength) return null
+
+    return value
+}
+
+fun sanitizeIntInput(
+    input: String,
+    allowNegative: Boolean = false,
+    min: Int? = Int.MIN_VALUE,
+    max: Int? = Int.MAX_VALUE
+): Int? {
+    val filtered = buildString {
+        input.forEachIndexed { index, c ->
+            when {
+                c.isDigit() -> append(c)
+                c == '-' && allowNegative && index == 0 -> append(c)
+            }
+        }
+    }
+    return filtered.toIntOrNull()?.coerceIn(min, max)
 }

@@ -14,6 +14,7 @@ import dev.datlag.kcef.KCEF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.dsqrwym.shared.AppRoot
+import org.dsqrwym.shared.ui.components.buttons.DesktopScannerWindow
 import org.dsqrwym.shared.util.log.SharedLog
 import java.awt.Dimension
 import java.io.File
@@ -21,6 +22,7 @@ import kotlin.math.max
 
 @Composable
 fun SharedInitDesktop(frameWindowScope: FrameWindowScope, app: @Composable () -> Unit) {
+    DesktopScannerWindow()
     frameWindowScope.window.minimumSize = Dimension(320, 600)
     var downloadProgress by remember { mutableStateOf(-1F) }
     var initialized by remember { mutableStateOf(false) } // if true, KCEF can be used to create clients, browsers etc

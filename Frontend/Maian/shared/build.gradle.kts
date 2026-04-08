@@ -170,10 +170,13 @@ kotlin {
             // Lottie 动画
             api(libs.compottie.lite)
 
+            // 精准计算
+            implementation(libs.bignum)
+
             // 回国
             api(libs.compose.multiplatform.media.player)
 
-                   }
+        }
 
         // 公共测试源码集
         commonTest.dependencies {

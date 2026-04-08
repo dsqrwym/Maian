@@ -215,7 +215,7 @@ export type MessagesGroupByOutputType = {
   _max: MessagesMaxAggregateOutputType | null
 }
 
-type GetMessagesGroupByPayload<T extends messagesGroupByArgs> = Prisma.PrismaPromise<
+export type GetMessagesGroupByPayload<T extends messagesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<MessagesGroupByOutputType, T['by']> &
       {

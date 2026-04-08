@@ -53,7 +53,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
         name: String,
         title: String? = null,
         description: String? = null,
-        iva: Double,
+        iva: String,
         productCode: String,
         primaryCategoryId: String,
         variants: List<ProductVariantDto>,
@@ -71,14 +71,14 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                         iva = iva,
                         productCode = productCode.trim(),
                         primaryCategoryId = primaryCategoryId,
-                        variants = variants.map { it.copy(productCode = it.productCode.trim()) },
+                        variants = variants.map { it.copy(productCode = it.productCode.trim(), id = null) },
                         translations = translations?.map {
                             it.copy(
                                 name = it.name.trim(),
                                 title = it.title?.trim(),
                                 description = it.description?.trim()
                             )
-                        },
+                        }?.ifEmpty { null },
                         files = files
                     )
                 )

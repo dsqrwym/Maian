@@ -81,7 +81,9 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
     ) {
         CheckIsPermitted(navViewModel)
         val loginViewModel = SharedAuthScope.scope.get<LoginViewModel>()
-        it.email?.let { email -> loginViewModel.updateEmail(email) }
+        LaunchedEffect(it.email) {
+            it.email?.let { email -> loginViewModel.updateEmail(email) }
+        }
         LoginScreen(
             onBackButtonClick = { navViewModel.navigate(SharedInitialScreen) },
             loginViewModel = loginViewModel,

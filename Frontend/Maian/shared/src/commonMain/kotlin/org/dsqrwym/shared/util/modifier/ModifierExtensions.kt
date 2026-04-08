@@ -44,9 +44,13 @@ fun Modifier.disableUserInput(disabled: Boolean): Modifier =
     } else this
 
 @Composable
-fun Modifier.paddingTopForMenu(): Modifier {
+fun Modifier.paddingTopForMenu(supportingPane: Boolean = false): Modifier {
     val windowSizeClass = LocalWindowSizeClass.current
     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) return this
+    if (supportingPane && getPlatform().type == PlatformType.Desktop) {
+        // desktop 的 supportingPane 采用独立窗口不会被遮挡
+        return this
+    }
 
     return this.padding(
         top = if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded) 76.dp else 0.dp

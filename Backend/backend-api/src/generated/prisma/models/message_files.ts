@@ -197,7 +197,7 @@ export type Message_filesGroupByOutputType = {
   _max: Message_filesMaxAggregateOutputType | null
 }
 
-type GetMessage_filesGroupByPayload<T extends message_filesGroupByArgs> = Prisma.PrismaPromise<
+export type GetMessage_filesGroupByPayload<T extends message_filesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Message_filesGroupByOutputType, T['by']> &
       {

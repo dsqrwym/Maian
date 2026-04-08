@@ -227,7 +227,7 @@ export type Product_translationsGroupByOutputType = {
   _max: Product_translationsMaxAggregateOutputType | null
 }
 
-type GetProduct_translationsGroupByPayload<T extends product_translationsGroupByArgs> = Prisma.PrismaPromise<
+export type GetProduct_translationsGroupByPayload<T extends product_translationsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Product_translationsGroupByOutputType, T['by']> &
       {

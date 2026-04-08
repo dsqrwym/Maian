@@ -30,6 +30,7 @@ import org.dsqrwym.shared.util.formatter.toFixed
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class CategoriesEditViewModel(
@@ -51,7 +52,7 @@ class CategoriesEditViewModel(
     // 表单：名称
     var categoryName by mutableStateOf("")
         private set
-    var categoryIva by mutableStateOf("")
+    var categoryIva: String? by mutableStateOf("")
         private set
     var isCheckingCategoryName by mutableStateOf(false)
     var categoryNameExist by mutableStateOf(false)
@@ -72,6 +73,7 @@ class CategoriesEditViewModel(
         translationIsValid.value
                 && updateButtonState != UiState.Loading
                 && validateCategoryName() && categoryId != null
+                && !isCheckingCategoryName
     }
     var showAddLanguageDialog by mutableStateOf(false)
         private set
@@ -80,7 +82,7 @@ class CategoriesEditViewModel(
         // 名称去抖唯一性校验（更新接口）
         viewModelScope.launch {
             snapshotFlow { categoryName }
-                .debounce(600)
+                .debounce(600.milliseconds)
                 .distinctUntilChanged()
                 .collectLatest { name ->
                     val id = categoryId ?: return@collectLatest
@@ -107,6 +109,7 @@ class CategoriesEditViewModel(
     }
 
     fun initWithCategory(categoryId: String) {
+        resetViewModel()
         this@CategoriesEditViewModel.categoryId = categoryId
         isLoading = true
         viewModelScope.launch {
@@ -119,7 +122,7 @@ class CategoriesEditViewModel(
                         translations.addAll(it)
                         initialLangCodes.addAll(it.map { t -> t.langCode })
                     }
-                    categoryIva = result.data?.iva?.toString() ?: ""
+                    categoryIva = result.data?.iva
                 }
 
                 is SharedResponseResult.Error -> {
@@ -152,14 +155,13 @@ class CategoriesEditViewModel(
         showAddLanguageDialog = show
     }
 
-    fun updateCategoryIva(iva: String) {
-        val result = sanitizeIvaInput(iva) ?: return
+    fun updateCategoryIva(iva: String?) {
+        val result = iva?.let { sanitizeIvaInput(iva) }
         categoryIva = result
     }
 
     fun formatIvaTwoDecimal() {
-        if (categoryIva.isBlank()) return
-        categoryIva = categoryIva.toDoubleOrNull()?.toFixed(2) ?: "0.00"
+        categoryIva = categoryIva?.toDoubleOrNull()?.toFixed(2)
     }
 
     fun upsertTranslation(langCode: String, name: String) {
@@ -189,7 +191,7 @@ class CategoriesEditViewModel(
             val dto = BusinessUpdateCategoryDto(
                 id = id,
                 name = categoryName,
-                iva = categoryIva.toDoubleOrNull(),
+                iva = categoryIva,
                 translations = translations,
                 translationsToDelete = toDelete.ifEmpty { null }
             )
@@ -211,8 +213,20 @@ class CategoriesEditViewModel(
                     }
                 }
             }
-            delay(500)
+            delay(500.milliseconds)
             updateButtonState = UiState.Idle
         }
+    }
+
+    private fun resetViewModel(){
+        categoryName = ""
+        categoryNameError = null
+        categoryIva = null
+        categoryNameError = null
+        categoryId = null
+        categoryNameExist = false
+        initialLangCodes.clear()
+        isCheckingCategoryName = false
+        translations.clear()
     }
 }

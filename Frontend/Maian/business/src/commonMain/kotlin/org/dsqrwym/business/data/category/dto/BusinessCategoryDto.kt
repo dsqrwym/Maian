@@ -8,7 +8,7 @@ import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 data class BusinessCreateCategoryDto(
     val userId: String? = null,
     val name: String,
-    val iva: Double? = null,
+    val iva: String? = null,
     val parentId: String? = null,
     val translations: List<SharedCategoryTranslation>? = null,
 )
@@ -16,8 +16,8 @@ data class BusinessCreateCategoryDto(
 @Serializable
 data class BusinessUpdateCategoryDto(
     val id: String,
-    val name: String? = null,
-    val iva: Double? = null,
+    val name: String,
+    val iva: String? = null,
     val translations: List<SharedCategoryTranslation>? = null,
     val translationsToDelete: List<String>? = null,
 )

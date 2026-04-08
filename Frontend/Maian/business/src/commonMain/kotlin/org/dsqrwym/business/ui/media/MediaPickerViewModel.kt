@@ -1,9 +1,6 @@
 package org.dsqrwym.business.ui.media
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +15,7 @@ import org.dsqrwym.business.ui.media.model.UploadMediaItem
 import org.dsqrwym.business.ui.media.model.UploadState
 import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository
+import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -32,6 +30,16 @@ class MediaPickerViewModel(
     private val snackbarViewModel: MySnackbarViewModel? = null,
     coroutineScope: CoroutineScope? = null
 ) : ViewModel() {
+    val mediaPickerUiState by derivedStateOf {
+        when{
+            _mediaItems.isEmpty() -> UiState.Idle
+            _mediaItems.any { it.uploadState == UploadState.Uploading } -> UiState.Loading
+            _mediaItems.any { it.uploadState == UploadState.Failed } -> UiState.Error
+            _mediaItems.all { it.uploadState == UploadState.Success } -> UiState.Success
+            else -> UiState.Idle
+        }
+    }
+
     private val _mediaItems = mutableStateListOf<UploadMediaItem>()
     val mediaItems: List<UploadMediaItem> = _mediaItems
 

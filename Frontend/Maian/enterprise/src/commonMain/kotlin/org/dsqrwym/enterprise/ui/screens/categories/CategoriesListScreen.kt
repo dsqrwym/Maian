@@ -23,8 +23,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
-import org.dsqrwym.business.ui.components.category.BusinessCategorieLanguages
-import org.dsqrwym.business.ui.components.category.BusinessCategoriePath
+import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
+import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
@@ -42,6 +42,7 @@ import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendErrorRetry
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendLoadingIndicator
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
+import org.dsqrwym.shared.util.row.SharedRowLayout
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -225,7 +226,7 @@ fun CategoryListItem(
     ) {
         Column(
             modifier = Modifier.padding(SharedColumnLayout.padding),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = SharedColumnLayout.arrangement
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -237,7 +238,7 @@ fun CategoryListItem(
                     Column {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = SharedRowLayout.arrangement
                         ) {
                             Text(
                                 text = category.name,
@@ -256,7 +257,7 @@ fun CategoryListItem(
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = SharedRowLayout.arrangement
                         ) {
                             Text(
                                 text = if (category.getParentName() != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
@@ -296,9 +297,9 @@ fun CategoryListItem(
 
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        category.categoryTranslations?.let { BusinessCategorieLanguages(it) }
-                        BusinessCategoriePath(category.getPath(), category.name)
+                    Column(verticalArrangement = SharedColumnLayout.arrangement) {
+                        category.categoryTranslations?.let { BusinessCategoryLanguages(it) }
+                        BusinessCategoryPath(category.getPath(), category.name)
                     }
                 }
                 BusinessOutlinedDeleteButton(

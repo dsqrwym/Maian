@@ -27,7 +27,7 @@ import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
 import org.dsqrwym.shared.ui.components.buttons.LoginButton
 import org.dsqrwym.shared.ui.components.buttons.MyTextButton
 import org.dsqrwym.shared.ui.components.containers.UiState
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyPasswordField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyPasswordField
 import org.dsqrwym.shared.ui.components.login.LoginTitleSection
 import org.dsqrwym.shared.ui.components.login.UsernameOrEmailField
 import org.dsqrwym.shared.ui.components.topbar.AuthTopBar

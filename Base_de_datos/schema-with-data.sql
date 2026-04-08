@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict CDf1hfz7NksPfbHJWa7A7YAgI03acaAc5jA8gcakWevA12axcFgK7c8eGZeTUns
+\restrict isCu1HGOhwXJxeoCzouqgVEZfAN7XYWH9jdSSwQubMxWOEAUXLk0VmaceSbpPe0
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -1315,7 +1315,6 @@ CREATE TABLE public.variant_products (
     sort smallint NOT NULL,
     attributes jsonb,
     status public."ProductStatus" DEFAULT 'ACTIVE'::public."ProductStatus" NOT NULL,
-    iva numeric(5,2) NOT NULL,
     product_code character varying(50) NOT NULL,
     reserved_stock integer DEFAULT 0 NOT NULL,
     low_stock_threshold integer DEFAULT 0 NOT NULL,
@@ -1325,7 +1324,6 @@ CREATE TABLE public.variant_products (
     created_by uuid NOT NULL,
     updated_by uuid,
     CONSTRAINT variant_available_stock_check CHECK ((available_stock >= 0)),
-    CONSTRAINT variant_iva_check CHECK ((iva >= (0)::numeric)),
     CONSTRAINT variant_low_stock_threshold_check CHECK ((low_stock_threshold >= 0)),
     CONSTRAINT variant_min_order_qty_check CHECK ((min_order_qty >= 1)),
     CONSTRAINT variant_price_check CHECK ((price >= (0)::numeric)),
@@ -1449,6 +1447,7 @@ COPY public.carts (id, user_id, created_at) FROM stdin;
 --
 
 COPY public.categories (id, user_id, name, iva, parent_id, created_at, level, updated_at, created_by, updated_by) FROM stdin;
+33	d4d56d10-7f27-416d-91a4-7b7824770e55	测试	21.00	\N	2025-11-16 11:43:24.454671	1	2026-04-04 18:04:36.939	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
 21	\N	食品与饮料	10.00	\N	2025-11-15 20:04:20.160739	1	2025-11-15 20:04:20.160739	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 22	\N	电子产品	21.00	\N	2025-11-15 22:40:08.123215	1	2025-11-15 22:40:08.123215	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 23	\N	办公与文具	21.00	\N	2025-11-15 22:50:02.536885	1	2025-11-15 22:50:02.536885	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
@@ -1459,12 +1458,12 @@ COPY public.categories (id, user_id, name, iva, parent_id, created_at, level, up
 28	\N	汽车与五金用品	21.00	\N	2025-11-15 23:19:28.985827	1	2025-11-15 23:19:28.985827	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 29	\N	宠物用品	21.00	\N	2025-11-15 23:22:40.557093	1	2025-11-15 23:22:40.557093	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
 31	\N	手机设备	21.00	22	2025-11-15 23:56:08.961821	2	2025-11-15 23:56:08.961821	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N
-38	d4d56d10-7f27-416d-91a4-7b7824770e55	电子产品	21.00	\N	2025-11-24 19:39:40.217416	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
 39	d4d56d10-7f27-416d-91a4-7b7824770e55	智能手机	21.00	38	2025-11-24 19:39:40.217416	2	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
 40	d4d56d10-7f27-416d-91a4-7b7824770e55	食品饮料	16.90	\N	2025-11-24 19:39:40.217416	1	2026-03-26 11:48:33.675	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
 41	d4d56d10-7f27-416d-91a4-7b7824770e55	a测试2	12.80	40	2025-11-29 10:13:59.284434	2	2026-03-26 11:49:03.285	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
-33	d4d56d10-7f27-416d-91a4-7b7824770e55	测试	21.00	\N	2025-11-16 11:43:24.454671	1	2026-03-26 12:49:54.69	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
-46	d4d56d10-7f27-416d-91a4-7b7824770e55	dewi	21.01	33	2026-03-26 11:48:48.578015	2	2026-03-27 10:49:26.866	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+38	d4d56d10-7f27-416d-91a4-7b7824770e55	电子产品	21.00	\N	2025-11-24 19:39:40.217416	1	2026-04-02 21:50:29.907	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+46	d4d56d10-7f27-416d-91a4-7b7824770e55	dewi	21.09	33	2026-03-26 11:48:48.578015	2	2026-04-02 21:50:47.307	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
+48	d4d56d10-7f27-416d-91a4-7b7824770e55	科技爆款2026	21.30	38	2026-03-28 10:15:53.725822	2	2026-04-02 21:50:57.025	d4d56d10-7f27-416d-91a4-7b7824770e55	d4d56d10-7f27-416d-91a4-7b7824770e55
 \.
 
 
@@ -1533,16 +1532,16 @@ COPY public.category_translations (category_id, lang_code, name, created_at, upd
 31	ca-ES	Dispositius Mòbils	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	pt-PT	Dispositivos Móveis	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
 31	fr-FR	Appareils Mobiles	2025-11-15 23:56:08.961821	2025-11-15 23:56:08.961821	\N
-33	ca-ES	测试2	2025-11-16 11:43:55.303232	2026-03-26 12:49:54.591808	d4d56d10-7f27-416d-91a4-7b7824770e55
-38	en	Electronics	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
-38	es	Electrónica	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
 39	en	Smartphones	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
 39	es	Teléfonos Inteligentes	2025-11-24 19:39:40.217416	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55
-33	pt-PT	国土局7	2025-11-16 13:09:58.918964	2026-03-26 12:49:54.591808	d4d56d10-7f27-416d-91a4-7b7824770e55
 40	en	Food & Beverage	2025-11-24 19:39:40.217416	2026-03-26 11:48:33.637772	d4d56d10-7f27-416d-91a4-7b7824770e55
 40	es	Alimentos y Bebidas	2025-11-24 19:39:40.217416	2026-03-26 11:48:33.637772	d4d56d10-7f27-416d-91a4-7b7824770e55
+38	en	Electronics	2025-11-24 19:39:40.217416	2026-04-02 21:50:28.616286	d4d56d10-7f27-416d-91a4-7b7824770e55
+38	es	Electrónica	2025-11-24 19:39:40.217416	2026-04-02 21:50:28.616286	d4d56d10-7f27-416d-91a4-7b7824770e55
+33	ca-ES	测试2	2025-11-16 11:43:55.303232	2026-04-04 18:04:35.966186	d4d56d10-7f27-416d-91a4-7b7824770e55
+33	pt-PT	国土局7	2025-11-16 13:09:58.918964	2026-04-04 18:04:35.966186	d4d56d10-7f27-416d-91a4-7b7824770e55
 41	es-ES	hgj	2025-12-27 00:03:18.313562	2026-03-26 11:49:03.162469	d4d56d10-7f27-416d-91a4-7b7824770e55
-46	pt-PT	dwed	2026-03-26 11:48:48.578015	2026-03-27 10:49:25.531206	d4d56d10-7f27-416d-91a4-7b7824770e55
+46	pt-PT	dwed	2026-03-26 11:48:48.578015	2026-04-02 21:50:46.021092	d4d56d10-7f27-416d-91a4-7b7824770e55
 \.
 
 
@@ -5338,7 +5337,6 @@ COPY public.cities (id, province_id, name, name_local) FROM stdin;
 
 COPY public.configurations (user_id, language, timezone) FROM stdin;
 c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	zh-CN	Europe/Madrid
-dbacf819-ab39-4943-834a-3a2b3a30428a	zh-CN	Europe/Madrid
 d4d56d10-7f27-416d-91a4-7b7824770e55	es-ES	Europe/Madrid
 52b8dfae-2880-464a-a24e-d81773bc2dc5	zh-CN	Europe/Madrid
 79c50819-3971-4ebf-9b0c-be3d63489fba	zh-CN	Europe/Madrid
@@ -5409,6 +5407,9 @@ COPY public.discounts (id, user_id, name, type_value, applies_to_all, start_date
 COPY public.files (id, file_name, file_hash, mime_type, file_size, storage_key, created_at, to_delete) FROM stdin;
 11	ce0P945bylO.jpg	ee055ba61c198546e1ff61a4d76d23e550b04fb404fb720424f49bb34af37ee0	image/jpeg	81770	jpg/ee0/55b/ee055ba61c198546e1ff61a4d76d23e550b04fb404fb720424f49bb34af37ee0.jpg	2025-11-24 20:28:51.057953	f
 10	O1CN01uBgPq81qU8VGZ7v99_!!2217579595498.jpg_Q75.jpg	ae7e09e73ee574c3da96fcb4904f423fbb01fcac41319bf5d855c4eaa7d2a411	image/jpeg	104746	jpg/ae7/e09/ae7e09e73ee574c3da96fcb4904f423fbb01fcac41319bf5d855c4eaa7d2a411.jpg	2025-11-24 20:25:44.835148	f
+242	暗色模式下的图片.png	bdc3a34a81aa3ba8f7344a714b18ff32f0f6620ff0b46ab8747a7ef167bdd235	image/png	1430590	png/bdc/3a3/bdc3a34a81aa3ba8f7344a714b18ff32f0f6620ff0b46ab8747a7ef167bdd235.png	2026-04-06 20:42:31.095496	f
+243	小米 14 Pro (1).png	f7caebd7047ab933f80f103b1f3f20718514785b8593d01645fde2cf3d334cc6	image/png	281863	png/f7c/aeb/f7caebd7047ab933f80f103b1f3f20718514785b8593d01645fde2cf3d334cc6.png	2026-04-06 20:42:42.812301	f
+239	屏幕截图 2026-03-30 120630.png	b645a87e55892be22032964fdc21019c3a5e2607f2805be76b8ad0e7e7e05074	image/png	106252	png/b64/5a8/b645a87e55892be22032964fdc21019c3a5e2607f2805be76b8ad0e7e7e05074.png	2026-04-06 20:20:55.888991	f
 \.
 
 
@@ -5459,6 +5460,7 @@ COPY public.orders (id, retailer_id, wholesaler_id, status, payment_method, ship
 COPY public.product_categories (product_id, category_id, is_primary) FROM stdin;
 1	39	t
 2	40	t
+3	48	t
 \.
 
 
@@ -5481,6 +5483,7 @@ COPY public.product_translations (product_id, lang_code, name, title, descriptio
 COPY public.products (id, user_id, name, title, description, iva, status, created_at, product_code, updated_at, created_by, updated_by) FROM stdin;
 1	d4d56d10-7f27-416d-91a4-7b7824770e55	小米 14 Pro	小米 14 Pro 5G 手机 黑色	高性能骁龙处理器，徕卡光学镜头。	21.00	ACTIVE	2025-11-24 19:39:40.217416	XM-14-PRO-BLK	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
 2	d4d56d10-7f27-416d-91a4-7b7824770e55	可口可乐	可口可乐 330ml 经典口味	畅爽怡神，经典碳酸饮料。	10.00	ACTIVE	2025-11-24 19:39:40.217416	COLA-330	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
+3	d4d56d10-7f27-416d-91a4-7b7824770e55	测试产品	测试产品标题	\N	21.00	ACTIVE	2026-04-06 21:56:02.003466	12321314314213123	2026-04-06 21:56:02.003466	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
 \.
 
 
@@ -5491,6 +5494,9 @@ COPY public.products (id, user_id, name, title, description, iva, status, create
 COPY public.products_files (id, product_id, file_id, sort) FROM stdin;
 1	2	10	0
 2	1	11	0
+3	3	239	0
+4	3	242	1
+5	3	243	2
 \.
 
 
@@ -5560,10 +5566,12 @@ COPY public.provinces (id, country_iso, name, name_local) FROM stdin;
 
 COPY public.user_sessions (session_id, user_id, device_name, device_finger, user_agent, revoked, last_ip, refresh_token, created_at, last_active) FROM stdin;
 1119162d-643a-4cd8-950d-b044198ea5e7	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	POCO F7	268210137bb084a45c117d138ca7cafdbc03c25bcf9d76e5fc6c2b574799bf59	25053PC47G	f	87.125.224.99	53d56fcad7365f21dd7796aebc67d0ef437c183a0b39a9337913965f13b75109	2026-03-25 14:22:13.122269	2026-03-25 14:22:13.122269
+b46ed0c8-4429-4409-b8d6-cb368ad79e20	c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	DSQRWYM	e689701d4ae4fdcc95df453548eee8015988b64a838d72b32f3afa7675b73f4c	29CD2FA4-1509-4AC3-9C84-E036BDB90B82	t	87.125.224.99	93dc853da0ce7abf21b724eea06317dd59cee603a42da2e76fb2d2183d13fb43	2026-03-22 22:00:58.329444	2026-03-27 19:46:31.568
 225f3751-9cf6-4afd-ab51-5766c03a8ab2	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/146.0.0.0 SAFARI/537.36 EDG/146.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	f	127.0.0.1	d34c015924c4587c90114d841a2df9a6f53160125bf48a74dd60cc9688403a43	2026-03-25 18:40:50.844782	2026-03-25 19:14:27.245
-b46ed0c8-4429-4409-b8d6-cb368ad79e20	c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	DSQRWYM	e689701d4ae4fdcc95df453548eee8015988b64a838d72b32f3afa7675b73f4c	29CD2FA4-1509-4AC3-9C84-E036BDB90B82	f	87.125.224.99	a2d58396d680bbbbdb87fdf4d1d69fe268a23d578169d09ea8c8455cbb98dfc8	2026-03-22 22:00:58.329444	2026-03-25 19:50:21.15
-eeaf8370-79a2-41be-a125-33aece4450fe	d4d56d10-7f27-416d-91a4-7b7824770e55	FEWFCVWEVQB REQBVWBVRQEBVRQEWVWERCDVWERVEW WECEWVQ RRQ3 BEB ERBER	4c8d2be2415cec66a713a799ab53948400da579641a798d3b2794b3d29f19fab	MOZILLA/5.0 (WINDOWS MT 10.0; WIN64; X64)	f	127.0.0.1	67cf5ea2199cd686499e26b241f89c02461a39ba37ea777a51dd8e0e321be665	2026-03-27 10:06:47.517756	2026-03-27 10:06:47.517756
-01a6f5c0-6225-495c-b4fb-435740cbc89a	d4d56d10-7f27-416d-91a4-7b7824770e55	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/146.0.0.0 SAFARI/537.36 EDG/146.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	t	127.0.0.1	feec3d19ae532c61063c5940196598fd03f40aad74c9332068fd773c6db0f60e	2026-03-25 18:08:31.324942	2026-03-27 10:49:32.314
+c6bf1b4f-cda0-4b83-8755-e1909dcb626c	d4d56d10-7f27-416d-91a4-7b7824770e55	DSQRWYM	e689701d4ae4fdcc95df453548eee8015988b64a838d72b32f3afa7675b73f4c	29CD2FA4-1509-4AC3-9C84-E036BDB90B82	f	87.125.224.99	f87b2e5ef74ed1d715469f4d7fb2ee4b2bbb6a0de11d84fcca2aef25c2759c14	2026-03-27 21:27:21.081964	2026-04-08 10:25:19.736
+545c8ad7-e4a7-4ce5-821b-82afaca249e6	d4d56d10-7f27-416d-91a4-7b7824770e55	WIN32 (MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64) APPLEWEBKIT/537.36 (KHTML, LIKE GECKO) CHROME/146.0.0.0 SAFARI/537.36 EDG/146.0.0.0)	fba4ffc76fe47edfddeaf5576b6599d47d35840d9f8d8a34fce281918eac60df	BD2F01CF-B4A6-4EAC-B9D3-93EBA6A374E5	f	127.0.0.1	d112a9de32000b58973c38ae751f552bc51673c50e6123299c21c3aec0cc128d	2026-04-07 17:07:41.301319	2026-04-07 17:07:41.301319
+be43454f-dcda-4287-b010-7831de1735cc	d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	DSQRWYM	e689701d4ae4fdcc95df453548eee8015988b64a838d72b32f3afa7675b73f4c	29CD2FA4-1509-4AC3-9C84-E036BDB90B82	t	87.125.224.99	b9ecb633a7c8b237dfa9cf7f46c94d13983a0f787b3faf63a9252ab5258b0d06	2026-03-30 19:27:21.783824	2026-03-30 19:30:46.206
+80daaf43-63fa-4bd2-8a26-0cf2b2c45da1	d4d56d10-7f27-416d-91a4-7b7824770e55	POCO F7	268210137bb084a45c117d138ca7cafdbc03c25bcf9d76e5fc6c2b574799bf59	25053PC47G	f	87.125.224.99	74354bcd676bdaa4151fa83986a57afcf6470c30a7805c465450643251ba77f8	2026-03-29 14:53:48.071815	2026-03-29 14:53:48.071815
 f2386654-d46c-4af9-8ba8-f646bde04865	79c50819-3971-4ebf-9b0c-be3d63489fba	CHROME_BROWSER-QWEWQEWQ	958b2c6f020a7f07dcbc5aa0e454fea5460997b2e38bf8c6e8e8c20675ba2577	MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)-EQWEWQEWQE	f	127.0.0.1	6a440771d9e8eef81f0e3e71441708b4957effb4942c48861ffaaaf083085bb2	2026-03-22 11:43:03.108924	2026-03-22 11:43:03.108924
 8d9fc01e-3c5f-4e1f-af7a-d8a9643fd58c	79c50819-3971-4ebf-9b0c-be3d63489fba	CHROME_BROWSER	c088e7dbf5c06889a622a22ff55b87040de34ad31f1114c5baafa8591bcc08e2	MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)	f	127.0.0.1	efec526d217c32e16e5ed17ed50952f986e10b17c1e1e5708a7c289556f181d6	2026-03-22 19:13:07.620034	2026-03-24 20:45:21.831
 \.
@@ -5577,7 +5585,10 @@ COPY public.user_uploads (user_id, file_id, created_at) FROM stdin;
 d4d56d10-7f27-416d-91a4-7b7824770e55	10	2026-01-10 20:19:49.711
 d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	10	2025-11-26 20:11:12.873
 d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	11	2025-11-26 20:11:21.331
+d4d56d10-7f27-416d-91a4-7b7824770e55	242	2026-04-06 20:42:31.095496
+d4d56d10-7f27-416d-91a4-7b7824770e55	243	2026-04-06 20:42:42.812301
 d4d56d10-7f27-416d-91a4-7b7824770e55	11	2026-01-10 21:13:59.158
+d4d56d10-7f27-416d-91a4-7b7824770e55	239	2026-04-07 18:32:22.075
 \.
 
 
@@ -5591,7 +5602,6 @@ d3efba7b-8a3f-45dc-aac2-dc51c1c061a2	\N	\N	\N	ADMIN@superadmin	$2b$10$SAc6wuTvxQ
 79c50819-3971-4ebf-9b0c-be3d63489fba	RET014	\N	\N	零售商	$2b$10$mDLOghe28jV/oSvlmhMsoemahSv.REq0ob0B1TYytuxzbYPMXDdX2	yuzhang5002@163.com	\N	ACTIVE	\N	2025-12-20 09:08:54.467068	2025-12-20 09:08:54.467068	RETAILER	\N	\N
 d4d56d10-7f27-416d-91a4-7b7824770e55	WHO003	\N	\N	Dsqrwym	$2b$10$n9j4b4nP28MlGAUOHwBZqOJbneMk5ilndHtaKIl/fpzVNbCw9V9Gm	dsqrwym@gmail.com	+34 609 87 89 97	APPROVED	{"company_name": "Ds", "company_type": "Sociedad Civil"}	2025-10-22 16:02:22.060009	2025-10-22 16:02:22.060009	WHOLESALER	\N	\N
 c10fff1c-7a1b-4300-9dd9-88f63d07a7b8	WHO005	\N	\N	yuz	$2b$10$ik7VW4lG1PQC99bSYnA/GeGuXyAe0ReuCv8.UAO6kzYYqAyNk6wWq	yuzhang502@gmail.com	+86 190 1678 3456	ACTIVE	{"company_name": "test112", "company_type": "Autónomo"}	2026-03-22 21:57:28.205006	2026-03-22 21:57:28.205006	WHOLESALER	\N	\N
-dbacf819-ab39-4943-834a-3a2b3a30428a	\N	\N	\N	\N	50d9882d-8226-4c72-ac24-01594f64a578	yuxi6678@gmail.com	\N	PENDING_VERIFICATION	\N	2026-03-27 10:49:55.808957	2026-03-27 10:49:55.808957	WHOLESALER	\N	\N
 \.
 
 
@@ -5599,11 +5609,12 @@ dbacf819-ab39-4943-834a-3a2b3a30428a	\N	\N	\N	\N	50d9882d-8226-4c72-ac24-01594f6
 -- Data for Name: variant_products; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.variant_products (id, created_at, product_id, type_sale, price, price_iva, available_stock, sort, attributes, status, iva, product_code, reserved_stock, low_stock_threshold, sale_unit_qty, min_order_qty, updated_at, created_by, updated_by) FROM stdin;
-1	2025-11-24 19:39:40.217416	1	UNIT	699.00	845.79	100	1	\N	ACTIVE	21.00	XM-14-PRO-BLK-UNIT	0	0	1	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
-2	2025-11-24 19:39:40.217416	2	UNIT	0.80	0.88	5000	1	\N	ACTIVE	10.00	COLA-330-U	0	0	1	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
-3	2025-11-24 19:39:40.217416	2	PACK	4.50	4.95	200	2	\N	ACTIVE	10.00	COLA-330-P6	0	0	6	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
-4	2025-11-24 19:39:40.217416	2	BOX	18.00	19.80	50	3	\N	ACTIVE	10.00	COLA-330-B24	0	0	24	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
+COPY public.variant_products (id, created_at, product_id, type_sale, price, price_iva, available_stock, sort, attributes, status, product_code, reserved_stock, low_stock_threshold, sale_unit_qty, min_order_qty, updated_at, created_by, updated_by) FROM stdin;
+1	2025-11-24 19:39:40.217416	1	UNIT	699.00	845.79	100	1	\N	ACTIVE	XM-14-PRO-BLK-UNIT	0	0	1	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
+2	2025-11-24 19:39:40.217416	2	UNIT	0.80	0.88	5000	1	\N	ACTIVE	COLA-330-U	0	0	1	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
+3	2025-11-24 19:39:40.217416	2	PACK	4.50	4.95	200	2	\N	ACTIVE	COLA-330-P6	0	0	6	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
+4	2025-11-24 19:39:40.217416	2	BOX	18.00	19.80	50	3	\N	ACTIVE	COLA-330-B24	0	0	24	1	2025-11-24 19:39:40.217416	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
+5	2026-04-06 21:56:02.003466	3	BOX	8.26	9.99	100000	0	\N	ACTIVE	SKU-1	0	0	100	1	2026-04-06 21:56:02.003466	d4d56d10-7f27-416d-91a4-7b7824770e55	\N
 \.
 
 
@@ -5633,7 +5644,7 @@ SELECT pg_catalog.setval('public.cart_id_seq', 1, false);
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 47, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 49, true);
 
 
 --
@@ -5682,7 +5693,7 @@ SELECT pg_catalog.setval('public.discounts_id_seq', 1, false);
 -- Name: files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.files_id_seq', 230, true);
+SELECT pg_catalog.setval('public.files_id_seq', 247, true);
 
 
 --
@@ -5724,14 +5735,14 @@ SELECT pg_catalog.setval('public.orders_id_seq', 1, false);
 -- Name: products_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.products_files_id_seq', 2, true);
+SELECT pg_catalog.setval('public.products_files_id_seq', 5, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 2, true);
+SELECT pg_catalog.setval('public.products_id_seq', 3, true);
 
 
 --
@@ -5794,7 +5805,7 @@ SELECT pg_catalog.setval('public.seq_wholesaler_id', 5, true);
 -- Name: variant_products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.variant_products_id_seq', 4, true);
+SELECT pg_catalog.setval('public.variant_products_id_seq', 5, true);
 
 
 --
@@ -6696,5 +6707,5 @@ ALTER TABLE public.verification_tokens ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict CDf1hfz7NksPfbHJWa7A7YAgI03acaAc5jA8gcakWevA12axcFgK7c8eGZeTUns
+\unrestrict isCu1HGOhwXJxeoCzouqgVEZfAN7XYWH9jdSSwQubMxWOEAUXLk0VmaceSbpPe0
 

@@ -97,15 +97,10 @@ export class ProductsService {
             data: variants.map((variant) => ({
               type_sale: variant.type_sale,
               sort: variant.sort,
-              iva: variant.iva ?? iva,
-              ...computePrice(
-                variant.price,
-                variant.price_iva,
-                variant.iva ?? iva,
-              ),
+              ...computePrice(variant.price, variant.price_iva, iva),
               product_code: variant.product_code,
               min_order_qty: variant.min_order_qty,
-              sale_uni_qty: variant.sale_unit_qty,
+              sale_unit_qty: variant.sale_unit_qty,
               available_stock: variant.available_stock,
               low_stock_threshold: variant.low_stock_threshold,
               created_by: user.userId,
@@ -114,20 +109,24 @@ export class ProductsService {
         },
         ...(translations && {
           product_translations: {
-            create: translations.map((translation) => ({
-              lang_code: translation.lang_code,
-              name: translation.name,
-              title: translation.title,
-              description: translation.description,
-            })),
+            createMany: {
+              data: translations.map((translation) => ({
+                lang_code: translation.lang_code,
+                name: translation.name,
+                title: translation.title,
+                description: translation.description,
+              })),
+            },
           },
         }),
         ...(files && {
-          product_files: {
-            create: files.map((file) => ({
-              file_id: file.file_id,
-              sort: file.sort,
-            })),
+          products_files: {
+            createMany: {
+              data: files.map((file) => ({
+                file_id: BigInt(file.file_id),
+                sort: file.sort,
+              })),
+            },
           },
         }),
       },
@@ -411,7 +410,6 @@ export class ProductsService {
       variant_products: {
         select: {
           id: true,
-          iva: true,
           sort: true,
           price: true,
           type_sale: true,
@@ -541,11 +539,10 @@ export class ProductsService {
             created_by: user.userId,
             type_sale: variant.type_sale,
             sort: variant.sort,
-            iva: variant.iva ?? mainProductData.iva ?? existingProduct.iva,
             ...computePrice(
               variant.price,
               variant.price_iva,
-              Number(variant.iva ?? mainProductData.iva ?? existingProduct.iva),
+              mainProductData.iva ?? existingProduct.iva,
             ),
             product_code: variant.product_code,
             min_order_qty: variant.min_order_qty,
@@ -573,12 +570,11 @@ export class ProductsService {
         await Promise.all(
           updateVariants.map((variant) => {
             // 重新计算价格逻辑
-            const iva =
-              variant.iva ?? mainProductData.iva ?? existingProduct.iva;
+            const iva = mainProductData.iva ?? existingProduct.iva;
             const priceData = computePrice(
               variant.price,
               variant.price_iva,
-              Number(iva), // 优先级：变体 -> 产品更新值 -> 数据库旧值
+              iva, // 产品更新值 -> 数据库旧值
             );
 
             return tx.variant_products.update({
@@ -586,7 +582,6 @@ export class ProductsService {
               data: {
                 type_sale: variant.type_sale,
                 sort: variant.sort,
-                iva: variant.iva,
                 product_code: variant.product_code,
                 available_stock: variant.available_stock,
                 sale_unit_qty: variant.sale_unit_qty,
@@ -754,16 +749,15 @@ export class ProductsService {
       // 即使 User 和 Wholesaler 都拥有 File A，结果里也只会出现一次 File A
       distinct: ['file_id'],
     });
-    const fileIds = filesDTO.map((f) => BigInt(f.file_id));
 
     // uniqueFileIds 和 validFiles 是去重的, 如果数量不一致->说明有文件没找到归属权
-    if (validFiles.length === fileIds.length) {
+    if (validFiles.length !== uniqueFileIds.length) {
       throw new ForbiddenException(
         'You do not have permission to use one or more provided files.',
       );
     }
     const filesForProduct = await this.prisma.files.findMany({
-      where: { id: { in: fileIds } },
+      where: { id: { in: uniqueFileIds } },
     });
 
     if (filesForProduct.length !== filesDTO.length) {

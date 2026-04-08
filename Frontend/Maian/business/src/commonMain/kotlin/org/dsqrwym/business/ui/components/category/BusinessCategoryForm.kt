@@ -30,7 +30,7 @@ import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.containers.UiState
-import org.dsqrwym.shared.ui.components.input.outlinetextfields.MyOutlinedTextField
+import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
@@ -156,7 +156,7 @@ fun BusinessTranslationCard(
 
 @Composable
 fun BusinessSelectedInfoCard(
-    visible: Boolean,
+    visible: Boolean = true,
     title: String? = null,
     description: String,
     enabled: Boolean = true,
@@ -296,10 +296,10 @@ fun BusinessCategoryBasicInfoCard(
     categoryName: String,
     categoryNameError: StringResource?,
     isChecking: Boolean,
-    categoryIva: String,
+    categoryIva: String?,
     enabled: Boolean,
     onNameChange: (String) -> Unit,
-    onIvaChange: (String) -> Unit,
+    onIvaChange: (String?) -> Unit,
     onIvaBlur: () -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
@@ -335,7 +335,7 @@ fun BusinessCategoryBasicInfoCard(
                 }.placeholderWithShimmer(isLoading),
                 leadingIcon = Icons.Outlined.Percent,
                 leadingIconContentDescription = stringResource(SharedRes.string.tax_rate),
-                value = categoryIva,
+                value = categoryIva ?: "",
                 onValueChange = onIvaChange,
                 labelText = "${stringResource(SharedRes.string.tax_rate)}->IVA(%)",
                 placeholderText = stringResource(BusinessRes.string.empty_use_product_tax),
@@ -343,9 +343,9 @@ fun BusinessCategoryBasicInfoCard(
                 keyBordType = KeyboardType.Decimal,
                 error = null,
                 trailingIcon = {
-                    if (categoryIva.isNotBlank() && isEnabled) {
+                    if (categoryIva?.isNotBlank() == true && isEnabled) {
                         SharedCloseButton {
-                            onIvaChange("")
+                            onIvaChange(null)
                         }
                     }
                 },

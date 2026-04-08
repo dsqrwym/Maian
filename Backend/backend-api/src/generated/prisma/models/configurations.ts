@@ -145,7 +145,7 @@ export type ConfigurationsGroupByOutputType = {
   _max: ConfigurationsMaxAggregateOutputType | null
 }
 
-type GetConfigurationsGroupByPayload<T extends configurationsGroupByArgs> = Prisma.PrismaPromise<
+export type GetConfigurationsGroupByPayload<T extends configurationsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ConfigurationsGroupByOutputType, T['by']> &
       {

@@ -1,28 +1,51 @@
 import { tags } from 'typia';
 
 /**
- * 验证number是否最多两个小数。
- * tags.MultipleOf<0.01>由于JS number 精度的问题不起效果：
- * 比如21.90不是MultipleOf<0.01>的，会被当成21.8999999999。
- * 实现逻辑：将数放大 100 倍，四舍五入后与原数比较，
- * 如果差值 < 1e-8(0.00000001) 则合法，避免浮点误差，高性能内联校验。
- * 21.9 * 100 = 2189.9999999999995
- * Math.round(2189.9999999999995) = 2190
- * 2189.9999999999995 - 2190 = -0.0000000000005
+ * 字符串表示的数字必须大于等于 N
  */
-export type TagsTowDecimal = number &
+export type TagsMinNumberString<N extends number> = string &
   tags.TagBase<{
-    kind: 'number.tow-decimal';
-    target: 'number';
-    value: undefined;
-    validate: `Math.abs($input * 100 - Math.round($input * 100)) < 1e-8`;
+    kind: 'string.minNumber';
+    target: 'string';
+    value: N;
+    validate: `
+      (() => {
+        const num = Number($input);
+        return !isNaN(num) && num >= ${N};
+      })()
+    `;
   }>;
 
 /**
- * PostgreSQL numeric (numeric(10,2))
- * 范围: 0 ~ 9999999999.99
+ * 字符串表示的数字必须小于等于 N
  */
-export type TagsUNumeric10_2 = number & tags.Minimum<0> & TagsTowDecimal;
+export type TagsMaxNumberString<N extends number> = string &
+  tags.TagBase<{
+    kind: 'string.maxNumber';
+    target: 'string';
+    value: N;
+    validate: `
+      (() => {
+        const num = Number($input);
+        return !isNaN(num) && num <= ${N};
+      })()
+    `;
+  }>;
+
+
+/**
+ * PostgreSQL numeric (numeric(10,2))
+ * 范围: 0 ~ 99999999.99
+ */
+export type TagsUNumeric10_2_String = string &
+  tags.TagBase<{
+    kind: 'string.numeric10_2';
+    target: 'string';
+    value: undefined;
+    validate: `
+      /^(?:0|[1-9]\\d{0,7})(\\.\\d{1,2})?$/.test($input)
+    `;
+  }>;
 
 /**
  * PostgreSQL smallint (int2)

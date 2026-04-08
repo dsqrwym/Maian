@@ -14,7 +14,7 @@ import {
   TagsNotBlank,
 } from '../../utils/typia/tags/string.tag';
 import {
-  TagsIva,
+  TagsIvaString,
   TagsProductCode,
 } from '../../utils/typia/validators/product.validator';
 import { cleanString } from '../../utils/string.util';
@@ -34,7 +34,7 @@ export interface ICreateProductDto {
   description?: string &
     tags.Example<'Cold-pressed extra virgin olive oil from Spain.'>;
 
-  iva: TagsIva; // 产品通用税率
+  iva: TagsIvaString; // 产品通用税率
 
   product_code: TagsProductCode; // 主产品编码
 
@@ -58,8 +58,10 @@ export const validateICreateProduct: IRequestBodyValidator.IAssert<ICreateProduc
           input.name = cleanString(input.name);
         if (typeof input.title === 'string')
           input.title = cleanString(input.title);
-        if (Array.isArray(input.variants)) {
-          input.variants = input.variants.map(validateICreateVariant);
+        if (Array.isArray(input.variants) && typeof input.iva === 'string') {
+          input.variants = input.variants.map((it: unknown) =>
+            validateICreateVariant(it, input.iva as string),
+          );
         }
         if (Array.isArray(input.translations)) {
           input.translations = input.translations.map(

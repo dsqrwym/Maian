@@ -261,7 +261,7 @@ export type DirectionsGroupByOutputType = {
   _max: DirectionsMaxAggregateOutputType | null
 }
 
-type GetDirectionsGroupByPayload<T extends directionsGroupByArgs> = Prisma.PrismaPromise<
+export type GetDirectionsGroupByPayload<T extends directionsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DirectionsGroupByOutputType, T['by']> &
       {

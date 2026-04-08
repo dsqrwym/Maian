@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict St9V470xGPT8kLJn40ExradKSo8NLCKlkZya9xQyFrXDEQ627nWqCYDK5FPhrye
+\restrict t2nLp3Mg7kgUaHx7diUySaCx8d4VBqiqao797cGIvOz3JhCbpASrHOBnWF34R0z
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -1315,7 +1315,6 @@ CREATE TABLE public.variant_products (
     sort smallint NOT NULL,
     attributes jsonb,
     status public."ProductStatus" DEFAULT 'ACTIVE'::public."ProductStatus" NOT NULL,
-    iva numeric(5,2) NOT NULL,
     product_code character varying(50) NOT NULL,
     reserved_stock integer DEFAULT 0 NOT NULL,
     low_stock_threshold integer DEFAULT 0 NOT NULL,
@@ -1325,7 +1324,6 @@ CREATE TABLE public.variant_products (
     created_by uuid NOT NULL,
     updated_by uuid,
     CONSTRAINT variant_available_stock_check CHECK ((available_stock >= 0)),
-    CONSTRAINT variant_iva_check CHECK ((iva >= (0)::numeric)),
     CONSTRAINT variant_low_stock_threshold_check CHECK ((low_stock_threshold >= 0)),
     CONSTRAINT variant_min_order_qty_check CHECK ((min_order_qty >= 1)),
     CONSTRAINT variant_price_check CHECK ((price >= (0)::numeric)),
@@ -2327,5 +2325,5 @@ ALTER TABLE public.verification_tokens ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict St9V470xGPT8kLJn40ExradKSo8NLCKlkZya9xQyFrXDEQ627nWqCYDK5FPhrye
+\unrestrict t2nLp3Mg7kgUaHx7diUySaCx8d4VBqiqao797cGIvOz3JhCbpASrHOBnWF34R0z
 

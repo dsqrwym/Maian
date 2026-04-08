@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import formatExpireDurationFromSeconds
+import org.dsqrwym.shared.util.formatter.formatExpireDurationFromSeconds
 import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

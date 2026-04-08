@@ -68,7 +68,7 @@ class CategoryRepository(
 
     suspend fun createCategory(
         name: String,
-        iva: Double? = null,
+        iva: String? = null,
         parentId: String? = null,
         translations: List<SharedCategoryTranslation>? = null,
     ): SharedResponseResult<Unit> = withAuthOrError { user ->
@@ -97,7 +97,7 @@ class CategoryRepository(
         return safeApiCall {
             api.updateCategory(
                 dto.copy(
-                    name = dto.name?.trim(),
+                    name = dto.name.trim(),
                     translations = dto.translations?.map { it.copy(name = it.name.trim()) }
                 )
             )

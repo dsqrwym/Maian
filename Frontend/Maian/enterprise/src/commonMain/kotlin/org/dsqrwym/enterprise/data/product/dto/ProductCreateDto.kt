@@ -12,7 +12,7 @@ data class ProductCreateDto(
     val name: String,
     val title: String? = null,
     val description: String? = null,
-    val iva: Double,
+    val iva: String,
     @SerialName("product_code")
     val productCode: String,
     @SerialName("primary_category_id")
@@ -24,18 +24,17 @@ data class ProductCreateDto(
 
 @Serializable
 data class ProductVariantDto(
+    val id: String? = null,
     // --- 核心销售和定价字段 (variant_products) ---
     @SerialName("type_sale")
     val typeSale: SharedProductSaleVariant,
     // 显示顺序，数量越小越靠前
-    val sort: Int,
+    val sort: Int = 0,
     // 不含税价格
-    val price: Double? = null,
+    val price: String? = null,
     // 含税价格
     @SerialName("price_iva")
-    val priceIva: Double? = null,
-    // 变体适用的税率（不存在则继承自 product.iva）
-    val iva: Double? = null,
+    val priceIva: String? = null,
     // 变体的编码
     @SerialName("product_code")
     val productCode: String,
@@ -51,7 +50,7 @@ data class ProductVariantDto(
     val minOrderQty: Int = 1,
     // 低库存预警阈值
     @SerialName("low_stock_threshold")
-    val lowStockThreshold: Int? = 0,
+    val lowStockThreshold: Int? = null,
     // --- 临时属性 (JSONB) ---
     val attributes: String? = null
 )

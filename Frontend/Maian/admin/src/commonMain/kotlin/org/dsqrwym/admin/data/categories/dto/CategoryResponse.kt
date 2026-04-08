@@ -10,7 +10,7 @@ data class CategoryResponse(
     @SerialName("user_id")
     val userId: String? = null,
     val name: String,
-    val iva: Double? = null,
+    val iva: String? = null,
     val parent: CategoryResponse? = null,
     val children: List<CategoryResponse>? = null,
     @SerialName("children_count")

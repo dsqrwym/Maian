@@ -21,6 +21,7 @@ import org.dsqrwym.shared.network.ErrorMessageMapper
 import org.dsqrwym.shared.network.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration.Companion.milliseconds
 
 
 class CategoriesListViewModel(
@@ -45,7 +46,7 @@ class CategoriesListViewModel(
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val pagedCategories: Flow<PagingData<CategoryResponse>> = combine(
-        pagingTrigger.debounce(600)
+        pagingTrigger.debounce(600.milliseconds)
             .distinctUntilChanged(),
         categoryRepository.updateEvents.onStart { emit(Unit) }
     ) { (query, parent), _ ->

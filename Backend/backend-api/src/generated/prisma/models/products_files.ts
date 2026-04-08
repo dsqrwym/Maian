@@ -197,7 +197,7 @@ export type Products_filesGroupByOutputType = {
   _max: Products_filesMaxAggregateOutputType | null
 }
 
-type GetProducts_filesGroupByPayload<T extends products_filesGroupByArgs> = Prisma.PrismaPromise<
+export type GetProducts_filesGroupByPayload<T extends products_filesGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Products_filesGroupByOutputType, T['by']> &
       {

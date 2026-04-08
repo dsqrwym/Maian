@@ -420,8 +420,8 @@ export class CategoryService {
       await tx.categories.update({
         where: { id },
         data: {
-          ...(name && { name }),
-          ...(iva && { iva }),
+          name,
+          iva: iva ?? null,
           updated_at: new Date(),
           updated_by: user.userId,
         },

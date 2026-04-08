@@ -17,9 +17,9 @@ const Decimal = Prisma.Decimal;
  * @throws 当 price 与 priceIva 同时为 undefined 时抛出错误
  */
 export function computePrice(
-  price?: number,
-  priceIva?: number,
-  iva: number = 0,
+  price?: string,
+  priceIva?: string,
+  iva: string = '0',
 ): { price: string; price_iva: string } {
   const ivaFactor = new Decimal(iva).dividedBy(100).plus(1);
 

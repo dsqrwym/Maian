@@ -27,14 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.status_completed_content_description
+import maian.shared.generated.resources.status_error_content_description
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.CircleError
 import org.dsqrwym.shared.theme.AppExtraColors
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 import org.jetbrains.compose.resources.stringResource
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.status_completed_content_description
-import maian.shared.generated.resources.status_error_content_description
 
 /**
  * Represents the different UI states for async operations.
@@ -42,8 +42,8 @@ import maian.shared.generated.resources.status_error_content_description
  */
 enum class UiState {
     Idle,    // 空闲状态 / Idle state
-    Loading, // 加载中 / Loading state
-    Success, // 成功 / Success state
+    Loading, // 加载中 或者说等待进行下一步 / Loading state
+    Success, // 成功，完成异步或者网络上传等操作 / Success state
     Error    // 错误 / Error state
 }
 

@@ -220,7 +220,7 @@ export type DiscountsGroupByOutputType = {
   _max: DiscountsMaxAggregateOutputType | null
 }
 
-type GetDiscountsGroupByPayload<T extends discountsGroupByArgs> = Prisma.PrismaPromise<
+export type GetDiscountsGroupByPayload<T extends discountsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DiscountsGroupByOutputType, T['by']> &
       {
