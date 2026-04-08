@@ -14,6 +14,7 @@ import kotlinx.serialization.modules.SerializersModule
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.navigation.SharedNavSerializersModule
 import org.dsqrwym.shared.util.log.SharedLog
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class SharedNavigationViewModel(
@@ -35,7 +36,7 @@ class SharedNavigationViewModel(
         viewModelScope.launch {
             backStack
                 .drop(1)
-                .debounce(300)
+                .debounce(300.milliseconds)
                 .collect {
                     persistNow()
                 }
