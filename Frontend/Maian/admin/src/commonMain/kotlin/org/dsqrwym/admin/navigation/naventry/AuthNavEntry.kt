@@ -1,6 +1,5 @@
 package org.dsqrwym.admin.navigation.naventry
 
-
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,12 +24,12 @@ import org.dsqrwym.shared.ui.screens.AgreementScreen
 import org.dsqrwym.shared.ui.screens.auth.ResetPasswordScreen
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 import org.dsqrwym.shared.util.log.SharedLog
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
 
-fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewModel) {
+fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationState) {
     entry<SharedInitialScreen>(
         metadata =
             NavDisplay.transitionSpec {
@@ -44,7 +43,7 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
         InitialScreen(
             onPrivacyPolicyClick = { navViewModel.navigate(SharedPrivacyPolicy) },
             onUserAgreementClick = { navViewModel.navigate(SharedUserAgreement) },
-            onLoginClick = { navViewModel.navigate(SharedLoginScreen()) }
+            onLoginClick = { navViewModel.navigate(SharedLoginScreen()) },
         )
     }
 
@@ -67,9 +66,13 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
         }
         CheckIsPermitted(navViewModel)
         LoginScreen(
-            onBackButtonClick = { navViewModel.navigate(SharedInitialScreen) },
+            onBackButtonClick = {
+                if (!navViewModel.popTo(SharedInitialScreen)) {
+                    navViewModel.replace(SharedInitialScreen)
+                }
+            },
             loginViewModel = loginViewModel,
-            onNavigate = navViewModel::navigate
+            onNavigate = navViewModel::navigate,
         )
     }
 
@@ -125,9 +128,9 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
         ResetPasswordScreen(
             onNavigate = { navViewModel.navigate(it) },
             onBackButtonClick = {
-                navViewModel.navigate(SharedLoginScreen())
+                navViewModel.pop()
             },
-            resetPasswordViewModel = resetPasswordViewModel
+            resetPasswordViewModel = resetPasswordViewModel,
         )
     }
 }
@@ -142,12 +145,14 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
  */
 @Composable
 fun CheckIsPermitted(
-    navController: SharedNavigationViewModel,
-    mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
+    navController: SharedNavigationState,
+    mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get(),
 ) {
     LaunchedEffect(Unit) {
         if (!SharedUserPreferences.isUserAgreed()) {
-            navController.navigate(SharedInitialScreen)
+            if (!navController.popTo(SharedInitialScreen)) {
+                navController.replace(SharedInitialScreen)
+            }
             mySnackbarViewModel.showInfo(message = getString(SharedRes.string.agreement_warning))
         }
     }

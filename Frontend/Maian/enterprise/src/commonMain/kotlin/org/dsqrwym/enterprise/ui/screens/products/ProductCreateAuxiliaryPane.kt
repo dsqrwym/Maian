@@ -16,6 +16,7 @@ import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
 import org.dsqrwym.business.ui.components.richtext.BusinessRichTextEditor
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliarySurface
 import org.dsqrwym.enterprise.MenuConfig
+import org.dsqrwym.enterprise.ui.components.product.TranslationTabRow
 import org.dsqrwym.enterprise.ui.screens.categories.AddLanguageDialog
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductCreateViewModel
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton

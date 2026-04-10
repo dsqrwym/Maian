@@ -5,6 +5,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass as CoreWindowSizeClass
+import androidx.window.core.layout.computeWindowSizeClass
 
 enum class WindowWidthSizeClass {
     /** 紧凑型 < 600dp (手机竖屏) */
@@ -20,7 +22,8 @@ enum class WindowWidthSizeClass {
 data class WindowSizeClass(
     val widthSizeClass: WindowWidthSizeClass,
     val widthDp: Dp,
-    val heightDp: Dp
+    val heightDp: Dp,
+    val coreSizeClass: CoreWindowSizeClass,
 )
 
 @Composable
@@ -29,13 +32,33 @@ fun calculateWindowSizeClass(): WindowSizeClass {
     val density = LocalDensity.current
     val widthDp = with(density) { localWindowInfo.containerSize.width.toDp() }
     val heightDp = with(density) { localWindowInfo.containerSize.height.toDp() }
-    return WindowSizeClass(getWidthSizeClass(widthDp), widthDp, heightDp)
+    val coreSizeClass = CoreWindowSizeClass.BREAKPOINTS_V1
+        .computeWindowSizeClass(widthDp.value, heightDp.value)
+
+    return WindowSizeClass(
+        widthSizeClass = getWidthSizeClass(coreSizeClass),
+        widthDp = widthDp,
+        heightDp = heightDp,
+        coreSizeClass = coreSizeClass,
+    )
 }
 
 fun getWidthSizeClass(widthDp: Dp): WindowWidthSizeClass {
     return when {
-        widthDp < 600.dp -> WindowWidthSizeClass.Compact
-        widthDp < 840.dp -> WindowWidthSizeClass.Medium
-        else -> WindowWidthSizeClass.Expanded
+        widthDp >= CoreWindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND.dp -> WindowWidthSizeClass.Expanded
+        widthDp >= CoreWindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND.dp -> WindowWidthSizeClass.Medium
+        else -> WindowWidthSizeClass.Compact
+    }
+}
+
+fun getWidthSizeClass(coreSizeClass: CoreWindowSizeClass): WindowWidthSizeClass {
+    return when {
+        coreSizeClass.isWidthAtLeastBreakpoint(CoreWindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND) ->
+            WindowWidthSizeClass.Expanded
+
+        coreSizeClass.isWidthAtLeastBreakpoint(CoreWindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND) ->
+            WindowWidthSizeClass.Medium
+
+        else -> WindowWidthSizeClass.Compact
     }
 }

@@ -5,17 +5,15 @@ import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.outlined.ShopTwo
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.chat
-import maian.standard.generated.resources.shopping_cart
-import maian.standard.generated.resources.wholesalers
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.chat
+import maian.standard.generated.resources.shopping_cart
+import maian.standard.generated.resources.wholesalers
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
@@ -29,7 +27,7 @@ import org.dsqrwym.shared.navigation.menu.*
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
 import org.dsqrwym.standard.navigation.BasketScreen
 import org.dsqrwym.standard.navigation.ChatScreen
 import org.dsqrwym.standard.navigation.SuppliersScreen
@@ -60,35 +58,27 @@ fun App() {
     }
 
     AppRoot { authState ->
-        val navViewModel = remember(authState) {
-            when (authState) {
-                is AuthState.Unauthenticated -> SharedNavigationViewModel(
-                    initRoute = if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen,
-                    extraSerializersModule = standardSerializersModule
-                )
-                is AuthState.Authenticated -> SharedNavigationViewModel(
-                    initRoute = SharedDashboardScreen,
-                    extraSerializersModule = standardSerializersModule
-                )
-            }
-        }
-
-        val backStack by navViewModel.backStack.collectAsState()
-        val currentRoute = backStack.last()
-
         when (authState) {
             is AuthState.Unauthenticated -> {
-                // 未登录 → 整个 Auth 流程都包在 AuthContainer 下
+                val navigationState = rememberSharedNavigationState(
+                    initRoute = if (SharedUserPreferences.isUserAgreed()) {
+                        SharedLoginScreen()
+                    } else {
+                        SharedInitialScreen
+                    },
+                    extraSerializersModule = standardSerializersModule,
+                )
+
                 AuthContainer {
-                    SharedNavigationRoot(navViewModel){
-                        authNavEntry(navViewModel)
+                    SharedNavigationRoot(navigationState) {
+                        authNavEntry(navigationState)
                     }
                 }
             }
 
             is AuthState.Authenticated -> {
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
-               val menuList = listOf(
+                val menuList = listOf(
                     SharedMenuItemState(SharedMenuItem.Dashboard),
                     SharedMenuItemState(
                         SharedMenuItem(
@@ -96,7 +86,7 @@ fun App() {
                             label = StandardRes.string.wholesalers,
                             icon = Icons.Outlined.ShopTwo,
                             iconContentDescription = StandardRes.string.wholesalers,
-                            isPrimary = true
+                            isPrimary = true,
                         )
                     ),
                     SharedMenuItemState(
@@ -105,7 +95,7 @@ fun App() {
                             label = StandardRes.string.chat,
                             icon = Icons.AutoMirrored.Outlined.Chat,
                             iconContentDescription = StandardRes.string.chat,
-                            isPrimary = true
+                            isPrimary = true,
                         )
                     ),
                     SharedMenuItemState(
@@ -114,7 +104,7 @@ fun App() {
                             label = StandardRes.string.shopping_cart,
                             icon = Icons.Outlined.ShoppingCart,
                             iconContentDescription = StandardRes.string.shopping_cart,
-                            isPrimary = true
+                            isPrimary = true,
                         )
                     ),
                     SharedMenuItemState(SharedMenuItem.Profile),
@@ -123,22 +113,24 @@ fun App() {
                     SharedMenuActions.ThemeChangeIconButton,
                     SharedMenuActions.LanguageSwitcherIconButton,
                 )
-                val userRole = UserRole.RETAILER
+                val menuConfig = SharedMenuConfiguration(
+                    items = menuList,
+                    topBarActions = topBarActions,
+                    userRole = UserRole.RETAILER,
+                )
+                val navigationState = rememberSharedNavigationState(
+                    startRoute = SharedDashboardScreen,
+                    topLevelRoutes = menuConfig.getVisibleItems().map { it.item.route },
+                    extraSerializersModule = standardSerializersModule,
+                )
 
-                // 已登录 → 渲染主业务 Graph
                 BackgroundImage(SharedImages.background()) {
                     SharedAdaptiveNavigation(
-                        menuConfig = SharedMenuConfiguration(
-                            menuList,
-                            topBarActions,
-                            userRole
-                        ),
-                        currentRoute = currentRoute,
-                        onNavigate = {
-                           navViewModel.navigate(it)
-                        }
+                        menuConfig = menuConfig,
+                        currentRoute = navigationState.currentTopLevelRoute,
+                        onNavigate = navigationState::navigateToTopLevel,
                     ) {
-                        SharedNavigationRoot(navViewModel){
+                        SharedNavigationRoot(navigationState) {
                             menuNavEntry(menuViewModel)
                         }
                     }

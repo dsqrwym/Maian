@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.dsqrwym.enterprise.navigation.EnterpriseSerializersModule
@@ -20,7 +17,6 @@ import org.dsqrwym.enterprise.ui.screens.products.ProductsListScreen
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
-import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.navigation.*
@@ -29,8 +25,7 @@ import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
-import org.dsqrwym.shared.util.log.SharedLog
+import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
 import org.koin.compose.currentKoinScope
 
 /**
@@ -45,36 +40,20 @@ import org.koin.compose.currentKoinScope
 @Composable
 fun App() {
     AppRoot { authState ->
-        val navViewModel = remember(authState) {
-            when (authState) {
-                is AuthState.Unauthenticated ->
-                    SharedNavigationViewModel(
-                        initRoute = if (SharedUserPreferences.isUserAgreed()) SharedLoginScreen() else SharedInitialScreen,
-                        stackKey = "auth",
-                        extraSerializersModule = EnterpriseSerializersModule
-                    )
-
-                is AuthState.Authenticated -> {
-                    val userId = SharedUserPayloadStorage.get()?.userId ?: "unknown"
-                    SharedLog.log("Debug: Loading navigation stack for user: $userId")
-                    SharedNavigationViewModel(
-                        initRoute = SharedDashboardScreen,
-                        stackKey = "main_$userId",
-                        extraSerializersModule = EnterpriseSerializersModule
-                    )
-                }
-            }
-        }
-
-        val backStack by navViewModel.backStack.collectAsState()
-        val currentRoute = backStack.last()
-
         when (authState) {
             is AuthState.Unauthenticated -> {
-                // 未登录 → 整个 Auth 流程都包在 AuthContainer 下
+                val navigationState = rememberSharedNavigationState(
+                    initRoute = if (SharedUserPreferences.isUserAgreed()) {
+                        SharedLoginScreen()
+                    } else {
+                        SharedInitialScreen
+                    },
+                    extraSerializersModule = EnterpriseSerializersModule,
+                )
+
                 AuthContainer {
-                    SharedNavigationRoot(navViewModel) {
-                        authNavEntry(navViewModel)
+                    SharedNavigationRoot(navigationState) {
+                        authNavEntry(navigationState)
                     }
                 }
             }
@@ -87,28 +66,36 @@ fun App() {
                     return@AppRoot
                 }
 
-                // 已登录 → 渲染主业务 Graph
+                val menuConfig = SharedMenuConfiguration(
+                    items = MenuConfig.menuList,
+                    topBarActions = MenuConfig.topBarActions,
+                    userRole = user.userRole,
+                )
+                val navigationState = rememberSharedNavigationState(
+                    startRoute = SharedDashboardScreen,
+                    topLevelRoutes = menuConfig.getVisibleItems().map { it.item.route },
+                    extraSerializersModule = EnterpriseSerializersModule,
+                )
+
                 BackgroundImage(SharedImages.background()) {
                     SharedAdaptiveNavigation(
-                        menuConfig = SharedMenuConfiguration(
-                            MenuConfig.menuList,
-                            MenuConfig.topBarActions,
-                            user.userRole
-                        ),
-                        currentRoute = currentRoute,
-                        onNavigate = {
-                            navViewModel.navigate(it)
-                        }
+                        menuConfig = menuConfig,
+                        currentRoute = navigationState.currentTopLevelRoute,
+                        onNavigate = navigationState::navigateToTopLevel,
                     ) {
-                        SharedNavigationRoot(navViewModel) {
-                            categoryNavEntry(navViewModel)
+                        SharedNavigationRoot(navigationState) {
+                            categoryNavEntry(navigationState)
                             entry<SharedDashboardScreen> {
                                 ProductsListScreen {
-                                    navViewModel.navigate(ProductCreate)
+                                    navigationState.navigate(ProductCreate)
                                 }
                             }
                             entry<ProductCreate> {
-                                ProductCreateScreen()
+                                ProductCreateScreen(
+                                    onNavigateBack = {
+                                        navigationState.pop()
+                                    }
+                                )
                             }
                             entry<SharedProfileScreen> {
                                 val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
@@ -117,21 +104,23 @@ fun App() {
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
                                     verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                    horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
-                                    ElevatedButton(onClick = {
-                                        authSessionViewModel.logout()
-                                    }) {
+                                    ElevatedButton(
+                                        onClick = {
+                                            authSessionViewModel.logout()
+                                        }
+                                    ) {
                                         Text("Logout")
                                     }
 
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showInfo("这是INFO") }) {
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showInfo("杩欐槸INFO") }) {
                                         Text("INFO")
                                     }
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showError("这是ERROR") }) {
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showError("杩欐槸ERROR") }) {
                                         Text("ERROR")
                                     }
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showSuccess("这是SUCCESS") }) {
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showSuccess("杩欐槸SUCCESS") }) {
                                         Text("SUCCESS")
                                     }
                                 }

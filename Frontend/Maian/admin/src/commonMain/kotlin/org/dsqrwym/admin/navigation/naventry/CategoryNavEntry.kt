@@ -8,25 +8,34 @@ import org.dsqrwym.admin.ui.screens.categories.CategoryEditScreen
 import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.business.navigation.CategoryCreate
 import org.dsqrwym.business.navigation.CategoryEdit
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 
-
-fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationViewModel) {
+fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationState) {
     entry<Categories> {
         CategoriesListScreen(
             onNavigateToCreate = { viewModel.navigate(CategoryCreate) },
-            onNavigateToEdit = { viewModel.navigate(CategoryEdit(it)) }
+            onNavigateToEdit = { viewModel.navigate(CategoryEdit(it)) },
         )
     }
 
     entry<CategoryCreate> {
-        CategoryCreateScreen(onNavigateBack = { viewModel.navigate(Categories) })
+        CategoryCreateScreen(
+            onNavigateBack = {
+                if (!viewModel.popTo(Categories)) {
+                    viewModel.navigateToTopLevel(Categories)
+                }
+            }
+        )
     }
 
     entry<CategoryEdit> { key ->
         CategoryEditScreen(
             categoryId = key.id,
-            onNavigateBack = { viewModel.navigate(Categories) }
+            onNavigateBack = {
+                if (!viewModel.popTo(Categories)) {
+                    viewModel.navigateToTopLevel(Categories)
+                }
+            },
         )
     }
 }

@@ -27,12 +27,12 @@ import org.dsqrwym.shared.ui.screens.AgreementScreen
 import org.dsqrwym.shared.ui.screens.auth.ResetPasswordScreen
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 import org.dsqrwym.shared.util.log.SharedLog
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
 
-fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewModel) {
+fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationState) {
     entry<SharedInitialScreen>(
         metadata =
             NavDisplay.transitionSpec {
@@ -47,7 +47,7 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
             onPrivacyPolicyClick = { navViewModel.navigate(SharedPrivacyPolicy) },
             onUserAgreementClick = { navViewModel.navigate(SharedUserAgreement) },
             onRegisterClick = { navViewModel.navigate(RegisterScreen) },
-            onLoginClick = { navViewModel.navigate(SharedLoginScreen()) }
+            onLoginClick = { navViewModel.navigate(SharedLoginScreen()) },
         )
     }
     entry<RegisterScreen>(
@@ -63,11 +63,16 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
         CheckIsPermitted(navViewModel)
         val registerViewModel = SharedAuthScope.scope.get<RegisterViewModel>()
         RegisterScreen(
-            onBackButtonClick = { navViewModel.navigate(SharedInitialScreen) },
+            onBackButtonClick = {
+                if (!navViewModel.popTo(SharedInitialScreen)) {
+                    navViewModel.replace(SharedInitialScreen)
+                }
+            },
             registerViewModel = registerViewModel,
             onNavigate = { route ->
                 navViewModel.navigate(route)
-            })
+            },
+        )
     }
     entry<SharedLoginScreen>(
         metadata =
@@ -85,9 +90,13 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
             it.email?.let { email -> loginViewModel.updateEmail(email) }
         }
         LoginScreen(
-            onBackButtonClick = { navViewModel.navigate(SharedInitialScreen) },
+            onBackButtonClick = {
+                if (!navViewModel.popTo(SharedInitialScreen)) {
+                    navViewModel.replace(SharedInitialScreen)
+                }
+            },
             loginViewModel = loginViewModel,
-            onNavigate = { route -> navViewModel.navigate(route) }
+            onNavigate = { route -> navViewModel.navigate(route) },
         )
     }
     entry<SharedPrivacyPolicy>(
@@ -140,8 +149,8 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
         }
         ResetPasswordScreen(
             onNavigate = { navViewModel.navigate(it) },
-            onBackButtonClick = { navViewModel.navigate(SharedLoginScreen()) },
-            resetPasswordViewModel = resetPasswordViewModel
+            onBackButtonClick = { navViewModel.pop() },
+            resetPasswordViewModel = resetPasswordViewModel,
         )
     }
 }
@@ -156,12 +165,14 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationViewMo
  */
 @Composable
 fun CheckIsPermitted(
-    navViewModel: SharedNavigationViewModel,
-    mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
+    navViewModel: SharedNavigationState,
+    mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get(),
 ) {
     LaunchedEffect(Unit) {
         if (!SharedUserPreferences.isUserAgreed()) {
-            navViewModel.replace(SharedInitialScreen)
+            if (!navViewModel.popTo(SharedInitialScreen)) {
+                navViewModel.replace(SharedInitialScreen)
+            }
             mySnackbarViewModel.showInfo(message = getString(SharedRes.string.agreement_warning))
         }
     }

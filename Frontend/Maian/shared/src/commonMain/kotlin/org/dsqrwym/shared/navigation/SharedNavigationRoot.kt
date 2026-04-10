@@ -1,24 +1,27 @@
 package org.dsqrwym.shared.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 
 @Composable
 fun SharedNavigationRoot(
-    viewModel: SharedNavigationViewModel,
+    navigationState: SharedNavigationState,
     entryProvider: EntryProviderScope<NavKey>.() -> Unit,
 ) {
-    val backStack by viewModel.backStack.collectAsState()
     NavDisplay(
-        backStack = backStack,
+        backStack = navigationState.backStack,
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator(),
+        ),
         onBack = {
-            viewModel.pop()
+            navigationState.pop()
         },
         entryProvider = entryProvider {
             entryProvider()

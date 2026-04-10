@@ -105,17 +105,19 @@ kotlin {
             // Android生命周期组件（跨平台）
             api(libs.androidx.lifecycle.viewmodel)       // ViewModel
             api(libs.androidx.lifecycle.runtimeCompose)  // 生命周期与Compose集成
-
+            api(libs.window.core)
             // 根据KMP官网教程 添加处理日期的跨平台库
             api(libs.kotlinx.datetime)
             // 官方导航
             api(libs.kmp.navigation.compose)
             // Navigation3
             api(libs.androidx.navigation3.runtime)
-            //api(libs.navigation3.ui)
+            // api(libs.navigation3.ui)
             api(libs.jetbrains.navigation3.ui)
             api(libs.jetbrains.material3.adaptiveNavigation3)
             api(libs.jetbrains.lifecycle.viewmodelNavigation3)
+            // 持久化保存
+            api(libs.jetbrains.savedstate)
             // placeholder
             api(libs.compose.placeholder.material3)
 

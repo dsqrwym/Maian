@@ -8,17 +8,17 @@ import org.dsqrwym.business.navigation.CategoryEdit
 import org.dsqrwym.enterprise.ui.screens.categories.CategoriesListScreen
 import org.dsqrwym.enterprise.ui.screens.categories.CategoryCreateScreen
 import org.dsqrwym.enterprise.ui.screens.categories.CategoryEditScreen
-import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationViewModel
+import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 
-fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationViewModel) {
-    entry<Categories>{
+fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationState) {
+    entry<Categories> {
         CategoriesListScreen(
             onNavigateToCreate = {
                 viewModel.navigate(CategoryCreate)
             },
             onNavigateToEdit = {
                 viewModel.navigate(CategoryEdit(it))
-            }
+            },
         )
     }
 
@@ -28,7 +28,9 @@ fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationViewM
                 viewModel.navigate(route)
             },
             onNavigateBack = {
-                viewModel.navigate(Categories)
+                if (!viewModel.popTo(Categories)) {
+                    viewModel.navigateToTopLevel(Categories)
+                }
             },
         )
     }
@@ -40,8 +42,10 @@ fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationViewM
                 viewModel.navigate(route)
             },
             onNavigateBack = {
-                viewModel.navigate(Categories)
-            }
+                if (!viewModel.popTo(Categories)) {
+                    viewModel.navigateToTopLevel(Categories)
+                }
+            },
         )
     }
 }
