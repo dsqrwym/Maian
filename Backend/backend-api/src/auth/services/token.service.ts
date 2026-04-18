@@ -5,13 +5,15 @@ import { AUTH_ERROR } from '../auth.constants';
 import { ENV } from '../../config/constants.config';
 import { Logger } from 'nestjs-pino';
 import { TokenResponseDto } from '../dto/token-response.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { IoRedisService } from '../../cache/redis/ioredis.cache.service';
 import { HashService } from '../../common/hash/hash.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { and, eq, sql } from 'drizzle-orm';
+import { user_sessions } from 'src/generated/drizzle/schema';
 
 @Injectable()
 export class TokenService {
@@ -22,36 +24,24 @@ export class TokenService {
     private readonly configService: ConfigService,
     private readonly hashService: HashService,
     private readonly ioRedisService: IoRedisService,
-    private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
   ) {}
 
   getSession = async (
     options: { sessionId: string } | { userId: string; deviceFinger: string },
   ) => {
     if ('sessionId' in options) {
-      return this.prismaService.user_sessions.findUnique({
-        where: {
-          session_id: options.sessionId,
-        },
-        select: {
-          refresh_token: true,
-          revoked: true,
-          session_id: true,
-        },
+      return this.drizzleService.db.query.user_sessions.findFirst({
+        columns: { refresh_token: true, revoked: true, session_id: true },
+        where: eq(user_sessions.session_id, options.sessionId),
       });
     } else {
-      return this.prismaService.user_sessions.findUnique({
-        where: {
-          user_id_device_finger: {
-            user_id: options.userId,
-            device_finger: options.deviceFinger,
-          },
-        },
-        select: {
-          refresh_token: true,
-          revoked: true,
-          session_id: true,
-        },
+      return this.drizzleService.db.query.user_sessions.findFirst({
+        columns: { refresh_token: true, revoked: true, session_id: true },
+        where: and(
+          eq(user_sessions.user_id, options.userId),
+          eq(user_sessions.device_finger, options.deviceFinger),
+        ),
       });
     }
   };
@@ -142,10 +132,15 @@ export class TokenService {
       );
       // Revoke the session proactively to mitigate suspected token reuse
       try {
-        await this.prismaService.user_sessions.updateMany({
-          where: { session_id: payload.sessionId, revoked: false },
-          data: { revoked: true, last_active: new Date() },
-        });
+        await this.drizzleService.db
+          .update(user_sessions)
+          .set({ revoked: true, last_active: sql`(NOW() AT TIME ZONE 'UTC')` })
+          .where(
+            and(
+              eq(user_sessions.session_id, payload.sessionId),
+              eq(user_sessions.revoked, false),
+            ),
+          );
 
         await this.redisCache.set(
           REDIS_KEYS.sessionRevokedKey(payload.sessionId),
@@ -190,16 +185,13 @@ export class TokenService {
       await this.hashService.hashWithCrypto(newRefreshToken);
 
     // 更新 last_active
-    await this.prismaService.user_sessions
-      .update({
-        where: {
-          session_id: payload.sessionId,
-        },
-        data: {
-          refresh_token: hashedRefreshToken,
-          last_active: new Date(),
-        },
+    await this.drizzleService.db
+      .update(user_sessions)
+      .set({
+        refresh_token: hashedRefreshToken,
+        last_active: sql`(NOW() AT TIME ZONE 'UTC')`,
       })
+      .where(eq(user_sessions.session_id, payload.sessionId))
       .then(() => {
         this.logger.debug(
           { userId: payload.userId, sessionId: payload.sessionId },

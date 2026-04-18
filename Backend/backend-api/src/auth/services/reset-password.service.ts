@@ -14,12 +14,15 @@ import {
   IVerifyCodeDto,
 } from '../dto/verification.dto';
 import { VerificationEmailType } from '../auth.constants';
+import { DrizzleService } from '../../drizzle/drizzle.service';
+import { user_sessions, users } from 'src/generated/drizzle/schema';
+import { and, eq } from 'drizzle-orm';
 
 @Injectable()
 export class ResetPasswordService {
   constructor(
     private readonly configService: ConfigService,
-    private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
     @Inject(REDIS_CACHE) private readonly redisCache: Cache,
     private readonly hashService: HashService,
     private readonly verificationService: VerificationService,
@@ -39,7 +42,7 @@ export class ResetPasswordService {
 
   async resetPassword(resetPasswordDto: IResetPasswordDto) {
     let userId: string | null = null;
-    const sessions = await this.prismaService.$transaction(async (tx) => {
+    const sessions = await this.drizzleService.db.transaction(async (tx) => {
       const VerificationUserId =
         await this.verificationService.verifyAndConsumeToken(
           tx,
@@ -54,21 +57,30 @@ export class ResetPasswordService {
         resetPasswordDto.newPassword,
       );
 
-      const updatedUser = await tx.users.update({
-        where: { id: VerificationUserId },
-        data: {
-          password: newHashedPassword,
-          user_sessions: {
-            updateMany: {
-              where: { revoked: false },
-              data: { revoked: true },
-            },
-          },
-        },
-        select: { user_sessions: { select: { session_id: true } } },
-      });
+      // CTE 1: 更新用户密码（不返回数据）
+      const updatedUserCte = tx.$with('updated_user').as(
+        tx
+          .update(users)
+          .set({ password: newHashedPassword })
+          .where(eq(users.id, VerificationUserId)),
+        // 不需要 returning，除非后续要引用
+      );
+      // CTE 2: 撤销会话并返回 session_id
+      const revokedCte = tx.$with('revoked_sessions').as(
+        tx
+          .update(user_sessions)
+          .set({ revoked: true })
+          .where(
+            and(
+              eq(user_sessions.user_id, VerificationUserId),
+              eq(user_sessions.revoked, false),
+            ),
+          )
+          .returning({ session_id: user_sessions.session_id }),
+      );
 
-      return updatedUser.user_sessions;
+      // 主查询：使用 with() 传入所有 CTE，然后从 revoked_sessions 中选择
+      return tx.with(revokedCte, updatedUserCte).select().from(revokedCte);
     });
 
     // revoke redis（事务外执行，避免事务失败时污染 Redis）

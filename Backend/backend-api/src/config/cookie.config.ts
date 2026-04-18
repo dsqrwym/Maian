@@ -9,6 +9,7 @@ export async function useCookie(app: NestFastifyApplication) {
   const secret =
     configService.get<string>(ENV.COOKIE_SECRET) || process.env.COOKIE_SECRET;
 
+  // @ts-ignore
   await app.register(fastifyCookie, {
     secret: secret,
   });

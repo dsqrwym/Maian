@@ -12,7 +12,6 @@ import { JwtAuthGuard } from '../../auth/guard/auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from 'src/generated/prisma/client';
 import {
   ICategoryQueryDto,
   validateCategoryQuery,
@@ -24,7 +23,7 @@ import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { TypedBody } from '../../utils/typia/typed-body.typia';
 import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
 import { ICategoryResponse } from '../dto/category-response.dto';
-import Decimal from 'decimal.js';
+import { UserRole } from '../../generated/drizzle/enums';
 
 /**
  * Controller for managing product categories
@@ -77,8 +76,7 @@ export class CategoryController {
     @TypedQuery(validateCategoryQuery) query: ICategoryQueryDto,
     @Req() req: FastifyRequest,
   ): Promise<PaginatedDataWithT<ICategoryResponse>> {
-    return this.categoryService.findAllUseSql(query, req.ability, req.user);
-    //return this.categoryService.search(query, req.ability);
+    return this.categoryService.findAllUseDrizzle(query, req.ability, req.user);
   }
 
   /**
@@ -105,6 +103,8 @@ export class CategoryController {
    * @param {FastifyRequest} req - Request object containing user ability
    * @returns {Promise<{
    *     name: string;
+   *     iva: string | null;
+   *     version: bigint;
    *     translations: { name: string; lang_code: string }[];
    *   }>}
    */
@@ -115,7 +115,8 @@ export class CategoryController {
     @Req() req: FastifyRequest,
   ): Promise<{
     name: string;
-    iva: Decimal | null;
+    iva: string | null;
+    version: bigint;
     translations: { name: string; lang_code: string }[];
   }> {
     return this.categoryService.getCategoryForUpdate(id, req.ability);

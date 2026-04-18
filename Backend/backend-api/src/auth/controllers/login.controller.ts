@@ -4,7 +4,7 @@ import { ILoginDto, LoginDto, validateLogin } from '../dto/login.dto';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from '../auth.service';
-import { UserRole } from 'src/generated/prisma/client';
+import { UserRole } from 'src/generated/drizzle/enums';
 import { TypedRoute } from '@nestia/core';
 import { TypedBody } from 'src/utils/typia/typed-body.typia';
 import { LoginResponseDto } from '../dto/login-response.dto';

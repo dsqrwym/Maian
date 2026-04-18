@@ -1,7 +1,7 @@
 import { I18nService } from 'nestjs-i18n';
-import { UserRole } from 'src/generated/prisma/client';
 import { I18nTranslations } from '../../i18n/generated/i18n.generated';
 import { Injectable } from '@nestjs/common';
+import { UserRole } from 'src/generated/drizzle/enums';
 
 @Injectable()
 export class RoleI18nService {

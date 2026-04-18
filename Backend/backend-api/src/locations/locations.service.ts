@@ -1,45 +1,61 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { DrizzleService } from '../drizzle/drizzle.service';
+import {
+  cities,
+  countries,
+  currencies,
+  provinces,
+} from '../generated/drizzle/schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class LocationsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly drizzleService: DrizzleService) {}
 
   async findAllCountries() {
-    const countries = await this.prismaService.countries.findMany();
-    if (countries.length === 0) {
-      throw new NotFoundException('Countries not found');
-    }
-    return countries;
+    return this.drizzleService.db.select().from(countries);
   }
 
   async findProvincesByCountryIsoNumeric(isoNumeric: number) {
-    const provinces = await this.prismaService.provinces.findMany({
-      where: { country_iso: isoNumeric },
-      select: { id: true, name: true, name_local: true },
-    });
-    if (provinces.length === 0) {
+    const foundedProvinces = await this.drizzleService.db
+      .select({
+        id: provinces.id,
+        name: provinces.name,
+        name_local: provinces.name_local,
+      })
+      .from(provinces)
+      .where(eq(provinces.country_iso, isoNumeric));
+    if (foundedProvinces.length === 0) {
       throw new NotFoundException('Provinces not found');
     }
-    return provinces;
+    return foundedProvinces;
   }
 
   async findCitiesByProvinceId(provinceId: number) {
-    const cities = await this.prismaService.cities.findMany({
-      where: { province_id: provinceId },
-      select: { id: true, name: true, name_local: true },
-    });
-    if (cities.length === 0) {
+    const foundedCities = await this.drizzleService.db
+      .select({
+        id: cities.id,
+        name: cities.name,
+        name_local: cities.name_local,
+      })
+      .from(cities)
+      .where(eq(cities.province_id, provinceId));
+    if (foundedCities.length === 0) {
       throw new NotFoundException('Cities not found');
     }
-    return cities;
+    return foundedCities;
   }
 
   async getCurrencyByIsoNumeric(isoNumeric: number) {
-    const currency = await this.prismaService.currencies.findUnique({
-      where: { iso_numeric: isoNumeric },
-      select: { iso_alpha3: true, symbol: true, decimal_digits: true },
-    });
+    const currency = await this.drizzleService.db
+      .select({
+        iso_alpha3: currencies.iso_alpha3,
+        symbol: currencies.symbol,
+        decimal_digits: currencies.decimal_digits,
+      })
+      .from(currencies)
+      .where(eq(currencies.iso_numeric, isoNumeric));
+
     if (!currency) {
       throw new NotFoundException('Currency not found');
     }

@@ -18,7 +18,7 @@ import {
   TagsProductCode,
 } from '../../utils/typia/validators/product.validator';
 import { cleanString } from '../../utils/string.util';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 export interface ICreateProductDto {

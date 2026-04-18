@@ -11,11 +11,12 @@ import {
   validateICreateVariant,
 } from './create-product-variant.dto';
 import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { cleanString } from '../../utils/string.util';
 import { ICreateProductDto } from './create-product.dto';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 import typia from 'typia';
+import { TagsVersion } from '../../utils/typia/tags/number.tags';
 
 type UpdateBase = Omit<ICreateProductDto, 'user_id' | 'variants'>;
 export interface IUpdateProductDto extends UpdateBase {
@@ -29,6 +30,8 @@ export interface IUpdateProductDto extends UpdateBase {
   translations?: IProductTranslationDto[];
 
   translationsToDelete?: string[];
+
+  version: TagsVersion;
 }
 export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProductDto> =
   {

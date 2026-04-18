@@ -4,7 +4,7 @@ import {
   TagsBCP47Language,
   TagsIANATimezone,
 } from '../../utils/typia/validators/language.validator';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { cleanString } from '../../utils/string.util';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 

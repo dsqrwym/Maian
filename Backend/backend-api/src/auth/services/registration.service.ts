@@ -3,23 +3,28 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { $Enums, AddressType, UserRole } from 'src/generated/prisma/client';
 import { randomUUID } from 'node:crypto';
 import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
 import { VerificationService } from './verification.service';
 import { IVerifyCodeDto } from '../dto/verification.dto';
 import { IRegisterRetailerDto } from '../dto/register-retailer.dto';
-import UserStatus = $Enums.UserStatus;
 import { HashService } from 'src/common/hash/hash.service';
 import { ISendNormalRegisterMailDto } from '../dto/register.dto';
 import { IRegisterWholesalerDto } from '../dto/register-wholesaler.dto';
 import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile.type';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import {
+  configurations,
+  directions,
+  users,
+} from '../../generated/drizzle/schema';
+import { and, eq, sql } from 'drizzle-orm';
+import { AddressType, UserRole, UserStatus } from 'src/generated/drizzle/enums';
 
 @Injectable()
 export class RegistrationService {
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
     private readonly hashService: HashService,
     private readonly verificationService: VerificationService,
   ) {}
@@ -28,37 +33,52 @@ export class RegistrationService {
     dto: ISendNormalRegisterMailDto,
     role: UserRole,
   ) {
-    await this.prismaService.$transaction(async (tx) => {
-      const user = await tx.users.findUnique({
-        where: { email: dto.email },
-        select: { status: true },
-      });
+    await this.drizzleService.db.transaction(async (tx) => {
+      const [user] = await tx
+        .select({ status: users.status })
+        .from(users)
+        .where(eq(users.email, dto.email));
 
       if (user) {
         if (user.status !== UserStatus.PENDING_VERIFICATION) {
           throw new ConflictException(AUTH_ERROR.EMAIL_CONFLICT);
         } else {
-          await tx.users.update({
-            where: { email: dto.email },
-            data: {
-              role: role,
-              configurations: {
-                update: { language: dto.language, timezone: dto.timezone },
-              },
-            },
-          });
+          const updatedUser = tx
+            .$with('updated_user')
+            .as(
+              tx
+                .update(users)
+                .set({ role: role })
+                .where(eq(users.email, dto.email))
+                .returning({ id: users.id }),
+            );
+          await tx
+            .with(updatedUser)
+            .update(configurations)
+            .set({ language: dto.language, timezone: dto.timezone })
+            .where(
+              eq(configurations.user_id, sql`(SELECT id FROM updated_user)`),
+            );
         }
       } else {
-        await tx.users.create({
-          data: {
-            email: dto.email,
-            password: randomUUID(),
-            role: role,
-            configurations: {
-              create: { language: dto.language, timezone: dto.timezone },
-            },
-          },
-        });
+        const createdUser = tx.$with('created_user').as(
+          tx
+            .insert(users)
+            .values({
+              email: dto.email,
+              password: randomUUID(),
+              role: role,
+            })
+            .returning({ id: users.id }),
+        );
+        await tx
+          .with(createdUser)
+          .insert(configurations)
+          .values({
+            user_id: sql`(SELECT id FROM created_user)`,
+            language: dto.language,
+            timezone: dto.timezone,
+          });
       }
     });
 
@@ -67,12 +87,13 @@ export class RegistrationService {
       VerificationEmailType.NORMAL_REGISTER,
     );
   }
+
   async beginRetailerRegistration(dto: ISendNormalRegisterMailDto) {
     return this.beginNormalRegistration(dto, UserRole.RETAILER);
   }
 
   async completeRetailerRegistration(dto: IRegisterRetailerDto) {
-    await this.prismaService.$transaction(async (tx) => {
+    return this.drizzleService.db.transaction(async (tx) => {
       await this.verificationService.verifyAndConsumeToken(
         tx,
         dto.verification_id,
@@ -83,28 +104,40 @@ export class RegistrationService {
         dto.password,
       );
 
-      const updatedUser = await tx.users.update({
-        select: { id: true },
-        where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
-        data: {
-          status: UserStatus.ACTIVE,
-          username: dto.username ?? randomUUID(),
-          password: hashedPassword,
-          directions: {
-            create: {
-              country_iso: dto.address.country,
-              province_id: dto.address.province,
-              city_id: dto.address.city,
-              street: dto.address.street,
-              type: AddressType.STORE,
-              zip_code: dto.address.zipCode,
-              latitude: dto.address.latitude,
-              longitude: dto.address.longitude,
-            },
-          },
-        },
-      });
-      if (!updatedUser) {
+      // CTE 1: 更新用户并返回 id
+      const updatedUserCte = tx.$with('updated_user').as(
+        tx
+          .update(users)
+          .set({
+            status: UserStatus.ACTIVE,
+            username: dto.username ?? randomUUID(),
+            password: hashedPassword,
+          })
+          .where(
+            and(
+              eq(users.email, dto.email),
+              eq(users.status, UserStatus.PENDING_VERIFICATION),
+            ),
+          )
+          .returning({ id: users.id }),
+      );
+      // CTE 2: 插入地址，使用 CTE 1 中的 id
+      const result = await tx
+        .with(updatedUserCte)
+        .insert(directions)
+        .values({
+          user_id: sql`(SELECT id FROM updated_user)`,
+          country_iso: dto.address.country,
+          province_id: dto.address.province,
+          city_id: dto.address.city,
+          street: dto.address.street,
+          type: AddressType.STORE,
+          zip_code: dto.address.zipCode,
+          latitude: dto.address.latitude,
+          longitude: dto.address.longitude,
+        });
+
+      if (!result.rowCount || result.rowCount < 1) {
         throw new NotFoundException(AUTH_ERROR.USER_NOT_FOUND);
       }
     });
@@ -115,7 +148,7 @@ export class RegistrationService {
   }
 
   async completeWholesalerRegistration(dto: IRegisterWholesalerDto) {
-    await this.prismaService.$transaction(async (tx) => {
+    await this.drizzleService.db.transaction(async (tx) => {
       await this.verificationService.verifyAndConsumeToken(
         tx,
         dto.verification_id,
@@ -131,31 +164,42 @@ export class RegistrationService {
         company_type: dto.company_type,
       };
 
-      const updatedUser = await tx.users.update({
-        select: { id: true },
-        where: { email: dto.email, status: UserStatus.PENDING_VERIFICATION },
-        data: {
-          status: UserStatus.ACTIVE,
-          username: dto.username ?? randomUUID(),
-          password: hashedPassword,
-          telephone: dto.telephone,
-          role: UserRole.WHOLESALER,
-          profile: wholesalerProfile,
-          directions: {
-            create: {
-              country_iso: dto.address.country,
-              province_id: dto.address.province,
-              city_id: dto.address.city,
-              street: dto.address.street,
-              type: AddressType.STORE,
-              zip_code: dto.address.zipCode,
-              latitude: dto.address.latitude,
-              longitude: dto.address.longitude,
-            },
-          },
-        },
-      });
-      if (!updatedUser) {
+      const updatedUser = await tx
+        .with(
+          tx.$with('updated_user').as(
+            tx
+              .update(users)
+              .set({
+                status: UserStatus.ACTIVE,
+                username: dto.username ?? randomUUID(),
+                password: hashedPassword,
+                telephone: dto.telephone,
+                role: UserRole.WHOLESALER,
+                profile: wholesalerProfile,
+              })
+              .where(
+                and(
+                  eq(users.email, dto.email),
+                  eq(users.status, UserStatus.PENDING_VERIFICATION),
+                ),
+              )
+              .returning({ id: users.id }),
+          ),
+        )
+        .insert(directions)
+        .values({
+          user_id: sql`(SELECT id FROM updated_user)`,
+          country_iso: dto.address.country,
+          province_id: dto.address.province,
+          city_id: dto.address.city,
+          street: dto.address.street,
+          type: AddressType.STORE,
+          zip_code: dto.address.zipCode,
+          latitude: dto.address.latitude,
+          longitude: dto.address.longitude,
+        });
+
+      if (!updatedUser.rowCount || updatedUser.rowCount < 1) {
         throw new NotFoundException(AUTH_ERROR.USER_NOT_FOUND);
       }
     });

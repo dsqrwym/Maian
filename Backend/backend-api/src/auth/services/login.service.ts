@@ -4,7 +4,6 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '../../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { HashService } from '../../common/hash/hash.service';
 import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
@@ -22,15 +21,18 @@ import {
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service';
-import { UserRole } from 'src/generated/prisma/client';
+import { UserRole } from 'src/generated/drizzle/enums';
 import { LoginResponseDto } from '../dto/login-response.dto';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { and, asc, eq, inArray } from 'drizzle-orm';
+import { user_sessions } from '../../generated/drizzle/schema';
 
 @Injectable()
 export class LoginService {
   constructor(
     private readonly loginValidationStrategy: LoginValidationStrategy,
     private readonly configService: ConfigService,
-    private readonly prismaService: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly jwtService: JwtService,
     private readonly hashService: HashService,
     @Inject(REDIS_CACHE) private readonly redisCache: Cache,
@@ -49,14 +51,12 @@ export class LoginService {
       '[Login] Generated device hash',
     );
 
-    const oldSessionId = await this.prismaService.user_sessions.findUnique({
-      where: {
-        user_id_device_finger: {
-          user_id: user.userId,
-          device_finger: deviceHash,
-        },
-      },
-      select: { session_id: true },
+    const oldSessionId = await this.drizzle.db.query.user_sessions.findFirst({
+      where: and(
+        eq(user_sessions.user_id, user.userId),
+        eq(user_sessions.device_finger, deviceHash),
+      ),
+      columns: { session_id: true },
     });
     this.logger.debug('OldSessionId Fonded', oldSessionId);
 
@@ -81,11 +81,11 @@ export class LoginService {
       await this.hashService.hashWithCrypto(refreshToken);
 
     // 事务：处理会话 upsert + refresh token 一步完成
-    const newSession = await this.prismaService.$transaction(async (tx) => {
-      const existingSessions = await tx.user_sessions.findMany({
-        where: { user_id: user.userId },
-        orderBy: { last_active: 'asc' },
-        select: { session_id: true },
+    const [newSession] = await this.drizzle.db.transaction(async (tx) => {
+      const existingSessions = await tx.query.user_sessions.findMany({
+        where: eq(user_sessions.user_id, user.userId),
+        orderBy: asc(user_sessions.last_active),
+        columns: { session_id: true },
       });
 
       const maxSessions = Number(
@@ -97,27 +97,16 @@ export class LoginService {
           .slice(0, existingSessions.length - maxSessions + 1)
           .map((s) => s.session_id);
 
-        await tx.user_sessions.deleteMany({
-          where: { session_id: { in: deletedSessions } },
-        });
+        await tx
+          .delete(user_sessions)
+          .where(inArray(user_sessions.session_id, deletedSessions));
       }
 
-      // Prisma upsert 保证并发安全
-      return tx.user_sessions.upsert({
-        where: {
-          user_id_device_finger: {
-            user_id: user.userId,
-            device_finger: deviceHash,
-          },
-        },
-        update: {
-          session_id: newSessionId,
-          revoked: false,
-          last_ip: req.ip,
-          last_active: new Date(),
-          refresh_token: hashedRefreshToken,
-        },
-        create: {
+      const lastActive = new Date().toISOString();
+      // upsert 保证并发安全
+      return tx
+        .insert(user_sessions)
+        .values({
           session_id: newSessionId,
           user_id: user.userId,
           device_name: deviceName,
@@ -125,9 +114,18 @@ export class LoginService {
           user_agent: userAgent,
           last_ip: req.ip,
           refresh_token: hashedRefreshToken,
-        },
-        select: { session_id: true },
-      });
+        })
+        .onConflictDoUpdate({
+          target: [user_sessions.user_id, user_sessions.device_finger],
+          set: {
+            session_id: newSessionId,
+            revoked: false,
+            last_ip: req.ip,
+            last_active: lastActive,
+            refresh_token: hashedRefreshToken,
+          },
+        })
+        .returning({ session_id: user_sessions.session_id });
     });
 
     if (!newSession) {

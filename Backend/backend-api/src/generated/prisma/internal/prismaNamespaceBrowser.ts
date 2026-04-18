@@ -130,7 +130,9 @@ export const CategoriesScalarFieldEnum = {
   name_unaccent: 'name_unaccent',
   updated_at: 'updated_at',
   created_by: 'created_by',
-  updated_by: 'updated_by'
+  updated_by: 'updated_by',
+  version: 'version',
+  deleted_at: 'deleted_at'
 } as const
 
 export type CategoriesScalarFieldEnum = (typeof CategoriesScalarFieldEnum)[keyof typeof CategoriesScalarFieldEnum]
@@ -371,7 +373,9 @@ export const ProductsScalarFieldEnum = {
   created_by: 'created_by',
   updated_by: 'updated_by',
   name_unaccent: 'name_unaccent',
-  title_unaccent: 'title_unaccent'
+  title_unaccent: 'title_unaccent',
+  version: 'version',
+  deleted_at: 'deleted_at'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]

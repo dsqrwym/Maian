@@ -3,7 +3,7 @@ import { seconds, Throttle } from '@nestjs/throttler';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { IResetPasswordDto } from '../dto/reset-password.dto';
 import { Logger } from 'nestjs-pino';
-import { maskEmail } from '../../common/formatter/emial-format';
+import { maskEmail } from '../../utils/email.utils';
 import { AuthService } from '../auth.service';
 import {
   ISendVerificationCodeDto,

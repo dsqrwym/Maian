@@ -1,6 +1,6 @@
 import { PinoLogger } from 'nestjs-pino';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { maskEmail } from '../common/formatter/emial-format';
+import { maskEmail } from './email.utils';
 
 /**
  * Sends an email using the provided mailer service and logs the result

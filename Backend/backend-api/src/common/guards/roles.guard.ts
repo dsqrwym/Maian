@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from 'src/generated/prisma/client';
+import { UserRole } from '../../generated/drizzle/enums';
 import { ROLES_ALLOWED_KEY } from './decorator/roles-allowed.decorator';
 import { FastifyRequest } from 'fastify';
 import { AUTH_ERROR } from '../../auth/auth.constants';

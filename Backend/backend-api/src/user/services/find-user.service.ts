@@ -1,16 +1,19 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { FindUserQueryDto } from '../dto/find-user-query.dto';
+import { IFindUserQueryDto } from '../dto/find-user-query.dto';
 import { AppAbility } from '../../casl/casl-types';
-import { Prisma } from 'src/generated/prisma/client';
-import { accessibleBy } from '@casl/prisma';
+import { UserRole } from 'src/generated/drizzle/enums';
 import { Action } from '../../casl/actions';
-import usersWhereInput = Prisma.usersWhereInput;
-import { PaginatedData } from '../../common/types-interfaces/response.interface';
+import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
+import { UserPayload } from '../../auth/auth.types';
+import { and, count, eq, ilike, notInArray, or, sql } from 'drizzle-orm';
+import { users } from '../../generated/drizzle/schema';
+import { DrizzleService } from '../../drizzle/drizzle.service';
+import { FindUserResponse } from '../dto/user-response';
 
 @Injectable()
 export class FindUserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly drizzleService: DrizzleService) {}
+  /*
   async findUser(query: FindUserQueryDto, ability: AppAbility) {
     if (!ability.can(Action.Read, 'users')) {
       throw new ForbiddenException('You do not have permission to find users');
@@ -97,6 +100,121 @@ export class FindUserService {
       items: users,
       pagination: {
         total: total,
+        page: page,
+        limit: limit,
+      },
+    };
+
+    return result;
+  }*/
+
+  getPermissionCondition(user: UserPayload) {
+    switch (user.userRole) {
+      case UserRole.ADMIN:
+        return notInArray(users.role, ['ADMIN', 'SUPERADMIN']);
+
+      case UserRole.RETAILER:
+        return and(
+          eq(users.role, UserRole.WHOLESALER),
+          notInArray(users.status, [
+            'INACTIVE',
+            'BANNED',
+            'PENDING_VERIFICATION',
+            'PENDING_REVIEW',
+          ]),
+        );
+      default:
+        return undefined;
+    }
+  }
+
+  async findUser(
+    query: IFindUserQueryDto,
+    ability: AppAbility,
+    user: UserPayload,
+  ) {
+    if (!ability.can(Action.Read, 'users')) {
+      throw new ForbiddenException('You do not have permission to find users');
+    }
+    const permissionCondition = this.getPermissionCondition(user);
+
+    const {
+      search,
+      role,
+      status,
+      selectUserStatus,
+      selectUserRole,
+      user_id,
+      username,
+      email,
+      first_name,
+      last_name,
+      telephone,
+      cif,
+      profile,
+      page,
+      limit,
+    } = query;
+
+    const mainQuery = this.drizzleService.db
+      .select({
+        id: users.id,
+        ...(selectUserStatus && { status: users.status }),
+        ...(selectUserRole && { role: users.role }),
+        ...(user_id && { user_id: users.user_id }),
+        ...(username && { username: users.username }),
+        ...(email && { email: users.email }),
+        ...(first_name && { first_name: users.first_name }),
+        ...(last_name && { last_name: users.last_name }),
+        ...(telephone && { telephone: users.telephone }),
+        ...(cif && { cif: users.cif }),
+        ...(profile && { profile: users.profile }),
+      })
+      .from(users)
+      .$dynamic();
+
+    const whereConditions = [permissionCondition];
+
+    if (search) {
+      const searchPattern = `%${search}%`;
+      whereConditions.push(
+        or(
+          ilike(users.username, searchPattern),
+          ilike(users.first_name, searchPattern),
+          ilike(users.last_name, searchPattern),
+          ilike(users.email, searchPattern),
+          ilike(users.telephone, searchPattern),
+          ilike(users.cif, searchPattern),
+          ilike(users.user_id, searchPattern),
+        ),
+      );
+    }
+
+    if (!permissionCondition) {
+      whereConditions.push(role ? eq(users.role, role) : undefined);
+      whereConditions.push(status ? eq(users.status, status) : undefined);
+    }
+
+    const [items, total] = await Promise.all([
+      mainQuery
+        .where(and(...whereConditions))
+        .orderBy(
+          sql.raw(
+            `${query.orderBy ?? 'created_at'} ${query.orderDir ?? 'desc'}`,
+          ),
+        )
+        .limit(limit)
+        .offset((page - 1) * limit),
+      this.drizzleService.db
+        .select({ count: count() })
+        .from(users)
+        .where(and(...whereConditions)),
+    ]);
+
+    const result: PaginatedDataWithT<FindUserResponse> = {
+      items,
+      pagination: {
+        total: total[0]?.count ?? 0,
         page: page,
         limit: limit,
       },

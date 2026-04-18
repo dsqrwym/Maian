@@ -33,6 +33,7 @@ export type CategoriesAvgAggregateOutputType = {
   iva: runtime.Decimal | null
   parent_id: number | null
   level: number | null
+  version: number | null
 }
 
 export type CategoriesSumAggregateOutputType = {
@@ -40,6 +41,7 @@ export type CategoriesSumAggregateOutputType = {
   iva: runtime.Decimal | null
   parent_id: bigint | null
   level: number | null
+  version: bigint | null
 }
 
 export type CategoriesMinAggregateOutputType = {
@@ -54,6 +56,8 @@ export type CategoriesMinAggregateOutputType = {
   updated_at: Date | null
   created_by: string | null
   updated_by: string | null
+  version: bigint | null
+  deleted_at: Date | null
 }
 
 export type CategoriesMaxAggregateOutputType = {
@@ -68,6 +72,8 @@ export type CategoriesMaxAggregateOutputType = {
   updated_at: Date | null
   created_by: string | null
   updated_by: string | null
+  version: bigint | null
+  deleted_at: Date | null
 }
 
 export type CategoriesCountAggregateOutputType = {
@@ -82,6 +88,8 @@ export type CategoriesCountAggregateOutputType = {
   updated_at: number
   created_by: number
   updated_by: number
+  version: number
+  deleted_at: number
   _all: number
 }
 
@@ -91,6 +99,7 @@ export type CategoriesAvgAggregateInputType = {
   iva?: true
   parent_id?: true
   level?: true
+  version?: true
 }
 
 export type CategoriesSumAggregateInputType = {
@@ -98,6 +107,7 @@ export type CategoriesSumAggregateInputType = {
   iva?: true
   parent_id?: true
   level?: true
+  version?: true
 }
 
 export type CategoriesMinAggregateInputType = {
@@ -112,6 +122,8 @@ export type CategoriesMinAggregateInputType = {
   updated_at?: true
   created_by?: true
   updated_by?: true
+  version?: true
+  deleted_at?: true
 }
 
 export type CategoriesMaxAggregateInputType = {
@@ -126,6 +138,8 @@ export type CategoriesMaxAggregateInputType = {
   updated_at?: true
   created_by?: true
   updated_by?: true
+  version?: true
+  deleted_at?: true
 }
 
 export type CategoriesCountAggregateInputType = {
@@ -140,6 +154,8 @@ export type CategoriesCountAggregateInputType = {
   updated_at?: true
   created_by?: true
   updated_by?: true
+  version?: true
+  deleted_at?: true
   _all?: true
 }
 
@@ -241,6 +257,8 @@ export type CategoriesGroupByOutputType = {
   updated_at: Date | null
   created_by: string | null
   updated_by: string | null
+  version: bigint
+  deleted_at: Date | null
   _count: CategoriesCountAggregateOutputType | null
   _avg: CategoriesAvgAggregateOutputType | null
   _sum: CategoriesSumAggregateOutputType | null
@@ -278,6 +296,8 @@ export type categoriesWhereInput = {
   updated_at?: Prisma.DateTimeNullableFilter<"categories"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"categories"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"categories"> | string | null
+  version?: Prisma.BigIntFilter<"categories"> | bigint | number
+  deleted_at?: Prisma.DateTimeNullableFilter<"categories"> | Date | string | null
   users_categories_created_byTousers?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   parent?: Prisma.XOR<Prisma.CategoriesNullableScalarRelationFilter, Prisma.categoriesWhereInput> | null
   children?: Prisma.CategoriesListRelationFilter
@@ -299,6 +319,8 @@ export type categoriesOrderByWithRelationInput = {
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   users_categories_created_byTousers?: Prisma.usersOrderByWithRelationInput
   parent?: Prisma.categoriesOrderByWithRelationInput
   children?: Prisma.categoriesOrderByRelationAggregateInput
@@ -324,6 +346,8 @@ export type categoriesWhereUniqueInput = Prisma.AtLeast<{
   updated_at?: Prisma.DateTimeNullableFilter<"categories"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"categories"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"categories"> | string | null
+  version?: Prisma.BigIntFilter<"categories"> | bigint | number
+  deleted_at?: Prisma.DateTimeNullableFilter<"categories"> | Date | string | null
   users_categories_created_byTousers?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null
   parent?: Prisma.XOR<Prisma.CategoriesNullableScalarRelationFilter, Prisma.categoriesWhereInput> | null
   children?: Prisma.CategoriesListRelationFilter
@@ -345,6 +369,8 @@ export type categoriesOrderByWithAggregationInput = {
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   created_by?: Prisma.SortOrderInput | Prisma.SortOrder
   updated_by?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.categoriesCountOrderByAggregateInput
   _avg?: Prisma.categoriesAvgOrderByAggregateInput
   _max?: Prisma.categoriesMaxOrderByAggregateInput
@@ -367,6 +393,8 @@ export type categoriesScalarWhereWithAggregatesInput = {
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"categories"> | Date | string | null
   created_by?: Prisma.UuidNullableWithAggregatesFilter<"categories"> | string | null
   updated_by?: Prisma.UuidNullableWithAggregatesFilter<"categories"> | string | null
+  version?: Prisma.BigIntWithAggregatesFilter<"categories"> | bigint | number
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"categories"> | Date | string | null
 }
 
 export type categoriesCreateInput = {
@@ -377,6 +405,8 @@ export type categoriesCreateInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
@@ -398,6 +428,8 @@ export type categoriesUncheckedCreateInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
@@ -411,6 +443,8 @@ export type categoriesUpdateInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
@@ -432,6 +466,8 @@ export type categoriesUncheckedUpdateInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
@@ -449,6 +485,8 @@ export type categoriesCreateManyInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
 }
 
 export type categoriesUpdateManyMutationInput = {
@@ -459,6 +497,8 @@ export type categoriesUpdateManyMutationInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type categoriesUncheckedUpdateManyInput = {
@@ -473,6 +513,8 @@ export type categoriesUncheckedUpdateManyInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CategoriesNullableScalarRelationFilter = {
@@ -507,6 +549,8 @@ export type categoriesCountOrderByAggregateInput = {
   updated_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
 }
 
 export type categoriesAvgOrderByAggregateInput = {
@@ -514,6 +558,7 @@ export type categoriesAvgOrderByAggregateInput = {
   iva?: Prisma.SortOrder
   parent_id?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type categoriesMaxOrderByAggregateInput = {
@@ -528,6 +573,8 @@ export type categoriesMaxOrderByAggregateInput = {
   updated_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
 }
 
 export type categoriesMinOrderByAggregateInput = {
@@ -542,6 +589,8 @@ export type categoriesMinOrderByAggregateInput = {
   updated_at?: Prisma.SortOrder
   created_by?: Prisma.SortOrder
   updated_by?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
 }
 
 export type categoriesSumOrderByAggregateInput = {
@@ -549,6 +598,7 @@ export type categoriesSumOrderByAggregateInput = {
   iva?: Prisma.SortOrder
   parent_id?: Prisma.SortOrder
   level?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type CategoriesScalarRelationFilter = {
@@ -792,6 +842,8 @@ export type categoriesCreateWithoutChildrenInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   users_categories_updated_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_updated_byTousersInput
@@ -812,6 +864,8 @@ export type categoriesUncheckedCreateWithoutChildrenInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
 }
@@ -829,6 +883,8 @@ export type categoriesCreateWithoutParentInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
   users_categories_updated_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_updated_byTousersInput
@@ -848,6 +904,8 @@ export type categoriesUncheckedCreateWithoutParentInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
@@ -882,6 +940,8 @@ export type categoriesUpdateWithoutChildrenInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   users_categories_updated_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_updated_byTousersNestedInput
@@ -902,6 +962,8 @@ export type categoriesUncheckedUpdateWithoutChildrenInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
 }
@@ -937,6 +999,8 @@ export type categoriesScalarWhereInput = {
   updated_at?: Prisma.DateTimeNullableFilter<"categories"> | Date | string | null
   created_by?: Prisma.UuidNullableFilter<"categories"> | string | null
   updated_by?: Prisma.UuidNullableFilter<"categories"> | string | null
+  version?: Prisma.BigIntFilter<"categories"> | bigint | number
+  deleted_at?: Prisma.DateTimeNullableFilter<"categories"> | Date | string | null
 }
 
 export type categoriesCreateWithoutProduct_categoriesInput = {
@@ -947,6 +1011,8 @@ export type categoriesCreateWithoutProduct_categoriesInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
@@ -967,6 +1033,8 @@ export type categoriesUncheckedCreateWithoutProduct_categoriesInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
 }
@@ -995,6 +1063,8 @@ export type categoriesUpdateWithoutProduct_categoriesInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
@@ -1015,6 +1085,8 @@ export type categoriesUncheckedUpdateWithoutProduct_categoriesInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
 }
@@ -1027,6 +1099,8 @@ export type categoriesCreateWithoutUsers_categories_created_byTousersInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
   users_categories_updated_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_updated_byTousersInput
@@ -1046,6 +1120,8 @@ export type categoriesUncheckedCreateWithoutUsers_categories_created_byTousersIn
   name_unaccent?: string | null
   updated_at?: Date | string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
@@ -1069,6 +1145,8 @@ export type categoriesCreateWithoutUsers_categories_updated_byTousersInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
@@ -1088,6 +1166,8 @@ export type categoriesUncheckedCreateWithoutUsers_categories_updated_byTousersIn
   name_unaccent?: string | null
   updated_at?: Date | string | null
   created_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
@@ -1111,6 +1191,8 @@ export type categoriesCreateWithoutUsersInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
@@ -1130,6 +1212,8 @@ export type categoriesUncheckedCreateWithoutUsersInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   category_translations?: Prisma.category_translationsUncheckedCreateNestedManyWithoutCategoriesInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
@@ -1201,6 +1285,8 @@ export type categoriesCreateWithoutCategory_translationsInput = {
   level: number
   name_unaccent?: string | null
   updated_at?: Date | string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   users_categories_created_byTousers?: Prisma.usersCreateNestedOneWithoutCategories_categories_created_byTousersInput
   parent?: Prisma.categoriesCreateNestedOneWithoutChildrenInput
   children?: Prisma.categoriesCreateNestedManyWithoutParentInput
@@ -1221,6 +1307,8 @@ export type categoriesUncheckedCreateWithoutCategory_translationsInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
   children?: Prisma.categoriesUncheckedCreateNestedManyWithoutParentInput
   product_categories?: Prisma.product_categoriesUncheckedCreateNestedManyWithoutCategoriesInput
 }
@@ -1249,6 +1337,8 @@ export type categoriesUpdateWithoutCategory_translationsInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
@@ -1269,6 +1359,8 @@ export type categoriesUncheckedUpdateWithoutCategory_translationsInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
 }
@@ -1284,6 +1376,8 @@ export type categoriesCreateManyParentInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
 }
 
 export type categoriesUpdateWithoutParentInput = {
@@ -1294,6 +1388,8 @@ export type categoriesUpdateWithoutParentInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
   users_categories_updated_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_updated_byTousersNestedInput
@@ -1313,6 +1409,8 @@ export type categoriesUncheckedUpdateWithoutParentInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
@@ -1329,6 +1427,8 @@ export type categoriesUncheckedUpdateManyWithoutParentInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type categoriesCreateManyUsers_categories_created_byTousersInput = {
@@ -1342,6 +1442,8 @@ export type categoriesCreateManyUsers_categories_created_byTousersInput = {
   name_unaccent?: string | null
   updated_at?: Date | string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
 }
 
 export type categoriesCreateManyUsers_categories_updated_byTousersInput = {
@@ -1355,6 +1457,8 @@ export type categoriesCreateManyUsers_categories_updated_byTousersInput = {
   name_unaccent?: string | null
   updated_at?: Date | string | null
   created_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
 }
 
 export type categoriesCreateManyUsersInput = {
@@ -1368,6 +1472,8 @@ export type categoriesCreateManyUsersInput = {
   updated_at?: Date | string | null
   created_by?: string | null
   updated_by?: string | null
+  version?: bigint | number
+  deleted_at?: Date | string | null
 }
 
 export type categoriesUpdateWithoutUsers_categories_created_byTousersInput = {
@@ -1378,6 +1484,8 @@ export type categoriesUpdateWithoutUsers_categories_created_byTousersInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
   users_categories_updated_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_updated_byTousersNestedInput
@@ -1397,6 +1505,8 @@ export type categoriesUncheckedUpdateWithoutUsers_categories_created_byTousersIn
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
@@ -1413,6 +1523,8 @@ export type categoriesUncheckedUpdateManyWithoutUsers_categories_created_byTouse
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type categoriesUpdateWithoutUsers_categories_updated_byTousersInput = {
@@ -1423,6 +1535,8 @@ export type categoriesUpdateWithoutUsers_categories_updated_byTousersInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
@@ -1442,6 +1556,8 @@ export type categoriesUncheckedUpdateWithoutUsers_categories_updated_byTousersIn
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
@@ -1458,6 +1574,8 @@ export type categoriesUncheckedUpdateManyWithoutUsers_categories_updated_byTouse
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type categoriesUpdateWithoutUsersInput = {
@@ -1468,6 +1586,8 @@ export type categoriesUpdateWithoutUsersInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   name_unaccent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   users_categories_created_byTousers?: Prisma.usersUpdateOneWithoutCategories_categories_created_byTousersNestedInput
   parent?: Prisma.categoriesUpdateOneWithoutChildrenNestedInput
   children?: Prisma.categoriesUpdateManyWithoutParentNestedInput
@@ -1487,6 +1607,8 @@ export type categoriesUncheckedUpdateWithoutUsersInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   children?: Prisma.categoriesUncheckedUpdateManyWithoutParentNestedInput
   category_translations?: Prisma.category_translationsUncheckedUpdateManyWithoutCategoriesNestedInput
   product_categories?: Prisma.product_categoriesUncheckedUpdateManyWithoutCategoriesNestedInput
@@ -1503,6 +1625,8 @@ export type categoriesUncheckedUpdateManyWithoutUsersInput = {
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1566,6 +1690,8 @@ export type categoriesSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updated_at?: boolean
   created_by?: boolean
   updated_by?: boolean
+  version?: boolean
+  deleted_at?: boolean
   users_categories_created_byTousers?: boolean | Prisma.categories$users_categories_created_byTousersArgs<ExtArgs>
   parent?: boolean | Prisma.categories$parentArgs<ExtArgs>
   children?: boolean | Prisma.categories$childrenArgs<ExtArgs>
@@ -1588,6 +1714,8 @@ export type categoriesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   updated_at?: boolean
   created_by?: boolean
   updated_by?: boolean
+  version?: boolean
+  deleted_at?: boolean
   users_categories_created_byTousers?: boolean | Prisma.categories$users_categories_created_byTousersArgs<ExtArgs>
   parent?: boolean | Prisma.categories$parentArgs<ExtArgs>
   users_categories_updated_byTousers?: boolean | Prisma.categories$users_categories_updated_byTousersArgs<ExtArgs>
@@ -1606,6 +1734,8 @@ export type categoriesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   updated_at?: boolean
   created_by?: boolean
   updated_by?: boolean
+  version?: boolean
+  deleted_at?: boolean
   users_categories_created_byTousers?: boolean | Prisma.categories$users_categories_created_byTousersArgs<ExtArgs>
   parent?: boolean | Prisma.categories$parentArgs<ExtArgs>
   users_categories_updated_byTousers?: boolean | Prisma.categories$users_categories_updated_byTousersArgs<ExtArgs>
@@ -1624,9 +1754,11 @@ export type categoriesSelectScalar = {
   updated_at?: boolean
   created_by?: boolean
   updated_by?: boolean
+  version?: boolean
+  deleted_at?: boolean
 }
 
-export type categoriesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "name" | "iva" | "parent_id" | "created_at" | "level" | "name_unaccent" | "updated_at" | "created_by" | "updated_by", ExtArgs["result"]["categories"]>
+export type categoriesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "name" | "iva" | "parent_id" | "created_at" | "level" | "name_unaccent" | "updated_at" | "created_by" | "updated_by" | "version" | "deleted_at", ExtArgs["result"]["categories"]>
 export type categoriesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users_categories_created_byTousers?: boolean | Prisma.categories$users_categories_created_byTousersArgs<ExtArgs>
   parent?: boolean | Prisma.categories$parentArgs<ExtArgs>
@@ -1673,6 +1805,8 @@ export type $categoriesPayload<ExtArgs extends runtime.Types.Extensions.Internal
     updated_at: Date | null
     created_by: string | null
     updated_by: string | null
+    version: bigint
+    deleted_at: Date | null
   }, ExtArgs["result"]["categories"]>
   composites: {}
 }
@@ -2114,6 +2248,8 @@ export interface categoriesFieldRefs {
   readonly updated_at: Prisma.FieldRef<"categories", 'DateTime'>
   readonly created_by: Prisma.FieldRef<"categories", 'String'>
   readonly updated_by: Prisma.FieldRef<"categories", 'String'>
+  readonly version: Prisma.FieldRef<"categories", 'BigInt'>
+  readonly deleted_at: Prisma.FieldRef<"categories", 'DateTime'>
 }
     
 

@@ -7,21 +7,36 @@ import {
 import { STORAGE_DRIVER } from './storage/storage-key';
 import { StorageDriver } from './storage/storage.driver';
 import { Readable } from 'stream';
-import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from '../auth/auth.types';
 import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
-import { UserRole } from '../generated/prisma/enums';
+import { UserRole } from '../generated/drizzle/enums';
 import { IProductFilesQueryDto } from './dto/product-files-query.dto';
 import { AppAbility } from '../casl/casl-types';
 import { Action } from '../casl/actions';
 import { subject } from '@casl/ability';
+import { DrizzleDb, DrizzleService } from 'src/drizzle/drizzle.service';
+import {
+  files,
+  products,
+  products_files,
+  user_uploads,
+} from 'src/generated/drizzle/schema';
+import { and, eq, sql } from 'drizzle-orm';
 
 @Injectable()
 export class FilesService {
   constructor(
     @Inject(STORAGE_DRIVER) private readonly storage: StorageDriver,
-    private readonly prisma: PrismaService,
+    private readonly drizzle: DrizzleService,
   ) {}
+  attachUser = (tx: DrizzleDb, user_id: string, file_id: bigint) =>
+    tx
+      .insert(user_uploads)
+      .values({ user_id, file_id })
+      .onConflictDoUpdate({
+        target: [user_uploads.user_id, user_uploads.file_id],
+        set: { created_at: sql`(NOW() AT TIME ZONE 'UTC')` },
+      });
 
   async uploadFile(
     buffer: Buffer | Readable,
@@ -32,33 +47,26 @@ export class FilesService {
     const { pathKey, file_hash, file_name, mime_type, file_size } =
       await this.storage.upload(buffer, filename);
 
-    const file = await this.prisma.$transaction(async (tx) => {
-      const fileId = await tx.files.upsert({
-        where: { file_hash },
-        update: {
-          to_delete: false,
-        },
-        create: {
+    const file = await this.drizzle.db.transaction(async (tx) => {
+      const [createdOrUpdatedFile] = await tx
+        .insert(files)
+        .values({
           file_hash,
           file_name,
           mime_type,
-          file_size,
+          file_size: BigInt(file_size),
           storage_key: pathKey,
-        },
-        select: { id: true },
-      });
+        })
+        .onConflictDoUpdate({
+          target: files.file_hash,
+          set: { to_delete: false },
+        })
+        .returning({ id: files.id });
 
-      const attachUser = (user_id: string, file_id: bigint) =>
-        tx.user_uploads.upsert({
-          where: { user_id_file_id: { user_id, file_id } },
-          update: { created_at: new Date() }, // 更新时间以示"活跃"
-          create: { user_id, file_id },
-        });
-
-      await attachUser(user.userId, fileId.id);
+      await this.attachUser(tx, user.userId, createdOrUpdatedFile.id);
 
       if (user.wholesalerId) {
-        await attachUser(user.wholesalerId, fileId.id);
+        await this.attachUser(tx, user.wholesalerId, createdOrUpdatedFile.id);
       }
 
       if (
@@ -67,9 +75,9 @@ export class FilesService {
           user.userRole === UserRole.SUPERADMIN)
       ) {
         const wholesaler = query.wholesalerId;
-        await attachUser(wholesaler, fileId.id);
+        await this.attachUser(tx, wholesaler, createdOrUpdatedFile.id);
       }
-      return fileId;
+      return createdOrUpdatedFile;
     });
 
     return { id: file.id.toString() };
@@ -77,25 +85,25 @@ export class FilesService {
 
   async getProductFileById(query: IProductFilesQueryDto, ability: AppAbility) {
     const { product_id, file_id } = query;
-    const file = await this.prisma.files.findUnique({
-      select: {
-        storage_key: true,
-        mime_type: true,
-        file_name: true,
-        products_files: {
-          select: { products: { select: { user_id: true } } },
-          where: { product_id: BigInt(product_id) },
-        },
-      },
-      where: {
-        id: BigInt(file_id),
-        products_files: {
-          some: {
-            product_id: BigInt(product_id),
-          },
-        },
-      },
-    });
+
+    const [file] = await this.drizzle.db
+      .select({
+        storage_key: files.storage_key,
+        mime_type: files.mime_type,
+        file_name: files.file_name,
+        product_user_id: products.user_id, // 拿 products 表的 user_id
+      })
+      .from(files)
+      // innerJoin 就是 join 只返回两个表中匹配的行。如果某行在任一表中无匹配，则不返回。
+      .innerJoin(products_files, eq(files.id, products_files.file_id))
+      .innerJoin(products, eq(products_files.product_id, products.id))
+      .where(
+        and(
+          eq(files.id, BigInt(file_id)), // 查找文件
+          eq(products_files.product_id, BigInt(product_id)), // 文件属于产品
+        ),
+      )
+      .limit(1);
 
     if (!file) {
       throw new NotFoundException(
@@ -103,12 +111,10 @@ export class FilesService {
       );
     }
 
-    const productOwnerId = file.products_files[0].products.user_id;
-
     if (
       !ability.can(
         Action.Read,
-        subject('products_files', { user_id: productOwnerId }),
+        subject('products_files', { user_id: file.product_user_id }),
       )
     ) {
       throw new ForbiddenException('You are not allowed to read this file');

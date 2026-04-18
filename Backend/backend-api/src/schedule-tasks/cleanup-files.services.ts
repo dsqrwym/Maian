@@ -1,28 +1,34 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import { HOUR, reduceHours } from '../utils/date.utils';
+import { HOUR, MINUTE, reduceHours } from '../utils/date.utils';
 import { STORAGE_DRIVER } from '../files/storage/storage-key';
 import { LocalStorageDriver } from '../files/storage/local-storage.driver';
-import { PrismaService } from '../prisma/prisma.service';
 import { PinoLogger } from 'nestjs-pino';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { StorageDriver } from '../files/storage/storage.driver';
 import { DistributedLockService } from './distributed-lock.service';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import {
+  files,
+  message_files,
+  products_files,
+} from '../generated/drizzle/schema';
+import { and, asc, eq, gt, inArray, lt, notExists, sql } from 'drizzle-orm';
 
 const CLEAN_TEMP_FILES_LOCK_KEY = 'cron:cleanup:temp-files';
-const CLEAN_TEMP_FILES_LOCK_TTL_MS = 5 * 60 * 1000;
+const CLEAN_TEMP_FILES_LOCK_TTL_MS = 5 * MINUTE;
 const MARK_FILES_LOCK_KEY = 'cron:cleanup:mark-files';
-const MARK_FILES_LOCK_TTL_MS = 10 * 60 * 1000;
+const MARK_FILES_LOCK_TTL_MS = 10 * MINUTE;
 const DELETE_FILES_LOCK_KEY = 'cron:cleanup:delete-files';
-const DELETE_FILES_LOCK_TTL_MS = 30 * 60 * 1000;
+const DELETE_FILES_LOCK_TTL_MS = 30 * MINUTE;
 
 @Injectable()
 export class CleanupFilesService {
   constructor(
     private readonly localDriver: LocalStorageDriver,
     @Inject(STORAGE_DRIVER) private readonly storage: StorageDriver,
-    private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly distributedLockService: DistributedLockService,
   ) {
@@ -60,20 +66,29 @@ export class CleanupFilesService {
       MARK_FILES_LOCK_TTL_MS,
       async () => {
         const deleteDate = reduceHours(new Date(), 6);
-        const deleted = await this.prismaService.files.updateMany({
-          where: {
-            AND: [
-              { to_delete: false },
-              { message_files: { none: {} } },
-              { products_files: { none: {} } },
-              { created_at: { lt: deleteDate } },
-              // 将来新增引用表继续添加
-            ],
-          },
-          data: { to_delete: true },
-        });
+        const toDeleted = await this.drizzleService.db
+          .update(files)
+          .set({ to_delete: true })
+          .where(
+            and(
+              eq(files.to_delete, false),
+              lt(files.created_at, deleteDate.toISOString()),
+              notExists(
+                this.drizzleService.db
+                  .select({ one: sql<number>`1` })
+                  .from(message_files)
+                  .where(eq(message_files.file_id, files.id)),
+              ),
+              notExists(
+                this.drizzleService.db
+                  .select({ one: sql<number>`1` })
+                  .from(products_files)
+                  .where(eq(products_files.file_id, files.id)),
+              ),
+            ),
+          );
         this.logger.info(
-          `Mark up ${deleted.count} unreferenced files to delete.`,
+          `Mark up ${toDeleted.rowCount ?? 0} unreferenced files to delete.`,
         );
       },
     );
@@ -90,22 +105,24 @@ export class CleanupFilesService {
         const concurrency = 8; // 并发 storage.delete 的限制
         let totalDeleted = 0;
         let totalFailed = 0;
-        let lastId: number | null = null;
+        let lastId: bigint | null = null;
 
         while (true) {
           // 分页拉取（按 id 升序），避免一次拉出过多
-          const files = await this.prismaService.files.findMany({
-            where: {
-              to_delete: true,
-              created_at: { lt: deleteDate },
-              ...(lastId && { id: { gt: lastId } }),
-            },
-            orderBy: { id: 'asc' },
-            take: batchSize,
-          });
+          const filesToDelete = await this.drizzleService.db
+            .select()
+            .from(files)
+            .where(
+              and(
+                eq(files.to_delete, true),
+                lt(files.created_at, deleteDate.toISOString()),
+                lastId ? gt(files.id, lastId) : undefined,
+              ),
+            )
+            .orderBy(asc(files.id))
+            .limit(batchSize);
 
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          if (files.length === 0) break;
+          if (filesToDelete.length === 0) break;
 
           // 并发限流执行 storage.delete，收集成功或可忽略的 id
           const idsToDeleteFromDb: bigint[] = [];
@@ -115,14 +132,11 @@ export class CleanupFilesService {
           const runners: Promise<void>[] = [];
           let idx = 0;
           const runNext = async () => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            while (idx < files.length) {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-              const current = files[idx++];
+            while (idx < filesToDelete.length) {
+              const current = filesToDelete[idx++];
               try {
                 // storage.delete 可能抛错 --- 处理 ENOENT 为可忽略
                 await this.storage
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument
                   .delete(current.storage_key)
                   .catch((err: unknown) => {
                     const e = err as
@@ -130,7 +144,6 @@ export class CleanupFilesService {
                       | { code?: string; message?: string };
                     if (e && (e.code === 'ENOENT' || e.code === 'NotFound')) {
                       this.logger.debug(
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                         `Storage missing for ${current.storage_key}, will remove DB record.`,
                       );
                       return;
@@ -139,13 +152,11 @@ export class CleanupFilesService {
                   });
 
                 // 如果 storage.delete 成功或文件本就不存在，加入批量删除名单
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
                 idsToDeleteFromDb.push(current.id);
               } catch (err) {
                 failedThisBatch++;
                 this.logger.error(
                   { err },
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                   `Failed to delete storage for ${current.storage_key}`,
                 );
                 // 不把这个 id 加入 idsToDeleteFromDb，这样不会删除 DB（保留做重试）
@@ -161,20 +172,21 @@ export class CleanupFilesService {
 
           // 批量从数据库中删除成功删除了存储的那些记录
           if (idsToDeleteFromDb.length > 0) {
-            const deleteResult = await this.prismaService.files.deleteMany({
-              where: {
-                id: { in: idsToDeleteFromDb },
-                to_delete: true,
-                created_at: { lt: deleteDate }, // 再次 double-check
-              },
-            });
-            totalDeleted += deleteResult.count;
+            const deletedResult = await this.drizzleService.db
+              .delete(files)
+              .where(
+                and(
+                  inArray(files.id, idsToDeleteFromDb),
+                  eq(files.to_delete, true),
+                  lt(files.created_at, deleteDate.toISOString()),
+                ),
+              );
+            totalDeleted += deletedResult.rowCount ?? 0;
           }
 
           totalFailed += failedThisBatch;
 
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-          lastId = files[files.length - 1].id;
+          lastId = filesToDelete[filesToDelete.length - 1].id;
         }
 
         this.logger.info(

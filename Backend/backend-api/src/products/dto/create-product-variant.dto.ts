@@ -1,4 +1,4 @@
-import { SaleVariant } from 'src/generated/prisma/client';
+import { SaleVariant, ProductStatus } from 'src/generated/drizzle/enums';
 import { TagsSort } from '../../utils/typia/validators/sort.validator';
 import typia, { tags } from 'typia';
 import {
@@ -7,7 +7,7 @@ import {
   TagsProductCode,
 } from '../../utils/typia/validators/product.validator';
 import { TagsUInt4 } from '../../utils/typia/tags/number.tags';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { BadRequestException } from '@nestjs/common';
 import Decimal from 'decimal.js';
 
@@ -31,6 +31,8 @@ export interface ICreateVariantDto {
   min_order_qty: TagsUInt4 & tags.Minimum<1>; // 最小起订量 (以销售单位计)
 
   low_stock_threshold?: TagsUInt4; // 低库存预警阈值
+
+  status?: ProductStatus;
 
   attributes?: string; // 暂时不用
 }

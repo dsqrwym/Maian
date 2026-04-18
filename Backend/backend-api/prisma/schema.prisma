@@ -42,7 +42,7 @@ model carts {
 model categories {
   id                                 BigInt                  @id @default(autoincrement())
   user_id                            String?                 @db.Uuid
-  name                               String                  @unique(map: "categories_name_unique_public", where: raw("(user_id IS NULL)")) @db.VarChar(50)
+  name                               String                  @unique(map: "categories_name_unique_public", where: raw("((user_id IS NULL) AND (deleted_at IS NULL))")) @db.VarChar(50)
   iva                                Decimal?                @db.Decimal(5, 2)
   parent_id                          BigInt?
   created_at                         DateTime                @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
@@ -51,6 +51,8 @@ model categories {
   updated_at                         DateTime?               @default(dbgenerated("(now() AT TIME ZONE 'utc'::text)")) @db.Timestamp(6)
   created_by                         String?                 @db.Uuid
   updated_by                         String?                 @db.Uuid
+  version                            BigInt                  @default(1)
+  deleted_at                         DateTime?               @db.Timestamp(6)
   users_categories_created_byTousers users?                  @relation("categories_created_byTousers", fields: [created_by], references: [id], onUpdate: NoAction)
   parent                             categories?             @relation("CategoryParent", fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   children                           categories[]            @relation("CategoryParent")
@@ -59,7 +61,7 @@ model categories {
   category_translations              category_translations[]
   product_categories                 product_categories[]
 
-  @@unique([user_id, name], map: "categories_user_name_unique_private", where: raw("(user_id IS NOT NULL)"))
+  @@unique([user_id, name], map: "categories_user_name_unique_private", where: raw("((user_id IS NOT NULL) AND (deleted_at IS NULL))"))
   @@schema("public")
 }
 
@@ -349,6 +351,8 @@ model products {
   updated_by                       String?                @db.Uuid
   name_unaccent                    String?                @default(dbgenerated("immutable_unaccent((name)::text)"))
   title_unaccent                   String?                @default(dbgenerated("immutable_unaccent((title)::text)"))
+  version                          BigInt                 @default(1)
+  deleted_at                       DateTime?              @db.Timestamp(6)
   product_categories               product_categories[]
   product_translations             product_translations[]
   users_products_created_byTousers users                  @relation("products_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)

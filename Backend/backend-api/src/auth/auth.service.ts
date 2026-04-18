@@ -16,7 +16,7 @@ import {
 } from './dto/verification.dto';
 import { ISendNormalRegisterMailDto } from './dto/register.dto';
 import { IRegisterWholesalerDto } from './dto/register-wholesaler.dto';
-import { UserRole } from 'src/generated/prisma/client';
+import { UserRole } from 'src/generated/drizzle/enums';
 
 @Injectable()
 export class AuthService {

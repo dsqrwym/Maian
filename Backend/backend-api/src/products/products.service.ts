@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -9,20 +10,12 @@ import { IUpdateProductDto } from './dto/update-product.dto';
 import { AppAbility } from '../casl/casl-types';
 import { Action } from '../casl/actions';
 import { subject } from '@casl/ability';
-import { PrismaService } from '../prisma/prisma.service';
 import { UserPayload } from '../auth/auth.types';
 import { computePrice } from '../utils/calculate/computePrice';
 import { IProductListQueryDto } from './dto/product-list-query.dto';
-import { accessibleBy } from '@casl/prisma';
-import { Prisma, UserRole } from 'src/generated/prisma/client';
+import { UserRole } from 'src/generated/drizzle/enums';
 import { PinoLogger } from 'nestjs-pino';
-import {
-  ProductListSelectField,
-  ProductSelectField,
-  ProductSortField,
-} from './product.enums';
-import { PaginatedData } from '../common/types-interfaces/response.interface';
-import { IProductQueryDto } from './dto/product-query.dto';
+import { ProductListSelectField, ProductSortField } from './product.enums';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '../config/constants.config';
 import {
@@ -31,16 +24,44 @@ import {
   VIDEO_MIME_TYPES,
 } from '../config/fastify-multipart.config';
 import { IProductFileDto } from './dto/product-file.dto';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import {
+  categories,
+  category_translations,
+  files,
+  product_categories,
+  product_translations,
+  products,
+  products_files,
+  user_uploads,
+  variant_products,
+} from '../generated/drizzle/schema';
+import {
+  and,
+  asc,
+  count,
+  eq,
+  exists,
+  ilike,
+  inArray,
+  like,
+  or,
+  SQL,
+  sql,
+} from 'drizzle-orm';
+import { toUnaccent } from '../utils/string.util';
+import { IProductResponse } from './dto/product-response';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly configService: ConfigService,
   ) {
     this.logger.setContext(ProductsService.name);
   }
+
   async create(
     createProductDto: ICreateProductDto,
     ability: AppAbility,
@@ -77,59 +98,63 @@ export class ProductsService {
 
     await this.validateAndCheckFiles(files, user, user_id);
 
-    await this.prisma.products.create({
-      data: {
-        iva,
-        name,
-        title,
-        user_id,
-        description,
-        product_code,
-        created_by: user.userId,
-        product_categories: {
-          create: {
-            category_id: BigInt(primary_category_id),
-            is_primary: true,
-          },
-        },
-        variant_products: {
-          createMany: {
-            data: variants.map((variant) => ({
-              type_sale: variant.type_sale,
-              sort: variant.sort,
-              ...computePrice(variant.price, variant.price_iva, iva),
-              product_code: variant.product_code,
-              min_order_qty: variant.min_order_qty,
-              sale_unit_qty: variant.sale_unit_qty,
-              available_stock: variant.available_stock,
-              low_stock_threshold: variant.low_stock_threshold,
-              created_by: user.userId,
-            })),
-          },
-        },
-        ...(translations && {
-          product_translations: {
-            createMany: {
-              data: translations.map((translation) => ({
-                lang_code: translation.lang_code,
-                name: translation.name,
-                title: translation.title,
-                description: translation.description,
-              })),
-            },
-          },
-        }),
-        ...(files && {
-          products_files: {
-            createMany: {
-              data: files.map((file) => ({
-                file_id: BigInt(file.file_id),
-                sort: file.sort,
-              })),
-            },
-          },
-        }),
-      },
+    await this.drizzle.db.transaction(async (tx) => {
+      const [createdProduct] = await tx
+        .insert(products)
+        .values({
+          iva,
+          name,
+          title,
+          user_id,
+          description,
+          product_code,
+          created_by: user.userId,
+        })
+        .returning({ id: products.id });
+
+      await tx.insert(product_categories).values({
+        product_id: createdProduct.id,
+        category_id: BigInt(primary_category_id),
+        is_primary: true,
+      });
+
+      await tx.insert(variant_products).values(
+        variants.map((variant) => ({
+          product_id: createdProduct.id,
+          type_sale: variant.type_sale,
+          sort: variant.sort,
+          ...computePrice(variant.price, variant.price_iva, iva),
+          product_code: variant.product_code,
+          min_order_qty: variant.min_order_qty,
+          sale_unit_qty: variant.sale_unit_qty,
+          available_stock: variant.available_stock,
+          low_stock_threshold: variant.low_stock_threshold,
+          created_by: user.userId,
+          status: variant.status,
+        })),
+      );
+
+      if (translations && translations.length > 0) {
+        await tx.insert(product_translations).values(
+          translations.map((translation) => ({
+            product_id: createdProduct.id,
+            lang_code: translation.lang_code,
+            name: translation.name,
+            title: translation.title,
+            description: translation.description,
+          })),
+        );
+      }
+
+      if (files && files.length > 0) {
+        await tx.insert(products_files).values(
+          files.map((file) => ({
+            product_id: createdProduct.id,
+            file_id: BigInt(file.file_id),
+            sort: file.sort,
+          })),
+        );
+      }
     });
   }
 
@@ -148,34 +173,37 @@ export class ProductsService {
     }
   }
 
-  getSortField(sortBy?: ProductSortField): string | undefined {
+  getSortFieldDrizzle(sortBy?: ProductSortField) {
     switch (sortBy) {
       case ProductSortField.NAME:
-        return 'p.name';
+        return products.name;
       case ProductSortField.TITLE:
-        return 'p.title';
+        return products.title;
       case ProductSortField.CATEGORY:
-        return `(cat.main_category->>'name')`;
+        return sql.raw(`("mainCategoryLateral"."main_category"->>'name')`);
       case ProductSortField.PRODUCT_CODE:
-        return 'p.product_code';
+        return products.product_code;
       case ProductSortField.MIN_ORDER_QTY:
-        return 'vp.min_order_qty';
+        return sql.raw(`"variantAggregates"."min_order_qty"`);
       case ProductSortField.AVAILABLE_STOCK:
-        return 'vp.total_stock';
+        return sql.raw(`"variantAggregates"."total_stock"`);
       case ProductSortField.PRICE_IVA:
-        return 'vp.min_price_iva';
+        return sql.raw(`"variantAggregates"."min_price_iva"`);
       case ProductSortField.PRICE:
-        return 'vp.min_price';
+        return sql.raw(`"variantAggregates"."min_price"`);
       default:
         return undefined;
     }
   }
 
-  async findAllUseSql(
+  async findAllUseSqlD(
     query: IProductListQueryDto,
     ability: AppAbility,
     user: UserPayload,
-  ) {
+  ): Promise<{
+    items: IProductResponse[];
+    pagination: { total: number; page: number; limit: number };
+  }> {
     if (!ability.can(Action.Read, 'products')) {
       throw new ForbiddenException(
         'You do not have permission to read products',
@@ -183,273 +211,258 @@ export class ProductsService {
     }
     const permissionCondition = this.getReadListPermission(user);
 
-    const { search, langCode, category_id, wholesaler_id, status } = query;
+    const { search, langCode, wholesaler_id, status } = query;
+    const category_id = query.category_id
+      ? BigInt(query.category_id)
+      : undefined;
     const fields = query.fields;
     const iva = fields?.includes(ProductListSelectField.IVA);
     const selectedStatus = fields?.includes(ProductListSelectField.STATUS);
     const user_id = fields?.includes(ProductListSelectField.USER_ID);
     const category = fields?.includes(ProductListSelectField.CATEGORY);
 
-    // 构建动态 SQL 参数数组
-    const params: string[] = [];
-    let paramIndex = 1; // $1, $2 ...
-
     const { page, limit, sort_by, sort_order } = query;
     const offset = (page - 1) * limit;
+    const sortField = this.getSortFieldDrizzle(sort_by);
 
-    const sortField = this.getSortField(sort_by);
+    // LEFT JOIN LATERAL 关联主查询，查询 variants
+    const variantAggregates = this.drizzle.db
+      .select({
+        product_id: variant_products.product_id,
+        // 聚合总数
+        total_stock:
+          sql<number>`SUM(${variant_products.available_stock} * ${variant_products.sale_unit_qty})`.as(
+            'total_stock',
+          ),
+        min_order_qty:
+          sql<number>`MIN(${variant_products.min_order_qty} * ${variant_products.sale_unit_qty})`.as(
+            'min_order_qty',
+          ),
+        // 用 array_agg（聚合为数组） + order by 基于 price_iva 升序排列，取首个变体的价格对，确保来源行一致
+        min_price_iva:
+          sql<string>`(ARRAY_AGG(${variant_products.price_iva} ORDER BY ${variant_products.price_iva} ASC))[1]::text`.as(
+            'min_price_iva',
+          ),
+        min_price:
+          sql<string>`(ARRAY_AGG(${variant_products.price} ORDER BY ${variant_products.price_iva} ASC))[1]::text`.as(
+            'min_price',
+          ),
+      })
+      .from(variant_products)
+      // WHERE 条件引用主表 ID 实现 Lateral 关联
+      .where(eq(variant_products.product_id, products.id))
+      // 必须要用 group by product_id 满足聚合查询对非聚合列的分组约束
+      .groupBy(variant_products.product_id)
+      .as('variantAggregates');
 
-    if (langCode) params.push(langCode);
+    // LEFT JOIN LATERAL 关联主查询，查询主图
+    const mainImgLateral = this.drizzle.db
+      .select({
+        main_image: sql<{ id: string; mime_type: string }>`
+      jsonb_build_object(
+        'id', ${files.id},
+        'mime_type', ${files.mime_type}
+      )
+    `.as('main_image'),
+      })
+      .from(products_files)
+      .innerJoin(files, eq(files.id, products_files.file_id))
+      .where(
+        and(
+          eq(products_files.product_id, products.id),
+          like(files.mime_type, 'image/%'),
+        ),
+      )
+      .orderBy(asc(products_files.sort))
+      .limit(1)
+      .as('mainImgLateral');
 
-    const selectFields = [
-      'p.id',
-      'p.name',
-      'p.title',
-      'p.product_code',
-      'vp.min_price',
-      'vp.min_price_iva',
-      'vp.total_stock',
-      'vp.min_order_qty',
-      'img.main_image',
-      category ? 'cat.main_category' : null,
-      iva ? 'p.iva' : null,
-      selectedStatus ? 'p.status' : null,
-      user_id ? 'p.user_id' : null,
-      `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
-        'lang_code', pt.lang_code,
-        'name', pt.name,
-        'title', pt.title
-      )), '[]'::jsonb)
-      FROM product_translations pt
-      WHERE pt.product_id = p.id
-      ${langCode ? `AND pt.lang_code = $${paramIndex++}` : ''}) AS product_translations`,
-    ]
-      .filter(Boolean)
-      .join(', ');
+    // LEFT JOIN LATERAL 关联主查询，查询主分类
+    const mainCategoryLateral = this.drizzle.db
+      .select({
+        main_category: sql<{
+          id: string;
+          name: string;
+          category_translations: { lang_code: string; name: string }[];
+        }>`
+      jsonb_build_object(
+        'id', ${categories.id},
+        'name', ${categories.name},
+        'category_translations', (
+            SELECT COALESCE(jsonb_agg(jsonb_build_object(
+              'lang_code', ${category_translations.lang_code},
+              'name', ${category_translations.name}
+            )), '[]'::jsonb)
+            FROM ${category_translations}
+            WHERE ${category_translations.category_id} = ${categories.id}
+            ${langCode ? sql`AND ${category_translations.lang_code} = ${langCode}` : sql.empty()}
+          )
+      )`.as('main_category'),
+      })
+      .from(product_categories)
+      .innerJoin(categories, eq(categories.id, product_categories.category_id))
+      .where(
+        and(
+          eq(product_categories.product_id, products.id),
+          eq(product_categories.is_primary, true),
+        ),
+      )
+      .limit(1)
+      .as('mainCategoryLateral');
 
-    const whereClauses: string[] = ['1=1'];
+    // LEFT JOIN LATERAL 关联主查询，查询翻译
+    const translationsLateral = this.drizzle.db
+      .select({
+        product_translations: sql<
+          { lang_code: string; name: string | null; title: string | null }[]
+        >`
+          COALESCE(
+            jsonb_agg(
+              jsonb_build_object(
+                'lang_code', ${product_translations.lang_code},
+                'name', ${product_translations.name},
+                'title', ${product_translations.title}
+              )
+            ),
+            '[]'::jsonb
+          )`.as('product_translations'),
+      })
+      .from(product_translations)
+      .where(eq(product_translations.product_id, products.id))
+      .as('productTranslationsLateral');
+
+    let productQuery = this.drizzle.db
+      .select({
+        id: products.id,
+        name: products.name,
+        title: products.title,
+        product_code: products.product_code,
+        min_price_iva: variantAggregates.min_price_iva,
+        min_price: variantAggregates.min_price,
+        total_stock: variantAggregates.total_stock,
+        min_order_qty: variantAggregates.min_order_qty,
+        main_image: mainImgLateral.main_image,
+        ...(category && { main_category: mainCategoryLateral.main_category }),
+        ...(iva && { iva: products.iva }),
+        ...(selectedStatus && { status: products.status }),
+        ...(user_id && { user_id: products.user_id }),
+        product_translations: translationsLateral.product_translations,
+      })
+      .from(products)
+      .leftJoinLateral(variantAggregates, sql`TRUE`)
+      .leftJoinLateral(mainImgLateral, sql`TRUE`)
+      .leftJoinLateral(mainCategoryLateral, sql`TRUE`)
+      .leftJoinLateral(translationsLateral, sql`TRUE`)
+      .$dynamic();
+
+    // 构建 WHERE 条件
+    const whereConditions: (SQL | undefined)[] = [];
+
+    if (langCode) {
+      whereConditions.push(eq(product_translations.lang_code, langCode));
+    }
 
     if (permissionCondition) {
-      params.push(permissionCondition);
-      whereClauses.push(`p.user_id = $${paramIndex++}`);
+      whereConditions.push(eq(products.user_id, permissionCondition));
     }
 
     if (search) {
-      params.push(`%${search}%`);
-      const searchIndex = paramIndex++;
-      whereClauses.push(`
-      (
-        p.name_unaccent ILIKE $${searchIndex} OR
-        p.title_unaccent ILIKE $${searchIndex} OR
-        p.product_code ILIKE $${searchIndex}
-        OR EXISTS (
-          SELECT 1 FROM variant_products vp
-          WHERE vp.product_id = p.id AND vp.product_code ILIKE $${searchIndex}
-        )
-        OR EXISTS (
-          SELECT 1
-          FROM product_categories pc
-          JOIN categories c ON c.id = pc.category_id
-          LEFT JOIN category_translations ct ON ct.category_id = c.id
-          WHERE pc.product_id = p.id
-          AND (c.name ILIKE $${searchIndex} OR ct.name_unaccent ILIKE $${searchIndex})
-        )
-        OR EXISTS (
-          SELECT 1
-          FROM product_translations pt
-          WHERE pt.product_id = p.id
-          AND (pt.name_unaccent ILIKE $${searchIndex} OR pt.title_unaccent ILIKE $${searchIndex})
-        )
-      )
-    `);
+      const likeSearch = `%${toUnaccent(search)}%`;
+      whereConditions.push(
+        or(
+          ilike(products.name_unaccent, likeSearch),
+          ilike(products.title_unaccent, likeSearch),
+          ilike(products.product_code, likeSearch),
+          exists(
+            this.drizzle.db
+              .select({ one: sql<number>`1` })
+              .from(variant_products)
+              .where(
+                and(
+                  eq(products.id, variant_products.product_id),
+                  ilike(variant_products.product_code, likeSearch),
+                ),
+              ),
+          ),
+          exists(
+            this.drizzle.db
+              .select({ one: sql<number>`1` })
+              .from(product_categories)
+              .innerJoin(
+                categories,
+                eq(categories.id, product_categories.category_id),
+              )
+              .leftJoin(
+                category_translations,
+                eq(categories.id, category_translations.category_id),
+              )
+              .where(ilike(category_translations.name_unaccent, likeSearch)),
+          ),
+          exists(
+            this.drizzle.db
+              .select({ one: sql<number>`1` })
+              .from(product_translations)
+              .where(
+                or(
+                  eq(product_translations.product_id, products.id),
+                  ilike(product_translations.name_unaccent, likeSearch),
+                  ilike(product_translations.title_unaccent, likeSearch),
+                ),
+              ),
+          ),
+        ),
+      );
     }
 
-    if (category_id != null) {
-      params.push(category_id);
-      whereClauses.push(`
-      EXISTS (
-        SELECT 1 FROM product_categories pc
-        WHERE pc.product_id = p.id AND pc.category_id = $${paramIndex++}
-      )
-    `);
+    if (category_id && category_id !== 0n) {
+      whereConditions.push(
+        exists(
+          this.drizzle.db
+            .select({ one: sql<number>`1` })
+            .from(product_categories)
+            .where(
+              and(
+                eq(product_categories.product_id, products.id),
+                eq(product_categories.category_id, category_id),
+              ),
+            ),
+        ),
+      );
     }
 
     if (!permissionCondition && wholesaler_id) {
-      params.push(wholesaler_id);
-      whereClauses.push(`p.user_id = $${paramIndex++}`);
+      whereConditions.push(eq(products.user_id, wholesaler_id));
     }
 
     if (status) {
-      params.push(status);
-      whereClauses.push(`p.status = $${paramIndex++}`);
+      whereConditions.push(eq(products.status, status));
     }
 
-    const whereSql = whereClauses.join(' AND ');
+    productQuery = productQuery
+      .where(and(...whereConditions))
+      .limit(limit)
+      .offset(offset);
 
-    const sql = `
-    SELECT ${selectFields}
-    FROM products p
-      -- 主图
-      LEFT JOIN LATERAL (
-        SELECT jsonb_build_object('id', f.id, 'mime_type', f.mime_type) AS main_image
-        FROM products_files pf
-        JOIN files f ON f.id = pf.file_id
-        WHERE pf.product_id = p.id AND f.mime_type LIKE 'image/%'
-        ORDER BY pf.sort ASC
-        LIMIT 1
-      ) img ON TRUE
-      -- 主分类
-      LEFT JOIN LATERAL (
-        SELECT jsonb_build_object(
-          'id', c.id,
-          'name', c.name,
-          'category_translations', (
-            SELECT COALESCE(jsonb_agg(jsonb_build_object(
-              'lang_code', ct.lang_code,
-              'name', ct.name
-            )), '[]'::jsonb)
-            FROM category_translations ct
-            WHERE ct.category_id = c.id
-            ${langCode ? `AND ct.lang_code = '${langCode}'` : ''}
-          )
-        ) AS main_category
-        FROM product_categories pc
-        JOIN categories c ON c.id = pc.category_id
-        WHERE pc.product_id = p.id AND pc.is_primary = true
-        LIMIT 1
-      ) cat ON TRUE
-      -- variant_products 聚合
-      LEFT JOIN LATERAL (
-        SELECT
-          MIN(vp.price_iva) AS min_price_iva,
-          MIN(vp.price) FILTER (
-            WHERE vp.price_iva = (
-              SELECT MIN(price_iva) FROM variant_products WHERE product_id = p.id
-            )
-          ) AS min_price,
-          SUM(vp.available_stock * vp.sale_unit_qty) AS total_stock,
-          MIN(vp.min_order_qty * vp.sale_unit_qty) AS min_order_qty
-        FROM variant_products vp
-        WHERE vp.product_id = p.id
-      ) vp ON TRUE
-    WHERE ${whereSql}
-    ${sortField ? `ORDER BY ${sortField} ${sort_order}` : ''}
-    LIMIT $${paramIndex++}
-    OFFSET $${paramIndex++};
-  `;
-    const countParams = params.slice(); // 拷贝一份
-    params.push(limit + '', offset + '');
+    if (sortField) {
+      productQuery = productQuery.orderBy(
+        sql`${sortField} ${sql.raw(sort_order)}`,
+      );
+    }
 
-    const countSql = `SELECT COUNT(*) AS total
-                      FROM products p WHERE ${whereSql}`;
+    const countQuery = this.drizzle.db
+      .select({ count: count() })
+      .from(products)
+      .where(and(...whereConditions));
 
-    const [products, count] = await Promise.all([
-      this.prisma.$queryRawUnsafe<any[]>(sql, ...params),
-      this.prisma.$queryRawUnsafe<[{ total: number }]>(
-        countSql,
-        ...countParams,
-      ),
+    const [items, [countResult]] = await Promise.all([
+      await productQuery,
+      await countQuery,
     ]);
-
-    const total = Number(count[0].total);
-
-    const result: PaginatedData = {
-      items: products,
+    const total: number = countResult?.count ?? 0;
+    return {
+      items,
       pagination: { total, page, limit },
     };
-
-    return result;
-  }
-
-  async findOne(
-    id: string,
-    query: IProductQueryDto,
-    ability: AppAbility,
-    user: UserPayload,
-  ) {
-    if (!ability.can(Action.Read, 'products')) {
-      throw new ForbiddenException(
-        'You do not have permission to read products',
-      );
-    }
-    const notAllowedToSelect =
-      user.userRole === UserRole.RETAILER ||
-      user.userRole === UserRole.DELIVERY;
-    const { fields, langCode } = query;
-    let user_id: boolean | undefined;
-    let status: boolean | undefined;
-    let created_at: boolean | undefined;
-    let updated_at: boolean | undefined;
-    let created_by: boolean | undefined;
-    let updated_by: boolean | undefined;
-    let reserved_stock: boolean | undefined;
-    let low_stock_threshold: boolean | undefined;
-    if (!notAllowedToSelect) {
-      user_id = fields?.includes(ProductSelectField.USER_ID);
-      status = fields?.includes(ProductSelectField.STATUS);
-      created_at = fields?.includes(ProductSelectField.CREATED_AT);
-      updated_at = fields?.includes(ProductSelectField.UPDATED_AT);
-      created_by = fields?.includes(ProductSelectField.CREATED_BY);
-      updated_by = fields?.includes(ProductSelectField.UPDATED_BY);
-      reserved_stock = fields?.includes(ProductSelectField.RESERVED_STOCK);
-      low_stock_threshold = fields?.includes(
-        ProductSelectField.LOW_STOCK_THRESHOLD,
-      );
-    }
-    const select: Prisma.productsSelect = {
-      id: true,
-      iva: true,
-      name: true,
-      title: true,
-      product_code: true,
-      products_files: true,
-      product_translations: {
-        select: { lang_code: true, name: true },
-        where: { ...(langCode && { lang_code: langCode }) },
-      },
-      variant_products: {
-        select: {
-          id: true,
-          sort: true,
-          price: true,
-          type_sale: true,
-          price_iva: true,
-          product_code: true,
-          min_order_qty: true,
-          available_stock: true,
-          ...(status && { status }),
-          ...(created_at && { created_at }),
-          ...(updated_at && { updated_at }),
-          ...(created_by && { created_by }),
-          ...(updated_by && { updated_by }),
-          ...(reserved_stock && { reserved_stock }),
-          ...(low_stock_threshold && { low_stock_threshold }),
-        },
-      },
-      ...(user_id && { user_id }),
-      ...(status && { status }),
-      ...(created_at && { created_at }),
-      ...(updated_at && { updated_at }),
-      ...(created_by && { created_by }),
-      ...(updated_by && { updated_by }),
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const permissionCondition: Prisma.productsWhereInput = accessibleBy(
-      ability,
-      Action.Read,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ).products;
-
-    const idBigInt = BigInt(id);
-    const where: Prisma.productsWhereInput = {
-      id: idBigInt,
-      ...permissionCondition,
-    };
-
-    this.logger.info('permissionCondition', permissionCondition);
-
-    return this.prisma.products.findFirst({ where, select });
   }
 
   async update(
@@ -460,14 +473,18 @@ export class ProductsService {
   ) {
     const productId = BigInt(id);
 
-    const existingProduct = await this.prisma.products.findUnique({
-      where: { id: productId },
-      select: {
+    const existingProduct = await this.drizzle.db.query.products.findFirst({
+      columns: {
         user_id: true,
         iva: true,
-        variant_products: { select: { id: true } },
-        products_files: { select: { files: { select: { mime_type: true } } } },
       },
+      with: {
+        variant_products: { columns: { id: true } },
+        products_files: {
+          with: { file: { columns: { mime_type: true } } },
+        },
+      },
+      where: eq(products.id, productId),
     });
 
     if (!existingProduct) {
@@ -494,8 +511,11 @@ export class ProductsService {
       translationsToDelete,
       files,
       primary_category_id,
+      version,
       ...mainProductData
     } = updateProductDto;
+
+    const clientVersion = BigInt(updateProductDto.version);
 
     const existVariant =
       (variantsToDelete?.length ?? 0) + (createVariants?.length ?? 0);
@@ -506,52 +526,63 @@ export class ProductsService {
 
     await this.validateAndCheckFiles(files, user);
 
-    await this.prisma.$transaction(async (tx) => {
-      const now = new Date();
-      // 更新主产品信息 (Main Info)
-      await tx.products.update({
-        where: { id: productId },
-        data: {
+    await this.drizzle.db.transaction(async (tx) => {
+      const now = new Date().toISOString();
+      // 更新主表并同时校验版本号和存在性，更新成功且持有事务会保证在事务执行期间，级联删除会被阻塞，直到事务完成或回滚
+      const updatedProduct = await tx
+        .update(products)
+        .set({
           ...mainProductData,
+          version: sql`${products.version} + 1`,
           updated_by: user.userId,
           updated_at: now,
-          // 如果有更新主分类的逻辑:
-          ...(primary_category_id && {
-            product_categories: {
-              updateMany: {
-                where: { product_id: productId, is_primary: true },
-                data: { category_id: BigInt(primary_category_id) },
-              },
-            },
-          }),
-        },
-      });
+        })
+        .where(
+          and(eq(products.id, productId), eq(products.version, clientVersion)),
+        );
 
-      const currentVariantIds = existingProduct.variant_products.map((v) =>
-        BigInt(v.id),
+      if ((updatedProduct.rowCount ?? 0) === 0) {
+        throw new ConflictException(
+          'Product version conflict. It was modified by another request.',
+        );
+      }
+
+      if (primary_category_id) {
+        await tx
+          .update(product_categories)
+          .set({ category_id: BigInt(primary_category_id) })
+          .where(
+            and(
+              eq(product_categories.product_id, productId),
+              eq(product_categories.is_primary, true),
+            ),
+          );
+      }
+
+      const currentVariantIds = existingProduct.variant_products.map(
+        (v) => v.id,
       );
 
       // 创建变体
       if (createVariants && createVariants.length > 0) {
-        const createData: Prisma.variant_productsCreateManyInput[] =
-          createVariants.map((variant) => ({
-            product_id: productId,
-            created_by: user.userId,
-            type_sale: variant.type_sale,
-            sort: variant.sort,
-            ...computePrice(
-              variant.price,
-              variant.price_iva,
-              mainProductData.iva ?? existingProduct.iva,
-            ),
-            product_code: variant.product_code,
-            min_order_qty: variant.min_order_qty,
-            sale_unit_qty: variant.sale_unit_qty,
-            available_stock: variant.available_stock,
-            low_stock_threshold: variant.low_stock_threshold,
-          }));
+        const createData = createVariants.map((variant) => ({
+          product_id: productId,
+          created_by: user.userId,
+          type_sale: variant.type_sale,
+          sort: variant.sort,
+          ...computePrice(
+            variant.price,
+            variant.price_iva,
+            mainProductData.iva ?? existingProduct.iva,
+          ),
+          product_code: variant.product_code,
+          min_order_qty: variant.min_order_qty,
+          sale_unit_qty: variant.sale_unit_qty,
+          available_stock: variant.available_stock,
+          low_stock_threshold: variant.low_stock_threshold,
+        }));
 
-        await tx.variant_products.createMany({ data: createData });
+        await tx.insert(variant_products).values(createData);
       }
 
       // 更新变体
@@ -577,9 +608,9 @@ export class ProductsService {
               iva, // 产品更新值 -> 数据库旧值
             );
 
-            return tx.variant_products.update({
-              where: { id: BigInt(variant.id) },
-              data: {
+            return tx
+              .update(variant_products)
+              .set({
                 type_sale: variant.type_sale,
                 sort: variant.sort,
                 product_code: variant.product_code,
@@ -590,11 +621,12 @@ export class ProductsService {
                 ...priceData, // 展开计算后的价格字段
                 updated_by: user.userId,
                 updated_at: now,
-              },
-            });
+              })
+              .where(eq(variant_products.id, BigInt(variant.id)));
           }),
         );
       }
+
       // 删除变体
       if (variantsToDelete && variantsToDelete.length > 0) {
         const toDeleteIds = variantsToDelete.map((id) => BigInt(id));
@@ -606,91 +638,68 @@ export class ProductsService {
             `Variant IDs [${invalidIds.join(', ')}] do not belong to product ${id}`,
           );
         }
-        await tx.variant_products.deleteMany({
-          where: { product_id: productId, id: { in: toDeleteIds } },
-        });
+        await tx
+          .delete(variant_products)
+          .where(
+            and(
+              eq(variant_products.product_id, productId),
+              inArray(variant_products.id, toDeleteIds),
+            ),
+          );
       }
 
       if (translationsToDelete && translationsToDelete.length > 0) {
-        await tx.product_translations.deleteMany({
-          where: {
-            product_id: productId,
-            lang_code: { in: translationsToDelete },
-          },
-        });
+        await tx
+          .delete(product_translations)
+          .where(
+            and(
+              eq(product_translations.product_id, productId),
+              inArray(product_translations.lang_code, translationsToDelete),
+            ),
+          );
       }
 
       // 对于翻译，数据量小，Upsert 是最优雅的 XD。
       if (translations && translations.length > 0) {
-        await tx.$queryRaw`
-            INSERT INTO product_translations
-            (product_id,
-             lang_code,
-             name,
-             title,
-             description,
-             updated_by)
-            SELECT ${productId} AS product_id,
-                   p.lang_code,
-                   p.name,
-                   p.title,
-                   p.description,
-                   ${user.userId}::uuid
-            FROM unnest(
-                         ARRAY[
-                             ${Prisma.join(
-                               translations.map(
-                                 (t) => Prisma.sql`${t.lang_code}`,
-                               ),
-                               ',',
-                             )}
-                        ]::text[],
-                         ARRAY[
-                             ${Prisma.join(
-                               translations.map((t) => Prisma.sql`${t.name}`),
-                               ',',
-                             )}
-                        ]::text[],
-                         ARRAY[
-                             ${Prisma.join(
-                               translations.map((t) => Prisma.sql`${t.title}`),
-                               ',',
-                             )}
-                        ]::text[],
-                         ARRAY[
-                             ${Prisma.join(
-                               translations.map(
-                                 (t) => Prisma.sql`${t.description}`,
-                               ),
-                               ',',
-                             )}
-                        ]::text[]
-                 ) AS p(lang_code, name, title, description) 
-                 ON CONFLICT (product_id, lang_code) DO
-                 UPDATE SET
-                    name = EXCLUDED.name,
-                    title = EXCLUDED.title,
-                    description = EXCLUDED.description,
-                    updated_by = ${user.userId}::uuid,
-                    updated_at = NOW();
-        `;
+        await tx
+          .insert(product_translations)
+          .values(
+            translations.map((t) => ({
+              product_id: productId,
+              lang_code: t.lang_code,
+              name: t.name,
+              title: t.title,
+              description: t.description,
+            })),
+          )
+          .onConflictDoUpdate({
+            target: [
+              product_translations.product_id,
+              product_translations.lang_code,
+            ],
+            set: {
+              name: sql`EXCLUDED.name`,
+              title: sql`EXCLUDED.title`,
+              description: sql`EXCLUDED.description`,
+              updated_by: user.userId,
+              updated_at: now,
+            },
+          });
       }
 
       if (files) {
         // 策略：文件通常涉及排序。全量替换关系表是处理排序最简单的方法。
-        await tx.products_files.deleteMany({
-          where: { product_id: productId },
-        });
+        await tx
+          .delete(products_files)
+          .where(eq(products_files.product_id, productId));
 
         if (files.length > 0) {
-          const data: Prisma.products_filesCreateManyInput[] = files.map(
-            (file) => ({
-              product_id: productId,
-              file_id: BigInt(file.file_id),
-              sort: file.sort,
-            }),
-          );
-          await tx.products_files.createMany({ data });
+          const data = files.map((file) => ({
+            product_id: productId,
+            file_id: BigInt(file.file_id),
+            sort: file.sort,
+          }));
+          await tx.insert(products_files).values(data);
         }
       }
     });
@@ -698,10 +707,11 @@ export class ProductsService {
 
   async remove(id: string, ability: AppAbility) {
     const idBigInt = BigInt(id);
-    const product = await this.prisma.products.findUnique({
-      where: { id: idBigInt },
-      select: { user_id: true },
-    });
+    const [product] = await this.drizzle.db
+      .select({ user_id: products.user_id })
+      .from(products)
+      .where(eq(products.id, idBigInt))
+      .limit(1);
     if (!product) {
       throw new NotFoundException('Product not found');
     }
@@ -715,7 +725,7 @@ export class ProductsService {
         'You do not have permission to delete products',
       );
     }
-    await this.prisma.products.delete({ where: { id: idBigInt } });
+    await this.drizzle.db.delete(products).where(eq(products.id, idBigInt));
   }
 
   private async validateAndCheckFiles(
@@ -738,17 +748,21 @@ export class ProductsService {
     if (productOwnerId) {
       allowedOwnerIds.add(productOwnerId);
     }
-    const validFiles = await this.prisma.user_uploads.findMany({
-      where: {
-        file_id: { in: uniqueFileIds },
-        user_id: { in: Array.from(allowedOwnerIds) },
-      },
-      select: {
-        file_id: true,
-      },
-      // 即使 User 和 Wholesaler 都拥有 File A，结果里也只会出现一次 File A
-      distinct: ['file_id'],
-    });
+    // 验证权限 + 获取 MIME 类型
+    const validFiles = await this.drizzle.db
+      .select({
+        file_id: files.id,
+        mime_type: files.mime_type,
+      })
+      .from(files)
+      .innerJoin(user_uploads, eq(files.id, user_uploads.file_id))
+      .where(
+        and(
+          inArray(files.id, uniqueFileIds),
+          inArray(user_uploads.user_id, Array.from(allowedOwnerIds)),
+        ),
+      )
+      .groupBy(files.id, files.mime_type);
 
     // uniqueFileIds 和 validFiles 是去重的, 如果数量不一致->说明有文件没找到归属权
     if (validFiles.length !== uniqueFileIds.length) {
@@ -756,23 +770,25 @@ export class ProductsService {
         'You do not have permission to use one or more provided files.',
       );
     }
-    const filesForProduct = await this.prisma.files.findMany({
-      where: { id: { in: uniqueFileIds } },
-    });
 
-    if (filesForProduct.length !== filesDTO.length) {
-      throw new BadRequestException('One or more files not found');
+    // 构建 file_id → mime_type 的映射（用于快速查找）
+    const fileMimeMap = new Map<bigint, string>();
+    for (const file of validFiles) {
+      fileMimeMap.set(file.file_id, file.mime_type);
     }
 
-    const imagesForProduct = filesForProduct.filter((file) =>
-      IMAGE_MIME_TYPES.has(file.mime_type),
-    );
-    const videosForProduct = filesForProduct.filter((file) =>
-      VIDEO_MIME_TYPES.has(file.mime_type),
-    );
-    const docsForProduct = filesForProduct.filter((file) =>
-      DOC_MIME_TYPES.has(file.mime_type),
-    );
+    // 基于原始 filesDTO（包含重复）进行分类计数
+    let imagesForProduct = 0;
+    let videosForProduct = 0;
+    let docsForProduct = 0;
+
+    for (const item of filesDTO) {
+      const mime = fileMimeMap.get(BigInt(item.file_id));
+      // mime 一定存在，因为已经验证过所有 file_id 都有权限且存在
+      if (mime && IMAGE_MIME_TYPES.has(mime)) imagesForProduct++;
+      else if (mime && VIDEO_MIME_TYPES.has(mime)) videosForProduct++;
+      else if (mime && DOC_MIME_TYPES.has(mime)) docsForProduct++;
+    }
 
     const maxImageForProduct = Number(
       this.configService.get<number>(ENV.PRODUCT_MAX_IMAGES, 10),
@@ -784,20 +800,115 @@ export class ProductsService {
       this.configService.get<number>(ENV.PRODUCT_MAX_DOCUMENTS, 5),
     );
 
-    if (imagesForProduct.length > maxImageForProduct) {
+    if (imagesForProduct > maxImageForProduct) {
       throw new BadRequestException(
         `You can only upload up to ${maxImageForProduct} images for a product`,
       );
     }
-    if (videosForProduct.length > maxVideoForProduct) {
+    if (videosForProduct > maxVideoForProduct) {
       throw new BadRequestException(
         `You can only upload up to ${maxVideoForProduct} videos for a product`,
       );
     }
-    if (docsForProduct.length > maxDocForProduct) {
+    if (docsForProduct > maxDocForProduct) {
       throw new BadRequestException(
         `You can only upload up to ${maxDocForProduct} documents for a product`,
       );
     }
+  }
+
+  async getForUpdate(id: string, ability: AppAbility) {
+    if (!ability.can(Action.Read, 'products')) {
+      throw new ForbiddenException(
+        'You do not have permission to read products',
+      );
+    }
+    const product = await this.drizzle.db.query.products.findFirst({
+      where: eq(products.id, BigInt(id)),
+      columns: {
+        user_id: true,
+        id: true,
+        iva: true,
+        name: true,
+        title: true,
+        status: true,
+        description: true,
+        product_code: true,
+        version: true,
+      },
+      with: {
+        products_files: { columns: { file_id: true, sort: true } },
+        product_categories: {
+          with: {
+            category: {
+              columns: {
+                id: true,
+                name: true,
+                iva: true,
+              },
+              with: {
+                category_translations: {
+                  columns: { lang_code: true, name: true },
+                },
+              },
+            },
+          },
+        },
+        product_translations: {
+          columns: {
+            lang_code: true,
+            name: true,
+            title: true,
+            description: true,
+          },
+        },
+        variant_products: {
+          columns: {
+            id: true,
+            sort: true,
+            price: true,
+            type_sale: true,
+            price_iva: true,
+            product_code: true,
+            min_order_qty: true,
+            available_stock: true,
+            low_stock_threshold: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    if (
+      !ability.can(
+        Action.Read,
+        subject('products', { user_id: product.user_id }),
+      )
+    ) {
+      throw new ForbiddenException(
+        'You do not have permission to read that product',
+      );
+    }
+
+    return {
+      products_files: product.products_files,
+      name: product.name,
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      iva: product.iva,
+      product_code: product.product_code,
+      status: product.status,
+      version: product.version,
+      product_categories: product.product_categories.map(
+        (category) => category.category,
+      ),
+      product_translations: product.product_translations,
+      variant_products: product.variant_products,
+    };
   }
 }

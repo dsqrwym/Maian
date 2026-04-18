@@ -64,7 +64,16 @@ export class LocationsController {
       },
     },
   })
-  async getCountries() {
+  async getCountries(): Promise<
+    {
+      iso_alpha2: string;
+      iso_alpha3: string;
+      iso_numeric: number;
+      name: string;
+      name_local: string;
+      currency_id: number | null;
+    }[]
+  > {
     return this.locationsService.findAllCountries();
   }
 
@@ -98,7 +107,9 @@ export class LocationsController {
     status: 404,
     description: 'Country not found with the specified ISO numeric code',
   })
-  async getProvinces(@TypedParam('isoNumeric') isoNumeric: number) {
+  async getProvinces(
+    @TypedParam('isoNumeric') isoNumeric: number,
+  ): Promise<{ id: number; name: string; name_local: string }[]> {
     return this.locationsService.findProvincesByCountryIsoNumeric(isoNumeric);
   }
 
@@ -132,7 +143,9 @@ export class LocationsController {
     status: 404,
     description: 'Province not found with the specified ID',
   })
-  async getCities(@TypedParam('provinceId') provinceId: number) {
+  async getCities(
+    @TypedParam('provinceId') provinceId: number,
+  ): Promise<{ id: number; name: string; name_local: string }[]> {
     return this.locationsService.findCitiesByProvinceId(provinceId);
   }
 
@@ -162,7 +175,9 @@ export class LocationsController {
     status: 404,
     description: 'Currency not found with the specified ISO numeric code',
   })
-  async getCurrency(@TypedParam('isoNumeric') isoNumeric: number) {
+  async getCurrency(
+    @TypedParam('isoNumeric') isoNumeric: number,
+  ): Promise<{ iso_alpha3: string; symbol: string; decimal_digits: number }[]> {
     return this.locationsService.getCurrencyByIsoNumeric(isoNumeric);
   }
 }

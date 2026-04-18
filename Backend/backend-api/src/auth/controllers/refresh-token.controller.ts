@@ -44,7 +44,7 @@ export class RefreshTokenController {
   @HttpCode(200)
   @Throttle({
     default: {
-      limit: 1,
+      limit: 2,
       ttl: seconds(RefreshTokenController.ACCESS_TOKEN_TTL),
     },
   })
@@ -70,7 +70,7 @@ export class RefreshTokenController {
   @HttpCode(200)
   @Throttle({
     default: {
-      limit: 1,
+      limit: 2,
       ttl: seconds(RefreshTokenController.ACCESS_TOKEN_TTL),
     },
   })

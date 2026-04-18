@@ -5,7 +5,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { HashService } from 'src/common/hash/hash.service';
 import { ILoginDto } from '../dto/login.dto';
 import { UserPayload } from '../auth.types';
@@ -17,10 +16,12 @@ import { ConfigService } from '@nestjs/config';
 import { MINUTE } from '../../utils/date.utils';
 import { ENV } from '../../config/constants.config';
 import { REDIS_KEYS } from '../../cache/redis/redis.constants';
-import { UserRole, Prisma } from 'src/generated/prisma/client';
-import usersWhereInput = Prisma.usersWhereInput;
+import { UserRole } from '../../generated/drizzle/enums';
 import { makeUsername } from '../../utils/user.utils';
-import { maskEmail } from '../../common/formatter/emial-format';
+import { maskEmail } from '../../utils/email.utils';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { users } from 'src/generated/drizzle/schema';
+import { and, eq, sql, SQL } from 'drizzle-orm';
 
 /**
  * LoginValidationStrategy handles local username/password authentication with account lockout
@@ -39,7 +40,7 @@ export class LoginValidationStrategy {
   // 账户锁定时间（毫秒），可通过环境变量配置，默认15分钟
   private readonly LOCK_TIME: number = 15 * MINUTE;
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
     @Inject(REDIS_CACHE) private readonly redisCache: Cache,
     private readonly hashService: HashService,
     private readonly logger: Logger,
@@ -62,10 +63,10 @@ export class LoginValidationStrategy {
   /**
    * Find user by specified query conditions
    * 根据查询条件查找用户
-   * @param query - Prisma query conditions for user search
+   * @param query - Drizzle query conditions for user search
    * @returns User with selected fields or null if not found
    */
-  async findUserBy(query: usersWhereInput) {
+  async findUserBy(query: { email?: string; username?: string }) {
     this.logger.debug({
       message: '[Login Validation] Executing user query',
       query: {
@@ -77,14 +78,17 @@ export class LoginValidationStrategy {
           : undefined,
       },
     });
-    return this.prismaService.users.findFirst({
-      where: query,
-      select: {
+    const filters: SQL<unknown>[] = [sql`1=1`];
+    if (query.email) filters.push(eq(users.email, query.email));
+    if (query.username) filters.push(eq(users.username, query.username));
+    return this.drizzleService.db.query.users.findFirst({
+      columns: {
         id: true,
         role: true,
         status: true,
         password: true,
       },
+      where: and(...filters),
     });
   }
 

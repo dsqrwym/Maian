@@ -31,9 +31,11 @@ export class ResponseInterceptor<T> implements NestInterceptor<
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T> | Observable<never>> {
+    const res = context.switchToHttp().getResponse<FastifyReply>();
+    const getHandler = context.getHandler();
     const skipInterceptor = this.reflector.get<boolean>(
       SKIP_RESPONSE_INTERCEPTOR,
-      context.getHandler(),
+      getHandler,
     );
 
     // 如果设置了跳过标志，则直接返回原始 Observable，跳过 map/tap 封装
@@ -43,13 +45,11 @@ export class ResponseInterceptor<T> implements NestInterceptor<
 
     const defaultMessage = this.reflector.get<string>(
       'responseMessage',
-      context.getHandler(),
+      getHandler,
     );
 
     return next.handle().pipe(
       map((data: T) => {
-        const res = context.switchToHttp().getResponse<FastifyReply>();
-
         if (isTypiaJSON(data)) {
           // 如果是字符串大概率来自typia路由自动转化成json格式的所以不需要再次进行处理
 
@@ -79,10 +79,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<
 
   private serializeData<T>(data: unknown): T | PaginatedData {
     if (isPaginatedDate(data)) {
-      return {
-        items: data.items,
-        pagination: data.pagination,
-      };
+      return data;
     }
     return data as T;
   }

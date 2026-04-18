@@ -12,7 +12,7 @@ function bench(fn: () => void, label: string, iterations = 1000) {
   );
 }
 
-console.log('🔬 开始性能对比测试...\n');
+console.log(' 开始性能对比测试...\n');
 
 const PASSWORD_LENGTH = 15;
 const ITERATIONS = 5000;

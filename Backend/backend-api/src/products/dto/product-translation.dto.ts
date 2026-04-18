@@ -1,16 +1,13 @@
 import { TagsBCP47Language } from '../../utils/typia/validators/language.validator';
 import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
-import { tags } from 'typia';
-import { isObject } from '../../utils/is.util';
+import typia, { tags } from 'typia';
+import { isObject } from '../../utils/is.utils';
 import { cleanString } from 'src/utils/string.util';
 
 export interface IProductTranslationDto {
-  lang_code: string & TagsBCP47Language; // 语言代码，例如 'es', 'en'
+  lang_code: TagsBCP47Language; // 语言代码，例如 'es', 'en'
 
-  name: string &
-    TagsNotBlank &
-    tags.MaxLength<50> &
-    tags.Example<'Product Name'>;
+  name: TagsNotBlank & tags.MaxLength<50> & tags.Example<'Product Name'>;
 
   title?: string & tags.MaxLength<100> & tags.Example<'Product Name'>;
 
@@ -26,4 +23,6 @@ export const validateProductTranslationDto = (dto: unknown) => {
       dto.title = cleanString(dto.title);
     }
   }
+
+  return typia.assertEquals<IProductTranslationDto>(dto);
 };

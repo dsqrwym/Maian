@@ -1,13 +1,16 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CheckUserService } from '../services/check-user.service';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { CacheTTL } from '@nestjs/cache-manager';
 import { SECOND } from '../../utils/date.utils';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-  CheckUserEmailQueryDto,
-  CheckUserUsernameQueryDto,
+  ICheckUserEmailQueryDto,
+  ICheckUserUsernameQueryDto,
+  validateICheckUserEmailQueryDto,
+  validateICheckUserUsernameQueryDto,
 } from '../dto/check-user-query.dto';
+import { TypedQuery, TypedRoute } from '@nestia/core';
 
 /**
  * User Availability Check Controller
@@ -43,7 +46,7 @@ export class CheckUserController {
    * @returns Object containing availability status
    * @returns 包含可用性状态的对象
    */
-  @Get('mail')
+  @TypedRoute.Get('mail')
   @ApiOperation({
     summary: 'Check if email is already registered',
     description:
@@ -70,7 +73,9 @@ export class CheckUserController {
       },
     },
   })
-  async checkEmailUsed(@Query() query: CheckUserEmailQueryDto) {
+  async checkEmailUsed(
+    @TypedQuery(validateICheckUserEmailQueryDto) query: ICheckUserEmailQueryDto,
+  ): Promise<boolean> {
     return this.userCheckService.checkEmailUsed(query.email);
   }
 
@@ -83,7 +88,7 @@ export class CheckUserController {
    * @returns Object containing availability status
    * @returns 包含可用性状态的对象
    */
-  @Get('username')
+  @TypedRoute.Get('username')
   @ApiOperation({
     summary: 'Check if username is already taken',
     description:
@@ -110,7 +115,10 @@ export class CheckUserController {
       },
     },
   })
-  async checkUsernameUsed(@Query() query: CheckUserUsernameQueryDto) {
+  async checkUsernameUsed(
+    @TypedQuery(validateICheckUserUsernameQueryDto)
+    query: ICheckUserUsernameQueryDto,
+  ): Promise<boolean> {
     return this.userCheckService.checkUsernameUsed(query);
   }
 }

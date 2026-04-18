@@ -1,27 +1,23 @@
-interface ICategoryTranslation {
-  name: string;
-  lang_code: string;
-}
-
-interface ICategoryChild {
-  id: string | number;
+export interface ICategoryResponseRelation {
+  id: string;
   name: string;
   iva?: string | null;
-}
-
-interface ICategoryParent {
-  id: string | number;
-  name: string;
-  iva?: string | null;
-  parent?: ICategoryParent | null;
+  level?: number;
+  user_id?: string | null;
+  parent?: ICategoryResponseRelation | null;
 }
 
 export interface ICategoryResponse {
+  parent?: ICategoryResponseRelation | null;
+  children?: ICategoryResponseRelation[] | null;
+  children_count?: number;
+  category_translations?: {
+    lang_code: string;
+    name: string;
+  }[];
+  user_id?: string | null;
+  level?: number;
+  iva?: string | null;
   id: bigint;
   name: string;
-  iva?: string | null;
-  category_translations?: ICategoryTranslation[];
-  parent?: ICategoryParent | null;
-  children?: ICategoryChild[];
-  children_count?: bigint;
 }

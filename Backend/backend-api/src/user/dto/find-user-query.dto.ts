@@ -1,121 +1,57 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsEnum, IsString, IsIn } from 'class-validator';
-import { UserStatus, UserRole } from 'src/generated/prisma/client';
-import { PaginationQueryDto } from '../../utils/dto/pagination.dto';
-import { ToBoolean } from '../../utils/transform/to-boolean.decorator'; // 假设你定义了这两个 enum
+import { IPaginationQueryDto } from '../../utils/dto/pagination.dto';
+import { OrderByEnum } from '../../common/enums/sort.enum';
+import typia, { tags } from 'typia';
+import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import { cleanString } from '../../utils/string.util';
+import { UserRole, UserStatus } from '../../generated/drizzle/enums';
 
-export class FindUserQueryDto extends PaginationQueryDto {
-  @ApiProperty({ description: 'Keywords for name search', required: false })
-  @IsString()
-  @IsOptional()
+export interface IFindUserQueryDto extends IPaginationQueryDto {
   search?: string;
 
-  @ApiPropertyOptional({
-    description: '（admin, retailer, wholesaler ）',
-  })
-  @IsOptional()
-  @IsEnum(UserRole)
   role?: UserRole;
 
-  @ApiPropertyOptional({
-    description: '（ACTIVE, PENDING_VERIFICATION ）',
-  })
-  @IsOptional()
-  @IsEnum(UserStatus)
   status?: UserStatus;
 
-  @ApiPropertyOptional({
-    description: 'return status',
-  })
-  @IsOptional()
-  @ToBoolean()
   selectUserStatus?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return role',
-  })
-  @IsOptional()
-  @ToBoolean()
   selectUserRole?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return user_id',
-  })
-  @IsOptional()
-  @ToBoolean()
   user_id?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return username',
-  })
-  @IsOptional()
-  @ToBoolean()
   username?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return email',
-  })
-  @IsOptional()
-  @ToBoolean()
   email?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return first_name',
-  })
-  @IsOptional()
-  @ToBoolean()
   first_name?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return last_name',
-  })
-  @IsOptional()
-  @ToBoolean()
   last_name?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return telephone',
-  })
-  @IsOptional()
-  @ToBoolean()
   telephone?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return cif',
-  })
-  @IsOptional()
-  @ToBoolean()
   cif?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'return profile',
-  })
-  @IsOptional()
-  @ToBoolean()
   profile?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'order by field',
-  })
-  @IsOptional()
-  @IsString()
-  @IsIn([
-    'id',
-    'user_id',
-    'username',
-    'email',
-    'first_name',
-    'last_name',
-    'telephone',
-    'cif',
-  ])
-  orderBy?: string;
+  orderBy?:
+    | 'id'
+    | 'user_id'
+    | 'username'
+    | 'email'
+    | 'first_name'
+    | 'last_name'
+    | 'telephone'
+    | 'cif';
 
-  @ApiPropertyOptional({
-    description: 'order direction',
-  })
-  @IsOptional()
-  @IsString()
-  @IsIn(['asc', 'desc'])
-  orderDir?: string;
+  orderDir?: OrderByEnum & tags.Example<'asc'>;
 }
+
+export const validateFindUserQuery: IRequestQueryValidator.IAssert<IFindUserQueryDto> =
+  {
+    type: 'assert',
+    assert: (input): IFindUserQueryDto => {
+      const search = input.get('search');
+      if (search) input.set('search', cleanString(search));
+
+      return typia.http.assertQuery<IFindUserQueryDto>(input);
+    },
+  };

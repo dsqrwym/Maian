@@ -7,7 +7,7 @@ import {
 } from '../../utils/typia/validators/auth.validator';
 import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
 import { TagsBCP47Language } from '../../utils/typia/validators/language.validator';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { cleanString } from '../../utils/string.util';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 

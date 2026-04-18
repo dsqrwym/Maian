@@ -75,3 +75,12 @@ export type TagsUInt4 = number &
   tags.Type<'int32'> &
   tags.Minimum<0> &
   tags.Maximum<2147483647>;
+
+/**
+ * PostgreSQL bigint
+ * 但是 number 精度丢失 不过对于 version 足够了
+ */
+export type TagsVersion = number &
+  tags.Type<'int64'> &
+  tags.Minimum<0> &
+  tags.Maximum<9007199254740991>; // Number.MAX_SAFE_INTEGER

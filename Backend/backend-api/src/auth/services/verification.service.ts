@@ -4,15 +4,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, UserRole, UserStatus } from 'src/generated/prisma/client';
+import { UserRole, UserStatus } from 'src/generated/drizzle/enums';
 import {
   ISendVerificationCodeDto,
   IVerifyCodeDto,
   IVerifyEmailQueryDto,
   VerifyCodeResponseDto,
 } from '../dto/verification.dto';
-import { maskEmail } from '../../common/formatter/emial-format';
+import { maskEmail } from '../../utils/email.utils';
 import { addMinutes } from '../../utils/date.utils';
 import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
 import { TooManyRequestsExceptions } from '../../common/exceptions/too-many-requests.exceptions';
@@ -28,12 +27,20 @@ import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile
 import { renderTemplate } from '../../utils/hbs-renderer';
 import { FastifyReply } from 'fastify';
 import { I18nService } from 'nestjs-i18n';
+import { DrizzleDb, DrizzleService } from '../../drizzle/drizzle.service';
+import { and, desc, eq, gt, sql } from 'drizzle-orm';
+import {
+  configurations,
+  users,
+  verification_tokens,
+} from '../../generated/drizzle/schema';
 
 @Injectable()
 export class VerificationService {
   constructor(
     private readonly i18nService: I18nService,
-    private readonly prismaService: PrismaService,
+    //private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
     private readonly mailService: MailService,
     private readonly hashService: HashService,
     private readonly logger: Logger,
@@ -46,16 +53,18 @@ export class VerificationService {
     const email = sendVerificationDto.email;
     const markedEmail = maskEmail(email);
     this.logger.debug({ email: markedEmail }, '[sendVerificationCode] start');
-    const user = await this.prismaService.users.findUnique({
-      where: { email: email },
-      select: {
-        id: true,
-        username: true,
-        configurations: { select: { language: true } },
+    const user = await this.drizzleService.db.query.users.findFirst({
+      where: eq(users.email, email),
+      columns: { id: true, username: true },
+      with: {
+        configurations: { columns: { language: true } },
         verification_tokens: {
-          where: { created_at: { gt: addMinutes(new Date(), -1) } },
-          take: 1,
-          select: { id: true },
+          where: gt(
+            verification_tokens.created_at,
+            addMinutes(new Date(), -1).toISOString(),
+          ),
+          limit: 1,
+          columns: { id: true },
         },
       },
     });
@@ -83,19 +92,17 @@ export class VerificationService {
 
     const hashedCode = await this.hashService.hashWithCrypto(code);
 
-    await this.prismaService.verification_tokens.create({
-      data: {
-        user_id: user.id,
-        token: hashedCode,
-        expires_at: addMinutes(new Date(), 10), // 10 分钟过期
-      },
+    await this.drizzleService.db.insert(verification_tokens).values({
+      user_id: user.id,
+      token: hashedCode,
+      expires_at: addMinutes(new Date(), 10).toISOString(), // 10 分钟过期
     });
 
     switch (emailType) {
       case VerificationEmailType.NORMAL_REGISTER: {
         const registerEmailJob: RegisterEmailJob = {
           to: email,
-          lang: user.configurations?.language,
+          lang: user.configurations[0]?.language,
           link: sendVerificationDto.deepLink ?? '',
           code: code,
         };
@@ -106,7 +113,7 @@ export class VerificationService {
         await this.mailService.sendResetPassword({
           to: email,
           name: user.username ?? email,
-          lang: user.configurations?.language,
+          lang: user.configurations[0]?.language,
           code: code,
         });
         break;
@@ -114,29 +121,26 @@ export class VerificationService {
 
     this.logger.debug(
       { userId: user.id, email: markedEmail },
-      `[sendVerificationCode] sent , language${user.configurations?.language}`,
+      `[sendVerificationCode] sent , language${user.configurations[0]?.language}`,
     );
   }
 
   async verifyCode(verifyCode: IVerifyCodeDto, expiresMinutes: number = 10) {
-    const [userCode] = await Promise.all([
-      this.prismaService.users.findUnique({
-        where: {
-          email: verifyCode.email,
+    const userCode = await this.drizzleService.db.query.users.findFirst({
+      where: eq(users.email, verifyCode.email),
+      columns: {},
+      with: {
+        verification_tokens: {
+          where: and(
+            eq(verification_tokens.is_used, false),
+            gt(verification_tokens.expires_at, new Date().toISOString()),
+          ),
+          columns: { token: true, id: true, attempts: true, expires_at: true },
+          orderBy: desc(verification_tokens.created_at),
+          limit: 1,
         },
-        select: {
-          verification_tokens: {
-            where: {
-              is_used: false,
-              expires_at: { gt: new Date() },
-            },
-            select: { token: true, id: true, attempts: true, expires_at: true },
-            orderBy: { created_at: 'desc' },
-            take: 1,
-          },
-        },
-      }),
-    ]);
+      },
+    });
 
     if (!userCode || userCode?.verification_tokens?.length === 0) {
       this.logger.warn(
@@ -152,16 +156,19 @@ export class VerificationService {
     );
 
     if (!isValidCode) {
-      const updatedToken = await this.prismaService.verification_tokens.update({
-        where: { id: userCode.verification_tokens[0].id },
-        data: { attempts: { increment: 1 } },
-        select: { attempts: true },
-      });
+      const [updatedToken] = await this.drizzleService.db
+        .update(verification_tokens)
+        .set({ attempts: sql`${verification_tokens.attempts} + 1` })
+        .where(eq(verification_tokens.id, userCode.verification_tokens[0].id))
+        .returning({ attempts: verification_tokens.attempts });
+
       if (updatedToken.attempts >= 3) {
-        await this.prismaService.verification_tokens.update({
-          where: { id: userCode.verification_tokens[0].id },
-          data: { is_used: true },
-        });
+        await this.drizzleService.db
+          .update(verification_tokens)
+          .set({ is_used: true })
+          .where(
+            eq(verification_tokens.id, userCode.verification_tokens[0].id),
+          );
         this.logger.warn(
           { email: maskEmail(verifyCode.email) },
           '[verifyCode] too many attempts',
@@ -183,15 +190,13 @@ export class VerificationService {
       expires_at: addMinutes(new Date(), expiresMinutes),
     };
 
-    await this.prismaService.verification_tokens.update({
-      where: {
-        id: response.verification_id,
-      },
-      data: {
-        expires_at: response.expires_at,
+    await this.drizzleService.db
+      .update(verification_tokens)
+      .set({
+        expires_at: response.expires_at.toISOString(),
         token: response.token,
-      },
-    });
+      })
+      .where(eq(verification_tokens.id, response.verification_id));
 
     this.logger.debug(
       { verificationId: response.verification_id },
@@ -201,28 +206,30 @@ export class VerificationService {
     return response;
   }
 
-  async verifyAndConsumeToken(
-    tx: Prisma.TransactionClient,
-    id: string,
-    token: string,
-  ) {
-    const verificationToken = await tx.verification_tokens.findFirst({
-      where: { id, token, is_used: false, expires_at: { gt: new Date() } },
-      select: { id: true, user_id: true },
+  async verifyAndConsumeToken(tx: DrizzleDb, id: string, token: string) {
+    const verificationToken = await tx.query.verification_tokens.findFirst({
+      columns: { id: true, user_id: true },
+      where: and(
+        eq(verification_tokens.id, id),
+        eq(verification_tokens.token, token),
+        eq(verification_tokens.is_used, false),
+        gt(verification_tokens.expires_at, new Date().toISOString()),
+      ),
     });
 
     if (!verificationToken) {
       throw new UnauthorizedException(AUTH_ERROR.VERIFICATION_TOKEN_INVALID);
     }
 
-    await tx.verification_tokens.update({
-      where: { id: verificationToken.id },
-      data: { is_used: true },
-    });
+    await tx
+      .update(verification_tokens)
+      .set({ is_used: true })
+      .where(eq(verification_tokens.id, verificationToken.id));
 
     return verificationToken.user_id;
   }
-
+  /*
+ Prisma
   async verifyEmailVerificationToken(
     dto: IVerifyEmailQueryDto,
     reply: FastifyReply,
@@ -309,6 +316,158 @@ export class VerificationService {
           where: { user_id: wholesalerUserId },
           select: { profile: true },
         });
+
+        const wholesalerProfile =
+          profile?.profile as unknown as WholesalerProfileType;
+
+        const companyName = wholesalerProfile.company_name || 'unknow';
+
+        return {
+          email: updatedUser.email,
+          role: updatedUser.role,
+          configurations: updatedUser.configurations,
+          employeeName:
+            updatedUser.first_name || updatedUser.username || updatedUser.email,
+          companyName,
+        };
+      }
+    });
+
+    if (result.role === UserRole.ADMIN) {
+      await this.mailService.sendActiveAdminWithTempPasswordEmail({
+        to: result.email,
+        adminName: result.username?.split('@')[1] || 'unknow',
+        lang: result.configurations?.language,
+        temporaryPassword: password,
+      });
+    } else {
+      await this.mailService.sendActiveEmployeeWithTempPasswordEmail({
+        to: result.email,
+        lang: result.configurations?.language,
+        employeeName: result.employeeName?.split('@')[1] || 'unknow',
+        companyName: result.companyName || 'unknow',
+        temporaryPassword: password,
+      });
+    }
+
+    return reply.type('text/html').send(
+      renderTemplate(
+        'verification-email-response',
+        this.i18nService.translate('verify-email-response.success', {
+          lang: dto.lang,
+        }),
+      ),
+    );
+  }
+
+*/
+  async verifyEmailVerificationToken(
+    dto: IVerifyEmailQueryDto,
+    reply: FastifyReply,
+  ) {
+    const now = new Date();
+    const hashToken = await this.hashService.hashWithCrypto(dto.token);
+
+    const verificationToken =
+      await this.drizzleService.db.query.verification_tokens.findFirst({
+        columns: { id: true, is_used: true, expires_at: true },
+        where: and(
+          eq(verification_tokens.user_id, dto.userId),
+          eq(verification_tokens.token, hashToken),
+          gt(verification_tokens.expires_at, now.toISOString()),
+        ),
+      });
+
+    if (!verificationToken) {
+      return reply.type('text/html').send(
+        renderTemplate(
+          'verification-email-response',
+          this.i18nService.translate('verify-email-response.invalid', {
+            lang: dto.lang,
+          }),
+        ),
+      );
+    }
+
+    if (verificationToken.is_used) {
+      return reply.type('text/html').send(
+        renderTemplate(
+          'verification-email-response',
+          this.i18nService.translate('verify-email-response.used', {
+            lang: dto.lang,
+          }),
+        ),
+      );
+    }
+
+    if (new Date(verificationToken.expires_at) < now) {
+      return reply.type('text/html').send(
+        renderTemplate(
+          'verification-email-response',
+          this.i18nService.translate('verify-email-response.expired', {
+            lang: dto.lang,
+          }),
+        ),
+      );
+    }
+
+    const password = generateUniformStrongPassword();
+
+    const hashedPassword = await this.hashService.hashWithBcrypt(password);
+
+    const result = await this.drizzleService.db.transaction(async (tx) => {
+      // 定义更新用户的 CTE，并返回需要的字段
+      const updatedUserCte = tx.$with('updated_user').as(
+        tx
+          .update(users)
+          .set({ status: UserStatus.APPROVED, password: hashedPassword })
+          .where(
+            and(
+              eq(users.id, dto.userId),
+              eq(users.status, UserStatus.PENDING_VERIFICATION),
+            ),
+          )
+          .returning({
+            id: users.id,
+            email: users.email,
+            role: users.role,
+            first_name: users.first_name,
+            username: users.username,
+          }),
+      );
+      // 主查询：从 CTE 中选择，并 LEFT JOIN configurations 表
+      const [updatedUser] = await tx
+        .with(updatedUserCte)
+        .select({
+          email: updatedUserCte.email,
+          role: updatedUserCte.role,
+          first_name: updatedUserCte.first_name,
+          username: updatedUserCte.username,
+          configurations: configurations,
+        })
+        .from(updatedUserCte)
+        .leftJoin(configurations, eq(configurations.user_id, updatedUserCte.id))
+        .limit(1);
+
+      await tx
+        .update(verification_tokens)
+        .set({ is_used: true })
+        .where(eq(verification_tokens.id, verificationToken.id));
+
+      if (updatedUser.role === UserRole.ADMIN) {
+        return {
+          email: updatedUser.email,
+          role: updatedUser.role,
+          configurations: updatedUser.configurations,
+          username: updatedUser.username,
+        };
+      } else {
+        const [wholesalerUserId] = dto.token.split('@');
+
+        const [profile] = await tx
+          .select({ profile: users.profile })
+          .from(users)
+          .where(eq(users.user_id, wholesalerUserId));
 
         const wholesalerProfile =
           profile?.profile as unknown as WholesalerProfileType;

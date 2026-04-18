@@ -6,7 +6,7 @@ import { TagsUuid } from '../../utils/typia/validators/auth.validator';
 import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
 import typia, { tags } from 'typia';
 import { TagsCategoryName } from '../../utils/typia/validators/category.validator';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { cleanString } from '../../utils/string.util';
 import { TagsIvaString } from '../../utils/typia/validators/product.validator';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';

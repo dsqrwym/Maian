@@ -1,6 +1,6 @@
 import { ICreateVariantDto } from './create-product-variant.dto';
 import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import typia from 'typia';
 import { BadRequestException } from '@nestjs/common';
 import Decimal from 'decimal.js';

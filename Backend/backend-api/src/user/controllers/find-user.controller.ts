@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
+import { Controller, Req, UseGuards } from '@nestjs/common';
 import { seconds, Throttle } from '@nestjs/throttler';
 import {
   ApiBadRequestResponse,
@@ -12,11 +12,17 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { FindUserService } from '../services/find-user.service';
-import { FindUserQueryDto } from '../dto/find-user-query.dto';
+import {
+  IFindUserQueryDto,
+  validateFindUserQuery,
+} from '../dto/find-user-query.dto';
 import { FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '../../auth/guard/auth.guard';
-import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { PaginatedResponseDto } from '../../utils/dto/pagination.dto';
+import { TypedQuery, TypedRoute } from '@nestia/core';
+import { PaginatedDataWithT } from 'src/common/types-interfaces/response.interface';
+import { FindUserResponse } from '../dto/user-response';
+import { UserRole, UserStatus } from '../../generated/drizzle/enums';
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -81,8 +87,11 @@ export class FindUserController {
     description: 'Paginated list of users',
     type: PaginatedResponseDto,
   })
-  @Get()
-  async findUser(@Query() query: FindUserQueryDto, @Req() req: FastifyRequest) {
-    return this.findUserService.findUser(query, req.ability);
+  @TypedRoute.Get()
+  async findUser(
+    @TypedQuery(validateFindUserQuery) query: IFindUserQueryDto,
+    @Req() req: FastifyRequest,
+  ): Promise<PaginatedDataWithT<FindUserResponse>> {
+    return this.findUserService.findUser(query, req.ability, req.user);
   }
 }

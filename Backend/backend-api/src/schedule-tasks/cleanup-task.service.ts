@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRole, UserStatus } from 'src/generated/prisma/client';
 import { reduceDay } from '../utils/date.utils';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { DistributedLockService } from './distributed-lock.service';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import {
+  user_sessions,
+  users,
+  verification_tokens,
+} from '../generated/drizzle/schema';
+import { and, eq, inArray, lt, notInArray, or } from 'drizzle-orm';
 
 const CLEANUP_TASK_LOCK_KEY = 'cron:cleanup:users';
 const CLEANUP_TASK_LOCK_TTL_MS = 10 * 60 * 1000;
@@ -12,8 +17,8 @@ const CLEANUP_TASK_LOCK_TTL_MS = 10 * 60 * 1000;
 @Injectable()
 export class CleanupTask {
   constructor(
-    private readonly prismaService: PrismaService,
     private readonly logger: PinoLogger,
+    private readonly drizzleService: DrizzleService,
     private readonly distributedLockService: DistributedLockService,
   ) {
     this.logger.setContext(CleanupTask.name);
@@ -22,63 +27,59 @@ export class CleanupTask {
   private async cleanupSessions(now: Date) {
     const deleteDate = reduceDay(now, 30);
     try {
-      const sessions = await this.prismaService.user_sessions.deleteMany({
-        where: { last_active: { lt: deleteDate } },
-      });
-      this.logger.info(`Deleted ${sessions.count} user sessions.`);
+      const sessions = await this.drizzleService.db
+        .delete(user_sessions)
+        .where(lt(user_sessions.last_active, deleteDate.toISOString()));
+      this.logger.info(`Deleted ${sessions.rowCount ?? 0} user sessions.`);
     } catch (e) {
       this.logger.error('Failed to delete old sessions', e);
     }
   }
 
   private async cleanupVerificationTokens(now: Date) {
-    const deleted = await this.prismaService.verification_tokens.deleteMany({
-      where: {
-        OR: [{ expires_at: { lt: now } }, { is_used: true }]
-      },
-    });
-    this.logger.info(`Deleted: ${deleted.count} verification tokens.`);
+    const deleted = await this.drizzleService.db
+      .delete(verification_tokens)
+      .where(
+        or(
+          lt(verification_tokens.expires_at, now.toISOString()),
+          eq(verification_tokens.is_used, true),
+        ),
+      );
+    this.logger.info(`Deleted: ${deleted.rowCount ?? 0} verification tokens.`);
   }
 
   private async cleanupUnverifiedUsers(now: Date) {
     const deleteDate = reduceDay(now, 1);
-    const deleted = await this.prismaService.users.deleteMany({
-      where: {
-        status: UserStatus.PENDING_VERIFICATION,
-        role: {
-          notIn: [
-            UserRole.SUPPORT,
-            UserRole.DELIVERY,
-            UserRole.WAREHOUSE,
-            UserRole.ADMIN,
-          ],
-        },
-        AND: {
-          created_at: { lt: deleteDate },
-        },
-      },
-    });
-    this.logger.info(`Deleted: ${deleted.count} users.`);
+    const deleted = await this.drizzleService.db
+      .delete(users)
+      .where(
+        and(
+          eq(users.status, 'PENDING_VERIFICATION'),
+          notInArray(users.role, ['SUPPORT', 'DELIVERY', 'WAREHOUSE', 'ADMIN']),
+          lt(users.created_at, deleteDate.toISOString()),
+        ),
+      );
+
+    this.logger.info(`Deleted: ${deleted.rowCount ?? 0} users.`);
   }
 
   private async cleanupIncompleteInformationUsers(now: Date) {
     const deleteDate = reduceDay(now, 7);
-    const deleted = await this.prismaService.users.deleteMany({
-      where: {
-        OR: [
-          { status: UserStatus.INACTIVE, created_at: { lt: deleteDate } },
-          // 员工类用户：待验证且属于特定角色
-          {
-            status: UserStatus.PENDING_VERIFICATION,
-            role: {
-              in: [UserRole.SUPPORT, UserRole.DELIVERY, UserRole.WAREHOUSE],
-            },
-            created_at: { lt: deleteDate },
-          },
-        ],
-      },
-    });
-    this.logger.info(`Deleted: ${deleted.count} users.`);
+    const deleted = await this.drizzleService.db.delete(users).where(
+      or(
+        and(
+          eq(users.status, 'INACTIVE'),
+          lt(users.created_at, deleteDate.toISOString()),
+        ),
+        // 员工类用户：待验证且属于特定角色
+        and(
+          eq(users.status, 'PENDING_VERIFICATION'),
+          inArray(users.role, ['SUPPORT', 'DELIVERY', 'WAREHOUSE']),
+          lt(users.created_at, deleteDate.toISOString()),
+        ),
+      ),
+    );
+    this.logger.info(`Deleted: ${deleted.rowCount ?? 0} users.`);
   }
 
   @Cron(CronExpression.EVERY_HOUR)

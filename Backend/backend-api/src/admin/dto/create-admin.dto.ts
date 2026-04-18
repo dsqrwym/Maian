@@ -2,7 +2,7 @@ import {
   TagsEmail,
   TagsUsername,
 } from '../../utils/typia/validators/auth.validator';
-import { isObject } from '../../utils/is.util';
+import { isObject } from '../../utils/is.utils';
 import { cleanString } from '../../utils/string.util';
 import typia from 'typia';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';

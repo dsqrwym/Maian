@@ -35,6 +35,7 @@ import { AdminModule } from './admin/admin.module';
 import { CategoryModule } from './category/category.module';
 import { ProductsModule } from './products/products.module';
 import { FilesModule } from './files/files.module';
+import { DrizzleModule } from './drizzle/drizzle.module';
 
 @Module({
   imports: [
@@ -87,6 +88,7 @@ import { FilesModule } from './files/files.module';
     FilesModule, // 全局的模块
     CommonModule, // 全局的模块
     PrismaModule, // 全局的模块
+    DrizzleModule, // 全局的模块
     MailModule, // 邮件模块
     AuthModule,
     LocationsModule,

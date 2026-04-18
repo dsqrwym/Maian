@@ -9,3 +9,12 @@
 export function cleanString(str: string): string {
   return str.trim().replace(/[\r\n]+/g, '');
 }
+
+/**
+ * 将字符串转换为无重音的平铺格式 (例如: "día" -> "dia", "Café" -> "Cafe")
+ */
+export function toUnaccent(str: string): string {
+  return str
+    .normalize('NFD') // 将字符分解为基础字符和重音标记
+    .replace(/[\u0300-\u036f]/g, ''); // 移除所有组合重音标记 (Unicode 范围)
+}

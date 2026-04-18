@@ -12,8 +12,8 @@ import { TypedQuery, TypedRoute } from '@nestia/core';
 import { JwtAuthGuard } from '../../auth/guard/auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from '../../generated/prisma/enums';
 import { ADMIN_ROLES } from '../../admin/admin.constants';
+import { UserRole } from '../../generated/drizzle/enums';
 
 /**
  * Category Availability Check Controller

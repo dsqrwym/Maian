@@ -2,17 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ENV } from '../../config/constants.config';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UserRole, UserStatus } from 'src/generated/prisma/client';
+import { UserRole } from 'src/generated/drizzle/enums';
 import { HashService } from '../../common/hash/hash.service';
 import { makeUsername } from '../../utils/user.utils';
+import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { users } from '../../generated/drizzle/schema';
 
 @Injectable()
 export class EnsureSuperAdminService {
   constructor(
     private readonly logger: Logger,
     private readonly configService: ConfigService,
-    private readonly prismaService: PrismaService,
+    private readonly drizzleService: DrizzleService,
     private readonly hashService: HashService,
   ) {}
 
@@ -33,9 +34,9 @@ export class EnsureSuperAdminService {
       'superadmin',
     );
 
-    const admin = await this.prismaService.users.findFirst({
-      where: { role: UserRole.SUPERADMIN },
-      select: { username: true, email: true },
+    const admin = await this.drizzleService.db.query.users.findFirst({
+      columns: { username: true, email: true },
+      where: (users, { eq }) => eq(users.role, 'SUPERADMIN'),
     });
 
     if (admin) {
@@ -50,23 +51,25 @@ export class EnsureSuperAdminService {
     const hashedPassword =
       await this.hashService.hashWithBcrypt(superAdminPassword);
 
-    await this.prismaService.users.upsert({
-      where: { email: superAdminMail, username: superAdminUsername },
-      create: {
+    await this.drizzleService.db
+      .insert(users)
+      .values({
         email: superAdminMail,
         username: superAdminUsername,
         password: hashedPassword,
-        role: UserRole.SUPERADMIN,
-        status: UserStatus.APPROVED,
-      },
-      update: {
-        email: superAdminMail,
-        username: superAdminUsername,
-        password: hashedPassword,
-        role: UserRole.SUPERADMIN,
-        status: UserStatus.APPROVED,
-      },
-    });
+        role: 'SUPERADMIN',
+        status: 'APPROVED',
+      })
+      .onConflictDoUpdate({
+        target: [users.email, users.username],
+        set: {
+          email: superAdminMail,
+          username: superAdminUsername,
+          password: hashedPassword,
+          role: 'SUPERADMIN',
+          status: 'APPROVED',
+        },
+      });
 
     this.logger.log('Super Admin created', superAdminMail, superAdminUsername);
   }
