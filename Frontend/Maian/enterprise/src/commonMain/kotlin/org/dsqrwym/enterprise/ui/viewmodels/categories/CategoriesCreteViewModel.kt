@@ -21,8 +21,8 @@ import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
 import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.formatter.toFixed
@@ -87,7 +87,7 @@ class CategoriesCreateViewModel(
                         }
 
                         is SharedResponseResult.Error -> {
-                            if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                            if (SharedResponseResult.shouldShowToUser(result.type)) {
                                 result.message?.let { mySnackbarViewModel.showError(it) }
                             }
                             categoryNameExist = true
@@ -162,7 +162,7 @@ class CategoriesCreateViewModel(
 
                 is SharedResponseResult.Error -> {
                     createButtonState = UiState.Error
-                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
                         val message = getString(SharedRes.string.create_failed)

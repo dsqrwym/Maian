@@ -193,6 +193,7 @@
     <string name="create_failed">Falha ao criar</string>
     <string name="update_success">Atualização bem-sucedida</string>
     <string name="update_failed">Falha na atualização</string>
+    <string name="update_conflict_preserved_changes">Parte do conteúdo foi modificada por outra pessoa. As suas alterações foram preservadas. Confirme e volte a atualizar.</string>
 
     <string name="category">Categoria</string>
 

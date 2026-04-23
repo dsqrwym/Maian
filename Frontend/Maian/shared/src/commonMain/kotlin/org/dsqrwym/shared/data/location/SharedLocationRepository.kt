@@ -4,7 +4,7 @@ import org.dsqrwym.shared.data.location.dto.CityDto
 import org.dsqrwym.shared.data.location.dto.CountryDto
 import org.dsqrwym.shared.data.location.dto.CurrencyDto
 import org.dsqrwym.shared.data.location.dto.ProvinceDto
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 
 class SharedLocationRepository(private val api: SharedLocationsApi) {

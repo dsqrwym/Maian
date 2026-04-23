@@ -5,8 +5,8 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiResponse
-import org.dsqrwym.shared.network.ApiResponseList
+import org.dsqrwym.shared.network.model.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponseList
 
 class SharedUserApi(val client: HttpClient) {
     suspend inline fun <reified T> getUsers(query: FindUserQueryDto): ApiResponse<ApiResponseList<T>> {

@@ -314,7 +314,7 @@ fun CategoryListItem(
 
                             Text(
                                 text = "${stringResource(SharedRes.string.tax_rate)}->IVA: ${
-                                    if (category.iva != null) category.iva.toString() + "%" else stringResource(
+                                    if (category.iva != null) category.iva + "%" else stringResource(
                                         SharedRes.string.not_set
                                     )
                                 }",

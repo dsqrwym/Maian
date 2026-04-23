@@ -1,6 +1,6 @@
 import { Controller, HttpCode, Req, Res } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { ILoginDto, LoginDto, validateLogin } from '../dto/login.dto';
+import { ILoginDto, validateLogin } from '../dto/login.dto';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from '../auth.service';
@@ -67,7 +67,7 @@ export class LoginController {
   @HttpCode(200)
   async loginAdmin(
     @Req() req: FastifyRequest,
-    @TypedBody(validateLogin) body: LoginDto,
+    @TypedBody(validateLogin) body: ILoginDto,
   ): Promise<LoginResponseDto> {
     return await this.authService.login(req, body, [
       UserRole.ADMIN,

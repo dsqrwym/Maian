@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.standard.data.auth.dto.CompleteRegisterRequest
 import org.dsqrwym.standard.data.auth.dto.StartRegisterRequest
 import org.dsqrwym.standard.network.StandardApi.AuthPath.REGISTRATION_RETAILER

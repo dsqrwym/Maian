@@ -193,6 +193,7 @@
     <string name="create_failed">Échec de la création</string>
     <string name="update_success">Mise à jour réussie</string>
     <string name="update_failed">La mise à jour a échoué</string>
+    <string name="update_conflict_preserved_changes">Une partie du contenu a été modifiée par quelqu’un d’autre. Vos modifications ont été conservées. Veuillez vérifier puis relancer la mise à jour.</string>
 
     <string name="category">Catégorie</string>
 

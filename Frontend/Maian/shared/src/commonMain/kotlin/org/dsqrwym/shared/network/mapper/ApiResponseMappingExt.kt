@@ -1,9 +1,12 @@
-package org.dsqrwym.shared.network
+package org.dsqrwym.shared.network.mapper
 
 import io.ktor.http.*
-import org.jetbrains.compose.resources.getString
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.error_no_permission
+import maian.shared.generated.resources.update_conflict_preserved_changes
+import org.dsqrwym.shared.network.model.ApiResponse
+import org.dsqrwym.shared.network.model.SharedResponseResult
+import org.jetbrains.compose.resources.getString
 
 /**
  * Convert an [ApiResponse] returned by the network layer to a domain-friendly [SharedResponseResult].
@@ -35,6 +38,11 @@ suspend fun <T> ApiResponse<T>.toSharedResponseResult(): SharedResponseResult<T>
         HttpStatusCode.Forbidden.value -> SharedResponseResult.Error(
             HttpStatusCode.Forbidden,
             getString(SharedRes.string.error_no_permission)
+        )
+
+        HttpStatusCode.Conflict.value -> SharedResponseResult.Error(
+            HttpStatusCode.Conflict,
+            getString(SharedRes.string.update_conflict_preserved_changes)
         )
 
         else -> SharedResponseResult.Error(HttpStatusCode.fromValue(statusCode), message)

@@ -10,9 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.dsqrwym.enterprise.navigation.EnterpriseSerializersModule
 import org.dsqrwym.enterprise.navigation.ProductCreate
+import org.dsqrwym.enterprise.navigation.ProductEdit
 import org.dsqrwym.enterprise.navigation.naventry.authNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.categoryNavEntry
 import org.dsqrwym.enterprise.ui.screens.products.ProductCreateScreen
+import org.dsqrwym.enterprise.ui.screens.products.ProductEditScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductsListScreen
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
@@ -86,9 +88,10 @@ fun App() {
                         SharedNavigationRoot(navigationState) {
                             categoryNavEntry(navigationState)
                             entry<SharedDashboardScreen> {
-                                ProductsListScreen {
-                                    navigationState.navigate(ProductCreate)
-                                }
+                                ProductsListScreen(
+                                    onNavigateToCreate = { navigationState.navigate(ProductCreate) },
+                                    onNavigateToEdit = { navigationState.navigate(ProductEdit(it)) }
+                                )
                             }
                             entry<ProductCreate> {
                                 ProductCreateScreen(
@@ -97,6 +100,16 @@ fun App() {
                                     }
                                 )
                             }
+
+                            entry<ProductEdit> {
+                                ProductEditScreen(
+                                    id = it.id,
+                                    onNavigateBack = {
+                                        navigationState.pop()
+                                    }
+                                )
+                            }
+
                             entry<SharedProfileScreen> {
                                 val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
                                 val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
@@ -114,13 +127,13 @@ fun App() {
                                         Text("Logout")
                                     }
 
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showInfo("杩欐槸INFO") }) {
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showInfo("INFO") }) {
                                         Text("INFO")
                                     }
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showError("杩欐槸ERROR") }) {
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showError("ERROR") }) {
                                         Text("ERROR")
                                     }
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showSuccess("杩欐槸SUCCESS") }) {
+                                    ElevatedButton(onClick = { mySnackbarViewModel.showSuccess("SUCCESS") }) {
                                         Text("SUCCESS")
                                     }
                                 }

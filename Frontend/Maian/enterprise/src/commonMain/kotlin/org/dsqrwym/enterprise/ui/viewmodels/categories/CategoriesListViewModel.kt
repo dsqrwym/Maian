@@ -17,8 +17,8 @@ import maian.shared.generated.resources.delete_success
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.shared.data.pagination.createPager
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration.Companion.milliseconds
@@ -68,7 +68,7 @@ class CategoriesListViewModel(
                     }
 
                     is SharedResponseResult.Error -> {
-                        if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                        if (SharedResponseResult.shouldShowToUser(result.type)) {
                             result.message?.let { mySnackbarViewModel.showError(it) }
                         }
                         emptyList()
@@ -115,7 +115,7 @@ class CategoriesListViewModel(
                 }
 
                 is SharedResponseResult.Error -> {
-                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
                         val message = getString(SharedRes.string.delete_failed)

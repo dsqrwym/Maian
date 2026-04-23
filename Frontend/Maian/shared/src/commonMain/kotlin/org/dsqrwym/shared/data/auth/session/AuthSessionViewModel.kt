@@ -10,8 +10,8 @@ import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.data.user.SharedUserPayload
 import org.dsqrwym.shared.di.auth.SharedAuthScope
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
 /**
@@ -102,7 +102,7 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
                 }
 
                 is SharedResponseResult.Error -> {
-                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     }
                 }

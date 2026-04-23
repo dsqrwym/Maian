@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.network
+package org.dsqrwym.shared.network.model
 
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PrimitiveKind

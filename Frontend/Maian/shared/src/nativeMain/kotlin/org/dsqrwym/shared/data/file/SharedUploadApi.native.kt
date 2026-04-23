@@ -16,7 +16,7 @@ import kotlinx.io.buffered
 import kotlinx.io.readByteArray
 import org.dsqrwym.shared.data.file.dto.SharedUploadFileResponse
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponse
 
 actual class SharedUploadApi actual constructor(val client: HttpClient) {
     @OptIn(InternalAPI::class)

@@ -187,7 +187,7 @@ fun RegisterScreen(
                         error = registerViewModel.usernameError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewUsername
@@ -209,7 +209,7 @@ fun RegisterScreen(
                         },
                         error = registerViewModel.passwordError.asString(),
                         imeAction = ImeAction.Next, onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword
@@ -227,7 +227,7 @@ fun RegisterScreen(
                         error = registerViewModel.repeatPasswordError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword
@@ -257,7 +257,7 @@ fun RegisterScreen(
                         error = registerViewModel.companyNameError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                     )
 
@@ -280,7 +280,7 @@ fun RegisterScreen(
                             },
                             imeAction = ImeAction.Next,
                             onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
+                                focusManager.moveFocus(FocusDirection.Down)
                             },
                         ),
                     )
@@ -291,7 +291,7 @@ fun RegisterScreen(
                         enabled = enabled,
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                     )
 
@@ -328,7 +328,7 @@ fun RegisterScreen(
                             },
                             imeAction = ImeAction.Next,
                             onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
+                                focusManager.moveFocus(FocusDirection.Down)
                             },
                         ),
                     )
@@ -356,7 +356,7 @@ fun RegisterScreen(
                             },
                             imeAction = ImeAction.Next,
                             onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
+                                focusManager.moveFocus(FocusDirection.Down)
                             },
                         ),
                     )
@@ -384,7 +384,7 @@ fun RegisterScreen(
                             },
                             imeAction = ImeAction.Next,
                             onImeAction = {
-                                focusManager.moveFocus(FocusDirection.Next)
+                                focusManager.moveFocus(FocusDirection.Down)
                             },
                         ),
                     )
@@ -400,7 +400,7 @@ fun RegisterScreen(
                         onValueChange = { registerViewModel.updateStreet(it) },
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.AddressStreet

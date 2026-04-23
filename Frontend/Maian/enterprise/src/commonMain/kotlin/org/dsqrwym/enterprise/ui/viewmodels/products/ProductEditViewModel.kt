@@ -10,6 +10,7 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.create_failed
 import maian.shared.generated.resources.create_success
 import maian.shared.generated.resources.field_cannot_be_empty
+import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.business.ui.media.MediaPickerViewModel
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.product.ProductRepository
@@ -23,10 +24,11 @@ import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
+import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
 import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
@@ -38,7 +40,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(FlowPreview::class)
-class ProductCreateViewModel(
+class ProductEditViewModel(
     private val uploadRepository: SharedUploadRepository,
     private val productRepository: ProductRepository,
     categoryRepository: CategoryRepository,
@@ -47,8 +49,15 @@ class ProductCreateViewModel(
     categoryRepository,
     snackbarViewModel
 ), SharedNavigable by SharedNavigableDelegate() {
-    val createFormUiState: UiState by mutableStateOf(UiState.Idle)
-    val createButtonEnabled: Boolean by derivedStateOf {
+
+    var isLoading by mutableStateOf(true)
+        private set
+
+    // 当前编辑的产品 ID
+    private var productId: String? = null
+
+    val editFormUiState: UiState by mutableStateOf(UiState.Idle)
+    val editButtonEnabled: Boolean by derivedStateOf {
         (mediaPicker.mediaPickerUiState == UiState.Success || mediaPicker.mediaPickerUiState == UiState.Idle)
                 && productTranslationUiState == UiState.Loading
                 && productMetaDataUiState == UiState.Loading
@@ -260,6 +269,57 @@ class ProductCreateViewModel(
         checkProductTranslation()
     }
 
+    private fun resetProduct() {
+        productId = null
+        productCode = ""
+        productCodeError = null
+        productIva = "21"
+        productCategoryError = null
+        productStatus = SharedProductStatus.ACTIVE
+        productMetaDataUiState = UiState.Idle
+        selectedTranslationIndex = 0
+        selectedTranslationNameError = null
+        productTranslationUiState = UiState.Idle
+        translationTabs.clear()
+        productVariants.clear()
+        productVariantUiState = UiState.Idle
+        variantSaleUnitQtyManuallyEdited.clear()
+        productVariantsProductCodesErrors.clear()
+        mediaPicker.clear()
+        isIvaManuallyEdited = false
+        showAddLanguageDialog(false)
+    }
+
+    fun initWithProduct(productId: String) {
+        resetProduct()
+        this@ProductEditViewModel.productId = productId
+        isLoading = true
+        viewModelScope.launch {
+            when (val result = productRepository.getProductForUpdate(productId)) {
+                is SharedResponseResult.Success -> {
+                    result.data?.let { products ->
+                        productCode = products.productCode
+                        productIva = products.iva
+                        productStatus = products.status
+                        translationTabs.addAll(products.translations.map {
+                            Pair(it, RichTextState())
+                        })
+                        productVariants.addAll(products.variant)
+                    }
+                }
+
+                is SharedResponseResult.Error -> {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
+                        result.message?.let {
+                            mySnackbarViewModel.showError(it)
+                        }
+                    }
+                    emitNavigation(NavigationEvent.ToRoute(Categories))
+                }
+            }
+        }
+    }
+
     @OptIn(ExperimentalUuidApi::class)
     fun upsertProductVariant(
         id: String?,
@@ -395,11 +455,11 @@ class ProductCreateViewModel(
         productStatus = state
     }
 
-    fun createProduct() {
+    fun editProduct() {
         checkProductMeta()
         checkProductVariant()
         checkProductTranslation()
-        if (!createButtonEnabled) return
+        if (!editButtonEnabled) return
         val primaryCategory = filterCategory ?: return
         val primaryTranslation = translationTabs.first().first
         val restTranslations = translationTabs.drop(1).map { it.first }
@@ -434,7 +494,7 @@ class ProductCreateViewModel(
                 }
 
                 is SharedResponseResult.Error -> {
-                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
                         val message = getString(SharedRes.string.create_failed)
@@ -452,7 +512,7 @@ class ProductCreateViewModel(
             }
 
             is SharedResponseResult.Error -> {
-                if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
                     result.message?.let { mySnackbarViewModel.showError(it) }
                 }
             }

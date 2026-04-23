@@ -1,19 +1,14 @@
 import { validateCategoryTranslation } from './category-translation.dto';
 import { ICreateCategoryDto } from './create-category.dto';
-import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
 import { isObject } from '../../utils/is.utils';
 import typia from 'typia';
-import { TagsCategoryName } from '../../utils/typia/validators/category.validator';
 import { cleanString } from '../../utils/string.util';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 import { TagsVersion } from '../../utils/typia/tags/number.tags';
 
-export interface IUpdateCategoryDto extends Omit<
-  ICreateCategoryDto,
-  'userId' | 'parentId' | 'name'
+export interface IUpdateCategoryDto extends Partial<
+  Omit<ICreateCategoryDto, 'userId' | 'parentId'>
 > {
-  name: TagsCategoryName;
-  id: TagsIntegerString;
   translationsToDelete?: string[];
   version: TagsVersion;
 }

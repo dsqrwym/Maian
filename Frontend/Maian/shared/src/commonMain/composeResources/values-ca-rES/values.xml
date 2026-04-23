@@ -196,6 +196,7 @@
     <string name="create_failed">Error en crear</string>
     <string name="update_success">Actualització correcta</string>
     <string name="update_failed">L'actualització ha fallat</string>
+    <string name="update_conflict_preserved_changes">Alguns continguts han estat modificats per una altra persona. S'han conservat els teus canvis. Revisa-ho i torna a actualitzar.</string>
 
     <string name="category">Categoria</string>
 

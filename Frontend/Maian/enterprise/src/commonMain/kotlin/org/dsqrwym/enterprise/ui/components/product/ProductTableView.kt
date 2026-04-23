@@ -23,8 +23,8 @@ import org.dsqrwym.shared.data.products.SharedProductSortField.*
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.buttons.MyTextButton
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
-import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
+import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.modifier.copyOnInteraction
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
@@ -60,6 +60,7 @@ fun ProductTableView(
     updateSortBy: (SharedProductSortField?) -> Unit,
     updateSortDir: (OrderDir) -> Unit,
     onPreview: (ProductResponse) -> Unit,
+    onEdit: (ProductResponse) -> Unit,
     onDelete: (ProductResponse) -> Unit,
     padding: PaddingValues,
     isRefreshing: Boolean,
@@ -280,6 +281,7 @@ fun ProductTableView(
                 cell { product, _ ->
                     DisableSelection {
                         Row(Modifier.placeholderWithShimmer(isRefreshing)) {
+                            MyTextButton(text = "编辑"){ onEdit(product) }
                             TooltipBox(
                                 state = rememberTooltipState(),
                                 positionProvider = positionProvider,

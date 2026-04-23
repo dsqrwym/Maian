@@ -1,9 +1,6 @@
 package org.dsqrwym.enterprise.data.product
 
-import org.dsqrwym.enterprise.data.product.dto.ProductCreateDto
-import org.dsqrwym.enterprise.data.product.dto.ProductFileDto
-import org.dsqrwym.enterprise.data.product.dto.ProductResponse
-import org.dsqrwym.enterprise.data.product.dto.ProductVariantDto
+import org.dsqrwym.enterprise.data.product.dto.*
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.SharedProductApi
 import org.dsqrwym.shared.data.products.SharedProductListSelectField
@@ -11,8 +8,8 @@ import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedFindProductDto
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
-import org.dsqrwym.shared.network.ApiResponseList
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.ApiResponseList
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
 
@@ -84,5 +81,9 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                 )
             }
         }
+    }
+
+    suspend fun getProductForUpdate(id: String): SharedResponseResult<ProductResponseForUpdate> {
+        return safeApiCall { productApi.getProductForUpdate(id) }
     }
 }

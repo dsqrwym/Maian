@@ -401,11 +401,11 @@ export class CategoryService {
   }
 
   async update(
+    id: bigint,
     updateCategoryDto: IUpdateCategoryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
-    const id = BigInt(updateCategoryDto.id);
     const clientVersion = BigInt(updateCategoryDto.version);
 
     const existingCategory = await this.drizzle.db.query.categories.findFirst({
@@ -434,8 +434,8 @@ export class CategoryService {
       const result = await tx
         .update(categories)
         .set({
-          name,
-          iva: iva ?? null,
+          ...(name !== undefined && { name: name }),
+          ...(iva !== undefined && { iva: iva }),
           updated_at: sql`(NOW() AT TIME ZONE 'UTC')`,
           updated_by: user.userId,
           version: sql`${categories.version} + 1`,

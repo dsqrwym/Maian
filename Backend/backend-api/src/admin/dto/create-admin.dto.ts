@@ -22,7 +22,7 @@ export interface ICreateAdminDto {
    *
    * @example 'mgarciam'
    */
-  username?: TagsUsername;
+  username?: TagsUsername | null;
 }
 export const validateCreateAdmin: IRequestBodyValidator.IAssert<ICreateAdminDto> =
   {

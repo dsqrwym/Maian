@@ -123,6 +123,7 @@ fun <T> SearchableSelector(
             onExpandedChange = {/*handled manually in trailing icon */ }
         ) {
             MyOutlinedTextField(
+                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
                 leadingIcon = config.leadingIcon,
                 enabled = config.enabled,
                 readOnly = config.readOnly,
@@ -308,6 +309,7 @@ fun <T : Any> SearchableSelectorRemote(
             expanded = expanded,
             onExpandedChange = {/*handled manually in trailing icon */ }) {
             MyOutlinedTextField(
+                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
                 leadingIcon = config.leadingIcon,
                 enabled = config.enabled,
                 value = query,

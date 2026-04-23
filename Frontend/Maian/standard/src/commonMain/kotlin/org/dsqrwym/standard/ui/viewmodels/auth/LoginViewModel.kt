@@ -14,8 +14,8 @@ import maian.shared.generated.resources.login_error_username_or_password
 import maian.shared.generated.resources.login_success
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.local.SharedUserPreferences
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.validation.validatePassword
@@ -79,7 +79,7 @@ class LoginViewModel(
 
                     is SharedResponseResult.Error -> {
                         loginUiState = UiState.Error
-                        if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                        if (SharedResponseResult.shouldShowToUser(result.type)) {
                             result.message?.let { mySnackbarViewModel.showError(it) }
                         } else {
                             mySnackbarViewModel.showError(

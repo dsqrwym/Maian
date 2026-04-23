@@ -83,14 +83,17 @@ export class CategoryController {
    * Update an existing category
    * @param {IUpdateCategoryDto} updateCategoryDto - Category data to update
    * @param {FastifyRequest} req - Request object containing user ability
+   * @param {bigint} id - ID of the category to update
    */
-  @TypedRoute.Put()
+  @TypedRoute.Patch(':id')
   @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async update(
     @Req() req: FastifyRequest,
     @TypedBody(validateUpdateCategory) updateCategoryDto: IUpdateCategoryDto,
+    @TypedParam('id') id: bigint,
   ): Promise<void> {
     return this.categoryService.update(
+      id,
       updateCategoryDto,
       req.ability,
       req.user,

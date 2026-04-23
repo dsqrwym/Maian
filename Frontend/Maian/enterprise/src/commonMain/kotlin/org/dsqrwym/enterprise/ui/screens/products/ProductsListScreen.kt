@@ -3,7 +3,6 @@ package org.dsqrwym.enterprise.ui.screens.products
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.clear
 import maian.shared.generated.resources.filter
 import org.dsqrwym.enterprise.data.product.dto.ProductResponse
 import org.dsqrwym.enterprise.ui.components.product.ProductTableView
@@ -36,7 +34,8 @@ import ua.wwind.table.ExperimentalTableApi
 @Composable
 fun ProductsListScreen(
     viewModel: ProductsListViewModel = koinViewModel(),
-    onNavigateToCreate: () -> Unit = {}
+    onNavigateToCreate: () -> Unit = {},
+    onNavigateToEdit: (String) -> Unit = {},
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val searchQuery = viewModel.searchQuery
@@ -103,6 +102,7 @@ fun ProductsListScreen(
                 viewModel::updateSortBy,
                 viewModel::updateSortDir,
                 {},
+                { onNavigateToEdit(it.id) },
                 {},
                 padding,
                 isRefreshing,
@@ -115,6 +115,7 @@ fun ProductsListScreen(
                 scrollBehavior,
                 viewModel::updateCurrentProduct,
                 {},
+                { onNavigateToEdit(it.id) },
                 {},
                 padding,
                 isRefreshing,

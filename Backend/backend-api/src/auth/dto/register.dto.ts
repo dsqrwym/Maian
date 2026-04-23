@@ -35,7 +35,7 @@ export interface ISendNormalRegisterMailDto {
    * Deep link for mobile app redirection (optional)
    * 移动应用深度链接（可选）
    */
-  deepLink?: string & tags.MaxLength<500>;
+  deepLink?: (string & tags.MaxLength<500>) | null;
 }
 
 export const validateSendNormalRegisterMail: IRequestBodyValidator.IAssert<ISendNormalRegisterMailDto> =

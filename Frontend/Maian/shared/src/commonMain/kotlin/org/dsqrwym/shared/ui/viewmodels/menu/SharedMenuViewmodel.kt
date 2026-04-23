@@ -13,14 +13,12 @@ class SharedMenuViewModel : ViewModel() {
     private val _menuStates = MutableStateFlow<List<SharedMenuItemState>>(emptyList())
     val menuStates = _menuStates.asStateFlow()
     var menuConfiguration: SharedMenuConfiguration? = null
-    private set
+        private set
 
 
     fun initMenu(configuration: SharedMenuConfiguration) {
-        if (_menuStates.value.isEmpty()) {
-            _menuStates.value = configuration.items
-            menuConfiguration = configuration
-        }
+        _menuStates.value = configuration.items
+        menuConfiguration = configuration
     }
 
     fun setBadge(route: Any, count: Int = 0, show: Boolean = true) {

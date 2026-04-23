@@ -9,7 +9,7 @@ import org.dsqrwym.business.data.category.dto.BusinessCreateCategoryDto
 import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
 import org.dsqrwym.business.network.BusinessApi
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponse
 
 class BusinessCategoryApi(
     private val client: HttpClient
@@ -20,11 +20,12 @@ class BusinessCategoryApi(
             setBody(dto)
         }.body()
 
-    suspend fun updateCategory(dto: BusinessUpdateCategoryDto): ApiResponse<Unit> =
-        client.put(ApiConfig.CategoryPath.CATEGORY) {
+    suspend fun updateCategory(id: String, dto: BusinessUpdateCategoryDto): ApiResponse<Unit> =
+        client.patch("${ApiConfig.CategoryPath.CATEGORY}/$id") {
             contentType(ContentType.Application.Json)
             setBody(dto)
         }.body()
+
     suspend fun deleteCategory(id: String): ApiResponse<Unit> =
         client.delete(ApiConfig.CategoryPath.CATEGORY) {
             url { appendPathSegments(id) }

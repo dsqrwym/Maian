@@ -52,12 +52,13 @@ import org.jetbrains.compose.resources.stringResource
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyStaggeredGridState
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun ProductVariantsFields(
-    skuTabs: List<ProductVariantDto>,
+    variants: List<ProductVariantDto>,
     productVariantsProductCodesErrors: Map<String, StringResource?>,
     isLoading: Boolean = false,
     onReorder: (Int, Int) -> Unit,
@@ -75,7 +76,7 @@ fun ProductVariantsFields(
         onReorder(from.index - 1, to.index - 1)
         hapticFeedback.performHapticFeedback(HapticFeedbackType.SegmentFrequentTick)
     }
-    val currentSKUId by remember { mutableStateOf(skuTabs.first().id) }
+    val currentSKUId by remember { mutableStateOf(variants.first().id) }
     val isisAnyItemDragging = reorderableState.isAnyItemDragging
 
     LazyVerticalStaggeredGrid(
@@ -95,8 +96,8 @@ fun ProductVariantsFields(
             ) {
                 BusinessSelectedInfoCard(
                     modifier = Modifier.weight(1f, false).widthIn(max = 336.dp),
-                    visible = skuTabs.isNotEmpty(),
-                    description = "已添加${skuTabs.size}个变体。",
+                    visible = variants.isNotEmpty(),
+                    description = "已添加${variants.size}个变体。",
                     icon = Icons.Outlined.Info,
                     enabled = false,
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -114,7 +115,7 @@ fun ProductVariantsFields(
                 }
             }
         }
-        itemsIndexed(skuTabs, key = { _, item -> item.id ?: "" }) { index, item ->
+        itemsIndexed(variants, key = { _, item -> item.id ?: Uuid.generateV4() }) { index, item ->
             ReorderableItem(
                 state = reorderableState,
                 key = item.id ?: "",
@@ -135,7 +136,7 @@ fun ProductVariantsFields(
                     currentSKUid = currentSKUId,
                     isAnyItemDragging = isisAnyItemDragging,
                     isSelfDragging = isSelfDragging,
-                    canDelete = skuTabs.size > 1,
+                    canDelete = variants.size > 1,
                     onDelete = onDelete,
                     onUpdate = onUpdate,
                     productCodeError = item.id?.let { productVariantsProductCodesErrors[it] }

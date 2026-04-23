@@ -8,10 +8,11 @@ import kotlinx.serialization.modules.polymorphic
 import org.dsqrwym.business.navigation.BusinessNavSerializersModule
 
 val EnterpriseSerializersModule = SerializersModule {
-    polymorphic(NavKey::class){
+    polymorphic(NavKey::class) {
         subclass(RegisterScreen::class, RegisterScreen.serializer())
         subclass(Products::class, Products.serializer())
         subclass(ProductCreate::class, ProductCreate.serializer())
+        subclass(ProductEdit::class, ProductEdit.serializer())
     }
     include(BusinessNavSerializersModule)
 }
@@ -27,3 +28,7 @@ object Products : NavKey
 @Serializable
 @SerialName("Product-Create")
 object ProductCreate : NavKey
+
+@Serializable
+@SerialName("Product-Edit")
+data class ProductEdit(val id: String) : NavKey

@@ -24,9 +24,6 @@ fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationState
 
     entry<CategoryCreate> {
         CategoryCreateScreen(
-            onNavigate = { route ->
-                viewModel.navigate(route)
-            },
             onNavigateBack = {
                 if (!viewModel.popTo(Categories)) {
                     viewModel.navigateToTopLevel(Categories)
@@ -38,9 +35,6 @@ fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationState
     entry<CategoryEdit> {
         CategoryEditScreen(
             categoryId = it.id,
-            onNavigate = { route ->
-                viewModel.navigate(route)
-            },
             onNavigateBack = {
                 if (!viewModel.popTo(Categories)) {
                     viewModel.navigateToTopLevel(Categories)

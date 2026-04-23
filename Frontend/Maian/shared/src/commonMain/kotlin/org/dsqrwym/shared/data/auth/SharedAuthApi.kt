@@ -6,7 +6,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import org.dsqrwym.shared.data.auth.dto.*
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.util.platform.MaiAnPlatformType
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform

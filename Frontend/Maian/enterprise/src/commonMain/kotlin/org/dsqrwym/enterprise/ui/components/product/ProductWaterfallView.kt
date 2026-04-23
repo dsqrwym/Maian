@@ -10,7 +10,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -32,8 +33,8 @@ import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.SharedOverlayContentBox
-import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
+import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendErrorRetry
@@ -53,6 +54,7 @@ fun ProductWaterfallView(
     scrollBehavior: TopAppBarScrollBehavior,
     updateCurrentProduct: (ProductResponse) -> Unit,
     onPreview: (ProductResponse) -> Unit,
+    onEdit: (ProductResponse) -> Unit,
     onDelete: (ProductResponse) -> Unit,
     padding: PaddingValues,
     isRefreshing: Boolean,
@@ -112,6 +114,7 @@ fun ProductWaterfallView(
                             onClick = {},
                             onImageClick = {},
                             onPreview = {},
+                            onEdit = {},
                             onDelete = {}
                         )
                     }
@@ -133,6 +136,7 @@ fun ProductWaterfallView(
                                 onImageClick = { updateCurrentProduct(product) },
                                 onClick = { },
                                 onPreview = { onPreview(product) },
+                                onEdit = { onEdit(product) },
                                 onDelete = { onDelete(product) }
                             )
                         }
@@ -169,6 +173,7 @@ fun ProductGridItem(
     onClick: () -> Unit,
     onImageClick: () -> Unit,
     onPreview: () -> Unit,
+    onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
     // 如果 product 为空 (placeholder) 或者正在刷新，显示骨架屏
@@ -343,8 +348,16 @@ fun ProductGridItem(
                 ) {
                     IconButton(onClick = onPreview) {
                         Icon(
-                            imageVector = Icons.Default.Visibility, // 假设你有这个Icon
+                            imageVector = Icons.Outlined.Visibility,
                             contentDescription = "预览",
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    IconButton(onClick = onEdit) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = "编辑",
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.size(20.dp)
                         )

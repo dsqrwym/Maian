@@ -12,6 +12,7 @@ import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthEvents
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
 
@@ -35,7 +36,7 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
     install(ContentNegotiation) {
         json(Json {
             ignoreUnknownKeys = true // 忽略未知字段
-            explicitNulls = false // 如果为null 就不向JSON输出字段 等于JavaScript的undefined
+            // explicitNulls = false // 如果为null 就不向JSON输出字段 等于JavaScript的undefined
             encodeDefaults = true // 默认值也写入JSON
         })
     }

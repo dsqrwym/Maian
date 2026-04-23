@@ -60,8 +60,14 @@ fun ProductTranslationTabs(
     onToggleRichTextEditor: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    if (translationTabs.isEmpty()) {
+        return
+    }
     val selectedLanguageIndex =
-        currentLanguageIndex.coerceIn(minimumValue = 0, maximumValue = translationTabs.lastIndex)
+        currentLanguageIndex.coerceIn(
+            minimumValue = 0,
+            maximumValue = translationTabs.lastIndex
+        )
     val currentTranslation = translationTabs[selectedLanguageIndex].first
     val currentDescription = translationTabs[selectedLanguageIndex].second
 

@@ -5,6 +5,7 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.session_not_found
 import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.user.SharedUserPayload
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.jetbrains.compose.resources.getString
 
 suspend fun <T> withAuthOrError(

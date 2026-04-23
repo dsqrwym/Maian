@@ -23,8 +23,9 @@ import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.navigation.core.SharedNavigable
+import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
@@ -44,7 +45,7 @@ class ProductCreateViewModel(
 ) : BaseCategoryFilterViewmodel(
     categoryRepository,
     snackbarViewModel
-) {
+), SharedNavigable by SharedNavigableDelegate() {
     val createFormUiState: UiState by mutableStateOf(UiState.Idle)
     val createButtonEnabled: Boolean by derivedStateOf {
         (mediaPicker.mediaPickerUiState == UiState.Success || mediaPicker.mediaPickerUiState == UiState.Idle)
@@ -432,7 +433,7 @@ class ProductCreateViewModel(
                 }
 
                 is SharedResponseResult.Error -> {
-                    if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
                         val message = getString(SharedRes.string.create_failed)
@@ -450,7 +451,7 @@ class ProductCreateViewModel(
             }
 
             is SharedResponseResult.Error -> {
-                if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
                     result.message?.let { mySnackbarViewModel.showError(it) }
                 }
             }

@@ -1,8 +1,7 @@
-package org.dsqrwym.shared.network
+package org.dsqrwym.shared.network.mapper
 
 import io.ktor.client.call.*
 import io.ktor.client.network.sockets.*
-import io.ktor.http.*
 import kotlinx.io.IOException
 import kotlinx.serialization.SerializationException
 import maian.shared.generated.resources.*
@@ -40,15 +39,4 @@ object ErrorMessageMapper {
                 getString(SharedRes.string.error_generic)
         }
     }
-
-    fun shouldShowToUser(statusCode: HttpStatusCode): Boolean {
-        return when (statusCode) {
-            HttpStatusCode.Forbidden,
-            HttpStatusCode.InternalServerError,
-            HttpStatusCode.ServiceUnavailable,
-            HttpStatusCode.RequestTimeout -> true
-            else -> false
-        }
-    }
-
 }

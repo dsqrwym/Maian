@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import org.dsqrwym.shared.util.formatter.formatExpireDurationFromSeconds
 import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,11 +13,13 @@ import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.formatter.formatExpireDurationFromSeconds
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 /**
@@ -67,7 +68,7 @@ open class VerifyOtpCodeViewModelBase(
 
         emailCheckJob = viewModelScope.launch {
             isCheckingEmail = true
-            delay(500)
+            delay(500.milliseconds)
             emailExists = false
             when (val result = sharedAuthRepository.checkEmailExists(email)) {
                 is SharedResponseResult.Success -> {
@@ -108,7 +109,7 @@ open class VerifyOtpCodeViewModelBase(
         }
         resendCodeCountDownJob = viewModelScope.launch {
             while (codeResentLeftTime > 0) {
-                delay(1000)
+                delay(1000.milliseconds)
                 codeResentLeftTime--
             }
         }

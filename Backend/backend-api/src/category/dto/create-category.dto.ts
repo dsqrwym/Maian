@@ -12,16 +12,18 @@ import { TagsIvaString } from '../../utils/typia/validators/product.validator';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 export interface ICreateCategoryDto {
-  userId?: TagsUuid;
+  userId: TagsUuid | null;
 
   name: TagsCategoryName;
 
-  iva?: TagsIvaString;
+  iva: TagsIvaString | null;
 
-  parentId?: TagsIntegerString;
+  parentId: TagsIntegerString | null;
 
-  translations?: ICategoryTranslationDto[] &
-    tags.Examples<{ langCode: 'es-ES'; name: 'Electrónica' }>;
+  translations:
+    | (ICategoryTranslationDto[] &
+        tags.Examples<{ langCode: 'es-ES'; name: 'Electrónica' }>)
+    | null;
 }
 export const validateCreateCategory: IRequestBodyValidator.IAssert<ICreateCategoryDto> =
   {

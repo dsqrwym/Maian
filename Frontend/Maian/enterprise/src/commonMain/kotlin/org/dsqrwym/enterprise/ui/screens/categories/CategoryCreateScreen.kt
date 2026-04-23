@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.add_language_translation
 import maian.business.generated.resources.all_languages_added
@@ -30,7 +29,6 @@ import org.dsqrwym.business.ui.components.category.BusinessParentCategoryCard
 import org.dsqrwym.business.ui.components.category.BusinessTranslationCard
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesCreateViewModel
 import org.dsqrwym.shared.localization.LanguageManager
-import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
@@ -43,7 +41,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CategoryCreateScreen(
     viewModel: CategoriesCreateViewModel = koinViewModel(),
-    onNavigate: (NavKey) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     val categoryName = viewModel.categoryName
@@ -65,9 +62,7 @@ fun CategoryCreateScreen(
 
     LaunchedEffect(Unit) {
         viewModel.navigateEvent.collect {
-            if (it is NavigationEvent.ToRoute) {
-                onNavigate(it.route)
-            }
+            onNavigateBack()
         }
     }
 

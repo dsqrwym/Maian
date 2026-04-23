@@ -32,7 +32,7 @@ export interface IRegisterRetailerDto {
    * Username (optional, must be unique)
    * 用户名（可选，必须唯一）
    */
-  username?: string & TagsUsername;
+  username: (string & TagsUsername) | null;
 
   /**
    * Store's business address

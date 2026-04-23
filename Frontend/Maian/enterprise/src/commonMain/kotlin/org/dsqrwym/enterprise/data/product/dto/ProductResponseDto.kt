@@ -59,3 +59,24 @@ data class ProductResponse(
             List(count) { fake(it) }
     }
 }
+
+@Serializable
+data class ProductResponseForUpdate(
+    val id: String,
+    val name: String,
+    val title: String?,
+    val description: String?,
+    val iva: String,
+    @SerialName("product_code")
+    val productCode: String,
+    val status: SharedProductStatus,
+    val version: Long,
+    @SerialName("product_categories")
+    val categories: List<ReducedCategoryResponse>,
+    @SerialName("variant_products")
+    val variant: List<ProductVariantDto>,
+    @SerialName("product_translations")
+    val translations: List<SharedProductTranslation>,
+    @SerialName("products_files")
+    val files: List<ProductFileDto>,
+)

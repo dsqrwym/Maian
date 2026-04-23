@@ -198,6 +198,7 @@
     <string name="create_failed">创建失败</string>
     <string name="update_success">更新成功</string>
     <string name="update_failed">更新失败</string>
+    <string name="update_conflict_preserved_changes">部分内容已被他人修改，已保留您的修改，请确认后重新更新。</string>
 
     <string name="category">类别</string>
 

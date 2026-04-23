@@ -11,7 +11,7 @@ export interface IDirectionDto {
   /**
    * 地址类型
    */
-  type?: AddressType & tags.Example<'STORE'>; // 默认值需要在业务层处理
+  type?: (AddressType & tags.Example<'STORE'>) | null; // 默认值需要在业务层处理
 
   /**
    * 街道地址
@@ -41,12 +41,12 @@ export interface IDirectionDto {
   /**
    * 纬度
    */
-  latitude?: TagsLatitude;
+  latitude?: TagsLatitude | null;
 
   /**
    * 经度
    */
-  longitude?: TagsLongitude;
+  longitude?: TagsLongitude | null;
 }
 
 export const validateDirection = (input: unknown) => {

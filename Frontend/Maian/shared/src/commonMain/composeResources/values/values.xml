@@ -196,6 +196,7 @@
     <string name="create_failed">Creation failed</string>
     <string name="update_success">Update successful</string>
     <string name="update_failed">Update failed</string>
+    <string name="update_conflict_preserved_changes">Some content was modified by someone else. Your changes have been preserved. Please review and update again.</string>
 
     <string name="category">Category</string>
 

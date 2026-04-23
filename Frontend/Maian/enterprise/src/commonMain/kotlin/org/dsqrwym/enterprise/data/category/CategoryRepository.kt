@@ -11,10 +11,11 @@ import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
-import org.dsqrwym.shared.network.ApiResponseList
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.ApiResponseList
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
+import org.dsqrwym.shared.serialization.mapNotNull
 
 class CategoryRepository(
     private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi
@@ -51,10 +52,9 @@ class CategoryRepository(
         limit: Int = 100,
         needIva: Boolean = false,
         maxLevel: Int = 3,
-    ): SharedResponseResult<ApiResponseList<ReducedCategoryResponse>> = withAuthOrError { user ->
+    ): SharedResponseResult<ApiResponseList<ReducedCategoryResponse>> {
         val query = SharedFindCategoryDto(
             search = search?.trim(),
-            userId = user.userId,
             maxLevel = maxLevel,
             page = page,
             limit = limit,
@@ -63,7 +63,7 @@ class CategoryRepository(
                 if (needIva) add(SharedCategorySelectField.IVA)
             }
         )
-        safeApiCall { sharedApi.getCategories<ReducedCategoryResponse>(query) }
+        return safeApiCall { sharedApi.getCategories<ReducedCategoryResponse>(query) }
     }
 
     suspend fun createCategory(
@@ -93,12 +93,17 @@ class CategoryRepository(
         safeApiCall { api.checkUpdateCategoryName(name.trim(), id, user.userId) }
     }
 
-    suspend fun updateCategory(dto: BusinessUpdateCategoryDto): SharedResponseResult<Unit> {
+    suspend fun updateCategory(id: String, dto: BusinessUpdateCategoryDto): SharedResponseResult<Unit> {
         return safeApiCall {
             api.updateCategory(
+                id,
                 dto.copy(
-                    name = dto.name.trim(),
-                    translations = dto.translations?.map { it.copy(name = it.name.trim()) }
+                    name = dto.name.mapNotNull { it.trim() },
+                    translations = dto.translations.mapNotNull { value ->
+                        value.map { translation ->
+                            translation.copy(name = translation.name.trim())
+                        }
+                    }
                 )
             )
         }.notifyUpdated()

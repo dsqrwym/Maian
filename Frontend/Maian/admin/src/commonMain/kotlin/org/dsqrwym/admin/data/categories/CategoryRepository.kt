@@ -10,9 +10,10 @@ import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
-import org.dsqrwym.shared.network.ApiResponseList
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.ApiResponseList
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
+import org.dsqrwym.shared.serialization.mapNotNull
 
 class CategoryRepository(private val sharedApi: SharedCategoryApi, private val api: BusinessCategoryApi) :
     BusinessCategoryRepository(api) {
@@ -86,12 +87,15 @@ class CategoryRepository(private val sharedApi: SharedCategoryApi, private val a
         return safeApiCall { api.checkUpdateCategoryName(name.trim(), id, userId) }
     }
 
-    suspend fun updateCategory(dto: BusinessUpdateCategoryDto): SharedResponseResult<Unit> {
+    suspend fun updateCategory(id: String, dto: BusinessUpdateCategoryDto): SharedResponseResult<Unit> {
         return safeApiCall {
             api.updateCategory(
+                id,
                 dto.copy(
-                    name = dto.name.trim(),
-                    translations = dto.translations?.map { it.copy(name = it.name.trim()) }
+                    name = dto.name.mapNotNull { it.trim() },
+                    translations = dto.translations.mapNotNull { value ->
+                        value.map { it.copy(name = it.name.trim()) }
+                    }
                 )
             )
         }.notifyUpdated()

@@ -10,10 +10,7 @@ import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -28,7 +25,7 @@ import org.dsqrwym.enterprise.ui.components.product.ProductMetaFields
 import org.dsqrwym.enterprise.ui.components.product.ProductTranslationTabs
 import org.dsqrwym.enterprise.ui.components.product.ProductVariantsFields
 import org.dsqrwym.enterprise.ui.screens.categories.AddLanguageDialog
-import org.dsqrwym.enterprise.ui.viewmodels.products.ProductCreateViewModel
+import org.dsqrwym.enterprise.ui.viewmodels.products.ProductEditViewModel
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
@@ -42,12 +39,18 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductCreateScreen(
+fun ProductEditScreen(
+    id: String,
     onNavigateBack: () -> Unit = {},
-    viewModel: ProductCreateViewModel = koinViewModel()
+    viewModel: ProductEditViewModel = koinViewModel()
 ) {
     val workspaceState = rememberBusinessAuxiliaryWorkspaceState()
-
+    LaunchedEffect(id) {
+        viewModel.initWithProduct(id)
+        viewModel.navigateEvent.collect {
+            onNavigateBack()
+        }
+    }
     DisposableEffect(Unit) {
         onDispose { workspaceState.close() }
     }
@@ -55,7 +58,7 @@ fun ProductCreateScreen(
     BusinessAuxiliaryHost(
         workspaceState = workspaceState,
         mainContent = {
-            ProductCreateScreenContent(
+            ProductEditScreenContent(
                 onNavigateBack = onNavigateBack,
                 viewModel = viewModel,
                 isAuxiliaryOpen = workspaceState.isOpen,
@@ -65,20 +68,16 @@ fun ProductCreateScreen(
             )
         },
         auxiliaryContent = { surface ->
-            ProductAuxiliaryPane(
-                viewModel = viewModel,
-                surface = surface,
-                onClose = workspaceState::close,
-            )
+
         },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalUuidApi::class)
 @Composable
-private fun ProductCreateScreenContent(
+private fun ProductEditScreenContent(
     onNavigateBack: () -> Unit,
-    viewModel: ProductCreateViewModel,
+    viewModel: ProductEditViewModel,
     isAuxiliaryOpen: Boolean,
     onToggleRichTextEditor: () -> Unit,
 ) {
@@ -120,9 +119,9 @@ private fun ProductCreateScreenContent(
             }
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
-            viewModel.createFormUiState,
-            viewModel.createButtonEnabled,
-            viewModel::createProduct,
+            viewModel.editFormUiState,
+            viewModel.editButtonEnabled,
+            viewModel::editProduct,
             stringResource(SharedRes.string.create),
             Icons.Outlined.Add,
             stringResource(SharedRes.string.create)
@@ -192,6 +191,7 @@ private fun ProductCreateScreenContent(
                     )
                 }
             }
+
             item(span = if (skuTabs.size > 1) StaggeredGridItemSpan.FullLine else null) {
                 FormCard(
                     title = "SKU 列表",
@@ -199,7 +199,7 @@ private fun ProductCreateScreenContent(
                     uiState = viewModel.productVariantUiState
                 ) {
                     ProductVariantsFields(
-                        skuTabs = skuTabs,
+                        variants = skuTabs,
                         onReorder = viewModel::reorder,
                         onDelete = viewModel::deleteVariant,
                         onAddClick = {

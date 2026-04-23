@@ -3,6 +3,7 @@ package org.dsqrwym.enterprise.data.product.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
+import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 
 @Serializable
@@ -51,6 +52,7 @@ data class ProductVariantDto(
     // 低库存预警阈值
     @SerialName("low_stock_threshold")
     val lowStockThreshold: Int? = null,
+    val status: SharedProductStatus = SharedProductStatus.ACTIVE,
     // --- 临时属性 (JSONB) ---
     val attributes: String? = null
 )

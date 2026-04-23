@@ -8,8 +8,7 @@ import org.dsqrwym.admin.data.categories.CategoryRepository
 import org.dsqrwym.admin.data.user.UserRepository
 import org.dsqrwym.admin.data.user.dto.WholeSalerUserResponse
 import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
 abstract class BaseCategoryFilterViewmodel(
@@ -34,7 +33,7 @@ abstract class BaseCategoryFilterViewmodel(
             }
 
             is SharedResponseResult.Error -> {
-                if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
                     result.message?.let { mySnackbarViewModel.showError(it) }
                 }
             }
@@ -52,7 +51,7 @@ abstract class BaseCategoryFilterViewmodel(
             }
 
             is SharedResponseResult.Error -> {
-                if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
                     result.message?.let { mySnackbarViewModel.showError(it) }
                 }
             }

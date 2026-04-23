@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import io.ktor.http.*
 import kotlinx.coroutines.launch
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.dto.SharedResetPasswordRequest
 import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
@@ -15,7 +16,7 @@ import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
 import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.validation.validateEmail
@@ -23,7 +24,6 @@ import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateRepeatPassword
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import maian.shared.generated.resources.*
 import kotlin.time.ExperimentalTime
 
 /**
@@ -118,7 +118,6 @@ class SharedResetPasswordViewModel(
                 mySnackbarViewModel.showSuccess(getString(SharedRes.string.otp_code_sent))
                 if (!codeSend) {
                     currentStep++
-                    codeSend = true
                 }
             }
 

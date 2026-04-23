@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.dsqrwym.shared.data.file.dto.SharedUploadFileResponse
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponse
 import org.khronos.webgl.Uint8Array
 import org.khronos.webgl.get
 import org.w3c.files.FileReader

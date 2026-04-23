@@ -6,8 +6,9 @@ import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
 import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.TimezoneManager
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
+import org.dsqrwym.shared.serialization.OptionalField
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
 import org.dsqrwym.shared.util.platform.getPlatformDeviceInfo
@@ -30,13 +31,14 @@ class AuthRepository(
         val platform = getPlatform().type
         val deviceInfo = getPlatformDeviceInfo()
         val isEmail = validateEmail(identifier)
+        val finalIdentifier = OptionalField.Value(identifier.trim())
 
         val result = safeApiCall {
             sharedAuthApi.login(
                 SharedLoginRequest(
                     password = password,
-                    email = if (isEmail) identifier.trim() else null,
-                    username = if (!isEmail) identifier.trim() else null,
+                    email = if (isEmail) finalIdentifier else OptionalField.Undefined,
+                    username = if (!isEmail) finalIdentifier else OptionalField.Undefined,
                     deviceName = deviceInfo.deviceName,
                     userAgent = deviceInfo.userAgent
                 )
@@ -55,6 +57,7 @@ class AuthRepository(
         }
         return result
     }
+
     suspend fun startRegister(email: String): SharedResponseResult<Unit> {
         val req = StartRegisterRequest(
             email = email.trim(),
@@ -66,6 +69,13 @@ class AuthRepository(
     }
 
     suspend fun completeRegister(req: CompleteRegisterRequest): SharedResponseResult<Unit> {
-        return safeApiCall { authApi.completeRegister(req.copy(email = req.email.trim(), username = req.username?.trim())) }
+        return safeApiCall {
+            authApi.completeRegister(
+                req.copy(
+                    email = req.email.trim(),
+                    username = req.username?.trim()
+                )
+            )
+        }
     }
 }

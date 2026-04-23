@@ -16,8 +16,7 @@ import org.dsqrwym.enterprise.data.product.dto.ProductResponse
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.data.products.SharedProductSortField
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -80,7 +79,7 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
                     }
 
                     is SharedResponseResult.Error -> {
-                        if (ErrorMessageMapper.shouldShowToUser(result.type)) {
+                        if (SharedResponseResult.shouldShowToUser(result.type)) {
                             result.message?.let { mySnackbarHostState.showError(it) }
                         }
                         emptyList()

@@ -10,10 +10,7 @@ import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -47,9 +44,14 @@ fun ProductCreateScreen(
     viewModel: ProductCreateViewModel = koinViewModel()
 ) {
     val workspaceState = rememberBusinessAuxiliaryWorkspaceState()
-
     DisposableEffect(Unit) {
         onDispose { workspaceState.close() }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.navigateEvent.collect {
+            onNavigateBack()
+        }
     }
 
     BusinessAuxiliaryHost(
@@ -65,7 +67,7 @@ fun ProductCreateScreen(
             )
         },
         auxiliaryContent = { surface ->
-            ProductCreateAuxiliaryPane(
+            ProductAuxiliaryPane(
                 viewModel = viewModel,
                 surface = surface,
                 onClose = workspaceState::close,
@@ -199,7 +201,7 @@ private fun ProductCreateScreenContent(
                     uiState = viewModel.productVariantUiState
                 ) {
                     ProductVariantsFields(
-                        skuTabs = skuTabs,
+                        variants = skuTabs,
                         onReorder = viewModel::reorder,
                         onDelete = viewModel::deleteVariant,
                         onAddClick = {

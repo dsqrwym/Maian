@@ -4,7 +4,7 @@ import org.dsqrwym.shared.data.auth.dto.SharedResetPasswordRequest
 import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 
 

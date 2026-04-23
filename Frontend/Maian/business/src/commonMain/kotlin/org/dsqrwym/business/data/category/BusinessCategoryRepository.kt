@@ -2,7 +2,7 @@ package org.dsqrwym.business.data.category
 
 import org.dsqrwym.business.data.category.dto.BusinessCategoryForUpdateResponseDto
 import org.dsqrwym.shared.data.SharedObservableRepository
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 
 abstract class BusinessCategoryRepository(

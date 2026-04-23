@@ -15,7 +15,7 @@ import io.ktor.utils.io.streams.*
 import kotlinx.io.buffered
 import org.dsqrwym.shared.data.file.dto.SharedUploadFileResponse
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.ApiResponse
+import org.dsqrwym.shared.network.model.ApiResponse
 
 /**
  * 在实现大文件上传功能时，决定使用 InputProvider 而不是真异步的 ChannelProvider。

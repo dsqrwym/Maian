@@ -243,7 +243,7 @@ fun MediaGridItem(
                                 modifier = Modifier.size(32.dp),
                             )
                             Text(
-                                text = "上传中：${(item.progress * 100).toInt()}%",
+                                text = "上传中：${(item.progress * 100).toInt().coerceIn(0, 100)}%",
                                 style = MaterialTheme.typography.labelSmall
                             )
                         }

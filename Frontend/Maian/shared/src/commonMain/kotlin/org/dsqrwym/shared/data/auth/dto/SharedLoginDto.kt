@@ -1,7 +1,10 @@
 package org.dsqrwym.shared.data.auth.dto
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 import org.dsqrwym.shared.data.user.SharedUserPayload
+import org.dsqrwym.shared.serialization.OptionalField
+import org.dsqrwym.shared.serialization.OptionalFieldSerializer
 
 /**
  * Data class representing a login request.
@@ -19,9 +22,15 @@ import org.dsqrwym.shared.data.user.SharedUserPayload
 @Serializable
 data class SharedLoginRequest(
     val password: String,
-    val email: String? = null,
-    val username: String? = null,
-    val wholesalerId: String? = null,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val email: OptionalField<String> = OptionalField.Undefined,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val username: OptionalField<String> = OptionalField.Undefined,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val wholesalerId: OptionalField<String> = OptionalField.Undefined,
     val deviceName: String,
     val userAgent: String
 )

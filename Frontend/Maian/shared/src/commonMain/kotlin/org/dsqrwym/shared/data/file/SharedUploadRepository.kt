@@ -11,8 +11,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.reset_unknown_error
-import org.dsqrwym.shared.network.ErrorMessageMapper
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
 import org.jetbrains.compose.resources.getString
@@ -65,7 +65,7 @@ class SharedUploadRepository(
 
                         is SharedResponseResult.Error -> {
                             val message =
-                                if (ErrorMessageMapper.shouldShowToUser(result.type)) result.message
+                                if (SharedResponseResult.shouldShowToUser(result.type)) result.message
                                 else getString(SharedRes.string.reset_unknown_error)
                             sharedFlow.tryEmit(SharedUploadEvent.Error(message))
                         }

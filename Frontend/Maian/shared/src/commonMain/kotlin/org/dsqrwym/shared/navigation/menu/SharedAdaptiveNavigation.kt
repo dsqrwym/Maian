@@ -12,7 +12,7 @@ import org.dsqrwym.shared.navigation.menu.layouts.SharedNavigationRailLayout
 import org.dsqrwym.shared.navigation.menu.layouts.SharedRailWithTopBarLayout
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
-import org.koin.compose.currentKoinScope
+import org.koin.compose.viewmodel.koinViewModel
 
 /**
  * 自适应导航组件
@@ -37,7 +37,7 @@ fun SharedAdaptiveNavigation(
     content: @Composable () -> Unit
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
-    val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
+    val menuViewModel: SharedMenuViewModel = koinViewModel()
 
     LaunchedEffect(Unit) {
         menuViewModel.initMenu(menuConfig)

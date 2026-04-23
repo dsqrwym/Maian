@@ -2,7 +2,7 @@ package org.dsqrwym.shared.data
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.SharedResponseResult
 
 open class SharedObservableRepository {
     private val _updateEvents = MutableSharedFlow<Unit>(extraBufferCapacity = 1)

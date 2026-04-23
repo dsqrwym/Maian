@@ -7,8 +7,8 @@ import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.data.user.UserStatus
 import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
 import org.dsqrwym.shared.data.user.dto.FindUserQueryOrderBy
-import org.dsqrwym.shared.network.ApiResponseList
-import org.dsqrwym.shared.network.SharedResponseResult
+import org.dsqrwym.shared.network.model.ApiResponseList
+import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 
 class UserRepository(val api: SharedUserApi) {
