@@ -26,6 +26,10 @@ import * as path from 'path';
 import { TypedQuery, TypedRoute } from '@nestia/core';
 import { PassThrough } from 'node:stream';
 
+/**
+ * Controller for file upload and retrieval
+ * @class FilesController
+ */
 @ApiTags('File Management')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -33,6 +37,17 @@ import { PassThrough } from 'node:stream';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  /**
+   * Upload a raw file via multipart/form-data.
+   *
+   * Reads the first chunk to detect the real MIME type using file-type,
+   * validates against allowed MIME types, sanitizes the filename,
+   * and streams the file to storage. Returns the generated file ID.
+   *
+   * @param {FastifyRequest} req - Request object containing the multipart file
+   * @param {IUploadFileForWholesalerDto} query - Optional query parameters for wholesaler-specific upload
+   * @returns {Promise<{ id: string }>} The ID of the uploaded file
+   */
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {

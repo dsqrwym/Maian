@@ -42,5 +42,5 @@ export async function useSwagger(app: INestApplication) {
     ],
   });
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  SwaggerModule.setup('maian/api-nestia-docs', app, nestiaDocument as any);
+  SwaggerModule.setup('maian/api-docs', app, nestiaDocument as any);
 }

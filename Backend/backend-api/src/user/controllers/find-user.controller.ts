@@ -24,6 +24,10 @@ import { PaginatedDataWithT } from 'src/common/types-interfaces/response.interfa
 import { FindUserResponse } from '../dto/user-response';
 import { UserRole, UserStatus } from '../../generated/drizzle/enums';
 
+/**
+ * Controller for searching and finding users
+ * @class FindUserController
+ */
 @ApiTags('User')
 @ApiBearerAuth()
 @ApiOkResponse({
@@ -47,6 +51,16 @@ import { UserRole, UserStatus } from '../../generated/drizzle/enums';
 export class FindUserController {
   constructor(private readonly findUserService: FindUserService) {}
 
+  /**
+   * Search and filter users with pagination.
+   *
+   * Supports filtering by search keywords, role, and status.
+   * Results are paginated and filtered by the user's CASL ability.
+   *
+   * @param {IFindUserQueryDto} query - Search criteria including search, role, status, page, limit
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<PaginatedDataWithT<FindUserResponse>>} Paginated user list
+   */
   @ApiOperation({
     summary: 'Search users',
     description: 'Search and filter users with pagination',

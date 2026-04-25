@@ -11,12 +11,23 @@ import { CacheTTL } from '@nestjs/cache-manager';
 import { DAY } from '../utils/date.utils';
 import { TypedParam, TypedRoute } from '@nestia/core';
 
+/**
+ * Controller for location data (countries, provinces, cities, currencies)
+ * @class LocationsController
+ */
 @ApiTags('Locations')
 @Controller('locations')
 @CacheTTL(DAY)
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
+  /**
+   * Get all countries.
+   *
+   * Returns a list of all available countries with ISO codes, names, and currency references.
+   *
+   * @returns {Promise<{ iso_alpha2: string; iso_alpha3: string; iso_numeric: number; name: string; name_local: string; currency_id: number | null }[]>} List of countries
+   */
   @TypedRoute.Get('countries')
   @ApiOperation({
     summary: 'Get all countries',
@@ -77,6 +88,12 @@ export class LocationsController {
     return this.locationsService.findAllCountries();
   }
 
+  /**
+   * Get provinces by country ISO numeric code.
+   *
+   * @param {number} isoNumeric - ISO 3166-1 numeric country code
+   * @returns {Promise<{ id: number; name: string; name_local: string }[]>} List of provinces
+   */
   @TypedRoute.Get('countries/:isoNumeric/provinces')
   @ApiOperation({
     summary: 'Get provinces by country',
@@ -113,6 +130,12 @@ export class LocationsController {
     return this.locationsService.findProvincesByCountryIsoNumeric(isoNumeric);
   }
 
+  /**
+   * Get cities by province ID.
+   *
+   * @param {number} provinceId - ID of the province
+   * @returns {Promise<{ id: number; name: string; name_local: string }[]>} List of cities
+   */
   @TypedRoute.Get('provinces/:provinceId/cities')
   @ApiOperation({
     summary: 'Get cities by province',
@@ -149,6 +172,12 @@ export class LocationsController {
     return this.locationsService.findCitiesByProvinceId(provinceId);
   }
 
+  /**
+   * Get currency details by ISO numeric code.
+   *
+   * @param {number} isoNumeric - ISO numeric code for the currency
+   * @returns {Promise<{ iso_alpha3: string; symbol: string; decimal_digits: number }[]>} Currency information
+   */
   @TypedRoute.Get('currencies/:isoNumeric')
   @ApiOperation({
     summary: 'Get currency details',

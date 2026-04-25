@@ -21,6 +21,10 @@ import { TypedRoute } from '@nestia/core';
 import { TypedBody } from '../../utils/typia/typed-body.typia';
 import typia from 'typia';
 
+/**
+ * Controller for session management (logout and session deletion)
+ * @class SessionController
+ */
 @ApiTags('Session')
 @Controller('session')
 @ApiBearerAuth()
@@ -31,6 +35,15 @@ export class SessionController {
     private readonly logger: Logger,
   ) {}
 
+  /**
+   * Logout the current session.
+   *
+   * Revokes the current session and clears the refresh token cookie.
+   *
+   * @param {FastifyRequest} req - Request object with user payload
+   * @param {FastifyReply} res - Response object for clearing cookie
+   * @returns {Promise<{ message: string }>} Confirmation message
+   */
   @TypedRoute.Delete('logout')
   @ApiBearerAuth()
   async logout(
@@ -66,6 +79,17 @@ export class SessionController {
     return result;
   }
 
+  /**
+   * Delete a specific session by providing the user's password.
+   *
+   * Validates the user's password, deletes the specified session,
+   * and clears the refresh token cookie if it matches the deleted session.
+   *
+   * @param {FastifyRequest} req - Request object with user payload
+   * @param {IDeleteSessionDto} deleteSessionDto - Contains sessionId and password
+   * @param {FastifyReply} res - Response object for clearing cookie
+   * @returns {Promise<void>}
+   */
   @TypedRoute.Post('delete-session')
   @HttpCode(200)
   @ApiBearerAuth()

@@ -13,11 +13,8 @@ import {
 import { TypedQuery, TypedRoute } from '@nestia/core';
 
 /**
- * User Availability Check Controller
- * 用户可用性检查控制器
- *
- * This controller handles endpoints for checking the availability of user credentials
- * 该控制器处理检查用户凭据可用性的端点
+ * Controller for checking user credential availability (email and username)
+ * @class CheckUserController
  */
 @ApiTags('User')
 @Throttle({ default: { limit: 2, ttl: seconds(1) } })
@@ -38,13 +35,12 @@ import { TypedQuery, TypedRoute } from '@nestia/core';
 export class CheckUserController {
   constructor(private readonly userCheckService: CheckUserService) {}
   /**
-   * Check email availability
-   * 检查邮箱可用性
+   * Check if an email is already registered.
    *
-   * @param query - Query parameters containing email to check
-   * @param query - 包含待检查邮箱的查询参数
-   * @returns Object containing availability status
-   * @returns 包含可用性状态的对象
+   * Returns true if the email is already in use, false otherwise.
+   *
+   * @param {ICheckUserEmailQueryDto} query - Contains email to check
+   * @returns {Promise<boolean>} Whether the email is already registered
    */
   @TypedRoute.Get('mail')
   @ApiOperation({
@@ -80,13 +76,13 @@ export class CheckUserController {
   }
 
   /**
-   * Check username availability
-   * 检查用户名可用性
+   * Check if a username is already taken.
    *
-   * @param query - Query parameters containing username to check
-   * @param query - 包含待检查用户名的查询参数
-   * @returns Object containing availability status
-   * @returns 包含可用性状态的对象
+   * Returns true if the username is already in use, false otherwise.
+   * Usernames must be 3-30 characters long.
+   *
+   * @param {ICheckUserUsernameQueryDto} query - Contains username to check
+   * @returns {Promise<boolean>} Whether the username is already taken
    */
   @TypedRoute.Get('username')
   @ApiOperation({

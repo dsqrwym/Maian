@@ -44,9 +44,11 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   /**
-   * Create a new category
+   * Create a new category.
+   *
    * @param {ICreateCategoryDto} createCategoryDto - Category data
    * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<void>}
    */
   @TypedRoute.Post()
   @RolesAllowed(
@@ -68,9 +70,11 @@ export class CategoryController {
   }
 
   /**
-   * Search and filter categories
+   * Search and filter categories.
+   *
    * @param {ICategoryQueryDto} query - Search criteria
-   * @param req
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<PaginatedDataWithT<ICategoryResponse>>} Paginated category list
    */
   @TypedRoute.Get()
   async search(
@@ -81,10 +85,14 @@ export class CategoryController {
   }
 
   /**
-   * Update an existing category
+   * Update an existing category.
+   *
+   * Uses optimistic locking via version field to prevent concurrent modifications.
+   *
    * @param {IUpdateCategoryDto} updateCategoryDto - Category data to update
    * @param {FastifyRequest} req - Request object containing user ability
-   * @param {bigint} id - ID of the category to update
+   * @param {string} id - ID of the category to update
+   * @returns {Promise<void>}
    */
   @ApiResponse({
     status: 409,

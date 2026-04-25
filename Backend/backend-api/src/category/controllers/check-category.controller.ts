@@ -35,8 +35,12 @@ export class CheckCategoryController {
   constructor(private readonly checkCategoryService: CheckCategoryService) {}
 
   /**
-   * Check category name availability for creating
-   * 创建时检查类别名称是否已存在
+   * Check if a category name is already used for creating.
+   *
+   * Returns true if the name is already taken, false if available.
+   *
+   * @param {ICheckCategoryNameCreateQueryDto} query - Contains name and optional parentId/userId
+   * @returns {Promise<boolean>} Whether the name is already used
    */
   @TypedRoute.Get('name')
   async checkNameForCreate(
@@ -47,8 +51,12 @@ export class CheckCategoryController {
   }
 
   /**
-   * Check category name availability for updating
-   * 更新时检查类别名称是否已存在（排除当前ID）
+   * Check if a category name is already used for updating (excluding current ID).
+   *
+   * Returns true if the name is already taken by another category, false if available.
+   *
+   * @param {ICheckCategoryNameUpdateQueryDto} query - Contains name, id, and optional parentId/userId
+   * @returns {Promise<boolean>} Whether the name is already used by another category
    */
   @TypedRoute.Get('name/update')
   async checkNameForUpdate(

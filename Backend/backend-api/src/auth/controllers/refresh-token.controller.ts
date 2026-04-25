@@ -26,6 +26,10 @@ import { TypedRoute } from '@nestia/core';
 import { TypedBody } from '../../utils/typia/typed-body.typia';
 import typia from 'typia';
 
+/**
+ * Controller for refreshing access tokens
+ * @class RefreshTokenController
+ */
 @Controller('token')
 @ApiTags('RefreshToken')
 @ApiExtraModels(TokenResponseDto)
@@ -40,6 +44,15 @@ export class RefreshTokenController {
     private readonly jwtService: JwtService,
   ) {}
 
+  /**
+   * Refresh access token using a refresh token (native app flow).
+   *
+   * Validates the refresh token, rotates it, and returns new access/refresh tokens.
+   * Rate-limited to 2 requests per access token TTL period.
+   *
+   * @param {IRefreshTokenDto} body - Contains the refresh token
+   * @returns {Promise<TokenResponseDto>} New access and refresh tokens
+   */
   @TypedRoute.Post('refresh')
   @HttpCode(200)
   @Throttle({
@@ -66,6 +79,18 @@ export class RefreshTokenController {
     return result.token;
   }
 
+  /**
+   * Refresh access token using cookie-based refresh token (web browser flow).
+   *
+   * Reads the refresh token from httpOnly cookie, validates CSRF token from body,
+   * rotates the cookie, and returns new access token with a new CSRF token.
+   * Rate-limited to 2 requests per access token TTL period.
+   *
+   * @param {FastifyRequest} req - Request object containing cookies
+   * @param {FastifyReply} res - Response object for rotating refresh cookie
+   * @param {IRefreshTokenDto} body - Contains CSRF token in refreshToken field
+   * @returns {Promise<TokenResponseDto>} New access token and CSRF token
+   */
   @TypedRoute.Post('refresh-web')
   @HttpCode(200)
   @Throttle({
