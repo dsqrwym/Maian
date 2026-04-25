@@ -16,9 +16,11 @@ import { cleanString } from '../../utils/string.util';
 import { ICreateProductDto } from './create-product.dto';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 import typia from 'typia';
-import { TagsVersion } from '../../utils/typia/tags/number.tags';
+import { BadRequestException } from '@nestjs/common';
 
-type UpdateBase = Omit<ICreateProductDto, 'user_id' | 'variants'>;
+type UpdateBase = Partial<
+  Omit<ICreateProductDto, 'user_id' | 'variants' | 'translations'>
+>;
 export interface IUpdateProductDto extends UpdateBase {
   // 覆盖 CreateProductDto 中的 variants，使用 UpdateVariantDto
   updateVariants?: IUpdateVariantDto[];
@@ -30,8 +32,6 @@ export interface IUpdateProductDto extends UpdateBase {
   translations?: IProductTranslationDto[];
 
   translationsToDelete?: string[];
-
-  version: TagsVersion;
 }
 export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProductDto> =
   {
@@ -42,17 +42,15 @@ export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProduc
           input.name = cleanString(input.name);
         if (typeof input.title === 'string')
           input.title = cleanString(input.title);
-        if (typeof input.iva === 'string') {
-          if (Array.isArray(input.createVariants)) {
-            input.createVariants = input.createVariants.map((it) =>
-              validateICreateVariant(it, input.iva as string),
-            );
-          }
-          if (Array.isArray(input.updateVariants)) {
-            input.updateVariants = input.updateVariants.map((it) =>
-              validateIUpdateVariant(it, input.iva as string),
-            );
-          }
+        if (Array.isArray(input.createVariants)) {
+          input.createVariants = input.createVariants.map((it) =>
+            validateICreateVariant(it),
+          );
+        }
+        if (Array.isArray(input.updateVariants)) {
+          input.updateVariants = input.updateVariants.map((it) =>
+            validateIUpdateVariant(it),
+          );
         }
         if (Array.isArray(input.translations)) {
           input.translations = input.translations.map(
@@ -61,6 +59,14 @@ export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProduc
         }
       }
 
-      return typia.assertEquals<IUpdateProductDto>(input);
+      const body = typia.assertEquals<IUpdateProductDto>(input);
+      if (body.translations) {
+        const codes = body.translations.map((t) => t.lang_code);
+        if (new Set(codes).size !== codes.length) {
+          throw new BadRequestException('Duplicate lang_code in translations');
+        }
+      }
+
+      return body;
     },
   };

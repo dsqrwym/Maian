@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -24,7 +23,7 @@ import {
   VIDEO_MIME_TYPES,
 } from '../config/fastify-multipart.config';
 import { IProductFileDto } from './dto/product-file.dto';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { DrizzleDb, DrizzleService } from 'src/drizzle/drizzle.service';
 import {
   categories,
   category_translations,
@@ -54,11 +53,15 @@ import { IProductResponse } from './dto/product-response';
 
 @Injectable()
 export class ProductsService {
+  private readonly maxVariantsForProduct: number;
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly configService: ConfigService,
   ) {
+    this.maxVariantsForProduct = Number(
+      this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
+    );
     this.logger.setContext(ProductsService.name);
   }
 
@@ -78,6 +81,7 @@ export class ProductsService {
       variants,
       translations,
       files,
+      status,
     } = createProductDto;
 
     if (!ability.can(Action.Create, subject('products', { user_id }))) {
@@ -86,13 +90,9 @@ export class ProductsService {
       );
     }
 
-    const maxVariantsForProduct = Number(
-      this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
-    );
-
-    if (variants.length > Number(maxVariantsForProduct)) {
+    if (variants.length > Number(this.maxVariantsForProduct)) {
       throw new BadRequestException(
-        `You can only create up to ${maxVariantsForProduct} variants for a product`,
+        `You can only create up to ${this.maxVariantsForProduct} variants for a product`,
       );
     }
 
@@ -106,6 +106,7 @@ export class ProductsService {
           name,
           title,
           user_id,
+          status,
           description,
           product_code,
           created_by: user.userId,
@@ -118,6 +119,7 @@ export class ProductsService {
         is_primary: true,
       });
 
+      // dto 验证已经保证了 price 和 price_iva 的有效性
       await tx.insert(variant_products).values(
         variants.map((variant) => ({
           product_id: createdProduct.id,
@@ -473,35 +475,6 @@ export class ProductsService {
   ) {
     const productId = BigInt(id);
 
-    const existingProduct = await this.drizzle.db.query.products.findFirst({
-      columns: {
-        user_id: true,
-        iva: true,
-      },
-      with: {
-        variant_products: { columns: { id: true } },
-        products_files: {
-          with: { file: { columns: { mime_type: true } } },
-        },
-      },
-      where: eq(products.id, productId),
-    });
-
-    if (!existingProduct) {
-      throw new NotFoundException('Product not found');
-    }
-
-    if (
-      !ability.can(
-        Action.Update,
-        subject('products', { user_id: existingProduct.user_id }),
-      )
-    ) {
-      throw new ForbiddenException(
-        'You are not allowed to update this product',
-      );
-    }
-
     // 解构 DTO
     const {
       createVariants,
@@ -511,25 +484,74 @@ export class ProductsService {
       translationsToDelete,
       files,
       primary_category_id,
-      version,
       ...mainProductData
     } = updateProductDto;
 
-    const clientVersion = BigInt(updateProductDto.version);
-
-    const existVariant =
-      (variantsToDelete?.length ?? 0) + (createVariants?.length ?? 0);
-
-    if (existVariant > 50) {
-      throw new BadRequestException('You can only update up to 50 variants');
-    }
-
-    await this.validateAndCheckFiles(files, user);
-
     await this.drizzle.db.transaction(async (tx) => {
+      // 悲观锁：锁定产品行，保证后续 读取变体数量 → 检查 → 插入/删除，这一系列操作对于同一个产品是串行化的，避免并发时突破变体上限。
+      await tx
+        .select({ id: products.id })
+        .from(products)
+        .where(eq(products.id, productId))
+        .for('update'); // 显式行锁，直到事务结束才释放
+
+      const existingProduct = await tx.query.products.findFirst({
+        columns: {
+          user_id: true,
+          iva: true,
+        },
+        with: {
+          variant_products: { columns: { id: true } },
+          products_files: {
+            with: { file: { columns: { mime_type: true } } },
+          },
+          product_translations: { columns: { lang_code: true } },
+        },
+        where: eq(products.id, productId),
+      });
+
+      if (!existingProduct) {
+        throw new NotFoundException('Product not found');
+      }
+
+      if (
+        !ability.can(
+          Action.Update,
+          subject('products', { user_id: existingProduct.user_id }),
+        )
+      ) {
+        throw new ForbiddenException(
+          'You are not allowed to update this product',
+        );
+      }
+      const currentVariantIds: bigint[] = existingProduct.variant_products.map(
+        (v) => v.id,
+      );
+
+      await this.validateAndCheckFiles(
+        files,
+        user,
+        existingProduct.user_id,
+        tx,
+      );
+
+      // 计算操作后的最终变体数量
+      const finalCount =
+        existingProduct.variant_products.length -
+        (variantsToDelete?.length ?? 0) +
+        (createVariants?.length ?? 0);
+
+      if (finalCount > this.maxVariantsForProduct) {
+        throw new BadRequestException(
+          `You can only update up to ${this.maxVariantsForProduct} variants`,
+        );
+      }
+
+      // 开启正式更新
       const now = new Date().toISOString();
-      // 更新主表并同时校验版本号和存在性，更新成功且持有事务会保证在事务执行期间，级联删除会被阻塞，直到事务完成或回滚
-      const updatedProduct = await tx
+      // 更新主表并同时校验存在性，更新成功且持有事务会保证在事务执行期间，级联删除会被阻塞，直到事务完成或回滚
+      // 已存在悲观锁所以乐观锁 where 条件没有必要了
+      await tx
         .update(products)
         .set({
           ...mainProductData,
@@ -537,15 +559,7 @@ export class ProductsService {
           updated_by: user.userId,
           updated_at: now,
         })
-        .where(
-          and(eq(products.id, productId), eq(products.version, clientVersion)),
-        );
-
-      if ((updatedProduct.rowCount ?? 0) === 0) {
-        throw new ConflictException(
-          'Product version conflict. It was modified by another request.',
-        );
-      }
+        .where(eq(products.id, productId));
 
       if (primary_category_id) {
         await tx
@@ -558,10 +572,6 @@ export class ProductsService {
             ),
           );
       }
-
-      const currentVariantIds = existingProduct.variant_products.map(
-        (v) => v.id,
-      );
 
       // 创建变体
       if (createVariants && createVariants.length > 0) {
@@ -580,6 +590,7 @@ export class ProductsService {
           sale_unit_qty: variant.sale_unit_qty,
           available_stock: variant.available_stock,
           low_stock_threshold: variant.low_stock_threshold,
+          status: variant.status,
         }));
 
         await tx.insert(variant_products).values(createData);
@@ -600,13 +611,16 @@ export class ProductsService {
 
         await Promise.all(
           updateVariants.map((variant) => {
+            const variantId = BigInt(variant.id);
+            let priceData: { price: string; price_iva: string } | undefined =
+              undefined;
             // 重新计算价格逻辑
             const iva = mainProductData.iva ?? existingProduct.iva;
-            const priceData = computePrice(
-              variant.price,
-              variant.price_iva,
-              iva, // 产品更新值 -> 数据库旧值
-            );
+            if (variant.price) {
+              priceData = computePrice(variant.price, undefined, iva);
+            } else if (variant.price_iva) {
+              priceData = computePrice(undefined, variant.price_iva, iva);
+            }
 
             return tx
               .update(variant_products)
@@ -619,36 +633,27 @@ export class ProductsService {
                 min_order_qty: variant.min_order_qty,
                 low_stock_threshold: variant.low_stock_threshold,
                 ...priceData, // 展开计算后的价格字段
+                status: variant.status,
                 updated_by: user.userId,
                 updated_at: now,
               })
-              .where(eq(variant_products.id, BigInt(variant.id)));
+              .where(eq(variant_products.id, variantId));
           }),
         );
       }
 
-      // 删除变体
-      if (variantsToDelete && variantsToDelete.length > 0) {
-        const toDeleteIds = variantsToDelete.map((id) => BigInt(id));
-        const invalidIds = toDeleteIds.filter(
-          (id) => !currentVariantIds.includes(id),
-        );
-        if (invalidIds.length > 0) {
-          throw new BadRequestException(
-            `Variant IDs [${invalidIds.join(', ')}] do not belong to product ${id}`,
-          );
-        }
-        await tx
-          .delete(variant_products)
-          .where(
-            and(
-              eq(variant_products.product_id, productId),
-              inArray(variant_products.id, toDeleteIds),
-            ),
-          );
-      }
+      const currentTranslationsLangCodes =
+        existingProduct.product_translations.map((v) => v.lang_code);
 
       if (translationsToDelete && translationsToDelete.length > 0) {
+        const invalidLangCodes = translationsToDelete.filter(
+          (langCodes) => !currentTranslationsLangCodes.includes(langCodes),
+        );
+        if (invalidLangCodes.length > 0) {
+          throw new BadRequestException(
+            `LangCodes [${invalidLangCodes.join(', ')}] do not belong to product ${id}`,
+          );
+        }
         await tx
           .delete(product_translations)
           .where(
@@ -659,7 +664,7 @@ export class ProductsService {
           );
       }
 
-      // 对于翻译，数据量小，Upsert 是最优雅的 XD。
+      // 对于翻译 数据量小 Upsert 是最优雅的 XD。
       if (translations && translations.length > 0) {
         await tx
           .insert(product_translations)
@@ -687,13 +692,34 @@ export class ProductsService {
           });
       }
 
-      if (files) {
+      // 删除变体
+      if (variantsToDelete && variantsToDelete.length > 0) {
+        const toDeleteIds = variantsToDelete.map((id) => BigInt(id));
+        const invalidIds = toDeleteIds.filter(
+          (id) => !currentVariantIds.includes(id),
+        );
+        if (invalidIds.length > 0) {
+          throw new BadRequestException(
+            `Variant IDs [${invalidIds.join(', ')}] do not belong to product ${id}`,
+          );
+        }
+        await tx
+          .delete(variant_products)
+          .where(
+            and(
+              eq(variant_products.product_id, productId),
+              inArray(variant_products.id, toDeleteIds),
+            ),
+          );
+      }
+
+      if (files !== undefined) {
         // 策略：文件通常涉及排序。全量替换关系表是处理排序最简单的方法。
         await tx
           .delete(products_files)
           .where(eq(products_files.product_id, productId));
 
-        if (files.length > 0) {
+        if (files && files.length > 0) {
           const data = files.map((file) => ({
             product_id: productId,
             file_id: BigInt(file.file_id),
@@ -729,11 +755,14 @@ export class ProductsService {
   }
 
   private async validateAndCheckFiles(
-    filesDTO: IProductFileDto[] | undefined,
+    filesDTO: IProductFileDto[] | null | undefined,
     user: UserPayload,
     productOwnerId?: string,
+    db?: DrizzleDb,
   ) {
     if (!filesDTO || filesDTO.length === 0) return;
+    const finalDb = db ?? this.drizzle.db;
+
     const uniqueFileIds = [...new Set(filesDTO.map((f) => BigInt(f.file_id)))];
     const allowedOwnerIds = new Set<string>();
     // 当前用户总是应该有权访问自己上传的文件
@@ -749,7 +778,7 @@ export class ProductsService {
       allowedOwnerIds.add(productOwnerId);
     }
     // 验证权限 + 获取 MIME 类型
-    const validFiles = await this.drizzle.db
+    const validFiles = await finalDb
       .select({
         file_id: files.id,
         mime_type: files.mime_type,
@@ -817,6 +846,7 @@ export class ProductsService {
     }
   }
 
+  // 存在悲观锁所以 version 的放回不在必要
   async getForUpdate(id: string, ability: AppAbility) {
     if (!ability.can(Action.Read, 'products')) {
       throw new ForbiddenException(
@@ -834,11 +864,11 @@ export class ProductsService {
         status: true,
         description: true,
         product_code: true,
-        version: true,
       },
       with: {
         products_files: { columns: { file_id: true, sort: true } },
         product_categories: {
+          columns: { is_primary: true },
           with: {
             category: {
               columns: {
@@ -903,10 +933,13 @@ export class ProductsService {
       iva: product.iva,
       product_code: product.product_code,
       status: product.status,
-      version: product.version,
-      product_categories: product.product_categories.map(
-        (category) => category.category,
-      ),
+      product_categories: product.product_categories.map((category) => ({
+        id: category.category.id,
+        name: category.category.name,
+        iva: category.category.iva,
+        category_translations: category.category.category_translations,
+        is_primary: category.is_primary,
+      })),
       product_translations: product.product_translations,
       variant_products: product.variant_products,
     };

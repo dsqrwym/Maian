@@ -10,6 +10,7 @@ import { isObject } from '../../utils/is.utils';
 import { cleanString } from '../../utils/string.util';
 import { TagsIvaString } from '../../utils/typia/validators/product.validator';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import { BadRequestException } from '@nestjs/common';
 
 export interface ICreateCategoryDto {
   userId: TagsUuid | null;
@@ -38,6 +39,14 @@ export const validateCreateCategory: IRequestBodyValidator.IAssert<ICreateCatego
           );
         }
       }
-      return typia.assertEquals<ICreateCategoryDto>(input);
+
+      const body = typia.assertEquals<ICreateCategoryDto>(input);
+      if (body.translations) {
+        const codes = body.translations.map((t) => t.lang_code);
+        if (new Set(codes).size !== codes.length) {
+          throw new BadRequestException('Duplicate lang_code in translations');
+        }
+      }
+      return body;
     },
   };

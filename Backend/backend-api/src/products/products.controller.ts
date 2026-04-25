@@ -26,6 +26,7 @@ import {
   SaleVariant,
   UserRole,
 } from '../generated/drizzle/enums';
+import { TagsIntegerString } from '../utils/typia/tags/string.tag';
 
 @ApiTags('Product Management')
 @ApiBearerAuth()
@@ -34,6 +35,16 @@ import {
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  /**
+   * Create a new product.
+   *
+   * The request body must include at least one variant and can optionally
+   * include translations and file references.
+   *
+   * @param {ICreateProductDto} createProductDto - Product creation payload
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<void>}
+   */
   @TypedRoute.Post()
   create(
     @TypedBody(validateICreateProduct) createProductDto: ICreateProductDto,
@@ -42,6 +53,15 @@ export class ProductsController {
     return this.productsService.create(createProductDto, req.ability, req.user);
   }
 
+  /**
+   * Search and paginate products with filters.
+   *
+   * Supports filtering by category, search terms, status, and selective field retrieval.
+   *
+   * @param {IProductListQueryDto} query - Search and pagination parameters
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<PaginatedDataWithT<IProductResponse>>} Paginated product list
+   */
   @TypedRoute.Get()
   async findAll(
     @TypedQuery(validateProductListQuery) query: IProductListQueryDto,
@@ -51,54 +71,54 @@ export class ProductsController {
   }
 
   /**
-   * Get product data for update
+   * Get product data required for the update form.
+   *
+   * Returns the current product state including variants, translations,
+   * files, and categories. The response can be directly used to populate
+   * an edit form.
+   *
    * @param {string} id - Product ID
-   * @param {FastifyRequest} req - Request object containing user ability
-   * @returns { Promise<{
-   *     products_files: {
-   *       sort: number;
-   *       file_id: bigint;
-   *     }[];
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<{
+   *   products_files: { sort: number; file_id: bigint }[];
+   *   name: string;
+   *   id: bigint;
+   *   title: string | null;
+   *   description: string | null;
+   *   iva: string;
+   *   product_code: string;
+   *   status: ProductStatus;
+   *   product_categories: {
    *     name: string;
    *     id: bigint;
+   *     iva: string | null;
+   *     category_translations: { name: string; lang_code: string }[];
+   *     is_primary: boolean;
+   *   }[];
+   *   product_translations: {
+   *     name: string;
    *     title: string | null;
    *     description: string | null;
-   *     iva: Decimal;
-   *     status: ProductStatus
+   *     lang_code: string;
+   *   }[];
+   *   variant_products: {
+   *     id: bigint;
+   *     status: ProductStatus;
    *     product_code: string;
-   *     version: bigint;
-   *     product_categories: {
-   *       categories: {
-   *         name: string;
-   *         id: bigint;
-   *         iva: Decimal | null;
-   *         category_translations: { name: string; lang_code: string }[];
-   *       };
-   *     }[];
-   *     product_translations: {
-   *       name: string;
-   *       title: string | null;
-   *       description: string | null;
-   *       lang_code: string;
-   *     }[];
-   *     variant_products: {
-   *       id: bigint;
-   *       status: ProductStatus;
-   *       product_code: string;
-   *       type_sale: SaleVariant;
-   *       price: Decimal;
-   *       price_iva: Decimal;
-   *       available_stock: number;
-   *       sort: number;
-   *       low_stock_threshold: number;
-   *       min_order_qty: number;
-   *     }[];
-   *   }>}
+   *     type_sale: SaleVariant;
+   *     price: string;
+   *     price_iva: string;
+   *     available_stock: number;
+   *     sort: number;
+   *     low_stock_threshold: number;
+   *     min_order_qty: number;
+   *   }[];
+   * }>}
    */
   @Get(':id/update')
   @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async getForUpdate(
-    @TypedParam('id') id: string,
+    @TypedParam('id') id: TagsIntegerString,
     @Req() req: FastifyRequest,
   ): Promise<{
     products_files: {
@@ -112,12 +132,12 @@ export class ProductsController {
     iva: string;
     product_code: string;
     status: ProductStatus;
-    version: bigint;
     product_categories: {
       name: string;
       id: bigint;
       iva: string | null;
       category_translations: { name: string; lang_code: string }[];
+      is_primary: boolean;
     }[];
     product_translations: {
       name: string;
@@ -141,9 +161,21 @@ export class ProductsController {
     return this.productsService.getForUpdate(id, req.ability);
   }
 
-  @TypedRoute.Put(':id')
+  /**
+   * Update a product (partial / PATCH).
+   *
+   * **Concurrency control:** This endpoint uses **pessimistic locking** (`SELECT ... FOR UPDATE`).
+   * The request does not require a `version` field; the row‑level lock ensures
+   * consistency of variant count limits.
+   *
+   * @param {string} id - Product ID to update
+   * @param {IUpdateProductDto} updateProductDto - Fields to update (all optional)
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<void>}
+   */
+  @TypedRoute.Patch(':id')
   update(
-    @TypedParam('id') id: string,
+    @TypedParam('id') id: TagsIntegerString,
     @TypedBody(validateIUpdateProduct) updateProductDto: IUpdateProductDto,
     @Req() req: FastifyRequest,
   ): Promise<void> {
@@ -155,9 +187,16 @@ export class ProductsController {
     );
   }
 
+  /**
+   * Delete a product by ID.
+   *
+   * @param {string} id - Product ID
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<void>}
+   */
   @TypedRoute.Delete(':id')
   remove(
-    @TypedParam('id') id: string,
+    @TypedParam('id') id: TagsIntegerString,
     @Req() req: FastifyRequest,
   ): Promise<void> {
     return this.productsService.remove(id, req.ability);

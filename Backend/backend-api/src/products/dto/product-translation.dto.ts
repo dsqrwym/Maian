@@ -9,10 +9,11 @@ export interface IProductTranslationDto {
 
   name: TagsNotBlank & tags.MaxLength<50> & tags.Example<'Product Name'>;
 
-  title?: string & tags.MaxLength<100> & tags.Example<'Product Name'>;
+  title: (string & tags.MaxLength<100> & tags.Example<'Product Name'>) | null;
 
-  description?: string &
-    tags.Example<'Translated detailed description of the product'>;
+  description:
+    | (string & tags.Example<'Translated detailed description of the product'>)
+    | null;
 }
 export const validateProductTranslationDto = (dto: unknown) => {
   if (isObject(dto)) {

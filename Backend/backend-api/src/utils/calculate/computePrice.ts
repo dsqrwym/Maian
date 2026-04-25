@@ -1,6 +1,10 @@
-import { Prisma } from 'src/generated/prisma/client';
-const Decimal = Prisma.Decimal;
-// 使用Prisma的Decimal类型，其底层由decimal.js实现。 https://prisma.org.cn/docs/orm/prisma-client/special-fields-and-types
+import Decimal from 'decimal.js';
+import { BadRequestException } from '@nestjs/common';
+
+// 联动验证：price 与 price_iva 最大值
+const MAX_PRICE = new Decimal(10000000);
+const MAX_PRICE_IVA = new Decimal(20000000);
+
 /**
  * 计算价格（不含 IVA ↔ 含 IVA）。
  *
@@ -15,31 +19,57 @@ const Decimal = Prisma.Decimal;
  * @returns { price: string, price_iva: string } —— 两者都返回，保留 2 位小数字符串
  *
  * @throws 当 price 与 priceIva 同时为 undefined 时抛出错误
+ * @throws 当 priceIva 超出最大允许值时抛出错误
+ * @throws 当 price 超出最大允许值时抛出错误
  */
 export function computePrice(
-  price?: string,
-  priceIva?: string,
+  price?: string | null,
+  priceIva?: string | null,
   iva: string = '0',
 ): { price: string; price_iva: string } {
   const ivaFactor = new Decimal(iva).dividedBy(100).plus(1);
 
-  if (price !== undefined) {
+  if (price) {
     const priceDecimal = new Decimal(price);
+    // 检查传入的 price 是否超过上限
+    if (priceDecimal.gt(MAX_PRICE)) {
+      throw new BadRequestException(
+        `Price exceeds maximum allowed price ${MAX_PRICE.toFixed(2)}`,
+      );
+    }
     const priceIvaDecimal = priceDecimal.times(ivaFactor);
+    if (priceIvaDecimal.gt(MAX_PRICE_IVA)) {
+      throw new BadRequestException(
+        `Price + IVA exceeds maximum allowed price_iva ${MAX_PRICE_IVA.toFixed(2)}`,
+      );
+    }
     return {
       price: priceDecimal.toFixed(2),
       price_iva: priceIvaDecimal.toFixed(2),
     };
   }
 
-  if (priceIva !== undefined) {
+  if (priceIva) {
     const priceIvaDecimal = new Decimal(priceIva);
+    // 检查传入的 priceIva 是否超过上限
+    if (priceIvaDecimal.gt(MAX_PRICE_IVA)) {
+      throw new BadRequestException(
+        `Price with IVA exceeds maximum allowed price_iva ${MAX_PRICE_IVA.toFixed(2)}`,
+      );
+    }
     const priceDecimal = priceIvaDecimal.dividedBy(ivaFactor);
+    if (priceDecimal.gt(MAX_PRICE)) {
+      throw new BadRequestException(
+        `Price derived from price_iva exceeds maximum allowed price ${MAX_PRICE.toFixed(2)}`,
+      );
+    }
     return {
       price: priceDecimal.toFixed(2),
       price_iva: priceIvaDecimal.toFixed(2),
     };
   }
 
-  throw new Error('Either price or price iva must be provided');
+  throw new BadRequestException(
+    'At least one of price and price_iva is required',
+  );
 }

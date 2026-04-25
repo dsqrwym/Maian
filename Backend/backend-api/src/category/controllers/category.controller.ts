@@ -24,6 +24,7 @@ import { TypedBody } from '../../utils/typia/typed-body.typia';
 import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
 import { ICategoryResponse } from '../dto/category-response.dto';
 import { UserRole } from '../../generated/drizzle/enums';
+import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
 
 /**
  * Controller for managing product categories
@@ -85,12 +86,17 @@ export class CategoryController {
    * @param {FastifyRequest} req - Request object containing user ability
    * @param {bigint} id - ID of the category to update
    */
+  @ApiResponse({
+    status: 409,
+    description:
+      'Version conflict. The category was modified by another request.',
+  })
   @TypedRoute.Patch(':id')
   @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async update(
     @Req() req: FastifyRequest,
     @TypedBody(validateUpdateCategory) updateCategoryDto: IUpdateCategoryDto,
-    @TypedParam('id') id: bigint,
+    @TypedParam('id') id: TagsIntegerString,
   ): Promise<void> {
     return this.categoryService.update(
       id,
@@ -114,7 +120,7 @@ export class CategoryController {
   @Get(':id/update')
   @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async getForUpdate(
-    @TypedParam('id') id: string,
+    @TypedParam('id') id: TagsIntegerString,
     @Req() req: FastifyRequest,
   ): Promise<{
     name: string;
@@ -134,7 +140,7 @@ export class CategoryController {
   @TypedRoute.Delete(':id')
   @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async remove(
-    @TypedParam('id') id: bigint,
+    @TypedParam('id') id: TagsIntegerString,
     @Req() req: FastifyRequest,
   ): Promise<void> {
     return this.categoryService.remove(id, req.ability);

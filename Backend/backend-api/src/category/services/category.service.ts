@@ -401,11 +401,12 @@ export class CategoryService {
   }
 
   async update(
-    id: bigint,
+    categoryId: string,
     updateCategoryDto: IUpdateCategoryDto,
     ability: AppAbility,
     user: UserPayload,
   ) {
+    const id = BigInt(categoryId);
     const clientVersion = BigInt(updateCategoryDto.version);
 
     const existingCategory = await this.drizzle.db.query.categories.findFirst({
@@ -485,7 +486,8 @@ export class CategoryService {
     });
   }
 
-  async remove(id: bigint, ability: AppAbility) {
+  async remove(categoryId: string, ability: AppAbility) {
+    const id = BigInt(categoryId);
     const [category] = await this.drizzle.db
       .select({ user_id: categories.user_id })
       .from(categories)

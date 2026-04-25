@@ -1,7 +1,7 @@
 import {
   AddressType as DrizzleAddressType,
   DeliveryStatus,
-  ProductStatus,
+  ProductStatus as DrizzleProductStatus,
   SaleVariant,
   UserRole as DrizzleUserRole,
   UserStatus as DrizzleUserStatus,
@@ -36,5 +36,9 @@ export const AddressType = {
   STORE: 'STORE',
 } as const;
 
-export type ProductStatus = (typeof ProductStatus.enumValues)[number];
+export type ProductStatus = (typeof DrizzleProductStatus.enumValues)[number];
+export const ProductStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+} as const;
 export type SaleVariant = (typeof SaleVariant.enumValues)[number];
