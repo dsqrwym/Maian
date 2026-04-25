@@ -4,14 +4,14 @@ import {
   TagsStrongPassword,
   TagsUsername,
   TagsUuid,
-} from '../../utils/typia/validators/auth.validator';
-import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
+} from '@/utils/typia/validators/auth.validator';
+import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
 import typia, { tags } from 'typia';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { BadRequestException } from '@nestjs/common';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
-import { TagsBasicTelephone } from '../../utils/typia/validators/telephone.validator';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
+import { TagsBasicTelephone } from '@/utils/typia/validators/telephone.validator';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**

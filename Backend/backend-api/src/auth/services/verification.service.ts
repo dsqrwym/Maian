@@ -11,29 +11,29 @@ import {
   IVerifyEmailQueryDto,
   VerifyCodeResponseDto,
 } from '../dto/verification.dto';
-import { maskEmail } from '../../utils/email.utils';
-import { addMinutes } from '../../utils/date.utils';
+import { maskEmail } from '@/utils/email.utils';
+import { addMinutes } from '@/utils/date.utils';
 import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
-import { TooManyRequestsExceptions } from '../../common/exceptions/too-many-requests.exceptions';
+import { TooManyRequestsExceptions } from '@/common/exceptions/too-many-requests.exceptions';
 import {
   generateUniformRandomDigits,
   generateUniformStrongPassword,
-} from '../../utils/random.utils';
-import { MailService } from '../../mail/mail.service';
+} from '@/utils/random.utils';
+import { MailService } from '@/mail/mail.service';
 import { HashService } from 'src/common/hash/hash.service';
 import { randomUUID } from 'node:crypto';
-import { RegisterEmailJob } from '../../mail/mail.types';
-import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile.type';
-import { renderTemplate } from '../../utils/hbs-renderer';
+import { RegisterEmailJob } from '@/mail/mail.types';
+import { WholesalerProfileType } from '@/enterprise/types/wholesaler-profile.type';
+import { renderTemplate } from '@/utils/hbs-renderer';
 import { FastifyReply } from 'fastify';
 import { I18nService } from 'nestjs-i18n';
-import { DrizzleDb, DrizzleService } from '../../drizzle/drizzle.service';
+import { DrizzleDb, DrizzleService } from '@/drizzle/drizzle.service';
 import { and, desc, eq, gt, sql } from 'drizzle-orm';
 import {
   configurations,
   users,
   verification_tokens,
-} from '../../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 
 @Injectable()
 export class VerificationService {

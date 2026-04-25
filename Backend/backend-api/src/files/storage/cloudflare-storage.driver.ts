@@ -12,9 +12,9 @@ import { Upload } from '@aws-sdk/lib-storage';
 import { LocalStorageDriver } from './local-storage.driver';
 import * as path from 'path';
 import * as fs from 'node:fs';
-import { HashService } from '../../common/hash/hash.service';
+import { HashService } from '@/common/hash/hash.service';
 import { fileTypeFromBuffer } from 'file-type';
-import { ENV } from '../../config/constants.config';
+import { ENV } from '@/config/constants.config';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()

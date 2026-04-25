@@ -1,8 +1,8 @@
-import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
+import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
 import typia, { tags } from 'typia';
-import { TagsUuid } from '../../utils/typia/validators/auth.validator';
+import { TagsUuid } from '@/utils/typia/validators/auth.validator';
 import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
-import { cleanString } from '../../utils/string.util';
+import { cleanString } from '@/utils/string.util';
 
 /**
  * DTO for checking category name availability when creating

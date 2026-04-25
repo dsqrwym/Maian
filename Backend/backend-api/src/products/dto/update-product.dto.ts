@@ -10,9 +10,9 @@ import {
   ICreateVariantDto,
   validateICreateVariant,
 } from './create-product-variant.dto';
-import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
+import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
 import { ICreateProductDto } from './create-product.dto';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 import typia from 'typia';

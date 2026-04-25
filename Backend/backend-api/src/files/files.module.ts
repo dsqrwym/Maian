@@ -5,7 +5,7 @@ import { STORAGE_DRIVER } from './storage/storage-key';
 import { LocalStorageDriver } from './storage/local-storage.driver';
 import { CloudflareStorageDriver } from './storage/cloudflare-storage.driver';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from '../config/constants.config';
+import { ENV } from '@/config/constants.config';
 
 @Global()
 @Module({

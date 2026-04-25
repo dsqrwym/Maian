@@ -9,11 +9,11 @@ import {
   validateCheckCategoryNameUpdateQuery,
 } from '../dto/check-category-query.dto';
 import { TypedQuery, TypedRoute } from '@nestia/core';
-import { JwtAuthGuard } from '../../auth/guard/auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
-import { ADMIN_ROLES } from '../../admin/admin.constants';
-import { UserRole } from '../../generated/drizzle/enums';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { RolesGuard } from '@/common/guards/roles.guard';
+import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
+import { ADMIN_ROLES } from '@/admin/admin.constants';
+import { UserRole } from '@/generated/drizzle/enums';
 
 /**
  * Category Availability Check Controller

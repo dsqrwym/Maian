@@ -5,11 +5,11 @@ import {
   TagsUserAgent,
   TagsUsername,
   TagsWholesalerId,
-} from '../../utils/typia/validators/auth.validator';
+} from '@/utils/typia/validators/auth.validator';
 import { BadRequestException } from '@nestjs/common';
 import typia from 'typia';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 export interface ILoginDto {

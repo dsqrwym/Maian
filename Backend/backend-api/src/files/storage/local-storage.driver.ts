@@ -7,12 +7,12 @@ import { StorageDriver } from './storage.driver';
 import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
-import { ENV } from '../../config/constants.config';
+import { ENV } from '@/config/constants.config';
 import * as fs from 'node:fs';
-import { HashService } from '../../common/hash/hash.service';
+import { HashService } from '@/common/hash/hash.service';
 import * as crypto from 'crypto';
 import { fileTypeFromBuffer } from 'file-type';
-import { ALLOWED_MIMES } from '../../config/fastify-multipart.config';
+import { ALLOWED_MIMES } from '@/config/fastify-multipart.config';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()

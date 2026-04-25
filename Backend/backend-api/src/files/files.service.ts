@@ -7,12 +7,12 @@ import {
 import { STORAGE_DRIVER } from './storage/storage-key';
 import { StorageDriver } from './storage/storage.driver';
 import { Readable } from 'stream';
-import { UserPayload } from '../auth/auth.types';
+import { UserPayload } from '@/auth/auth.types';
 import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
-import { UserRole } from '../generated/drizzle/enums';
+import { UserRole } from '@/generated/drizzle/enums';
 import { IProductFilesQueryDto } from './dto/product-files-query.dto';
-import { AppAbility } from '../casl/casl-types';
-import { Action } from '../casl/actions';
+import { AppAbility } from '@/casl/casl-types';
+import { Action } from '@/casl/actions';
 import { subject } from '@casl/ability';
 import { DrizzleDb, DrizzleService } from 'src/drizzle/drizzle.service';
 import {

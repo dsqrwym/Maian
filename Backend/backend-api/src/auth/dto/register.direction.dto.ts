@@ -3,9 +3,9 @@ import typia, { tags } from 'typia';
 import {
   TagsLatitude,
   TagsLongitude,
-} from '../../utils/typia/validators/direction.validator';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
+} from '@/utils/typia/validators/direction.validator';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
 
 export interface IDirectionDto {
   /**

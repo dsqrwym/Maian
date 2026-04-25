@@ -7,7 +7,7 @@ import { PrismaClient } from 'src/generated/prisma/client';
 import { PinoLogger } from 'nestjs-pino';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from '../config/constants.config';
+import { ENV } from '@/config/constants.config';
 
 @Injectable()
 export class PrismaService

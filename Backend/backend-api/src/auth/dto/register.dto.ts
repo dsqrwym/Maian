@@ -1,11 +1,11 @@
-import { TagsEmail } from '../../utils/typia/validators/auth.validator';
+import { TagsEmail } from '@/utils/typia/validators/auth.validator';
 import typia, { tags } from 'typia';
 import {
   TagsBCP47Language,
   TagsIANATimezone,
-} from '../../utils/typia/validators/language.validator';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
+} from '@/utils/typia/validators/language.validator';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**

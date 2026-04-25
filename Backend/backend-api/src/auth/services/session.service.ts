@@ -6,16 +6,16 @@ import {
 } from '@nestjs/common';
 import { UserPayload } from '../auth.types';
 import { AUTH_ERROR } from '../auth.constants';
-import { REDIS_KEYS } from '../../cache/redis/redis.constants';
-import { ENV } from '../../config/constants.config';
+import { REDIS_KEYS } from '@/cache/redis/redis.constants';
+import { ENV } from '@/config/constants.config';
 import { Logger } from 'nestjs-pino';
 import { IDeleteSessionDto } from '../dto/delete.session.dto';
-import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
+import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { HashService } from 'src/common/hash/hash.service';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { user_sessions } from '../../generated/drizzle/schema';
+import { user_sessions } from '@/generated/drizzle/schema';
 import { and, eq, sql } from 'drizzle-orm';
 
 @Injectable()

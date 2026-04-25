@@ -6,8 +6,8 @@ import {
   ActiveAdminWithPasswordEmailJob,
   BaseEmailJobWithLink,
 } from '../mail.types';
-import { I18nTranslations } from '../../i18n/generated/i18n.generated';
-import { sendMail } from '../../utils/mailer.utils';
+import { I18nTranslations } from '@/i18n/generated/i18n.generated';
+import { sendMail } from '@/utils/mailer.utils';
 
 @Injectable()
 export class VerifyAdminMailProcessorService {

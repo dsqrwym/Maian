@@ -15,9 +15,9 @@ import {
   ApiProduces,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guard/auth.guard';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
 import { fileTypeFromBuffer } from 'file-type';
-import { ALLOWED_MIMES, CHUNK_SIZE } from '../config/fastify-multipart.config';
+import { ALLOWED_MIMES, CHUNK_SIZE } from '@/config/fastify-multipart.config';
 import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
 import { IProductFilesQueryDto } from './dto/product-files-query.dto';
 import { SkipResponseInterceptor } from 'src/common/guards/decorator/skip-response-interceptor.decorator';

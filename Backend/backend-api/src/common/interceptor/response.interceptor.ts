@@ -14,6 +14,7 @@ import {
 } from '../types-interfaces/response.interface';
 import { FastifyReply } from 'fastify';
 import { SKIP_RESPONSE_INTERCEPTOR } from '../guards/decorator/skip-response-interceptor.decorator';
+import { isJson } from '@/utils/is.utils';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<
@@ -50,9 +51,8 @@ export class ResponseInterceptor<T> implements NestInterceptor<
 
     return next.handle().pipe(
       map((data: T) => {
-        if (isTypiaJSON(data)) {
-          // 如果是字符串大概率来自typia路由自动转化成json格式的所以不需要再次进行处理
-
+        // 如果是字符串大概率来自typia路由自动转化成json格式的所以不需要再次进行处理
+        if (isJson(data)) {
           const response = `{"statusCode":${res.statusCode},"message":${JSON.stringify(
             defaultMessage || 'success',
           )},"data":${data}}`;
@@ -92,16 +92,6 @@ function isPaginatedDate(data: unknown): data is PaginatedData {
     typeof data === 'object' &&
     'items' in data &&
     'pagination' in data &&
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     Array.isArray((data as any).items)
   );
 }
-
-const isTypiaJSON = (data: unknown): data is string => {
-  if (typeof data !== 'string') return false;
-
-  const first = data[0];
-  const last = data[data.length - 1];
-
-  return (first === '{' && last === '}') || (first === '[' && last === ']');
-};

@@ -7,3 +7,29 @@
 export const isObject = (val: unknown): val is Record<string, unknown> => {
   return val !== null && typeof val === 'object';
 };
+/**
+ * 判断是否为json字符串
+ * 主要用于判断是否来自 typia stringify 过的
+ * @param data
+ */
+export const isJson = (data: unknown) => {
+  if (typeof data !== 'string') return false;
+
+  const first = data[0];
+  const last = data[data.length - 1];
+
+  const baseCheck =
+    (first === '{' && last === '}') ||
+    (first === '[' && last === ']') ||
+    (first === '"' && last === '"');
+  if (baseCheck) {
+    return true;
+  }
+
+  try {
+    JSON.parse(data);
+    return true;
+  } catch {
+    return false;
+  }
+};

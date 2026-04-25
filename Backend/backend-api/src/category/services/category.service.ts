@@ -8,12 +8,12 @@ import {
 import { ICreateCategoryDto } from '../dto/create-category.dto';
 import { IUpdateCategoryDto } from '../dto/update-category.dto';
 import { Logger } from 'nestjs-pino';
-import { AppAbility } from '../../casl/casl-types';
-import { Action } from '../../casl/actions';
+import { AppAbility } from '@/casl/casl-types';
+import { Action } from '@/casl/actions';
 import { subject } from '@casl/ability';
 import { ICategoryQueryDto } from '../dto/category-query.dto';
-import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
-import { UserPayload } from '../../auth/auth.types';
+import { PaginatedDataWithT } from '@/common/types-interfaces/response.interface';
+import { UserPayload } from '@/auth/auth.types';
 import { CategorySelectField, CategoryType } from '../category.enums';
 import {
   ICategoryResponse,
@@ -37,9 +37,9 @@ import {
 import {
   categories,
   category_translations,
-} from '../../generated/drizzle/schema';
-import { toUnaccent } from '../../utils/string.util';
-import { UserRole } from '../../generated/drizzle/enums';
+} from '@/generated/drizzle/schema';
+import { toUnaccent } from '@/utils/string.util';
+import { UserRole } from '@/generated/drizzle/enums';
 
 @Injectable()
 export class CategoryService {

@@ -1,8 +1,8 @@
-import { TagsBCP47Language } from '../../utils/typia/validators/language.validator';
-import { TagsNotBlank } from '../../utils/typia/tags/string.tag';
+import { TagsBCP47Language } from '@/utils/typia/validators/language.validator';
+import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
 import typia, { tags } from 'typia';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
 
 export interface ICategoryTranslationDto {
   lang_code: string & TagsBCP47Language;

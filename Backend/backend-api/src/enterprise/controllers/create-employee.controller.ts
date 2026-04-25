@@ -5,12 +5,12 @@ import {
   validateICreateEmployee,
 } from '../dto/create-employee.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/guard/auth.guard';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
 import { FastifyRequest } from 'fastify';
-import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
+import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
 import { UserRole } from 'src/generated/drizzle/enums';
 import { minutes, Throttle } from '@nestjs/throttler';
-import { TypedBody } from '../../utils/typia/typed-body.typia';
+import { TypedBody } from '@/utils/typia/typed-body.typia';
 import { TypedRoute } from '@nestia/core';
 
 /**

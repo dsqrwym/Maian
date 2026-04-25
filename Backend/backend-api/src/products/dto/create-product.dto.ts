@@ -7,18 +7,18 @@ import {
   validateProductTranslationDto,
 } from './product-translation.dto';
 import { IProductFileDto } from './product-file.dto';
-import { TagsUuid } from '../../utils/typia/validators/auth.validator';
+import { TagsUuid } from '@/utils/typia/validators/auth.validator';
 import typia, { tags } from 'typia';
 import {
   TagsIntegerString,
   TagsNotBlank,
-} from '../../utils/typia/tags/string.tag';
+} from '@/utils/typia/tags/string.tag';
 import {
   TagsIvaString,
   TagsProductCode,
-} from '../../utils/typia/validators/product.validator';
-import { cleanString } from '../../utils/string.util';
-import { isObject } from '../../utils/is.utils';
+} from '@/utils/typia/validators/product.validator';
+import { cleanString } from '@/utils/string.util';
+import { isObject } from '@/utils/is.utils';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 import { ProductStatus } from 'src/generated/drizzle/enums';
 import { BadRequestException } from '@nestjs/common';

@@ -6,22 +6,22 @@ import {
 } from '@nestjs/common';
 import { ICreateProductDto } from './dto/create-product.dto';
 import { IUpdateProductDto } from './dto/update-product.dto';
-import { AppAbility } from '../casl/casl-types';
-import { Action } from '../casl/actions';
+import { AppAbility } from '@/casl/casl-types';
+import { Action } from '@/casl/actions';
 import { subject } from '@casl/ability';
-import { UserPayload } from '../auth/auth.types';
-import { computePrice } from '../utils/calculate/computePrice';
+import { UserPayload } from '@/auth/auth.types';
+import { computePrice } from '@/utils/calculate/computePrice';
 import { IProductListQueryDto } from './dto/product-list-query.dto';
 import { UserRole } from 'src/generated/drizzle/enums';
 import { PinoLogger } from 'nestjs-pino';
 import { ProductListSelectField, ProductSortField } from './product.enums';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from '../config/constants.config';
+import { ENV } from '@/config/constants.config';
 import {
   DOC_MIME_TYPES,
   IMAGE_MIME_TYPES,
   VIDEO_MIME_TYPES,
-} from '../config/fastify-multipart.config';
+} from '@/config/fastify-multipart.config';
 import { IProductFileDto } from './dto/product-file.dto';
 import { DrizzleDb, DrizzleService } from 'src/drizzle/drizzle.service';
 import {
@@ -34,7 +34,7 @@ import {
   products_files,
   user_uploads,
   variant_products,
-} from '../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 import {
   and,
   asc,
@@ -48,7 +48,7 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import { toUnaccent } from '../utils/string.util';
+import { toUnaccent } from '@/utils/string.util';
 import { IProductResponse } from './dto/product-response';
 
 @Injectable()

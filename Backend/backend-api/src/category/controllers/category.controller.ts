@@ -8,23 +8,23 @@ import {
   IUpdateCategoryDto,
   validateUpdateCategory,
 } from '../dto/update-category.dto';
-import { JwtAuthGuard } from '../../auth/guard/auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { RolesGuard } from '@/common/guards/roles.guard';
 import { FastifyRequest } from 'fastify';
-import { RolesAllowed } from '../../common/guards/decorator/roles-allowed.decorator';
+import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
 import {
   ICategoryQueryDto,
   validateCategoryQuery,
 } from '../dto/category-query.dto';
 import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { seconds, Throttle } from '@nestjs/throttler';
-import { ADMIN_ROLES } from '../../admin/admin.constants';
+import { ADMIN_ROLES } from '@/admin/admin.constants';
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
-import { TypedBody } from '../../utils/typia/typed-body.typia';
-import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
+import { TypedBody } from '@/utils/typia/typed-body.typia';
+import { PaginatedDataWithT } from '@/common/types-interfaces/response.interface';
 import { ICategoryResponse } from '../dto/category-response.dto';
-import { UserRole } from '../../generated/drizzle/enums';
-import { TagsIntegerString } from '../../utils/typia/tags/string.tag';
+import { UserRole } from '@/generated/drizzle/enums';
+import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
 
 /**
  * Controller for managing product categories

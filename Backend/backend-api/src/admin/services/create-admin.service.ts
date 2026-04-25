@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { HashService } from '../../common/hash/hash.service';
+import { HashService } from '@/common/hash/hash.service';
 import { ICreateAdminDto } from '../dto/create-admin.dto';
 import { randomUUID } from 'node:crypto';
-import { addDays } from '../../utils/date.utils';
-import { AUTH_VERIFY_EMAIL_PATH } from '../../auth/auth.constants';
+import { addDays } from '@/utils/date.utils';
+import { AUTH_VERIFY_EMAIL_PATH } from '@/auth/auth.constants';
 import { MailService } from 'src/mail/mail.service';
-import { makeUsername } from '../../utils/user.utils';
+import { makeUsername } from '@/utils/user.utils';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import {
   configurations,
   users,
   verification_tokens,
-} from '../../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 import { eq } from 'drizzle-orm';
-import { UserRole } from '../../generated/drizzle/enums';
+import { UserRole } from '@/generated/drizzle/enums';
 
 @Injectable()
 export class CreateAdminService {

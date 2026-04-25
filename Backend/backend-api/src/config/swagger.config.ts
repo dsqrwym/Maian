@@ -40,6 +40,13 @@ export async function useSwagger(app: INestApplication) {
       { url: 'http://localhost:3000', description: 'Local' },
       { url: 'https://api.dsqrwym.es', description: 'Production' },
     ],
+    security: {
+      bearer: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
   });
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   SwaggerModule.setup('maian/api-docs', app, nestiaDocument as any);

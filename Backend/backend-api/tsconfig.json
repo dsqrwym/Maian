@@ -17,7 +17,7 @@
     "allowSyntheticDefaultImports": true, // 允许从没有默认导出的模块中默认导入，提高与 CommonJS 模块的互操作性
     // Set the JavaScript language version for emitted JavaScript / 指定 ECMAScript 目标版本
     // Options: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', 'ES2022', 'ESNext'
-    "target": "ES2023", // 编译后的 JavaScript 将符合 ES2023 标准
+    //"target": "ES2023", // 编译后的 JavaScript 将符合 ES2023 标准
     // Generate source map files / 生成 source map 文件
     "sourceMap": true, // 生成对应的 .map 文件，用于调试
     // Enable all strict type checking options / 启用所有严格类型检查选项
@@ -27,7 +27,7 @@
     // Output directory for compiled files / 编译输出目录
     "outDir": "./dist", // 编译后的 JavaScript 文件输出到 dist 目录
     // Base directory to resolve non-absolute module names / 解析非绝对模块名的基目录
-    "baseUrl": "./", // 设置模块解析的基准目录
+    // "baseUrl": "./", // 设置模块解析的基准目录, 在 typescript 6/7 弃用
     // Save .tsbuildinfo files to allow for incremental compilation / 启用增量编译
     "incremental": true, // 启用增量编译，提高后续编译速度
     // Skip type checking of declaration files / 跳过声明文件的类型检查
@@ -42,15 +42,29 @@
     "strictBindCallApply": false, // 禁用对 bind/call/apply 方法的严格类型检查
     // Enable error reporting for fallthrough cases in switch statements / 报告 switch 语句中的 fallthrough 错误
     "noFallthroughCasesInSwitch": false, // 不报告 switch 语句中的 fallthrough 错误
+    // ========== 针对 TypeScript 6.0 的更改 ==========
+    // 显式声明类型定义文件（TypeScript 6.0 不再自动包含 @types/node）
+    "types": ["node"], // 包含 Node.js 核心类型，解决 process、Buffer 等全局变量找不到的问题
+    // 移除 'importsNotUsedAsValues'（该选项在 TypeScript 6.0 中已被删除）
+    // 原配置: "importsNotUsedAsValues": "remove",   // 已删除
     // Specifies what to do with imports that are only used for types / 指定如何处理仅用于类型的导入
     // Options: 'remove' (default), 'preserve', 'error'
-    "importsNotUsedAsValues": "remove", // 移除仅用于类型的导入语句
+    // 原配置: "importsNotUsedAsValues": "remove",   // 移除仅用于类型的导入语句
+    // 显式指定模块解析策略（与 "module": "commonjs" 配合，避免未来默认值变化）
+    "moduleResolution": "node", // 模块解析算法
+    // 临时忽略弃用警告（主要是 baseUrl 的弃用警告，让项目能够顺利升级）
+    "ignoreDeprecations": "6.0", // 忽略 TypeScript 6.0 引入的弃用错误（例如 baseUrl）
+    "paths": {
+      "@/*": ["./src/*"], // 相对于项目根目录的完整相对路径
+      "src/*": ["./src/*"]
+    },
+    "rootDir": ".",
     "plugins": [
       {
         "transform": "@nestia/core/lib/transform",
         /**
          * Validate request body.
-         * 
+         *
          *   - "assert": Use typia.assert() function
          *   - "is": Use typia.is() function
          *   - "validate": Use typia.validate() function
@@ -61,7 +75,7 @@
         "validate": "assertEquals",
         /**
          * Validate JSON typed response body.
-         * 
+         *
          *   - "assert": Use typia.assertStringify() function
          *   - "is": Use typia.isStringify() function
          *   - "validate": Use typia.validateStringify() function

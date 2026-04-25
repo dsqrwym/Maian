@@ -1,11 +1,11 @@
 import {
   TagsEmail,
   TagsUsername,
-} from '../../utils/typia/validators/auth.validator';
+} from '@/utils/typia/validators/auth.validator';
 import typia, { tags } from 'typia';
-import { TagsBasicTelephone } from '../../utils/typia/validators/telephone.validator';
-import { isObject } from '../../utils/is.utils';
-import { cleanString } from '../../utils/string.util';
+import { TagsBasicTelephone } from '@/utils/typia/validators/telephone.validator';
+import { isObject } from '@/utils/is.utils';
+import { cleanString } from '@/utils/string.util';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { BadRequestException } from '@nestjs/common';
 import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';

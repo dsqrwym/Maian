@@ -1,19 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import { HOUR, MINUTE, reduceHours } from '../utils/date.utils';
-import { STORAGE_DRIVER } from '../files/storage/storage-key';
-import { LocalStorageDriver } from '../files/storage/local-storage.driver';
+import { HOUR, MINUTE, reduceHours } from '@/utils/date.utils';
+import { STORAGE_DRIVER } from '@/files/storage/storage-key';
+import { LocalStorageDriver } from '@/files/storage/local-storage.driver';
 import { PinoLogger } from 'nestjs-pino';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { StorageDriver } from '../files/storage/storage.driver';
+import { StorageDriver } from '@/files/storage/storage.driver';
 import { DistributedLockService } from './distributed-lock.service';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import {
   files,
   message_files,
   products_files,
-} from '../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 import { and, asc, eq, gt, inArray, lt, notExists, sql } from 'drizzle-orm';
 
 const CLEAN_TEMP_FILES_LOCK_KEY = 'cron:cleanup:temp-files';

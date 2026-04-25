@@ -11,13 +11,13 @@ import { IRegisterRetailerDto } from '../dto/register-retailer.dto';
 import { HashService } from 'src/common/hash/hash.service';
 import { ISendNormalRegisterMailDto } from '../dto/register.dto';
 import { IRegisterWholesalerDto } from '../dto/register-wholesaler.dto';
-import { WholesalerProfileType } from '../../enterprise/types/wholesaler-profile.type';
+import { WholesalerProfileType } from '@/enterprise/types/wholesaler-profile.type';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import {
   configurations,
   directions,
   users,
-} from '../../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { AddressType, UserRole, UserStatus } from 'src/generated/drizzle/enums';
 

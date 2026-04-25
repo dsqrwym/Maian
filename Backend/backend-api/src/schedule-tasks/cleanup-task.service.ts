@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { reduceDay } from '../utils/date.utils';
+import { reduceDay } from '@/utils/date.utils';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { DistributedLockService } from './distributed-lock.service';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
@@ -8,7 +8,7 @@ import {
   user_sessions,
   users,
   verification_tokens,
-} from '../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 import { and, eq, inArray, lt, notInArray, or } from 'drizzle-orm';
 
 const CLEANUP_TASK_LOCK_KEY = 'cron:cleanup:users';

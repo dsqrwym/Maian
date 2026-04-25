@@ -17,12 +17,12 @@ import {
   validateFindUserQuery,
 } from '../dto/find-user-query.dto';
 import { FastifyRequest } from 'fastify';
-import { JwtAuthGuard } from '../../auth/guard/auth.guard';
-import { PaginatedResponseDto } from '../../utils/dto/pagination.dto';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { PaginatedResponseDto } from '@/utils/dto/pagination.dto';
 import { TypedQuery, TypedRoute } from '@nestia/core';
 import { PaginatedDataWithT } from 'src/common/types-interfaces/response.interface';
 import { FindUserResponse } from '../dto/user-response';
-import { UserRole, UserStatus } from '../../generated/drizzle/enums';
+import { UserRole, UserStatus } from '@/generated/drizzle/enums';
 
 /**
  * Controller for searching and finding users

@@ -8,7 +8,7 @@ import {
   IUpdateProductDto,
   validateIUpdateProduct,
 } from './dto/update-product.dto';
-import { JwtAuthGuard } from '../auth/guard/auth.guard';
+import { JwtAuthGuard } from '@/auth/guard/auth.guard';
 import { FastifyRequest } from 'fastify';
 import {
   IProductListQueryDto,
@@ -16,17 +16,17 @@ import {
 } from './dto/product-list-query.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
-import { TypedBody } from '../utils/typia/typed-body.typia';
-import { RolesAllowed } from '../common/guards/decorator/roles-allowed.decorator';
-import { ADMIN_ROLES } from '../admin/admin.constants';
+import { TypedBody } from '@/utils/typia/typed-body.typia';
+import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
+import { ADMIN_ROLES } from '@/admin/admin.constants';
 import { PaginatedDataWithT } from 'src/common/types-interfaces/response.interface';
 import { IProductResponse } from './dto/product-response';
 import {
   ProductStatus,
   SaleVariant,
   UserRole,
-} from '../generated/drizzle/enums';
-import { TagsIntegerString } from '../utils/typia/tags/string.tag';
+} from '@/generated/drizzle/enums';
+import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
 
 @ApiTags('Product Management')
 @ApiBearerAuth()

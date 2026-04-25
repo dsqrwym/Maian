@@ -1,9 +1,9 @@
 import { AbilityBuilder } from '@casl/ability';
 import { AppAbility } from '../casl-types';
 import { Action } from '../actions';
-import { UserPayload } from '../../auth/auth.types';
+import { UserPayload } from '@/auth/auth.types';
 import { createPrismaAbility } from '@casl/prisma';
-import { UserRole, UserStatus } from '../../generated/drizzle/enums';
+import { UserRole, UserStatus } from '@/generated/drizzle/enums';
 
 export class CaslAbilityFactory {
   constructor() {}

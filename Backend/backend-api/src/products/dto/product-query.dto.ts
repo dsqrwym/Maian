@@ -1,4 +1,4 @@
-import { IPaginationQueryDto } from '../../utils/dto/pagination.dto';
+import { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
 import { ProductSelectField } from '../product.enums';
 
 export interface IProductQueryDto extends IPaginationQueryDto {

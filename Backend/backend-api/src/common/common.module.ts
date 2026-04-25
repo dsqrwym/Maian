@@ -4,7 +4,7 @@ import { HashService } from './hash/hash.service';
 import { Bcp47LanguageValidator } from './validators/is-bcp47-language.validator';
 import { IanaTimezoneValidator } from './validators/is-iana.validator';
 import { HashWorkerPoolProvider } from './hash/hash-worker-pool.provider';
-import { MyI18nModule } from '../i18n/i18n.module';
+import { MyI18nModule } from '@/i18n/i18n.module';
 import { RoleI18nService } from './i18n/role.i18n';
 @Global() // 让这个模块在全局可用
 @Module({

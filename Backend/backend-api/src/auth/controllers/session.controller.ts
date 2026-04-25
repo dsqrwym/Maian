@@ -11,14 +11,14 @@ import { AUTH_ERROR } from '../auth.constants';
 import {
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_PATH,
-} from '../../config/constants.config';
+} from '@/config/constants.config';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from '../auth.service';
 import { Logger } from 'nestjs-pino';
 import { JwtAuthGuard } from '../guard/auth.guard';
 import { IDeleteSessionDto } from '../dto/delete.session.dto';
 import { TypedRoute } from '@nestia/core';
-import { TypedBody } from '../../utils/typia/typed-body.typia';
+import { TypedBody } from '@/utils/typia/typed-body.typia';
 import typia from 'typia';
 
 /**

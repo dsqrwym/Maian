@@ -1,13 +1,13 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { IFindUserQueryDto } from '../dto/find-user-query.dto';
-import { AppAbility } from '../../casl/casl-types';
+import { AppAbility } from '@/casl/casl-types';
 import { UserRole } from 'src/generated/drizzle/enums';
-import { Action } from '../../casl/actions';
-import { PaginatedDataWithT } from '../../common/types-interfaces/response.interface';
-import { UserPayload } from '../../auth/auth.types';
+import { Action } from '@/casl/actions';
+import { PaginatedDataWithT } from '@/common/types-interfaces/response.interface';
+import { UserPayload } from '@/auth/auth.types';
 import { and, count, eq, ilike, notInArray, or, sql } from 'drizzle-orm';
-import { users } from '../../generated/drizzle/schema';
-import { DrizzleService } from '../../drizzle/drizzle.service';
+import { users } from '@/generated/drizzle/schema';
+import { DrizzleService } from '@/drizzle/drizzle.service';
 import { FindUserResponse } from '../dto/user-response';
 
 @Injectable()

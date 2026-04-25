@@ -8,7 +8,7 @@ import {
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Prisma } from 'src/generated/prisma/client';
 import { PinoLogger } from 'nestjs-pino';
-import { extractPrismaMeta } from '../../utils/meta.utils';
+import { extractPrismaMeta } from '@/utils/meta.utils';
 import { ErrorResponse } from '../types-interfaces/response.interface';
 
 @Injectable()

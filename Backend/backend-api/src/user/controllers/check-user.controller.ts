@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { CheckUserService } from '../services/check-user.service';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { CacheTTL } from '@nestjs/cache-manager';
-import { SECOND } from '../../utils/date.utils';
+import { SECOND } from '@/utils/date.utils';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ICheckUserEmailQueryDto,

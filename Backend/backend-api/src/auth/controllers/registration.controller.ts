@@ -4,7 +4,7 @@ import {
   ISendNormalRegisterMailDto,
   validateSendNormalRegisterMail,
 } from '../dto/register.dto';
-import { maskEmail } from '../../utils/email.utils';
+import { maskEmail } from '@/utils/email.utils';
 import { AuthService } from '../auth.service';
 import { Logger } from 'nestjs-pino';
 import {

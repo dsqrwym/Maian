@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IResetPasswordDto } from '../dto/reset-password.dto';
-import { REDIS_KEYS } from '../../cache/redis/redis.constants';
-import { ENV } from '../../config/constants.config';
+import { REDIS_KEYS } from '@/cache/redis/redis.constants';
+import { ENV } from '@/config/constants.config';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { HashService } from 'src/common/hash/hash.service';
-import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
+import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
 import { VerificationService } from './verification.service';
 import {
@@ -14,7 +14,7 @@ import {
   IVerifyCodeDto,
 } from '../dto/verification.dto';
 import { VerificationEmailType } from '../auth.constants';
-import { DrizzleService } from '../../drizzle/drizzle.service';
+import { DrizzleService } from '@/drizzle/drizzle.service';
 import { user_sessions, users } from 'src/generated/drizzle/schema';
 import { and, eq } from 'drizzle-orm';
 

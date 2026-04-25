@@ -1,13 +1,13 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { ICreateEmployeeDto } from '../dto/create-employee.dto';
-import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '../../auth/auth.constants';
-import { HashService } from '../../common/hash/hash.service';
-import { addDays } from '../../utils/date.utils';
-import { MailService } from '../../mail/mail.service';
+import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '@/auth/auth.constants';
+import { HashService } from '@/common/hash/hash.service';
+import { addDays } from '@/utils/date.utils';
+import { MailService } from '@/mail/mail.service';
 import { WholesalerProfileType } from '../types/wholesaler-profile.type';
 import { RoleI18nService } from 'src/common/i18n/role.i18n';
-import { UserRole } from '../../generated/drizzle/enums';
+import { UserRole } from '@/generated/drizzle/enums';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { eq } from 'drizzle-orm';
 import {

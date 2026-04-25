@@ -1,6 +1,6 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CaslAbilityFactory } from '../../casl/casl-ability.factory/casl-ability.factory';
+import { CaslAbilityFactory } from '@/casl/casl-ability.factory/casl-ability.factory';
 import { FastifyRequest } from 'fastify';
 
 /**

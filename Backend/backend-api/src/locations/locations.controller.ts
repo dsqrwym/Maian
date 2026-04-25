@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { LocationsService } from './locations.service';
 import { CacheTTL } from '@nestjs/cache-manager';
-import { DAY } from '../utils/date.utils';
+import { DAY } from '@/utils/date.utils';
 import { TypedParam, TypedRoute } from '@nestia/core';
 
 /**

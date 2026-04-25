@@ -4,7 +4,7 @@ import {
   ICheckCategoryNameUpdateQueryDto,
 } from '../dto/check-category-query.dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { categories } from '../../generated/drizzle/schema';
+import { categories } from '@/generated/drizzle/schema';
 import { and, eq, exists, isNull, ne, sql } from 'drizzle-orm';
 @Injectable()
 export class CheckCategoryService {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'; // 用于定义可注入的服务
-import { I18nTranslations } from '../i18n/generated/i18n.generated';
+import { I18nTranslations } from '@/i18n/generated/i18n.generated';
 import { PinoLogger } from 'nestjs-pino';
 import { I18nService } from 'nestjs-i18n';
-import { maskEmail } from '../utils/email.utils';
+import { maskEmail } from '@/utils/email.utils';
 import { InjectQueue } from '@nestjs/bullmq';
 import { JobsOptions, Queue } from 'bullmq';
-import { ENV } from '../config/constants.config';
+import { ENV } from '@/config/constants.config';
 import { ConfigService } from '@nestjs/config';
 import {
   ActiveAdminWithPasswordEmailJob,

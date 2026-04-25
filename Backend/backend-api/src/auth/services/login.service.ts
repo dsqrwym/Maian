@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { HashService } from '../../common/hash/hash.service';
-import { REDIS_CACHE } from '../../cache/redis/cache.redis.token';
+import { HashService } from '@/common/hash/hash.service';
+import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';
 import { Logger } from 'nestjs-pino';
 import type { FastifyReply, FastifyRequest } from 'fastify';
@@ -17,15 +17,15 @@ import {
   ENV,
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_PATH,
-} from '../../config/constants.config';
-import { REDIS_KEYS } from '../../cache/redis/redis.constants';
+} from '@/config/constants.config';
+import { REDIS_KEYS } from '@/cache/redis/redis.constants';
 import { TokenResponseDto } from '../dto/token-response.dto';
 import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service';
 import { UserRole } from 'src/generated/drizzle/enums';
 import { LoginResponseDto } from '../dto/login-response.dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { and, asc, eq, inArray } from 'drizzle-orm';
-import { user_sessions } from '../../generated/drizzle/schema';
+import { user_sessions } from '@/generated/drizzle/schema';
 
 @Injectable()
 export class LoginService {

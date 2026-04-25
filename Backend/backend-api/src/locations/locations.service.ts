@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DrizzleService } from '../drizzle/drizzle.service';
+import { DrizzleService } from '@/drizzle/drizzle.service';
 import {
   cities,
   countries,
   currencies,
   provinces,
-} from '../generated/drizzle/schema';
+} from '@/generated/drizzle/schema';
 import { eq } from 'drizzle-orm';
 
 @Injectable()

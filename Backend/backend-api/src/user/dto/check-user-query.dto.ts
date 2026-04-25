@@ -2,8 +2,8 @@ import {
   TagsEmail,
   TagsUsername,
   TagsWholesalerId,
-} from '../../utils/typia/validators/auth.validator';
-import { cleanString } from '../../utils/string.util';
+} from '@/utils/typia/validators/auth.validator';
+import { cleanString } from '@/utils/string.util';
 import typia from 'typia';
 import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
 

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { ENV } from '../../config/constants.config';
+import { ENV } from '@/config/constants.config';
 import { ConfigService } from '@nestjs/config';
 import { UserRole } from 'src/generated/drizzle/enums';
-import { HashService } from '../../common/hash/hash.service';
-import { makeUsername } from '../../utils/user.utils';
+import { HashService } from '@/common/hash/hash.service';
+import { makeUsername } from '@/utils/user.utils';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { users } from '../../generated/drizzle/schema';
+import { users } from '@/generated/drizzle/schema';
 
 @Injectable()
 export class EnsureSuperAdminService {
