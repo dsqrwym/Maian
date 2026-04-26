@@ -9,7 +9,6 @@ export class CustomThrottlerGuard extends ThrottlerGuard {
     if (authTokenPayload) {
       return Promise.resolve(`session:${authTokenPayload.sessionId}`);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
     const email = (req.body as any)?.email;
     if (email) {
       return Promise.resolve(`email:${email}`);

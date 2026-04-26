@@ -48,27 +48,39 @@ import { DrizzleModule } from './drizzle/drizzle.module';
     ), // 加载环境变量配置文件，默认加载 .env 文件中的变量
     // 默认内存缓存
     CacheRedisModule.register(REDIS_CACHE, ENV.REDIS_CACHE_URL), // Redis 缓存模块
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport:
-          process.env.NODE_ENV !== 'production'
-            ? {
-                target: 'pino-pretty', // 开发环境使用 pino-pretty 格式化日志
-                options: {
-                  colorize: true, // 彩色输出
-                  translateTime: 'SYS:standard', // 使用系统时间格式化
-                },
-              }
-            : undefined,
-        level: process.env.NODE_ENV === 'production' ? 'error' : 'debug', // 设置日志级别
-        redact:
-          process.env.NODE_ENV === 'production'
-            ? [
-                'req.headers.authorization', // Bearer token
-                'req.headers.cookie',
-              ]
-            : undefined,
-      },
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        pinoHttp: {
+          transport:
+            config.get<string>(ENV.NODE_ENV) !== 'production'
+              ? {
+                  targets: [
+                    {
+                      target: 'pino-pretty', // 开发环境使用 pino-pretty 格式化日志
+                      options: {
+                        destination: 1, // 1 表示 stdout
+                        colorize: true, // 彩色输出
+                        translateTime: 'SYS:standard', // 使用系统时间格式化
+                      },
+                    },
+                  ],
+                }
+              : undefined,
+          level:
+            config.get<string>(ENV.NODE_ENV) === 'production'
+              ? 'error'
+              : 'debug', // 设置日志级别
+          redact:
+            config.get<string>(ENV.NODE_ENV) === 'production'
+              ? [
+                  'req.headers.authorization', // Bearer token
+                  'req.headers.cookie',
+                ]
+              : undefined,
+        },
+      }),
     }),
     JwtModule.registerAsync({
       global: true,

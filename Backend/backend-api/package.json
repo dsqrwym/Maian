@@ -42,7 +42,16 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "ts-patch install"
+    "prepare": "ts-patch install",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:start:prod": "pm2 start ecosystem.config.js --env production",
+    "pm2:stop": "pm2 stop maian-backend",
+    "pm2:restart": "pm2 restart maian-backend",
+    "pm2:reload": "pm2 reload maian-backend",
+    "pm2:delete": "pm2 delete maian-backend",
+    "pm2:logs": "pm2 logs maian-backend --lines 60",
+    "pm2:dev": "pnpm build && pnpm pm2:start",
+    "pm2:prod": "pnpm build && pnpm pm2:start:prod"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1037.0",

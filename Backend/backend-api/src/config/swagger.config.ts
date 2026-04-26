@@ -49,5 +49,11 @@ export async function useSwagger(app: INestApplication) {
     },
   });
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  SwaggerModule.setup('maian/api-docs', app, nestiaDocument as any);
+  SwaggerModule.setup('maian/api-docs', app, nestiaDocument as any, {
+    swaggerOptions: {
+      persistAuthorization: true, // 认证持久化
+      displayRequestDuration: true, // 显示请求耗时
+      explorer: true,
+    },
+  });
 }
