@@ -1,18 +1,20 @@
-import { IDirectionDto, validateDirection } from './register.direction.dto';
-import {
+import type { IDirectionDto } from './register.direction.dto';
+import { validateDirection } from './register.direction.dto';
+import type {
   TagsEmail,
   TagsStrongPassword,
   TagsUsername,
   TagsUuid,
 } from '@/utils/typia/validators/auth.validator';
-import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
-import typia, { tags } from 'typia';
+import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
+import type { tags } from 'typia';
+import typia from 'typia';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { BadRequestException } from '@nestjs/common';
 import { isObject } from '@/utils/is.utils';
 import { cleanString } from '@/utils/string.util';
-import { TagsBasicTelephone } from '@/utils/typia/validators/telephone.validator';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { TagsBasicTelephone } from '@/utils/typia/validators/telephone.validator';
+import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**
  * Enum for Spanish company types

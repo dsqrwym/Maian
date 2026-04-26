@@ -1,9 +1,7 @@
 import path from 'path';
 import Piscina from 'piscina';
-import {
-  HashWorkerData,
-  WORKER_POOL_MAX_THREADS,
-} from './hash-worker-pool.provider';
+import type { HashWorkerData } from './hash-worker-pool.provider';
+import { WORKER_POOL_MAX_THREADS } from './hash-worker-pool.provider';
 
 // 创建 Piscina 线程池实例，指定 worker 文件位置和线程数配置
 const pool = new Piscina({

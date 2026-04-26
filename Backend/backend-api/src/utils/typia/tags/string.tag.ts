@@ -1,4 +1,4 @@
-import { tags } from 'typia';
+import type { tags } from 'typia';
 
 /** 至少 N 个大写字母 */
 export type TagsMinUppercase<N extends number> = string &

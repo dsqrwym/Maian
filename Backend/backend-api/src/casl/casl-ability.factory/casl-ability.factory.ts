@@ -1,7 +1,7 @@
 import { AbilityBuilder } from '@casl/ability';
-import { AppAbility } from '../casl-types';
+import type { AppAbility } from '../casl-types';
 import { Action } from '../actions';
-import { UserPayload } from '@/auth/auth.types';
+import type { UserPayload } from '@/auth/auth.types';
 import { createPrismaAbility } from '@casl/prisma';
 import { UserRole, UserStatus } from '@/generated/drizzle/enums';
 

@@ -1,12 +1,13 @@
-import { TagsEmail } from '@/utils/typia/validators/auth.validator';
-import typia, { tags } from 'typia';
-import {
+import type { TagsEmail } from '@/utils/typia/validators/auth.validator';
+import type { tags } from 'typia';
+import typia from 'typia';
+import type {
   TagsBCP47Language,
   TagsIANATimezone,
 } from '@/utils/typia/validators/language.validator';
 import { isObject } from '@/utils/is.utils';
 import { cleanString } from '@/utils/string.util';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**
  * DTO for sending normal registration email

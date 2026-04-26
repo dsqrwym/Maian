@@ -72,10 +72,8 @@ export class LoginValidationStrategy {
       query: {
         ...query,
         // Mask sensitive information in the query
-        email: query.email ? maskEmail(query.email as string) : undefined,
-        username: query.username
-          ? maskEmail(query.username as string)
-          : undefined,
+        email: query.email ? maskEmail(query.email) : undefined,
+        username: query.username ? maskEmail(query.username) : undefined,
       },
     });
     const filters: SQL<unknown>[] = [sql`1=1`];

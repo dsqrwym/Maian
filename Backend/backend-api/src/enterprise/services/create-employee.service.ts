@@ -172,7 +172,7 @@ export class CreateEmployeeService {
     });
 
     const link = `${AUTH_VERIFY_EMAIL_PATH}?token=${result.token}&userId=${result.employeeId}&lang=${result.lang}`;
-    const wholesalerData = result.profile as unknown as WholesalerProfileType;
+    const wholesalerData = result.profile as WholesalerProfileType;
     const position = this.roleI18nService.translateRole(userRole, result.lang);
 
     await this.mailService.sendEmployeeVerifyEmail({

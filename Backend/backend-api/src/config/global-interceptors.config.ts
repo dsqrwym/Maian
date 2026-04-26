@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { ResponseInterceptor } from '@/common/interceptor/response.interceptor';
 
 export function useGlobalInterceptors(app: INestApplication) {

@@ -1,5 +1,5 @@
-import { tags } from 'typia';
-import {
+import type { tags } from 'typia';
+import type {
   TagsMaxNumberString,
   TagsUNumeric10_2_String,
 } from '../tags/number.tags';

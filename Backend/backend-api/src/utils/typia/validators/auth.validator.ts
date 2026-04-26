@@ -1,5 +1,5 @@
-import { tags } from 'typia';
-import {
+import type { tags } from 'typia';
+import type {
   TagsMinDigits,
   TagsMinLowercase,
   TagsMinUppercase,

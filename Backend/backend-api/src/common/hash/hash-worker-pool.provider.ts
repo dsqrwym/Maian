@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Provider } from '@nestjs/common';
+import type { Provider } from '@nestjs/common';
 import { Piscina } from 'piscina';
 import * as path from 'path';
 import * as os from 'os';

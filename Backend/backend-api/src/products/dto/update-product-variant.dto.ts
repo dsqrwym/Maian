@@ -1,5 +1,5 @@
-import { ICreateVariantDto } from './create-product-variant.dto';
-import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+import type { ICreateVariantDto } from './create-product-variant.dto';
+import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
 import { isObject } from '@/utils/is.utils';
 import typia from 'typia';
 

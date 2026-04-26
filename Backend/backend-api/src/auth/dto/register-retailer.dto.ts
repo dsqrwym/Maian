@@ -1,15 +1,16 @@
-import { IDirectionDto, validateDirection } from './register.direction.dto';
-import {
+import type { IDirectionDto } from './register.direction.dto';
+import { validateDirection } from './register.direction.dto';
+import type {
   TagsEmail,
   TagsStrongPassword,
   TagsUsername,
   TagsUuid,
 } from '@/utils/typia/validators/auth.validator';
-import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
+import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
 import typia from 'typia';
 import { isObject } from '@/utils/is.utils';
 import { cleanString } from '@/utils/string.util';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**
  * DTO for retailer registration

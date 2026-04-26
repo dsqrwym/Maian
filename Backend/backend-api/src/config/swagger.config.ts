@@ -1,5 +1,5 @@
 import { SwaggerModule } from '@nestjs/swagger';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { NestiaSwaggerComposer } from '@nestia/sdk';
 
 export async function useSwagger(app: INestApplication) {

@@ -1,15 +1,14 @@
-import {
-  ICategoryTranslationDto,
-  validateCategoryTranslation,
-} from './category-translation.dto';
-import { TagsUuid } from '@/utils/typia/validators/auth.validator';
-import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
-import typia, { tags } from 'typia';
-import { TagsCategoryName } from '@/utils/typia/validators/category.validator';
+import type { ICategoryTranslationDto } from './category-translation.dto';
+import { validateCategoryTranslation } from './category-translation.dto';
+import type { TagsUuid } from '@/utils/typia/validators/auth.validator';
+import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+import type { tags } from 'typia';
+import typia from 'typia';
+import type { TagsCategoryName } from '@/utils/typia/validators/category.validator';
 import { isObject } from '@/utils/is.utils';
 import { cleanString } from '@/utils/string.util';
-import { TagsIvaString } from '@/utils/typia/validators/product.validator';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { TagsIvaString } from '@/utils/typia/validators/product.validator';
+import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 import { BadRequestException } from '@nestjs/common';
 
 export interface ICreateCategoryDto {

@@ -34,10 +34,7 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import {
-  categories,
-  category_translations,
-} from '@/generated/drizzle/schema';
+import { categories, category_translations } from '@/generated/drizzle/schema';
 import { toUnaccent } from '@/utils/string.util';
 import { UserRole } from '@/generated/drizzle/enums';
 

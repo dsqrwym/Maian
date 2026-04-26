@@ -1,4 +1,4 @@
-import { tags } from 'typia';
+import type { tags } from 'typia';
 
 /**
  * 字符串表示的数字必须大于等于 N
@@ -31,7 +31,6 @@ export type TagsMaxNumberString<N extends number> = string &
       })()
     `;
   }>;
-
 
 /**
  * PostgreSQL numeric (numeric(10,2))

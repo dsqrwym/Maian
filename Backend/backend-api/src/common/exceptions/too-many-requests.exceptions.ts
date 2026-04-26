@@ -1,8 +1,5 @@
-import {
-  HttpException,
-  HttpExceptionOptions,
-  HttpStatus,
-} from '@nestjs/common';
+import type { HttpExceptionOptions } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class TooManyRequestsExceptions extends HttpException {
   constructor(

@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 
 export function useLogger(app: INestApplication) {

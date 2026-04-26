@@ -1,10 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ISendNormalRegisterMailDto } from './register.dto';
 import typia, { tags } from 'typia';
-import {
-  TagsEmail,
-  TagsUuid,
-} from '@/utils/typia/validators/auth.validator';
+import { TagsEmail, TagsUuid } from '@/utils/typia/validators/auth.validator';
 import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
 import { TagsBCP47Language } from '@/utils/typia/validators/language.validator';
 import { isObject } from '@/utils/is.utils';

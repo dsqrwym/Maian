@@ -1,4 +1,4 @@
-import {
+import type {
   TagsDeviceName,
   TagsEmail,
   TagsStrongPassword,
@@ -10,7 +10,7 @@ import { BadRequestException } from '@nestjs/common';
 import typia from 'typia';
 import { isObject } from '@/utils/is.utils';
 import { cleanString } from '@/utils/string.util';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 export interface ILoginDto {
   password: string & TagsStrongPassword; // 密码

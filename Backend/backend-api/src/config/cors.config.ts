@@ -1,4 +1,4 @@
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 
 export function useCors(app: NestFastifyApplication) {
   app.enableCors({

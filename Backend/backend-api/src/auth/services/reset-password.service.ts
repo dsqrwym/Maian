@@ -4,7 +4,6 @@ import { REDIS_KEYS } from '@/cache/redis/redis.constants';
 import { ENV } from '@/config/constants.config';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { HashService } from 'src/common/hash/hash.service';
 import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
 import type { Cache } from 'cache-manager';

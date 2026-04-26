@@ -1,5 +1,5 @@
-import { TagsUInt2 } from '../tags/number.tags';
-import { tags } from 'typia';
+import type { TagsUInt2 } from '../tags/number.tags';
+import type { tags } from 'typia';
 
 /**
  * 用于排序

@@ -1,9 +1,10 @@
-import { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
-import { CategorySelectField, CategoryType } from '../category.enums';
-import typia, { tags } from 'typia';
-import { TagsUuid } from '@/utils/typia/validators/auth.validator';
-import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
-import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import type { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
+import type { CategorySelectField, CategoryType } from '../category.enums';
+import type { tags } from 'typia';
+import typia from 'typia';
+import type { TagsUuid } from '@/utils/typia/validators/auth.validator';
+import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
+import type { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
 import { cleanString } from '@/utils/string.util';
 
 export interface ICategoryQueryDto extends IPaginationQueryDto {

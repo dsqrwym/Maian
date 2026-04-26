@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { useSwagger } from './config/swagger.config';
 import { useGlobalFilters } from './config/global-filters.config';
 import { useGlobalInterceptors } from './config/global-interceptors.config';

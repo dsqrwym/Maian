@@ -1,4 +1,4 @@
-import {
+import type {
   TagsStrongPassword,
   TagsUuid,
 } from '@/utils/typia/validators/auth.validator';

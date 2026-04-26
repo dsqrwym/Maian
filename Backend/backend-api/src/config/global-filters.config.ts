@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { PrismaExceptionFilter } from '@/common/filters/prisma-exception.filter';
 import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
 import { JwtExceptionFilter } from '@/common/filters/jwt-exception.filter';

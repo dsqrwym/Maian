@@ -1,12 +1,16 @@
-import { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
-import { ProductListSelectField, ProductSortField } from '../product.enums';
-import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
-import { TagsUuid } from '@/utils/typia/validators/auth.validator';
-import typia, { tags } from 'typia';
-import { OrderByEnum } from '@/common/enums/sort.enum';
-import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import type { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
+import type {
+  ProductListSelectField,
+  ProductSortField,
+} from '../product.enums';
+import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+import type { TagsUuid } from '@/utils/typia/validators/auth.validator';
+import type { tags } from 'typia';
+import typia from 'typia';
+import type { OrderByEnum } from '@/common/enums/sort.enum';
+import type { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
 import { cleanString } from '@/utils/string.util';
-import { ProductStatus } from '@/generated/drizzle/enums';
+import type { ProductStatus } from '@/generated/drizzle/enums';
 
 export interface IProductListQueryDto extends IPaginationQueryDto {
   search?: string; // 搜索关键字 (用于 name, title, product_code)

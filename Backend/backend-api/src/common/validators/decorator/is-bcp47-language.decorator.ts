@@ -1,4 +1,5 @@
-import { registerDecorator, ValidationOptions } from 'class-validator';
+import type { ValidationOptions } from 'class-validator';
+import { registerDecorator } from 'class-validator';
 import { Bcp47LanguageValidator } from '../is-bcp47-language.validator';
 
 export function IsBCP47Language(validationOptions?: ValidationOptions) {

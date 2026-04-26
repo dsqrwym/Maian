@@ -1,6 +1,7 @@
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { Injectable } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
+import { isObject } from '@/utils/is.utils';
 
 @Injectable()
 export class CustomThrottlerGuard extends ThrottlerGuard {
@@ -9,9 +10,12 @@ export class CustomThrottlerGuard extends ThrottlerGuard {
     if (authTokenPayload) {
       return Promise.resolve(`session:${authTokenPayload.sessionId}`);
     }
-    const email = (req.body as any)?.email;
-    if (email) {
-      return Promise.resolve(`email:${email}`);
+
+    if (isObject(req.body)) {
+      const email: unknown = req.body?.email;
+      if (email && typeof email === 'string') {
+        return Promise.resolve(`email:${email}`);
+      }
     }
 
     const ip = req.ip;

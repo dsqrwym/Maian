@@ -1,11 +1,11 @@
-import {
+import type {
   TagsEmail,
   TagsUsername,
   TagsWholesalerId,
 } from '@/utils/typia/validators/auth.validator';
 import { cleanString } from '@/utils/string.util';
 import typia from 'typia';
-import { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
+import type { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
 
 /**
  * DTO for checking email availability

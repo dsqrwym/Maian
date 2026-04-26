@@ -469,8 +469,7 @@ export class VerificationService {
           .from(users)
           .where(eq(users.user_id, wholesalerUserId));
 
-        const wholesalerProfile =
-          profile?.profile as unknown as WholesalerProfileType;
+        const wholesalerProfile = profile?.profile as WholesalerProfileType;
 
         const companyName = wholesalerProfile.company_name || 'unknow';
 

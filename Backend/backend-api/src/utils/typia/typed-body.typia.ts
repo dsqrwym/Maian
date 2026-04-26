@@ -1,11 +1,9 @@
-import {
-  BadRequestException,
-  createParamDecorator,
-  ExecutionContext,
-} from '@nestjs/common';
-import { FastifyRequest } from 'fastify';
-import typia, { TypeGuardError } from 'typia';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { ExecutionContext } from '@nestjs/common';
+import { BadRequestException, createParamDecorator } from '@nestjs/common';
+import type { FastifyRequest } from 'fastify';
+import type { TypeGuardError } from 'typia';
+import typia from 'typia';
+import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
 
 /**
  * 自定义TypeBody装饰器，不使用@TypedBody 因为它不返回validator转换后的数据
@@ -32,7 +30,9 @@ export function TypedBody<T>(
       );
 
     try {
-      return validator.assert(request.body as T);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      return validator.assert(request.body);
     } catch (exp) {
       if (typia.is<TypeGuardError>(exp)) {
         throw new BadRequestException({

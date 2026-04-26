@@ -1,12 +1,14 @@
-import { SaleVariant, ProductStatus } from 'src/generated/drizzle/enums';
-import { TagsSort } from '@/utils/typia/validators/sort.validator';
-import typia, { tags } from 'typia';
-import {
+import type { SaleVariant } from 'src/generated/drizzle/enums';
+import { ProductStatus } from 'src/generated/drizzle/enums';
+import type { TagsSort } from '@/utils/typia/validators/sort.validator';
+import type { tags } from 'typia';
+import typia from 'typia';
+import type {
   TagsPrice,
   TagsPriceIva,
   TagsProductCode,
 } from '@/utils/typia/validators/product.validator';
-import { TagsUInt4 } from '@/utils/typia/tags/number.tags';
+import type { TagsUInt4 } from '@/utils/typia/tags/number.tags';
 import { isObject } from '@/utils/is.utils';
 import { BadRequestException } from '@nestjs/common';
 

@@ -1,6 +1,7 @@
 import { AddressType } from 'src/generated/drizzle/enums';
-import typia, { tags } from 'typia';
-import {
+import type { tags } from 'typia';
+import typia from 'typia';
+import type {
   TagsLatitude,
   TagsLongitude,
 } from '@/utils/typia/validators/direction.validator';

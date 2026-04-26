@@ -1,6 +1,7 @@
-import { TagsBCP47Language } from '@/utils/typia/validators/language.validator';
-import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
-import typia, { tags } from 'typia';
+import type { TagsBCP47Language } from '@/utils/typia/validators/language.validator';
+import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
+import type { tags } from 'typia';
+import typia from 'typia';
 import { isObject } from '@/utils/is.utils';
 import { cleanString } from 'src/utils/string.util';
 

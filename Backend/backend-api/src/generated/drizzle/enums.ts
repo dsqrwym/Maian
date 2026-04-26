@@ -1,4 +1,4 @@
-import {
+import type {
   AddressType as DrizzleAddressType,
   DeliveryStatus,
   ProductStatus as DrizzleProductStatus,

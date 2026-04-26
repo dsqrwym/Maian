@@ -41,7 +41,8 @@ export class ResponseInterceptor<T> implements NestInterceptor<
 
     // 如果设置了跳过标志，则直接返回原始 Observable，跳过 map/tap 封装
     if (skipInterceptor) {
-      return next.handle() as any as Observable<Response<T>>; // 用于特殊情况不需要json化的跳过
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return next.handle(); // 用于特殊情况不需要json化的跳过
     }
 
     const defaultMessage = this.reflector.get<string>(
@@ -92,6 +93,6 @@ function isPaginatedDate(data: unknown): data is PaginatedData {
     typeof data === 'object' &&
     'items' in data &&
     'pagination' in data &&
-    Array.isArray((data as any).items)
+    Array.isArray(data.items)
   );
 }

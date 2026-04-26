@@ -457,8 +457,8 @@ export class ProductsService {
       .where(and(...whereConditions));
 
     const [items, [countResult]] = await Promise.all([
-      await productQuery,
-      await countQuery,
+      productQuery,
+      countQuery,
     ]);
     const total: number = countResult?.count ?? 0;
     return {

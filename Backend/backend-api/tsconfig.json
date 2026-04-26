@@ -9,6 +9,8 @@
     "declaration": true, // 生成相应的 .d.ts 文件
     // Remove comments from output / 删除输出中的注释
     "removeComments": true, // 删除编译后的 JavaScript 文件中的注释
+    //"resolvePackageJsonExports": true, // 启用 package.json 的 exports 字段解析
+    "esModuleInterop": true, // 启用 ES 模块互操作性
     // Emit design-type metadata for decorated declarations in source / 为装饰器提供元数据支持
     "emitDecoratorMetadata": true, // 为装饰器提供元数据支持，常用于类验证器(如 class-validator)和依赖注入
     // Enable experimental support for TC39 stage 2 draft decorators / 启用实验性的装饰器支持
@@ -44,7 +46,7 @@
     "noFallthroughCasesInSwitch": false, // 不报告 switch 语句中的 fallthrough 错误
     // ========== 针对 TypeScript 6.0 的更改 ==========
     // 显式声明类型定义文件（TypeScript 6.0 不再自动包含 @types/node）
-    "types": ["node"], // 包含 Node.js 核心类型，解决 process、Buffer 等全局变量找不到的问题
+    "types": ["node", "reflect-metadata"], // 包含 Node.js 核心类型，解决 process、Buffer 等全局变量找不到的问题
     // 移除 'importsNotUsedAsValues'（该选项在 TypeScript 6.0 中已被删除）
     // 原配置: "importsNotUsedAsValues": "remove",   // 已删除
     // Specifies what to do with imports that are only used for types / 指定如何处理仅用于类型的导入

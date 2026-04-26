@@ -1,4 +1,4 @@
-import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
 
 export interface IProductFilesQueryDto {
   product_id: TagsIntegerString;

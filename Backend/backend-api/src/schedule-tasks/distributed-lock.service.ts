@@ -42,7 +42,10 @@ export class DistributedLockService {
     const lockValue = await this.acquire(lockKey, ttlMs);
 
     if (!lockValue) {
-      this.logger.debug({ lockKey }, 'Skip scheduled task because lock is held');
+      this.logger.debug(
+        { lockKey },
+        'Skip scheduled task because lock is held',
+      );
       return null;
     }
 

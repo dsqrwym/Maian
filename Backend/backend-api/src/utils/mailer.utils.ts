@@ -1,5 +1,5 @@
-import { PinoLogger } from 'nestjs-pino';
-import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
+import type { PinoLogger } from 'nestjs-pino';
+import type { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { maskEmail } from './email.utils';
 
 /**

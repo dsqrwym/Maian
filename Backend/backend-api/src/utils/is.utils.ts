@@ -12,7 +12,7 @@ export const isObject = (val: unknown): val is Record<string, unknown> => {
  * 主要用于判断是否来自 typia stringify 过的
  * @param data
  */
-export const isJson = (data: unknown) => {
+export const isJson = (data: unknown): data is string => {
   if (typeof data !== 'string') return false;
 
   const first = data[0];
