@@ -18,13 +18,13 @@ export class AppController {
    *
    * Generates a random string of the specified length.
    *
-   * @param length Length of the random string (minimum 1, default 16)
+   * @param query.length Length of the random string (minimum 1, default 16)
    * @returns Randomly generated string
    */
   @Throttle({ default: { ttl: seconds(10), limit: 1 } })
   @TypedRoute.Get('random-string')
-  getRandomString(@TypedQuery() length?: number): string {
-    const len = length && length > 0 ? length : 16;
+  getRandomString(@TypedQuery() query: { length?: number }): string {
+    const len = query.length && query.length > 0 ? query.length : 16;
     return this.appService.generateRandomString(len);
   }
 
