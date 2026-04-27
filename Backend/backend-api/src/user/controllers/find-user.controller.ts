@@ -16,7 +16,7 @@ import {
   IFindUserQueryDto,
   validateFindUserQuery,
 } from '../dto/find-user-query.dto.js';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { PaginatedResponseDto } from '#/utils/dto/pagination.dto.js';
 import { TypedQuery, TypedRoute } from '@nestia/core';

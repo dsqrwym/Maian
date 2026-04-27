@@ -95,9 +95,11 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
     MyI18nModule, // 语言翻译
     MyThrottlerModule, // 限流模块
 
+    CacheRedisModule, // 全局的模块
+    DrizzleModule, // 全局的模块
     FilesModule, // 全局的模块
     CommonModule, // 全局的模块
-    DrizzleModule, // 全局的模块
+
     MailModule, // 邮件模块
     AuthModule,
     LocationsModule,

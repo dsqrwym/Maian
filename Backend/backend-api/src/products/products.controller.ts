@@ -9,7 +9,7 @@ import {
   validateIUpdateProduct,
 } from './dto/update-product.dto.js';
 import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import {
   IProductListQueryDto,
   validateProductListQuery,

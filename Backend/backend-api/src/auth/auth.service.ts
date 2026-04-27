@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ILoginDto } from './dto/login.dto.js';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UserPayload } from './auth.types.js';
 import { IDeleteSessionDto } from './dto/delete.session.dto.js';
 import { IResetPasswordDto } from './dto/reset-password.dto.js';

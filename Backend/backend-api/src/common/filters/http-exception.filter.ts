@@ -5,7 +5,7 @@ import {
   HttpException,
   Injectable,
 } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { PinoLogger } from 'nestjs-pino';
 import { TypeGuardError } from 'typia';
 import { ErrorResponse } from '../types-interfaces/response.interface.js';

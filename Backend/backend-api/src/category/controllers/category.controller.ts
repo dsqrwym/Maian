@@ -10,7 +10,7 @@ import {
 } from '../dto/update-category.dto.js';
 import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { RolesGuard } from '#/common/guards/roles.guard.js';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
 import {
   ICategoryQueryDto,

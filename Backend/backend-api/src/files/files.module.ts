@@ -6,10 +6,13 @@ import { LocalStorageDriver } from './storage/local-storage.driver.js';
 import { CloudflareStorageDriver } from './storage/cloudflare-storage.driver.js';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '#/config/constants.config.js';
+import { DrizzleModule } from '#/drizzle/drizzle.module.js';
+import { CommonModule } from '#/common/common.module.js';
 
 @Global()
 @Module({
   controllers: [FilesController],
+  imports: [DrizzleModule, CommonModule],
   providers: [
     FilesService,
     LocalStorageDriver,

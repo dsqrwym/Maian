@@ -4,7 +4,7 @@ import {
   ExceptionFilter,
   Injectable,
 } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { PinoLogger } from 'nestjs-pino';
 import {
   JsonWebTokenError,

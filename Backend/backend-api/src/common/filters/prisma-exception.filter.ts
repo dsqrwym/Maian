@@ -5,7 +5,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { PinoLogger } from 'nestjs-pino';
 import { extractPrismaMeta } from '#/utils/meta.utils.js';
 import { ErrorResponse } from '../types-interfaces/response.interface.js';

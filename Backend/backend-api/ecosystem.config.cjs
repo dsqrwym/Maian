@@ -4,7 +4,7 @@ module.exports = {
       name: 'maian-backend',
       script: './dist/src/main.js',
       exec_mode: 'cluster', // 多进程模式
-      instances: '3', // 根据CPU核心数最大化进程
+      instances: '2', // 根据CPU核心数最大化进程
       watch: false,
       error_file: './logs/pm2-error.log',
       out_file: './logs/pm2-out.log',

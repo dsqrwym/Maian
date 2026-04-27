@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CaslAbilityFactory } from '#/casl/casl-ability.factory/casl-ability.factory.js';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 
 /**
  * JWT Guard

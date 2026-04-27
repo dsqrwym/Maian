@@ -1,6 +1,6 @@
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { Injectable } from '@nestjs/common';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { isObject } from '#/utils/is.utils.js';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import type { Readable } from 'stream';
 
-export interface StorageDriver {
+export abstract class StorageDriver {
   readonly STREAM_THRESHOLD: number;
   /**
    * 上传文件
@@ -8,7 +8,7 @@ export interface StorageDriver {
    * @param filename 原文件名
    * @returns
    */
-  upload(
+  abstract upload(
     buffer: Buffer | Readable, // 限制在200MB 内存占用就不会太严重了
     filename: string,
   ): Promise<{
@@ -23,14 +23,14 @@ export interface StorageDriver {
    * 删除文件
    * @param pathOrKey 文件存储路径或唯一键
    */
-  delete(pathOrKey: string): Promise<void>;
+  abstract delete(pathOrKey: string): Promise<void>;
 
   /**
    * 读取文件
    * @param pathOrKey 文件存储路径或唯一键
    * @returns 返回 Node.js 可读流
    */
-  createReadStream(pathOrKey: string): Promise<Readable> | Readable;
+  abstract createReadStream(pathOrKey: string): Promise<Readable> | Readable;
 
   /**
    * 可选：生成短期签名 URL（适用于 S3、OSS 等场景）

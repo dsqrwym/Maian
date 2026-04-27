@@ -7,7 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FilesService } from './files.service.js';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -21,8 +21,8 @@ import {
   ALLOWED_MIMES,
   CHUNK_SIZE,
 } from '#/config/fastify-multipart.config.js';
-import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto.js';
-import { IProductFilesQueryDto } from './dto/product-files-query.dto.js';
+import type { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto.js';
+import type { IProductFilesQueryDto } from './dto/product-files-query.dto.js';
 import { SkipResponseInterceptor } from '#/common/guards/decorator/skip-response-interceptor.decorator.js';
 import * as mime from 'mime-types';
 import * as path from 'path';

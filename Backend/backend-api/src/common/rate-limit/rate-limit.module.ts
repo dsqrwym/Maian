@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from '../guards/custom-throttler.guard.js';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { IoRedisService } from '#/cache/redis/ioredis.cache.service.js';
+import { CacheRedisModule } from '#/cache/cache.redis.module.js';
 
 @Global()
 @Module({
@@ -18,6 +19,7 @@ import { IoRedisService } from '#/cache/redis/ioredis.cache.service.js';
 
   imports: [
     ThrottlerModule.forRootAsync({
+      imports: [CacheRedisModule],
       inject: [ConfigService, IoRedisService],
       useFactory: (
         configService: ConfigService,
