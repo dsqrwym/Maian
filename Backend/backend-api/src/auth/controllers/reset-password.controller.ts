@@ -1,19 +1,19 @@
 import { Controller, HttpCode } from '@nestjs/common';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { IResetPasswordDto } from '../dto/reset-password.dto';
+import { IResetPasswordDto } from '../dto/reset-password.dto.js';
 import { Logger } from 'nestjs-pino';
-import { maskEmail } from '@/utils/email.utils';
-import { AuthService } from '../auth.service';
+import { maskEmail } from '#/utils/email.utils.js';
+import { AuthService } from '../auth.service.js';
 import {
   ISendVerificationCodeDto,
   IVerifyCodeDto,
   validateISendVerificationCode,
   validateVerifyCode,
   VerifyCodeResponseDto,
-} from '../dto/verification.dto';
+} from '../dto/verification.dto.js';
 import { TypedRoute } from '@nestia/core';
-import { TypedBody } from 'src/utils/typia/typed-body.typia';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 import typia from 'typia';
 
 /**

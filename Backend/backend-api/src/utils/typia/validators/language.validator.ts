@@ -1,5 +1,5 @@
 import type { tags } from 'typia';
-import type { TagsBCP47, TagsIANA, TagsNotBlank } from '../tags/string.tag';
+import type { TagsBCP47, TagsIANA, TagsNotBlank } from '../tags/string.tag.js';
 
 /**
  * Preferred language in BCP-47 format (e.g., en-US, zh-CN)

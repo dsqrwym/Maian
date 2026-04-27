@@ -1,16 +1,16 @@
 import { Controller, Req, UseGuards } from '@nestjs/common';
-import { CreateEmployeeService } from '../services/create-employee.service';
+import { CreateEmployeeService } from '../services/create-employee.service.js';
 import {
   ICreateEmployeeDto,
   validateICreateEmployee,
-} from '../dto/create-employee.dto';
+} from '../dto/create-employee.dto.js';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { FastifyRequest } from 'fastify';
-import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from 'src/generated/drizzle/enums';
+import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 import { minutes, Throttle } from '@nestjs/throttler';
-import { TypedBody } from '@/utils/typia/typed-body.typia';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 import { TypedRoute } from '@nestia/core';
 
 /**

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { StorageDriver } from './storage.driver';
+import { StorageDriver } from './storage.driver.js';
 import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -9,12 +9,12 @@ import {
   HeadObjectCommand,
 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
-import { LocalStorageDriver } from './local-storage.driver';
+import { LocalStorageDriver } from './local-storage.driver.js';
 import * as path from 'path';
 import * as fs from 'node:fs';
-import { HashService } from '@/common/hash/hash.service';
+import { HashService } from '#/common/hash/hash.service.js';
 import { fileTypeFromBuffer } from 'file-type';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()

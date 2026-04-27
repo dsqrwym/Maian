@@ -3,12 +3,12 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { Cache } from 'cache-manager';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserPayload } from '../auth.types';
+import { UserPayload } from '../auth.types.js';
 import { Logger } from 'nestjs-pino';
-import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
-import { ENV } from '@/config/constants.config';
-import { AUTH_ERROR } from '../auth.constants';
-import { REDIS_KEYS } from '@/cache/redis/redis.constants';
+import { REDIS_CACHE } from '#/cache/redis/cache.redis.token.js';
+import { ENV } from '#/config/constants.config.js';
+import { AUTH_ERROR } from '../auth.constants.js';
+import { REDIS_KEYS } from '#/cache/redis/redis.constants.js';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'my-jwt') {

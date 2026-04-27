@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ICheckUserUsernameQueryDto } from '../dto/check-user-query.dto';
-import { UserRole, UserStatus } from 'src/generated/drizzle/enums';
-import { makeUsername } from '@/utils/user.utils';
-import { DrizzleService } from '@/drizzle/drizzle.service';
+import { ICheckUserUsernameQueryDto } from '../dto/check-user-query.dto.js';
+import { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
+import { makeUsername } from '#/utils/user.utils.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { and, eq, exists, ne, sql } from 'drizzle-orm';
-import { users } from '@/generated/drizzle/schema';
+import { users } from '#/generated/drizzle/schema.js';
 
 @Injectable()
 export class CheckUserService {

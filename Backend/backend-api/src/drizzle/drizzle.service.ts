@@ -7,9 +7,9 @@ import { ConfigService } from '@nestjs/config';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { PinoLogger } from 'nestjs-pino';
-import { ENV } from '@/config/constants.config';
-import * as schema from '../generated/drizzle/schema';
-import * as relations from '../generated/drizzle/relations';
+import { ENV } from '#/config/constants.config.js';
+import * as schema from '../generated/drizzle/schema.js';
+import * as relations from '../generated/drizzle/relations.js';
 
 const FullSchema = { ...schema, ...relations };
 export type DrizzleDb = NodePgDatabase<typeof FullSchema>;

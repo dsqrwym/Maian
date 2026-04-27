@@ -20,6 +20,6 @@ BigInt.prototype.toJSON = function (this: bigint): string {
 /**
  * 理论上以上操作应该在程序运行之前，所以程序入口为下
  */
-import { bootstrap } from './bootstrap';
+import { bootstrap } from './bootstrap.js';
 
 void bootstrap(); // 启动应用程序，创建 NestJS 应用实例并配置相关功能

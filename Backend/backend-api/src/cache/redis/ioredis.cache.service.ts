@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 
 /**
  * 我为什么要写 IoRedisService：

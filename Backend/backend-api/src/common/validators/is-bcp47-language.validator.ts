@@ -5,8 +5,8 @@ import {
 } from 'class-validator';
 import { Inject, Injectable } from '@nestjs/common';
 import type { Cache } from 'cache-manager';
-import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
-import { DAY, HOUR } from '@/utils/date.utils';
+import { REDIS_CACHE } from '#/cache/redis/cache.redis.token.js';
+import { DAY, HOUR } from '#/utils/date.utils.js';
 
 @ValidatorConstraint({ name: 'IsBCP47Language', async: true })
 @Injectable()

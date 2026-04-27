@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService } from './app.service.js';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { seconds, SkipThrottle, Throttle } from '@nestjs/throttler';
 import { TypedQuery, TypedRoute } from '@nestia/core';

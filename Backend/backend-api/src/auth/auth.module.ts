@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
-import { MailModule } from 'src/mail/mail.module';
-import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategy/jwt.strategy';
-import { LoginValidationStrategy } from './strategy/login-validation-strategy.service';
+import { MailModule } from '#/mail/mail.module.js';
+import { AuthService } from './auth.service.js';
+import { JwtStrategy } from './strategy/jwt.strategy.js';
+import { LoginValidationStrategy } from './strategy/login-validation-strategy.service.js';
 import { PassportModule } from '@nestjs/passport';
-import { ResetPasswordService } from './services/reset-password.service';
-import { SessionService } from './services/session.service';
-import { TokenService } from './services/token.service';
-import { LoginService } from './services/login.service';
-import { VerificationService } from './services/verification.service';
-import { RegistrationService } from './services/registration.service';
-import { RegistrationController } from './controllers/registration.controller';
-import { LoginController } from './controllers/login.controller';
-import { RefreshTokenController } from './controllers/refresh-token.controller';
-import { SessionController } from './controllers/session.controller';
+import { ResetPasswordService } from './services/reset-password.service.js';
+import { SessionService } from './services/session.service.js';
+import { TokenService } from './services/token.service.js';
+import { LoginService } from './services/login.service.js';
+import { VerificationService } from './services/verification.service.js';
+import { RegistrationService } from './services/registration.service.js';
+import { RegistrationController } from './controllers/registration.controller.js';
+import { LoginController } from './controllers/login.controller.js';
+import { RefreshTokenController } from './controllers/refresh-token.controller.js';
+import { SessionController } from './controllers/session.controller.js';
 import { RouterModule } from '@nestjs/core';
-import { ResetPasswordController } from './controllers/reset-password.controller';
-import { EmailVerificationController } from './controllers/email-verification.controller';
+import { ResetPasswordController } from './controllers/reset-password.controller.js';
+import { EmailVerificationController } from './controllers/email-verification.controller.js';
 
 @Module({
   imports: [

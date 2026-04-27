@@ -1,4 +1,4 @@
-import type { UserRole, UserStatus } from 'src/generated/drizzle/enums';
+import type { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
 
 /**
  * UserPayload 是嵌入 JWT token 中的载荷（payload）结构。

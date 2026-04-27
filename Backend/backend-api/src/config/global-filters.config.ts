@@ -1,7 +1,7 @@
 import type { INestApplication } from '@nestjs/common';
-import { PrismaExceptionFilter } from '@/common/filters/prisma-exception.filter';
-import { HttpExceptionFilter } from '@/common/filters/http-exception.filter';
-import { JwtExceptionFilter } from '@/common/filters/jwt-exception.filter';
+import { PrismaExceptionFilter } from '#/common/filters/prisma-exception.filter.js';
+import { HttpExceptionFilter } from '#/common/filters/http-exception.filter.js';
+import { JwtExceptionFilter } from '#/common/filters/jwt-exception.filter.js';
 
 export function useGlobalFilters(app: INestApplication) {
   app.useGlobalFilters(

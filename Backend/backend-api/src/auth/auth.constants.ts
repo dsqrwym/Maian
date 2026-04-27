@@ -1,6 +1,6 @@
 // Standardized auth error codes for frontend differentiation
 
-import { UserStatus } from 'src/generated/drizzle/enums';
+import { UserStatus } from '#/generated/drizzle/enums.js';
 
 export const VERIFY_EMAIL_PATH: string = 'email-verification';
 export const AUTH_VERIFY_EMAIL_PATH: string = `https://api.dsqrwym.es/maian/auth/${VERIFY_EMAIL_PATH}`;

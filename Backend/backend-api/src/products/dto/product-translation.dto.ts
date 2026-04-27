@@ -1,9 +1,9 @@
-import type { TagsBCP47Language } from '@/utils/typia/validators/language.validator';
-import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
+import type { TagsBCP47Language } from '#/utils/typia/validators/language.validator.js';
+import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
 import type { tags } from 'typia';
 import typia from 'typia';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from 'src/utils/string.util';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
 
 export interface IProductTranslationDto {
   lang_code: TagsBCP47Language; // 语言代码，例如 'es', 'en'

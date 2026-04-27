@@ -3,21 +3,21 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { StorageDriver } from './storage.driver';
+import { StorageDriver } from './storage.driver.js';
 import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 import * as fs from 'node:fs';
-import { HashService } from '@/common/hash/hash.service';
+import { HashService } from '#/common/hash/hash.service.js';
 import * as crypto from 'crypto';
 import { fileTypeFromBuffer } from 'file-type';
-import { ALLOWED_MIMES } from '@/config/fastify-multipart.config';
+import { ALLOWED_MIMES } from '#/config/fastify-multipart.config.js';
 import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class LocalStorageDriver implements StorageDriver {
-  private readonly projectRoot = path.resolve(__dirname, '../../../');
+  private readonly projectRoot = path.resolve(import.meta.dirname, '../../../');
   private readonly baseDir: string;
   private readonly tempDir: string;
   readonly STREAM_THRESHOLD = 10 * 1024 * 1024; // 10 MB

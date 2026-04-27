@@ -1,32 +1,32 @@
 import { Controller, UseGuards, Req, Get } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductsService } from './products.service.js';
 import {
   ICreateProductDto,
   validateICreateProduct,
-} from './dto/create-product.dto';
+} from './dto/create-product.dto.js';
 import {
   IUpdateProductDto,
   validateIUpdateProduct,
-} from './dto/update-product.dto';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+} from './dto/update-product.dto.js';
+import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { FastifyRequest } from 'fastify';
 import {
   IProductListQueryDto,
   validateProductListQuery,
-} from './dto/product-list-query.dto';
+} from './dto/product-list-query.dto.js';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
-import { TypedBody } from '@/utils/typia/typed-body.typia';
-import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
-import { ADMIN_ROLES } from '@/admin/admin.constants';
-import { PaginatedDataWithT } from 'src/common/types-interfaces/response.interface';
-import { IProductResponse } from './dto/product-response';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
+import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
+import { ADMIN_ROLES } from '#/admin/admin.constants.js';
+import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
+import { IProductResponse } from './dto/product-response.js';
 import {
   ProductStatus,
   SaleVariant,
   UserRole,
-} from '@/generated/drizzle/enums';
-import { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+} from '#/generated/drizzle/enums.js';
+import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 
 @ApiTags('Product Management')
 @ApiBearerAuth()

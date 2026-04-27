@@ -5,21 +5,21 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ICreateCategoryDto } from '../dto/create-category.dto';
-import { IUpdateCategoryDto } from '../dto/update-category.dto';
+import { ICreateCategoryDto } from '../dto/create-category.dto.js';
+import { IUpdateCategoryDto } from '../dto/update-category.dto.js';
 import { Logger } from 'nestjs-pino';
-import { AppAbility } from '@/casl/casl-types';
-import { Action } from '@/casl/actions';
+import { AppAbility } from '#/casl/casl-types.js';
+import { Action } from '#/casl/actions.js';
 import { subject } from '@casl/ability';
-import { ICategoryQueryDto } from '../dto/category-query.dto';
-import { PaginatedDataWithT } from '@/common/types-interfaces/response.interface';
-import { UserPayload } from '@/auth/auth.types';
-import { CategorySelectField, CategoryType } from '../category.enums';
+import { ICategoryQueryDto } from '../dto/category-query.dto.js';
+import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
+import { UserPayload } from '#/auth/auth.types.js';
+import { CategorySelectField, CategoryType } from '../category.enums.js';
 import {
   ICategoryResponse,
   ICategoryResponseRelation,
-} from '../dto/category-response.dto';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
+} from '../dto/category-response.dto.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import {
   and,
   count,
@@ -34,9 +34,12 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import { categories, category_translations } from '@/generated/drizzle/schema';
-import { toUnaccent } from '@/utils/string.util';
-import { UserRole } from '@/generated/drizzle/enums';
+import {
+  categories,
+  category_translations,
+} from '#/generated/drizzle/schema.js';
+import { toUnaccent } from '#/utils/string.util.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 
 @Injectable()
 export class CategoryService {
@@ -99,7 +102,7 @@ export class CategoryService {
             user_id: true,
             level: true,
           },
-          where: (categories, { eq }) => eq(categories.id, parentId),
+          where: eq(categories.id, parentId),
         });
 
         if (!parent) {
@@ -356,7 +359,7 @@ export class CategoryService {
 
   async getCategoryForUpdate(id: string, ability: AppAbility) {
     const category = await this.drizzle.db.query.categories.findFirst({
-      where: (categories, { eq }) => eq(categories.id, BigInt(id)),
+      where: eq(categories.id, BigInt(id)),
       columns: {
         user_id: true,
         name: true,

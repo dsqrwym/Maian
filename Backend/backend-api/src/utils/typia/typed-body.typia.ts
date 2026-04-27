@@ -3,7 +3,7 @@ import { BadRequestException, createParamDecorator } from '@nestjs/common';
 import type { FastifyRequest } from 'fastify';
 import type { TypeGuardError } from 'typia';
 import typia from 'typia';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 
 /**
  * 自定义TypeBody装饰器，不使用@TypedBody 因为它不返回validator转换后的数据

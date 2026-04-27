@@ -1,19 +1,19 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { CSRFPayload, UserPayload } from '../auth.types';
-import { REDIS_KEYS } from '@/cache/redis/redis.constants';
-import { AUTH_ERROR } from '../auth.constants';
-import { ENV } from '@/config/constants.config';
+import { CSRFPayload, UserPayload } from '../auth.types.js';
+import { REDIS_KEYS } from '#/cache/redis/redis.constants.js';
+import { AUTH_ERROR } from '../auth.constants.js';
+import { ENV } from '#/config/constants.config.js';
 import { Logger } from 'nestjs-pino';
-import { TokenResponseDto } from '../dto/token-response.dto';
-import { IoRedisService } from '@/cache/redis/ioredis.cache.service';
-import { HashService } from '@/common/hash/hash.service';
+import { TokenResponseDto } from '../dto/token-response.dto.js';
+import { IoRedisService } from '#/cache/redis/ioredis.cache.service.js';
+import { HashService } from '#/common/hash/hash.service.js';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
+import { REDIS_CACHE } from '#/cache/redis/cache.redis.token.js';
 import type { Cache } from 'cache-manager';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { and, eq, sql } from 'drizzle-orm';
-import { user_sessions } from 'src/generated/drizzle/schema';
+import { user_sessions } from '#/generated/drizzle/schema.js';
 
 @Injectable()
 export class TokenService {

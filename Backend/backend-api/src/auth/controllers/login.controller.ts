@@ -1,13 +1,13 @@
 import { Controller, HttpCode, Req, Res } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { ILoginDto, validateLogin } from '../dto/login.dto';
-import { TokenResponseDto } from '../dto/token-response.dto';
+import { ILoginDto, validateLogin } from '../dto/login.dto.js';
+import { TokenResponseDto } from '../dto/token-response.dto.js';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { AuthService } from '../auth.service';
-import { UserRole } from 'src/generated/drizzle/enums';
+import { AuthService } from '../auth.service.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 import { TypedRoute } from '@nestia/core';
-import { TypedBody } from 'src/utils/typia/typed-body.typia';
-import { LoginResponseDto } from '../dto/login-response.dto';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
+import { LoginResponseDto } from '../dto/login-response.dto.js';
 
 /**
  * Controller for user authentication via login

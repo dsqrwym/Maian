@@ -1,7 +1,7 @@
 import { Controller, Res } from '@nestjs/common';
-import { VerificationService } from '../services/verification.service';
-import { IVerifyEmailQueryDto } from '../dto/verification.dto';
-import { VERIFY_EMAIL_PATH } from '../auth.constants';
+import { VerificationService } from '../services/verification.service.js';
+import { IVerifyEmailQueryDto } from '../dto/verification.dto.js';
+import { VERIFY_EMAIL_PATH } from '../auth.constants.js';
 import { FastifyReply } from 'fastify';
 import { TypedQuery, TypedRoute } from '@nestia/core';
 

@@ -4,18 +4,18 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserPayload } from '../auth.types';
-import { AUTH_ERROR } from '../auth.constants';
-import { REDIS_KEYS } from '@/cache/redis/redis.constants';
-import { ENV } from '@/config/constants.config';
+import { UserPayload } from '../auth.types.js';
+import { AUTH_ERROR } from '../auth.constants.js';
+import { REDIS_KEYS } from '#/cache/redis/redis.constants.js';
+import { ENV } from '#/config/constants.config.js';
 import { Logger } from 'nestjs-pino';
-import { IDeleteSessionDto } from '../dto/delete.session.dto';
-import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
+import { IDeleteSessionDto } from '../dto/delete.session.dto.js';
+import { REDIS_CACHE } from '#/cache/redis/cache.redis.token.js';
 import type { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
-import { HashService } from 'src/common/hash/hash.service';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { user_sessions } from '@/generated/drizzle/schema';
+import { HashService } from '#/common/hash/hash.service.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
+import { user_sessions } from '#/generated/drizzle/schema.js';
 import { and, eq, sql } from 'drizzle-orm';
 
 @Injectable()

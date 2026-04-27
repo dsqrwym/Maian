@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PinoLogger } from 'nestjs-pino';
-import { IoRedisService } from '@/cache/redis/ioredis.cache.service';
+import { IoRedisService } from '#/cache/redis/ioredis.cache.service.js';
 
 @Injectable()
 export class DistributedLockService {

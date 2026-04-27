@@ -11,18 +11,18 @@ import {
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { FindUserService } from '../services/find-user.service';
+import { FindUserService } from '../services/find-user.service.js';
 import {
   IFindUserQueryDto,
   validateFindUserQuery,
-} from '../dto/find-user-query.dto';
+} from '../dto/find-user-query.dto.js';
 import { FastifyRequest } from 'fastify';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard';
-import { PaginatedResponseDto } from '@/utils/dto/pagination.dto';
+import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
+import { PaginatedResponseDto } from '#/utils/dto/pagination.dto.js';
 import { TypedQuery, TypedRoute } from '@nestia/core';
-import { PaginatedDataWithT } from 'src/common/types-interfaces/response.interface';
-import { FindUserResponse } from '../dto/user-response';
-import { UserRole, UserStatus } from '@/generated/drizzle/enums';
+import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
+import { FindUserResponse } from '../dto/user-response.js';
+import { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
 
 /**
  * Controller for searching and finding users

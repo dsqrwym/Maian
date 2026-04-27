@@ -1,20 +1,20 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { ICreateEmployeeDto } from '../dto/create-employee.dto';
-import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '@/auth/auth.constants';
-import { HashService } from '@/common/hash/hash.service';
-import { addDays } from '@/utils/date.utils';
-import { MailService } from '@/mail/mail.service';
-import { WholesalerProfileType } from '../types/wholesaler-profile.type';
-import { RoleI18nService } from 'src/common/i18n/role.i18n';
-import { UserRole } from '@/generated/drizzle/enums';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { ICreateEmployeeDto } from '../dto/create-employee.dto.js';
+import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '#/auth/auth.constants.js';
+import { HashService } from '#/common/hash/hash.service.js';
+import { addDays } from '#/utils/date.utils.js';
+import { MailService } from '#/mail/mail.service.js';
+import { WholesalerProfileType } from '../types/wholesaler-profile.type.js';
+import { RoleI18nService } from '#/common/i18n/role.i18n.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { eq } from 'drizzle-orm';
 import {
   configurations,
   users,
   verification_tokens,
-} from 'src/generated/drizzle/schema';
+} from '#/generated/drizzle/schema.js';
 
 @Injectable()
 export class CreateEmployeeService {

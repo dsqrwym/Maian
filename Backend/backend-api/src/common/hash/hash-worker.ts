@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import type { HashWorkerData } from './hash-worker-pool.provider';
+import type { HashWorkerData } from './hash-worker-pool.provider.js';
 
 // 哈希函数
 async function hashWithBcrypt(string: string, salt: number): Promise<string> {

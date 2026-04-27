@@ -11,7 +11,7 @@ import {
   NotBeforeError,
   TokenExpiredError,
 } from '@nestjs/jwt';
-import { ErrorResponse } from '../types-interfaces/response.interface';
+import { ErrorResponse } from '../types-interfaces/response.interface.js';
 
 /**
  * Global JWT exception filter

@@ -3,26 +3,26 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   ISendNormalRegisterMailDto,
   validateSendNormalRegisterMail,
-} from '../dto/register.dto';
-import { maskEmail } from '@/utils/email.utils';
-import { AuthService } from '../auth.service';
+} from '../dto/register.dto.js';
+import { maskEmail } from '#/utils/email.utils.js';
+import { AuthService } from '../auth.service.js';
 import { Logger } from 'nestjs-pino';
 import {
   IRegisterRetailerDto,
   validateRegisterRetailer,
-} from '../dto/register-retailer.dto';
+} from '../dto/register-retailer.dto.js';
 import { minutes, seconds, Throttle } from '@nestjs/throttler';
 import {
   IVerifyCodeDto,
   validateVerifyCode,
   VerifyCodeResponseDto,
-} from '../dto/verification.dto';
+} from '../dto/verification.dto.js';
 import {
   IRegisterWholesalerDto,
   validateRegisterWholesaler,
-} from '../dto/register-wholesaler.dto';
+} from '../dto/register-wholesaler.dto.js';
 import { TypedRoute } from '@nestia/core';
-import { TypedBody } from 'src/utils/typia/typed-body.typia';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 
 /**
  * Controller for user registration (retailer and wholesaler)

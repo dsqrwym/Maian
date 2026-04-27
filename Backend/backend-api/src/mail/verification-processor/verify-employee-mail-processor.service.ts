@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PinoLogger } from 'nestjs-pino';
 import { I18nService } from 'nestjs-i18n';
-import { I18nTranslations } from '@/i18n/generated/i18n.generated';
+import { I18nTranslations } from '#/i18n/generated/i18n.generated.js';
 import {
   ActiveEmployeeWithPasswordEmailJob,
   VerifyEmployeeEmailJob,
-} from '../mail.types';
-import { sendMail } from '@/utils/mailer.utils';
+} from '../mail.types.js';
+import { sendMail } from '#/utils/mailer.utils.js';
 
 @Injectable()
 export class VerifyEmployeeMailProcessorService {

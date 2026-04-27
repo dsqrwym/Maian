@@ -1,17 +1,17 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
-import { useSwagger } from './config/swagger.config';
-import { useGlobalFilters } from './config/global-filters.config';
-import { useGlobalInterceptors } from './config/global-interceptors.config';
-import { useLogger } from './config/logger.config';
+import { useSwagger } from './config/swagger.config.js';
+import { useGlobalFilters } from './config/global-filters.config.js';
+import { useGlobalInterceptors } from './config/global-interceptors.config.js';
+import { useLogger } from './config/logger.config.js';
 import * as process from 'node:process';
-import { useCors } from './config/cors.config';
-import { useCookie } from './config/cookie.config';
-import { GLOBAL_PREFIX } from './config/constants.config';
-import { useFastifyMultipart } from './config/fastify-multipart.config';
+import { useCors } from './config/cors.config.js';
+import { useCookie } from './config/cookie.config.js';
+import { GLOBAL_PREFIX } from './config/constants.config.js';
+import { useFastifyMultipart } from './config/fastify-multipart.config.js';
 
 // 用于 session 支持
 

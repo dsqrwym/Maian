@@ -1,11 +1,11 @@
 import type {
   TagsEmail,
   TagsUsername,
-} from '@/utils/typia/validators/auth.validator';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from '@/utils/string.util';
+} from '#/utils/typia/validators/auth.validator.js';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
 import typia from 'typia';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 
 export interface ICreateAdminDto {
   /**

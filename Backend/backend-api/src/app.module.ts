@@ -1,41 +1,39 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 
 import { ConfigModule, ConfigService } from '@nestjs/config'; // 用于加载和管理应用程序的配置 比Node.js 自带的 process.env 更加安全和方便维护
 import { LoggerModule, PinoLogger } from 'nestjs-pino';
 
 // 我自己的模块 :
 //  公共模块
-import { CommonModule } from './common/common.module'; // 全局的
-//  Prisma 模块
-import { PrismaModule } from './prisma/prisma.module'; // 全局的
+import { CommonModule } from './common/common.module.js'; // 全局的
 // Redis 模块
-import { CacheRedisModule } from './cache/cache.redis.module'; // 全局的
+import { CacheRedisModule } from './cache/cache.redis.module.js'; // 全局的
 //  邮件模块
-import { MailModule } from './mail/mail.module';
+import { MailModule } from './mail/mail.module.js';
 //  认证模块
-import { AuthModule } from './auth/auth.module';
-import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import { AuthModule } from './auth/auth.module.js';
+import { ResponseInterceptor } from './common/interceptor/response.interceptor.js';
 import { Reflector } from '@nestjs/core';
-import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { JwtExceptionFilter } from './common/filters/jwt-exception.filter';
-import { ScheduleTaskModule } from './schedule-tasks/schedule-task.module';
-import { MyI18nModule } from './i18n/i18n.module';
-import { MyThrottlerModule } from './common/rate-limit/rate-limit.module';
-import { REDIS_CACHE } from './cache/redis/cache.redis.token';
-import { ENV } from './config/constants.config';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter.js';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter.js';
+import { JwtExceptionFilter } from './common/filters/jwt-exception.filter.js';
+import { ScheduleTaskModule } from './schedule-tasks/schedule-task.module.js';
+import { MyI18nModule } from './i18n/i18n.module.js';
+import { MyThrottlerModule } from './common/rate-limit/rate-limit.module.js';
+import { REDIS_CACHE } from './cache/redis/cache.redis.token.js';
+import { ENV } from './config/constants.config.js';
 import { JwtModule } from '@nestjs/jwt';
-import { LocationsModule } from './locations/locations.module';
-import { CaslModule } from './casl/casl.module';
-import { UserModule } from './user/user.module';
-import { EnterpriseModule } from './enterprise/enterprise.module';
-import { AdminModule } from './admin/admin.module';
-import { CategoryModule } from './category/category.module';
-import { ProductsModule } from './products/products.module';
-import { FilesModule } from './files/files.module';
-import { DrizzleModule } from './drizzle/drizzle.module';
+import { LocationsModule } from './locations/locations.module.js';
+import { CaslModule } from './casl/casl.module.js';
+import { UserModule } from './user/user.module.js';
+import { EnterpriseModule } from './enterprise/enterprise.module.js';
+import { AdminModule } from './admin/admin.module.js';
+import { CategoryModule } from './category/category.module.js';
+import { ProductsModule } from './products/products.module.js';
+import { FilesModule } from './files/files.module.js';
+import { DrizzleModule } from './drizzle/drizzle.module.js';
 
 @Module({
   imports: [
@@ -99,7 +97,6 @@ import { DrizzleModule } from './drizzle/drizzle.module';
 
     FilesModule, // 全局的模块
     CommonModule, // 全局的模块
-    PrismaModule, // 全局的模块
     DrizzleModule, // 全局的模块
     MailModule, // 邮件模块
     AuthModule,

@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import type { UserRole } from '@/generated/drizzle/enums';
+import type { UserRole } from '#/generated/drizzle/enums.js';
 
 export const ROLES_ALLOWED_KEY = 'ROLES_ALLOWED_KEY';
 

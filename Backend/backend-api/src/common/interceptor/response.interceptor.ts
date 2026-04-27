@@ -11,10 +11,10 @@ import { map } from 'rxjs/operators';
 import {
   PaginatedData,
   Response,
-} from '../types-interfaces/response.interface';
+} from '../types-interfaces/response.interface.js';
 import { FastifyReply } from 'fastify';
-import { SKIP_RESPONSE_INTERCEPTOR } from '../guards/decorator/skip-response-interceptor.decorator';
-import { isJson } from '@/utils/is.utils';
+import { SKIP_RESPONSE_INTERCEPTOR } from '../guards/decorator/skip-response-interceptor.decorator.js';
+import { isJson } from '#/utils/is.utils.js';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<

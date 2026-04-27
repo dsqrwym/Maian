@@ -1,6 +1,6 @@
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
-import { TokenResponseDto } from './token-response.dto';
-import { UserPayload } from '../auth.types';
+import { TokenResponseDto } from './token-response.dto.js';
+import { UserPayload } from '../auth.types.js';
 
 class UserPayloadDto {
   @ApiProperty({ description: 'User payload' })

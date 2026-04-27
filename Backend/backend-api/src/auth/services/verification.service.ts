@@ -4,36 +4,36 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { UserRole, UserStatus } from 'src/generated/drizzle/enums';
+import { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
 import {
   ISendVerificationCodeDto,
   IVerifyCodeDto,
   IVerifyEmailQueryDto,
   VerifyCodeResponseDto,
-} from '../dto/verification.dto';
-import { maskEmail } from '@/utils/email.utils';
-import { addMinutes } from '@/utils/date.utils';
-import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
-import { TooManyRequestsExceptions } from '@/common/exceptions/too-many-requests.exceptions';
+} from '../dto/verification.dto.js';
+import { maskEmail } from '#/utils/email.utils.js';
+import { addMinutes } from '#/utils/date.utils.js';
+import { AUTH_ERROR, VerificationEmailType } from '../auth.constants.js';
+import { TooManyRequestsExceptions } from '#/common/exceptions/too-many-requests.exceptions.js';
 import {
   generateUniformRandomDigits,
   generateUniformStrongPassword,
-} from '@/utils/random.utils';
-import { MailService } from '@/mail/mail.service';
-import { HashService } from 'src/common/hash/hash.service';
+} from '#/utils/random.utils.js';
+import { MailService } from '#/mail/mail.service.js';
+import { HashService } from '#/common/hash/hash.service.js';
 import { randomUUID } from 'node:crypto';
-import { RegisterEmailJob } from '@/mail/mail.types';
-import { WholesalerProfileType } from '@/enterprise/types/wholesaler-profile.type';
-import { renderTemplate } from '@/utils/hbs-renderer';
+import { RegisterEmailJob } from '#/mail/mail.types.js';
+import { WholesalerProfileType } from '#/enterprise/types/wholesaler-profile.type.js';
+import { renderTemplate } from '#/utils/hbs-renderer.js';
 import { FastifyReply } from 'fastify';
 import { I18nService } from 'nestjs-i18n';
-import { DrizzleDb, DrizzleService } from '@/drizzle/drizzle.service';
+import { DrizzleDb, DrizzleService } from '#/drizzle/drizzle.service.js';
 import { and, desc, eq, gt, sql } from 'drizzle-orm';
 import {
   configurations,
   users,
   verification_tokens,
-} from '@/generated/drizzle/schema';
+} from '#/generated/drizzle/schema.js';
 
 @Injectable()
 export class VerificationService {

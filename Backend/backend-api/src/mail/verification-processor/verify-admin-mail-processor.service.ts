@@ -5,9 +5,9 @@ import { I18nService } from 'nestjs-i18n';
 import {
   ActiveAdminWithPasswordEmailJob,
   BaseEmailJobWithLink,
-} from '../mail.types';
-import { I18nTranslations } from '@/i18n/generated/i18n.generated';
-import { sendMail } from '@/utils/mailer.utils';
+} from '../mail.types.js';
+import { I18nTranslations } from '#/i18n/generated/i18n.generated.js';
+import { sendMail } from '#/utils/mailer.utils.js';
 
 @Injectable()
 export class VerifyAdminMailProcessorService {

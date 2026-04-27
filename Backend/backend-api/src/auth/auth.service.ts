@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { ILoginDto } from './dto/login.dto';
+import { ILoginDto } from './dto/login.dto.js';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { UserPayload } from './auth.types';
-import { IDeleteSessionDto } from './dto/delete.session.dto';
-import { IResetPasswordDto } from './dto/reset-password.dto';
-import { LoginService } from './services/login.service';
-import { RegistrationService } from './services/registration.service';
-import { TokenService } from './services/token.service';
-import { SessionService } from './services/session.service';
-import { ResetPasswordService } from './services/reset-password.service';
-import { IRegisterRetailerDto } from './dto/register-retailer.dto';
+import { UserPayload } from './auth.types.js';
+import { IDeleteSessionDto } from './dto/delete.session.dto.js';
+import { IResetPasswordDto } from './dto/reset-password.dto.js';
+import { LoginService } from './services/login.service.js';
+import { RegistrationService } from './services/registration.service.js';
+import { TokenService } from './services/token.service.js';
+import { SessionService } from './services/session.service.js';
+import { ResetPasswordService } from './services/reset-password.service.js';
+import { IRegisterRetailerDto } from './dto/register-retailer.dto.js';
 import {
   ISendVerificationCodeDto,
   IVerifyCodeDto,
-} from './dto/verification.dto';
-import { ISendNormalRegisterMailDto } from './dto/register.dto';
-import { IRegisterWholesalerDto } from './dto/register-wholesaler.dto';
-import { UserRole } from 'src/generated/drizzle/enums';
+} from './dto/verification.dto.js';
+import { ISendNormalRegisterMailDto } from './dto/register.dto.js';
+import { IRegisterWholesalerDto } from './dto/register-wholesaler.dto.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 
 @Injectable()
 export class AuthService {

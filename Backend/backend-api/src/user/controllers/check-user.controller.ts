@@ -1,15 +1,15 @@
 import { Controller } from '@nestjs/common';
-import { CheckUserService } from '../services/check-user.service';
+import { CheckUserService } from '../services/check-user.service.js';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { CacheTTL } from '@nestjs/cache-manager';
-import { SECOND } from '@/utils/date.utils';
+import { SECOND } from '#/utils/date.utils.js';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ICheckUserEmailQueryDto,
   ICheckUserUsernameQueryDto,
   validateICheckUserEmailQueryDto,
   validateICheckUserUsernameQueryDto,
-} from '../dto/check-user-query.dto';
+} from '../dto/check-user-query.dto.js';
 import { TypedQuery, TypedRoute } from '@nestia/core';
 
 /**

@@ -1,14 +1,14 @@
-import type { IUpdateVariantDto } from './update-product-variant.dto';
-import { validateIUpdateVariant } from './update-product-variant.dto';
-import type { IProductTranslationDto } from './product-translation.dto';
-import { validateProductTranslationDto } from './product-translation.dto';
-import type { ICreateVariantDto } from './create-product-variant.dto';
-import { validateICreateVariant } from './create-product-variant.dto';
-import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from '@/utils/string.util';
-import type { ICreateProductDto } from './create-product.dto';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IUpdateVariantDto } from './update-product-variant.dto.js';
+import { validateIUpdateVariant } from './update-product-variant.dto.js';
+import type { IProductTranslationDto } from './product-translation.dto.js';
+import { validateProductTranslationDto } from './product-translation.dto.js';
+import type { ICreateVariantDto } from './create-product-variant.dto.js';
+import { validateICreateVariant } from './create-product-variant.dto.js';
+import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
+import type { ICreateProductDto } from './create-product.dto.js';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 import typia from 'typia';
 import { BadRequestException } from '@nestjs/common';
 

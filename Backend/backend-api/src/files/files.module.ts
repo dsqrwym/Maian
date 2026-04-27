@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common';
-import { FilesService } from './files.service';
-import { FilesController } from './files.controller';
-import { STORAGE_DRIVER } from './storage/storage-key';
-import { LocalStorageDriver } from './storage/local-storage.driver';
-import { CloudflareStorageDriver } from './storage/cloudflare-storage.driver';
+import { FilesService } from './files.service.js';
+import { FilesController } from './files.controller.js';
+import { STORAGE_DRIVER } from './storage/storage-key.js';
+import { LocalStorageDriver } from './storage/local-storage.driver.js';
+import { CloudflareStorageDriver } from './storage/cloudflare-storage.driver.js';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 
 @Global()
 @Module({

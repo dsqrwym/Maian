@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CreateEmployeeService } from './services/create-employee.service';
-import { CreateEmployeeController } from './controllers/create-employee.controller';
+import { CreateEmployeeService } from './services/create-employee.service.js';
+import { CreateEmployeeController } from './controllers/create-employee.controller.js';
 import { RouterModule } from '@nestjs/core';
 
 @Module({

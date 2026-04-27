@@ -9,11 +9,11 @@ import {
   RegisterEmailJob,
   ResetPasswordJob,
   VerifyEmployeeEmailJob,
-} from './mail.types';
-import { VerifyRegistrationProcessorService } from './verification-processor/verify-registration.processor.service';
-import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password.processor.service';
-import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service';
-import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service';
+} from './mail.types.js';
+import { VerifyRegistrationProcessorService } from './verification-processor/verify-registration.processor.service.js';
+import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password.processor.service.js';
+import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service.js';
+import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service.js';
 
 @Processor('mail')
 @Injectable()

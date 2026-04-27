@@ -3,7 +3,7 @@ import type { Provider } from '@nestjs/common';
 import { Piscina } from 'piscina';
 import * as path from 'path';
 import * as os from 'os';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 
 // 定义注入标识符，方便在Nest中引用
 export const HASH_PROVIDE = 'HASH_WORKER_POOL';
@@ -24,7 +24,7 @@ export const HashWorkerPoolProvider: Provider = {
   inject: [ConfigService],
   useFactory: (config: ConfigService) => {
     return new Piscina({
-      filename: path.resolve(__dirname, './hash-worker.js'),
+      filename: path.resolve(import.meta.dirname, './hash-worker.js'),
       maxThreads: Number(
         config.get<number>(
           ENV.WORKER_POOL_MAX_THREADS,

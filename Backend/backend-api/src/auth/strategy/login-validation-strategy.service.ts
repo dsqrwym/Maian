@@ -5,22 +5,22 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { HashService } from 'src/common/hash/hash.service';
-import { ILoginDto } from '../dto/login.dto';
-import { UserPayload } from '../auth.types';
+import { HashService } from '#/common/hash/hash.service.js';
+import { ILoginDto } from '../dto/login.dto.js';
+import { UserPayload } from '../auth.types.js';
 import { Logger } from 'nestjs-pino';
 import type { Cache } from 'cache-manager';
-import { AUTH_ERROR, INACTIVE_STATUSES } from '../auth.constants';
-import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
+import { AUTH_ERROR, INACTIVE_STATUSES } from '../auth.constants.js';
+import { REDIS_CACHE } from '#/cache/redis/cache.redis.token.js';
 import { ConfigService } from '@nestjs/config';
-import { MINUTE } from '@/utils/date.utils';
-import { ENV } from '@/config/constants.config';
-import { REDIS_KEYS } from '@/cache/redis/redis.constants';
-import { UserRole } from '@/generated/drizzle/enums';
-import { makeUsername } from '@/utils/user.utils';
-import { maskEmail } from '@/utils/email.utils';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { users } from 'src/generated/drizzle/schema';
+import { MINUTE } from '#/utils/date.utils.js';
+import { ENV } from '#/config/constants.config.js';
+import { REDIS_KEYS } from '#/cache/redis/redis.constants.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { makeUsername } from '#/utils/user.utils.js';
+import { maskEmail } from '#/utils/email.utils.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
+import { users } from '#/generated/drizzle/schema.js';
 import { and, eq, sql, SQL } from 'drizzle-orm';
 
 /**

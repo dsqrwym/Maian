@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 import { ConfigService } from '@nestjs/config';
-import { UserRole } from 'src/generated/drizzle/enums';
-import { HashService } from '@/common/hash/hash.service';
-import { makeUsername } from '@/utils/user.utils';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { users } from '@/generated/drizzle/schema';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { HashService } from '#/common/hash/hash.service.js';
+import { makeUsername } from '#/utils/user.utils.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
+import { users } from '#/generated/drizzle/schema.js';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class EnsureSuperAdminService {
@@ -36,7 +37,7 @@ export class EnsureSuperAdminService {
 
     const admin = await this.drizzleService.db.query.users.findFirst({
       columns: { username: true, email: true },
-      where: (users, { eq }) => eq(users.role, 'SUPERADMIN'),
+      where: eq(users.role, 'SUPERADMIN'),
     });
 
     if (admin) {

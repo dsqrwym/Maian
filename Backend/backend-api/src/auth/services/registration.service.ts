@@ -4,18 +4,26 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { AUTH_ERROR, VerificationEmailType } from '../auth.constants';
-import { VerificationService } from './verification.service';
-import { IVerifyCodeDto } from '../dto/verification.dto';
-import { IRegisterRetailerDto } from '../dto/register-retailer.dto';
-import { HashService } from 'src/common/hash/hash.service';
-import { ISendNormalRegisterMailDto } from '../dto/register.dto';
-import { IRegisterWholesalerDto } from '../dto/register-wholesaler.dto';
-import { WholesalerProfileType } from '@/enterprise/types/wholesaler-profile.type';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { configurations, directions, users } from '@/generated/drizzle/schema';
+import { AUTH_ERROR, VerificationEmailType } from '../auth.constants.js';
+import { VerificationService } from './verification.service.js';
+import { IVerifyCodeDto } from '../dto/verification.dto.js';
+import { IRegisterRetailerDto } from '../dto/register-retailer.dto.js';
+import { HashService } from '#/common/hash/hash.service.js';
+import { ISendNormalRegisterMailDto } from '../dto/register.dto.js';
+import { IRegisterWholesalerDto } from '../dto/register-wholesaler.dto.js';
+import { WholesalerProfileType } from '#/enterprise/types/wholesaler-profile.type.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
+import {
+  configurations,
+  directions,
+  users,
+} from '#/generated/drizzle/schema.js';
 import { and, eq, sql } from 'drizzle-orm';
-import { AddressType, UserRole, UserStatus } from 'src/generated/drizzle/enums';
+import {
+  AddressType,
+  UserRole,
+  UserStatus,
+} from '#/generated/drizzle/enums.js';
 
 @Injectable()
 export class RegistrationService {

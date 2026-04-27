@@ -8,7 +8,7 @@ import {
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { PinoLogger } from 'nestjs-pino';
 import { TypeGuardError } from 'typia';
-import { ErrorResponse } from '../types-interfaces/response.interface';
+import { ErrorResponse } from '../types-interfaces/response.interface.js';
 
 @Injectable()
 @Catch(HttpException)

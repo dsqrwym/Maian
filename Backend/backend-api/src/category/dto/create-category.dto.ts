@@ -1,14 +1,14 @@
-import type { ICategoryTranslationDto } from './category-translation.dto';
-import { validateCategoryTranslation } from './category-translation.dto';
-import type { TagsUuid } from '@/utils/typia/validators/auth.validator';
-import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
+import type { ICategoryTranslationDto } from './category-translation.dto.js';
+import { validateCategoryTranslation } from './category-translation.dto.js';
+import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
+import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import type { tags } from 'typia';
 import typia from 'typia';
-import type { TagsCategoryName } from '@/utils/typia/validators/category.validator';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from '@/utils/string.util';
-import type { TagsIvaString } from '@/utils/typia/validators/product.validator';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { TagsCategoryName } from '#/utils/typia/validators/category.validator.js';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
+import type { TagsIvaString } from '#/utils/typia/validators/product.validator.js';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 import { BadRequestException } from '@nestjs/common';
 
 export interface ICreateCategoryDto {

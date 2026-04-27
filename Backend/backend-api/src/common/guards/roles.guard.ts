@@ -6,10 +6,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from '@/generated/drizzle/enums';
-import { ROLES_ALLOWED_KEY } from './decorator/roles-allowed.decorator';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { ROLES_ALLOWED_KEY } from './decorator/roles-allowed.decorator.js';
 import { FastifyRequest } from 'fastify';
-import { AUTH_ERROR } from '@/auth/auth.constants';
+import { AUTH_ERROR } from '#/auth/auth.constants.js';
 
 /**
  * Role Guard

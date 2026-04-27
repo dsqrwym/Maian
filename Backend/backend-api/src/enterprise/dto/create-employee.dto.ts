@@ -1,15 +1,15 @@
 import type {
   TagsEmail,
   TagsUsername,
-} from '@/utils/typia/validators/auth.validator';
+} from '#/utils/typia/validators/auth.validator.js';
 import type { tags } from 'typia';
 import typia from 'typia';
-import type { TagsBasicTelephone } from '@/utils/typia/validators/telephone.validator';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from '@/utils/string.util';
+import type { TagsBasicTelephone } from '#/utils/typia/validators/telephone.validator.js';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { BadRequestException } from '@nestjs/common';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 
 /**
  * 批发商系统创建新员工的数据传输对象

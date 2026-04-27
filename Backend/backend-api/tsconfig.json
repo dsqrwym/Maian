@@ -4,12 +4,13 @@
   "compilerOptions": {
     // Specify module code generation / 指定模块代码生成
     // Options: 'None', 'CommonJS', 'AMD', 'System', 'UMD', 'ES6'/'ES2015', 'ES2020', 'ESNext', 'Node16', 'NodeNext'
-    "module": "commonjs", // 使用 CommonJS 模块系统，适用于 Node.js 环境
+    // "module": "commonjs", // 使用 CommonJS 模块系统，适用于 Node.js 环境
+    "module": "nodenext", // 使用 Node ESM 模块系统，配合 package.json "type": "module" 生效
     // Generate .d.ts files from project references / 从项目引用生成 .d.ts 文件
     "declaration": true, // 生成相应的 .d.ts 文件
     // Remove comments from output / 删除输出中的注释
     "removeComments": true, // 删除编译后的 JavaScript 文件中的注释
-    //"resolvePackageJsonExports": true, // 启用 package.json 的 exports 字段解析
+    "resolvePackageJsonExports": true, // 启用 package.json 的 exports 字段解析
     "esModuleInterop": true, // 启用 ES 模块互操作性
     // Emit design-type metadata for decorated declarations in source / 为装饰器提供元数据支持
     "emitDecoratorMetadata": true, // 为装饰器提供元数据支持，常用于类验证器(如 class-validator)和依赖注入
@@ -53,12 +54,12 @@
     // Options: 'remove' (default), 'preserve', 'error'
     // 原配置: "importsNotUsedAsValues": "remove",   // 移除仅用于类型的导入语句
     // 显式指定模块解析策略（与 "module": "commonjs" 配合，避免未来默认值变化）
-    "moduleResolution": "node", // 模块解析算法
+    "moduleResolution": "nodenext", // 模块解析算法
     // 临时忽略弃用警告（主要是 baseUrl 的弃用警告，让项目能够顺利升级）
-    "ignoreDeprecations": "6.0", // 忽略 TypeScript 6.0 引入的弃用错误（例如 baseUrl）
+    //"ignoreDeprecations": "6.0", // 忽略 TypeScript 6.0 引入的弃用错误（例如 baseUrl）
     "paths": {
-      "@/*": ["./src/*"], // 相对于项目根目录的完整相对路径
-      "src/*": ["./src/*"]
+      // 相对于项目根目录的完整相对路径
+      "#/*": ["./src/*"]
     },
     "rootDir": ".",
     "plugins": [

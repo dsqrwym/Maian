@@ -6,16 +6,16 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { Prisma } from 'src/generated/prisma/client';
 import { PinoLogger } from 'nestjs-pino';
-import { extractPrismaMeta } from '@/utils/meta.utils';
-import { ErrorResponse } from '../types-interfaces/response.interface';
+import { extractPrismaMeta } from '#/utils/meta.utils.js';
+import { ErrorResponse } from '../types-interfaces/response.interface.js';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 @Injectable()
-@Catch(Prisma.PrismaClientKnownRequestError)
+@Catch(PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: PinoLogger) {}
-  catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
+  catch(exception: PrismaClientKnownRequestError, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<FastifyReply>();
     const request = host.switchToHttp().getRequest<FastifyRequest>();
 

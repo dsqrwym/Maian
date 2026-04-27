@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CleanupTask } from './cleanup-task.service';
+import { CleanupTask } from './cleanup-task.service.js';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CleanupFilesService } from './cleanup-files.services';
-import { DistributedLockService } from './distributed-lock.service';
+import { CleanupFilesService } from './cleanup-files.services.js';
+import { DistributedLockService } from './distributed-lock.service.js';
 
 @Module({
   imports: [ScheduleModule.forRoot()], // 负责任务调度的 NestJS  cron 包集成模块

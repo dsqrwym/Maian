@@ -4,23 +4,23 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { STORAGE_DRIVER } from './storage/storage-key';
-import { StorageDriver } from './storage/storage.driver';
+import { STORAGE_DRIVER } from './storage/storage-key.js';
+import { StorageDriver } from './storage/storage.driver.js';
 import { Readable } from 'stream';
-import { UserPayload } from '@/auth/auth.types';
-import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
-import { UserRole } from '@/generated/drizzle/enums';
-import { IProductFilesQueryDto } from './dto/product-files-query.dto';
-import { AppAbility } from '@/casl/casl-types';
-import { Action } from '@/casl/actions';
+import { UserPayload } from '#/auth/auth.types.js';
+import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { IProductFilesQueryDto } from './dto/product-files-query.dto.js';
+import { AppAbility } from '#/casl/casl-types.js';
+import { Action } from '#/casl/actions.js';
 import { subject } from '@casl/ability';
-import { DrizzleDb, DrizzleService } from 'src/drizzle/drizzle.service';
+import { DrizzleDb, DrizzleService } from '#/drizzle/drizzle.service.js';
 import {
   files,
   products,
   products_files,
   user_uploads,
-} from 'src/generated/drizzle/schema';
+} from '#/generated/drizzle/schema.js';
 import { and, eq, sql } from 'drizzle-orm';
 
 @Injectable()

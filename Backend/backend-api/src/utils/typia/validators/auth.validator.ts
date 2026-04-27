@@ -6,7 +6,7 @@ import type {
   TagsNotBlank,
   TagsNotEndWithIgnoreCase,
   TagsNotInclude,
-} from '../tags/string.tag';
+} from '../tags/string.tag.js';
 
 /**
  * 强密码验证

@@ -1,4 +1,4 @@
-import type { TagsUInt2 } from '../tags/number.tags';
+import type { TagsUInt2 } from '../tags/number.tags.js';
 import type { tags } from 'typia';
 
 /**

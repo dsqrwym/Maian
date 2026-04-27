@@ -1,18 +1,15 @@
-import type { PureAbility } from '@casl/ability';
-import type { Action } from './actions';
-import type { PrismaQuery, Subjects } from '@casl/prisma';
-import type { users } from 'src/generated/prisma/client';
+import type { MongoAbility } from '@casl/ability';
+import type { Action } from './actions.js';
 
-export type PrismaModels = {
-  products: { user_id: string };
+export type ModelSubjects = {
+  products: { user_id: string; status: string };
   categories: { user_id: string | undefined | null };
-  users: users;
+  users: { role: string; status: string };
   products_files: { user_id: string };
 };
 
-type PrismaSubjects = Subjects<PrismaModels>;
+type SubjectName = keyof ModelSubjects;
 export type ConsTomSubject = 'Admin' | 'Standard' | 'Enterprise';
-export type AppAbility = PureAbility<
-  [Action, PrismaSubjects | ConsTomSubject],
-  PrismaQuery
+export type AppAbility = MongoAbility<
+  [Action, SubjectName | ConsTomSubject | ModelSubjects[SubjectName]]
 >;

@@ -1,10 +1,10 @@
-import type { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
-import type { OrderByEnum } from '@/common/enums/sort.enum';
+import type { IPaginationQueryDto } from '#/utils/dto/pagination.dto.js';
+import type { OrderByEnum } from '#/common/enums/sort.enum.js';
 import type { tags } from 'typia';
 import typia from 'typia';
-import type { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
-import { cleanString } from '@/utils/string.util';
-import type { UserRole, UserStatus } from '@/generated/drizzle/enums';
+import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
+import { cleanString } from '#/utils/string.util.js';
+import type { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
 
 export interface IFindUserQueryDto extends IPaginationQueryDto {
   search?: string;

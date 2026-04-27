@@ -4,26 +4,26 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ICreateProductDto } from './dto/create-product.dto';
-import { IUpdateProductDto } from './dto/update-product.dto';
-import { AppAbility } from '@/casl/casl-types';
-import { Action } from '@/casl/actions';
+import { ICreateProductDto } from './dto/create-product.dto.js';
+import { IUpdateProductDto } from './dto/update-product.dto.js';
+import { AppAbility } from '#/casl/casl-types.js';
+import { Action } from '#/casl/actions.js';
 import { subject } from '@casl/ability';
-import { UserPayload } from '@/auth/auth.types';
-import { computePrice } from '@/utils/calculate/computePrice';
-import { IProductListQueryDto } from './dto/product-list-query.dto';
-import { UserRole } from 'src/generated/drizzle/enums';
+import { UserPayload } from '#/auth/auth.types.js';
+import { computePrice } from '#/utils/calculate/computePrice.js';
+import { IProductListQueryDto } from './dto/product-list-query.dto.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 import { PinoLogger } from 'nestjs-pino';
-import { ProductListSelectField, ProductSortField } from './product.enums';
+import { ProductListSelectField, ProductSortField } from './product.enums.js';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from '@/config/constants.config';
+import { ENV } from '#/config/constants.config.js';
 import {
   DOC_MIME_TYPES,
   IMAGE_MIME_TYPES,
   VIDEO_MIME_TYPES,
-} from '@/config/fastify-multipart.config';
-import { IProductFileDto } from './dto/product-file.dto';
-import { DrizzleDb, DrizzleService } from 'src/drizzle/drizzle.service';
+} from '#/config/fastify-multipart.config.js';
+import { IProductFileDto } from './dto/product-file.dto.js';
+import { DrizzleDb, DrizzleService } from '#/drizzle/drizzle.service.js';
 import {
   categories,
   category_translations,
@@ -34,7 +34,7 @@ import {
   products_files,
   user_uploads,
   variant_products,
-} from '@/generated/drizzle/schema';
+} from '#/generated/drizzle/schema.js';
 import {
   and,
   asc,
@@ -48,8 +48,8 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import { toUnaccent } from '@/utils/string.util';
-import { IProductResponse } from './dto/product-response';
+import { toUnaccent } from '#/utils/string.util.js';
+import { IProductResponse } from './dto/product-response.js';
 
 @Injectable()
 export class ProductsService {

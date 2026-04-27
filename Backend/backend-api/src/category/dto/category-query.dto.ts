@@ -1,11 +1,11 @@
-import type { IPaginationQueryDto } from '@/utils/dto/pagination.dto';
-import type { CategorySelectField, CategoryType } from '../category.enums';
+import type { IPaginationQueryDto } from '#/utils/dto/pagination.dto.js';
+import type { CategorySelectField, CategoryType } from '../category.enums.js';
 import type { tags } from 'typia';
 import typia from 'typia';
-import type { TagsUuid } from '@/utils/typia/validators/auth.validator';
-import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
-import type { IRequestQueryValidator } from '@nestia/core/src/options/IRequestQueryValidator';
-import { cleanString } from '@/utils/string.util';
+import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
+import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
+import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
+import { cleanString } from '#/utils/string.util.js';
 
 export interface ICategoryQueryDto extends IPaginationQueryDto {
   search?: string & tags.Example<'Keywords for name search'>; // 用于 name 和 lang 模糊搜索

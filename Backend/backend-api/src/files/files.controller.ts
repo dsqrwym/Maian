@@ -6,7 +6,7 @@ import {
   StreamableFile,
   UseGuards,
 } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { FilesService } from './files.service.js';
 import { FastifyRequest } from 'fastify';
 import {
   ApiBearerAuth,
@@ -15,12 +15,15 @@ import {
   ApiProduces,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard';
+import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { fileTypeFromBuffer } from 'file-type';
-import { ALLOWED_MIMES, CHUNK_SIZE } from '@/config/fastify-multipart.config';
-import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto';
-import { IProductFilesQueryDto } from './dto/product-files-query.dto';
-import { SkipResponseInterceptor } from 'src/common/guards/decorator/skip-response-interceptor.decorator';
+import {
+  ALLOWED_MIMES,
+  CHUNK_SIZE,
+} from '#/config/fastify-multipart.config.js';
+import { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesaler.dto.js';
+import { IProductFilesQueryDto } from './dto/product-files-query.dto.js';
+import { SkipResponseInterceptor } from '#/common/guards/decorator/skip-response-interceptor.decorator.js';
 import * as mime from 'mime-types';
 import * as path from 'path';
 import { TypedQuery, TypedRoute } from '@nestia/core';

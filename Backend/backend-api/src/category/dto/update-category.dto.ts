@@ -1,10 +1,10 @@
-import { validateCategoryTranslation } from './category-translation.dto';
-import type { ICreateCategoryDto } from './create-category.dto';
-import { isObject } from '@/utils/is.utils';
+import { validateCategoryTranslation } from './category-translation.dto.js';
+import type { ICreateCategoryDto } from './create-category.dto.js';
+import { isObject } from '#/utils/is.utils.js';
 import typia from 'typia';
-import { cleanString } from '@/utils/string.util';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
-import type { TagsVersion } from '@/utils/typia/tags/number.tags';
+import { cleanString } from '#/utils/string.util.js';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
+import type { TagsVersion } from '#/utils/typia/tags/number.tags.js';
 import { BadRequestException } from '@nestjs/common';
 
 export interface IUpdateCategoryDto extends Partial<

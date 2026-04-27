@@ -1,19 +1,19 @@
 import { Controller, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { seconds, Throttle } from '@nestjs/throttler';
-import { CheckCategoryService } from '../services/check-category.service';
+import { CheckCategoryService } from '../services/check-category.service.js';
 import {
   ICheckCategoryNameCreateQueryDto,
   ICheckCategoryNameUpdateQueryDto,
   validateCheckCategoryNameCreateQuery,
   validateCheckCategoryNameUpdateQuery,
-} from '../dto/check-category-query.dto';
+} from '../dto/check-category-query.dto.js';
 import { TypedQuery, TypedRoute } from '@nestia/core';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard';
-import { RolesGuard } from '@/common/guards/roles.guard';
-import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
-import { ADMIN_ROLES } from '@/admin/admin.constants';
-import { UserRole } from '@/generated/drizzle/enums';
+import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
+import { RolesGuard } from '#/common/guards/roles.guard.js';
+import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
+import { ADMIN_ROLES } from '#/admin/admin.constants.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 
 /**
  * Category Availability Check Controller

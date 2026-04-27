@@ -1,7 +1,7 @@
 import type {
   TagsStrongPassword,
   TagsUuid,
-} from '@/utils/typia/validators/auth.validator';
+} from '#/utils/typia/validators/auth.validator.js';
 
 export interface IResetPasswordDto {
   verification_id: string & TagsUuid;

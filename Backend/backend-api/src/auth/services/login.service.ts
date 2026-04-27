@@ -5,27 +5,27 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { HashService } from '@/common/hash/hash.service';
-import { REDIS_CACHE } from '@/cache/redis/cache.redis.token';
+import { HashService } from '#/common/hash/hash.service.js';
+import { REDIS_CACHE } from '#/cache/redis/cache.redis.token.js';
 import type { Cache } from 'cache-manager';
 import { Logger } from 'nestjs-pino';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { CSRFPayload, UserPayload } from '../auth.types';
-import { ILoginDto } from '../dto/login.dto';
+import { CSRFPayload, UserPayload } from '../auth.types.js';
+import { ILoginDto } from '../dto/login.dto.js';
 import { randomUUID } from 'node:crypto';
 import {
   ENV,
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_PATH,
-} from '@/config/constants.config';
-import { REDIS_KEYS } from '@/cache/redis/redis.constants';
-import { TokenResponseDto } from '../dto/token-response.dto';
-import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service';
-import { UserRole } from 'src/generated/drizzle/enums';
-import { LoginResponseDto } from '../dto/login-response.dto';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
+} from '#/config/constants.config.js';
+import { REDIS_KEYS } from '#/cache/redis/redis.constants.js';
+import { TokenResponseDto } from '../dto/token-response.dto.js';
+import { LoginValidationStrategy } from '../strategy/login-validation-strategy.service.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { LoginResponseDto } from '../dto/login-response.dto.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { and, asc, eq, inArray } from 'drizzle-orm';
-import { user_sessions } from '@/generated/drizzle/schema';
+import { user_sessions } from '#/generated/drizzle/schema.js';
 
 @Injectable()
 export class LoginService {

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { PinoLogger } from 'nestjs-pino';
 import { MailerService } from '@nestjs-modules/mailer';
-import { I18nTranslations } from '@/i18n/generated/i18n.generated';
-import { RegisterEmailJob } from '../mail.types';
-import { sendMail } from '@/utils/mailer.utils';
+import { I18nTranslations } from '#/i18n/generated/i18n.generated.js';
+import { RegisterEmailJob } from '../mail.types.js';
+import { sendMail } from '#/utils/mailer.utils.js';
 
 @Injectable()
 export class VerifyRegistrationProcessorService {

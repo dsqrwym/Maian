@@ -1,12 +1,12 @@
-import { AddressType } from 'src/generated/drizzle/enums';
+import { AddressType } from '#/generated/drizzle/enums.js';
 import type { tags } from 'typia';
 import typia from 'typia';
 import type {
   TagsLatitude,
   TagsLongitude,
-} from '@/utils/typia/validators/direction.validator';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from '@/utils/string.util';
+} from '#/utils/typia/validators/direction.validator.js';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
 
 export interface IDirectionDto {
   /**

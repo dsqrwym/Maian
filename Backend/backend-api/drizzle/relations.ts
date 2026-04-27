@@ -30,7 +30,7 @@ import {
   product_categories,
   category_translations,
   product_translations,
-} from './schema';
+} from './schema.js';
 
 export const provincesRelations = relations(provinces, ({ one, many }) => ({
   country: one(countries, {

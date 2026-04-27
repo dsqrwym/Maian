@@ -1,21 +1,22 @@
-import { AbilityBuilder } from '@casl/ability';
-import type { AppAbility } from '../casl-types';
-import { Action } from '../actions';
-import type { UserPayload } from '@/auth/auth.types';
-import { createPrismaAbility } from '@casl/prisma';
-import { UserRole, UserStatus } from '@/generated/drizzle/enums';
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
+import type { AppAbility } from '../casl-types.js';
+import { Action } from '../actions.js';
+import type { UserPayload } from '#/auth/auth.types.js';
+import { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
 
 export class CaslAbilityFactory {
   constructor() {}
   createForUser(user: Partial<UserPayload>) {
-    const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+    const { can, cannot, build } = new AbilityBuilder<AppAbility>(
+      createMongoAbility,
+    );
 
     switch (user.userRole) {
       case UserRole.ADMIN:
         can(Action.Access, 'Admin');
-        can(Action.Manage, 'users', {
-          role: { notIn: [UserRole.ADMIN, UserRole.SUPERADMIN] },
-        });
+        can(Action.Manage, 'users');
+        cannot(Action.Manage, 'users', { role: UserRole.ADMIN });
+        cannot(Action.Manage, 'users', { role: UserRole.SUPERADMIN });
         can(Action.Create, 'categories');
         can(Action.Update, 'categories');
         can(Action.Read, 'categories');
@@ -31,17 +32,13 @@ export class CaslAbilityFactory {
         break;
       case UserRole.RETAILER:
         can(Action.Access, 'Standard');
-        can(Action.Read, 'users', {
-          role: UserRole.WHOLESALER,
-          status: {
-            notIn: [
-              UserStatus.INACTIVE,
-              UserStatus.BANNED,
-              UserStatus.PENDING_VERIFICATION,
-              UserStatus.PENDING_REVIEW,
-            ],
-          },
+        can(Action.Read, 'users', { role: UserRole.WHOLESALER });
+        cannot(Action.Read, 'users', { status: UserStatus.INACTIVE });
+        cannot(Action.Read, 'users', { status: UserStatus.BANNED });
+        cannot(Action.Read, 'users', {
+          status: UserStatus.PENDING_VERIFICATION,
         });
+        cannot(Action.Read, 'users', { status: UserStatus.PENDING_REVIEW });
         can(Action.Read, 'categories');
         can(Action.Read, 'products', { status: 'ACTIVE' });
         can(Action.Read, 'products_files');

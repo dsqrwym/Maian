@@ -1,6 +1,6 @@
-import type { ICreateVariantDto } from './create-product-variant.dto';
-import type { TagsIntegerString } from '@/utils/typia/tags/string.tag';
-import { isObject } from '@/utils/is.utils';
+import type { ICreateVariantDto } from './create-product-variant.dto.js';
+import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
+import { isObject } from '#/utils/is.utils.js';
 import typia from 'typia';
 
 export interface IUpdateVariantDto extends Partial<ICreateVariantDto> {

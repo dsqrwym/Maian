@@ -1,4 +1,4 @@
-import type { TagsNotBlank } from '@/utils/typia/tags/string.tag';
+import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
 import type { tags } from 'typia';
 
 export interface IRefreshTokenDto {

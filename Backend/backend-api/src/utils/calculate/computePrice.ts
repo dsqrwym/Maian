@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js';
+import { Decimal } from 'decimal.js';
 import { BadRequestException } from '@nestjs/common';
 
 // 联动验证：price 与 price_iva 最大值

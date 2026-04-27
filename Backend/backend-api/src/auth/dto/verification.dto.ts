@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ISendNormalRegisterMailDto } from './register.dto';
+import { ISendNormalRegisterMailDto } from './register.dto.js';
 import typia, { tags } from 'typia';
-import { TagsEmail, TagsUuid } from '@/utils/typia/validators/auth.validator';
-import { TagsNotBlank } from '@/utils/typia/tags/string.tag';
-import { TagsBCP47Language } from '@/utils/typia/validators/language.validator';
-import { isObject } from '@/utils/is.utils';
-import { cleanString } from '@/utils/string.util';
-import { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
+import {
+  TagsEmail,
+  TagsUuid,
+} from '#/utils/typia/validators/auth.validator.js';
+import { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
+import { TagsBCP47Language } from '#/utils/typia/validators/language.validator.js';
+import { isObject } from '#/utils/is.utils.js';
+import { cleanString } from '#/utils/string.util.js';
+import { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 
 export type ISendVerificationCodeDto = Omit<
   ISendNormalRegisterMailDto,

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import Piscina from 'piscina';
-import { HASH_PROVIDE } from './hash-worker-pool.provider';
-import { ENV } from '@/config/constants.config';
+import { Piscina } from 'piscina';
+import { HASH_PROVIDE } from './hash-worker-pool.provider.js';
+import { ENV } from '#/config/constants.config.js';
 
 @Injectable()
 export class HashService {

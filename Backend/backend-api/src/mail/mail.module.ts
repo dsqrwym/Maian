@@ -1,16 +1,16 @@
 import { Global, Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
-import { MailService } from './mail.service';
+import { MailService } from './mail.service.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ENV } from '@/config/constants.config';
-import { MyI18nModule } from '@/i18n/i18n.module';
+import { ENV } from '#/config/constants.config.js';
+import { MyI18nModule } from '#/i18n/i18n.module.js';
 import { BullModule } from '@nestjs/bullmq';
-import { MailQueueProcessorService } from './mail-queue-processor.service';
-import { VerifyRegistrationProcessorService } from './verification-processor/verify-registration.processor.service';
-import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password.processor.service';
-import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service';
-import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service';
+import { MailQueueProcessorService } from './mail-queue-processor.service.js';
+import { VerifyRegistrationProcessorService } from './verification-processor/verify-registration.processor.service.js';
+import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password.processor.service.js';
+import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service.js';
+import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service.js';
 import { Logger } from 'nestjs-pino';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
 

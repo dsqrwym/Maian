@@ -1,23 +1,23 @@
-import type { ICreateVariantDto } from './create-product-variant.dto';
-import { validateICreateVariant } from './create-product-variant.dto';
-import type { IProductTranslationDto } from './product-translation.dto';
-import { validateProductTranslationDto } from './product-translation.dto';
-import type { IProductFileDto } from './product-file.dto';
-import type { TagsUuid } from '@/utils/typia/validators/auth.validator';
+import type { ICreateVariantDto } from './create-product-variant.dto.js';
+import { validateICreateVariant } from './create-product-variant.dto.js';
+import type { IProductTranslationDto } from './product-translation.dto.js';
+import { validateProductTranslationDto } from './product-translation.dto.js';
+import type { IProductFileDto } from './product-file.dto.js';
+import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 import type { tags } from 'typia';
 import typia from 'typia';
 import type {
   TagsIntegerString,
   TagsNotBlank,
-} from '@/utils/typia/tags/string.tag';
+} from '#/utils/typia/tags/string.tag.js';
 import type {
   TagsIvaString,
   TagsProductCode,
-} from '@/utils/typia/validators/product.validator';
-import { cleanString } from '@/utils/string.util';
-import { isObject } from '@/utils/is.utils';
-import type { IRequestBodyValidator } from '@nestia/core/src/options/IRequestBodyValidator';
-import { ProductStatus } from 'src/generated/drizzle/enums';
+} from '#/utils/typia/validators/product.validator.js';
+import { cleanString } from '#/utils/string.util.js';
+import { isObject } from '#/utils/is.utils.js';
+import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
+import { ProductStatus } from '#/generated/drizzle/enums.js';
 import { BadRequestException } from '@nestjs/common';
 
 export interface ICreateProductDto {

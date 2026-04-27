@@ -2,7 +2,7 @@ import type { tags } from 'typia';
 import type {
   TagsMaxNumberString,
   TagsUNumeric10_2_String,
-} from '../tags/number.tags';
+} from '../tags/number.tags.js';
 
 /**
  *  税率百分比验证，最大100，最少0，最多两位小数

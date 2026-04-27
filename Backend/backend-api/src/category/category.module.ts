@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CategoryService } from './services/category.service';
-import { CategoryController } from './controllers/category.controller';
+import { CategoryService } from './services/category.service.js';
+import { CategoryController } from './controllers/category.controller.js';
 import { RouterModule } from '@nestjs/core';
-import { CheckCategoryController } from './controllers/check-category.controller';
-import { CheckCategoryService } from './services/check-category.service';
+import { CheckCategoryController } from './controllers/check-category.controller.js';
+import { CheckCategoryService } from './services/check-category.service.js';
 
 @Module({
   imports: [

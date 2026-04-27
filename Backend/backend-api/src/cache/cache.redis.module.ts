@@ -3,7 +3,7 @@ import { Global, Module, Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PinoLogger } from 'nestjs-pino';
 import KeyvRedis from '@keyv/redis';
-import { IoRedisService } from './redis/ioredis.cache.service';
+import { IoRedisService } from './redis/ioredis.cache.service.js';
 
 @Global()
 @Module({

@@ -6,9 +6,9 @@ import {
   ApiParam,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { LocationsService } from './locations.service';
+import { LocationsService } from './locations.service.js';
 import { CacheTTL } from '@nestjs/cache-manager';
-import { DAY } from '@/utils/date.utils';
+import { DAY } from '#/utils/date.utils.js';
 import { TypedParam, TypedRoute } from '@nestia/core';
 
 /**

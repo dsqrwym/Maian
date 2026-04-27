@@ -7,18 +7,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AUTH_ERROR } from '../auth.constants';
+import { AUTH_ERROR } from '../auth.constants.js';
 import {
   REFRESH_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_PATH,
-} from '@/config/constants.config';
+} from '#/config/constants.config.js';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth.service.js';
 import { Logger } from 'nestjs-pino';
-import { JwtAuthGuard } from '../guard/auth.guard';
-import { IDeleteSessionDto } from '../dto/delete.session.dto';
+import { JwtAuthGuard } from '../guard/auth.guard.js';
+import { IDeleteSessionDto } from '../dto/delete.session.dto.js';
 import { TypedRoute } from '@nestia/core';
-import { TypedBody } from '@/utils/typia/typed-body.typia';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 import typia from 'typia';
 
 /**

@@ -1,11 +1,14 @@
 import { Controller, UseGuards } from '@nestjs/common';
-import { CreateAdminService } from '../services/create-admin.service';
-import { ICreateAdminDto, validateCreateAdmin } from '../dto/create-admin.dto';
+import { CreateAdminService } from '../services/create-admin.service.js';
+import {
+  ICreateAdminDto,
+  validateCreateAdmin,
+} from '../dto/create-admin.dto.js';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@/auth/guard/auth.guard';
-import { RolesAllowed } from '@/common/guards/decorator/roles-allowed.decorator';
-import { UserRole } from 'src/generated/drizzle/enums';
-import { TypedBody } from '@/utils/typia/typed-body.typia';
+import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
+import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
+import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 import { TypedRoute } from '@nestia/core';
 
 /**

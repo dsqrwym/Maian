@@ -45,4 +45,4 @@ COPY --from=builder /app/src/i18n/locales ./src/i18n/locales
 EXPOSE 3000
 
 # 启动命令
-CMD ["node", "dist/src/main"]
+CMD ["node", "dist/src/main.js"]
