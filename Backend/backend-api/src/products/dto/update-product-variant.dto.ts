@@ -6,6 +6,8 @@ import typia from 'typia';
 export interface IUpdateVariantDto extends Partial<ICreateVariantDto> {
   id: TagsIntegerString;
 }
+export const validateIUpdateVariantFunction =
+  typia.createAssertEquals<IUpdateVariantDto>();
 export const validateIUpdateVariant = (input: unknown) => {
   if (isObject(input)) {
     if (typeof input.product_code === 'string') {
@@ -13,5 +15,5 @@ export const validateIUpdateVariant = (input: unknown) => {
     }
   }
 
-  return typia.assertEquals<IUpdateVariantDto>(input);
+  return validateIUpdateVariantFunction(input);
 };

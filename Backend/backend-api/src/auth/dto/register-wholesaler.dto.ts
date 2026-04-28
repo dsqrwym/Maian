@@ -88,7 +88,8 @@ export interface IRegisterWholesalerDto {
    */
   token: TagsNotBlank;
 }
-
+export const validateRegisterWholesalerFunction =
+  typia.createAssertEquals<IRegisterWholesalerDto>();
 export const validateRegisterWholesaler: IRequestBodyValidator.IAssert<IRegisterWholesalerDto> =
   {
     type: 'assert',
@@ -109,7 +110,7 @@ export const validateRegisterWholesaler: IRequestBodyValidator.IAssert<IRegister
         }
         obj.address = validateDirection(obj.address);
       }
-      const typedBody = typia.assertEquals<IRegisterWholesalerDto>(input);
+      const typedBody = validateRegisterWholesalerFunction(input);
 
       const phoneNumber = parsePhoneNumberFromString(typedBody.telephone);
       if (!phoneNumber || !phoneNumber.isValid()) {

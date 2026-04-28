@@ -24,6 +24,8 @@ export interface ICategoryQueryDto extends IPaginationQueryDto {
 
   fields?: CategorySelectField[];
 }
+export const validateCategoryQueryFunction =
+  typia.http.createAssertQuery<ICategoryQueryDto>();
 export const validateCategoryQuery: IRequestQueryValidator.IAssert<ICategoryQueryDto> =
   {
     type: 'assert',
@@ -31,6 +33,6 @@ export const validateCategoryQuery: IRequestQueryValidator.IAssert<ICategoryQuer
       const search = input.get('search');
       if (search) input.set('search', cleanString(search));
 
-      return typia.http.assertQuery<ICategoryQueryDto>(input);
+      return validateCategoryQueryFunction(input);
     },
   };

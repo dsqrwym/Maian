@@ -14,7 +14,7 @@ import { join } from 'path';
       loader: I18nJsonLoader,
       loaderOptions: {
         path: join(process.cwd(), 'src', 'i18n', 'locales'), // i18n JSON 文件夹
-        watch: true,
+        watch: false,
       },
       typesOutputPath: join(
         process.cwd(),

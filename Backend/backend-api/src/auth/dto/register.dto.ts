@@ -38,6 +38,8 @@ export interface ISendNormalRegisterMailDto {
    */
   deepLink?: (string & tags.MaxLength<500>) | null;
 }
+export const validateSendNormalRegisterMailFunction =
+  typia.createAssertEquals<ISendNormalRegisterMailDto>();
 
 export const validateSendNormalRegisterMail: IRequestBodyValidator.IAssert<ISendNormalRegisterMailDto> =
   {
@@ -50,6 +52,6 @@ export const validateSendNormalRegisterMail: IRequestBodyValidator.IAssert<ISend
         }
       }
 
-      return typia.assertEquals<ISendNormalRegisterMailDto>(input);
+      return validateSendNormalRegisterMailFunction(input);
     },
   };

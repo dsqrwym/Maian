@@ -62,7 +62,8 @@ export interface ICreateEmployeeDto {
    */
   username?: TagsUsername;
 }
-
+export const validateCreateEmployeeFunction =
+  typia.createAssertEquals<ICreateEmployeeDto>();
 export const validateICreateEmployee: IRequestBodyValidator.IAssert<ICreateEmployeeDto> =
   {
     type: 'assert',
@@ -93,6 +94,6 @@ export const validateICreateEmployee: IRequestBodyValidator.IAssert<ICreateEmplo
           obj.cif = cleanString(obj.cif);
         }
       }
-      return typia.assertEquals<ICreateEmployeeDto>(input);
+      return validateCreateEmployeeFunction(input);
     },
   };

@@ -1,29 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsNumber, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 import { tags } from 'typia';
-
-export class PaginationQueryDto {
-  @ApiPropertyOptional({
-    description: 'Current page number (starts from 1)',
-    default: 1,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  @Min(1)
-  page: number = 1;
-
-  @ApiPropertyOptional({
-    description: 'Number of items per page',
-    default: 50,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  @Min(1)
-  limit: number = 50;
-}
 
 export interface IPaginationQueryDto {
   page: number & tags.Minimum<1>;

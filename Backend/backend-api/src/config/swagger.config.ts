@@ -1,59 +1,50 @@
-import { SwaggerModule } from '@nestjs/swagger';
-import type { INestApplication } from '@nestjs/common';
 import { NestiaSwaggerComposer } from '@nestia/sdk';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { join } from 'path';
+import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 
-export async function useSwagger(app: INestApplication) {
-  // const config = new DocumentBuilder()
-  //   .setTitle('Maian NestJS Backend API')
-  //   .setDescription('Interactive API documentation for Maian backend services')
-  //   .setVersion('1.0.0')
-  //   .addTag('nestjs')
-  //   .addTag('Authentication')
-  //   .addTag('App')
-  //   .addBearerAuth(
-  //     {
-  //       type: 'http',
-  //       scheme: 'bearer',
-  //       bearerFormat: 'JWT',
-  //       description: 'Enter JWT access token',
-  //     },
-  //     'bearer',
-  //   )
-  //   .addServer('http://localhost:3000', 'Local')
-  //   .addServer('https://api.dsqrwym.es', 'Production')
-  //   .build();
-  //
-  // const document = SwaggerModule.createDocument(app, config);
-  //
-  // SwaggerModule.setup('maian/api-docs', app, document, {
-  //   swaggerOptions: {
-  //     persistAuthorization: true,
-  //     withCredentials: true,
-  //     displayRequestDuration: true,
-  //   },
-  // });
-
-  const nestiaDocument = await NestiaSwaggerComposer.document(app, {
-    openapi: '3.0',
-    tags: [{ name: 'nestjs' }, { name: 'Authentication' }, { name: 'App' }],
-    servers: [
-      { url: 'http://localhost:3000', description: 'Local' },
-      { url: 'https://api.dsqrwym.es', description: 'Production' },
-    ],
-    security: {
-      bearer: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
+export async function useSwagger(
+  app: NestFastifyApplication,
+  toGenerateSwagger: boolean = false,
+  swaggerPath: string = './public/swagger/swagger.json',
+) {
+  if (toGenerateSwagger) {
+    const nestiaDocument = await NestiaSwaggerComposer.document(app, {
+      openapi: '3.1',
+      tags: [{ name: 'nestjs' }, { name: 'Authentication' }, { name: 'App' }],
+      servers: [
+        { url: 'http://localhost:3000', description: 'Local' },
+        { url: 'https://api.dsqrwym.es', description: 'Production' },
+      ],
+      security: {
+        bearer: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
-    },
-  });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  SwaggerModule.setup('maian/api-docs', app, nestiaDocument as any, {
-    swaggerOptions: {
-      persistAuthorization: true, // 认证持久化
-      displayRequestDuration: true, // 显示请求耗时
-      explorer: true,
-    },
-  });
+    });
+    mkdirSync(dirname(swaggerPath), { recursive: true });
+    writeFileSync(swaggerPath, JSON.stringify(nestiaDocument, null, 2), 'utf8');
+  } else {
+    app.useStaticAssets({
+      root: join(process.cwd(), 'public/swagger'),
+      prefix: '/maian/api-docs',
+      decorateReply: true,
+      index: ['index.html'],
+    });
+
+    // const nestiaDocument: unknown = JSON.parse(
+    //   readFileSync(swaggerPath, 'utf8'),
+    // );
+
+    // SwaggerModule.setup('maian/api-docs', app, nestiaDocument as any, {
+    //   swaggerOptions: {
+    //     persistAuthorization: true, // 认证持久化
+    //     displayRequestDuration: true, // 显示请求耗时
+    //     explorer: true,
+    //   },
+    // });
+  }
 }

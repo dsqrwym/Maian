@@ -46,6 +46,9 @@ export interface IFindUserQueryDto extends IPaginationQueryDto {
   orderDir?: OrderByEnum & tags.Example<'asc'>;
 }
 
+export const validateFindUserQueryFunction =
+  typia.http.createAssertQuery<IFindUserQueryDto>();
+
 export const validateFindUserQuery: IRequestQueryValidator.IAssert<IFindUserQueryDto> =
   {
     type: 'assert',
@@ -53,6 +56,6 @@ export const validateFindUserQuery: IRequestQueryValidator.IAssert<IFindUserQuer
       const search = input.get('search');
       if (search) input.set('search', cleanString(search));
 
-      return typia.http.assertQuery<IFindUserQueryDto>(input);
+      return validateFindUserQueryFunction(input);
     },
   };

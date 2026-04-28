@@ -25,6 +25,7 @@ export interface ILoginDto {
 
   userAgent: string & TagsUserAgent; // 登录设备
 }
+export const validateLoginFunction = typia.createAssertEquals<ILoginDto>();
 
 export const validateLogin: IRequestBodyValidator.IAssert<ILoginDto> = {
   type: 'assert',
@@ -45,7 +46,7 @@ export const validateLogin: IRequestBodyValidator.IAssert<ILoginDto> = {
         obj.userAgent = obj.userAgent.toUpperCase();
       }
     }
-    const typedInput = typia.assertEquals<ILoginDto>(input);
+    const typedInput = validateLoginFunction(input);
 
     if (!typedInput.email && !typedInput.username) {
       throw new BadRequestException('Either email or username is required');

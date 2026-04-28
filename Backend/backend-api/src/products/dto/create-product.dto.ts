@@ -53,6 +53,8 @@ export interface ICreateProductDto {
 
   files: IProductFileDto[] | null;
 }
+export const validateICreateProductFunction =
+  typia.createAssertEquals<ICreateProductDto>();
 export const validateICreateProduct: IRequestBodyValidator.IAssert<ICreateProductDto> =
   {
     type: 'assert',
@@ -78,7 +80,7 @@ export const validateICreateProduct: IRequestBodyValidator.IAssert<ICreateProduc
           );
         }
       }
-      const body = typia.assertEquals<ICreateProductDto>(input);
+      const body = validateICreateProductFunction(input);
 
       if (body.translations) {
         const codes = body?.translations.map((t) => t.lang_code);

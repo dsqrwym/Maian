@@ -33,6 +33,8 @@ export interface IProductListQueryDto extends IPaginationQueryDto {
   fields?: ProductListSelectField[] &
     tags.Example<['iva', 'status', 'user_id', 'category']>;
 }
+export const validateProductListQueryFunction =
+  typia.http.createAssertQuery<IProductListQueryDto>();
 export const validateProductListQuery: IRequestQueryValidator.IAssert<IProductListQueryDto> =
   {
     type: 'assert',
@@ -40,6 +42,6 @@ export const validateProductListQuery: IRequestQueryValidator.IAssert<IProductLi
       const search = input.get('search');
       if (search) input.set('search', cleanString(search));
 
-      return typia.http.assertQuery<IProductListQueryDto>(input);
+      return validateProductListQueryFunction(input);
     },
   };

@@ -51,7 +51,8 @@ export interface IRegisterRetailerDto {
    */
   token: TagsNotBlank;
 }
-
+export const validateRegisterRetailerFunction =
+  typia.createAssertEquals<IRegisterRetailerDto>();
 export const validateRegisterRetailer: IRequestBodyValidator.IAssert<IRegisterRetailerDto> =
   {
     type: 'assert',
@@ -67,6 +68,6 @@ export const validateRegisterRetailer: IRequestBodyValidator.IAssert<IRegisterRe
         obj.address = validateDirection(obj.address);
       }
 
-      return typia.assertEquals<IRegisterRetailerDto>(input);
+      return validateRegisterRetailerFunction(input);
     },
   };

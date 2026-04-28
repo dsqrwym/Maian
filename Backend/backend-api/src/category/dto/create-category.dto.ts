@@ -25,6 +25,8 @@ export interface ICreateCategoryDto {
         tags.Examples<{ langCode: 'es-ES'; name: 'Electrónica' }>)
     | null;
 }
+export const validateCreateCategoryFunction =
+  typia.createAssertEquals<ICreateCategoryDto>();
 export const validateCreateCategory: IRequestBodyValidator.IAssert<ICreateCategoryDto> =
   {
     type: 'assert',
@@ -39,7 +41,7 @@ export const validateCreateCategory: IRequestBodyValidator.IAssert<ICreateCatego
         }
       }
 
-      const body = typia.assertEquals<ICreateCategoryDto>(input);
+      const body = validateCreateCategoryFunction(input);
       if (body.translations) {
         const codes = body.translations.map((t) => t.lang_code);
         if (new Set(codes).size !== codes.length) {

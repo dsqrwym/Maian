@@ -27,6 +27,8 @@ export interface IUpdateProductDto extends UpdateBase {
 
   translationsToDelete?: string[];
 }
+export const validateIUpdateProductFunction =
+  typia.createAssertEquals<IUpdateProductDto>();
 export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProductDto> =
   {
     type: 'assert',
@@ -53,7 +55,7 @@ export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProduc
         }
       }
 
-      const body = typia.assertEquals<IUpdateProductDto>(input);
+      const body = validateIUpdateProductFunction(input);
       if (body.translations) {
         const codes = body.translations.map((t) => t.lang_code);
         if (new Set(codes).size !== codes.length) {

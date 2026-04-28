@@ -10,9 +10,11 @@ export interface ICategoryTranslationDto {
 
   name: string & TagsNotBlank & tags.MaxLength<50> & tags.Example<'电子产品'>; // 对应数据库中的 name 字段
 }
+export const validateCategoryTranslationFunction =
+  typia.createAssertEquals<ICategoryTranslationDto>();
 export const validateCategoryTranslation = (input: unknown) => {
   if (isObject(input)) {
     if (typeof input.name === 'string') input.name = cleanString(input.name);
   }
-  return typia.assertEquals<ICategoryTranslationDto>(input);
+  return validateCategoryTranslationFunction(input);
 };

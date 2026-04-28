@@ -37,6 +37,8 @@ export interface ICreateVariantDto {
 
   attributes: string | null; // 暂时不用
 }
+export const validateICreateVariantFunction =
+  typia.createAssertEquals<ICreateVariantDto>();
 export const validateICreateVariant = (input: unknown) => {
   if (isObject(input)) {
     if (typeof input.product_code === 'string') {
@@ -50,7 +52,7 @@ export const validateICreateVariant = (input: unknown) => {
     }
   }
 
-  const typedBody = typia.assertEquals<ICreateVariantDto>(input);
+  const typedBody = validateICreateVariantFunction(input);
 
   if (!typedBody.price && !typedBody.price_iva) {
     throw new BadRequestException(

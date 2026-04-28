@@ -49,7 +49,8 @@ export interface IDirectionDto {
    */
   longitude?: TagsLongitude | null;
 }
-
+export const validateDirectionFunction =
+  typia.createAssertEquals<IDirectionDto>();
 export const validateDirection = (input: unknown) => {
   if (isObject(input)) {
     const obj = input;
@@ -57,7 +58,7 @@ export const validateDirection = (input: unknown) => {
       obj.street = cleanString(obj.street);
     }
   }
-  const typedInput = typia.assertEquals<IDirectionDto>(input);
+  const typedInput = validateDirectionFunction(input);
   typedInput.type = typedInput.type ?? AddressType.STORE;
   return typedInput;
 };

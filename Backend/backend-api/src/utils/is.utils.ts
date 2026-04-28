@@ -14,7 +14,7 @@ export const isObject = (val: unknown): val is Record<string, unknown> => {
  */
 export const isJson = (data: unknown): data is string => {
   if (typeof data !== 'string') return false;
-
+  if (data.length < 2) return false;
   const first = data[0];
   const last = data[data.length - 1];
 

@@ -15,6 +15,8 @@ export type ISendVerificationCodeDto = Omit<
   ISendNormalRegisterMailDto,
   'language' | 'timezone'
 >;
+export const validateSendVerificationCodeFunction =
+  typia.createAssertEquals<ISendVerificationCodeDto>();
 export const validateISendVerificationCode: IRequestBodyValidator.IAssert<ISendVerificationCodeDto> =
   {
     type: 'assert',
@@ -25,7 +27,7 @@ export const validateISendVerificationCode: IRequestBodyValidator.IAssert<ISendV
           obj.email = cleanString(obj.email);
         }
       }
-      return typia.assertEquals<ISendVerificationCodeDto>(input);
+      return validateSendVerificationCodeFunction(input);
     },
   };
 
@@ -33,6 +35,8 @@ export interface IVerifyCodeDto {
   code: string & tags.Pattern<'^\\d{6}$'> & tags.Example<'123456'>;
   email: string & TagsEmail; // 邮箱地址
 }
+export const validateVerifyCodeFunction =
+  typia.createAssertEquals<IVerifyCodeDto>();
 export const validateVerifyCode: IRequestBodyValidator.IAssert<IVerifyCodeDto> =
   {
     type: 'assert',
@@ -46,7 +50,7 @@ export const validateVerifyCode: IRequestBodyValidator.IAssert<IVerifyCodeDto> =
         }
       }
 
-      return typia.assertEquals<IVerifyCodeDto>(input);
+      return validateVerifyCodeFunction(input);
     },
   };
 

@@ -16,6 +16,8 @@ export interface IProductTranslationDto {
     | (string & tags.Example<'Translated detailed description of the product'>)
     | null;
 }
+export const validateProductTranslationFunction =
+  typia.createAssertEquals<IProductTranslationDto>();
 export const validateProductTranslationDto = (dto: unknown) => {
   if (isObject(dto)) {
     if (typeof dto.name === 'string') {
@@ -26,5 +28,5 @@ export const validateProductTranslationDto = (dto: unknown) => {
     }
   }
 
-  return typia.assertEquals<IProductTranslationDto>(dto);
+  return validateProductTranslationFunction(dto);
 };

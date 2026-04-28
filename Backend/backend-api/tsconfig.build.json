@@ -8,6 +8,7 @@
     "drizzle",
     "prisma",
     "drizzle.config.ts",
-    "prisma.config.ts"
+    "prisma.config.ts",
+    "public"
   ]
 }

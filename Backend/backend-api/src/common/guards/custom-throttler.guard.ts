@@ -18,7 +18,12 @@ export class CustomThrottlerGuard extends ThrottlerGuard {
       }
     }
 
-    const ip = req.ip;
+    const forwarded = req.headers['x-forwarded-for'];
+    const ip =
+      (typeof forwarded === 'string'
+        ? forwarded.split(',')[0].trim()
+        : req.ip) || '';
+
     const ua = req.headers['user-agent'] || 'unknown-user-agent';
     const ra = req.socket.remoteAddress || 'unknown-remote-address';
     return Promise.resolve(`ip-ua-ra:${ip}-${ua}-${ra}`);

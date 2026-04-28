@@ -18,6 +18,8 @@ export interface IUpdateCategoryDto extends Partial<
    */
   version: TagsVersion;
 }
+export const validateUpdateCategoryFunction =
+  typia.createAssertEquals<IUpdateCategoryDto>();
 export const validateUpdateCategory: IRequestBodyValidator.IAssert<IUpdateCategoryDto> =
   {
     type: 'assert',
@@ -32,7 +34,7 @@ export const validateUpdateCategory: IRequestBodyValidator.IAssert<IUpdateCatego
         }
       }
 
-      const body = typia.assertEquals<IUpdateCategoryDto>(input);
+      const body = validateUpdateCategoryFunction(input);
       if (body.translations) {
         const codes = body.translations.map((t) => t.lang_code);
         if (new Set(codes).size !== codes.length) {

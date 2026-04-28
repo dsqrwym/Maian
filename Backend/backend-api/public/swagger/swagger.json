@@ -1,0 +1,4876 @@
+{
+  "openapi": "3.1.0",
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local"
+    },
+    {
+      "url": "https://api.dsqrwym.es",
+      "description": "Production"
+    }
+  ],
+  "info": {
+    "version": "0.0.1",
+    "title": "backend-api",
+    "description": "",
+    "license": {
+      "name": "UNLICENSED"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "IUploadFileForWholesalerDto": {
+        "type": "object",
+        "properties": {
+          "wholesalerId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          }
+        },
+        "required": []
+      },
+      "VerifyCodeResponseDto": {
+        "type": "object",
+        "properties": {
+          "verification_id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "verification_id",
+          "token",
+          "expires_at"
+        ]
+      },
+      "IVerifyCodeDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^\\d{6}$",
+            "example": "123456"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com"
+          }
+        },
+        "required": [
+          "code",
+          "email"
+        ]
+      },
+      "ISendNormalRegisterMailDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com",
+            "description": "Email address for registration\n注册邮箱地址"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES",
+            "description": "Preferred language in BCP-47 format (e.g., en-US, zh-CN)\n首选语言（BCP-47格式，例如：en-US, zh-CN）"
+          },
+          "timezone": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Europe/Madrid",
+            "description": "Timezone in IANA format (e.g., America/New_York, Asia/Shanghai, Europe/Madrid)\n时区（IANA格式，例如：America/New_York, Asia/Shanghai, Europe/Madrid）"
+          },
+          "deepLink": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 500
+              }
+            ],
+            "description": "Deep link for mobile app redirection (optional)\n移动应用深度链接（可选）"
+          }
+        },
+        "required": [
+          "email",
+          "language",
+          "timezone"
+        ],
+        "description": "DTO for sending normal registration email\n发送普通注册邮件的DTO"
+      },
+      "IRegisterRetailerDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com",
+            "description": "User's email address\n用户邮箱地址"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "example": "StrongPassword123!",
+            "description": "User's password\n用户密码"
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 30,
+                "example": "username"
+              }
+            ],
+            "description": "Username (optional, must be unique)\n用户名（可选，必须唯一）"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IDirectionDto",
+            "description": "Store's business address\n商店经营地址"
+          },
+          "verification_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890",
+            "description": "Unique identifier for the password reset verification process"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT token to be used for password reset"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "username",
+          "address",
+          "verification_id",
+          "token"
+        ],
+        "description": "DTO for retailer registration\n零售商注册数据传输对象"
+      },
+      "IDirectionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "const": "DELIVERY"
+              },
+              {
+                "const": "INVOICE"
+              },
+              {
+                "const": "STORE"
+              }
+            ],
+            "description": "地址类型"
+          },
+          "street": {
+            "type": "string",
+            "maxLength": 200,
+            "example": "123 Main St, Apt 4B",
+            "description": "街道地址"
+          },
+          "city": {
+            "type": "number",
+            "minimum": 1,
+            "example": 1,
+            "description": "城市ID"
+          },
+          "province": {
+            "type": "number",
+            "minimum": 1,
+            "example": 2,
+            "description": "省份ID"
+          },
+          "country": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 999,
+            "example": 724,
+            "description": "国家（ISO numeric）"
+          },
+          "zipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "description": "邮编"
+          },
+          "latitude": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90,
+                "example": "39.7128"
+              }
+            ],
+            "description": "纬度"
+          },
+          "longitude": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "example": "116.4074"
+              }
+            ],
+            "description": "经度"
+          }
+        },
+        "required": [
+          "street",
+          "city",
+          "province",
+          "country",
+          "zipCode"
+        ]
+      },
+      "IRegisterWholesalerDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com",
+            "description": "User's email address\n用户邮箱地址"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "example": "StrongPassword123!",
+            "description": "User's password\n用户密码"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "username",
+            "description": "Username (optional)\n用户名（可选）"
+          },
+          "company_name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Company's legal name\n公司名称"
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "const": "S.L."
+              },
+              {
+                "const": "S.A."
+              },
+              {
+                "const": "Autónomo"
+              },
+              {
+                "const": "Cooperativa"
+              },
+              {
+                "const": "Sociedad Civil"
+              },
+              {
+                "const": "Otros"
+              }
+            ],
+            "description": "Company type (Spain)\n公司类型（西班牙）"
+          },
+          "telephone": {
+            "type": "string",
+            "maxLength": 25,
+            "example": "+34 679 876 667",
+            "description": "Telephone number\n联系电话"
+          },
+          "address": {
+            "$ref": "#/components/schemas/IDirectionDto",
+            "description": "Business address\n经营地址"
+          },
+          "verification_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890",
+            "description": "Verification ID\n验证ID"
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT token used for verification\n用于验证的JWT令牌"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "company_name",
+          "company_type",
+          "telephone",
+          "address",
+          "verification_id",
+          "token"
+        ],
+        "description": "DTO for wholesaler registration\n批发商注册数据传输对象"
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserPayload"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "user"
+        ]
+      },
+      "UserPayload": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "用户唯一 ID（来自 users 表的主键）\n用于标识 token 属于哪个用户。"
+          },
+          "userRole": {
+            "oneOf": [
+              {
+                "const": "WHOLESALER"
+              },
+              {
+                "const": "RETAILER"
+              },
+              {
+                "const": "SUPPORT"
+              },
+              {
+                "const": "DELIVERY"
+              },
+              {
+                "const": "WAREHOUSE"
+              },
+              {
+                "const": "ADMIN"
+              },
+              {
+                "const": "SUPERADMIN"
+              }
+            ],
+            "description": "用户角色，用于进行角色权限判断。\n控制用户可以访问哪些资源和执行哪些操作。"
+          },
+          "userStatus": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              },
+              {
+                "const": "PENDING_VERIFICATION"
+              },
+              {
+                "const": "PENDING_REVIEW"
+              },
+              {
+                "const": "APPROVED"
+              },
+              {
+                "const": "BANNED"
+              }
+            ],
+            "description": "用户账户状态\n用于判断用户账户是否被禁用或其他状态。"
+          },
+          "deviceFinger": {
+            "type": "string",
+            "description": "设备指纹，由设备名和 UA 信息哈希而成\n用于识别用户使用的是哪个设备，增强安全性。"
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "会话记录 ID（来自 user_sessions 表的主键）\n每次登录生成一个唯一的 sessionId，用于精确控制和撤销特定会话。"
+          },
+          "wholesalerId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId",
+          "userRole",
+          "userStatus",
+          "deviceFinger",
+          "sessionId"
+        ],
+        "description": "UserPayload 是嵌入 JWT token 中的载荷（payload）结构。\n用于识别当前会话的用户、设备以及该次会话的唯一标识。\n这个接口替代了原来的 AuthTokenPayload 和 AuthenticatedUser 接口，\n将用户认证信息和会话信息合并到一个统一的接口中。"
+      },
+      "ILoginDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "example": "StrongPassword123!"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "username"
+          },
+          "wholesalerId": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20
+          },
+          "deviceName": {
+            "type": "string",
+            "maxLength": 150,
+            "example": "CHROME_BROWSER"
+          },
+          "userAgent": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "MOZILLA/5.0 (WINDOWS NT 10.0; WIN64; X64)"
+          }
+        },
+        "required": [
+          "password",
+          "deviceName",
+          "userAgent"
+        ]
+      },
+      "ISendVerificationCodeDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com",
+            "description": "Email address for registration\n注册邮箱地址"
+          },
+          "deepLink": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 500
+              }
+            ],
+            "description": "Deep link for mobile app redirection (optional)\n移动应用深度链接（可选）"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "IResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "verification_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "token": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 6,
+            "example": "StrongPassword123!"
+          }
+        },
+        "required": [
+          "verification_id",
+          "token",
+          "newPassword"
+        ]
+      },
+      "TokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ]
+      },
+      "IRefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "IDeleteSessionDto": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6,
+            "example": "StrongPassword123!"
+          }
+        },
+        "required": [
+          "sessionId",
+          "password"
+        ]
+      },
+      "IVerifyEmailQueryDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "token": {
+            "type": "string"
+          },
+          "lang": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          }
+        },
+        "required": [
+          "userId",
+          "token"
+        ]
+      },
+      "ICheckUserEmailQueryDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "description": "DTO for checking email availability\n检查邮箱可用性的数据传输对象"
+      },
+      "ICheckUserUsernameQueryDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "username"
+          },
+          "wholesalerId": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20
+          },
+          "isAdmin": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "description": "DTO for checking username availability\n检查用户名可用性的数据传输对象"
+      },
+      "PaginatedDataWithTFindUserResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FindUserResponse"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "items",
+          "pagination"
+        ]
+      },
+      "FindUserResponse": {
+        "type": "object",
+        "properties": {
+          "profile": {},
+          "cif": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "last_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "first_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "role": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "page",
+          "limit"
+        ]
+      },
+      "IFindUserQueryDto": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string"
+          },
+          "role": {
+            "oneOf": [
+              {
+                "const": "WHOLESALER"
+              },
+              {
+                "const": "RETAILER"
+              },
+              {
+                "const": "SUPPORT"
+              },
+              {
+                "const": "DELIVERY"
+              },
+              {
+                "const": "WAREHOUSE"
+              },
+              {
+                "const": "ADMIN"
+              },
+              {
+                "const": "SUPERADMIN"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              },
+              {
+                "const": "PENDING_VERIFICATION"
+              },
+              {
+                "const": "PENDING_REVIEW"
+              },
+              {
+                "const": "APPROVED"
+              },
+              {
+                "const": "BANNED"
+              }
+            ]
+          },
+          "selectUserStatus": {
+            "type": "boolean"
+          },
+          "selectUserRole": {
+            "type": "boolean"
+          },
+          "user_id": {
+            "type": "boolean"
+          },
+          "username": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "boolean"
+          },
+          "first_name": {
+            "type": "boolean"
+          },
+          "last_name": {
+            "type": "boolean"
+          },
+          "telephone": {
+            "type": "boolean"
+          },
+          "cif": {
+            "type": "boolean"
+          },
+          "profile": {
+            "type": "boolean"
+          },
+          "orderBy": {
+            "oneOf": [
+              {
+                "const": "id"
+              },
+              {
+                "const": "user_id"
+              },
+              {
+                "const": "first_name"
+              },
+              {
+                "const": "last_name"
+              },
+              {
+                "const": "username"
+              },
+              {
+                "const": "email"
+              },
+              {
+                "const": "telephone"
+              },
+              {
+                "const": "cif"
+              }
+            ]
+          },
+          "orderDir": {
+            "oneOf": [
+              {
+                "const": "asc"
+              },
+              {
+                "const": "desc"
+              }
+            ]
+          },
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "ICreateEmployeeDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com",
+            "description": "员工账户的唯一电子邮箱地址\n必须是有效格式且不在黑名单域名中"
+          },
+          "first_name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "员工的名字"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 60,
+            "description": "员工的姓氏"
+          },
+          "telephone": {
+            "type": "string",
+            "maxLength": 25,
+            "example": "+34 679 876 667",
+            "description": "联系电话"
+          },
+          "cif": {
+            "type": "string",
+            "maxLength": 20,
+            "pattern": "^[A-Z]?\\d{7,8}[A-Z]?$",
+            "description": "西班牙税务识别号 (CIF/NIF/NIE)"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "username",
+            "description": "系统登录用的唯一用户名\n长度必须为3-30个字符，且不能包含'@'符号"
+          }
+        },
+        "required": [
+          "email",
+          "first_name"
+        ],
+        "description": "批发商系统创建新员工的数据传输对象\n包含注册员工账户所需的所有必要信息"
+      },
+      "ICreateAdminDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "format": "email",
+            "example": "user@example.com",
+            "description": "员工账户的唯一电子邮箱地址\n必须是有效格式且不在黑名单域名中"
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 30,
+                "example": "username"
+              }
+            ],
+            "description": "系统登录用的唯一用户名\n长度必须为3-30个字符，且不能包含'@'符号"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ICreateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "uuid",
+                "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Electronics"
+          },
+          "iva": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "21.00"
+              }
+            ]
+          },
+          "parentId": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "translations": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ICategoryTranslationDto"
+                },
+                "examples": {
+                  "langCode": "es-ES",
+                  "name": "Electrónica"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "userId",
+          "name",
+          "iva",
+          "parentId",
+          "translations"
+        ]
+      },
+      "ICategoryTranslationDto": {
+        "type": "object",
+        "properties": {
+          "lang_code": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "电子产品"
+          }
+        },
+        "required": [
+          "lang_code",
+          "name"
+        ]
+      },
+      "PaginatedDataWithTICategoryResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICategoryResponse"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "items",
+          "pagination"
+        ]
+      },
+      "ICategoryResponse": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ICategoryResponseRelation"
+              }
+            ]
+          },
+          "children": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ICategoryResponseRelation"
+                }
+              }
+            ]
+          },
+          "children_count": {
+            "type": "number"
+          },
+          "category_translations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lang_code": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "lang_code",
+                "name"
+              ]
+            }
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "level": {
+            "type": "number"
+          },
+          "iva": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "ICategoryResponseRelation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iva": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "level": {
+            "type": "number"
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "parent": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ICategoryResponseRelation"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "ICategoryQueryDto": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "example": "Keywords for name search"
+          },
+          "langCode": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "zh-CH"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "maxLevel": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 3,
+            "example": 3
+          },
+          "withChildrenCount": {
+            "type": "boolean"
+          },
+          "type": {
+            "oneOf": [
+              {
+                "const": "PRIVATE"
+              },
+              {
+                "const": "PUBLIC"
+              }
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "const": "iva"
+                },
+                {
+                  "const": "level"
+                },
+                {
+                  "const": "user_id"
+                },
+                {
+                  "const": "relations"
+                },
+                {
+                  "const": "translations"
+                }
+              ]
+            }
+          },
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "IUpdateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "translationsToDelete": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "The current version of the category. Required for optimistic concurrency control.\nThis value is obtained from `GET /:id/update`.\nIf the version does not match the latest one on the server, a 409 Conflict is returned."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Electronics"
+          },
+          "iva": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "21.00"
+              }
+            ]
+          },
+          "translations": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ICategoryTranslationDto"
+                },
+                "examples": {
+                  "langCode": "es-ES",
+                  "name": "Electrónica"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "ICheckCategoryNameCreateQueryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "Electronics"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "description": "DTO for checking category name availability when creating"
+      },
+      "ICheckCategoryNameUpdateQueryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "Electronics"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "description": "DTO for checking category name availability when updating"
+      },
+      "ICreateProductDto": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Organic Olive Oil"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 100,
+                "example": "Short title of the product"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "Cold-pressed extra virgin olive oil from Spain."
+              }
+            ]
+          },
+          "iva": {
+            "type": "string",
+            "example": "21.00"
+          },
+          "product_code": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
+            "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              }
+            ]
+          },
+          "primary_category_id": {
+            "type": "string"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICreateVariantDto"
+            },
+            "minItems": 1
+          },
+          "translations": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IProductTranslationDto"
+                }
+              }
+            ]
+          },
+          "files": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IProductFileDto"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "name",
+          "title",
+          "description",
+          "iva",
+          "product_code",
+          "status",
+          "primary_category_id",
+          "variants",
+          "translations",
+          "files"
+        ]
+      },
+      "ICreateVariantDto": {
+        "type": "object",
+        "properties": {
+          "type_sale": {
+            "oneOf": [
+              {
+                "const": "UNIT"
+              },
+              {
+                "const": "BOX"
+              },
+              {
+                "const": "PACK"
+              }
+            ]
+          },
+          "sort": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 32767,
+            "example": 0
+          },
+          "price": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "10.0"
+              }
+            ]
+          },
+          "price_iva": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "10.21"
+              }
+            ]
+          },
+          "product_code": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
+            "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
+          },
+          "available_stock": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "sale_unit_qty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+          },
+          "min_order_qty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              }
+            ]
+          },
+          "low_stock_threshold": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "attributes": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "type_sale",
+          "sort",
+          "price",
+          "price_iva",
+          "product_code",
+          "available_stock",
+          "sale_unit_qty",
+          "min_order_qty",
+          "status",
+          "low_stock_threshold",
+          "attributes"
+        ]
+      },
+      "IProductTranslationDto": {
+        "type": "object",
+        "properties": {
+          "lang_code": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Product Name"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 100,
+                "example": "Product Name"
+              }
+            ]
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "Translated detailed description of the product"
+              }
+            ]
+          }
+        },
+        "required": [
+          "lang_code",
+          "name",
+          "title",
+          "description"
+        ]
+      },
+      "IProductFileDto": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string"
+          },
+          "sort": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 32767,
+            "example": 0
+          }
+        },
+        "required": [
+          "file_id",
+          "sort"
+        ]
+      },
+      "PaginatedDataWithTIProductResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IProductResponse"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "items",
+          "pagination"
+        ]
+      },
+      "IProductResponse": {
+        "type": "object",
+        "properties": {
+          "product_translations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lang_code": {
+                  "type": "string"
+                },
+                "name": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "title": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "lang_code",
+                "name",
+                "title"
+              ]
+            }
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "iva": {
+            "type": "string"
+          },
+          "main_category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "category_translations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "lang_code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "lang_code",
+                    "name"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "category_translations"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "product_code": {
+            "type": "string"
+          },
+          "min_price_iva": {
+            "type": "string"
+          },
+          "min_price": {
+            "type": "string"
+          },
+          "total_stock": {
+            "type": "number"
+          },
+          "min_order_qty": {
+            "type": "number"
+          },
+          "main_image": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "mime_type": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "mime_type"
+            ]
+          }
+        },
+        "required": [
+          "product_translations",
+          "id",
+          "name",
+          "title",
+          "product_code",
+          "min_price_iva",
+          "min_price",
+          "total_stock",
+          "min_order_qty",
+          "main_image"
+        ]
+      },
+      "IProductListQueryDto": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string"
+          },
+          "langCode": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          },
+          "wholesaler_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "sort_by": {
+            "oneOf": [
+              {
+                "const": "name"
+              },
+              {
+                "const": "title"
+              },
+              {
+                "const": "category"
+              },
+              {
+                "const": "product_code"
+              },
+              {
+                "const": "min_order_qty"
+              },
+              {
+                "const": "available_stock"
+              },
+              {
+                "const": "price_iva"
+              },
+              {
+                "const": "price"
+              }
+            ]
+          },
+          "sort_order": {
+            "oneOf": [
+              {
+                "const": "asc"
+              },
+              {
+                "const": "desc"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              }
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "const": "iva"
+                },
+                {
+                  "const": "status"
+                },
+                {
+                  "const": "user_id"
+                },
+                {
+                  "const": "category"
+                }
+              ]
+            }
+          },
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "sort_order",
+          "page",
+          "limit"
+        ]
+      },
+      "IUpdateProductDto": {
+        "type": "object",
+        "properties": {
+          "updateVariants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IUpdateVariantDto"
+            }
+          },
+          "createVariants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICreateVariantDto"
+            }
+          },
+          "variantsToDelete": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IProductTranslationDto"
+            }
+          },
+          "translationsToDelete": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "Cold-pressed extra virgin olive oil from Spain."
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Organic Olive Oil"
+          },
+          "title": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 100,
+                "example": "Short title of the product"
+              }
+            ]
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              }
+            ]
+          },
+          "product_code": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
+            "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
+          },
+          "iva": {
+            "type": "string",
+            "example": "21.00"
+          },
+          "files": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IProductFileDto"
+                }
+              }
+            ]
+          },
+          "primary_category_id": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "IUpdateVariantDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type_sale": {
+            "oneOf": [
+              {
+                "const": "UNIT"
+              },
+              {
+                "const": "BOX"
+              },
+              {
+                "const": "PACK"
+              }
+            ]
+          },
+          "sort": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 32767,
+            "example": 0
+          },
+          "price": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "10.0"
+              }
+            ]
+          },
+          "price_iva": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "10.21"
+              }
+            ]
+          },
+          "product_code": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
+            "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
+          },
+          "available_stock": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "sale_unit_qty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+          },
+          "min_order_qty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              }
+            ]
+          },
+          "low_stock_threshold": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "attributes": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/maian/get/random-string": {
+      "get": {
+        "summary": "Get a random string",
+        "description": "Get a random string.\n\nGenerates a random string of the specified length.",
+        "tags": [
+          "App"
+        ],
+        "parameters": [
+          {
+            "name": "length",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Randomly generated string",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "get",
+          "random_string",
+          "getRandomString"
+        ],
+        "x-samchon-controller": "AppController"
+      }
+    },
+    "/maian/get/hello": {
+      "get": {
+        "summary": "Simple health check greeting",
+        "description": "Simple health check greeting.",
+        "tags": [
+          "App"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "A hello message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "get",
+          "hello",
+          "getHello"
+        ],
+        "x-samchon-controller": "AppController"
+      }
+    },
+    "/maian/files/upload-raw": {
+      "post": {
+        "summary": "Upload a raw file via multipart/form-data",
+        "description": "Upload a raw file via multipart/form-data.\n\nReads the first chunk to detect the real MIME type using file-type,\nvalidates against allowed MIME types, sanitizes the filename,\nand streams the file to storage. Returns the generated file ID.",
+        "tags": [
+          "File Management"
+        ],
+        "parameters": [
+          {
+            "name": "wholesalerId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The ID of the uploaded file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "files",
+          "upload_raw",
+          "uploadRawFile"
+        ],
+        "x-samchon-controller": "FilesController"
+      }
+    },
+    "/maian/auth/registration/verify-email": {
+      "post": {
+        "summary": "Verify email during registration",
+        "description": "Verify email during registration.\n\nValidates the verification code sent to the user's email,\nand returns a verification token valid for 30 minutes.",
+        "tags": [
+          "Registration"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email and verification code",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IVerifyCodeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "verification_id, token, and expires_at",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyCodeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "registration",
+          "verify_email",
+          "verifyEmail"
+        ],
+        "x-samchon-controller": "RegistrationController"
+      }
+    },
+    "/maian/auth/registration/retailer": {
+      "post": {
+        "summary": "Begin retailer registration",
+        "description": "Begin retailer registration.\n\nCreates a PENDING_VERIFICATION user with RETAILER role\nand sends a verification code to the provided email.",
+        "tags": [
+          "Registration"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email, language, timezone, and optional deepLink",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ISendNormalRegisterMailDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "registration",
+          "retailer",
+          "beginRetailerRegistration"
+        ],
+        "x-samchon-controller": "RegistrationController"
+      }
+    },
+    "/maian/auth/registration/retailer/complete": {
+      "post": {
+        "summary": "Complete retailer registration",
+        "description": "Complete retailer registration.\n\nVerifies the email token, sets the user password and address,\nand activates the account (status becomes ACTIVE).",
+        "tags": [
+          "Registration"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email, password, username, verification token, and address",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IRegisterRetailerDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "registration",
+          "retailer",
+          "complete",
+          "completeRetailerRegistration"
+        ],
+        "x-samchon-controller": "RegistrationController"
+      }
+    },
+    "/maian/auth/registration/wholesaler": {
+      "post": {
+        "summary": "Begin wholesaler registration",
+        "description": "Begin wholesaler registration.\n\nCreates a PENDING_VERIFICATION user with WHOLESALER role\nand sends a verification code to the provided email.",
+        "tags": [
+          "Registration"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email, language, timezone, and optional deepLink",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ISendNormalRegisterMailDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "registration",
+          "wholesaler",
+          "beginWholesalerRegistration"
+        ],
+        "x-samchon-controller": "RegistrationController"
+      }
+    },
+    "/maian/auth/registration/wholesaler/complete": {
+      "post": {
+        "summary": "Complete wholesaler registration",
+        "description": "Complete wholesaler registration.\n\nVerifies the email token, sets the user password, company profile,\ntelephone, and address, and activates the account.",
+        "tags": [
+          "Registration"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email, password, username, company info, verification token, and address",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IRegisterWholesalerDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "registration",
+          "wholesaler",
+          "complete",
+          "completeWholesalerRegistration"
+        ],
+        "x-samchon-controller": "RegistrationController"
+      }
+    },
+    "/maian/auth/login/standard": {
+      "post": {
+        "summary": "Login for standard (retailer) users via native app",
+        "description": "Login for standard (retailer) users via native app.\n\nValidates credentials and returns access/refresh tokens in the response body.",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Login credentials (email, password, deviceName)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token, refresh token, and user payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "login",
+          "standard",
+          "loginStandard"
+        ],
+        "x-samchon-controller": "LoginController"
+      }
+    },
+    "/maian/auth/login/standard/web": {
+      "post": {
+        "summary": "Login for standard (retailer) users via web browser",
+        "description": "Login for standard (retailer) users via web browser.\n\nSets the refresh token as an httpOnly cookie and returns a CSRF token\nin the response body instead of the raw refresh token.",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Login credentials (email, password, deviceName)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token, CSRF token, and user payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "login",
+          "standard",
+          "web",
+          "loginStandardWeb"
+        ],
+        "x-samchon-controller": "LoginController"
+      }
+    },
+    "/maian/auth/login/enterprise": {
+      "post": {
+        "summary": "Login for enterprise users via native app",
+        "description": "Login for enterprise users via native app.\n\nAllows WHOLESALER, DELIVERY, SUPPORT, and WAREHOUSE roles.\nReturns access/refresh tokens in the response body.",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Login credentials (email, password, deviceName)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token, refresh token, and user payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "login",
+          "enterprise",
+          "loginEnterprise"
+        ],
+        "x-samchon-controller": "LoginController"
+      }
+    },
+    "/maian/auth/login/enterprise/web": {
+      "post": {
+        "summary": "Login for enterprise users via web browser",
+        "description": "Login for enterprise users via web browser.\n\nAllows WHOLESALER, DELIVERY, SUPPORT, and WAREHOUSE roles.\nSets the refresh token as an httpOnly cookie and returns a CSRF token.",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Login credentials (email, password, deviceName)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token, CSRF token, and user payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "login",
+          "enterprise",
+          "web",
+          "loginEnterpriseWeb"
+        ],
+        "x-samchon-controller": "LoginController"
+      }
+    },
+    "/maian/auth/login/admin": {
+      "post": {
+        "summary": "Login for admin users via native app",
+        "description": "Login for admin users via native app.\n\nAllows ADMIN and SUPERADMIN roles.\nReturns access/refresh tokens in the response body.",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Login credentials (email, password, deviceName)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token, refresh token, and user payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "login",
+          "admin",
+          "loginAdmin"
+        ],
+        "x-samchon-controller": "LoginController"
+      }
+    },
+    "/maian/auth/login/admin/web": {
+      "post": {
+        "summary": "Login for admin users via web browser",
+        "description": "Login for admin users via web browser.\n\nAllows ADMIN and SUPERADMIN roles.\nSets the refresh token as an httpOnly cookie and returns a CSRF token.",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Login credentials (email, password, deviceName)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILoginDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token, CSRF token, and user payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "login",
+          "admin",
+          "web",
+          "loginAdminWeb"
+        ],
+        "x-samchon-controller": "LoginController"
+      }
+    },
+    "/maian/auth/reset-password/send-code": {
+      "post": {
+        "summary": "Send a verification code for password reset",
+        "description": "Send a verification code for password reset.\n\nSends a 6-digit verification code to the user's email.\nRate-limited to 1 request per 60 seconds.",
+        "tags": [
+          "Reset Password"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email and optional deepLink",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ISendVerificationCodeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "reset_password",
+          "send_code",
+          "sendVerificationCode"
+        ],
+        "x-samchon-controller": "ResetPasswordController"
+      }
+    },
+    "/maian/auth/reset-password/verify-code": {
+      "post": {
+        "summary": "Verify the password reset code",
+        "description": "Verify the password reset code.\n\nValidates the verification code sent to the user's email,\nand returns a verification token for the subsequent reset step.\nRate-limited to 3 requests per 60 seconds.",
+        "tags": [
+          "Reset Password"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email and verification code",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IVerifyCodeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "verification_id, token, and expires_at",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyCodeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "reset_password",
+          "verify_code",
+          "verifyCode"
+        ],
+        "x-samchon-controller": "ResetPasswordController"
+      }
+    },
+    "/maian/auth/reset-password/reset-password": {
+      "post": {
+        "summary": "Reset the user's password",
+        "description": "Reset the user's password.\n\nConsumes the verification token, updates the password,\nand revokes all active sessions for the user.\nRate-limited to 1 request per 60 seconds.",
+        "tags": [
+          "Reset Password"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains verification_id, token, and new password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IResetPasswordDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "reset_password",
+          "reset_password",
+          "resetPassword"
+        ],
+        "x-samchon-controller": "ResetPasswordController"
+      }
+    },
+    "/maian/auth/token/refresh": {
+      "post": {
+        "summary": "Refresh access token using a refresh token (native app flow)",
+        "description": "Refresh access token using a refresh token (native app flow).\n\nValidates the refresh token, rotates it, and returns new access/refresh tokens.\nRate-limited to 2 requests per access token TTL period.",
+        "tags": [
+          "RefreshToken"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains the refresh token",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IRefreshTokenDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "New access and refresh tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "token",
+          "refresh",
+          "getAccessToken"
+        ],
+        "x-samchon-controller": "RefreshTokenController"
+      }
+    },
+    "/maian/auth/token/refresh-web": {
+      "post": {
+        "summary": "Refresh access token using cookie-based refresh token (web browser flow)",
+        "description": "Refresh access token using cookie-based refresh token (web browser flow).\n\nReads the refresh token from httpOnly cookie, validates CSRF token from body,\nrotates the cookie, and returns new access token with a new CSRF token.\nRate-limited to 2 requests per access token TTL period.",
+        "tags": [
+          "RefreshToken"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains CSRF token in refreshToken field",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IRefreshTokenDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "New access token and CSRF token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "refresh_token": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "token",
+          "refresh_web",
+          "getAccessTokenWeb"
+        ],
+        "x-samchon-controller": "RefreshTokenController"
+      }
+    },
+    "/maian/auth/session/logout": {
+      "delete": {
+        "summary": "Logout the current session",
+        "description": "Logout the current session.\n\nRevokes the current session and clears the refresh token cookie.",
+        "tags": [
+          "Session"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Confirmation message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "session",
+          "logout"
+        ],
+        "x-samchon-controller": "SessionController"
+      }
+    },
+    "/maian/auth/session/delete-session": {
+      "post": {
+        "summary": "Delete a specific session by providing the user's password",
+        "description": "Delete a specific session by providing the user's password.\n\nValidates the user's password, deletes the specified session,\nand clears the refresh token cookie if it matches the deleted session.",
+        "tags": [
+          "Session"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains sessionId and password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IDeleteSessionDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "session",
+          "delete_session",
+          "deleteSession"
+        ],
+        "x-samchon-controller": "SessionController"
+      }
+    },
+    "/maian/auth/email-verification": {
+      "get": {
+        "summary": "Verify email via verification link",
+        "description": "Verify email via verification link.\n\nValidates the email verification token from the query parameters,\nconsumes the token, and redirects the user accordingly.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": true
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "example": "es-ES"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "auth",
+          "email_verification",
+          "verifyEmail"
+        ],
+        "x-samchon-controller": "EmailVerificationController"
+      }
+    },
+    "/maian/locations/countries": {
+      "get": {
+        "summary": "Get all countries",
+        "description": "Get all countries.\n\nReturns a list of all available countries with ISO codes, names, and currency references.",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of countries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "iso_alpha2": {
+                        "type": "string"
+                      },
+                      "iso_alpha3": {
+                        "type": "string"
+                      },
+                      "iso_numeric": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      },
+                      "currency_id": {
+                        "oneOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "iso_alpha2",
+                      "iso_alpha3",
+                      "iso_numeric",
+                      "name",
+                      "name_local",
+                      "currency_id"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "locations",
+          "countries",
+          "getCountries"
+        ],
+        "x-samchon-controller": "LocationsController"
+      }
+    },
+    "/maian/locations/countries/{isoNumeric}/provinces": {
+      "get": {
+        "summary": "Get provinces by country ISO numeric code",
+        "description": "Get provinces by country ISO numeric code.",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "isoNumeric",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "- ISO 3166-1 numeric country code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of provinces",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "name_local"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "locations",
+          "countries",
+          "provinces",
+          "getProvinces"
+        ],
+        "x-samchon-controller": "LocationsController"
+      }
+    },
+    "/maian/locations/provinces/{provinceId}/cities": {
+      "get": {
+        "summary": "Get cities by province ID",
+        "description": "Get cities by province ID.",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "provinceId",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "- ID of the province"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "name_local"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "locations",
+          "provinces",
+          "cities",
+          "getCities"
+        ],
+        "x-samchon-controller": "LocationsController"
+      }
+    },
+    "/maian/locations/currencies/{isoNumeric}": {
+      "get": {
+        "summary": "Get currency details by ISO numeric code",
+        "description": "Get currency details by ISO numeric code.",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "isoNumeric",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true,
+            "description": "- ISO numeric code for the currency"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Currency information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "iso_alpha3": {
+                        "type": "string"
+                      },
+                      "symbol": {
+                        "type": "string"
+                      },
+                      "decimal_digits": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "iso_alpha3",
+                      "symbol",
+                      "decimal_digits"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "locations",
+          "currencies",
+          "getCurrency"
+        ],
+        "x-samchon-controller": "LocationsController"
+      }
+    },
+    "/maian/user/check/mail": {
+      "get": {
+        "summary": "Check if an email is already registered",
+        "description": "Check if an email is already registered.\n\nReturns true if the email is already in use, false otherwise.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "format": "email",
+              "example": "user@example.com"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the email is already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "check",
+          "mail",
+          "checkEmailUsed"
+        ],
+        "x-samchon-controller": "CheckUserController"
+      }
+    },
+    "/maian/user/check/username": {
+      "get": {
+        "summary": "Check if a username is already taken",
+        "description": "Check if a username is already taken.\n\nReturns true if the username is already in use, false otherwise.\nUsernames must be 3-30 characters long.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 30,
+              "example": "username"
+            },
+            "required": true
+          },
+          {
+            "name": "wholesalerId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 20
+            },
+            "required": false
+          },
+          {
+            "name": "isAdmin",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the username is already taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "check",
+          "username",
+          "checkUsernameUsed"
+        ],
+        "x-samchon-controller": "CheckUserController"
+      }
+    },
+    "/maian/user": {
+      "get": {
+        "summary": "Search and filter users with pagination",
+        "description": "Search and filter users with pagination.\n\nSupports filtering by search keywords, role, and status.\nResults are paginated and filtered by the user's CASL ability.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "WHOLESALER"
+                },
+                {
+                  "const": "RETAILER"
+                },
+                {
+                  "const": "SUPPORT"
+                },
+                {
+                  "const": "DELIVERY"
+                },
+                {
+                  "const": "WAREHOUSE"
+                },
+                {
+                  "const": "ADMIN"
+                },
+                {
+                  "const": "SUPERADMIN"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "ACTIVE"
+                },
+                {
+                  "const": "INACTIVE"
+                },
+                {
+                  "const": "PENDING_VERIFICATION"
+                },
+                {
+                  "const": "PENDING_REVIEW"
+                },
+                {
+                  "const": "APPROVED"
+                },
+                {
+                  "const": "BANNED"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "selectUserStatus",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "selectUserRole",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "first_name",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "last_name",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "telephone",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "cif",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "profile",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "id"
+                },
+                {
+                  "const": "user_id"
+                },
+                {
+                  "const": "first_name"
+                },
+                {
+                  "const": "last_name"
+                },
+                {
+                  "const": "username"
+                },
+                {
+                  "const": "email"
+                },
+                {
+                  "const": "telephone"
+                },
+                {
+                  "const": "cif"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "orderDir",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated user list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataWithTFindUserResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "findUser"
+        ],
+        "x-samchon-controller": "FindUserController"
+      }
+    },
+    "/maian/enterprise/create-employee/support": {
+      "post": {
+        "description": "Create a new support employee\n\nCreates a support employee account with PENDING_VERIFICATION status.\nThe employee will receive a verification email with a link to activate their account.\nThe username is automatically generated as: {wholesaler_user_id}@{random_uuid}",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Employee details including email, name, and contact information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateEmployeeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Empty response with 201 status code on success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "create_employee",
+          "support",
+          "createEmployee"
+        ],
+        "x-samchon-controller": "CreateEmployeeController"
+      }
+    },
+    "/maian/enterprise/create-employee/delivery": {
+      "post": {
+        "description": "Create a new delivery employee\n\nCreates a delivery employee account with PENDING_VERIFICATION status.\nThe employee will receive a verification email with a link to activate their account.\nThe username is automatically generated as: {wholesaler_user_id}@{random_uuid}",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Employee details including email, name, and contact information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateEmployeeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Empty response with 201 status code on success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "create_employee",
+          "delivery",
+          "createDeliveryEmployee"
+        ],
+        "x-samchon-controller": "CreateEmployeeController"
+      }
+    },
+    "/maian/enterprise/create-employee/warehouse": {
+      "post": {
+        "description": "Create a new warehouse employee\n\nCreates a warehouse employee account with PENDING_VERIFICATION status.\nThe employee will receive a verification email with a link to activate their account.\nThe username is automatically generated as: {wholesaler_user_id}@{random_uuid}",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Employee details including email, name, and contact information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateEmployeeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Empty response with 201 status code on success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "create_employee",
+          "warehouse",
+          "createWarehouseEmployee"
+        ],
+        "x-samchon-controller": "CreateEmployeeController"
+      }
+    },
+    "/maian/create-admin": {
+      "post": {
+        "description": "Create a new admin user\n\nThis endpoint creates a new admin user with PENDING_VERIFICATION status.\nAn email with verification link will be sent to the provided email address.\nThe verification link is valid for 7 days.",
+        "tags": [
+          "Admin Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Contains email and optional username for the new admin",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateAdminDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Empty response with 201 status code on success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "create_admin",
+          "createAdmin"
+        ],
+        "x-samchon-controller": "CreateAdminController"
+      }
+    },
+    "/maian/category": {
+      "post": {
+        "summary": "Create a new category",
+        "description": "Create a new category.",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Category data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateCategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "create"
+        ],
+        "x-samchon-controller": "CategoryController"
+      },
+      "get": {
+        "summary": "Search and filter categories",
+        "description": "Search and filter categories.",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "Keywords for name search"
+            },
+            "required": false
+          },
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "example": "zh-CH"
+            },
+            "required": false
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          },
+          {
+            "name": "parentId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "maxLevel",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3,
+              "example": 3
+            },
+            "required": false
+          },
+          {
+            "name": "withChildrenCount",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "PRIVATE"
+                },
+                {
+                  "const": "PUBLIC"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "const": "iva"
+                  },
+                  {
+                    "const": "level"
+                  },
+                  {
+                    "const": "user_id"
+                  },
+                  {
+                    "const": "relations"
+                  },
+                  {
+                    "const": "translations"
+                  }
+                ]
+              }
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated category list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataWithTICategoryResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "search"
+        ],
+        "x-samchon-controller": "CategoryController"
+      }
+    },
+    "/maian/category/{id}": {
+      "patch": {
+        "summary": "Update an existing category",
+        "description": "Update an existing category.\n\nUses optimistic locking via version field to prevent concurrent modifications.",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- ID of the category to update"
+          }
+        ],
+        "requestBody": {
+          "description": "- Category data to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateCategoryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "update"
+        ],
+        "x-samchon-controller": "CategoryController"
+      },
+      "delete": {
+        "description": "Delete a category by ID",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- ID of the category to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "remove"
+        ],
+        "x-samchon-controller": "CategoryController"
+      }
+    },
+    "/maian/category/{id}/update": {
+      "get": {
+        "description": "Get category data for update",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Category ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "iva": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "translations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "lang_code": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "lang_code"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "iva",
+                    "version",
+                    "translations"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "update",
+          "getForUpdate"
+        ],
+        "x-samchon-controller": "CategoryController"
+      }
+    },
+    "/maian/category/check/name": {
+      "get": {
+        "summary": "Check if a category name is already used for creating",
+        "description": "Check if a category name is already used for creating.\n\nReturns true if the name is already taken, false if available.",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "example": "Electronics"
+            },
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the name is already used",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "check",
+          "name",
+          "checkNameForCreate"
+        ],
+        "x-samchon-controller": "CheckCategoryController"
+      }
+    },
+    "/maian/category/check/name/update": {
+      "get": {
+        "summary": "Check if a category name is already used for updating (excluding current ID)",
+        "description": "Check if a category name is already used for updating (excluding current ID).\n\nReturns true if the name is already taken by another category, false if available.",
+        "tags": [
+          "Category Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "example": "Electronics"
+            },
+            "required": true
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the name is already used by another category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "category",
+          "check",
+          "name",
+          "update",
+          "checkNameForUpdate"
+        ],
+        "x-samchon-controller": "CheckCategoryController"
+      }
+    },
+    "/maian/product": {
+      "post": {
+        "summary": "Create a new product",
+        "description": "Create a new product.\n\nThe request body must include at least one variant and can optionally\ninclude translations and file references.",
+        "tags": [
+          "Product Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Product creation payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateProductDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "product",
+          "create"
+        ],
+        "x-samchon-controller": "ProductsController"
+      },
+      "get": {
+        "summary": "Search and paginate products with filters",
+        "description": "Search and paginate products with filters.\n\nSupports filtering by category, search terms, status, and selective field retrieval.",
+        "tags": [
+          "Product Management"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "wholesaler_id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "name"
+                },
+                {
+                  "const": "title"
+                },
+                {
+                  "const": "category"
+                },
+                {
+                  "const": "product_code"
+                },
+                {
+                  "const": "min_order_qty"
+                },
+                {
+                  "const": "available_stock"
+                },
+                {
+                  "const": "price_iva"
+                },
+                {
+                  "const": "price"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "ACTIVE"
+                },
+                {
+                  "const": "INACTIVE"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "const": "iva"
+                  },
+                  {
+                    "const": "status"
+                  },
+                  {
+                    "const": "user_id"
+                  },
+                  {
+                    "const": "category"
+                  }
+                ]
+              }
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated product list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataWithTIProductResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "product",
+          "findAll"
+        ],
+        "x-samchon-controller": "ProductsController"
+      }
+    },
+    "/maian/product/{id}/update": {
+      "get": {
+        "summary": "Get product data required for the update form",
+        "description": "Get product data required for the update form.\n\nReturns the current product state including variants, translations,\nfiles, and categories. The response can be directly used to populate\nan edit form.",
+        "tags": [
+          "Product Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Product ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products_files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sort": {
+                            "type": "number"
+                          },
+                          "file_id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sort",
+                          "file_id"
+                        ]
+                      }
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "description": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "iva": {
+                      "type": "string"
+                    },
+                    "product_code": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "oneOf": [
+                        {
+                          "const": "ACTIVE"
+                        },
+                        {
+                          "const": "INACTIVE"
+                        }
+                      ]
+                    },
+                    "product_categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "iva": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "category_translations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "lang_code": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "lang_code"
+                              ]
+                            }
+                          },
+                          "is_primary": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "id",
+                          "iva",
+                          "category_translations",
+                          "is_primary"
+                        ]
+                      }
+                    },
+                    "product_translations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "description": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "lang_code": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "title",
+                          "description",
+                          "lang_code"
+                        ]
+                      }
+                    },
+                    "variant_products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "oneOf": [
+                              {
+                                "const": "ACTIVE"
+                              },
+                              {
+                                "const": "INACTIVE"
+                              }
+                            ]
+                          },
+                          "product_code": {
+                            "type": "string"
+                          },
+                          "type_sale": {
+                            "oneOf": [
+                              {
+                                "const": "UNIT"
+                              },
+                              {
+                                "const": "BOX"
+                              },
+                              {
+                                "const": "PACK"
+                              }
+                            ]
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "price_iva": {
+                            "type": "string"
+                          },
+                          "available_stock": {
+                            "type": "number"
+                          },
+                          "sort": {
+                            "type": "number"
+                          },
+                          "low_stock_threshold": {
+                            "type": "number"
+                          },
+                          "min_order_qty": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "status",
+                          "product_code",
+                          "type_sale",
+                          "price",
+                          "price_iva",
+                          "available_stock",
+                          "sort",
+                          "low_stock_threshold",
+                          "min_order_qty"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "products_files",
+                    "name",
+                    "id",
+                    "title",
+                    "description",
+                    "iva",
+                    "product_code",
+                    "status",
+                    "product_categories",
+                    "product_translations",
+                    "variant_products"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "product",
+          "update",
+          "getForUpdate"
+        ],
+        "x-samchon-controller": "ProductsController"
+      }
+    },
+    "/maian/product/{id}": {
+      "patch": {
+        "summary": "Update a product (partial / PATCH)",
+        "description": "Update a product (partial / PATCH).\n\n**Concurrency control:** This endpoint uses **pessimistic locking** (`SELECT ... FOR UPDATE`).\nThe request does not require a `version` field; the row‑level lock ensures\nconsistency of variant count limits.",
+        "tags": [
+          "Product Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Product ID to update"
+          }
+        ],
+        "requestBody": {
+          "description": "- Fields to update (all optional)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateProductDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "product",
+          "update"
+        ],
+        "x-samchon-controller": "ProductsController"
+      },
+      "delete": {
+        "summary": "Delete a product by ID",
+        "description": "Delete a product by ID.",
+        "tags": [
+          "Product Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Product ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "product",
+          "remove"
+        ],
+        "x-samchon-controller": "ProductsController"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "nestjs"
+    },
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "App"
+    },
+    {
+      "name": "File Management"
+    },
+    {
+      "name": "Registration"
+    },
+    {
+      "name": "Reset Password"
+    },
+    {
+      "name": "RefreshToken"
+    },
+    {
+      "name": "Session"
+    },
+    {
+      "name": "Locations"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "Employee Management"
+    },
+    {
+      "name": "Admin Management"
+    },
+    {
+      "name": "Category Management"
+    },
+    {
+      "name": "Product Management"
+    }
+  ]
+}

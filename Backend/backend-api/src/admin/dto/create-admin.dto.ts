@@ -24,6 +24,8 @@ export interface ICreateAdminDto {
    */
   username?: TagsUsername | null;
 }
+export const validateCreateAdminFunction =
+  typia.createAssertEquals<ICreateAdminDto>();
 export const validateCreateAdmin: IRequestBodyValidator.IAssert<ICreateAdminDto> =
   {
     type: 'assert',
@@ -38,7 +40,7 @@ export const validateCreateAdmin: IRequestBodyValidator.IAssert<ICreateAdminDto>
         }
       }
 
-      return typia.assertEquals<ICreateAdminDto>(input);
+      return validateCreateAdminFunction(input);
     },
   };
 

@@ -65,6 +65,7 @@
     "plugins": [
       {
         "transform": "@nestia/core/lib/transform",
+        "functional": true,
         /**
          * Validate request body.
          *
@@ -89,7 +90,7 @@
         "stringify": "stringify"
       },
       {
-        "transform": "@nestia/sdk/lib/transform"
+        //"transform": "@nestia/sdk/lib/transform" //运行时的生成 swagger 会展开所有输入导致编译后的 .js 文件非常大， 所以只在需要生成时开启
       },
       {
         "transform": "typia/lib/transform"

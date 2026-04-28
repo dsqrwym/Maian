@@ -16,6 +16,8 @@ export interface ICheckCategoryNameCreateQueryDto {
 
   userId?: string & TagsUuid;
 }
+export const validateCheckCategoryNameCreateQueryFunction =
+  typia.http.createAssertQuery<ICheckCategoryNameCreateQueryDto>();
 export const validateCheckCategoryNameCreateQuery: IRequestQueryValidator.IAssert<ICheckCategoryNameCreateQueryDto> =
   {
     type: 'assert',
@@ -24,7 +26,7 @@ export const validateCheckCategoryNameCreateQuery: IRequestQueryValidator.IAsser
       if (name) {
         input.set('name', cleanString(name));
       }
-      return typia.http.assertQuery<ICheckCategoryNameCreateQueryDto>(input);
+      return validateCheckCategoryNameCreateQueryFunction(input);
     },
   };
 
@@ -34,6 +36,8 @@ export const validateCheckCategoryNameCreateQuery: IRequestQueryValidator.IAsser
 export interface ICheckCategoryNameUpdateQueryDto extends ICheckCategoryNameCreateQueryDto {
   id: TagsIntegerString;
 }
+export const validateCheckCategoryNameUpdateQueryFunction =
+  typia.http.createAssertQuery<ICheckCategoryNameUpdateQueryDto>();
 export const validateCheckCategoryNameUpdateQuery: IRequestQueryValidator.IAssert<ICheckCategoryNameUpdateQueryDto> =
   {
     type: 'assert',
@@ -42,6 +46,6 @@ export const validateCheckCategoryNameUpdateQuery: IRequestQueryValidator.IAsser
       if (name) {
         input.set('name', cleanString(name));
       }
-      return typia.http.assertQuery<ICheckCategoryNameUpdateQueryDto>(input);
+      return validateCheckCategoryNameUpdateQueryFunction(input);
     },
   };

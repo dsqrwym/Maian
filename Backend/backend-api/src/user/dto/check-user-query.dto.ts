@@ -14,6 +14,8 @@ import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 export interface ICheckUserEmailQueryDto {
   email: TagsEmail; // 邮箱地址
 }
+export const validateICheckUserEmailQueryDtoFunction =
+  typia.http.createAssertQuery<ICheckUserEmailQueryDto>();
 export const validateICheckUserEmailQueryDto: IRequestQueryValidator.IAssert<ICheckUserEmailQueryDto> =
   {
     type: 'assert',
@@ -22,7 +24,7 @@ export const validateICheckUserEmailQueryDto: IRequestQueryValidator.IAssert<ICh
       if (email) {
         input.set('email', cleanString(email));
       }
-      return typia.http.assertQuery<ICheckUserEmailQueryDto>(input);
+      return validateICheckUserEmailQueryDtoFunction(input);
     },
   };
 
@@ -35,6 +37,8 @@ export interface ICheckUserUsernameQueryDto {
   wholesalerId?: TagsWholesalerId;
   isAdmin?: boolean;
 }
+export const validateICheckUserUsernameQueryDtoFunction =
+  typia.http.createAssertQuery<ICheckUserUsernameQueryDto>();
 export const validateICheckUserUsernameQueryDto: IRequestQueryValidator.IAssert<ICheckUserUsernameQueryDto> =
   {
     type: 'assert',
@@ -43,6 +47,6 @@ export const validateICheckUserUsernameQueryDto: IRequestQueryValidator.IAssert<
       if (username) {
         input.set('name', cleanString(username));
       }
-      return typia.http.assertQuery<ICheckUserUsernameQueryDto>(input);
+      return validateICheckUserUsernameQueryDtoFunction(input);
     },
   };
