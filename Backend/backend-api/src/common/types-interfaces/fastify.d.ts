@@ -6,3 +6,12 @@ declare module 'fastify' {
     ability: AppAbility;
   }
 }
+
+declare module 'fastify' {
+  interface FastifyReply {
+    _nestMetadata: {
+      skip: boolean;
+      message: string;
+    };
+  }
+}

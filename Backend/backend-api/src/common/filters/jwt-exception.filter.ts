@@ -49,6 +49,12 @@ export class JwtExceptionFilter implements ExceptionFilter<JsonWebTokenError> {
       error: 'Unauthorized',
     };
 
+    // 错误跳过格式化
+    reply._nestMetadata = {
+      skip: true,
+      message: errorResponse.message ?? '',
+    };
+
     reply.status(401).send(errorResponse);
   }
 }

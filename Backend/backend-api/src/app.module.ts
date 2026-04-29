@@ -3,7 +3,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 
 import { ConfigModule, ConfigService } from '@nestjs/config'; // 用于加载和管理应用程序的配置 比Node.js 自带的 process.env 更加安全和方便维护
-import { LoggerModule, PinoLogger } from 'nestjs-pino';
+import { LoggerModule } from 'nestjs-pino';
 
 // 我自己的模块 :
 //  公共模块
@@ -16,7 +16,6 @@ import { MailModule } from './mail/mail.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor.js';
 import { Reflector } from '@nestjs/core';
-import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter.js';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter.js';
 import { JwtExceptionFilter } from './common/filters/jwt-exception.filter.js';
 import { ScheduleTaskModule } from './schedule-tasks/schedule-task.module.js';
@@ -51,6 +50,7 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         pinoHttp: {
+          autoLogging: false,
           transport:
             config.get<string>(ENV.NODE_ENV) !== 'production'
               ? {
@@ -78,6 +78,8 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
                 ]
               : undefined,
         },
+        exclude: ['/(.*)'], // 排除所有路径，防止它为每个请求自动创建日志对象
+        useExisting: true,
       }),
     }),
     JwtModule.registerAsync({
@@ -95,7 +97,6 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
     MyI18nModule, // 语言翻译
     MyThrottlerModule, // 限流模块
 
-    CacheRedisModule, // 全局的模块
     DrizzleModule, // 全局的模块
     FilesModule, // 全局的模块
     CommonModule, // 全局的模块
@@ -114,13 +115,11 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
   providers: [
     {
       provide: ResponseInterceptor,
-      useFactory: (reflector: Reflector, logger: PinoLogger) =>
-        new ResponseInterceptor(reflector, logger), // 通过工厂函数创建 ResponseInterceptor 实例
-      inject: [Reflector, PinoLogger], // 注入 Reflector 依赖项
+      useFactory: (reflector: Reflector) => new ResponseInterceptor(reflector), // 通过工厂函数创建 ResponseInterceptor 实例
+      inject: [Reflector], // 注入 Reflector 依赖项
     },
 
     AppService,
-    PrismaExceptionFilter, // 全局异常过滤器，处理未捕获的异常
     HttpExceptionFilter, // 全局异常过滤器，处理 HTTP 异常
     JwtExceptionFilter, // 全局异常过滤器，处理 JWT 异常
   ], // 可以注入的服务

@@ -5,94 +5,35 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { PinoLogger } from 'nestjs-pino';
-import { EMPTY, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import {
-  PaginatedData,
-  Response,
-} from '../types-interfaces/response.interface.js';
 import { FastifyReply } from 'fastify';
-import { SKIP_RESPONSE_INTERCEPTOR } from '../guards/decorator/skip-response-interceptor.decorator.js';
-import { isJson } from '#/utils/is.utils.js';
+import { Observable } from 'rxjs';
+import { SKIP_RESPONSE_INTERCEPTOR } from '#/common/guards/decorator/skip-response-interceptor.decorator.js';
 
 @Injectable()
-export class ResponseInterceptor<T> implements NestInterceptor<
-  T,
-  Response<T> | Observable<never>
-> {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly logger: PinoLogger,
-  ) {
-    this.logger.setContext(ResponseInterceptor.name);
-  }
+export class ResponseInterceptor implements NestInterceptor {
+  // 缓存 Handler 对应的元数据，避免重复反射
+  private readonly cache = new WeakMap<
+    object,
+    { skip: boolean; message: string }
+  >();
+  constructor(private readonly reflector: Reflector) {}
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<Response<T> | Observable<never>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const res = context.switchToHttp().getResponse<FastifyReply>();
-    const getHandler = context.getHandler();
-    const skipInterceptor = this.reflector.get<boolean>(
-      SKIP_RESPONSE_INTERCEPTOR,
-      getHandler,
-    );
+    const handler = context.getHandler();
+    let metadata = this.cache.get(handler);
 
-    // 如果设置了跳过标志，则直接返回原始 Observable，跳过 map/tap 封装
-    if (skipInterceptor) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return next.handle(); // 用于特殊情况不需要json化的跳过
+    if (!metadata) {
+      metadata = {
+        skip: this.reflector.get<boolean>(SKIP_RESPONSE_INTERCEPTOR, handler),
+        message: this.reflector.get<string>('message', handler) || 'success',
+      };
+      this.cache.set(handler, metadata);
     }
 
-    const defaultMessage = this.reflector.get<string>(
-      'responseMessage',
-      getHandler,
-    );
+    // 将 NestJS 的元数据挂载到 reply 对象上，供底层的 onSend 钩子读取
+    res._nestMetadata = metadata;
 
-    return next.handle().pipe(
-      map((data: T) => {
-        // 如果是字符串大概率来自typia路由自动转化成json格式的所以不需要再次进行处理
-        if (isJson(data)) {
-          const response = `{"statusCode":${res.statusCode},"message":${JSON.stringify(
-            defaultMessage || 'success',
-          )},"data":${data}}`;
-
-          this.logger.debug(
-            'ResponseInterceptor: isTypiaJSON' + response,
-            data,
-            response,
-          );
-
-          res.type('application/json');
-          res.send(response);
-          return EMPTY;
-        }
-
-        return {
-          statusCode: res.statusCode,
-          message: defaultMessage || 'success',
-          data: this.serializeData(data),
-        } as Response<T>;
-      }),
-    );
+    return next.handle();
   }
-
-  private serializeData<T>(data: unknown): T | PaginatedData {
-    if (isPaginatedDate(data)) {
-      return data;
-    }
-    return data as T;
-  }
-}
-
-// 类型守卫函数
-function isPaginatedDate(data: unknown): data is PaginatedData {
-  return (
-    !!data &&
-    typeof data === 'object' &&
-    'items' in data &&
-    'pagination' in data &&
-    Array.isArray(data.items)
-  );
 }

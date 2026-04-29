@@ -18,18 +18,16 @@ export const isJson = (data: unknown): data is string => {
   const first = data[0];
   const last = data[data.length - 1];
 
-  const baseCheck =
+  return (
     (first === '{' && last === '}') ||
     (first === '[' && last === ']') ||
-    (first === '"' && last === '"');
-  if (baseCheck) {
-    return true;
-  }
+    (first === '"' && last === '"')
+  );
 
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+  // try {
+  //   JSON.parse(data);
+  //   return true;
+  // } catch {
+  //   return false;
+  // }
 };

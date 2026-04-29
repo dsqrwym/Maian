@@ -56,16 +56,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
         statusCode: status,
         error: JSON.stringify(exceptionResponse),
       };
-      // 记录未知错误结构日志以便添加
-      this.logger.error(
-        {
-          path: request.url,
-          method: request.method,
-          statusCode: status,
-          exceptionResponse,
-        },
-        'Unknown exception',
-      );
     }
     // 记录日志
     this.logger.error(
@@ -77,6 +67,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       },
       'HttpException caught',
     );
+
+    // 错误跳过格式化
+    response._nestMetadata = {
+      skip: true,
+      message: errorResponse.message ?? '',
+    };
 
     response.status(status).send(errorResponse);
   }

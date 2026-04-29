@@ -1,8 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service.js';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { seconds, SkipThrottle, Throttle } from '@nestjs/throttler';
-import { TypedQuery, TypedRoute } from '@nestia/core';
+import { TypedQuery } from '@nestia/core';
 
 /**
  * Controller for application utility endpoints
@@ -22,7 +22,7 @@ export class AppController {
    * @returns Randomly generated string
    */
   @Throttle({ default: { ttl: seconds(10), limit: 1 } })
-  @TypedRoute.Get('random-string')
+  @Get('random-string')
   getRandomString(@TypedQuery() query: { length?: number }): string {
     const len = query.length && query.length > 0 ? query.length : 16;
     return this.appService.generateRandomString(len);
@@ -34,7 +34,7 @@ export class AppController {
    * @returns {string} A hello message
    */
   @SkipThrottle()
-  @TypedRoute.Get('hello')
+  @Get('hello')
   @ApiOperation({ summary: 'Simple health check greeting' })
   @ApiResponse({
     status: 200,

@@ -2,3 +2,4 @@
 docker-compose.yml
 # 忽略 Cloudflare Tunnel 凭证文件 和 配置文件
 cloudflared/
+Backend/backend-api-elysia
