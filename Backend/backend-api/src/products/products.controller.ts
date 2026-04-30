@@ -124,6 +124,7 @@ export class ProductsController {
     products_files: {
       sort: number;
       file_id: bigint;
+      mime_type: string;
     }[];
     name: string;
     id: bigint;

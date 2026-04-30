@@ -11,6 +11,7 @@ import { useCookie } from './config/cookie.config.js';
 import { GLOBAL_PREFIX } from './config/constants.config.js';
 import { useFastifyMultipart } from './config/fastify-multipart.config.js';
 import { useGlobalInterceptors } from '#/config/global-interceptors.config.js';
+import { useLogger } from '#/config/logger.config.js';
 
 export async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>( //<NestFastifyApplication>: 是 TypeScript 的泛型，指定了应用实例类型。NestFastifyApplication 表示希望 NestJS 使用 Fastify 作为底层 HTTP 框架，而不是默认的 Express。
@@ -23,7 +24,7 @@ export async function bootstrap() {
     },
   ); // 创建NestFastifyApplication实例
 
-  //useLogger(app); // 使用 Pino 日志记录器，提供更好的性能和功能。Pino 是一个高性能的 JSON 日志记录器，适用于 Node.js 应用程序。它提供了快速的日志记录和易于使用的 API。
+  useLogger(app); // 使用 Pino 日志记录器，提供更好的性能和功能。Pino 是一个高性能的 JSON 日志记录器，适用于 Node.js 应用程序。它提供了快速的日志记录和易于使用的 API。
 
   app.enableShutdownHooks();
 

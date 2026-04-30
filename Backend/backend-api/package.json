@@ -39,7 +39,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/src/main.js",
+    "start:prod": "cross-env NODE_ENV=production node dist/src/main.js",
     "start:cluster": "node dist/src/cluster-main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -59,8 +59,8 @@
     "pm2:prod": "pnpm build && pnpm pm2:start:prod"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1039.0",
-    "@aws-sdk/lib-storage": "^3.1039.0",
+    "@aws-sdk/client-s3": "^3.1040.0",
+    "@aws-sdk/lib-storage": "^3.1040.0",
     "@casl/ability": "^6.8.1",
     "@fastify/cookie": "^11.0.2",
     "@fastify/helmet": "^13.0.2",
@@ -95,6 +95,7 @@
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.4",
+    "cross-env": "^10.1.0",
     "decimal.js": "^10.6.0",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",

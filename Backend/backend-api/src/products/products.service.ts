@@ -866,7 +866,10 @@ export class ProductsService {
         product_code: true,
       },
       with: {
-        products_files: { columns: { file_id: true, sort: true } },
+        products_files: {
+          columns: { file_id: true, sort: true },
+          with: { file: { columns: { mime_type: true } } },
+        },
         product_categories: {
           columns: { is_primary: true },
           with: {
@@ -925,7 +928,11 @@ export class ProductsService {
     }
 
     return {
-      products_files: product.products_files,
+      products_files: product.products_files.map((file) => ({
+        file_id: file.file_id,
+        sort: file.sort,
+        mime_type: file.file.mime_type,
+      })),
       name: product.name,
       id: product.id,
       title: product.title,
