@@ -148,7 +148,7 @@ class CategoriesCreateViewModel(
             when (val result = categoryRepository.createCategory(
                 categoryName,
                 categoryIva,
-                filterCategory?.id?.toString(),
+                filterCategory?.id,
                 translations
             )) {
                 is SharedResponseResult.Success -> {

@@ -11,6 +11,8 @@ import io.github.vinceglb.filekit.size
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.dsqrwym.business.ui.media.model.MediaType.*
+import org.dsqrwym.business.ui.media.model.MediaSource
+import org.dsqrwym.business.ui.media.model.UploadedProductFile
 import org.dsqrwym.business.ui.media.model.UploadMediaItem
 import org.dsqrwym.business.ui.media.model.UploadState
 import org.dsqrwym.shared.data.file.SharedUploadEvent
@@ -88,7 +90,7 @@ class MediaPickerViewModel(
 
             val item = UploadMediaItem(
                 localId = generateLocalId(),
-                file = file,
+                source = MediaSource.Local(file),
                 type = type,
                 uploadState = UploadState.Idle
             )
@@ -97,6 +99,44 @@ class MediaPickerViewModel(
 
             _mediaItems.add(item)
             startUpload(item)
+        }
+    }
+
+    fun addUploadedProductFiles(files: List<UploadedProductFile>) {
+        files.sortedBy { it.sort }.forEach { file ->
+            if (_mediaItems.size >= maxItemCount) return
+            if (_mediaItems.any { it.serverId == file.fileId }) return@forEach
+
+            val type = if (file.mimeType?.substringBefore("/") == "video")
+                VIDEO
+            else
+                IMAGE
+
+            when (type) {
+                VIDEO -> {
+                    if (maxVideo != null && _videoCount >= maxVideo) return@forEach
+                }
+
+                IMAGE -> {
+                    if (maxImage != null && _imageCount >= maxImage) return@forEach
+                }
+
+                DOCUMENT -> Unit
+            }
+
+            // 已属于产品的文件视为上传完成，只加入 UI 队列，不重复上传。
+            _mediaItems.add(
+                UploadMediaItem(
+                    localId = "uploaded-${file.fileId}",
+                    source = MediaSource.Remote(file.url, file.mimeType),
+                    type = type,
+                    uploadState = UploadState.Success,
+                    progress = 1f,
+                    serverId = file.fileId
+                )
+            )
+
+            if (type == VIDEO) _videoCount++ else _imageCount++
         }
     }
 
@@ -168,13 +208,14 @@ class MediaPickerViewModel(
     }
 
     private fun startUpload(item: UploadMediaItem) {
+        val source = item.source as? MediaSource.Local ?: return
         uploadRepository?.let { repository ->
             // 标记正在上传
             updateItem(item.localId) { it.copy(uploadState = UploadState.Uploading) }
             scope.launch {
                 val flow = repository.uploadFile(
                     localId = item.localId,
-                    file = item.file,
+                    file = source.file,
                     scope = scope
                 )
 
@@ -196,7 +237,7 @@ class MediaPickerViewModel(
 
     fun retryUpload(localId: String) {
         _mediaItems.find { it.localId == localId }?.let {
-            startUpload(it)
+            if (it.source is MediaSource.Local) startUpload(it)
         }
     }
 

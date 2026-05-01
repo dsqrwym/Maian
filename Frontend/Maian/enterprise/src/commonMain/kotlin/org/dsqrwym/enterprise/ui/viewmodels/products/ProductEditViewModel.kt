@@ -1,54 +1,51 @@
 package org.dsqrwym.enterprise.ui.viewmodels.products
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.mohamedrejeb.richeditor.model.RichTextState
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.create_failed
-import maian.shared.generated.resources.create_success
-import maian.shared.generated.resources.field_cannot_be_empty
+import maian.shared.generated.resources.update_failed
+import maian.shared.generated.resources.update_success
 import org.dsqrwym.business.navigation.Categories
-import org.dsqrwym.business.ui.media.MediaPickerViewModel
+import org.dsqrwym.business.ui.media.model.UploadedProductFile
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.product.ProductRepository
-import org.dsqrwym.enterprise.data.product.dto.ProductFileDto
+import org.dsqrwym.enterprise.data.product.dto.ProductResponseForUpdate
+import org.dsqrwym.enterprise.data.product.dto.ProductUpdateDto
 import org.dsqrwym.enterprise.data.product.dto.ProductVariantDto
-import org.dsqrwym.enterprise.ui.viewmodels.categories.BaseCategoryFilterViewmodel
-import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
+import org.dsqrwym.enterprise.navigation.Products
+import org.dsqrwym.shared.data.category.mapper.toDomain
 import org.dsqrwym.shared.data.file.SharedUploadRepository
-import org.dsqrwym.shared.data.products.SharedProductSaleVariant
-import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
-import org.dsqrwym.shared.localization.LanguageManager
-import org.dsqrwym.shared.localization.customAppLocale
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.navigation.core.NavigationEvent
-import org.dsqrwym.shared.navigation.core.SharedNavigable
-import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
-import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
+import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.SharedResponseResult
+import org.dsqrwym.shared.serialization.OptionalField
+import org.dsqrwym.shared.serialization.getValOrNull
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
-import org.dsqrwym.shared.util.validation.sanitizeIvaInput
-import org.dsqrwym.shared.util.validation.sanitizeProductCode
-import org.dsqrwym.shared.util.validation.sanitizeProductPricesInput
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class ProductEditViewModel(
-    private val uploadRepository: SharedUploadRepository,
-    private val productRepository: ProductRepository,
+    uploadRepository: SharedUploadRepository,
+    productRepository: ProductRepository,
     categoryRepository: CategoryRepository,
-    private val snackbarViewModel: MySnackbarViewModel
-) : BaseCategoryFilterViewmodel(
+    snackbarViewModel: MySnackbarViewModel
+) : BaseProductFormViewModel(
+    uploadRepository,
+    productRepository,
     categoryRepository,
     snackbarViewModel
-), SharedNavigable by SharedNavigableDelegate() {
+) {
 
     var isLoading by mutableStateOf(true)
         private set
@@ -56,255 +53,161 @@ class ProductEditViewModel(
     // 当前编辑的产品 ID
     private var productId: String? = null
 
-    val editFormUiState: UiState by mutableStateOf(UiState.Idle)
+    var editFormUiState: UiState by mutableStateOf(UiState.Idle)
     val editButtonEnabled: Boolean by derivedStateOf {
-        (mediaPicker.mediaPickerUiState == UiState.Success || mediaPicker.mediaPickerUiState == UiState.Idle)
+        editFormUiState == UiState.Idle &&
+                (mediaPicker.mediaPickerUiState == UiState.Success || mediaPicker.mediaPickerUiState == UiState.Idle)
                 && productTranslationUiState == UiState.Loading
                 && productMetaDataUiState == UiState.Loading
                 && productVariantUiState == UiState.Loading
     }
-    var productTranslationUiState: UiState by mutableStateOf(UiState.Idle)
-        private set
-    var productVariantUiState: UiState by mutableStateOf(UiState.Idle)
-        private set
-    var productMetaDataUiState: UiState by mutableStateOf(UiState.Idle)
-        private set
+    private var initialProduct: ProductResponseForUpdate? = null
 
-    private fun checkProductMeta() {
-        productMetaDataUiState = if (productCode.isNotBlank() && filterCategory != null) {
-            UiState.Loading
-        } else {
-            UiState.Error
-        }
-    }
-
-    private fun checkProductTranslation() {
-        productTranslationUiState = if (translationTabs.any { it.first.name.isBlank() }) {
-            UiState.Error
-        } else {
-            UiState.Loading
-        }
-        selectedTranslationNameError =
-            if (translationTabs[selectedTranslationIndex.coerceIn(0, translationTabs.size)].first.name.isBlank()) {
-                SharedRes.string.field_cannot_be_empty
-            } else {
-                null
-            }
-    }
-
-    private fun checkProductVariant() {
-        var uiState = UiState.Loading
-        val existingIds = productVariants.mapNotNull { it.id }.toSet()
-        productVariantsProductCodesErrors.keys.retainAll { it in existingIds }
-        productVariants.forEach {
-            if (it.productCode.isBlank()) {
-                uiState = UiState.Error
-                it.id?.let { id ->
-                    productVariantsProductCodesErrors[id] = SharedRes.string.field_cannot_be_empty
-                }
-            } else {
-                it.id?.let { id ->
-                    productVariantsProductCodesErrors[id] = null
-                }
-            }
+    // 主分类是否改变
+    private val isPrimaryCategoryChanged: Boolean
+        get() {
+            val initialPrimary = initialProduct?.categories?.find { it.isPrimary }
+            return filterCategory?.id != initialPrimary?.id
         }
 
-        productVariantUiState = uiState
-    }
-
-    // 产品媒体
-    val mediaPicker = MediaPickerViewModel(
-        uploadRepository = uploadRepository,
-        coroutineScope = viewModelScope,
-        snackbarViewModel = snackbarViewModel
-    )
-
-    // 产品信息 (多语言)
-    var selectedTranslationIndex by mutableIntStateOf(0)
-        private set
-    var translationTabs = mutableStateListOf(
-        Pair(
-            SharedProductTranslation(
-                LanguageManager.getCurrent().code,
-                "",
-                ""
-            ),
-            RichTextState()
-        )
-    )
-        private set
-    var selectedTranslationNameError: StringResource? by mutableStateOf(null)
-
-    var showAddLanguageDialog by mutableStateOf(false)
-        private set
-    val canAddTranslation by derivedStateOf {
-        getAvailableLanguages().isNotEmpty()
-                && productTranslationUiState == UiState.Loading
-    }
-
-    // 产品基础属性
-    var productIva by mutableStateOf("21.00")
-        private set
-    var productCategoryError: StringResource? by mutableStateOf(null)
-
-    // 用户输入则使用用户输入否则根据选择类别
-    var isIvaManuallyEdited = false
-        private set
-
-    var productCode by mutableStateOf("")
-        private set
-    var productCodeError: StringResource? by mutableStateOf(null)
-
-    var productStatus by mutableStateOf(SharedProductStatus.ACTIVE)
-        private set
-
-    // SKU
-    @OptIn(ExperimentalUuidApi::class)
-    var productVariants = mutableStateListOf(
-        ProductVariantDto(
-            id = Uuid.generateV4().toString(),
-            typeSale = SharedProductSaleVariant.BOX,
-            price = "0.00",
-            priceIva = "0.00",
-            productCode = "",
-            availableStock = 100,
-            saleUnitQty = getRecommendedSaleUnitQty(SharedProductSaleVariant.BOX)
-        )
-    )
-        private set
-    var productVariantsProductCodesErrors = mutableStateMapOf<String, StringResource?>()
-    val canAddSku: Boolean by derivedStateOf {
-        productVariants.size < 50 &&
-                if (productVariantsProductCodesErrors.isNotEmpty()) productVariantsProductCodesErrors.values.none {
-                    it?.let { true } ?: false
-                } else true
-    }
-
-    // 记录用户是否手动编辑过某个 SKU 的 saleUnitQty
-    private val variantSaleUnitQtyManuallyEdited = mutableStateMapOf<String, Boolean>()
-
-    // 根据销售单位返回推荐的 saleUnitQty
-    private fun getRecommendedSaleUnitQty(typeSale: SharedProductSaleVariant): Int {
-        return when (typeSale) {
-            SharedProductSaleVariant.UNIT -> 1
-            SharedProductSaleVariant.PACK -> 12
-            SharedProductSaleVariant.BOX -> 24
+    // 产品根字段 (name/title/description) 是否改变
+    private val isNameChanged: Boolean
+        get() {
+            val initial = initialProduct ?: return true
+            val current = translationTabs.first().first
+            return current.name != initial.name
         }
-    }
+    private val isTitleChanged: Boolean
+        get() {
+            val initial = initialProduct ?: return true
+            val current = translationTabs.first().first
+            return current.title != initial.title
+        }
+    private val isDescriptionChanged: Boolean
+        get() {
+            val initial = initialProduct ?: return true
+            val current = translationTabs.first().second
+            return current.toHtml() != initial.description
+        }
+
+    // 需要删除的语言代码（基于初始 translations 列表中被移除的项）
+    private val translationsToDelete: List<String>
+        get() {
+            val initialCodes = initialProduct?.translations?.map { it.langCode } ?: emptyList()
+            val currentCodes = translationTabs.drop(1).map { it.first.langCode }.toSet()
+            return initialCodes.filter { it !in currentCodes }
+        }
+
+    // 其他翻译是否改变（排除第一个主语言后的翻译列表）
+    private val isTranslationsChanged: Boolean
+        get() {
+            val initialTranslations = initialProduct?.translations ?: emptyList()
+            // 当前 translations 列表：除了第一个（主语言）以外的翻译
+            val currentOthers = translationTabs.drop(1).map { it.first }
+            // 与初始的 translation 比较（忽略主语言占位，假设初始 translations 包含所有语言，但我们也需要排除主语言）
+            // 简化：直接比较整个列表，但通常会保持同步更新
+            return currentOthers.toSet() != initialTranslations.toSet()
+        }
+
+    // 文件是否改变
+    private val isFilesChanged: Boolean
+        get() {
+            val initialFiles = initialProduct?.files?.map { it.copy(mimeType = null) } ?: emptyList()
+            val currentFiles = buildFiles() // buildFiles 会忽略 mimetype
+            return initialFiles != currentFiles
+        }
 
 
     init {
-        // 监听语言
-        viewModelScope.launch {
-            snapshotFlow { customAppLocale }.collectLatest { _ ->
-                val currentCode = LanguageManager.getCurrent().code
-                val existingIndex = translationTabs.indexOfFirst { it.first.langCode == currentCode }
-
-                if (existingIndex == -1) {
-                    // 如果不存在，添加并放在第一位
-                    translationTabs.add(
-                        0,
-                        Pair(
-                            SharedProductTranslation(currentCode, "", ""),
-                            RichTextState()
-                        )
-                    )
-                } else if (existingIndex != 0) {
-                    // 如果存在但不在第一位，移动到第一位
-                    val existing = translationTabs.removeAt(existingIndex)
-                    translationTabs.add(0, existing)
-                }
-                // 自动选中当前语言（第一位）
-                selectedTranslationIndex = 0
-            }
-        }
-
-        productVariants.firstOrNull()?.id?.let { firstId ->
+        productVariants.firstOrNull()?.id?.getValOrNull()?.let { firstId ->
             variantSaleUnitQtyManuallyEdited[firstId] = false
         }
     }
 
-    fun showAddLanguageDialog(value: Boolean) {
-        showAddLanguageDialog = value
+    private fun buildToDeleteVariants(): List<String> {
+        val currentVariantIds = productVariants
+            .mapNotNull { it.id.getValOrNull() }
+            .toSet()
+        return initialProduct?.variant
+            ?.mapNotNull { it.id.getValOrNull() }
+            ?.filter { initialId -> initialId !in currentVariantIds }
+            .orEmpty()
     }
 
-    fun changeLanguageIndex(languageIndex: Int) {
-        selectedTranslationIndex = languageIndex
+    private fun buildCreateVariants(): List<ProductVariantDto> {
+        val existingVariantsIds = initialProduct?.variant?.map { it.id }
+            ?: return productVariants.map { it.copy(id = OptionalField.Undefined) }
+        // 新增：没有 id 的变体
+        return productVariants.filter { !existingVariantsIds.contains(it.id) }
+            .map { it.copy(id = OptionalField.Undefined) }
     }
 
-    fun upsertTranslation(langCode: String, name: String, title: String?, description: String? = null) {
-        translationTabs.indexOfFirst { it.first.langCode == langCode }.let {
-            if (it != -1) {
-                translationTabs[it] =
-                    translationTabs[it].copy(
-                        first = SharedProductTranslation(
-                            langCode,
-                            name = name.take(50),
-                            title = title?.take(100),
-                            description = description
-                        )
-                    )
-            } else {
-                translationTabs.add(
-                    Pair(
-                        SharedProductTranslation(
-                            langCode = langCode,
-                            name = name.take(50),
-                            title = title?.take(100),
-                            description = description,
-                        ),
-                        RichTextState()
-                    )
+    private fun buildUpdateVariants(): List<ProductVariantDto> {
+        return productVariants.mapNotNull { variant ->
+            val existingVariant = initialProduct?.variant?.find { it.id.getValOrNull() != null && it.id == variant.id }
+                ?: return@mapNotNull null
+            if (existingVariant != variant) {
+                return@mapNotNull existingVariant.copy(
+                    typeSale = if (existingVariant.typeSale != variant.typeSale) variant.typeSale else OptionalField.Undefined,
+                    status = if (existingVariant.status != variant.status) variant.status else OptionalField.Undefined,
+                    sort = if (existingVariant.sort != variant.sort) variant.sort else OptionalField.Undefined,
+                    productCode = if (existingVariant.productCode != variant.productCode) variant.productCode else OptionalField.Undefined,
+                    price = if (existingVariant.price != variant.price) variant.price else OptionalField.Undefined,
+                    priceIva = if (existingVariant.priceIva != variant.priceIva) variant.priceIva else OptionalField.Undefined,
+                    availableStock = if (existingVariant.availableStock != variant.availableStock) variant.availableStock else OptionalField.Undefined,
+                    lowStockThreshold = if (existingVariant.lowStockThreshold != variant.lowStockThreshold) variant.lowStockThreshold else OptionalField.Undefined,
+                    saleUnitQty = if (existingVariant.saleUnitQty != variant.saleUnitQty) variant.saleUnitQty else OptionalField.Undefined,
+                    minOrderQty = if (existingVariant.minOrderQty != variant.minOrderQty) variant.minOrderQty else OptionalField.Undefined
                 )
             }
+            return@mapNotNull null
         }
-        checkProductTranslation()
-    }
-
-    fun removeTranslation(langCode: String) {
-        if (translationTabs.isEmpty()) return
-        translationTabs.find { it.first.langCode == langCode }?.let {
-            translationTabs.remove(it)
-        }
-        checkProductTranslation()
-    }
-
-    private fun resetProduct() {
-        productId = null
-        productCode = ""
-        productCodeError = null
-        productIva = "21"
-        productCategoryError = null
-        productStatus = SharedProductStatus.ACTIVE
-        productMetaDataUiState = UiState.Idle
-        selectedTranslationIndex = 0
-        selectedTranslationNameError = null
-        productTranslationUiState = UiState.Idle
-        translationTabs.clear()
-        productVariants.clear()
-        productVariantUiState = UiState.Idle
-        variantSaleUnitQtyManuallyEdited.clear()
-        productVariantsProductCodesErrors.clear()
-        mediaPicker.clear()
-        isIvaManuallyEdited = false
-        showAddLanguageDialog(false)
     }
 
     fun initWithProduct(productId: String) {
-        resetProduct()
+        resetForm()
         this@ProductEditViewModel.productId = productId
         isLoading = true
         viewModelScope.launch {
             when (val result = productRepository.getProductForUpdate(productId)) {
                 is SharedResponseResult.Success -> {
                     result.data?.let { products ->
+                        initialProduct = products // 保存快照
                         productCode = products.productCode
                         productIva = products.iva
                         productStatus = products.status
+                        translationTabs[0] = translationTabs[0].copy(
+                            first = SharedProductTranslation(
+                                langCode = "",
+                                name = products.name,
+                                title = products.title,
+                                description = products.description,
+                            ),
+                            second = RichTextState().setHtml(products.description ?: "")
+                        )
                         translationTabs.addAll(products.translations.map {
-                            Pair(it, RichTextState())
+                            Pair(it, RichTextState().setHtml(it.description ?: ""))
                         })
+                        filterCategory = products.categories.find { it.isPrimary }?.let { categories ->
+                            CategorySummary(
+                                id = categories.id,
+                                name = categories.name,
+                                iva = categories.iva,
+                                translations = categories.translation.map { it.toDomain() }
+                            )
+                        }
                         productVariants.addAll(products.variant)
+                        mediaPicker.addUploadedProductFiles(
+                            products.files.map { file ->
+                                UploadedProductFile(
+                                    fileId = file.fileId,
+                                    sort = file.sort,
+                                    url = ApiConfig.FilePath.productFile(products.id, file.fileId),
+                                    mimeType = file.mimeType.getValOrNull()
+                                )
+                            }
+                        )
+                        validateForm()
                     }
                 }
 
@@ -317,228 +220,81 @@ class ProductEditViewModel(
                     emitNavigation(NavigationEvent.ToRoute(Categories))
                 }
             }
+            isLoading = false
         }
-    }
-
-    @OptIn(ExperimentalUuidApi::class)
-    fun upsertProductVariant(
-        id: String?,
-        typeSale: SharedProductSaleVariant,
-        sort: Int = 0,
-        price: String? = null,
-        priceIva: String? = null,
-        productCode: String = "",
-        availableStock: Int,
-        saleUnitQty: Int = 1,
-        minOrderQty: Int = 1,
-        lowStockThreshold: Int? = null
-    ) {
-        val sanitizedProductCode = sanitizeProductCode(productCode)
-
-        val index = productVariants.indexOfFirst { it.id == id }
-        if (index != -1) {
-            val existingSku = productVariants[index]
-            val effectiveIva = productIva.ifBlank { "0.00" }
-            var finalPrice = price
-            var finalPriceIva = priceIva
-
-            finalPrice?.let {
-                if (it != existingSku.price) {
-                    sanitizeProductPricesInput(price = it, iva = effectiveIva).let { (price, priceIva) ->
-                        finalPrice = price
-                        finalPriceIva = priceIva
-                    }
-                }
-            }
-
-            finalPriceIva?.let {
-                if (it != existingSku.priceIva) {
-                    sanitizeProductPricesInput(priceIva = it, iva = effectiveIva).let { (price, priceIva) ->
-                        finalPriceIva = priceIva
-                        finalPrice = price
-                    }
-                }
-            }
-
-            var finalSaleUnitQty = saleUnitQty
-            val saleUnitQtyManuallyEdited = existingSku.id?.let { variantSaleUnitQtyManuallyEdited[it] } == true
-
-            if (saleUnitQty != existingSku.saleUnitQty) {
-                existingSku.id?.let { variantSaleUnitQtyManuallyEdited[it] = true }
-            }
-            if (!saleUnitQtyManuallyEdited) {
-                finalSaleUnitQty = getRecommendedSaleUnitQty(typeSale)
-            }
-
-            productVariants[index] = existingSku.copy(
-                typeSale = typeSale,
-                sort = sort,
-                price = finalPrice,
-                priceIva = finalPriceIva,
-                productCode = sanitizedProductCode,
-                availableStock = availableStock,
-                saleUnitQty = finalSaleUnitQty,
-                minOrderQty = minOrderQty,
-                lowStockThreshold = lowStockThreshold
-            )
-        } else {
-            productVariants.add(
-                ProductVariantDto(
-                    id = id,
-                    typeSale = typeSale,
-                    price = price,
-                    priceIva = priceIva,
-                    productCode = sanitizedProductCode,
-                    availableStock = availableStock,
-                    saleUnitQty = getRecommendedSaleUnitQty(typeSale),
-                    minOrderQty = minOrderQty,
-                    lowStockThreshold = lowStockThreshold
-                )
-            )
-        }
-
-        checkProductVariant()
-    }
-
-    fun deleteVariant(skuId: String?) {
-        if (productVariants.isEmpty()) return
-        productVariants.find { it.id == skuId }?.let {
-            productVariants.remove(it)
-            it.id?.let { id -> productVariantsProductCodesErrors.remove(id) }
-        }
-        checkProductVariant()
-    }
-
-    fun reorder(from: Int, to: Int) {
-        if (from == to) return
-        if (from !in productVariants.indices || to !in productVariants.indices) return
-        productVariants.add(to, productVariants.removeAt(from))
-    }
-
-    fun getAvailableLanguages(): List<LanguageManager.SupportedLanguages> {
-        return LanguageManager.SupportedLanguages.entries
-            .filter { it.code !in translationTabs.map { translation -> translation.first.langCode } }
-    }
-
-    fun updateProductCode(code: String) {
-        productCode = sanitizeProductCode(code)
-        productCodeError = if (productCode.isBlank()) {
-            SharedRes.string.field_cannot_be_empty
-        } else {
-            null
-        }
-        checkProductMeta()
-    }
-
-    fun updateProductIva(iva: String?) {
-        val result = iva?.let { sanitizeIvaInput(it) } ?: return
-        productIva = result
-        isIvaManuallyEdited = iva.isNotBlank()
-
-        calculatePrices()
-    }
-
-    private fun calculatePrices() {
-        productVariants.forEachIndexed { index, dto ->
-            val (price, priceIva) = sanitizeProductPricesInput(
-                priceIva = dto.priceIva,
-                iva = productIva
-            )
-            productVariants[index] = dto.copy(
-                price = price,
-                priceIva = priceIva
-            )
-        }
-    }
-
-    fun updateProductStatus(state: SharedProductStatus) {
-        productStatus = state
     }
 
     fun editProduct() {
-        checkProductMeta()
-        checkProductVariant()
-        checkProductTranslation()
         if (!editButtonEnabled) return
-        val primaryCategory = filterCategory ?: return
-        val primaryTranslation = translationTabs.first().first
-        val restTranslations = translationTabs.drop(1).map { it.first }
-        productVariants.forEachIndexed { index, _ ->
-            productVariants[index] = productVariants[index].copy(sort = index)
-        }
-        val files = mediaPicker.mediaItems.mapIndexed { index, item ->
-            item.serverId?.let { serverId ->
-                ProductFileDto(
-                    fileId = serverId,
-                    sort = index
-                )
-            }
-        }.filterNotNull()
+        val id = productId ?: return
+        // 重新校验，防止状态过期
+        if (!validateForm()) return
+
         viewModelScope.launch {
-            when (val result = productRepository.createProduct(
-                name = primaryTranslation.name,
-                title = primaryTranslation.title,
-                description = primaryTranslation.description,
-                translations = restTranslations,
-                iva = productIva,
-                productCode = productCode,
-                primaryCategoryId = primaryCategory.id.toString(),
-                variants = productVariants,
-                files = files
-            )) {
+            editFormUiState = UiState.Loading
+            val primaryTranslation = translationTabs.first().first.copy(
+                description = translationTabs.first().second.toHtml()
+            )
+
+            val dto = ProductUpdateDto(
+                name = if (isNameChanged) OptionalField.Value(primaryTranslation.name)
+                else OptionalField.Undefined,
+                title = if (isTitleChanged) {
+                    primaryTranslation.title?.let { OptionalField.Value(it) }
+                } else OptionalField.Undefined,
+                description = if (isDescriptionChanged) {
+                    primaryTranslation.description?.let { OptionalField.Value(it) }
+                } else OptionalField.Undefined,
+                iva = if (productIva != initialProduct?.iva) OptionalField.Value(productIva)
+                else OptionalField.Undefined,
+                productCode = if (productCode != initialProduct?.productCode) OptionalField.Value(productCode)
+                else OptionalField.Undefined,
+                status = if (productStatus != initialProduct?.status) OptionalField.Value(productStatus)
+                else OptionalField.Undefined,
+                primaryCategoryId = if (isPrimaryCategoryChanged) OptionalField.Value(filterCategory?.id ?: "")
+                else OptionalField.Undefined,
+                // 变体
+                createVariants = buildCreateVariants().takeIf { it.isNotEmpty() }?.let { OptionalField.Value(it) }
+                    ?: OptionalField.Undefined,
+                updateVariants = buildUpdateVariants().takeIf { it.isNotEmpty() }?.let { OptionalField.Value(it) }
+                    ?: OptionalField.Undefined,
+                variantsToDelete = buildToDeleteVariants().takeIf { it.isNotEmpty() }?.let { OptionalField.Value(it) }
+                    ?: OptionalField.Undefined,
+                // 翻译
+                translations = if (isTranslationsChanged) {
+                    OptionalField.Value(translationTabs.drop(1).map { it.first })
+                } else OptionalField.Undefined,
+                translationsToDelete = translationsToDelete.takeIf { it.isNotEmpty() }?.let { OptionalField.Value(it) }
+                    ?: OptionalField.Undefined,
+                // 文件
+                files = if (isFilesChanged) {
+                    OptionalField.Value(buildFiles()) // 空列表表示清空，null 不行，这里用 Value
+                } else OptionalField.Undefined
+            )
+
+
+            when (val result = productRepository.updateProduct(id, dto)) {
                 is SharedResponseResult.Success -> {
-                    val message = getString(SharedRes.string.create_success)
+                    editFormUiState = UiState.Success
+                    val message = getString(SharedRes.string.update_success)
                     mySnackbarViewModel.showSuccess(
                         message = message
                     )
+                    emitNavigation(NavigationEvent.ToRoute(Products))
                 }
 
                 is SharedResponseResult.Error -> {
+                    editFormUiState = UiState.Error
                     if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
-                        val message = getString(SharedRes.string.create_failed)
+                        val message = getString(SharedRes.string.update_failed)
                         mySnackbarViewModel.showError(message)
                     }
                 }
             }
+            delay(500.milliseconds)
+            editFormUiState = UiState.Idle
         }
-    }
-
-    override suspend fun findCategories(query: String?, page: Int, limit: Int): List<ReducedCategoryResponse> {
-        when (val result = categoryRepository.getCategoriesByLevel(query, page, limit, true)) {
-            is SharedResponseResult.Success -> {
-                return result.data?.items ?: emptyList()
-            }
-
-            is SharedResponseResult.Error -> {
-                if (SharedResponseResult.shouldShowToUser(result.type)) {
-                    result.message?.let { mySnackbarViewModel.showError(it) }
-                }
-            }
-        }
-        return emptyList()
-    }
-
-    override fun updateFilterCategory(category: ReducedCategoryResponse?) {
-        super.updateFilterCategory(category)
-        productCategoryError = if (category == null) {
-            SharedRes.string.field_cannot_be_empty
-        } else {
-            null
-        }
-        checkProductMeta()
-        val iva = category?.iva ?: return
-
-        // 没有被用户改过自动填充
-        if (!isIvaManuallyEdited) {
-            productIva = iva
-            calculatePrices()
-        }
-    }
-
-    override fun removeFilterCategory() {
-        super.removeFilterCategory()
-        checkProductMeta()
     }
 }

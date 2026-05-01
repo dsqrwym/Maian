@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.collections.immutable.toPersistentList
-import org.dsqrwym.enterprise.data.product.dto.ProductResponse
+import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.util.uawwindtablekmp.cellWithModifier
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.SharedProductSortField
@@ -54,21 +54,21 @@ enum class ProductColumn {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class)
 @Composable
 fun ProductTableView(
-    paginatedProducts: LazyPagingItems<ProductResponse>,
-    fakeProducts: List<ProductResponse>,
-    updateCurrentProduct: (ProductResponse) -> Unit,
+    paginatedProducts: LazyPagingItems<Product>,
+    fakeProducts: List<Product>,
+    updateCurrentProduct: (Product) -> Unit,
     updateSortBy: (SharedProductSortField?) -> Unit,
     updateSortDir: (OrderDir) -> Unit,
-    onPreview: (ProductResponse) -> Unit,
-    onEdit: (ProductResponse) -> Unit,
-    onDelete: (ProductResponse) -> Unit,
+    onPreview: (Product) -> Unit,
+    onEdit: (Product) -> Unit,
+    onDelete: (Product) -> Unit,
     padding: PaddingValues,
     isRefreshing: Boolean,
     isError: Boolean,
 ) {
     val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
     val columns =
-        tableColumns<ProductResponse, ProductColumn, Unit> {
+        tableColumns<Product, ProductColumn, Unit> {
             column(ProductColumn.Image, valueOf = { it.mainImage }) {
                 header(" 主图")
                 autoWidth(100.dp)
@@ -83,7 +83,7 @@ fun ProductTableView(
                         SharedAsyncImage(
                             modifier = Modifier.size(60.dp),
                             placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
-                            model = product.mainImage.getUrl(product.id),
+                            model = product.mainImage.url(product.id),
                             zoomable = false,
                             enableContextMenu = false,
                             contentDescription = "产品图片",
@@ -109,8 +109,8 @@ fun ProductTableView(
                             PlainTooltip {
                                 SelectionContainer {
                                     Text(
-                                        product.nameTranslations,
-                                        modifier = Modifier.copyOnInteraction(SharedClipboardData.Text(product.nameTranslations))
+                                        product.nameTranslationsText,
+                                        modifier = Modifier.copyOnInteraction(SharedClipboardData.Text(product.nameTranslationsText))
                                     )
                                 }
                             }
@@ -142,8 +142,8 @@ fun ProductTableView(
                             PlainTooltip {
                                 SelectionContainer {
                                     Text(
-                                        product.titleTranslations,
-                                        Modifier.copyOnInteraction(SharedClipboardData.Text(product.titleTranslations))
+                                        product.titleTranslationsText,
+                                        Modifier.copyOnInteraction(SharedClipboardData.Text(product.titleTranslationsText))
                                     )
                                 }
                             }
@@ -180,11 +180,11 @@ fun ProductTableView(
                 cellWithModifier(
                     {
                         Modifier.fillMaxSize()
-                            .copyOnInteraction(SharedClipboardData.Text(it.mainCategory.localName))
+                            .copyOnInteraction(SharedClipboardData.Text(it.mainCategory.name))
                     }
                 ) {
                     Text(
-                        it.mainCategory.localName,
+                        it.mainCategory.name,
                         Modifier.padding(horizontal = 6.dp).placeholderWithShimmer(isRefreshing)
                     )
                 }

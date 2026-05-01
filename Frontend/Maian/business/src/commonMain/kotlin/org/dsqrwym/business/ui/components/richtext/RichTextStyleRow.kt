@@ -34,7 +34,7 @@ sealed interface RichTextItem {
         val icon: ImageVector,
         val onClick: (RichTextState) -> Unit,
         val isSelected: (RichTextState) -> Boolean,
-        val enabled: Boolean = true,
+        val enabled: Boolean,
     ) : RichTextItem
 
     data object Divider : RichTextItem
@@ -45,11 +45,10 @@ sealed interface RichTextItem {
 }
 
 fun defaultRichTextItems(
-    isEnabled: Boolean = true,
+    isEnabled: Boolean,
     editorMode: RichTextEditorState,
     toggleEditorMode: (RichTextEditorState) -> Unit
 ): List<RichTextItem> = listOf(
-
     // 对齐
     RichTextItem.Action(
         icon = Icons.AutoMirrored.Outlined.FormatAlignLeft,
@@ -148,6 +147,7 @@ fun defaultRichTextItems(
             RichTextStyleButton(
                 onClick = { it.increaseListLevel() },
                 icon = Icons.Outlined.TextIncrease,
+                enabled = isEnabled
             )
         }
     },
@@ -157,6 +157,7 @@ fun defaultRichTextItems(
             RichTextStyleButton(
                 onClick = { it.decreaseListLevel() },
                 icon = Icons.Outlined.TextDecrease,
+                enabled = isEnabled
             )
         }
     },
@@ -175,11 +176,11 @@ fun defaultRichTextItems(
             SharedLog.log(editorMode.name)
             if (editorMode == RichTextEditorState.HTML) {
                 toggleEditorMode(RichTextEditorState.NORMAL)
-                SharedLog.log("TO NORMAL")
                 return@Action
             }
             toggleEditorMode(RichTextEditorState.HTML)
         },
+        enabled = isEnabled,
         isSelected = { editorMode == RichTextEditorState.HTML },
         icon = Icons.Outlined.Html,
     ),
@@ -192,6 +193,7 @@ fun defaultRichTextItems(
             }
             toggleEditorMode(RichTextEditorState.MARKDOWN)
         },
+        enabled = isEnabled,
         isSelected = { editorMode == RichTextEditorState.MARKDOWN },
         icon = SharedIcons.Markdown,
     )
@@ -215,7 +217,6 @@ fun RichTextStyleRow(
         extraItems()
         items.forEach { item ->
             when (item) {
-
                 is RichTextItem.Action -> {
                     item {
                         RichTextStyleButton(

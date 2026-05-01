@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
-import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.cards.FormCard
@@ -358,11 +358,11 @@ fun BusinessCategoryBasicInfoCard(
 
 @Composable
 fun BusinessParentCategoryCard(
-    selectedParentCategory: ReducedCategoryResponse?, // 替换为实际类型
+    selectedParentCategory: CategorySummary?,
     enabled: Boolean,
-    onParentCategoryChange: (ReducedCategoryResponse?) -> Unit,
+    onParentCategoryChange: (CategorySummary?) -> Unit,
     onRemoveParent: () -> Unit,
-    onSearch: suspend (String?, Int, Int) -> List<ReducedCategoryResponse>,
+    onSearch: suspend (String?, Int, Int) -> List<CategorySummary>,
     modifier: Modifier = Modifier
 ) {
     FormCard(
@@ -381,7 +381,7 @@ fun BusinessParentCategoryCard(
                     onSelectedItemChange = onParentCategoryChange,
                     pageSize = 100,
                     itemToString = {
-                        "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
+                        "${it.name}${it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()}"
                     },
                     onSearch = onSearch
                 )

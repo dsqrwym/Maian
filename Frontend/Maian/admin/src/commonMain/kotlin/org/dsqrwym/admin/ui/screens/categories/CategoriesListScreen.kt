@@ -28,14 +28,15 @@ import maian.admin.generated.resources.platform_category
 import maian.admin.generated.resources.select_wholesaler
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
-import org.dsqrwym.admin.data.categories.dto.CategoryResponse
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
 import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
+import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -206,7 +207,7 @@ fun CategoriesListScreen(
                                             CategoryListItem(
                                                 isLoading = true,
                                                 categoriesListViewmodel = viewModel,
-                                                category = CategoryResponse(
+                                                category = CategoryNode(
                                                     id = it.toLong(),
                                                     name = "",
                                                 ),
@@ -255,7 +256,7 @@ fun CategoriesListScreen(
 fun CategoryListItem(
     modifier: Modifier = Modifier,
     categoriesListViewmodel: CategoriesListViewModel = koinViewModel(),
-    category: CategoryResponse,
+    category: CategoryNode,
     userRole: UserRole? = null,
     isLoading: Boolean = true,
     onEdit: () -> Unit,
@@ -287,12 +288,12 @@ fun CategoryListItem(
                             AssistChip(
                                 onClick = {
                                     categoriesListViewmodel.updateFilterCategoryType(
-                                        if (category.isPublic()) SharedCategoryType.PUBLIC else SharedCategoryType.PRIVATE
+                                        if (category.isPublic) SharedCategoryType.PUBLIC else SharedCategoryType.PRIVATE
                                     )
                                 },
                                 label = {
                                     Text(
-                                        if (category.isPublic()) stringResource(BusinessRes.string.platform_category) else stringResource(
+                                        if (category.isPublic) stringResource(BusinessRes.string.platform_category) else stringResource(
                                             BusinessRes.string.private_category
                                         ),
                                         style = MaterialTheme.typography.labelSmall
@@ -306,7 +307,7 @@ fun CategoryListItem(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = if (category.getParentName() != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
+                                text = if (category.parentName != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.parentName}" else stringResource(
                                     BusinessRes.string.base_category
                                 ),
                                 style = MaterialTheme.typography.bodySmall
@@ -343,8 +344,8 @@ fun CategoryListItem(
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
                     Column(verticalArrangement = SharedColumnLayout.arrangement) {
-                        category.categoryTranslations?.let { BusinessCategoryLanguages(it) }
-                        BusinessCategoryPath(category.getPath(), category.name)
+                        BusinessCategoryLanguages(category.translations.map { it.toDto() })
+                        BusinessCategoryPath(category.pathNames(), category.name)
                     }
                 }
                 TooltipBox(
@@ -428,7 +429,7 @@ fun FilterDialog(
                             },
                             pageSize = 100,
                             itemToString = {
-                                "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
+                                "${it.name}${it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()}"
                             },
                             onSearch = { query, page, limit ->
                                 viewModel.findParentCategories(query, page, limit)

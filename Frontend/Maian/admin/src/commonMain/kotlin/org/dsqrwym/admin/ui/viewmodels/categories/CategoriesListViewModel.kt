@@ -15,11 +15,11 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.delete_failed
 import maian.shared.generated.resources.delete_success
 import org.dsqrwym.admin.data.categories.CategoryRepository
-import org.dsqrwym.admin.data.categories.dto.CategoryResponse
 import org.dsqrwym.admin.data.user.UserRepository
 import org.dsqrwym.admin.data.user.dto.WholeSalerUserResponse
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.pagination.createPager
+import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -51,7 +51,7 @@ class CategoriesListViewModel(
     }
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    val pagedCategories: Flow<PagingData<CategoryResponse>> = combine(
+    val pagedCategories: Flow<PagingData<CategoryNode>> = combine(
         pagingTrigger.debounce(600)
             .distinctUntilChanged(),
         categoryRepository.updateEvents.onStart { emit(Unit) } // 刷新触发器
@@ -66,7 +66,7 @@ class CategoriesListViewModel(
                 when (val result = categoryRepository.getCategories(
                     search = q,
                     type = type,
-                    parentId = parentId?.toString(),
+                    parentId = parentId,
                     userId = if (type == SharedCategoryType.PUBLIC) null else filterUser?.id,
                     page = page,
                     limit = size
@@ -89,7 +89,7 @@ class CategoriesListViewModel(
     // 弹窗状态
     var showFilterDialog by mutableStateOf(false)
         private set
-    var deleteCategory by mutableStateOf<CategoryResponse?>(null)
+    var deleteCategory by mutableStateOf<CategoryNode?>(null)
         private set
 
     override fun updateFilterUser(user: WholeSalerUserResponse?) {
@@ -113,7 +113,7 @@ class CategoriesListViewModel(
         showFilterDialog = show
     }
 
-    fun updateShowDeleteDialog(category: CategoryResponse?) {
+    fun updateShowDeleteDialog(category: CategoryNode?) {
         deleteCategory = category
     }
 
@@ -136,7 +136,7 @@ class CategoriesListViewModel(
     }
 
     // 删除类别
-    fun deleteCategory(category: CategoryResponse) {
+    fun deleteCategory(category: CategoryNode) {
         viewModelScope.launch {
             isLoading = true
             when (val result = categoryRepository.deleteCategory(category.id.toString())) {

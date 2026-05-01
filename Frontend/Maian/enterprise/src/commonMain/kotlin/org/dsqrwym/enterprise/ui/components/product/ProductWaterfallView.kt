@@ -28,7 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
-import org.dsqrwym.enterprise.data.product.dto.ProductResponse
+import org.dsqrwym.enterprise.domain.product.Product
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
@@ -49,13 +50,13 @@ import org.dsqrwym.shared.util.platform.getPlatform
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductWaterfallView(
-    paginatedProducts: LazyPagingItems<ProductResponse>,
-    fakeProducts: List<ProductResponse>,
+    paginatedProducts: LazyPagingItems<Product>,
+    fakeProducts: List<Product>,
     scrollBehavior: TopAppBarScrollBehavior,
-    updateCurrentProduct: (ProductResponse) -> Unit,
-    onPreview: (ProductResponse) -> Unit,
-    onEdit: (ProductResponse) -> Unit,
-    onDelete: (ProductResponse) -> Unit,
+    updateCurrentProduct: (Product) -> Unit,
+    onPreview: (Product) -> Unit,
+    onEdit: (Product) -> Unit,
+    onDelete: (Product) -> Unit,
     padding: PaddingValues,
     isRefreshing: Boolean,
     isError: Boolean,
@@ -167,7 +168,7 @@ fun ProductWaterfallView(
 
 @Composable
 fun ProductGridItem(
-    product: ProductResponse?,
+    product: Product?,
     isRefreshing: Boolean,
     platform: Platform,
     onClick: () -> Unit,
@@ -219,7 +220,7 @@ fun ProductGridItem(
                             .fillMaxWidth()
                             .wrapContentHeight()
                             .clickable(onClick = onImageClick),
-                        model = it.mainImage.getUrl(it.id),
+                        model = it.mainImage.url(it.id),
                         contentDescription = it.name,
                         placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
                         zoomable = false,
@@ -258,7 +259,7 @@ fun ProductGridItem(
                             Spacer(Modifier.width(6.dp))
                             SelectionContainer {
                                 Text(
-                                    text = item.mainCategory.localName,
+                                    text = item.mainCategory.localizedName(LanguageManager.getCurrent().code),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 1,

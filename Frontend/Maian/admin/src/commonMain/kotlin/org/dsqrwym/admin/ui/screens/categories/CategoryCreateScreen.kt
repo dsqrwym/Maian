@@ -32,6 +32,7 @@ import org.dsqrwym.business.ui.components.category.BusinessCategoryBasicInfoCard
 import org.dsqrwym.business.ui.components.category.BusinessParentCategoryCard
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
 import org.dsqrwym.business.ui.components.category.BusinessTranslationCard
+import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -89,10 +90,11 @@ fun CategoryCreateScreen(
             )
         },
         title = {
-            Row {
-                Icon(Icons.Outlined.Category, stringResource(SharedRes.string.category))
-                Text(stringResource(SharedRes.string.create))
-            }
+            BusinessTitleIconRow(
+                stringResource(SharedRes.string.create),
+                Icons.Outlined.Category,
+                stringResource(SharedRes.string.category)
+            )
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             createStatus,

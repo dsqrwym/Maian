@@ -2,7 +2,6 @@ package org.dsqrwym.shared.data.products.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.dsqrwym.shared.network.ApiConfig
 
 @Serializable
 abstract class SharedProductResponse {
@@ -30,9 +29,6 @@ abstract class SharedProductResponse {
 
     @SerialName("product_translations")
     abstract val translations: List<SharedProductTranslation>
-
-    val hasStock: Boolean
-        get() = totalStock > 0
 }
 
 @Serializable
@@ -40,11 +36,7 @@ data class SharedProductFile(
     val id: Long,
     @SerialName("mime_type")
     val mimeType: String
-) {
-    fun getUrl(productId: String): String {
-        return "${ApiConfig.FilePath.PRODUCT_FILE}?product_id=$productId&file_id=$id"
-    }
-}
+)
 
 @Serializable
 data class SharedProductTranslation(

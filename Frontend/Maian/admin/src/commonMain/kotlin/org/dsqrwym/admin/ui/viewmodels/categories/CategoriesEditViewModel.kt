@@ -234,7 +234,7 @@ class CategoriesEditViewModel(
                     OptionalField.Undefined
                 },
                 iva = if (isIvaChanged) {
-                    OptionalField.Value(categoryIva)
+                    categoryIva?.let { OptionalField.Value(it) }
                 } else {
                     OptionalField.Undefined
                 },

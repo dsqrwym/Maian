@@ -23,7 +23,7 @@ data class BusinessUpdateCategoryDto(
     val name: OptionalField<String> = OptionalField.Undefined,
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)
-    val iva: OptionalField<String?> = OptionalField.Undefined,
+    val iva: OptionalField<String>? = OptionalField.Undefined,
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)
     val translations: OptionalField<List<SharedCategoryTranslation>> = OptionalField.Undefined,

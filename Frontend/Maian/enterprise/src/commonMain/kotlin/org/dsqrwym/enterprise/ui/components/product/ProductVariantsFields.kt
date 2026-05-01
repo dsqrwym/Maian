@@ -27,7 +27,7 @@ import org.dsqrwym.business.drawable.sharedicons.Barcode
 import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
 import org.dsqrwym.business.ui.components.row.BusinessLabelValueRow
-import org.dsqrwym.enterprise.data.product.dto.ProductVariantDto
+import org.dsqrwym.enterprise.domain.product.ProductVariant
 import org.dsqrwym.enterprise.ui.components.containers.ReorderableContentBox
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.drawable.SharedIcons
@@ -58,11 +58,11 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun ProductVariantsFields(
-    variants: List<ProductVariantDto>,
+    variants: List<ProductVariant>,
     productVariantsProductCodesErrors: Map<String, StringResource?>,
     isLoading: Boolean = false,
     onReorder: (Int, Int) -> Unit,
-    onUpdate: (ProductVariantDto) -> Unit,
+    onUpdate: (ProductVariant) -> Unit,
     onDelete: (String?) -> Unit,
     onAddClick: () -> Unit,
     canAdd: Boolean,
@@ -76,7 +76,7 @@ fun ProductVariantsFields(
         onReorder(from.index - 1, to.index - 1)
         hapticFeedback.performHapticFeedback(HapticFeedbackType.SegmentFrequentTick)
     }
-    val currentSKUId by remember { mutableStateOf(variants.first().id) }
+    val currentSKUId by remember { mutableStateOf(variants.firstOrNull()?.id) }
     val isisAnyItemDragging = reorderableState.isAnyItemDragging
 
     LazyVerticalStaggeredGrid(
@@ -95,7 +95,7 @@ fun ProductVariantsFields(
                 itemVerticalAlignment = Alignment.CenterVertically,
             ) {
                 BusinessSelectedInfoCard(
-                    modifier = Modifier.weight(1f, false).widthIn(max = 336.dp),
+                    modifier = Modifier.weight(1f, false).widthIn(max = 336.dp).placeholderWithShimmer(isLoading),
                     visible = variants.isNotEmpty(),
                     description = "已添加${variants.size}个变体。",
                     icon = Icons.Outlined.Info,
@@ -121,6 +121,7 @@ fun ProductVariantsFields(
                 key = item.id ?: "",
             ) { isSelfDragging ->
                 VariantCard(
+                    isLoading = isLoading,
                     modifier = Modifier
                         .draggableHandle(
                             onDragStarted = {
@@ -149,14 +150,14 @@ fun ProductVariantsFields(
 @Composable
 fun VariantCard(
     index: Int,
-    item: ProductVariantDto,
+    item: ProductVariant,
     isLoading: Boolean = false,
     isAnyItemDragging: Boolean = false,
     isSelfDragging: Boolean = false,
     canDelete: Boolean = true,
     currentSKUid: String? = null,
     productCodeError: StringResource?,
-    onUpdate: (ProductVariantDto) -> Unit,
+    onUpdate: (ProductVariant) -> Unit,
     onDelete: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -266,6 +267,7 @@ fun VariantCard(
 
                 AnimatedVisibility(expanded) {
                     ProductVariantFields(
+                        isLoading = isLoading,
                         selectedSaleVariant = item.typeSale,
                         onSelectedSaleVariantChange = {
                             onUpdate(item.copy(typeSale = it))
@@ -291,7 +293,7 @@ fun VariantCard(
                         onMinOrderQtyChange = { min ->
                             min?.let { onUpdate(item.copy(minOrderQty = it)) }
                         },
-                        lowStockThreshold = item.lowStockThreshold,
+                        lowStockThreshold = item.lowStockThreshold ?: 0,
                         onLowStockThresholdChange = { onUpdate(item.copy(lowStockThreshold = it)) },
                         productCodeError = productCodeError
                     )
@@ -303,6 +305,7 @@ fun VariantCard(
 
 @Composable
 fun ProductVariantFields(
+    isLoading: Boolean = false,
     modifier: Modifier = Modifier,
     selectedSaleVariant: SharedProductSaleVariant,
     onSelectedSaleVariantChange: (SharedProductSaleVariant) -> Unit,
@@ -318,8 +321,8 @@ fun ProductVariantFields(
     onAvailableStockChange: (Int?) -> Unit,
     minOrderQty: Int,
     onMinOrderQtyChange: (Int?) -> Unit,
-    lowStockThreshold: Int?,
-    onLowStockThresholdChange: (Int?) -> Unit,
+    lowStockThreshold: Int,
+    onLowStockThresholdChange: (Int) -> Unit,
 ) {
     val focus = LocalFocusManager.current
     var saleUnitEnabled by remember { mutableStateOf(true) }
@@ -348,6 +351,7 @@ fun ProductVariantFields(
         )
 
         MyOutlinedTextField(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             value = productCode,
             onValueChange = onProductCodeChange,
             leadingIcon = SharedIcons.Barcode,
@@ -384,7 +388,7 @@ fun ProductVariantFields(
                     }
                 },
                 config = SelectorConfig(
-                    modifier = Modifier.weight(0.5f),
+                    modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                     modifierFillMaxWidth = false,
                     label = "销售单位 (${stringResource(SharedRes.string.field_required)})",
                     leadingIcon = Icons.Outlined.Scale,
@@ -394,7 +398,7 @@ fun ProductVariantFields(
             )
 
             MyOutlinedIntegerField(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 min = 1,
                 enabled = saleUnitEnabled,
@@ -428,7 +432,7 @@ fun ProductVariantFields(
             horizontalArrangement = SharedRowLayout.arrangement
         ) {
             MyOutlinedDoubleField(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 value = priceIva ?: "0.00",
                 onValueChange = {
@@ -446,7 +450,7 @@ fun ProductVariantFields(
             )
 
             MyOutlinedDoubleField(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 value = price ?: "0.00",
                 onValueChange = {
@@ -475,7 +479,7 @@ fun ProductVariantFields(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             MyOutlinedIntegerField(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 min = 1,
                 value = minOrderQty.toString(),
@@ -488,7 +492,7 @@ fun ProductVariantFields(
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
             MyOutlinedIntegerField(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 min = 0,
                 value = availableStock.toString(),
@@ -502,15 +506,16 @@ fun ProductVariantFields(
             )
         }
         MyOutlinedIntegerField(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             min = 0,
-            value = lowStockThreshold?.toString() ?: "",
-            onValueChange = onLowStockThresholdChange,
+            value = if (lowStockThreshold == 0) "" else lowStockThreshold.toString(),
+            onValueChange = { it?.let { onLowStockThresholdChange(it) } },
             leadingIcon = Icons.Outlined.NotificationImportant,
             leadingIconContentDescription = "低库存提醒",
             trailingIcon = {
-                if (lowStockThreshold != null) {
+                if (lowStockThreshold != 0) {
                     SharedCloseButton {
-                        onLowStockThresholdChange(null)
+                        onLowStockThresholdChange(0)
                     }
                 }
             },

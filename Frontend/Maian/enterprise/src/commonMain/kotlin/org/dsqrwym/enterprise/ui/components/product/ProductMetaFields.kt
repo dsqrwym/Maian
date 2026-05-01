@@ -20,7 +20,7 @@ import maian.shared.generated.resources.field_required
 import maian.shared.generated.resources.tax_rate
 import org.dsqrwym.business.drawable.sharedicons.Barcode
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
-import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.InProgress
@@ -34,6 +34,7 @@ import org.dsqrwym.shared.ui.components.input.selector.Selector
 import org.dsqrwym.shared.ui.components.input.selector.SelectorConfig
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.formatter.asString
+import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.dsqrwym.shared.util.row.SharedRowLayout
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -41,9 +42,10 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ProductMetaFields(
-    selectedCategory: ReducedCategoryResponse?,
-    onSelectedCategoryChange: (ReducedCategoryResponse?) -> Unit,
-    onSearchCategory: suspend (String?, Int, Int) -> List<ReducedCategoryResponse>,
+    isLoading: Boolean = false,
+    selectedCategory: CategorySummary?,
+    onSelectedCategoryChange: (CategorySummary?) -> Unit,
+    onSearchCategory: suspend (String?, Int, Int) -> List<CategorySummary>,
     onRemoveCategory: () -> Unit,
     categoryError: StringResource?,
     productCode: String = "",
@@ -62,6 +64,7 @@ fun ProductMetaFields(
     ) {
         SearchableSelectorRemote(
             config = RemoteSearchableSelectorConfig(
+                modifier = Modifier.placeholderWithShimmer(isLoading),
                 label = "选择产品主类别 (${stringResource(SharedRes.string.field_required)})",
                 error = categoryError.asString(),
                 leadingIcon = Icons.Outlined.Category,
@@ -69,13 +72,14 @@ fun ProductMetaFields(
                 onSelectedItemChange = onSelectedCategoryChange,
                 pageSize = 100,
                 itemToString = {
-                    "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
+                    "${it.name}${it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()}"
                 },
                 onSearch = onSearchCategory,
             )
         )
 
         BusinessSelectedInfoCard(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             visible = selectedCategory != null,
             title = stringResource(BusinessRes.string.parent_category_selected),
             description = selectedCategory?.name ?: "",
@@ -85,6 +89,7 @@ fun ProductMetaFields(
 
 
         MyOutlinedTextField(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             value = productCode,
             onValueChange = onProductCodeChange,
             leadingIcon = SharedIcons.Barcode,
@@ -108,7 +113,7 @@ fun ProductMetaFields(
         ) {
             MyOutlinedDoubleField(
                 value = productIva,
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 onValueChange = {
                     onIvaChange(it)
@@ -129,7 +134,7 @@ fun ProductMetaFields(
                     it?.let { onProductStatusChange(it) }
                 },
                 config = SelectorConfig(
-                    modifier = Modifier.weight(0.5f),
+                    modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                     label = "产品状态 (${stringResource(SharedRes.string.field_required)})",
                     leadingIcon = SharedIcons.InProgress,
                     modifierFillMaxWidth = false,

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.ui.material3.OutlinedRichTextEditor
 import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
+import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 
 enum class RichTextEditorState {
     NORMAL, HTML, MARKDOWN
@@ -21,6 +22,7 @@ enum class RichTextEditorState {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BusinessRichTextEditor(
+    isLoading: Boolean = false,
     modifier: Modifier = Modifier,
     fillMaxSize: Boolean = false,
     label: String,
@@ -42,7 +44,7 @@ fun BusinessRichTextEditor(
 
     val rowItems = remember(editorMode) {
         defaultRichTextItems(
-            isEnabled = enabled,
+            isEnabled = enabled && !isLoading,
             editorMode = editorMode,
             toggleEditorMode = { editorMode = it })
 
@@ -54,6 +56,7 @@ fun BusinessRichTextEditor(
             state = state,
             items = rowItems,
             extraItems = toolbarItems,
+            enabled = enabled && !isLoading
         )
 
         val modifier = Modifier.then(if (fillMaxSize) Modifier.fillMaxSize() else Modifier.fillMaxWidth())
@@ -62,7 +65,7 @@ fun BusinessRichTextEditor(
             when (it) {
                 RichTextEditorState.MARKDOWN -> {
                     MyOutlinedTextField(
-                        modifier = modifier,
+                        modifier = modifier.placeholderWithShimmer(isLoading),
                         value = markdown,
                         labelText = label,
                         placeholderText = placeholder,
@@ -76,7 +79,7 @@ fun BusinessRichTextEditor(
 
                 RichTextEditorState.HTML -> {
                     MyOutlinedTextField(
-                        modifier = modifier,
+                        modifier = modifier.placeholderWithShimmer(isLoading),
                         value = html,
                         onValueChange = { str ->
                             html = str
@@ -90,7 +93,7 @@ fun BusinessRichTextEditor(
 
                 else ->
                     OutlinedRichTextEditor(
-                        modifier = modifier,
+                        modifier = modifier.placeholderWithShimmer(isLoading),
                         state = state,
                         enabled = enabled,
                         label = { Text(label) },

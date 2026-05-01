@@ -11,7 +11,7 @@ bignum = "0.3.10"
 coilCompose = "3.4.0" #3.3.0
 #composeMultiplatform = "1.9.3" #1.9.3
 composemediaplayer = "0.10.0" #0.9.0
-compose-multiplatform-adaptive = "1.3.0-alpha06"
+compose-multiplatform-adaptive = "1.3.0-alpha06" #1.3.0-alpha06
 compose-multiplatform-lifecycle = "2.10.0"
 composeMultiplatform = "1.10.3" #1.10.2
 composeMultiplatformMediaPlayer = "1.0.53" #1.0.52
@@ -24,24 +24,25 @@ filekitCore = "0.13.0" #0.12.0
 haze = "1.7.2" #1.7.2
 jmail = "2.1.0" #2.0.2
 koinCore = "4.2.1" #4.2.0
-kotlin = "2.3.20" #2.3.0
+kotlin = "2.3.21" #2.3.20
 kotlinx-coroutines = "1.10.2"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxDatetime = "0.7.1"
 kotlinxSerializationJson = "1.11.0" #1.10.0
 kscan = "0.8.1"
-ktor = "3.4.2" #3.4.1
+ktor = "3.4.3" #3.4.2
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
 multiplatformSettings = "1.3.0"
-navigation3Runtime = "1.1.0" #1.1.0-rc01
-multiplatform-nav3-ui = "1.0.0-alpha06"
+navigation3Runtime = "1.1.1" #1.1.0
+multiplatform-nav3-ui = "1.1.0" #1.0.0-alpha06
 navigationCompose = "2.9.2" #2.9.1
 pagingRuntime = "3.4.2" #3.4.0-rc01
 reorderable = "3.1.0" #3.0.0
-richeditorCompose = "1.0.0-rc13"
+richeditorCompose = "1.0.0-rc14" #1.0.0-rc13
 savedstate = "1.4.0"
 securityCrypto = "1.1.0"
+slf4jSimple = "2.0.17"
 sonner = "0.3.9"
 tableCore = "1.8.2" #1.8.1
 uiTooling = "1.10.3" #1.10.2
@@ -95,6 +96,7 @@ reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reo
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 jetbrains-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate", version.ref = "savedstate" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
 webcam-capture = { module = "com.github.sarxos:webcam-capture", version.ref = "webcam" }
 window-core = { module = "org.jetbrains.androidx.window:window-core", version.ref = "windowCore" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }

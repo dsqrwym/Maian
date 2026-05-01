@@ -1,7 +1,10 @@
 package org.dsqrwym.enterprise.data.product
 
 import org.dsqrwym.enterprise.data.product.dto.*
+import org.dsqrwym.enterprise.data.product.mapper.toDomain
+import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.shared.data.SharedObservableRepository
 import org.dsqrwym.shared.data.products.SharedProductApi
 import org.dsqrwym.shared.data.products.SharedProductListSelectField
 import org.dsqrwym.shared.data.products.SharedProductSortField
@@ -12,8 +15,11 @@ import org.dsqrwym.shared.network.model.ApiResponseList
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
+import org.dsqrwym.shared.serialization.OptionalField
+import org.dsqrwym.shared.serialization.map
 
-class ProductRepository(private val sharedProductApi: SharedProductApi, private val productApi: ProductApi) {
+class ProductRepository(private val sharedProductApi: SharedProductApi, private val productApi: ProductApi) :
+    SharedObservableRepository() {
     suspend fun getProducts(
         search: String? = null,
         langCode: String? = null,
@@ -23,7 +29,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
         status: SharedProductStatus? = null,
         page: Int = 1,
         limit: Int = 50
-    ): SharedResponseResult<ApiResponseList<ProductResponse>> {
+    ): SharedResponseResult<ApiResponseList<Product>> {
         return withAuthOrError { user ->
             val fields: List<SharedProductListSelectField> = listOf(
                 SharedProductListSelectField.IVA,
@@ -42,7 +48,18 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                 page = page,
                 limit = limit
             )
-            safeApiCall { sharedProductApi.getProducts(query) }
+            when (val result = safeApiCall { sharedProductApi.getProducts<ProductResponse>(query) }) {
+                is SharedResponseResult.Success -> SharedResponseResult.Success(
+                    result.data?.let {
+                        ApiResponseList(
+                            items = it.items.map { product -> product.toDomain() },
+                            pagination = it.pagination
+                        )
+                    }
+                )
+
+                is SharedResponseResult.Error -> result
+            }
         }
     }
 
@@ -68,7 +85,12 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                         iva = iva,
                         productCode = productCode.trim(),
                         primaryCategoryId = primaryCategoryId,
-                        variants = variants.map { it.copy(productCode = it.productCode.trim(), id = null) },
+                        variants = variants.map {
+                            it.copy(
+                                productCode = it.productCode.map { code -> code.trim() },
+                                id = OptionalField.Undefined
+                            )
+                        },
                         translations = translations?.map {
                             it.copy(
                                 name = it.name.trim(),
@@ -79,8 +101,47 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                         files = files
                     )
                 )
-            }
+            }.notifyUpdated()
         }
+    }
+
+    suspend fun updateProduct(id: String, dto: ProductUpdateDto): SharedResponseResult<Unit> {
+        return safeApiCall {
+            productApi.updateProduct(
+                id, dto.copy(
+                    name = dto.name.map { it.trim() },
+                    title = dto.title?.map { it.trim() },
+                    description = dto.description.map { it.trim() },
+                    iva = dto.iva,
+                    productCode = dto.productCode.map { it.trim() },
+                    primaryCategoryId = dto.primaryCategoryId,
+                    variantsToDelete = dto.variantsToDelete,
+                    createVariants = dto.createVariants.map { variants ->
+                        variants.map {
+                            it.copy(
+                                productCode = it.productCode.map { code -> code.trim() },
+                                id = OptionalField.Undefined
+                            )
+                        }
+                    },
+                    updateVariants = dto.updateVariants.map { variants ->
+                        variants.map {
+                            it.copy(productCode = it.productCode.map { code -> code.trim() })
+                        }
+                    },
+                    translationsToDelete = dto.translationsToDelete,
+                    translations = dto.translations.map { translations ->
+                        translations.map {
+                            it.copy(
+                                name = it.name.trim(),
+                                title = it.title?.trim(),
+                                description = it.description?.trim(),
+                            )
+                        }
+                    }
+                )
+            )
+        }.notifyUpdated()
     }
 
     suspend fun getProductForUpdate(id: String): SharedResponseResult<ProductResponseForUpdate> {

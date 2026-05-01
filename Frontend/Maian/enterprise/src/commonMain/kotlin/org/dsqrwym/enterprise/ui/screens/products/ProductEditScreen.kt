@@ -1,25 +1,28 @@
 package org.dsqrwym.enterprise.ui.screens.products
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.create
+import maian.shared.generated.resources.category
+import maian.shared.generated.resources.update
+import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliaryHost
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliarySurface
 import org.dsqrwym.business.ui.workspace.rememberBusinessAuxiliaryWorkspaceState
+import org.dsqrwym.enterprise.data.product.mapper.toDomain
 import org.dsqrwym.enterprise.ui.components.product.ProductMediaUploader
 import org.dsqrwym.enterprise.ui.components.product.ProductMetaFields
 import org.dsqrwym.enterprise.ui.components.product.ProductTranslationTabs
@@ -32,6 +35,7 @@ import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
+import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.uuid.ExperimentalUuidApi
@@ -81,6 +85,7 @@ private fun ProductEditScreenContent(
     isAuxiliaryOpen: Boolean,
     onToggleRichTextEditor: () -> Unit,
 ) {
+    val isLoading = viewModel.isLoading
     val mediaPicker = viewModel.mediaPicker
 
     val translationTabs = viewModel.translationTabs
@@ -113,18 +118,20 @@ private fun ProductEditScreenContent(
             )
         },
         title = {
-            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.ShoppingBag, "产品")
-                Text(stringResource(SharedRes.string.create))
-            }
+            BusinessTitleIconRow(
+                if (translationTabs.isNotEmpty()) translationTabs[0].first.name else "",
+                Icons.Outlined.Category,
+                stringResource(SharedRes.string.category),
+                isLoading
+            )
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             viewModel.editFormUiState,
             viewModel.editButtonEnabled,
             viewModel::editProduct,
-            stringResource(SharedRes.string.create),
+            stringResource(SharedRes.string.update),
             Icons.Outlined.Add,
-            stringResource(SharedRes.string.create)
+            stringResource(SharedRes.string.update)
         )
     ) { padding, scrollBehavior ->
         val maxSize by derivedStateOf { mediaPicker.maxItemSize.div(1024 * 1024) }
@@ -146,7 +153,7 @@ private fun ProductEditScreenContent(
                     subtitle = "长按拖拽排序，首张图片为主图。单个文件不超过 ${maxSize}MB",
                     uiState = mediaPicker.mediaPickerUiState
                 ) {
-                    ProductMediaUploader(mediaPicker)
+                    ProductMediaUploader(mediaPicker, modifier = Modifier.placeholderWithShimmer(isLoading))
                 }
             }
             item {
@@ -156,6 +163,7 @@ private fun ProductEditScreenContent(
                     uiState = viewModel.productTranslationUiState
                 ) {
                     ProductTranslationTabs(
+                        isLoading = isLoading,
                         translationTabs = translationTabs,
                         currentProductNameError = selectedTranslationNameError,
                         currentLanguageIndex = selectedIndex,
@@ -176,6 +184,7 @@ private fun ProductEditScreenContent(
                     uiState = viewModel.productMetaDataUiState
                 ) {
                     ProductMetaFields(
+                        isLoading = isLoading,
                         selectedCategory = selectedCategory,
                         onSelectedCategoryChange = viewModel::updateFilterCategory,
                         onSearchCategory = viewModel::findCategories,
@@ -199,7 +208,8 @@ private fun ProductEditScreenContent(
                     uiState = viewModel.productVariantUiState
                 ) {
                     ProductVariantsFields(
-                        variants = skuTabs,
+                        isLoading = isLoading,
+                        variants = skuTabs.map { it.toDomain() },
                         onReorder = viewModel::reorder,
                         onDelete = viewModel::deleteVariant,
                         onAddClick = {

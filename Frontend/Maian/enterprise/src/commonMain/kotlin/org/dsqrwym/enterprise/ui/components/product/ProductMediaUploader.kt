@@ -41,6 +41,7 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.status_error_content_description
 import org.dsqrwym.business.ui.media.MediaPickerViewModel
 import org.dsqrwym.business.ui.media.model.MediaType
+import org.dsqrwym.business.ui.media.model.MediaSource
 import org.dsqrwym.business.ui.media.model.UploadMediaItem
 import org.dsqrwym.business.ui.media.model.UploadState
 import org.dsqrwym.enterprise.ui.components.containers.ReorderableContentBox
@@ -197,8 +198,12 @@ fun MediaGridItem(
         when (
             item.type) {
             MediaType.IMAGE -> {
+                val model = when (val source = item.source) {
+                    is MediaSource.Local -> source.file
+                    is MediaSource.Remote -> source.url
+                }
                 SharedAsyncImage(
-                    model = item.file,
+                    model = model,
                     contentDescription = "image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize().hazeSource(hazeState),
@@ -208,12 +213,27 @@ fun MediaGridItem(
             }
 
             MediaType.VIDEO -> {
-                SharedVideoPlayer(
-                    item.file,
-                    Modifier.hazeSource(hazeState),
-                    showProgressBar = false,
-                    enableContextMenu = false
-                )
+                when (val source = item.source) {
+                    is MediaSource.Local -> {
+                        SharedVideoPlayer(
+                            source.file,
+                            Modifier.hazeSource(hazeState),
+                            showProgressBar = false,
+                            enableContextMenu = false
+                        )
+                    }
+
+                    is MediaSource.Remote -> {
+                        SharedAsyncImage(
+                            model = source.url,
+                            contentDescription = "video",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize().hazeSource(hazeState),
+                            zoomable = false,
+                            enableContextMenu = false
+                        )
+                    }
+                }
             }
 
             MediaType.DOCUMENT -> Unit

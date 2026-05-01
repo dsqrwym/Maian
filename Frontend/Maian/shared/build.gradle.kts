@@ -191,6 +191,7 @@ kotlin {
             api(libs.kotlinx.coroutinesSwing)         // 协程Swing支持
             api(libs.jmail) // 邮箱验证
             api(libs.ktor.client.cio) // Ktor 引擎
+            api(libs.slf4j.simple) // 日志
 
             implementation(libs.zxing.core) // 解析条码二维码
             implementation(libs.zxing.javase) // BufferedImageLuminanceSource

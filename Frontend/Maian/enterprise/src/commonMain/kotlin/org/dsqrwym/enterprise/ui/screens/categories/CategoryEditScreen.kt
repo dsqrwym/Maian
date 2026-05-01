@@ -7,13 +7,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -22,6 +19,7 @@ import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
 import org.dsqrwym.business.ui.components.category.BusinessCategoryBasicInfoCard
 import org.dsqrwym.business.ui.components.category.BusinessTranslationCard
+import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesEditViewModel
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -78,13 +76,7 @@ fun CategoryEditScreen(
             )
         },
         title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(categoryName)
-                Icon(Icons.Outlined.Category, stringResource(SharedRes.string.category))
-            }
+            BusinessTitleIconRow(categoryName, Icons.Outlined.Category, stringResource(SharedRes.string.category), isLoading)
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             updateStatus,

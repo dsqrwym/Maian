@@ -26,8 +26,9 @@ import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
 import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
-import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
+import org.dsqrwym.shared.data.category.mapper.toDto
+import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
@@ -174,7 +175,7 @@ fun CategoriesListScreen(
                                     item {
                                         CategoryListItem(
                                             isLoading = true,
-                                            category = CategoryResponse(
+                                            category = CategoryNode(
                                                 id = it.toLong(),
                                                 name = "",
                                             ),
@@ -216,7 +217,7 @@ fun CategoriesListScreen(
 @Composable
 fun CategoryListItem(
     modifier: Modifier = Modifier,
-    category: CategoryResponse,
+    category: CategoryNode,
     isLoading: Boolean = true,
     onEdit: () -> Unit,
     onDelete: () -> Unit
@@ -260,7 +261,7 @@ fun CategoryListItem(
                             horizontalArrangement = SharedRowLayout.arrangement
                         ) {
                             Text(
-                                text = if (category.getParentName() != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.getParentName()}" else stringResource(
+                                text = if (category.parentName != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.parentName}" else stringResource(
                                     BusinessRes.string.base_category
                                 ),
                                 style = MaterialTheme.typography.bodySmall
@@ -268,7 +269,7 @@ fun CategoryListItem(
 
                             Text(
                                 text = "${stringResource(SharedRes.string.tax_rate)}->IVA: ${
-                                    if (category.iva != null) category.iva.toString() + "%" else stringResource(
+                                    if (category.iva != null) category.iva + "%" else stringResource(
                                         SharedRes.string.not_set
                                     )
                                 }",
@@ -298,8 +299,8 @@ fun CategoryListItem(
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
                     Column(verticalArrangement = SharedColumnLayout.arrangement) {
-                        category.categoryTranslations?.let { BusinessCategoryLanguages(it) }
-                        BusinessCategoryPath(category.getPath(), category.name)
+                        BusinessCategoryLanguages(category.translations.map { it.toDto() })
+                        BusinessCategoryPath(category.pathNames(), category.name)
                     }
                 }
                 BusinessOutlinedDeleteButton(
@@ -333,7 +334,7 @@ fun FilterDialog(
                             },
                             pageSize = 100,
                             itemToString = {
-                                "${it.name}${it.translationString?.let { str -> " • $str" }.orEmpty()}"
+                                "${it.name}${it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()}"
                             },
                             onSearch = { query, page, limit ->
                                 viewModel.findCategories(query, page, limit)

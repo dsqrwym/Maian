@@ -1,9 +1,9 @@
 package org.dsqrwym.shared.network
 
 object ApiConfig {
-    //const val BASE_URL: String = "https://api.dsqrwym.es/maian"
+    const val BASE_URL: String = "https://api.dsqrwym.es/maian"
     //const val BASE_URL: String = "https://northflank.dsqrwym.es/maian"
-    const val BASE_URL: String = "http://127.0.0.1:3000/maian"
+    //const val BASE_URL: String = "http://127.0.0.1:3000/maian"
     const val CONNECT_TIMEOUT_MILLIS = 10_000L
     const val REQUEST_TIMEOUT_MILLIS = 38_000L
     const val ENABLE_LOGGING = true
@@ -55,7 +55,10 @@ object ApiConfig {
         const val UPLOAD_FILE_RAW = "${FILES}/upload-raw"
 
         const val PRODUCT_FILE = "${FILES}/product-file"
+        fun productFile(productId: String, fileId: String): String =
+            "${PRODUCT_FILE}?product_id=$productId&file_id=$fileId"
     }
+
     object CategoryPath {
         const val CATEGORY = "${BASE_URL}/category"
     }

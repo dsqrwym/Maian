@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import org.dsqrwym.admin.data.categories.CategoryRepository
 import org.dsqrwym.admin.data.user.UserRepository
 import org.dsqrwym.admin.data.user.dto.WholeSalerUserResponse
-import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 
@@ -20,7 +20,7 @@ abstract class BaseCategoryFilterViewmodel(
     var filterUser by mutableStateOf<WholeSalerUserResponse?>(null)
         protected set
 
-    var filterParentCategory by mutableStateOf<ReducedCategoryResponse?>(null)
+    var filterParentCategory by mutableStateOf<CategorySummary?>(null)
         protected set
 
     /**
@@ -44,7 +44,7 @@ abstract class BaseCategoryFilterViewmodel(
     /**
      * 获取父分类列表（带分页）
      */
-    open suspend fun findParentCategories(query: String?, page: Int, limit: Int): List<ReducedCategoryResponse> {
+    open suspend fun findParentCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
         when (val result = categoryRepository.getParentCategories(query, filterUser?.id, page, limit)) {
             is SharedResponseResult.Success -> {
                 return result.data?.items ?: emptyList()
@@ -71,7 +71,7 @@ abstract class BaseCategoryFilterViewmodel(
         filterParentCategory = null
     }
 
-    open fun updateFilterParentCategory(parentCategory: ReducedCategoryResponse?) {
+    open fun updateFilterParentCategory(parentCategory: CategorySummary?) {
         filterParentCategory = parentCategory
     }
 }

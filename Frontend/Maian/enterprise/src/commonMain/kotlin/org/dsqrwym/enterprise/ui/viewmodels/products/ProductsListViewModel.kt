@@ -12,7 +12,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.dsqrwym.enterprise.data.product.ProductRepository
-import org.dsqrwym.enterprise.data.product.dto.ProductResponse
+import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.data.products.SharedProductSortField
@@ -34,7 +34,7 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
     val pageSize = 20
     var totalItemsCount by mutableStateOf(0)
 
-    var currentProduct by mutableStateOf<ProductResponse?>(null)
+    var currentProduct by mutableStateOf<Product?>(null)
     private set
 
     // 搜索条件和过滤类型
@@ -105,7 +105,7 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
         sortDir = dir
     }
 
-    fun updateCurrentProduct(product: ProductResponse?) {
+    fun updateCurrentProduct(product: Product?) {
         currentProduct = product
     }
 

@@ -15,8 +15,8 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.delete_failed
 import maian.shared.generated.resources.delete_success
 import org.dsqrwym.enterprise.data.category.CategoryRepository
-import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.shared.data.pagination.createPager
+import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -45,7 +45,7 @@ class CategoriesListViewModel(
     }
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    val pagedCategories: Flow<PagingData<CategoryResponse>> = combine(
+    val pagedCategories: Flow<PagingData<CategoryNode>> = combine(
         pagingTrigger.debounce(600.milliseconds)
             .distinctUntilChanged(),
         categoryRepository.updateEvents.onStart { emit(Unit) }
@@ -59,7 +59,7 @@ class CategoriesListViewModel(
             ) { page, size, q ->
                 when (val result = categoryRepository.getCategories(
                     search = q,
-                    parentId = parentId?.toString(),
+                    parentId = parentId,
                     page = page,
                     limit = size
                 )) {
@@ -81,7 +81,7 @@ class CategoriesListViewModel(
     // 弹窗状态
     var showFilterDialog by mutableStateOf(false)
         private set
-    var deleteCategory by mutableStateOf<CategoryResponse?>(null)
+    var deleteCategory by mutableStateOf<CategoryNode?>(null)
         private set
 
     // 更新搜索
@@ -94,7 +94,7 @@ class CategoriesListViewModel(
         showFilterDialog = show
     }
 
-    fun updateShowDeleteDialog(category: CategoryResponse?) {
+    fun updateShowDeleteDialog(category: CategoryNode?) {
         deleteCategory = category
     }
 
@@ -105,7 +105,7 @@ class CategoriesListViewModel(
     }
 
     // 删除类别
-    fun deleteCategory(category: CategoryResponse) {
+    fun deleteCategory(category: CategoryNode) {
         viewModelScope.launch {
             isLoading = true
             when (val result = categoryRepository.deleteCategory(category.id.toString())) {

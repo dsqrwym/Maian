@@ -16,8 +16,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import org.dsqrwym.business.navigation.ProductWorkspaceAuxPane
 import org.dsqrwym.business.navigation.ProductWorkspaceMainPane
-import org.dsqrwym.shared.LocalWindowSizeClass
-import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable

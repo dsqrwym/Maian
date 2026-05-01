@@ -1,6 +1,9 @@
 package org.dsqrwym.enterprise.ui.screens.products
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -8,18 +11,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.create
+import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliaryHost
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliarySurface
 import org.dsqrwym.business.ui.workspace.rememberBusinessAuxiliaryWorkspaceState
+import org.dsqrwym.enterprise.data.product.mapper.toDomain
 import org.dsqrwym.enterprise.ui.components.product.ProductMediaUploader
 import org.dsqrwym.enterprise.ui.components.product.ProductMetaFields
 import org.dsqrwym.enterprise.ui.components.product.ProductTranslationTabs
@@ -116,10 +118,7 @@ private fun ProductCreateScreenContent(
             )
         },
         title = {
-            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.ShoppingBag, "产品")
-                Text(stringResource(SharedRes.string.create))
-            }
+            BusinessTitleIconRow(stringResource(SharedRes.string.create), Icons.Outlined.ShoppingBag, "产品")
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             viewModel.createFormUiState,
@@ -201,7 +200,7 @@ private fun ProductCreateScreenContent(
                     uiState = viewModel.productVariantUiState
                 ) {
                     ProductVariantsFields(
-                        variants = skuTabs,
+                        variants = skuTabs.map { it.toDomain() },
                         onReorder = viewModel::reorder,
                         onDelete = viewModel::deleteVariant,
                         onAddClick = {

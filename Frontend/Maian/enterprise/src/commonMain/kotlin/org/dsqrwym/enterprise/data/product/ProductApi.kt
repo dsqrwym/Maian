@@ -6,6 +6,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import org.dsqrwym.enterprise.data.product.dto.ProductCreateDto
 import org.dsqrwym.enterprise.data.product.dto.ProductResponseForUpdate
+import org.dsqrwym.enterprise.data.product.dto.ProductUpdateDto
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.ApiResponse
 
@@ -16,6 +17,11 @@ class ProductApi(val client: HttpClient) {
             setBody(dto)
         }.body()
 
+    suspend fun updateProduct(id: String, dto: ProductUpdateDto): ApiResponse<Unit> =
+        client.patch("${ApiConfig.ProductPath.PRODUCT}/$id") {
+            contentType(ContentType.Application.Json)
+            setBody(dto)
+        }.body()
 
     suspend fun getProductForUpdate(id: String): ApiResponse<ProductResponseForUpdate> =
         client.get(ApiConfig.ProductPath.getProductForUpdate(id)).body()

@@ -1,17 +1,18 @@
 package org.dsqrwym.shared.serialization
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonEncoder
+import kotlin.jvm.JvmName
 
 /**
  * 表示一个JSON字段的三种可能状态：
  * - [Undefined]: 字段完全不存在于JSON中（未设置）
- * - [Value] : 字段存在，并携带一个值，该值可以为null（显式null）
+ * - null: 字段存在，并显式携带 null
+ * - [Value] : 字段存在，并携带一个非空值
  * 使用方式：
  * @EncodeDefault(EncodeDefault.Mode.NEVER) -> 保证 Undefined 时跳过不序列化键
  * @Serializable(with = OptionalFieldSerializer::class)
@@ -25,31 +26,56 @@ sealed class OptionalField<out T> {
     object Undefined : OptionalField<Nothing>()
 
     /**
-     * 字段存在且有具体值（可为null）。
-     * @param value 字段值，可为null表示显式清空。
+     * 字段存在且有具体值。
+     * @param value 字段值。
      */
-    data class Value<T>(val value: T?) : OptionalField<T>()
+    data class Value<T : Any>(val value: T) : OptionalField<T>()
 }
 
-inline fun <T, R> OptionalField<T>.map(transform: (T?) -> R): OptionalField<R> {
+@JvmName("mapNullable")
+inline fun <T : Any, R : Any> OptionalField<T>?.map(transform: (T) -> R): OptionalField<R>? {
     return when (this) {
+        null -> null
         is OptionalField.Undefined -> OptionalField.Undefined
         is OptionalField.Value -> OptionalField.Value(transform(value))
     }
 }
 
-inline fun <T, R> OptionalField<T>.mapNotNull(transform: (T) -> R): OptionalField<R> {
+@JvmName("mapNotNull")
+inline fun <T : Any, R : Any> OptionalField<T>.map(transform: (T) -> R): OptionalField<R> {
     return when (this) {
         is OptionalField.Undefined -> OptionalField.Undefined
-        is OptionalField.Value -> value?.let(transform)?.let { OptionalField.Value(it) } ?: OptionalField.Undefined
+        is OptionalField.Value -> transform(value).let { OptionalField.Value(it) }
     }
 }
+
+fun <T : Any> OptionalField<T>?.getValOrNull(): T? = when (this) {
+    null -> null
+    is OptionalField.Undefined -> null
+    is OptionalField.Value -> value
+}
+
+inline fun <T : Any> OptionalField<T>.getOrElse(default: () -> T): T {
+    return when (this) {
+        is OptionalField.Value -> value
+        is OptionalField.Undefined -> default()
+    }
+}
+
+@JvmName("toStringOptionalFieldNullable")
+fun String?.toOptionalField(): OptionalField<String>? = this?.let { OptionalField.Value(it) }
+
+@JvmName("toStringOptionalFieldNotNullable")
+fun String.toOptionalField(): OptionalField<String> = OptionalField.Value(this)
+
+@JvmName("toIntOptionalFieldNotNullable")
+fun Int.toOptionalField(): OptionalField<Int> = OptionalField.Value(this)
 
 class OptionalFieldSerializer<T : Any>(
     private val valueSerializer: KSerializer<T>
 ) : KSerializer<OptionalField<T>> {
     override val descriptor: SerialDescriptor =
-        valueSerializer.nullable.descriptor
+        valueSerializer.descriptor
 
     /**
      * 序列化规则：
@@ -63,11 +89,8 @@ class OptionalFieldSerializer<T : Any>(
             is OptionalField.Undefined -> return
 
             is OptionalField.Value -> {
-                // 获取可空T的序列化器，以正确处理value.value为null的场景
-                val nullableSerializer = valueSerializer.nullable
-                // 将可空值写入JSON（如果为null则输出"field": null）
                 jsonEncoder.encodeSerializableValue(
-                    nullableSerializer,
+                    valueSerializer,
                     value.value
                 )
             }
@@ -80,7 +103,7 @@ class OptionalFieldSerializer<T : Any>(
         val element = jsonDecoder.decodeJsonElement()
         return OptionalField.Value(
             jsonDecoder.json.decodeFromJsonElement(
-                valueSerializer.nullable,  // 可空解析器
+                valueSerializer,
                 element
             )
         )

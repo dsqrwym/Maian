@@ -36,6 +36,7 @@ import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.formatter.asString
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
+import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,6 +44,7 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductTranslationTabs(
+    isLoading: Boolean = false,
     translationTabs: SnapshotStateList<Pair<SharedProductTranslation, RichTextState>>,
     currentProductNameError: StringResource?,
     currentLanguageIndex: Int,
@@ -76,8 +78,9 @@ fun ProductTranslationTabs(
         verticalArrangement = SharedColumnLayout.arrangement,
     ) {
         BusinessSelectedInfoCard(
-            visible = true,
-            description = stringResource(BusinessRes.string.translations_count, translationTabs.size),
+            modifier = Modifier.placeholderWithShimmer(isLoading),
+            visible = translationTabs.size > 1,
+            description = stringResource(BusinessRes.string.translations_count, translationTabs.lastIndex),
             icon = Icons.Outlined.Info,
             enabled = false,
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -85,6 +88,7 @@ fun ProductTranslationTabs(
         )
 
         TranslationTabRow(
+            isLoading = isLoading,
             translationTabs = translationTabs,
             selectedLanguageIndex = selectedLanguageIndex,
             onSelect = changeLanguageIndex,
@@ -94,6 +98,7 @@ fun ProductTranslationTabs(
         )
 
         MyOutlinedTextField(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             value = currentTranslation.name,
             onValueChange = {
                 upsertTranslation(
@@ -113,6 +118,7 @@ fun ProductTranslationTabs(
         )
 
         MyOutlinedTextField(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             value = currentTranslation.title ?: "",
             onValueChange = {
                 upsertTranslation(
@@ -131,12 +137,14 @@ fun ProductTranslationTabs(
         )
 
         BusinessRichTextEditor(
+            isLoading = isLoading,
             label = "产品详情 (${stringResource(SharedRes.string.field_optional)})",
             placeholder = "请输入详细的产品介绍",
             state = currentDescription,
             toolbarItems = {
                 item {
                     RichTextStyleButton(
+                        enabled = !isLoading,
                         onClick = onToggleRichTextEditor,
                         icon = Icons.Outlined.Expand,
                         isSelected = isAuxiliaryOpen,
@@ -150,6 +158,7 @@ fun ProductTranslationTabs(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TranslationTabRow(
+    isLoading: Boolean = false,
     translationTabs: SnapshotStateList<Pair<SharedProductTranslation, RichTextState>>,
     selectedLanguageIndex: Int,
     onSelect: (Int) -> Unit,
@@ -165,12 +174,13 @@ fun TranslationTabRow(
     ) {
         PrimaryScrollableTabRow(
             selectedTabIndex = selectedLanguageIndex,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).placeholderWithShimmer(isLoading),
             containerColor = Color.Transparent,
         ) {
             translationTabs.forEachIndexed { index, lang ->
+                val isMainLanguage = index == 0
                 val language = LanguageManager.SupportedLanguages.fromCode(lang.first.langCode)
-                val content = "${language.displayName} (${language.code})"
+                val content = if (isMainLanguage) "主语言" else "${language.displayName} (${language.code})"
                 LeadingIconTab(
                     selected = selectedLanguageIndex == index,
                     onClick = {
@@ -185,7 +195,7 @@ fun TranslationTabRow(
                             horizontalArrangement = Arrangement.spacedBy(1.dp)
                         ) {
                             Text(content, style = MaterialTheme.typography.labelLarge)
-                            if (index > 0) {
+                            if (!isMainLanguage) {
                                 BusinessDeleteIconButton { onRemove(lang.first.langCode) }
                             }
                         }
@@ -194,6 +204,7 @@ fun TranslationTabRow(
             }
         }
         OutlinedButton(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             onClick = onAddClick,
             enabled = canAdd,
         ) {

@@ -13,17 +13,6 @@ data class CategoryResponse(
     val children: List<CategoryResponse>? = null,
     @SerialName("children_count")
     val childrenCount: Int = 0,
-    @SerialName("category_translations") val categoryTranslations: List<SharedCategoryTranslation>? = null,
-) {
-    fun getParentName(): String? = parent?.name
-    fun getPath(separator: Char = '>'): List<String> {
-        // 使用递归向上查找 parent
-        return buildList {
-            var current: CategoryResponse? = this@CategoryResponse
-            while (current != null) {
-                add(current.name)
-                current = current.parent
-            }
-        }.reversed().joinToString("@$separator@").split("@")
-    }
-}
+    @SerialName("category_translations")
+    val categoryTranslations: List<SharedCategoryTranslation>? = null,
+)

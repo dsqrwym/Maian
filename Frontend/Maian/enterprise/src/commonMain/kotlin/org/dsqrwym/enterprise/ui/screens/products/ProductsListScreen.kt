@@ -15,7 +15,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.filter
-import org.dsqrwym.enterprise.data.product.dto.ProductResponse
+import org.dsqrwym.enterprise.ui.model.ProductPlaceholders
 import org.dsqrwym.enterprise.ui.components.product.ProductTableView
 import org.dsqrwym.enterprise.ui.components.product.ProductWaterfallView
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductsListViewModel
@@ -47,7 +47,7 @@ fun ProductsListScreen(
         overlayContent = {
             currentProduct?.let {
                 SharedImageViewDialog(
-                    model = it.mainImage.getUrl(it.id),
+                    model = it.mainImage.url(it.id),
                     imageName = it.name,
                     onDismissRequest = { viewModel.updateCurrentProduct(null) }
                 )
@@ -88,7 +88,7 @@ fun ProductsListScreen(
             buttonIconDescription = "Add Product"
         )
     ) { padding, scrollBehavior ->
-        val fakeProducts = remember { ProductResponse.generateFakeProducts(9) }
+        val fakeProducts = remember { ProductPlaceholders.generateFakeProducts(9) }
         val loadState = paginatedProducts.loadState
         val isRefreshing = loadState.refresh is LoadState.Loading
         val isError = loadState.refresh is LoadState.Error

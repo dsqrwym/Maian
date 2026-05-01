@@ -1,5 +1,36 @@
 package org.dsqrwym.enterprise.ui.viewmodels.products
 
+import androidx.compose.runtime.*
+import androidx.lifecycle.viewModelScope
+import com.mohamedrejeb.richeditor.model.RichTextState
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.field_cannot_be_empty
+import org.dsqrwym.business.ui.media.MediaPickerViewModel
+import org.dsqrwym.enterprise.data.category.CategoryRepository
+import org.dsqrwym.enterprise.data.product.ProductRepository
+import org.dsqrwym.enterprise.data.product.dto.ProductFileDto
+import org.dsqrwym.enterprise.data.product.dto.ProductVariantDto
+import org.dsqrwym.enterprise.ui.viewmodels.categories.BaseCategoryFilterViewmodel
+import org.dsqrwym.shared.data.file.SharedUploadRepository
+import org.dsqrwym.shared.data.products.SharedProductSaleVariant
+import org.dsqrwym.shared.data.products.SharedProductStatus
+import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
+import org.dsqrwym.shared.domain.category.CategorySummary
+import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.navigation.core.SharedNavigable
+import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
+import org.dsqrwym.shared.network.model.SharedResponseResult
+import org.dsqrwym.shared.serialization.OptionalField
+import org.dsqrwym.shared.serialization.getOrElse
+import org.dsqrwym.shared.serialization.getValOrNull
+import org.dsqrwym.shared.serialization.toOptionalField
+import org.dsqrwym.shared.ui.components.containers.UiState
+import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.validation.sanitizeIvaInput
+import org.dsqrwym.shared.util.validation.sanitizeProductCode
+import org.dsqrwym.shared.util.validation.sanitizeProductPricesInput
+import org.jetbrains.compose.resources.StringResource
+
 abstract class BaseProductFormViewModel(
     private val uploadRepository: SharedUploadRepository,
     protected val productRepository: ProductRepository,
@@ -9,7 +40,7 @@ abstract class BaseProductFormViewModel(
     categoryRepository,
     snackbarViewModel
 ), SharedNavigable by SharedNavigableDelegate() {
-
+    // 产品媒体
     val mediaPicker = MediaPickerViewModel(
         uploadRepository = uploadRepository,
         coroutineScope = viewModelScope,
@@ -25,6 +56,7 @@ abstract class BaseProductFormViewModel(
     var productMetaDataUiState: UiState by mutableStateOf(UiState.Idle)
         protected set
 
+    // 产品信息 (多语言)
     var selectedTranslationIndex by mutableIntStateOf(0)
         private set
 
@@ -39,12 +71,14 @@ abstract class BaseProductFormViewModel(
     var showAddLanguageDialog by mutableStateOf(false)
         private set
 
+    // 产品基础属性
     var productIva by mutableStateOf("21.00")
         protected set
 
     var productCategoryError: StringResource? by mutableStateOf(null)
         protected set
 
+    // 用户输入则使用用户输入否则根据选择类别
     var isIvaManuallyEdited = false
         protected set
 
@@ -63,10 +97,11 @@ abstract class BaseProductFormViewModel(
     var productVariantsProductCodesErrors = mutableStateMapOf<String, StringResource?>()
         protected set
 
+    // 记录用户是否手动编辑过某个 SKU 的 saleUnitQty
     protected val variantSaleUnitQtyManuallyEdited = mutableStateMapOf<String, Boolean>()
 
     val canAddTranslation by derivedStateOf {
-        getAvailableLanguages().isNotEmpty() &&
+        getAvailableLanguages().size > 1 &&
                 productTranslationUiState == UiState.Loading
     }
 
@@ -111,14 +146,14 @@ abstract class BaseProductFormViewModel(
         productVariants.forEach { variant ->
             val id = variant.id.getValOrNull()
 
-            if (variant.productCode.isBlank()) {
+            if (variant.productCode.getOrElse { "" }.isBlank()) {
                 uiState = UiState.Error
-                if (id != null) {
-                    productVariantsProductCodesErrors[id] = SharedRes.string.field_cannot_be_empty
+                id?.let {
+                    productVariantsProductCodesErrors[it] = SharedRes.string.field_cannot_be_empty
                 }
             } else {
-                if (id != null) {
-                    productVariantsProductCodesErrors[id] = null
+                id?.let {
+                    productVariantsProductCodesErrors[it] = null
                 }
             }
         }
@@ -126,6 +161,7 @@ abstract class BaseProductFormViewModel(
         productVariantUiState = uiState
     }
 
+    // 根据销售单位返回推荐的 saleUnitQty
     protected fun getRecommendedSaleUnitQty(typeSale: SharedProductSaleVariant): Int {
         return when (typeSale) {
             SharedProductSaleVariant.UNIT -> 1
@@ -207,19 +243,20 @@ abstract class BaseProductFormViewModel(
         val result = iva?.let { sanitizeIvaInput(it) } ?: return
         productIva = result
         isIvaManuallyEdited = iva.isNotBlank()
+
         calculatePrices()
     }
 
     protected fun calculatePrices() {
         productVariants.forEachIndexed { index, dto ->
             val (price, priceIva) = sanitizeProductPricesInput(
-                priceIva = dto.priceIva,
+                priceIva = dto.priceIva.getValOrNull(),
                 iva = productIva
             )
 
             productVariants[index] = dto.copy(
-                price = price,
-                priceIva = priceIva
+                price = price.toOptionalField(),
+                priceIva = priceIva.toOptionalField()
             )
         }
     }
@@ -251,19 +288,19 @@ abstract class BaseProductFormViewModel(
             var finalPriceIva = priceIva
 
             finalPrice?.let {
-                if (it != existingSku.price) {
-                    sanitizeProductPricesInput(price = it, iva = effectiveIva).let { result ->
-                        finalPrice = result.first
-                        finalPriceIva = result.second
+                if (it != existingSku.price.getValOrNull()) {
+                    sanitizeProductPricesInput(price = it, iva = effectiveIva).let { (price, priceIva) ->
+                        finalPrice = price
+                        finalPriceIva = priceIva
                     }
                 }
             }
 
             finalPriceIva?.let {
-                if (it != existingSku.priceIva) {
-                    sanitizeProductPricesInput(priceIva = it, iva = effectiveIva).let { result ->
-                        finalPrice = result.first
-                        finalPriceIva = result.second
+                if (it != existingSku.priceIva.getValOrNull()) {
+                    sanitizeProductPricesInput(priceIva = it, iva = effectiveIva).let { (price, priceIva) ->
+                        finalPriceIva = priceIva
+                        finalPrice = price
                     }
                 }
             }
@@ -273,7 +310,7 @@ abstract class BaseProductFormViewModel(
             val saleUnitQtyManuallyEdited =
                 variantId?.let { variantSaleUnitQtyManuallyEdited[it] } == true
 
-            if (saleUnitQty != existingSku.saleUnitQty && variantId != null) {
+            if (saleUnitQty != existingSku.saleUnitQty.getValOrNull() && variantId != null) {
                 variantSaleUnitQtyManuallyEdited[variantId] = true
             }
 
@@ -282,29 +319,29 @@ abstract class BaseProductFormViewModel(
             }
 
             productVariants[index] = existingSku.copy(
-                typeSale = typeSale,
-                sort = sort,
-                price = finalPrice,
-                priceIva = finalPriceIva,
-                productCode = sanitizedProductCode,
-                availableStock = availableStock,
-                saleUnitQty = finalSaleUnitQty,
-                minOrderQty = minOrderQty,
-                lowStockThreshold = lowStockThreshold
+                typeSale = OptionalField.Value(typeSale),
+                sort = sort.toOptionalField(),
+                price = finalPrice.toOptionalField(),
+                priceIva = finalPriceIva.toOptionalField(),
+                productCode = sanitizedProductCode.toOptionalField(),
+                availableStock = availableStock.toOptionalField(),
+                saleUnitQty = finalSaleUnitQty.toOptionalField(),
+                minOrderQty = minOrderQty.toOptionalField(),
+                lowStockThreshold = lowStockThreshold.toOptionalField()
             )
         } else {
             productVariants.add(
                 ProductVariantDto(
                     id = id.toOptionalField(),
-                    typeSale = typeSale,
-                    sort = sort,
-                    price = price,
-                    priceIva = priceIva,
-                    productCode = sanitizedProductCode,
-                    availableStock = availableStock,
-                    saleUnitQty = getRecommendedSaleUnitQty(typeSale),
-                    minOrderQty = minOrderQty,
-                    lowStockThreshold = lowStockThreshold
+                    typeSale = OptionalField.Value(typeSale),
+                    sort = sort.toOptionalField(),
+                    price = price.toOptionalField(),
+                    priceIva = priceIva.toOptionalField(),
+                    productCode = sanitizedProductCode.toOptionalField(),
+                    availableStock = availableStock.toOptionalField(),
+                    saleUnitQty = getRecommendedSaleUnitQty(typeSale).toOptionalField(),
+                    minOrderQty = minOrderQty.toOptionalField(),
+                    lowStockThreshold = lowStockThreshold.toOptionalField()
                 )
             )
         }
@@ -322,23 +359,35 @@ abstract class BaseProductFormViewModel(
     fun reorder(from: Int, to: Int) {
         if (from == to) return
         if (from !in productVariants.indices || to !in productVariants.indices) return
-
         productVariants.add(to, productVariants.removeAt(from))
+    }
+
+    override suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+        when (val result = categoryRepository.getCategoriesByLevel(query, page, limit, true)) {
+            is SharedResponseResult.Success -> {
+                return result.data?.items ?: emptyList()
+            }
+
+            is SharedResponseResult.Error -> {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    result.message?.let { mySnackbarViewModel.showError(it) }
+                }
+            }
+        }
+        return emptyList()
     }
 
     override fun updateFilterCategory(category: CategorySummary?) {
         super.updateFilterCategory(category)
-
         productCategoryError = if (category == null) {
             SharedRes.string.field_cannot_be_empty
         } else {
             null
         }
-
         checkProductMeta()
-
         val iva = category?.iva ?: return
 
+        // 没有被用户改过自动填充
         if (!isIvaManuallyEdited) {
             productIva = iva
             calculatePrices()

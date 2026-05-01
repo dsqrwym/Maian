@@ -1,10 +1,13 @@
 package org.dsqrwym.enterprise.data.product.dto
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
+import org.dsqrwym.shared.serialization.OptionalField
+import org.dsqrwym.shared.serialization.OptionalFieldSerializer
 
 @Serializable
 data class ProductCreateDto(
@@ -16,6 +19,7 @@ data class ProductCreateDto(
     val iva: String,
     @SerialName("product_code")
     val productCode: String,
+    val status: SharedProductStatus = SharedProductStatus.ACTIVE,
     @SerialName("primary_category_id")
     val primaryCategoryId: String,
     val variants: List<ProductVariantDto>,
@@ -25,34 +29,57 @@ data class ProductCreateDto(
 
 @Serializable
 data class ProductVariantDto(
-    val id: String? = null,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val id: OptionalField<String>? = OptionalField.Undefined,
     // --- 核心销售和定价字段 (variant_products) ---
     @SerialName("type_sale")
-    val typeSale: SharedProductSaleVariant,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val typeSale: OptionalField<SharedProductSaleVariant> = OptionalField.Undefined,
     // 显示顺序，数量越小越靠前
-    val sort: Int = 0,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val sort: OptionalField<Int> = OptionalField.Undefined,
     // 不含税价格
-    val price: String? = null,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val price: OptionalField<String>? = OptionalField.Undefined,
     // 含税价格
     @SerialName("price_iva")
-    val priceIva: String? = null,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val priceIva: OptionalField<String>? = OptionalField.Undefined,
     // 变体的编码
     @SerialName("product_code")
-    val productCode: String,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val productCode: OptionalField<String> = OptionalField.Undefined,
     // --- 库存和销售配置字段 (variant_products) ---
     // 初始库存
     @SerialName("available_stock")
-    val availableStock: Int,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val availableStock: OptionalField<Int> = OptionalField.Undefined,
     // 换算因子 (例如：1 箱 = 24 件)
     @SerialName("sale_unit_qty")
-    val saleUnitQty: Int = 1,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val saleUnitQty: OptionalField<Int> = OptionalField.Undefined,
     // 最小起订量 (以销售单位计)
     @SerialName("min_order_qty")
-    val minOrderQty: Int = 1,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val minOrderQty: OptionalField<Int> = OptionalField.Undefined,
     // 低库存预警阈值
     @SerialName("low_stock_threshold")
-    val lowStockThreshold: Int? = null,
-    val status: SharedProductStatus = SharedProductStatus.ACTIVE,
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val lowStockThreshold: OptionalField<Int> = OptionalField.Undefined,  // 低库存预警阈值（≥0，0 表示不预警
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val status: OptionalField<SharedProductStatus> = OptionalField.Undefined,
     // --- 临时属性 (JSONB) ---
     val attributes: String? = null
 )
@@ -61,5 +88,9 @@ data class ProductVariantDto(
 data class ProductFileDto(
     @SerialName("file_id")
     val fileId: String, // 对应 files.id 要先上传之后拿到id
-    val sort: Int
+    val sort: Int,
+    @SerialName("mime_type")
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val mimeType: OptionalField<String>? = null
 )

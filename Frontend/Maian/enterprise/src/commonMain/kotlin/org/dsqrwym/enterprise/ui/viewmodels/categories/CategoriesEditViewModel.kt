@@ -150,7 +150,6 @@ class CategoriesEditViewModel(
                         initialCategory = data  // 保存原始数据快照
                         categoryName = data.name ?: ""
 
-                        translations.clear()
                         data.translations?.let {
                             translations.addAll(it)
                         }
@@ -229,7 +228,7 @@ class CategoriesEditViewModel(
                     OptionalField.Undefined
                 },
                 iva = if (isIvaChanged) {
-                    OptionalField.Value(categoryIva)
+                    categoryIva?.let { OptionalField.Value(it) }
                 } else {
                     OptionalField.Undefined
                 },
