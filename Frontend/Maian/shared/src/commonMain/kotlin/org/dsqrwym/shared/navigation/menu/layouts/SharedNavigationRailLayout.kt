@@ -20,6 +20,9 @@ import dev.chrisbanes.haze.rememberHazeState
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.menu_close_content_description
 import maian.shared.generated.resources.menu_open_content_description
+import maian.shared.generated.resources.navigation_item_icon_fallback
+import maian.shared.generated.resources.navigation_item_label_fallback
+import maian.shared.generated.resources.navigation_title_fallback
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.theme.MyHazeStyles
@@ -74,7 +77,7 @@ fun SharedNavigationRailLayout(
                     }
                 },
                 title = {
-                    Text(currentItem?.item?.label.asString() ?: "title")
+                    Text(currentItem?.item?.label.asString() ?: stringResource(SharedRes.string.navigation_title_fallback))
                 },
                 actions = {
                     menuConfig.topBarActions?.forEach {
@@ -171,12 +174,13 @@ fun SharedNavigationRailItem(
                     MyBadgedBox(state.showBadge, state.badgeCount) {
                         SharedMenuIcon(
                             imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                            contentDescription = state.item.iconContentDescription.asString() ?: "menu item icon"
+                            contentDescription = state.item.iconContentDescription.asString()
+                                ?: stringResource(SharedRes.string.navigation_item_icon_fallback)
                         )
                     }
                 }
             },
-            label = { Text(state.item.label.asString() ?: "navigation item label") },
+            label = { Text(state.item.label.asString() ?: stringResource(SharedRes.string.navigation_item_label_fallback)) },
             selected = isSameRoute(currentRoute, state.item.route),
             onClick = { onNavigate(state.item.route) }
         )

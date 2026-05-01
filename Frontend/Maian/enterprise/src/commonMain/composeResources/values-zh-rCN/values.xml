@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="button_register_new_account">注册新账户</string>
     <string name="register_account_title">注册账号</string>
     <string name="register_success">注册成功</string>
@@ -22,4 +22,61 @@
         查看与搜索类别，创建自己的商品类别，并管理多语言名称。
         支持最多三层嵌套（1 → 2 → 3）。
     </string>
+    <string name="company_type_limited_company">有限责任公司（S.L.）</string>
+    <string name="company_type_public_limited_company">股份有限公司（S.A.）</string>
+    <string name="company_type_self_employed">个体经营者</string>
+    <string name="company_type_cooperative">合作社</string>
+    <string name="company_type_civil_company">民事合伙公司</string>
+    <string name="company_type_other">其他</string>
+    <string name="search_products">搜索产品</string>
+    <string name="add_product">添加产品</string>
+    <string name="product">产品</string>
+    <string name="product_preview">预览</string>
+    <string name="product_preview_tooltip">预览零售商看到的产品页面</string>
+    <string name="product_description">产品详情</string>
+    <string name="product_description_placeholder">请输入详细的产品介绍</string>
+    <string name="product_preview_outline">预览概要</string>
+    <string name="product_preview_placeholder">此区域预留给完整产品预览流程。</string>
+    <string name="product_preview_name">名称：%1$s</string>
+    <string name="product_preview_title">标题：%1$s</string>
+    <string name="product_preview_category">分类：%1$s</string>
+    <string name="product_preview_tax_rate">税率：%1$s</string>
+    <string name="product_preview_status">状态：%1$s</string>
+    <string name="product_preview_media_count">媒体数量：%1$d</string>
+    <string name="product_not_filled">未填写</string>
+    <string name="product_not_selected">未选择</string>
+    <string name="products_added_variants_count">已添加 %1$d 个变体</string>
+    <string name="add_product_variant">添加产品变体</string>
+    <string name="sales_information">销售信息</string>
+    <string name="sale_unit">销售单位</string>
+    <string name="sale_unit_conversion">单位换算</string>
+    <string name="enter_product_code">请输入产品编码</string>
+    <string name="price_information">价格信息</string>
+    <string name="inventory_information">库存信息</string>
+    <string name="available_stock">库存数量</string>
+    <string name="enter_available_stock">请输入当前库存数量</string>
+    <string name="low_stock_threshold">低库存提醒</string>
+    <string name="enter_low_stock_threshold">请输入低库存提醒数量</string>
+    <string name="select_main_product_category">选择产品主类别</string>
+    <string name="product_title_placeholder">请输入简短产品标题</string>
+    <string name="main_language">主语言</string>
+    <string name="stock_count">库存：%1$d</string>
+    <string name="price_with_vat_value">含税：%1$s</string>
+    <string name="price_without_vat_value">未税：%1$s</string>
+    <string name="moq_value">MOQ：%1$d</string>
+    <string name="upload_progress">上传中：%1$d%%</string>
+    <string name="upload_failed_retry">上传失败\n点击重试</string>
+    <string name="upload_media">上传</string>
+    <string name="add_media">添加媒体</string>
+    <string name="remove_media">移除媒体</string>
+    <string name="release_to_delete">松手删除</string>
+    <string name="drag_here_to_delete">拖动到此删除</string>
+    <string name="product_form_media_title">媒体文件</string>
+    <string name="product_form_media_subtitle_mb">长按拖拽排序，首张图片为主图。单个文件不超过 %1$d MB。</string>
+    <string name="product_form_translations_title">产品信息（多语言）</string>
+    <string name="product_form_translations_subtitle">添加不同语言的名称和描述。主语言为默认展示语言，其他语言用于多语言展示。至少需要填写一种语言。</string>
+    <string name="product_form_attributes_title">产品属性</string>
+    <string name="product_form_attributes_subtitle">设置产品的基础属性，包括分类、税率和状态信息。</string>
+    <string name="product_form_sku_title">SKU 列表</string>
+    <string name="product_form_sku_subtitle">每个产品至少需要一个销售变体（SKU）。你可以为不同包装、规格或价格创建多个变体。最多支持 50 个变体。</string>
 </resources>

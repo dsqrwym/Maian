@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="button_register_new_account">Register New Account</string>
     <string name="register_account_title">Create Account</string>
     <string name="register_success">Registration Successful</string>
@@ -22,4 +22,62 @@
         View and search categories, create your own product categories, and manage multilingual names.
         Supports up to three levels of nesting (1 → 2 → 3).
     </string>
+    <string name="company_type_limited_company">Limited company (S.L.)</string>
+    <string name="company_type_public_limited_company">Public limited company (S.A.)</string>
+    <string name="company_type_self_employed">Self-employed</string>
+    <string name="company_type_cooperative">Cooperative</string>
+    <string name="company_type_civil_company">Civil company</string>
+    <string name="company_type_other">Other</string>
+    <string name="search_products">Search products</string>
+    <string name="add_product">Add product</string>
+    <string name="product">Product</string>
+    <string name="product_preview">Preview</string>
+    <string name="product_preview_tooltip">Preview the product page retailers will see</string>
+    <string name="product_description">Product details</string>
+    <string name="product_description_placeholder">Enter the detailed product description</string>
+    <string name="product_preview_outline">Preview outline</string>
+    <string name="product_preview_placeholder">This area is reserved for the full product preview workflow.</string>
+    <string name="product_preview_name">Name: %1$s</string>
+    <string name="product_preview_title">Title: %1$s</string>
+    <string name="product_preview_category">Category: %1$s</string>
+    <string name="product_preview_tax_rate">Tax rate: %1$s</string>
+    <string name="product_preview_status">Status: %1$s</string>
+    <string name="product_preview_media_count">Media: %1$d</string>
+    <string name="product_not_filled">Not filled</string>
+    <string name="product_not_selected">Not selected</string>
+    <string name="products_added_variants_count">%1$d variants added</string>
+    <string name="add_product_variant">Add product variant</string>
+    <string name="sales_information">Sales information</string>
+    <string name="sale_unit">Sale unit</string>
+    <string name="sale_unit_conversion">Unit conversion</string>
+    <string name="enter_product_code">Enter product code</string>
+    <string name="price_information">Price information</string>
+    <string name="inventory_information">Inventory information</string>
+    <string name="available_stock">Available stock</string>
+    <string name="enter_available_stock">Enter current stock quantity</string>
+    <string name="low_stock_threshold">Low stock alert</string>
+    <string name="enter_low_stock_threshold">Enter the low stock alert quantity</string>
+    <string name="select_main_product_category">Select main product category</string>
+    <string name="product_title_placeholder">Enter a short product title</string>
+    <string name="main_language">Main language</string>
+    <string name="stock_count">Stock: %1$d</string>
+    <string name="price_with_vat_value">VAT: %1$s</string>
+    <string name="price_without_vat_value">Net: %1$s</string>
+    <string name="moq_value">MOQ: %1$d</string>
+    <string name="upload_progress">Uploading: %1$d%%</string>
+    <string name="upload_failed_retry">Upload failed\nTap to retry</string>
+    <string name="upload_media">Upload</string>
+    <string name="add_media">Add media</string>
+    <string name="remove_media">Remove media</string>
+    <string name="release_to_delete">Release to delete</string>
+    <string name="drag_here_to_delete">Drag here to delete</string>
+    <string name="product_form_media_title">Media files</string>
+    <string name="product_form_media_subtitle_mb">Long press and drag to reorder. The first image is the main image. Each file must be no larger than %1$d MB.</string>
+    <string name="product_form_translations_title">Product information (multilingual)</string>
+    <string name="product_form_translations_subtitle">Add names and descriptions in different languages. The main language is shown by default; other languages are used for multilingual display. At least one language is required.</string>
+    <string name="product_form_attributes_title">Product attributes</string>
+    <string name="product_form_attributes_subtitle">Set basic product attributes, including category, tax rate, and status.</string>
+    <string name="product_form_sku_title">SKU list</string>
+    <string name="product_form_sku_subtitle">Each product needs at least one sales variant (SKU). You can create variants for different packaging, specifications, or prices. Up to 50 variants are supported.</string>
 </resources>
+

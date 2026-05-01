@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <!-- ===================== 公共描述 (Content Description) ===================== -->
     <string name="login_background_content_description">登入畫面的背景</string>
     <string name="button_google_logo_content_description">Google 圖示</string>
@@ -202,6 +202,23 @@
     <string name="basic_info">基本資訊</string>
 
     <string name="tax_rate">稅率</string>
+    <string name="confirm">確認</string>
+    <string name="confirm_delete_title">刪除所選項目？</string>
+    <string name="confirm_delete_message">此操作無法復原。</string>
+    <string name="image_content_description">圖片</string>
+    <string name="video_play_pause_content_description">播放或暫停影片</string>
+    <string name="video_toggle_fullscreen_content_description">切換全螢幕</string>
+    <string name="toast_success_content_description">成功</string>
+    <string name="toast_info_content_description">資訊</string>
+    <string name="toast_warning_content_description">警告</string>
+    <string name="toast_error_content_description">錯誤</string>
+    <string name="navigation_title_fallback">標題</string>
+    <string name="navigation_item_icon_fallback">選單項目圖示</string>
+    <string name="navigation_item_label_fallback">導覽項目</string>
+    <string name="menu_item_tooltip_title_fallback">選單項目</string>
+    <string name="menu_item_tooltip_text_fallback">選單項目詳情</string>
+    <string name="menu_item_tooltip_fallback">選單項目</string>
+    <string name="product_image_with_name">產品圖片：%1$s</string>
     
     <!-- ===================== 常用操作（Shared） ===================== -->
     <string name="copy">複製</string>
@@ -219,4 +236,34 @@
     <string name="image_saved_with_name">已儲存圖片「%1$s」</string>
     <string name="file_saved_with_name">已儲存檔案「%1$s」</string>
     <string name="image_saved_to_gallery_with_name">已將圖片「%1$s」儲存到相簿</string>
+    <string name="status">狀態</string>
+    <string name="sort">排序</string>
+    <string name="order_dir_ascending">升冪</string>
+    <string name="order_dir_descending">降冪</string>
+    <string name="out_of_stock">缺貨</string>
+    <string name="product_image">產品圖片</string>
+    <string name="product_name">產品名稱</string>
+    <string name="product_title">產品標題</string>
+    <string name="product_code">產品編碼</string>
+    <string name="product_category">類別</string>
+    <string name="product_total_stock">總庫存</string>
+    <string name="product_price">價格</string>
+    <string name="product_price_with_vat">含稅價格</string>
+    <string name="product_price_without_vat">未稅價格</string>
+    <string name="product_min_order_qty">最低起訂量</string>
+    <string name="product_actions">操作</string>
+    <string name="product_status_active">啟用</string>
+    <string name="product_status_inactive">停用</string>
+    <string name="sale_variant_unit">單件</string>
+    <string name="sale_variant_box">箱</string>
+    <string name="sale_variant_pack">包</string>
+    <string name="product_sort_name">名稱</string>
+    <string name="product_sort_title">標題</string>
+    <string name="product_sort_code">編碼</string>
+    <string name="product_sort_category">類別</string>
+    <string name="product_sort_stock">庫存</string>
+    <string name="product_sort_price">價格</string>
+    <string name="product_sort_price_without_vat">未稅價格</string>
+    <string name="product_sort_min_order_qty">起訂量</string>
 </resources>
+

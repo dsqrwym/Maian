@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="button_register_new_account">Registrar un nou compte</string>
     <string name="register_account_title">Crear un compte</string>
     <string name="register_success">Registre exitós</string>
@@ -22,4 +22,61 @@
         Veure i cercar categories, crear les teves pròpies categories de productes i gestionar noms multilingües.
         Admet fins a tres nivells de nidificació (1 → 2 → 3).
     </string>
+    <string name="company_type_limited_company">Societat limitada (S.L.)</string>
+    <string name="company_type_public_limited_company">Societat anònima (S.A.)</string>
+    <string name="company_type_self_employed">Autònom</string>
+    <string name="company_type_cooperative">Cooperativa</string>
+    <string name="company_type_civil_company">Societat civil</string>
+    <string name="company_type_other">Altre</string>
+    <string name="search_products">Busca productes</string>
+    <string name="add_product">Afig producte</string>
+    <string name="product">Producte</string>
+    <string name="product_preview">Vista prèvia</string>
+    <string name="product_preview_tooltip">Vista prèvia de la pàgina del producte que voran els detallistes</string>
+    <string name="product_description">Detalls del producte</string>
+    <string name="product_description_placeholder">Introduïx la descripció detallada del producte</string>
+    <string name="product_preview_outline">Resum de vista prèvia</string>
+    <string name="product_preview_placeholder">Esta àrea està reservada per al flux complet de vista prèvia del producte.</string>
+    <string name="product_preview_name">Nom: %1$s</string>
+    <string name="product_preview_title">Títol: %1$s</string>
+    <string name="product_preview_category">Categoria: %1$s</string>
+    <string name="product_preview_tax_rate">Tipus impositiu: %1$s</string>
+    <string name="product_preview_status">Estat: %1$s</string>
+    <string name="product_preview_media_count">Multimèdia: %1$d</string>
+    <string name="product_not_filled">No emplenat</string>
+    <string name="product_not_selected">No seleccionat</string>
+    <string name="products_added_variants_count">S'han afegit %1$d variants</string>
+    <string name="add_product_variant">Afig variant de producte</string>
+    <string name="sales_information">Informació de venda</string>
+    <string name="sale_unit">Unitat de venda</string>
+    <string name="sale_unit_conversion">Conversió d'unitats</string>
+    <string name="enter_product_code">Introduïx el codi del producte</string>
+    <string name="price_information">Informació de preus</string>
+    <string name="inventory_information">Informació d'inventari</string>
+    <string name="available_stock">Estoc disponible</string>
+    <string name="enter_available_stock">Introduïx la quantitat actual d'estoc</string>
+    <string name="low_stock_threshold">Avís d'estoc baix</string>
+    <string name="enter_low_stock_threshold">Introduïx la quantitat per a l'avís d'estoc baix</string>
+    <string name="select_main_product_category">Selecciona la categoria principal del producte</string>
+    <string name="product_title_placeholder">Introduïx un títol breu del producte</string>
+    <string name="main_language">Idioma principal</string>
+    <string name="stock_count">Estoc: %1$d</string>
+    <string name="price_with_vat_value">IVA: %1$s</string>
+    <string name="price_without_vat_value">Net: %1$s</string>
+    <string name="moq_value">Comanda mín.: %1$d</string>
+    <string name="upload_progress">Pujant: %1$d%%</string>
+    <string name="upload_failed_retry">La pujada ha fallat\nToca per a tornar-ho a intentar</string>
+    <string name="upload_media">Puja</string>
+    <string name="add_media">Afig multimèdia</string>
+    <string name="remove_media">Elimina multimèdia</string>
+    <string name="release_to_delete">Solta per a eliminar</string>
+    <string name="drag_here_to_delete">Arrossega ací per a eliminar</string>
+    <string name="product_form_media_title">Fitxers multimèdia</string>
+    <string name="product_form_media_subtitle_mb">Mantín premut i arrossega per a ordenar. La primera imatge serà la principal. Cada fitxer no pot superar %1$d MB.</string>
+    <string name="product_form_translations_title">Informació del producte (multilingüe)</string>
+    <string name="product_form_translations_subtitle">Afig noms i descripcions en diferents idiomes. L'idioma principal es mostra per defecte; els altres s'usen per a la visualització multilingüe. Cal omplir almenys un idioma.</string>
+    <string name="product_form_attributes_title">Atributs del producte</string>
+    <string name="product_form_attributes_subtitle">Configura els atributs bàsics del producte, incloent categoria, tipus impositiu i estat.</string>
+    <string name="product_form_sku_title">Llista d'SKU</string>
+    <string name="product_form_sku_subtitle">Cada producte necessita almenys una variant de venda (SKU). Pots crear variants per a diferents embalatges, formats o preus. S'admeten fins a 50 variants.</string>
 </resources>

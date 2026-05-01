@@ -23,6 +23,9 @@ import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.menu_close_content_description
 import maian.shared.generated.resources.menu_open_content_description
+import maian.shared.generated.resources.navigation_item_icon_fallback
+import maian.shared.generated.resources.navigation_item_label_fallback
+import maian.shared.generated.resources.navigation_title_fallback
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.theme.MyHazeStyles
@@ -111,11 +114,12 @@ fun SharedBottomNavigationLayout(
                                         MyBadgedBox(state.showBadge, state.badgeCount) {
                                             SharedMenuIcon(
                                                 imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                                contentDescription = state.item.iconContentDescription.asString() ?: "menu item icon"
+                                                contentDescription = state.item.iconContentDescription.asString()
+                                                    ?: stringResource(SharedRes.string.navigation_item_icon_fallback)
                                             )
                                         }
                                     },
-                                    label = { Text(state.item.label.asString() ?: "navigation item label") },
+                                    label = { Text(state.item.label.asString() ?: stringResource(SharedRes.string.navigation_item_label_fallback)) },
                                     selected = isSameRoute(currentRoute, state.item.route),
                                     onClick = {
                                         onNavigate(state.item.route)
@@ -133,7 +137,7 @@ fun SharedBottomNavigationLayout(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(currentItem?.item?.label.asString() ?: "title") },
+                    title = { Text(currentItem?.item?.label.asString() ?: stringResource(SharedRes.string.navigation_title_fallback)) },
                     scrollBehavior = scrollBehavior,
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
@@ -198,12 +202,13 @@ fun SharedBottomNavigationLayout(
                                     MyBadgedBox(state.showBadge, state.badgeCount) {
                                         SharedMenuIcon(
                                             imageVector = state.item.icon ?: Icons.Outlined.Apps,
-                                            contentDescription = state.item.iconContentDescription.asString() ?: "menu item icon"
+                                            contentDescription = state.item.iconContentDescription.asString()
+                                                ?: stringResource(SharedRes.string.navigation_item_icon_fallback)
                                         )
                                     }
                                 }
                             },
-                            label = { Text(state.item.label.asString() ?: "navigation item label") },
+                            label = { Text(state.item.label.asString() ?: stringResource(SharedRes.string.navigation_item_label_fallback)) },
                             selected = isSameRoute(currentRoute, state.item.route),
                             onClick = { onNavigate(state.item.route) }
                         )

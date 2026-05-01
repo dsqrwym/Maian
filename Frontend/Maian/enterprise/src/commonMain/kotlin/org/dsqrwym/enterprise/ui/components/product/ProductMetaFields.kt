@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.components.product
+﻿package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,13 +15,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.parent_category_selected
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.field_required
-import maian.shared.generated.resources.tax_rate
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.enter_product_code
+import maian.enterprise.generated.resources.select_main_product_category
+import maian.shared.generated.resources.*
 import org.dsqrwym.business.drawable.sharedicons.Barcode
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
-import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.data.products.SharedProductStatus
+import org.dsqrwym.shared.data.products.toStringResource
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.InProgress
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
@@ -57,6 +59,7 @@ fun ProductMetaFields(
     onProductStatusChange: (SharedProductStatus) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val productStatusLabels = SharedProductStatus.entries.associateWith { stringResource(it.toStringResource()) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -65,7 +68,7 @@ fun ProductMetaFields(
         SearchableSelectorRemote(
             config = RemoteSearchableSelectorConfig(
                 modifier = Modifier.placeholderWithShimmer(isLoading),
-                label = "选择产品主类别 (${stringResource(SharedRes.string.field_required)})",
+                label = "${stringResource(EnterpriseRes.string.select_main_product_category)} (${stringResource(SharedRes.string.field_required)})",
                 error = categoryError.asString(),
                 leadingIcon = Icons.Outlined.Category,
                 selectedItem = selectedCategory,
@@ -93,14 +96,14 @@ fun ProductMetaFields(
             value = productCode,
             onValueChange = onProductCodeChange,
             leadingIcon = SharedIcons.Barcode,
-            leadingIconContentDescription = "产品编码",
+            leadingIconContentDescription = stringResource(SharedRes.string.product_code),
             trailingIcon = {
                 if (productCode.isBlank()) {
                     SharedScannerButton(onProductCodeChange)
                 } else SharedCloseButton { onProductCodeChange("") }
             },
-            labelText = "产品编码 (${stringResource(SharedRes.string.field_required)})",
-            placeholderText = "请输入产品编码",
+            labelText = "${stringResource(SharedRes.string.product_code)} (${stringResource(SharedRes.string.field_required)})",
+            placeholderText = stringResource(EnterpriseRes.string.enter_product_code),
             error = productCodeError.asString(),
             keyBordType = KeyboardType.Uri,
             imeAction = ImeAction.Next,
@@ -128,14 +131,14 @@ fun ProductMetaFields(
 
             Selector(
                 items = SharedProductStatus.entries,
-                itemToString = { it.name },
+                itemToString = { productStatusLabels[it].orEmpty() },
                 selectedItem = productStatus,
                 onItemSelected = {
                     it?.let { onProductStatusChange(it) }
                 },
                 config = SelectorConfig(
                     modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
-                    label = "产品状态 (${stringResource(SharedRes.string.field_required)})",
+                    label = "${stringResource(SharedRes.string.status)} (${stringResource(SharedRes.string.field_required)})",
                     leadingIcon = SharedIcons.InProgress,
                     modifierFillMaxWidth = false,
                     onImeAction = { focusManager.moveFocus(FocusDirection.Down) }
@@ -144,3 +147,6 @@ fun ProductMetaFields(
         }
     }
 }
+
+
+

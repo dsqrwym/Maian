@@ -1,4 +1,4 @@
-package org.dsqrwym.business.ui.media
+﻿package org.dsqrwym.business.ui.media
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Rect
@@ -10,6 +10,7 @@ import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.size
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import maian.business.generated.resources.*
 import org.dsqrwym.business.ui.media.model.MediaType.*
 import org.dsqrwym.business.ui.media.model.MediaSource
 import org.dsqrwym.business.ui.media.model.UploadedProductFile
@@ -19,6 +20,7 @@ import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.jetbrains.compose.resources.getString
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -67,7 +69,15 @@ class MediaPickerViewModel(
             if (_mediaItems.size >= maxItemCount) return
 
             if (file.size() > maxItemSize) {
-                snackbarViewModel?.showInfo("文件 ${file.name} 太大了: ${file.size() / 1024 / 1024}MB")
+                scope.launch {
+                    snackbarViewModel?.showInfo(
+                        getString(
+                            BusinessRes.string.media_file_too_large_mb,
+                            file.name,
+                            file.size() / 1024 / 1024
+                        )
+                    )
+                }
                 return@forEach
             }
 
@@ -274,3 +284,5 @@ class MediaPickerViewModel(
     private fun generateLocalId(): String =
         Uuid.generateV7().toString()
 }
+
+

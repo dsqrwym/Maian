@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.components.product
+﻿package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -22,7 +22,8 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.add_language_translation
 import maian.business.generated.resources.translations_count
-import maian.shared.generated.resources.SharedRes
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
 import maian.shared.generated.resources.add
 import maian.shared.generated.resources.field_optional
 import maian.shared.generated.resources.field_required
@@ -110,8 +111,8 @@ fun ProductTranslationTabs(
             },
             leadingIcon = Icons.AutoMirrored.Outlined.Label,
             leadingIconContentDescription = "",
-            labelText = "产品名称 (${stringResource(SharedRes.string.field_required)})",
-            placeholderText = "请输入产品名称",
+            labelText = "${stringResource(SharedRes.string.product_name)} (${stringResource(SharedRes.string.field_required)})",
+            placeholderText = stringResource(SharedRes.string.product_name),
             imeAction = ImeAction.Next,
             error = currentProductNameError.asString(),
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
@@ -130,16 +131,16 @@ fun ProductTranslationTabs(
             },
             leadingIcon = Icons.AutoMirrored.Outlined.Article,
             leadingIconContentDescription = "",
-            labelText = "产品标题 (${stringResource(SharedRes.string.field_optional)})",
-            placeholderText = "请输入产品名称，用于进行简短的介绍",
+            labelText = "${stringResource(SharedRes.string.product_title)} (${stringResource(SharedRes.string.field_optional)})",
+            placeholderText = stringResource(EnterpriseRes.string.product_title_placeholder),
             imeAction = ImeAction.Next,
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
         )
 
         BusinessRichTextEditor(
             isLoading = isLoading,
-            label = "产品详情 (${stringResource(SharedRes.string.field_optional)})",
-            placeholder = "请输入详细的产品介绍",
+            label = "${stringResource(EnterpriseRes.string.product_description)} (${stringResource(SharedRes.string.field_optional)})",
+            placeholder = stringResource(EnterpriseRes.string.product_description_placeholder),
             state = currentDescription,
             toolbarItems = {
                 item {
@@ -180,7 +181,7 @@ fun TranslationTabRow(
             translationTabs.forEachIndexed { index, lang ->
                 val isMainLanguage = index == 0
                 val language = LanguageManager.SupportedLanguages.fromCode(lang.first.langCode)
-                val content = if (isMainLanguage) "主语言" else "${language.displayName} (${language.code})"
+                val content = if (isMainLanguage) stringResource(EnterpriseRes.string.main_language) else "${language.displayName} (${language.code})"
                 LeadingIconTab(
                     selected = selectedLanguageIndex == index,
                     onClick = {
@@ -214,3 +215,6 @@ fun TranslationTabRow(
         }
     }
 }
+
+
+

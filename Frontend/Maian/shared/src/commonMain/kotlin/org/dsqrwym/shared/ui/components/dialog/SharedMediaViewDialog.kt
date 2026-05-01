@@ -15,8 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.image_content_description
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -29,7 +32,7 @@ fun SharedImageViewDialog(
         SharedAsyncImage(
             modifier = Modifier.wrapContentSize(),
             model = model,
-            contentDescription = imageName ?: "图片",
+            contentDescription = imageName ?: stringResource(SharedRes.string.image_content_description),
             imageName = imageName
         )
     }

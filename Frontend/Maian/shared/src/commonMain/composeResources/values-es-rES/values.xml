@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <!-- ===================== Descripción de contenido ===================== -->
     <string name="login_background_content_description">Fondo de la pantalla de inicio de sesión</string>
     <string name="button_google_logo_content_description">Icono de Google</string>
@@ -205,6 +205,23 @@
     <string name="basic_info">Información básica</string>
 
     <string name="tax_rate">Tasa de impuesto</string>
+    <string name="confirm">Confirmar</string>
+    <string name="confirm_delete_title">¿Eliminar el elemento seleccionado?</string>
+    <string name="confirm_delete_message">Esta acción no se puede deshacer.</string>
+    <string name="image_content_description">Imagen</string>
+    <string name="video_play_pause_content_description">Reproducir o pausar vídeo</string>
+    <string name="video_toggle_fullscreen_content_description">Alternar pantalla completa</string>
+    <string name="toast_success_content_description">Correcto</string>
+    <string name="toast_info_content_description">Información</string>
+    <string name="toast_warning_content_description">Advertencia</string>
+    <string name="toast_error_content_description">Error</string>
+    <string name="navigation_title_fallback">Título</string>
+    <string name="navigation_item_icon_fallback">Icono del elemento de menú</string>
+    <string name="navigation_item_label_fallback">Elemento de navegación</string>
+    <string name="menu_item_tooltip_title_fallback">Elemento de menú</string>
+    <string name="menu_item_tooltip_text_fallback">Detalles del elemento de menú</string>
+    <string name="menu_item_tooltip_fallback">Elemento de menú</string>
+    <string name="product_image_with_name">Imagen del producto: %1$s</string>
     
     <!-- ===================== Acciones comunes (Shared) ===================== -->
     <string name="copy">Copiar</string>
@@ -222,4 +239,34 @@
     <string name="image_saved_with_name">Imagen "%1$s" guardada</string>
     <string name="file_saved_with_name">Archivo "%1$s" guardado</string>
     <string name="image_saved_to_gallery_with_name">Imagen "%1$s" guardada en la galería</string>
+    <string name="status">Estado</string>
+    <string name="sort">Ordenar</string>
+    <string name="order_dir_ascending">Ascendente</string>
+    <string name="order_dir_descending">Descendente</string>
+    <string name="out_of_stock">Sin stock</string>
+    <string name="product_image">Imagen del producto</string>
+    <string name="product_name">Nombre del producto</string>
+    <string name="product_title">Título del producto</string>
+    <string name="product_code">Código del producto</string>
+    <string name="product_category">Categoría</string>
+    <string name="product_total_stock">Stock total</string>
+    <string name="product_price">Precio</string>
+    <string name="product_price_with_vat">Precio con IVA</string>
+    <string name="product_price_without_vat">Precio sin IVA</string>
+    <string name="product_min_order_qty">Cantidad mínima de pedido</string>
+    <string name="product_actions">Acciones</string>
+    <string name="product_status_active">Activo</string>
+    <string name="product_status_inactive">Inactivo</string>
+    <string name="sale_variant_unit">Unidad</string>
+    <string name="sale_variant_box">Caja</string>
+    <string name="sale_variant_pack">Paquete</string>
+    <string name="product_sort_name">Nombre</string>
+    <string name="product_sort_title">Título</string>
+    <string name="product_sort_code">Código</string>
+    <string name="product_sort_category">Categoría</string>
+    <string name="product_sort_stock">Stock</string>
+    <string name="product_sort_price">Precio</string>
+    <string name="product_sort_price_without_vat">Precio sin IVA</string>
+    <string name="product_sort_min_order_qty">Pedido mínimo</string>
 </resources>
+

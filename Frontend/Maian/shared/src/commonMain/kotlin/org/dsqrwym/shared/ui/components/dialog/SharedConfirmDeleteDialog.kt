@@ -9,6 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.cancel
+import maian.shared.generated.resources.confirm
+import maian.shared.generated.resources.confirm_delete_message
+import maian.shared.generated.resources.confirm_delete_title
 import maian.shared.generated.resources.delete
 import org.jetbrains.compose.resources.stringResource
 
@@ -17,9 +20,12 @@ fun SharedConfirmDeleteDialog(
     onDismissRequest: () -> Unit = {},
     onConfirm: () -> Unit = {},
     modifier: Modifier = Modifier,
-    title: String = "你确认要删除吗？",
-    text: String = "你确定要删除选中的元素吗？你将无法恢复数据。",
+    title: String? = null,
+    text: String? = null,
 ) {
+    val dialogTitle = title ?: stringResource(SharedRes.string.confirm_delete_title)
+    val dialogText = text ?: stringResource(SharedRes.string.confirm_delete_message)
+
     AlertDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
@@ -32,11 +38,11 @@ fun SharedConfirmDeleteDialog(
                     contentDescription = stringResource(SharedRes.string.delete),
                     tint = MaterialTheme.colorScheme.error
                 )
-                Text(title)
+                Text(dialogTitle)
             }
         },
         text = {
-            Text(text)
+            Text(dialogText)
         },
         confirmButton = {
             FilledTonalButton(
@@ -48,7 +54,7 @@ fun SharedConfirmDeleteDialog(
                     onDismissRequest()
                 }
             ) {
-                Text("确认")
+                Text(stringResource(SharedRes.string.confirm))
             }
         },
         dismissButton = {

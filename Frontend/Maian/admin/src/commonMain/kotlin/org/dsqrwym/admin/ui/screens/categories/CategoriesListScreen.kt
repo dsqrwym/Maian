@@ -307,7 +307,9 @@ fun CategoryListItem(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = if (category.parentName != null) "${stringResource(BusinessRes.string.parent_category)}: ${category.parentName}" else stringResource(
+                                text = category.parentName?.let {
+                                    stringResource(BusinessRes.string.parent_category_with_name, it)
+                                } ?: stringResource(
                                     BusinessRes.string.base_category
                                 ),
                                 style = MaterialTheme.typography.bodySmall
@@ -507,7 +509,7 @@ private fun FilterChipsRow(
             ElevatedFilterChip(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
-                label = { Text("${stringResource(BusinessRes.string.parent_category)}: ${it.name}") },
+                label = { Text(stringResource(BusinessRes.string.parent_category_with_name, it.name)) },
                 trailingIcon = { SharedCloseIcon() }
             )
         }

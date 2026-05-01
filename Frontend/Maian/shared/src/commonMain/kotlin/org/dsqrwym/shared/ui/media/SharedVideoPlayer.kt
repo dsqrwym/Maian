@@ -38,6 +38,8 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.copied_to_clipboard
 import maian.shared.generated.resources.file_saved_with_name
 import maian.shared.generated.resources.unable_to_copy_resource
+import maian.shared.generated.resources.video_play_pause_content_description
+import maian.shared.generated.resources.video_toggle_fullscreen_content_description
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.clipboard.rememberClipboardCopier
@@ -176,7 +178,7 @@ fun SharedVideoPlayer(
                             ) {
                                 Icon(
                                     imageVector = if (!playerState.isPlaying || isFinished) Icons.Outlined.PlayArrow else Icons.Outlined.Pause,
-                                    contentDescription = "Play/Pause",
+                                    contentDescription = stringResource(SharedRes.string.video_play_pause_content_description),
                                     tint = Color.White,
                                     modifier = Modifier.fillMaxSize()
                                 )
@@ -239,7 +241,7 @@ fun SharedVideoPlayer(
                                     ) {
                                         Icon(
                                             imageVector = if (playerState.isFullscreen) Icons.Outlined.FullscreenExit else Icons.Outlined.Fullscreen,
-                                            contentDescription = "Toggle Fullscreen",
+                                            contentDescription = stringResource(SharedRes.string.video_toggle_fullscreen_content_description),
                                             modifier = Modifier.fillMaxSize()
                                         )
                                     }

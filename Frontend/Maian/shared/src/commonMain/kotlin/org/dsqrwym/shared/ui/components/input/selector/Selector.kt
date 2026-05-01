@@ -56,6 +56,7 @@ fun <T> Selector(
         ) {
             items.forEachIndexed { _, item ->
                 DropdownMenuItem(
+                    enabled = config.enabled,
                     text = { Text(itemToString(item)) },
                     onClick = {
                         onItemSelected(item)

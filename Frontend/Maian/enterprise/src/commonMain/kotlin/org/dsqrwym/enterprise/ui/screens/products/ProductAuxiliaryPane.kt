@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.screens.products
+﻿package org.dsqrwym.enterprise.ui.screens.products
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -12,13 +12,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.translations_count
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.product_name
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
 import org.dsqrwym.business.ui.components.richtext.BusinessRichTextEditor
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliarySurface
 import org.dsqrwym.enterprise.MenuConfig
 import org.dsqrwym.enterprise.ui.components.product.TranslationTabRow
 import org.dsqrwym.enterprise.ui.screens.categories.AddLanguageDialog
-import org.dsqrwym.enterprise.ui.viewmodels.products.ProductCreateViewModel
+import org.dsqrwym.enterprise.ui.viewmodels.products.BaseProductFormViewModel
+import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.containers.HazeContainer
@@ -30,7 +34,7 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductAuxiliaryPane(
-    viewModel: ProductCreateViewModel,
+    viewModel: BaseProductFormViewModel,
     surface: BusinessAuxiliarySurface,
     onClose: () -> Unit,
 ) {
@@ -40,6 +44,8 @@ fun ProductAuxiliaryPane(
     val translationTabs = viewModel.translationTabs
     val currentTranslation = viewModel.translationTabs[selectedLanguageIndex].first
     val currentDescription = viewModel.translationTabs[selectedLanguageIndex].second
+    val canAddTranslation = viewModel.canAddTranslation
+
     var showAddTranslation by remember { mutableStateOf(false) }
 
     HazeContainer(
@@ -72,7 +78,7 @@ fun ProductAuxiliaryPane(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(currentTranslation.name)
-                            Icon(Icons.Outlined.ShoppingBag, "产品")
+                            Icon(Icons.Outlined.ShoppingBag, stringResource(SharedRes.string.product_name))
                         }
                     },
                     actions = {
@@ -93,8 +99,12 @@ fun ProductAuxiliaryPane(
             ) {
                 when (surface) {
                     BusinessAuxiliarySurface.Editor -> {
+                        if (translationTabs.isEmpty()) {
+                            return@Column
+                        }
                         BusinessSelectedInfoCard(
                             description = stringResource(BusinessRes.string.translations_count, translationTabs.size),
+                            visible = translationTabs.size > 1,
                             icon = Icons.Outlined.Info,
                             enabled = false,
                             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -107,35 +117,35 @@ fun ProductAuxiliaryPane(
                             onSelect = viewModel::changeLanguageIndex,
                             onRemove = viewModel::removeTranslation,
                             onAddClick = { showAddTranslation = true },
-                            canAdd = viewModel.getAvailableLanguages().isNotEmpty()
+                            canAdd = canAddTranslation
                         )
 
                         BusinessRichTextEditor(
                             modifier = Modifier.fillMaxSize(),
                             fillMaxSize = true,
-                            label = "产品详情",
-                            placeholder = "请输入详细的产品介绍",
+                            label = stringResource(EnterpriseRes.string.product_description),
+                            placeholder = stringResource(EnterpriseRes.string.product_description_placeholder),
                             state = currentDescription,
                         )
 
                     }
 
                     BusinessAuxiliarySurface.Preview -> {
-                        FormCard(title = "预览骨架") {
+                        FormCard(title = stringResource(EnterpriseRes.string.product_preview_outline)) {
                             Text(
-                                text = "这里预留给整产品预览工作区。后续可以接入 standard 模块的产品瀑布流或详情预览，而不是只预览富文本。",
+                                text = stringResource(EnterpriseRes.string.product_preview_placeholder),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
 
                             Spacer(Modifier.height(16.dp))
 
-                            Text("产品名: ${currentTranslation.name.ifBlank { "未填写" }}")
-                            Text("标题: ${currentTranslation.title.orEmpty().ifBlank { "未填写" }}")
-                            Text("分类: ${viewModel.filterCategory?.name ?: "未选择"}")
-                            Text("税率: ${viewModel.productIva.ifBlank { "未填写" }}")
-                            Text("状态: ${viewModel.productStatus.name}")
-                            Text("媒体数量: ${viewModel.mediaPicker.mediaItems.size}")
+                            Text(stringResource(EnterpriseRes.string.product_preview_name, currentTranslation.name.ifBlank { stringResource(EnterpriseRes.string.product_not_filled) }))
+                            Text(stringResource(EnterpriseRes.string.product_preview_title, currentTranslation.title.orEmpty().ifBlank { stringResource(EnterpriseRes.string.product_not_filled) }))
+                            Text(stringResource(EnterpriseRes.string.product_preview_category, viewModel.filterCategory?.name ?: stringResource(EnterpriseRes.string.product_not_selected)))
+                            Text(stringResource(EnterpriseRes.string.product_preview_tax_rate, viewModel.productIva.ifBlank { stringResource(EnterpriseRes.string.product_not_filled) }))
+                            Text(stringResource(EnterpriseRes.string.product_preview_status, viewModel.productStatus.displayName()))
+                            Text(stringResource(EnterpriseRes.string.product_preview_media_count, viewModel.mediaPicker.mediaItems.size))
                         }
                     }
                 }
@@ -143,3 +153,6 @@ fun ProductAuxiliaryPane(
         }
     }
 }
+
+
+

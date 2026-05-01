@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.components.product
+﻿package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,9 +28,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.LocalWindowSizeClass
+import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
@@ -47,6 +50,7 @@ import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 import org.dsqrwym.shared.util.platform.Platform
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -205,7 +209,7 @@ fun ProductGridItem(
                     product?.let {
                         SelectionContainer {
                             Text(
-                                text = if (it.totalStock > 0) "库存: ${it.totalStock}" else "缺货",
+                                text = if (it.totalStock > 0) stringResource(EnterpriseRes.string.stock_count, it.totalStock) else stringResource(SharedRes.string.out_of_stock),
                                 style = MaterialTheme.typography.labelSmall,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                 color = if (it.totalStock > 0) MaterialTheme.colorScheme.onPrimaryContainer
@@ -222,7 +226,7 @@ fun ProductGridItem(
                             .wrapContentHeight()
                             .clickable(onClick = onImageClick),
                         model = it.mainImage.url(it.id),
-                        contentDescription = it.name,
+                        contentDescription = stringResource(SharedRes.string.product_image_with_name, it.name),
                         placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
                         zoomable = false,
                         enableContextMenu = false,
@@ -310,13 +314,13 @@ fun ProductGridItem(
                             SelectionContainer {
                                 Column {
                                     Text(
-                                        text = "含税: ${item.minPriceIva}",
+                                        text = stringResource(EnterpriseRes.string.price_with_vat_value, item.minPriceIva),
                                         style = MaterialTheme.typography.labelLarge,
                                         fontWeight = FontWeight.ExtraBold,
                                         color = MaterialTheme.colorScheme.primary
                                     )
                                     Text(
-                                        text = "未税: ${item.minPrice}",
+                                        text = stringResource(EnterpriseRes.string.price_without_vat_value, item.minPrice),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -326,12 +330,12 @@ fun ProductGridItem(
                             SelectionContainer {
                                 Column(horizontalAlignment = Alignment.End) {
                                     Text(
-                                        text = "MOQ: ${item.minOrderQty}",
+                                        text = stringResource(EnterpriseRes.string.moq_value, item.minOrderQty),
                                         style = MaterialTheme.typography.labelLarge,
                                         color = MaterialTheme.colorScheme.secondary
                                     )
                                     Text(
-                                        text = item.status.toString(),
+                                        text = item.status.displayName(),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.outline
                                     )
@@ -351,7 +355,7 @@ fun ProductGridItem(
                     IconButton(onClick = onPreview) {
                         Icon(
                             imageVector = Icons.Outlined.Visibility,
-                            contentDescription = "预览",
+                            contentDescription = stringResource(EnterpriseRes.string.product_preview),
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.size(20.dp)
                         )
@@ -359,7 +363,7 @@ fun ProductGridItem(
                     IconButton(onClick = onEdit) {
                         Icon(
                             imageVector = Icons.Outlined.Edit,
-                            contentDescription = "编辑",
+                            contentDescription = stringResource(SharedRes.string.edit),
                             tint = MaterialTheme.colorScheme.secondary,
                             modifier = Modifier.size(20.dp)
                         )
@@ -370,3 +374,6 @@ fun ProductGridItem(
         }
     }
 }
+
+
+

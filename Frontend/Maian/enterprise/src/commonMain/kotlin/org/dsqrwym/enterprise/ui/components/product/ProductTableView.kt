@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.components.product
+﻿package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,11 +15,14 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.collections.immutable.toPersistentList
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.util.uawwindtablekmp.cellWithModifier
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductSortField.*
+import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.buttons.MyTextButton
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
@@ -28,6 +31,7 @@ import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.modifier.copyOnInteraction
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
+import org.jetbrains.compose.resources.stringResource
 import ua.wwind.table.ExperimentalTableApi
 import ua.wwind.table.Table
 import ua.wwind.table.config.PinnedSide
@@ -70,10 +74,21 @@ fun ProductTableView(
     isError: Boolean,
 ) {
     val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
+    val productImageText = stringResource(SharedRes.string.product_image)
+    val productNameText = stringResource(SharedRes.string.product_name)
+    val productTitleText = stringResource(SharedRes.string.product_title)
+    val productCodeText = stringResource(SharedRes.string.product_code)
+    val productCategoryText = stringResource(SharedRes.string.product_category)
+    val productTotalStockText = stringResource(SharedRes.string.product_total_stock)
+    val productPriceWithVatText = stringResource(SharedRes.string.product_price_with_vat)
+    val productPriceWithoutVatText = stringResource(SharedRes.string.product_price_without_vat)
+    val productMinOrderQtyText = stringResource(SharedRes.string.product_min_order_qty)
+    val statusText = stringResource(SharedRes.string.status)
+    val productActionsText = stringResource(SharedRes.string.product_actions)
     val columns =
         tableColumns<Product, ProductColumn, Unit> {
             column(ProductColumn.Image, valueOf = { it.mainImage }) {
-                header(" 主图")
+                header(productImageText)
                 autoWidth(100.dp)
                 resizable(false)
                 align(Alignment.Center)
@@ -89,14 +104,14 @@ fun ProductTableView(
                             model = product.mainImage.url(product.id),
                             zoomable = false,
                             enableContextMenu = false,
-                            contentDescription = "产品图片",
+                            contentDescription = productImageText,
                         )
                     }
                 }
             }
             // 2. 产品名称 (支持排序)
             column(ProductColumn.Name, valueOf = { it.name }) {
-                header("产品名称")
+                header(productNameText)
                 sortable() // 开启UI排序
                 autoWidth()
                 cellWithModifier(
@@ -129,7 +144,7 @@ fun ProductTableView(
 
             // 3. 产品标题
             column(ProductColumn.Title, valueOf = { it.title }) {
-                header("产品标题")
+                header(productTitleText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -162,7 +177,7 @@ fun ProductTableView(
 
             // 4. 编码
             column(ProductColumn.Code, valueOf = { it.code }) {
-                header("产品编码")
+                header(productCodeText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -177,7 +192,7 @@ fun ProductTableView(
 
             // 5. 类别
             column(ProductColumn.Category, valueOf = { it.mainCategory }) {
-                header("类别")
+                header(productCategoryText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -195,7 +210,7 @@ fun ProductTableView(
 
             // 6. 总库存
             column(ProductColumn.TotalStock, valueOf = { it.totalStock }) {
-                header("总库存")
+                header(productTotalStockText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -213,7 +228,7 @@ fun ProductTableView(
 
             // 7. 最低不含税价
             column(ProductColumn.Price, valueOf = { it.minPrice }) {
-                header("最低不含税价")
+                header(productPriceWithoutVatText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -229,7 +244,7 @@ fun ProductTableView(
 
             // 8. 最低含税价
             column(ProductColumn.PriceIva, valueOf = { it.minPriceIva }) {
-                header("最低含税价")
+                header(productPriceWithVatText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -245,7 +260,7 @@ fun ProductTableView(
 
             // 9. 起订量
             column(ProductColumn.MinOrderQty, valueOf = { it.minOrderQty }) {
-                header("最低起订量")
+                header(productMinOrderQtyText)
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -264,13 +279,13 @@ fun ProductTableView(
 
             // 10. 状态
             column(ProductColumn.Status, valueOf = { it.status }) {
-                header("状态")
+                header(statusText)
                 autoWidth()
                 cellWithModifier(
-                    { Modifier.fillMaxSize().copyOnInteraction(SharedClipboardData.Text(it.status.toString())) }
+                    { Modifier.fillMaxSize().copyOnInteraction(SharedClipboardData.Text(it.status.name)) }
                 ) {
                     Text(
-                        it.status.toString(), Modifier.padding(horizontal = 6.dp)
+                        it.status.displayName(), Modifier.padding(horizontal = 6.dp)
                             .placeholderWithShimmer(isRefreshing)
                     )
                 }
@@ -278,20 +293,20 @@ fun ProductTableView(
 
             // 11. 操作
             column(ProductColumn.Actions, valueOf = { null }) {
-                header("操作")
+                header(productActionsText)
                 autoWidth()
                 align(Alignment.Center)
                 cell { product, _ ->
                     DisableSelection {
                         Row(Modifier.placeholderWithShimmer(isRefreshing)) {
-                            MyTextButton(text = "编辑"){ onEdit(product) }
+                            MyTextButton(text = stringResource(SharedRes.string.edit)){ onEdit(product) }
                             TooltipBox(
                                 state = rememberTooltipState(),
                                 positionProvider = positionProvider,
-                                tooltip = { PlainTooltip { Text("显示零售商看到的产品画面") } }
-                            ) { MyTextButton(text = "预览") { onPreview(product) } }
+                                tooltip = { PlainTooltip { Text(stringResource(EnterpriseRes.string.product_preview_tooltip)) } }
+                            ) { MyTextButton(text = stringResource(EnterpriseRes.string.product_preview)) { onPreview(product) } }
 
-                            MyTextButton(text = "删除") { onDelete(product) }
+                            MyTextButton(text = stringResource(SharedRes.string.delete)) { onDelete(product) }
                         }
                     }
 
@@ -387,3 +402,6 @@ private fun SharedProductSortField.toProductColumn(): ProductColumn? =
         PRICE_IVA -> ProductColumn.PriceIva
         MIN_ORDER_QTY -> ProductColumn.MinOrderQty
     }
+
+
+

@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.components.product
+﻿package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -37,7 +37,8 @@ import dev.chrisbanes.haze.rememberHazeState
 import io.github.vinceglb.filekit.dialogs.FileKitMode
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
-import maian.shared.generated.resources.SharedRes
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
 import maian.shared.generated.resources.status_error_content_description
 import org.dsqrwym.business.ui.media.MediaPickerViewModel
 import org.dsqrwym.business.ui.media.model.MediaType
@@ -204,7 +205,7 @@ fun MediaGridItem(
                 }
                 SharedAsyncImage(
                     model = model,
-                    contentDescription = "image",
+                    contentDescription = stringResource(SharedRes.string.product_image),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize().hazeSource(hazeState),
                     zoomable = false,
@@ -226,7 +227,7 @@ fun MediaGridItem(
                     is MediaSource.Remote -> {
                         SharedAsyncImage(
                             model = source.url,
-                            contentDescription = "video",
+                            contentDescription = stringResource(EnterpriseRes.string.upload_media),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize().hazeSource(hazeState),
                             zoomable = false,
@@ -263,7 +264,7 @@ fun MediaGridItem(
                                 modifier = Modifier.size(32.dp),
                             )
                             Text(
-                                text = "上传中：${(item.progress * 100).toInt().coerceIn(0, 100)}%",
+                                text = stringResource(EnterpriseRes.string.upload_progress, (item.progress * 100).toInt().coerceIn(0, 100)),
                                 style = MaterialTheme.typography.labelSmall
                             )
                         }
@@ -282,7 +283,7 @@ fun MediaGridItem(
                                     modifier = Modifier.size(24.dp)
                                 )
                                 Text(
-                                    text = "上传失败\n点击重试",
+                                    text = stringResource(EnterpriseRes.string.upload_failed_retry),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onErrorContainer,
                                 )
@@ -316,13 +317,13 @@ fun MediaAddGridItem(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 imageVector = Icons.Outlined.Add,
-                contentDescription = "Add Media",
+                contentDescription = stringResource(EnterpriseRes.string.add_media),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "上传",
+                text = stringResource(EnterpriseRes.string.upload_media),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -361,16 +362,19 @@ fun MediaRemoveGridItem(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = "Remove Media",
+                contentDescription = stringResource(EnterpriseRes.string.remove_media),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = if (isHovering) "松手删除" else "拖动到此删除",
+                text = if (isHovering) stringResource(EnterpriseRes.string.release_to_delete) else stringResource(EnterpriseRes.string.drag_here_to_delete),
                 style = MaterialTheme.typography.labelSmall,
                 color = if (isHovering) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.primary
             )
         }
     }
 }
+
+
+

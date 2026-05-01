@@ -24,12 +24,18 @@ import com.dokar.sonner.Toast
 import com.dokar.sonner.ToastType.*
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.ToasterState
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.toast_error_content_description
+import maian.shared.generated.resources.toast_info_content_description
+import maian.shared.generated.resources.toast_success_content_description
+import maian.shared.generated.resources.toast_warning_content_description
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.CircleError
 import org.dsqrwym.shared.theme.AppExtraColors
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Components for displaying snackbar notifications and toasts.
@@ -133,7 +139,7 @@ fun SharedToaster(
                 Success -> {
                     Icon(
                         imageVector = Icons.Outlined.CheckCircle,
-                        contentDescription = "Success icon",
+                        contentDescription = stringResource(SharedRes.string.toast_success_content_description),
                         modifier = Modifier.size(20.dp),
                         tint = AppExtraColors.current.correct
                     )
@@ -142,7 +148,7 @@ fun SharedToaster(
                 Info -> {
                     Icon(
                         imageVector = Icons.Outlined.Info,
-                        contentDescription = "Info icon",
+                        contentDescription = stringResource(SharedRes.string.toast_info_content_description),
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -150,7 +156,7 @@ fun SharedToaster(
                 Warning -> {
                     Image(
                         imageVector = Icons.Outlined.Warning,
-                        contentDescription = "Warning icon",
+                        contentDescription = stringResource(SharedRes.string.toast_warning_content_description),
                         modifier = Modifier.size(20.dp),
                         colorFilter = ColorFilter.tint(contentColor(toast, isDarkTheme)),
                     )
@@ -159,7 +165,7 @@ fun SharedToaster(
                 Error -> {
                     Icon(
                         imageVector = SharedIcons.CircleError,
-                        contentDescription = "Error icon",
+                        contentDescription = stringResource(SharedRes.string.toast_error_content_description),
                         modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.onErrorContainer
                     )
@@ -457,7 +463,11 @@ fun SnackbarScaffold(
                             run {
                                 Icon(
                                     imageVector = leadingImageVector,
-                                    contentDescription = "leading icon",
+                                    contentDescription = when (currentEvent?.type) {
+                                        MySnackbarViewModel.ToastType.Success -> stringResource(SharedRes.string.toast_success_content_description)
+                                        MySnackbarViewModel.ToastType.Error -> stringResource(SharedRes.string.toast_error_content_description)
+                                        else -> stringResource(SharedRes.string.toast_info_content_description)
+                                    },
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Spacer(Modifier.width(8.dp))
@@ -715,7 +725,11 @@ fun SnackbarScaffold(
                                 run {
                                     Icon(
                                         imageVector = leadingImageVector,
-                                        contentDescription = "leading icon",
+                                        contentDescription = when (event.type) {
+                                            MySnackbarViewModel.ToastType.Success -> stringResource(SharedRes.string.toast_success_content_description)
+                                            MySnackbarViewModel.ToastType.Error -> stringResource(SharedRes.string.toast_error_content_description)
+                                            else -> stringResource(SharedRes.string.toast_info_content_description)
+                                        },
                                         modifier = Modifier.size(20.dp)
                                     )
                                     Spacer(Modifier.width(8.dp))

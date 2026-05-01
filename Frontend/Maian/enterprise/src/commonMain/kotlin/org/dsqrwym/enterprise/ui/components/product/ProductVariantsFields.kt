@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.components.product
+﻿package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -19,10 +19,8 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.add
-import maian.shared.generated.resources.field_optional
-import maian.shared.generated.resources.field_required
+import maian.enterprise.generated.resources.*
+import maian.shared.generated.resources.*
 import org.dsqrwym.business.drawable.sharedicons.Barcode
 import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
@@ -31,6 +29,8 @@ import org.dsqrwym.enterprise.domain.product.ProductVariant
 import org.dsqrwym.enterprise.ui.components.containers.ReorderableContentBox
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.data.products.SharedProductStatus
+import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.data.products.toStringResource
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Box
 import org.dsqrwym.shared.drawable.sharedicons.InProgress
@@ -99,7 +99,7 @@ fun ProductVariantsFields(
                 BusinessSelectedInfoCard(
                     modifier = Modifier.weight(1f, false).widthIn(max = 336.dp).placeholderWithShimmer(isLoading),
                     visible = variants.isNotEmpty(),
-                    description = "已添加${variants.size}个变体。",
+                    description = stringResource(EnterpriseRes.string.products_added_variants_count, variants.size),
                     icon = Icons.Outlined.Info,
                     enabled = false,
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -113,7 +113,7 @@ fun ProductVariantsFields(
                 ) {
                     Icon(Icons.Outlined.Add, stringResource(SharedRes.string.add))
                     Spacer(Modifier.width(8.dp))
-                    Text("添加产品变体")
+                    Text(stringResource(EnterpriseRes.string.add_product_variant))
                 }
             }
         }
@@ -218,7 +218,7 @@ fun VariantCard(
                             onClick = {},
                             label = {
                                 Text(
-                                    item.typeSale.name + ": ${item.saleUnitQty}",
+                                    item.typeSale.displayName() + ": ${item.saleUnitQty}",
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             },
@@ -228,7 +228,7 @@ fun VariantCard(
                                     SharedProductSaleVariant.UNIT -> Icons.Outlined._1xMobiledata
                                     SharedProductSaleVariant.PACK -> SharedIcons.Package24
                                 }
-                                Icon(icon, item.typeSale.name)
+                                Icon(icon, item.typeSale.displayName())
                             }
                         )
                     }
@@ -249,10 +249,22 @@ fun VariantCard(
 
                         horizontalArrangement = SharedRowLayout.arrangement,
                     ) {
-                        BusinessLabelValueRow("含税价: ", "${item.priceIva ?: 0}")
-                        BusinessLabelValueRow("价格: ", "${item.price ?: 0}")
-                        BusinessLabelValueRow("最小起订量: ", "${item.minOrderQty}")
-                        BusinessLabelValueRow("库存: ", "${item.availableStock}")
+                        BusinessLabelValueRow(
+                            stringResource(SharedRes.string.product_price_with_vat) + ": ",
+                            "${item.priceIva ?: 0}"
+                        )
+                        BusinessLabelValueRow(
+                            stringResource(SharedRes.string.product_price) + ": ",
+                            "${item.price ?: 0}"
+                        )
+                        BusinessLabelValueRow(
+                            stringResource(SharedRes.string.product_min_order_qty) + ": ",
+                            "${item.minOrderQty}"
+                        )
+                        BusinessLabelValueRow(
+                            stringResource(EnterpriseRes.string.available_stock) + ": ",
+                            "${item.availableStock}"
+                        )
                     }
 
                     val degrees by animateFloatAsState(if (expanded) 0f else 180f)
@@ -299,7 +311,8 @@ fun VariantCard(
                         onLowStockThresholdChange = { onUpdate(item.copy(lowStockThreshold = it)) },
                         productCodeError = productCodeError,
                         status = item.status,
-                        onStatusChange = { onUpdate(item.copy(status = it)) }
+                        onStatusChange = { onUpdate(item.copy(status = it)) },
+                        statusEnabled = index != 0
                     )
                 }
             }
@@ -327,10 +340,13 @@ fun ProductVariantFields(
     onMinOrderQtyChange: (Int?) -> Unit,
     lowStockThreshold: Int,
     onLowStockThresholdChange: (Int) -> Unit,
+    statusEnabled: Boolean = true,
     status: SharedProductStatus = SharedProductStatus.ACTIVE,
     onStatusChange: (SharedProductStatus) -> Unit = {},
 ) {
     val focus = LocalFocusManager.current
+    val saleVariantLabels = SharedProductSaleVariant.entries.associateWith { stringResource(it.toStringResource()) }
+    val productStatusLabels = SharedProductStatus.entries.associateWith { stringResource(it.toStringResource()) }
     var saleUnitEnabled by remember { mutableStateOf(true) }
 
     LaunchedEffect(selectedSaleVariant) {
@@ -352,7 +368,7 @@ fun ProductVariantFields(
         HorizontalDivider()
 
         Text(
-            text = "销售信息",
+            text = stringResource(EnterpriseRes.string.sales_information),
             style = MaterialTheme.typography.titleSmall,
         )
 
@@ -361,14 +377,14 @@ fun ProductVariantFields(
             value = productCode,
             onValueChange = onProductCodeChange,
             leadingIcon = SharedIcons.Barcode,
-            leadingIconContentDescription = "SKU编码",
+            leadingIconContentDescription = stringResource(SharedRes.string.product_code),
             trailingIcon = {
                 if (productCode.isBlank()) {
                     SharedScannerButton(onProductCodeChange)
                 } else SharedCloseButton { onProductCodeChange("") }
             },
-            labelText = "产品编码 (${stringResource(SharedRes.string.field_required)})",
-            placeholderText = "请输入SKU编码",
+            labelText = "${stringResource(SharedRes.string.product_code)} (${stringResource(SharedRes.string.field_required)})",
+            placeholderText = stringResource(EnterpriseRes.string.enter_product_code),
             error = productCodeError.asString(),
             keyBordType = KeyboardType.Uri,
             imeAction = ImeAction.Next,
@@ -382,7 +398,7 @@ fun ProductVariantFields(
             Selector(
                 items = SharedProductSaleVariant.entries,
                 selectedItem = selectedSaleVariant,
-                itemToString = { it.name },
+                itemToString = { saleVariantLabels[it].orEmpty() },
                 onItemSelected = {
                     it?.let { onSelectedSaleVariantChange(it) }
                 },
@@ -396,7 +412,7 @@ fun ProductVariantFields(
                 config = SelectorConfig(
                     modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                     modifierFillMaxWidth = false,
-                    label = "销售单位 (${stringResource(SharedRes.string.field_required)})",
+                    label = "${stringResource(EnterpriseRes.string.sale_unit)} (${stringResource(SharedRes.string.field_required)})",
                     leadingIcon = Icons.Outlined.Scale,
                     imeAction = ImeAction.Next,
                     onImeAction = { focus.moveFocus(FocusDirection.Next) }
@@ -411,7 +427,7 @@ fun ProductVariantFields(
                 value = saleUnitQty.toString(),
                 onValueChange = onSaleUnitQtyChange,
                 leadingIcon = Icons.Outlined.SwapHorizontalCircle,
-                leadingIconContentDescription = "单位换算",
+                leadingIconContentDescription = stringResource(EnterpriseRes.string.sale_unit_conversion),
                 trailingIcon = {
                     val icon = when (selectedSaleVariant) {
                         SharedProductSaleVariant.BOX -> SharedIcons.Box
@@ -421,14 +437,14 @@ fun ProductVariantFields(
                     Icon(icon, icon.name)
 
                 },
-                labelText = "单位换算 (${stringResource(SharedRes.string.field_required)})",
+                labelText = "${stringResource(EnterpriseRes.string.sale_unit_conversion)} (${stringResource(SharedRes.string.field_required)})",
                 imeAction = ImeAction.Next,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
         }
 
         Text(
-            text = "价格",
+            text = stringResource(EnterpriseRes.string.price_information),
             style = MaterialTheme.typography.titleSmall,
         )
 
@@ -445,8 +461,8 @@ fun ProductVariantFields(
                     onPriceChange(price, it)
                 },
                 leadingIcon = Icons.Outlined.PriceCheck,
-                leadingIconContentDescription = "含税价格",
-                labelText = "含税价格 (${stringResource(SharedRes.string.field_required)})",
+                leadingIconContentDescription = stringResource(SharedRes.string.product_price_with_vat),
+                labelText = "${stringResource(SharedRes.string.product_price_with_vat)} (${stringResource(SharedRes.string.field_required)})",
                 trailingIcon = {
                     Icon(Icons.Outlined.EuroSymbol, contentDescription = Icons.Outlined.EuroSymbol.name)
                 },
@@ -463,9 +479,9 @@ fun ProductVariantFields(
                     onPriceChange(it, priceIva)
                 },
                 leadingIcon = Icons.Outlined.AttachMoney,
-                leadingIconContentDescription = "价格 ",
-                labelText = "未含税价格 (${stringResource(SharedRes.string.field_required)})",
-                placeholderText = "请输入产品未含税价格",
+                leadingIconContentDescription = stringResource(SharedRes.string.product_price),
+                labelText = "${stringResource(SharedRes.string.product_price_without_vat)} (${stringResource(SharedRes.string.field_required)})",
+                placeholderText = stringResource(SharedRes.string.product_price_without_vat),
                 trailingIcon = {
                     Icon(Icons.Outlined.EuroSymbol, contentDescription = Icons.Outlined.EuroSymbol.name)
                 },
@@ -476,7 +492,7 @@ fun ProductVariantFields(
         }
 
         Text(
-            text = "库存信息",
+            text = stringResource(EnterpriseRes.string.inventory_information),
             style = MaterialTheme.typography.titleSmall,
         )
         Row(
@@ -491,9 +507,9 @@ fun ProductVariantFields(
                 value = minOrderQty.toString(),
                 onValueChange = onMinOrderQtyChange,
                 leadingIcon = Icons.Outlined.LooksOne,
-                leadingIconContentDescription = "最小起订量",
-                labelText = "最小起订量 (${stringResource(SharedRes.string.field_required)})",
-                placeholderText = "请输入最小起订量",
+                leadingIconContentDescription = stringResource(SharedRes.string.product_min_order_qty),
+                labelText = "${stringResource(SharedRes.string.product_min_order_qty)} (${stringResource(SharedRes.string.field_required)})",
+                placeholderText = stringResource(SharedRes.string.product_min_order_qty),
                 imeAction = ImeAction.Next,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
@@ -504,53 +520,50 @@ fun ProductVariantFields(
                 value = availableStock.toString(),
                 onValueChange = onAvailableStockChange,
                 leadingIcon = Icons.Outlined.Inventory2,
-                leadingIconContentDescription = "库存数量",
-                labelText = "库存数量 (${stringResource(SharedRes.string.field_required)})",
-                placeholderText = "请输入当前库存数量",
+                leadingIconContentDescription = stringResource(EnterpriseRes.string.available_stock),
+                labelText = "${stringResource(EnterpriseRes.string.available_stock)} (${stringResource(SharedRes.string.field_required)})",
+                placeholderText = stringResource(EnterpriseRes.string.enter_available_stock),
                 imeAction = ImeAction.Next,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = SharedRowLayout.arrangement,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            MyOutlinedIntegerField(
-                modifier = Modifier.placeholderWithShimmer(isLoading),
-                modifierFillMaxWidth = false,
-                min = 0,
-                value = if (lowStockThreshold == 0) "" else lowStockThreshold.toString(),
-                onValueChange = { it?.let { onLowStockThresholdChange(it) } },
-                leadingIcon = Icons.Outlined.NotificationImportant,
-                leadingIconContentDescription = "低库存提醒",
-                trailingIcon = {
-                    if (lowStockThreshold != 0) {
-                        SharedCloseButton {
-                            onLowStockThresholdChange(0)
-                        }
+        MyOutlinedIntegerField(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
+            min = 0,
+            value = if (lowStockThreshold == 0) "" else lowStockThreshold.toString(),
+            onValueChange = { it?.let { onLowStockThresholdChange(it) } },
+            leadingIcon = Icons.Outlined.NotificationImportant,
+            leadingIconContentDescription = stringResource(EnterpriseRes.string.low_stock_threshold),
+            trailingIcon = {
+                if (lowStockThreshold != 0) {
+                    SharedCloseButton {
+                        onLowStockThresholdChange(0)
                     }
-                },
-                labelText = "低库存提醒 (${stringResource(SharedRes.string.field_optional)})",
-                placeholderText = "请输入低库存提醒数量",
-                imeAction = ImeAction.Next,
+                }
+            },
+            labelText = "${stringResource(EnterpriseRes.string.low_stock_threshold)} (${stringResource(SharedRes.string.field_optional)})",
+            placeholderText = stringResource(EnterpriseRes.string.enter_low_stock_threshold),
+            imeAction = ImeAction.Next,
+            onImeAction = { focus.moveFocus(FocusDirection.Next) }
+        )
+
+        Selector(
+            items = SharedProductStatus.entries,
+            itemToString = { productStatusLabels[it].orEmpty() },
+            selectedItem = status,
+            onItemSelected = {
+                it?.let { onStatusChange(it) }
+            },
+            config = SelectorConfig(
+                enabled = statusEnabled,
+                modifier = Modifier.placeholderWithShimmer(isLoading),
+                label = "${stringResource(SharedRes.string.status)} (${stringResource(SharedRes.string.field_required)})",
+                leadingIcon = SharedIcons.InProgress,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
-            Selector(
-                items = SharedProductStatus.entries,
-                itemToString = { it.name },
-                selectedItem = status,
-                onItemSelected = {
-                    it?.let { onStatusChange(it) }
-                },
-                config = SelectorConfig(
-                    modifier = Modifier.weight(1f).placeholderWithShimmer(isLoading),
-                    label = "产品状态 (${stringResource(SharedRes.string.field_required)})",
-                    leadingIcon = SharedIcons.InProgress,
-                    modifierFillMaxWidth = false,
-                    onImeAction = { focus.moveFocus(FocusDirection.Next) }
-                )
-            )
-        }
+        )
     }
 }
+
+
+

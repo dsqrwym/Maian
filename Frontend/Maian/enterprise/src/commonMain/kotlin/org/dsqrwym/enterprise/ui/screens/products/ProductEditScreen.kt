@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
@@ -72,7 +73,11 @@ fun ProductEditScreen(
             )
         },
         auxiliaryContent = { surface ->
-
+            ProductAuxiliaryPane(
+                viewModel = viewModel,
+                surface = surface,
+                onClose = workspaceState::close,
+            )
         },
     )
 }
@@ -149,8 +154,8 @@ private fun ProductEditScreenContent(
             }
             item {
                 FormCard(
-                    title = "媒体文件",
-                    subtitle = "长按拖拽排序，首张图片为主图。单个文件不超过 ${maxSize}MB",
+                    title = stringResource(EnterpriseRes.string.product_form_media_title),
+                    subtitle = stringResource(EnterpriseRes.string.product_form_media_subtitle_mb, maxSize),
                     uiState = mediaPicker.mediaPickerUiState
                 ) {
                     ProductMediaUploader(mediaPicker, modifier = Modifier.placeholderWithShimmer(isLoading))
@@ -158,8 +163,8 @@ private fun ProductEditScreenContent(
             }
             item {
                 FormCard(
-                    title = "产品信息（多语言）",
-                    subtitle = "添加不同语言的名称和描述。主语言为默认展示语言，其它语言用于多语言展示。至少需要填写一种语言。",
+                    title = stringResource(EnterpriseRes.string.product_form_translations_title),
+                    subtitle = stringResource(EnterpriseRes.string.product_form_translations_subtitle),
                     uiState = viewModel.productTranslationUiState
                 ) {
                     ProductTranslationTabs(
@@ -179,8 +184,8 @@ private fun ProductEditScreenContent(
             }
             item {
                 FormCard(
-                    title = "产品属性",
-                    subtitle = "设置产品的基础属性，包括分类、税率和状态信息。",
+                    title = stringResource(EnterpriseRes.string.product_form_attributes_title),
+                    subtitle = stringResource(EnterpriseRes.string.product_form_attributes_subtitle),
                     uiState = viewModel.productMetaDataUiState
                 ) {
                     ProductMetaFields(
@@ -203,8 +208,8 @@ private fun ProductEditScreenContent(
 
             item(span = if (skuTabs.size > 1) StaggeredGridItemSpan.FullLine else null) {
                 FormCard(
-                    title = "SKU 列表",
-                    subtitle = "每个产品至少需要一个销售变体（SKU）。你可以为不同包装、规格或价格创建多个变体。最多支持 50 个变体。",
+                    title = stringResource(EnterpriseRes.string.product_form_sku_title),
+                    subtitle = stringResource(EnterpriseRes.string.product_form_sku_subtitle),
                     uiState = viewModel.productVariantUiState
                 ) {
                     ProductVariantsFields(
@@ -232,6 +237,7 @@ private fun ProductEditScreenContent(
                                 saleUnitQty = it.saleUnitQty,
                                 minOrderQty = it.minOrderQty,
                                 lowStockThreshold = it.lowStockThreshold,
+                                status = it.status,
                             )
                         },
                         productVariantsProductCodesErrors = productVariantsProductCodesErrors,

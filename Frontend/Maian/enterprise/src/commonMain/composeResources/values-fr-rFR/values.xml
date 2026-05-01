@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="button_register_new_account">Créer un nouveau compte</string>
     <string name="register_account_title">Créer un compte</string>
     <string name="register_success">Inscription réussie</string>
@@ -24,4 +24,61 @@
         Voir et rechercher des catégories, créer vos propres catégories de produits et gérer les noms multilingues.
         Prend en charge jusqu'à trois niveaux d'imbrication (1 → 2 → 3).
     </string>
+    <string name="company_type_limited_company">Société à responsabilité limitée (S.L.)</string>
+    <string name="company_type_public_limited_company">Société anonyme (S.A.)</string>
+    <string name="company_type_self_employed">Indépendant</string>
+    <string name="company_type_cooperative">Coopérative</string>
+    <string name="company_type_civil_company">Société civile</string>
+    <string name="company_type_other">Autre</string>
+    <string name="search_products">Rechercher des produits</string>
+    <string name="add_product">Ajouter un produit</string>
+    <string name="product">Produit</string>
+    <string name="product_preview">Aperçu</string>
+    <string name="product_preview_tooltip">Aperçu de la page produit que verront les détaillants</string>
+    <string name="product_description">Détails du produit</string>
+    <string name="product_description_placeholder">Saisissez la description détaillée du produit</string>
+    <string name="product_preview_outline">Résumé de l’aperçu</string>
+    <string name="product_preview_placeholder">Cette zone est réservée au flux complet d’aperçu du produit.</string>
+    <string name="product_preview_name">Nom : %1$s</string>
+    <string name="product_preview_title">Titre : %1$s</string>
+    <string name="product_preview_category">Catégorie : %1$s</string>
+    <string name="product_preview_tax_rate">Taux de taxe : %1$s</string>
+    <string name="product_preview_status">Statut : %1$s</string>
+    <string name="product_preview_media_count">Médias : %1$d</string>
+    <string name="product_not_filled">Non renseigné</string>
+    <string name="product_not_selected">Non sélectionné</string>
+    <string name="products_added_variants_count">%1$d variantes ajoutées</string>
+    <string name="add_product_variant">Ajouter une variante de produit</string>
+    <string name="sales_information">Informations de vente</string>
+    <string name="sale_unit">Unité de vente</string>
+    <string name="sale_unit_conversion">Conversion d’unités</string>
+    <string name="enter_product_code">Saisissez le code produit</string>
+    <string name="price_information">Informations de prix</string>
+    <string name="inventory_information">Informations de stock</string>
+    <string name="available_stock">Stock disponible</string>
+    <string name="enter_available_stock">Saisissez la quantité actuellement en stock</string>
+    <string name="low_stock_threshold">Alerte de stock faible</string>
+    <string name="enter_low_stock_threshold">Saisissez la quantité d’alerte de stock faible</string>
+    <string name="select_main_product_category">Sélectionnez la catégorie principale du produit</string>
+    <string name="product_title_placeholder">Saisissez un titre court pour le produit</string>
+    <string name="main_language">Langue principale</string>
+    <string name="stock_count">Stock : %1$d</string>
+    <string name="price_with_vat_value">TVA : %1$s</string>
+    <string name="price_without_vat_value">Net : %1$s</string>
+    <string name="moq_value">Commande min. : %1$d</string>
+    <string name="upload_progress">Importation : %1$d%%</string>
+    <string name="upload_failed_retry">Échec de l’importation\nAppuyez pour réessayer</string>
+    <string name="upload_media">Importer</string>
+    <string name="add_media">Ajouter un média</string>
+    <string name="remove_media">Supprimer le média</string>
+    <string name="release_to_delete">Relâchez pour supprimer</string>
+    <string name="drag_here_to_delete">Glissez ici pour supprimer</string>
+    <string name="product_form_media_title">Fichiers multimédias</string>
+    <string name="product_form_media_subtitle_mb">Maintenez appuyé et faites glisser pour réordonner. La première image sera l'image principale. Chaque fichier ne doit pas dépasser %1$d Mo.</string>
+    <string name="product_form_translations_title">Informations produit (multilingue)</string>
+    <string name="product_form_translations_subtitle">Ajoutez des noms et descriptions dans différentes langues. La langue principale est affichée par défaut ; les autres servent à l’affichage multilingue. Au moins une langue est requise.</string>
+    <string name="product_form_attributes_title">Attributs du produit</string>
+    <string name="product_form_attributes_subtitle">Définissez les attributs de base du produit, notamment la catégorie, le taux de taxe et le statut.</string>
+    <string name="product_form_sku_title">Liste des SKU</string>
+    <string name="product_form_sku_subtitle">Chaque produit nécessite au moins une variante de vente (SKU). Vous pouvez créer des variantes pour différents emballages, spécifications ou prix. Jusqu’à 50 variantes sont prises en charge.</string>
 </resources>

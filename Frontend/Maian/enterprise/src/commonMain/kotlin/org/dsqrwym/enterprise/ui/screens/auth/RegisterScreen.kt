@@ -30,6 +30,8 @@ import androidx.navigation3.runtime.NavKey
 import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.data.auth.dto.SpanishCompanyType
+import org.dsqrwym.enterprise.data.auth.dto.displayName
+import org.dsqrwym.enterprise.data.auth.dto.toStringResource
 import org.dsqrwym.enterprise.ui.viewmodels.auth.RegisterViewModel
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
@@ -261,10 +263,11 @@ fun RegisterScreen(
                         },
                     )
 
+                    val companyTypeLabels = SpanishCompanyType.entries.associateWith { stringResource(it.toStringResource()) }
                     // Company Type
                     SearchableSelector(
                         items = SpanishCompanyType.entries,
-                        itemToString = { it.name },
+                        itemToString = { companyTypeLabels[it].orEmpty() },
                         itemId = { it.name },
                         config = SearchableSelectorConfig(
                             enabled = enabled,

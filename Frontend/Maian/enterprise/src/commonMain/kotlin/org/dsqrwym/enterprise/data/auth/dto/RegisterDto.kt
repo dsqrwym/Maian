@@ -1,8 +1,18 @@
 package org.dsqrwym.enterprise.data.auth.dto
 
+import androidx.compose.runtime.Composable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.company_type_civil_company
+import maian.enterprise.generated.resources.company_type_cooperative
+import maian.enterprise.generated.resources.company_type_limited_company
+import maian.enterprise.generated.resources.company_type_other
+import maian.enterprise.generated.resources.company_type_public_limited_company
+import maian.enterprise.generated.resources.company_type_self_employed
 import org.dsqrwym.shared.data.location.dto.DirectionRequest
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Serializable
 data class StartRegisterRequest(
@@ -35,6 +45,19 @@ enum class SpanishCompanyType {
     @SerialName("Otros")
     OTROS
 }
+
+fun SpanishCompanyType.toStringResource(): StringResource =
+    when (this) {
+        SpanishCompanyType.SL -> EnterpriseRes.string.company_type_limited_company
+        SpanishCompanyType.SA -> EnterpriseRes.string.company_type_public_limited_company
+        SpanishCompanyType.AUTONOMO -> EnterpriseRes.string.company_type_self_employed
+        SpanishCompanyType.COOPERATIVA -> EnterpriseRes.string.company_type_cooperative
+        SpanishCompanyType.SOCIEDAD_CIVIL -> EnterpriseRes.string.company_type_civil_company
+        SpanishCompanyType.OTROS -> EnterpriseRes.string.company_type_other
+    }
+
+@Composable
+fun SpanishCompanyType.displayName(): String = stringResource(toStringResource())
 
 /**
  * Enterprise批发商注册请求DTO

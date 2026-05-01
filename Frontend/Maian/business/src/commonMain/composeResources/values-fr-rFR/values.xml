@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="category_management">Gestion des catégories</string>
 
     <string name="category_name_tax_setting">Paramètres du nom et du taux de la catégorie</string>
@@ -9,6 +9,7 @@
 
     <string name="subcategories_count">%1$s sous-catégories</string>
     <string name="parent_category">Catégorie parente</string>
+    <string name="parent_category_with_name">Catégorie parente : %1$s</string>
     <string name="base_category">Catégorie de base</string>
     <string name="other_languages">Autres langues</string>
     <string name="confirm_delete_category">Voulez-vous vraiment supprimer la catégorie « %1$s » ?</string>
@@ -28,4 +29,6 @@
     <string name="add_multilingual_translation">Ajouter une traduction multilingue</string>
     <string name="no_other_language_translation">Aucune traduction dans d'autres langues</string>
     <string name="translations_count">%1$s langues ajoutées</string>
+    <string name="media_file_too_large_mb">Le fichier "%1$s" est trop volumineux : %2$d Mo</string>
 </resources>
+

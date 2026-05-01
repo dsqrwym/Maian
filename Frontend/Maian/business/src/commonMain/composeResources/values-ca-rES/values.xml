@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="category_management">Gestió de categories</string>
 
     <string name="category_name_tax_setting">Configuració del nom i de l'impost de la categoria</string>
@@ -9,6 +9,7 @@
 
     <string name="subcategories_count">%1$s subcategories</string>
     <string name="parent_category">Categoria pare</string>
+    <string name="parent_category_with_name">Categoria pare: %1$s</string>
     <string name="base_category">Categoria base</string>
     <string name="other_languages">Altres idiomes</string>
     <string name="confirm_delete_category">Segur que vols eliminar la categoria "%1$s"?</string>
@@ -28,4 +29,6 @@
     <string name="add_multilingual_translation">Afegir traducció multilingüe</string>
     <string name="no_other_language_translation">No hi ha traduccions en altres idiomes</string>
     <string name="translations_count">%1$s idiomes afegits</string>
+    <string name="media_file_too_large_mb">El fitxer "%1$s" és massa gran: %2$d MB</string>
 </resources>
+

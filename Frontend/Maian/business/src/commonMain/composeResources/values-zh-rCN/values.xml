@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="category_management">类别管理</string>
 
     <string name="category_name_tax_setting">类别的名称和税率设置</string>
@@ -9,6 +9,7 @@
 
     <string name="subcategories_count">%1$s个子类别</string>
     <string name="parent_category">父类别</string>
+    <string name="parent_category_with_name">父类别：%1$s</string>
     <string name="base_category">基础类别</string>
     <string name="other_languages">其他语言</string>
     <string name="confirm_delete_category">确定要删除类别 "%1$s" 吗？</string>
@@ -28,4 +29,5 @@
     <string name="add_multilingual_translation">添加多语言翻译</string>
     <string name="no_other_language_translation">暂无其他语言翻译</string>
     <string name="translations_count">已添加%1$s种语言翻译</string>
+    <string name="media_file_too_large_mb">文件“%1$s”太大：%2$d MB</string>
 </resources>

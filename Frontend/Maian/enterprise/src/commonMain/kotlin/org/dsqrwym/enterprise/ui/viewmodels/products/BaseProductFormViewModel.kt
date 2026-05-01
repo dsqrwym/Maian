@@ -275,10 +275,13 @@ abstract class BaseProductFormViewModel(
         availableStock: Int,
         saleUnitQty: Int = 1,
         minOrderQty: Int = 1,
-        lowStockThreshold: Int = 0
+        lowStockThreshold: Int = 0,
+        status: SharedProductStatus = SharedProductStatus.ACTIVE
     ) {
         val sanitizedProductCode = sanitizeProductCode(productCode)
         val index = productVariants.indexOfFirst { it.id.getValOrNull() == id }
+        // 最少一个 variant 是开启的
+        val hasStatusActives = productVariants.filter { it.status.getValOrNull() == SharedProductStatus.ACTIVE }
 
         if (index != -1) {
             val existingSku = productVariants[index]
@@ -327,7 +330,8 @@ abstract class BaseProductFormViewModel(
                 availableStock = availableStock.toOptionalField(),
                 saleUnitQty = finalSaleUnitQty.toOptionalField(),
                 minOrderQty = minOrderQty.toOptionalField(),
-                lowStockThreshold = lowStockThreshold.toOptionalField()
+                lowStockThreshold = lowStockThreshold.toOptionalField(),
+                status = OptionalField.Value(if (hasStatusActives.size > 1) status else SharedProductStatus.ACTIVE)
             )
         } else {
             productVariants.add(
@@ -341,7 +345,8 @@ abstract class BaseProductFormViewModel(
                     availableStock = availableStock.toOptionalField(),
                     saleUnitQty = getRecommendedSaleUnitQty(typeSale).toOptionalField(),
                     minOrderQty = minOrderQty.toOptionalField(),
-                    lowStockThreshold = lowStockThreshold.toOptionalField()
+                    lowStockThreshold = lowStockThreshold.toOptionalField(),
+                    status = OptionalField.Value(if (hasStatusActives.isNotEmpty()) status else SharedProductStatus.ACTIVE)
                 )
             )
         }
@@ -351,8 +356,14 @@ abstract class BaseProductFormViewModel(
 
     fun deleteVariant(skuId: String?) {
         val item = productVariants.find { it.id.getValOrNull() == skuId } ?: return
+        // 最少一个变体
+        if (productVariants.size < 2) return
         productVariants.remove(item)
         skuId?.let { productVariantsProductCodesErrors.remove(it) }
+        // 最少一个开启，之前的判断保证最少一个
+        if (productVariants.size < 2) {
+            productVariants[0] = productVariants[0].copy(status = OptionalField.Value(SharedProductStatus.ACTIVE))
+        }
         checkProductVariant()
     }
 

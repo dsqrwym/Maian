@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <!-- ===================== Content Descriptions ===================== -->
     <string name="login_background_content_description">Login screen background</string>
     <string name="button_google_logo_content_description">Google icon</string>
@@ -189,7 +189,6 @@
     <string name="filter">Filter</string>
     <string name="close">Close</string>
     <string name="user">User</string>
-
     <string name="delete_success">Deleted successfully</string>
     <string name="delete_failed">Deletion failed</string>
     <string name="create_success">Created successfully</string>
@@ -204,6 +203,23 @@
     <string name="basic_info">Basic Info</string>
 
     <string name="tax_rate">Tax rate</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_delete_title">Delete selected item?</string>
+    <string name="confirm_delete_message">This action cannot be undone.</string>
+    <string name="image_content_description">Image</string>
+    <string name="video_play_pause_content_description">Play or pause video</string>
+    <string name="video_toggle_fullscreen_content_description">Toggle fullscreen</string>
+    <string name="toast_success_content_description">Success</string>
+    <string name="toast_info_content_description">Information</string>
+    <string name="toast_warning_content_description">Warning</string>
+    <string name="toast_error_content_description">Error</string>
+    <string name="navigation_title_fallback">Title</string>
+    <string name="navigation_item_icon_fallback">Menu item icon</string>
+    <string name="navigation_item_label_fallback">Navigation item</string>
+    <string name="menu_item_tooltip_title_fallback">Menu item</string>
+    <string name="menu_item_tooltip_text_fallback">Menu item details</string>
+    <string name="menu_item_tooltip_fallback">Menu item</string>
+    <string name="product_image_with_name">Product image: %1$s</string>
     
     <!-- ===================== Common Actions (Shared) ===================== -->
     <string name="copy">Copy</string>
@@ -221,4 +237,34 @@
     <string name="image_saved_with_name">Saved image "%1$s"</string>
     <string name="file_saved_with_name">Saved file "%1$s"</string>
     <string name="image_saved_to_gallery_with_name">Saved image "%1$s" to gallery</string>
+    <string name="status">Status</string>
+    <string name="sort">Sort</string>
+    <string name="order_dir_ascending">Ascending</string>
+    <string name="order_dir_descending">Descending</string>
+    <string name="out_of_stock">Out of stock</string>
+    <string name="product_image">Product image</string>
+    <string name="product_name">Product name</string>
+    <string name="product_title">Product title</string>
+    <string name="product_code">Product code</string>
+    <string name="product_category">Category</string>
+    <string name="product_total_stock">Total stock</string>
+    <string name="product_price">Price</string>
+    <string name="product_price_with_vat">Price with VAT</string>
+    <string name="product_price_without_vat">Price without VAT</string>
+    <string name="product_min_order_qty">Minimum order quantity</string>
+    <string name="product_actions">Actions</string>
+    <string name="product_status_active">Active</string>
+    <string name="product_status_inactive">Inactive</string>
+    <string name="sale_variant_unit">Unit</string>
+    <string name="sale_variant_box">Box</string>
+    <string name="sale_variant_pack">Pack</string>
+    <string name="product_sort_name">Name</string>
+    <string name="product_sort_title">Title</string>
+    <string name="product_sort_code">Code</string>
+    <string name="product_sort_category">Category</string>
+    <string name="product_sort_stock">Stock</string>
+    <string name="product_sort_price">Price</string>
+    <string name="product_sort_price_without_vat">Price without VAT</string>
+    <string name="product_sort_min_order_qty">MOQ</string>
 </resources>
+
