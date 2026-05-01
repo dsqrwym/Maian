@@ -48,19 +48,23 @@ import {
   SQL,
   sql,
 } from 'drizzle-orm';
-import { toUnaccent } from '#/utils/string.util.js';
+import { escapeLike, toUnaccent } from '#/utils/string.util.js';
 import { IProductResponse } from './dto/product-response.js';
 
 @Injectable()
 export class ProductsService {
-  private readonly maxVariantsForProduct: number;
+  private readonly MAX_VARIANTS_PRODUCT: number;
+  private readonly MAX_SEARCH_TERMS: number;
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly configService: ConfigService,
   ) {
-    this.maxVariantsForProduct = Number(
+    this.MAX_VARIANTS_PRODUCT = Number(
       this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
+    );
+    this.MAX_SEARCH_TERMS = Number(
+      this.configService.get<number>(ENV.MAX_SEARCH_TERMS, 10),
     );
     this.logger.setContext(ProductsService.name);
   }
@@ -90,9 +94,9 @@ export class ProductsService {
       );
     }
 
-    if (variants.length > Number(this.maxVariantsForProduct)) {
+    if (variants.length > Number(this.MAX_VARIANTS_PRODUCT)) {
       throw new BadRequestException(
-        `You can only create up to ${this.maxVariantsForProduct} variants for a product`,
+        `You can only create up to ${this.MAX_VARIANTS_PRODUCT} variants for a product`,
       );
     }
 
@@ -369,51 +373,65 @@ export class ProductsService {
     }
 
     if (search) {
-      const likeSearch = `%${toUnaccent(search)}%`;
-      whereConditions.push(
-        or(
-          ilike(products.name_unaccent, likeSearch),
-          ilike(products.title_unaccent, likeSearch),
-          ilike(products.product_code, likeSearch),
-          exists(
-            this.drizzle.db
-              .select({ one: sql<number>`1` })
-              .from(variant_products)
-              .where(
-                and(
-                  eq(products.id, variant_products.product_id),
-                  ilike(variant_products.product_code, likeSearch),
+      // 精确匹配跨字段关键词
+      const searchTerms = escapeLike(toUnaccent(search))
+        .split(/\s+/)
+        .filter((s) => s.length > 0)
+        .slice(0, this.MAX_SEARCH_TERMS);
+      searchTerms.forEach((keyWord) => {
+        const likeSearch = `%${keyWord}%`;
+        whereConditions.push(
+          or(
+            ilike(products.name_unaccent, likeSearch),
+            ilike(products.title_unaccent, likeSearch),
+            ilike(products.product_code, likeSearch),
+            exists(
+              this.drizzle.db
+                .select({ one: sql<number>`1` })
+                .from(variant_products)
+                .where(
+                  and(
+                    eq(products.id, variant_products.product_id),
+                    ilike(variant_products.product_code, likeSearch),
+                  ),
                 ),
-              ),
-          ),
-          exists(
-            this.drizzle.db
-              .select({ one: sql<number>`1` })
-              .from(product_categories)
-              .innerJoin(
-                categories,
-                eq(categories.id, product_categories.category_id),
-              )
-              .leftJoin(
-                category_translations,
-                eq(categories.id, category_translations.category_id),
-              )
-              .where(ilike(category_translations.name_unaccent, likeSearch)),
-          ),
-          exists(
-            this.drizzle.db
-              .select({ one: sql<number>`1` })
-              .from(product_translations)
-              .where(
-                or(
-                  eq(product_translations.product_id, products.id),
-                  ilike(product_translations.name_unaccent, likeSearch),
-                  ilike(product_translations.title_unaccent, likeSearch),
+            ),
+            exists(
+              this.drizzle.db
+                .select({ one: sql<number>`1` })
+                .from(product_categories)
+                .innerJoin(
+                  categories,
+                  eq(categories.id, product_categories.category_id),
+                )
+                .leftJoin(
+                  category_translations,
+                  eq(categories.id, category_translations.category_id),
+                )
+                .where(
+                  and(
+                    eq(product_categories.product_id, products.id),
+                    ilike(category_translations.name_unaccent, likeSearch),
+                  ),
                 ),
-              ),
+            ),
+            exists(
+              this.drizzle.db
+                .select({ one: sql<number>`1` })
+                .from(product_translations)
+                .where(
+                  and(
+                    eq(product_translations.product_id, products.id),
+                    or(
+                      ilike(product_translations.name_unaccent, likeSearch),
+                      ilike(product_translations.title_unaccent, likeSearch),
+                    ),
+                  ),
+                ),
+            ),
           ),
-        ),
-      );
+        );
+      });
     }
 
     if (category_id && category_id !== 0n) {
@@ -541,9 +559,9 @@ export class ProductsService {
         (variantsToDelete?.length ?? 0) +
         (createVariants?.length ?? 0);
 
-      if (finalCount > this.maxVariantsForProduct) {
+      if (finalCount > this.MAX_VARIANTS_PRODUCT) {
         throw new BadRequestException(
-          `You can only update up to ${this.maxVariantsForProduct} variants`,
+          `You can only update up to ${this.MAX_VARIANTS_PRODUCT} variants`,
         );
       }
 
@@ -903,6 +921,7 @@ export class ProductsService {
             type_sale: true,
             price_iva: true,
             product_code: true,
+            sale_unit_qty: true,
             min_order_qty: true,
             available_stock: true,
             low_stock_threshold: true,

@@ -38,15 +38,21 @@ import {
   categories,
   category_translations,
 } from '#/generated/drizzle/schema.js';
-import { toUnaccent } from '#/utils/string.util.js';
+import { escapeLike, toUnaccent } from '#/utils/string.util.js';
 import { UserRole } from '#/generated/drizzle/enums.js';
+import { ConfigService } from '@nestjs/config';
+import { ENV } from '#/config/constants.config.js';
 
 @Injectable()
 export class CategoryService {
+  private readonly MAX_SEARCH_TERMS: number;
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: Logger,
-  ) {}
+    private readonly config: ConfigService,
+  ) {
+    this.MAX_SEARCH_TERMS = this.config.get<number>(ENV.MAX_SEARCH_TERMS, 10);
+  }
 
   async create(
     createCategoryDto: ICreateCategoryDto,
@@ -291,23 +297,30 @@ export class CategoryService {
     const whereConditions: (SQL | undefined)[] = [];
 
     if (search) {
-      const pattern = `%${toUnaccent(search)}%`;
-      whereConditions.push(
-        or(
-          ilike(categories.name_unaccent, pattern),
-          exists(
-            this.drizzle.db
-              .select({ one: sql<number>`1` })
-              .from(category_translations)
-              .where(
-                and(
-                  eq(category_translations.category_id, categories.id),
-                  ilike(category_translations.name_unaccent, pattern),
+      const searchTerms = escapeLike(toUnaccent(search))
+        .split(/\s+/)
+        .filter((s) => s.length > 0)
+        .slice(0, this.MAX_SEARCH_TERMS);
+
+      searchTerms.forEach((key) => {
+        const pattern = `%${key}%`;
+        whereConditions.push(
+          or(
+            ilike(categories.name_unaccent, pattern),
+            exists(
+              this.drizzle.db
+                .select({ one: sql<number>`1` })
+                .from(category_translations)
+                .where(
+                  and(
+                    eq(category_translations.category_id, categories.id),
+                    ilike(category_translations.name_unaccent, pattern),
+                  ),
                 ),
-              ),
+            ),
           ),
-        ),
-      );
+        );
+      });
     }
 
     // 处理权限逻辑

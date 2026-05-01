@@ -18,3 +18,11 @@ export function toUnaccent(str: string): string {
     .normalize('NFD') // 将字符分解为基础字符和重音标记
     .replace(/[\u0300-\u036f]/g, ''); // 移除所有组合重音标记 (Unicode 范围)
 }
+
+/**
+ * 转义 SQL LIKE/ILIKE 通配符 (%, _)，防止用户输入被当作通配符
+ * 例如: "100%" -> "100\%", "a_b" -> "a\_b"
+ */
+export function escapeLike(str: string): string {
+  return str.replace(/[%_]/g, '\\$&');
+}

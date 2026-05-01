@@ -154,6 +154,7 @@ export class ProductsController {
       price: string;
       price_iva: string;
       available_stock: number;
+      sale_unit_qty: number;
       sort: number;
       low_stock_threshold: number;
       min_order_qty: number;
