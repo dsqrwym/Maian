@@ -184,6 +184,7 @@
     <string name="load_failed">加载失败，点击重试</string>
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
+    <string name="undo">撤销</string>
     <string name="path">路径</string>
     <string name="clear">清除</string>
     <string name="not_set">未设置</string>
@@ -194,6 +195,8 @@
 
     <string name="delete_success">删除成功</string>
     <string name="delete_failed">删除失败</string>
+    <string name="translation_deleted">翻译已删除</string>
+    <string name="variant_deleted">变体已删除</string>
     <string name="create_success">创建成功</string>
     <string name="create_failed">创建失败</string>
     <string name="update_success">更新成功</string>

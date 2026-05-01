@@ -7,10 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,11 +21,7 @@ import com.dokar.sonner.Toast
 import com.dokar.sonner.ToastType.*
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.ToasterState
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.toast_error_content_description
-import maian.shared.generated.resources.toast_info_content_description
-import maian.shared.generated.resources.toast_success_content_description
-import maian.shared.generated.resources.toast_warning_content_description
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.CircleError
@@ -63,7 +56,9 @@ fun SnackbarScaffold(
                 SharedToaster(
                     state = state,
                     maxVisibleToasts = maxVisibleToasts,
-                    position = position
+                    position = position,
+                    actionForMessage = { viewModel.snackbarActions[it] },
+                    onActionDismissed = { viewModel.snackbarActions.remove(it) }
                 )
             }
         }
@@ -74,7 +69,9 @@ fun SnackbarScaffold(
 fun SharedToaster(
     state: ToasterState,
     maxVisibleToasts: Int,
-    position: MySnackbarViewModel.ToastPosition
+    position: MySnackbarViewModel.ToastPosition,
+    actionForMessage: (String) -> MySnackbarViewModel.SnackbarAction? = { null },
+    onActionDismissed: (String) -> Unit = {}
 ) {
     val isDarkTheme = LocalIsDarkTheme.current
     Toaster(
@@ -85,17 +82,45 @@ fun SharedToaster(
         contentPadding = { PaddingValues(2.dp) },
         actionSlot = { toast ->
             if (toast.action == true) {
-                IconButton(onClick = { state.dismiss(toast) }) {
-                    SharedCloseIcon(
-                        tint = when (toast.type) {
-                            Error -> MaterialTheme.colorScheme.onErrorContainer
-                            Normal -> contentColor(toast, isDarkTheme)
-                            Info,
-                            Success -> MaterialTheme.colorScheme.onPrimaryContainer
+                val message = toast.message.toString()
+                val customAction = actionForMessage(message)
+                if (customAction != null) {
+                    TextButton(
+                        colors = ButtonDefaults.textButtonColors().copy(
+                            contentColor = when (toast.type) {
+                                Error -> MaterialTheme.colorScheme.onErrorContainer
+                                Normal -> contentColor(toast, isDarkTheme)
+                                Info,
+                                Success -> MaterialTheme.colorScheme.onPrimaryContainer
 
-                            Warning -> contentColor(toast, isDarkTheme)
+                                Warning -> contentColor(toast, isDarkTheme)
+                            }
+                        ),
+                        onClick = {
+                            customAction.callback()
+                            state.dismiss(toast)
                         }
-                    )
+                    ) {
+                        Text(customAction.label)
+                    }
+                } else {
+                    IconButton(
+                        onClick = {
+                            onActionDismissed(message)
+                            state.dismiss(toast)
+                        }
+                    ) {
+                        SharedCloseIcon(
+                            tint = when (toast.type) {
+                                Error -> MaterialTheme.colorScheme.onErrorContainer
+                                Normal -> contentColor(toast, isDarkTheme)
+                                Info,
+                                Success -> MaterialTheme.colorScheme.onPrimaryContainer
+
+                                Warning -> contentColor(toast, isDarkTheme)
+                            }
+                        )
+                    }
                 }
             }
         },

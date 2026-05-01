@@ -3,6 +3,7 @@ package org.dsqrwym.shared.ui.viewmodels
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,10 @@ import com.dokar.sonner.ToastType
 import com.dokar.sonner.ToasterDefaults
 import com.dokar.sonner.ToasterState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.dsqrwym.shared.util.platform.PlatformType
+import org.dsqrwym.shared.util.platform.getPlatform
 import kotlin.time.Duration.Companion.milliseconds
 
 
@@ -36,6 +41,13 @@ class MySnackbarViewModel(maxSnackbars: Int = 3) : ViewModel() {
         ToastPosition.entries.associateWith {
             ToasterState(viewModelScope)
         }
+
+    data class SnackbarAction(
+        val label: String,
+        val callback: () -> Unit
+    )
+
+    val snackbarActions = mutableStateMapOf<String, SnackbarAction>()
 
     /**
      * EN: Update the maximum number of visible snackbars.
@@ -65,10 +77,32 @@ class MySnackbarViewModel(maxSnackbars: Int = 3) : ViewModel() {
         type: ToastType = ToastType.Info,
         position: ToastPosition = ToastPosition.Top,
         withDismissAction: Boolean = true,
-        dismissPrevious: Boolean = false
+        dismissPrevious: Boolean = false,
+        action: SnackbarAction? = null
     ) {
         if (dismissPrevious) {
             toasterStates[position]?.dismissAll()
+            snackbarActions.clear()
+        }
+        // 如果是普通消息 确保这个 message 没有绑定旧 action
+        if (action == null) {
+            snackbarActions.remove(message)
+        } else {
+            snackbarActions[message] = action
+            // 定时清理 callback 避免内存泄漏
+            viewModelScope.launch {
+                delay(
+                    (when (duration) {
+                        SnackbarDuration.Short -> 4000L
+                        SnackbarDuration.Long -> 8000L
+                        SnackbarDuration.Indefinite -> Long.MAX_VALUE
+                    } + 1000L).milliseconds
+                )
+                // 防止误删新 action
+                if (snackbarActions[message] == action) {
+                    snackbarActions.remove(message)
+                }
+            }
         }
         val targetState = toasterStates[position]
             ?: error("No ToasterState for position: $position")
@@ -80,7 +114,7 @@ class MySnackbarViewModel(maxSnackbars: Int = 3) : ViewModel() {
                 SnackbarDuration.Long -> ToasterDefaults.DurationLong
                 else -> Long.MAX_VALUE.milliseconds
             },
-            action = withDismissAction,
+            action = withDismissAction || action != null,
             type = type
         )
     }
@@ -135,6 +169,28 @@ class MySnackbarViewModel(maxSnackbars: Int = 3) : ViewModel() {
         dismissPrevious: Boolean = false
     ) {
         show(message, duration, ToastType.Warning, position, withDismissAction, dismissPrevious)
+    }
+
+    fun showUndo(
+        message: String,
+        actionLabel: String,
+        duration: SnackbarDuration = SnackbarDuration.Long,
+        position: ToastPosition = if (getPlatform().type == PlatformType.Desktop || getPlatform().type == PlatformType.Web) ToastPosition.BottomEnd else ToastPosition.Bottom,
+        dismissPrevious: Boolean = false,
+        onUndo: () -> Unit
+    ) {
+        show(
+            message = message,
+            duration = duration,
+            type = ToastType.Warning,
+            position = position,
+            withDismissAction = true,
+            dismissPrevious = dismissPrevious,
+            action = SnackbarAction(actionLabel) {
+                snackbarActions.remove(message)
+                onUndo()
+            }
+        )
     }
 
 }

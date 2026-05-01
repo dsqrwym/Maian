@@ -183,6 +183,7 @@
     <string name="load_failed">Error al cargar, toca para reintentar</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
+    <string name="undo">Deshacer</string>
     <string name="path">Ruta</string>
     <string name="clear">Borrar</string>
     <string name="not_set">No establecido</string>
@@ -193,6 +194,8 @@
 
     <string name="delete_success">Eliminado con éxito</string>
     <string name="delete_failed">Error al eliminar</string>
+    <string name="translation_deleted">Traducción eliminada</string>
+    <string name="variant_deleted">Variante eliminada</string>
     <string name="create_success">Creado con éxito</string>
     <string name="create_failed">Error al crear</string>
     <string name="update_success">Actualización exitosa</string>

@@ -179,6 +179,7 @@
     <string name="load_failed">Falha ao carregar, toque para tentar novamente</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
+    <string name="undo">Anular</string>
     <string name="path">Caminho</string>
     <string name="clear">Limpar</string>
     <string name="not_set">Não definido</string>
@@ -189,6 +190,8 @@
 
     <string name="delete_success">Eliminado com sucesso</string>
     <string name="delete_failed">Falha ao eliminar</string>
+    <string name="translation_deleted">Tradução eliminada</string>
+    <string name="variant_deleted">Variante eliminada</string>
     <string name="create_success">Criado com sucesso</string>
     <string name="create_failed">Falha ao criar</string>
     <string name="update_success">Atualização bem-sucedida</string>

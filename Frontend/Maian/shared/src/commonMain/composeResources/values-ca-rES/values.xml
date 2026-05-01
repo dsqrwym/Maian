@@ -182,6 +182,7 @@
     <string name="load_failed">Error en carregar, toca per reintentar</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
+    <string name="undo">Desfés</string>
     <string name="path">Ruta</string>
     <string name="clear">Esborrar</string>
     <string name="not_set">No establert</string>
@@ -192,6 +193,8 @@
 
     <string name="delete_success">S'ha eliminat correctament</string>
     <string name="delete_failed">Error en eliminar</string>
+    <string name="translation_deleted">Traducció eliminada</string>
+    <string name="variant_deleted">Variant eliminada</string>
     <string name="create_success">Creat correctament</string>
     <string name="create_failed">Error en crear</string>
     <string name="update_success">Actualització correcta</string>

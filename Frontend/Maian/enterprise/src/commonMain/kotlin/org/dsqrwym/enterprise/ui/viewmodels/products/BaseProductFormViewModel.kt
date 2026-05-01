@@ -3,8 +3,12 @@ package org.dsqrwym.enterprise.ui.viewmodels.products
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import com.mohamedrejeb.richeditor.model.RichTextState
+import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.field_cannot_be_empty
+import maian.shared.generated.resources.translation_deleted
+import maian.shared.generated.resources.undo
+import maian.shared.generated.resources.variant_deleted
 import org.dsqrwym.business.ui.media.MediaPickerViewModel
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.product.ProductRepository
@@ -30,6 +34,7 @@ import org.dsqrwym.shared.util.validation.sanitizeIvaInput
 import org.dsqrwym.shared.util.validation.sanitizeProductCode
 import org.dsqrwym.shared.util.validation.sanitizeProductPricesInput
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 
 abstract class BaseProductFormViewModel(
     private val uploadRepository: SharedUploadRepository,
@@ -211,8 +216,9 @@ abstract class BaseProductFormViewModel(
     }
 
     fun removeTranslation(langCode: String) {
-        val item = translationTabs.find { it.first.langCode == langCode } ?: return
-        translationTabs.remove(item)
+        val index = translationTabs.indexOfFirst { it.first.langCode == langCode }
+        if (index == -1) return
+        val item = translationTabs.removeAt(index)
 
         selectedTranslationIndex = selectedTranslationIndex.coerceIn(
             0,
@@ -220,6 +226,20 @@ abstract class BaseProductFormViewModel(
         )
 
         checkProductTranslation()
+
+        viewModelScope.launch {
+            val language = LanguageManager.SupportedLanguages.fromCode(item.first.langCode)
+            snackbarViewModel.showUndo(
+                message = "${getString(SharedRes.string.translation_deleted)} (${language.displayName})",
+                actionLabel = getString(SharedRes.string.undo),
+            ) {
+                if (translationTabs.none { it.first.langCode == item.first.langCode }) {
+                    translationTabs.add(index.coerceIn(0, translationTabs.size), item)
+                    selectedTranslationIndex = index.coerceIn(0, translationTabs.lastIndex)
+                    checkProductTranslation()
+                }
+            }
+        }
     }
 
     fun getAvailableLanguages(): List<LanguageManager.SupportedLanguages> {
@@ -355,16 +375,42 @@ abstract class BaseProductFormViewModel(
     }
 
     fun deleteVariant(skuId: String?) {
-        val item = productVariants.find { it.id.getValOrNull() == skuId } ?: return
+        val index = productVariants.indexOfFirst { it.id.getValOrNull() == skuId }
+        if (index == -1) return
+        val variantCode = productVariants[index].productCode.getOrElse { "" }
+        val previousVariants = productVariants.toList()
+        val previousErrors = productVariantsProductCodesErrors.toMap()
+        val previousSaleUnitQtyEdited = variantSaleUnitQtyManuallyEdited.toMap()
         // 最少一个变体
         if (productVariants.size < 2) return
-        productVariants.remove(item)
-        skuId?.let { productVariantsProductCodesErrors.remove(it) }
+        productVariants.removeAt(index)
+        skuId?.let {
+            productVariantsProductCodesErrors.remove(it)
+            variantSaleUnitQtyManuallyEdited.remove(it)
+        }
         // 最少一个开启，之前的判断保证最少一个
         if (productVariants.size < 2) {
             productVariants[0] = productVariants[0].copy(status = OptionalField.Value(SharedProductStatus.ACTIVE))
         }
         checkProductVariant()
+
+        viewModelScope.launch {
+            val message = getString(SharedRes.string.variant_deleted).let {
+                if (variantCode.isBlank()) it else "$it ($variantCode)"
+            }
+            snackbarViewModel.showUndo(
+                message = message,
+                actionLabel = getString(SharedRes.string.undo),
+            ) {
+                productVariants.clear()
+                productVariants.addAll(previousVariants)
+                productVariantsProductCodesErrors.clear()
+                productVariantsProductCodesErrors.putAll(previousErrors)
+                variantSaleUnitQtyManuallyEdited.clear()
+                variantSaleUnitQtyManuallyEdited.putAll(previousSaleUnitQtyEdited)
+                checkProductVariant()
+            }
+        }
     }
 
     fun reorder(from: Int, to: Int) {

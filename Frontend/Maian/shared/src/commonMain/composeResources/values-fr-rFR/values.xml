@@ -179,6 +179,7 @@
     <string name="load_failed">Échec du chargement, cliquez pour réessayer</string>
     <string name="edit">Modifier</string>
     <string name="delete">Supprimer</string>
+    <string name="undo">Annuler</string>
     <string name="path">Chemin</string>
     <string name="clear">Effacer</string>
     <string name="not_set">Non défini</string>
@@ -189,6 +190,8 @@
 
     <string name="delete_success">Suppression réussie</string>
     <string name="delete_failed">Échec de la suppression</string>
+    <string name="translation_deleted">Traduction supprimée</string>
+    <string name="variant_deleted">Variante supprimée</string>
     <string name="create_success">Création réussie</string>
     <string name="create_failed">Échec de la création</string>
     <string name="update_success">Mise à jour réussie</string>

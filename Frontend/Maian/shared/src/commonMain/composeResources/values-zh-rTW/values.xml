@@ -180,6 +180,7 @@
     <string name="load_failed">載入失敗，點擊重試</string>
     <string name="edit">編輯</string>
     <string name="delete">刪除</string>
+    <string name="undo">復原</string>
     <string name="path">路徑</string>
     <string name="clear">清除</string>
     <string name="not_set">未設定</string>
@@ -190,6 +191,8 @@
 
     <string name="delete_success">刪除成功</string>
     <string name="delete_failed">刪除失敗</string>
+    <string name="translation_deleted">翻譯已刪除</string>
+    <string name="variant_deleted">變體已刪除</string>
     <string name="create_success">建立成功</string>
     <string name="create_failed">建立失敗</string>
     <string name="update_success">更新成功</string>

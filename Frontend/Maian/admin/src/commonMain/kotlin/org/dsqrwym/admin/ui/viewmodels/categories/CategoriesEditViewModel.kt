@@ -13,6 +13,8 @@ import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.category_name_exists
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.field_cannot_be_empty
+import maian.shared.generated.resources.translation_deleted
+import maian.shared.generated.resources.undo
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
 import org.dsqrwym.admin.data.categories.CategoryRepository
@@ -213,7 +215,21 @@ class CategoriesEditViewModel(
     }
 
     fun removeTranslation(langCode: String) {
-        translations.find { it.langCode == langCode }?.let { translations.remove(it) }
+        val index = translations.indexOfFirst { it.langCode == langCode }
+        if (index == -1) return
+        val removed = translations.removeAt(index)
+
+        viewModelScope.launch {
+            val language = LanguageManager.SupportedLanguages.fromCode(removed.langCode)
+            mySnackbarViewModel.showUndo(
+                message = "${getString(SharedRes.string.translation_deleted)} (${language.displayName})",
+                actionLabel = getString(SharedRes.string.undo),
+            ) {
+                if (translations.none { it.langCode == removed.langCode }) {
+                    translations.add(index.coerceIn(0, translations.size), removed)
+                }
+            }
+        }
     }
 
     fun getAvailableLanguages(): List<LanguageManager.SupportedLanguages> {

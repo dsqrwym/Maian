@@ -24,7 +24,7 @@ import org.dsqrwym.shared.util.navigation.WindowSizeClass
 import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 import org.dsqrwym.shared.util.settings.initSharedSettingsProvider
 import org.jetbrains.compose.resources.getString
-import org.koin.compose.currentKoinScope
+import org.koin.compose.viewmodel.koinViewModel
 
 /**
  * EN: CompositionLocal flag indicating whether the app is currently in dark theme.
@@ -61,8 +61,8 @@ fun AppRoot(
     InitCoil()
     initSharedSettingsProvider()
 
-    val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
-    val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
+    val mySnackbarViewModel: MySnackbarViewModel = koinViewModel()
+    val authSessionViewModel: AuthSessionViewModel = koinViewModel()
 
     // 通过 UserPreferences 的 SharedFlow 监听主题变化
     val init = remember { SharedUserPreferences.getIsDarkTheme() }
