@@ -25,9 +25,9 @@ import maian.shared.generated.resources.address_no_match
 import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 import org.dsqrwym.shared.ui.viewmodels.component.SearchableSelectorRemoteViewModel
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.min
-import kotlin.time.Duration.Companion.milliseconds
 
 data class RemoteSearchableSelectorConfig<T : Any>(
     val modifier: Modifier = Modifier,
@@ -137,7 +137,7 @@ fun <T> SearchableSelector(
                         if (config.isSearching == null) internalSearching = true
                         config.onSearchingChange?.invoke(true)
 
-                        delay(500.milliseconds)
+                        delay(SharedUiTiming.localSearchDelay)
                         filteredList = filtered(it)
                         expanded = true
 

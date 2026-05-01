@@ -23,6 +23,7 @@ import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.getString
 
 
@@ -52,7 +53,7 @@ class CategoriesListViewModel(
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val pagedCategories: Flow<PagingData<CategoryNode>> = combine(
-        pagingTrigger.debounce(600)
+        pagingTrigger.debounce(SharedUiTiming.searchDebounce)
             .distinctUntilChanged(),
         categoryRepository.updateEvents.onStart { emit(Unit) } // 刷新触发器
     ) { (query, type, parent), _ ->

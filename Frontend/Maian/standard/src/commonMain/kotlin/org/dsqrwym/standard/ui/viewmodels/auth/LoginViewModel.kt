@@ -18,6 +18,7 @@ import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 import org.dsqrwym.standard.data.auth.AuthRepository
@@ -64,7 +65,7 @@ class LoginViewModel(
     }
 
     fun login() {
-        val delayMillis = 1300L
+        val delayMillis = SharedUiTiming.loginStateHoldDelay
         if (loginEnabled.value) {
             viewModelScope.launch {
                 loginUiState = UiState.Loading

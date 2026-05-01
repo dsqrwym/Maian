@@ -21,12 +21,12 @@ import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateUsernameOrEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration.Companion.milliseconds
 
 enum class LoginType {
     WHOLESALER,
@@ -105,7 +105,7 @@ class LoginViewModel(
     }
 
     fun login() {
-        val delayMillis = 1300L
+        val delayMillis = SharedUiTiming.loginStateHoldDelay
         if (loginEnabled.value) {
             viewModelScope.launch {
                 loginUiState = UiState.Loading
@@ -113,7 +113,7 @@ class LoginViewModel(
                     is SharedResponseResult.Success -> {
                         loginUiState = UiState.Success
                         mySnackbarViewModel.showSuccess(getString(SharedRes.string.login_success))
-                        delay(delayMillis.milliseconds)
+                        delay(delayMillis)
                         loginUiState = UiState.Idle
 
                         result.data?.user?.let { authSessionViewModel.onLoggedIn(it, email) }
@@ -131,7 +131,7 @@ class LoginViewModel(
                                 )
                             )
                         }
-                        delay(delayMillis.milliseconds)
+                        delay(delayMillis)
                         loginUiState = UiState.Idle
                     }
                 }

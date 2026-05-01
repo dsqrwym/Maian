@@ -26,10 +26,10 @@ import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.formatter.toFixed
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @OptIn(FlowPreview::class)
@@ -71,7 +71,7 @@ class CategoriesCreateViewModel(
     init {
         viewModelScope.launch {
             snapshotFlow { categoryName }
-                .debounce(600.milliseconds)
+                .debounce(SharedUiTiming.searchDebounce)
                 .distinctUntilChanged()
                 .collectLatest { name ->
                     if (name.isBlank()) return@collectLatest
@@ -171,7 +171,7 @@ class CategoriesCreateViewModel(
                 }
             }
 
-            delay(500.milliseconds)
+            delay(SharedUiTiming.formStateResetDelay)
             createButtonState = UiState.Idle
         }
 

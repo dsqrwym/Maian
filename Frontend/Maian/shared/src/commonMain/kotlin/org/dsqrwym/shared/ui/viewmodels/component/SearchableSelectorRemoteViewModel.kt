@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import org.dsqrwym.shared.data.pagination.createPager
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 
 class SearchableSelectorRemoteViewModel<T : Any>(
     private val pageSize: Int,
@@ -23,7 +24,7 @@ class SearchableSelectorRemoteViewModel<T : Any>(
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val pagingFlow = _query
-        .debounce(600)
+        .debounce(SharedUiTiming.searchDebounce)
         .distinctUntilChanged()
         .flatMapLatest { q ->
             createPager(

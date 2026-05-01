@@ -28,6 +28,7 @@ import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.VerifyOtpCodeViewModelBase
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.dsqrwym.shared.util.validation.validatePassword
 import org.dsqrwym.shared.util.validation.validateRepeatPassword
@@ -239,7 +240,7 @@ class RegisterViewModel(
 
         usernameCheckJob = viewModelScope.launch {
             isCheckingUsername = true
-            delay(500)
+            delay(SharedUiTiming.availabilityCheckDelay)
             usernameExists = true
             when (val result = sharedAuthRepository.checkUserNameExist(username)) {
                 is SharedResponseResult.Success<Boolean> -> {

@@ -34,6 +34,7 @@ import ua.wwind.table.config.PinnedSide
 import ua.wwind.table.config.SelectionMode
 import ua.wwind.table.config.TableSettings
 import ua.wwind.table.data.SortOrder
+import ua.wwind.table.state.SortState
 import ua.wwind.table.state.rememberTableState
 import ua.wwind.table.tableColumns
 
@@ -56,6 +57,8 @@ enum class ProductColumn {
 fun ProductTableView(
     paginatedProducts: LazyPagingItems<Product>,
     fakeProducts: List<Product>,
+    sortBy: SharedProductSortField?,
+    sortDir: OrderDir,
     updateCurrentProduct: (Product) -> Unit,
     updateSortBy: (SharedProductSortField?) -> Unit,
     updateSortDir: (OrderDir) -> Unit,
@@ -208,9 +211,9 @@ fun ProductTableView(
                 }
             }
 
-            // 7. 含税价
+            // 7. 最低不含税价
             column(ProductColumn.Price, valueOf = { it.minPrice }) {
-                header("最低含税价")
+                header("最低不含税价")
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -224,9 +227,9 @@ fun ProductTableView(
                 }
             }
 
-            // 8. 不含税价
+            // 8. 最低含税价
             column(ProductColumn.PriceIva, valueOf = { it.minPriceIva }) {
-                header("最低不含税价")
+                header("最低含税价")
                 autoWidth()
                 sortable()
                 cellWithModifier(
@@ -298,9 +301,12 @@ fun ProductTableView(
 
     val tableState = rememberTableState(
         columns = columns.map { it.key }.toPersistentList(),
+        initialSort = sortBy?.toProductColumn()?.let { column ->
+            SortState(column, if (sortDir == OrderDir.ASC) SortOrder.ASCENDING else SortOrder.DESCENDING)
+        },
         settings = TableSettings(
             enableTextSelection = true,
-            isDragEnabled = true,
+            rowReorderEnabled = false,
             stripedRows = true,
             selectionMode = SelectionMode.None,
             enableDragToScroll = true,
@@ -311,8 +317,10 @@ fun ProductTableView(
 
     val sort = tableState.sort
     LaunchedEffect(sort?.column, sort?.order) {
-        sort?.let { sortState ->
-            val field = when (sortState.column) {
+        if (sort == null) {
+            updateSortBy(null)
+        } else {
+            val field = when (sort.column) {
                 ProductColumn.Name -> NAME
                 ProductColumn.Title -> TITLE
                 ProductColumn.Code -> PRODUCT_CODE
@@ -324,7 +332,7 @@ fun ProductTableView(
                 else -> null
             }
 
-            val dir = if (sortState.order == SortOrder.ASCENDING) OrderDir.ASC else OrderDir.DESC
+            val dir = if (sort.order == SortOrder.ASCENDING) OrderDir.ASC else OrderDir.DESC
 
             updateSortBy(field)
             updateSortDir(dir)
@@ -334,18 +342,16 @@ fun ProductTableView(
     paginatedProducts.apply {
         when {
             isRefreshing -> {
-                SelectionContainer {
-                    Table(
-                        modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
-                        itemsCount = fakeProducts.size,
-                        itemAt = { index -> fakeProducts[index] },
-                        columns = columns,
-                        state = tableState,
-                        placeholderRow = {
-                            SharedNotFoundPlaceholder()
-                        }
-                    )
-                }
+                Table(
+                    modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
+                    itemsCount = fakeProducts.size,
+                    itemAt = { index -> fakeProducts[index] },
+                    columns = columns,
+                    state = tableState,
+                    placeholderRow = {
+                        SharedNotFoundPlaceholder()
+                    }
+                )
             }
 
             isError -> SharedRetryButton { retry() }
@@ -355,20 +361,29 @@ fun ProductTableView(
             }
 
             else -> {
-                SelectionContainer {
-                    Table(
-                        modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
-                        itemsCount = paginatedProducts.itemCount,
-                        itemAt = { index -> paginatedProducts[index] },
-                        columns = columns,
-                        state = tableState,
-                        placeholderRow = {
-                           SharedNotFoundPlaceholder()
-                        }
-                    )
-                }
+                Table(
+                    modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
+                    itemsCount = paginatedProducts.itemCount,
+                    itemAt = { index -> paginatedProducts[index] },
+                    columns = columns,
+                    state = tableState,
+                    placeholderRow = {
+                       SharedNotFoundPlaceholder()
+                    }
+                )
             }
         }
     }
 }
 
+private fun SharedProductSortField.toProductColumn(): ProductColumn? =
+    when (this) {
+        NAME -> ProductColumn.Name
+        TITLE -> ProductColumn.Title
+        PRODUCT_CODE -> ProductColumn.Code
+        CATEGORY -> ProductColumn.Category
+        AVAILABLE_STOCK -> ProductColumn.TotalStock
+        PRICE -> ProductColumn.Price
+        PRICE_IVA -> ProductColumn.PriceIva
+        MIN_ORDER_QTY -> ProductColumn.MinOrderQty
+    }

@@ -31,8 +31,8 @@ import org.dsqrwym.shared.serialization.OptionalField
 import org.dsqrwym.shared.serialization.getValOrNull
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class ProductEditViewModel(
@@ -293,7 +293,7 @@ class ProductEditViewModel(
                     }
                 }
             }
-            delay(500.milliseconds)
+            delay(SharedUiTiming.formStateResetDelay)
             editFormUiState = UiState.Idle
         }
     }

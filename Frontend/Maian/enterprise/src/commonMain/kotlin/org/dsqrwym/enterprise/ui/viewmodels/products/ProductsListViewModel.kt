@@ -11,23 +11,31 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.product.ProductRepository
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.data.products.SharedProductSortField
+import org.dsqrwym.shared.data.products.SharedProductStatus
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
-import kotlin.time.Duration.Companion.milliseconds
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 
 data class SearchQuery(
     val query: String,
     val categoryId: String?,
     val sortBy: SharedProductSortField?,
-    val sortDir: OrderDir
+    val sortDir: OrderDir,
+    val status: SharedProductStatus?,
 )
 
-class ProductsListViewModel(private val repository: ProductRepository, mySnackbarHostState: MySnackbarViewModel) :
+class ProductsListViewModel(
+    private val repository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
+    private val mySnackbarHostState: MySnackbarViewModel,
+) :
     ViewModel() {
     private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 0)
     private val refreshTrigger = _refreshTrigger.asSharedFlow()
@@ -42,22 +50,36 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
         private set
     var filterCategoryId by mutableStateOf<String?>(null)
         private set
+    var filterCategory by mutableStateOf<CategorySummary?>(null)
+        private set
+    var filterStatus by mutableStateOf<SharedProductStatus?>(null)
+        private set
     var sortBy by mutableStateOf<SharedProductSortField?>(SharedProductSortField.NAME)
     var sortDir by mutableStateOf(OrderDir.ASC)
+    var showFilterDialog by mutableStateOf(false)
+        private set
+    var showSortDialog by mutableStateOf(false)
+        private set
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    val pagedProducts = combine(
+    private val productQuery = combine(
         snapshotFlow { searchQuery }
-            .debounce(600.milliseconds)
+            .debounce(SharedUiTiming.searchDebounce)
             .distinctUntilChanged(),
         snapshotFlow { filterCategoryId }
             .distinctUntilChanged(),
+        snapshotFlow { filterStatus }.distinctUntilChanged(),
         snapshotFlow { sortBy }.distinctUntilChanged(),
         snapshotFlow { sortDir }.distinctUntilChanged(),
-        refreshTrigger.onStart { emit(Unit) }
-    ) { query, categoryId, sortBy, sortDir, _ ->
-        SearchQuery(query, categoryId, sortBy, sortDir)
+    ) { query, categoryId, status, sortBy, sortDir ->
+        SearchQuery(query, categoryId, sortBy, sortDir, status)
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val pagedProducts = combine(
+        productQuery,
+        refreshTrigger.onStart { emit(Unit) }
+    ) { query, _ -> query }
         .flatMapLatest { queryDto ->
             createPager(
                 query = queryDto.query,
@@ -69,6 +91,7 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
                         categoryId = queryDto.categoryId,
                         sortBy = queryDto.sortBy,
                         sortOrder = queryDto.sortDir,
+                        status = queryDto.status,
                         page = page,
                         limit = pageSize
                     )
@@ -97,12 +120,54 @@ class ProductsListViewModel(private val repository: ProductRepository, mySnackba
         filterCategoryId = categoryId
     }
 
+    fun updateFilterCategory(category: CategorySummary?) {
+        filterCategory = category
+        filterCategoryId = category?.id
+    }
+
+    fun removeFilterCategory() {
+        updateFilterCategory(null)
+    }
+
+    fun updateFilterStatus(status: SharedProductStatus?) {
+        filterStatus = status
+    }
+
     fun updateSortBy(sortBy: SharedProductSortField?) {
         this.sortBy = sortBy
     }
 
     fun updateSortDir(dir: OrderDir) {
         sortDir = dir
+    }
+
+    fun toggleSort(field: SharedProductSortField) {
+        if (sortBy == field) {
+            sortDir = if (sortDir == OrderDir.ASC) OrderDir.DESC else OrderDir.ASC
+        } else {
+            sortBy = field
+            sortDir = OrderDir.ASC
+        }
+    }
+
+    fun updateShowFilterDialog(show: Boolean) {
+        showFilterDialog = show
+    }
+
+    fun updateShowSortDialog(show: Boolean) {
+        showSortDialog = show
+    }
+
+    suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+        return when (val result = categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 3)) {
+            is SharedResponseResult.Success -> result.data?.items ?: emptyList()
+            is SharedResponseResult.Error -> {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    result.message?.let { mySnackbarHostState.showError(it) }
+                }
+                emptyList()
+            }
+        }
     }
 
     fun updateCurrentProduct(product: Product?) {

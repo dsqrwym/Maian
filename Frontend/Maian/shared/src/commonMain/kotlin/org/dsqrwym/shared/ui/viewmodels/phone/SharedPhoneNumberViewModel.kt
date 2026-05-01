@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.location.SharedLocationRepository
 import org.dsqrwym.shared.util.platform.getPlatformDeviceInfo
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.StringResource
 
 /**
@@ -104,7 +105,7 @@ class SharedPhoneNumberViewModel(private val locationRepository: SharedLocationR
 
         validationJob = viewModelScope.launch {
             validationState = PhoneValidationState.Validating
-            delay(500)
+            delay(SharedUiTiming.availabilityCheckDelay)
             validatePhoneNumber(value, getDetectRegion())
         }
     }

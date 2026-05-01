@@ -24,14 +24,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.enterprise.domain.product.Product
-import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.drawable.SharedIcons
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.SharedOverlayContentBox
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
@@ -53,6 +54,7 @@ fun ProductWaterfallView(
     paginatedProducts: LazyPagingItems<Product>,
     fakeProducts: List<Product>,
     scrollBehavior: TopAppBarScrollBehavior,
+    filterHeaderHeight: Dp,
     updateCurrentProduct: (Product) -> Unit,
     onPreview: (Product) -> Unit,
     onEdit: (Product) -> Unit,
@@ -65,7 +67,6 @@ fun ProductWaterfallView(
     val platform = remember { getPlatform() }
     val state = rememberLazyStaggeredGridState()
     val windowSizeClass = LocalWindowSizeClass.current
-    var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
     val pullToRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
@@ -102,7 +103,7 @@ fun ProductWaterfallView(
             ) {
                 item(span = StaggeredGridItemSpan.FullLine) {
                     Spacer(Modifier.height(padding.calculateTopPadding()))
-                    Spacer(Modifier.fillMaxWidth().height(filterFlowRowHeight).heightIn(min = 28.dp))
+                    Spacer(Modifier.fillMaxWidth().height(filterHeaderHeight).heightIn(min = 28.dp))
                 }
 
                 // Fake Data (骨架屏)
@@ -185,7 +186,7 @@ fun ProductGridItem(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column {
-            // --- 1. 图片区域 (带状态标签) ---
+            // ---  图片区域 (带状态标签) ---
             SharedOverlayContentBox(
                 isLoading,
                 loadingContent = {
@@ -230,7 +231,7 @@ fun ProductGridItem(
                 }
             }
 
-            // --- 2. 内容详情区域 ---
+            // --- 内容详情区域 ---
             Column(modifier = Modifier.padding(SharedColumnLayout.padding)) {
                 if (isLoading) {
                     // 骨架屏文本
@@ -309,13 +310,13 @@ fun ProductGridItem(
                             SelectionContainer {
                                 Column {
                                     Text(
-                                        text = "含税: ${item.minPrice}",
+                                        text = "含税: ${item.minPriceIva}",
                                         style = MaterialTheme.typography.labelLarge,
                                         fontWeight = FontWeight.ExtraBold,
                                         color = MaterialTheme.colorScheme.primary
                                     )
                                     Text(
-                                        text = "未税: ${item.minPriceIva}",
+                                        text = "未税: ${item.minPrice}",
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -341,7 +342,7 @@ fun ProductGridItem(
                 }
             }
 
-            // --- 3. 操作栏 (针对管理员/批发商的快捷入口) ---
+            // --- 操作栏 (针对管理员/批发商的快捷入口) ---
             if (!isLoading) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(SharedColumnLayout.padding),

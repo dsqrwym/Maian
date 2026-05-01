@@ -30,8 +30,10 @@ import org.dsqrwym.business.ui.components.row.BusinessLabelValueRow
 import org.dsqrwym.enterprise.domain.product.ProductVariant
 import org.dsqrwym.enterprise.ui.components.containers.ReorderableContentBox
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
+import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.Box
+import org.dsqrwym.shared.drawable.sharedicons.InProgress
 import org.dsqrwym.shared.drawable.sharedicons.Package24
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
@@ -293,9 +295,11 @@ fun VariantCard(
                         onMinOrderQtyChange = { min ->
                             min?.let { onUpdate(item.copy(minOrderQty = it)) }
                         },
-                        lowStockThreshold = item.lowStockThreshold ?: 0,
+                        lowStockThreshold = item.lowStockThreshold,
                         onLowStockThresholdChange = { onUpdate(item.copy(lowStockThreshold = it)) },
-                        productCodeError = productCodeError
+                        productCodeError = productCodeError,
+                        status = item.status,
+                        onStatusChange = { onUpdate(item.copy(status = it)) }
                     )
                 }
             }
@@ -323,6 +327,8 @@ fun ProductVariantFields(
     onMinOrderQtyChange: (Int?) -> Unit,
     lowStockThreshold: Int,
     onLowStockThresholdChange: (Int) -> Unit,
+    status: SharedProductStatus = SharedProductStatus.ACTIVE,
+    onStatusChange: (SharedProductStatus) -> Unit = {},
 ) {
     val focus = LocalFocusManager.current
     var saleUnitEnabled by remember { mutableStateOf(true) }
@@ -505,24 +511,46 @@ fun ProductVariantFields(
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
         }
-        MyOutlinedIntegerField(
-            modifier = Modifier.placeholderWithShimmer(isLoading),
-            min = 0,
-            value = if (lowStockThreshold == 0) "" else lowStockThreshold.toString(),
-            onValueChange = { it?.let { onLowStockThresholdChange(it) } },
-            leadingIcon = Icons.Outlined.NotificationImportant,
-            leadingIconContentDescription = "低库存提醒",
-            trailingIcon = {
-                if (lowStockThreshold != 0) {
-                    SharedCloseButton {
-                        onLowStockThresholdChange(0)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = SharedRowLayout.arrangement,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            MyOutlinedIntegerField(
+                modifier = Modifier.placeholderWithShimmer(isLoading),
+                modifierFillMaxWidth = false,
+                min = 0,
+                value = if (lowStockThreshold == 0) "" else lowStockThreshold.toString(),
+                onValueChange = { it?.let { onLowStockThresholdChange(it) } },
+                leadingIcon = Icons.Outlined.NotificationImportant,
+                leadingIconContentDescription = "低库存提醒",
+                trailingIcon = {
+                    if (lowStockThreshold != 0) {
+                        SharedCloseButton {
+                            onLowStockThresholdChange(0)
+                        }
                     }
-                }
-            },
-            labelText = "低库存提醒 (${stringResource(SharedRes.string.field_optional)})",
-            placeholderText = "请输入低库存提醒数量",
-            imeAction = ImeAction.Next,
-            onImeAction = { focus.moveFocus(FocusDirection.Next) }
-        )
+                },
+                labelText = "低库存提醒 (${stringResource(SharedRes.string.field_optional)})",
+                placeholderText = "请输入低库存提醒数量",
+                imeAction = ImeAction.Next,
+                onImeAction = { focus.moveFocus(FocusDirection.Next) }
+            )
+            Selector(
+                items = SharedProductStatus.entries,
+                itemToString = { it.name },
+                selectedItem = status,
+                onItemSelected = {
+                    it?.let { onStatusChange(it) }
+                },
+                config = SelectorConfig(
+                    modifier = Modifier.weight(1f).placeholderWithShimmer(isLoading),
+                    label = "产品状态 (${stringResource(SharedRes.string.field_required)})",
+                    leadingIcon = SharedIcons.InProgress,
+                    modifierFillMaxWidth = false,
+                    onImeAction = { focus.moveFocus(FocusDirection.Next) }
+                )
+            )
+        }
     }
 }

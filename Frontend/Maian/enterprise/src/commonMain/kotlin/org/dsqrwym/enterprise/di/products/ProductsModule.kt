@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val productsModule = module {
     single { ProductApi(get()) }
     single { ProductRepository(get(), get()) }
-    viewModel<ProductsListViewModel> { ProductsListViewModel(get(), get()) }
+    viewModel<ProductsListViewModel> { ProductsListViewModel(get(), get(), get()) }
     viewModel<ProductCreateViewModel> {
         ProductCreateViewModel(get(), get(), get(), get())
     }

@@ -42,9 +42,10 @@ fun BusinessRichTextEditor(
         }
     }
 
-    val rowItems = remember(editorMode) {
+    val controlsEnabled = enabled && !isLoading
+    val rowItems = remember(editorMode, controlsEnabled) {
         defaultRichTextItems(
-            isEnabled = enabled && !isLoading,
+            isEnabled = controlsEnabled,
             editorMode = editorMode,
             toggleEditorMode = { editorMode = it })
 
@@ -56,7 +57,7 @@ fun BusinessRichTextEditor(
             state = state,
             items = rowItems,
             extraItems = toolbarItems,
-            enabled = enabled && !isLoading
+            enabled = controlsEnabled
         )
 
         val modifier = Modifier.then(if (fillMaxSize) Modifier.fillMaxSize() else Modifier.fillMaxWidth())
@@ -66,6 +67,7 @@ fun BusinessRichTextEditor(
                 RichTextEditorState.MARKDOWN -> {
                     MyOutlinedTextField(
                         modifier = modifier.placeholderWithShimmer(isLoading),
+                        enabled = controlsEnabled,
                         value = markdown,
                         labelText = label,
                         placeholderText = placeholder,
@@ -80,6 +82,7 @@ fun BusinessRichTextEditor(
                 RichTextEditorState.HTML -> {
                     MyOutlinedTextField(
                         modifier = modifier.placeholderWithShimmer(isLoading),
+                        enabled = controlsEnabled,
                         value = html,
                         onValueChange = { str ->
                             html = str
@@ -95,7 +98,7 @@ fun BusinessRichTextEditor(
                     OutlinedRichTextEditor(
                         modifier = modifier.placeholderWithShimmer(isLoading),
                         state = state,
-                        enabled = enabled,
+                        enabled = controlsEnabled,
                         label = { Text(label) },
                         placeholder = { placeholder?.let { str -> Text(str) } }
                     )

@@ -30,10 +30,10 @@ import org.dsqrwym.shared.serialization.OptionalField
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.formatter.toFixed
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.sanitizeIvaInput
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class CategoriesEditViewModel(
@@ -119,7 +119,7 @@ class CategoriesEditViewModel(
     init {
         // 名称去抖唯一性校验（更新接口）
         viewModelScope.launch {
-            snapshotFlow { categoryName }.debounce(600.milliseconds)
+            snapshotFlow { categoryName }.debounce(SharedUiTiming.searchDebounce)
                 .distinctUntilChanged()
                 .collectLatest { name ->
                     val id = categoryId ?: return@collectLatest
@@ -269,7 +269,7 @@ class CategoriesEditViewModel(
                     }
                 }
             }
-            delay(500.milliseconds)
+            delay(SharedUiTiming.formStateResetDelay)
             updateButtonState = UiState.Idle
         }
     }

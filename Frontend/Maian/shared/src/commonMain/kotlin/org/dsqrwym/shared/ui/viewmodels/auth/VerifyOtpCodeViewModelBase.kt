@@ -16,6 +16,7 @@ import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.formatter.formatExpireDurationFromSeconds
+import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
@@ -68,7 +69,7 @@ open class VerifyOtpCodeViewModelBase(
 
         emailCheckJob = viewModelScope.launch {
             isCheckingEmail = true
-            delay(500.milliseconds)
+            delay(SharedUiTiming.availabilityCheckDelay)
             emailExists = false
             when (val result = sharedAuthRepository.checkEmailExists(email)) {
                 is SharedResponseResult.Success -> {
