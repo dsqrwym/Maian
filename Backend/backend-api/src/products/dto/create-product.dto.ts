@@ -89,6 +89,12 @@ export const validateICreateProduct: IRequestBodyValidator.IAssert<ICreateProduc
         }
       }
 
+      if (!body.variants.some((v) => v.status === ProductStatus.ACTIVE)) {
+        throw new BadRequestException(
+          'At least one variant must have ACTIVE status',
+        );
+      }
+
       return body;
     },
   };

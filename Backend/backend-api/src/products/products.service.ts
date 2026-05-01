@@ -12,7 +12,7 @@ import { subject } from '@casl/ability';
 import { UserPayload } from '#/auth/auth.types.js';
 import { computePrice } from '#/utils/calculate/computePrice.js';
 import { IProductListQueryDto } from './dto/product-list-query.dto.js';
-import { UserRole } from '#/generated/drizzle/enums.js';
+import { ProductStatus, UserRole } from '#/generated/drizzle/enums.js';
 import { PinoLogger } from 'nestjs-pino';
 import { ProductListSelectField, ProductSortField } from './product.enums.js';
 import { ConfigService } from '@nestjs/config';
@@ -660,6 +660,50 @@ export class ProductsService {
         );
       }
 
+      // 删除变体
+      if (variantsToDelete && variantsToDelete.length > 0) {
+        const toDeleteIds = variantsToDelete.map((id) => BigInt(id));
+        const invalidIds = toDeleteIds.filter(
+          (id) => !currentVariantIds.includes(id),
+        );
+        if (invalidIds.length > 0) {
+          throw new BadRequestException(
+            `Variant IDs [${invalidIds.join(', ')}] do not belong to product ${id}`,
+          );
+        }
+        await tx
+          .delete(variant_products)
+          .where(
+            and(
+              eq(variant_products.product_id, productId),
+              inArray(variant_products.id, toDeleteIds),
+            ),
+          );
+      }
+
+      // 验证至少一个 ACTIVE variant
+      const activeVariant = await tx
+        .select({
+          exists: exists(
+            tx
+              .select({ one: sql<number>`1` })
+              .from(variant_products)
+              .where(
+                and(
+                  eq(variant_products.product_id, productId),
+                  eq(variant_products.status, ProductStatus.ACTIVE),
+                ),
+              ),
+          ),
+        })
+        .from(sql`(VALUES (1)) AS tmp`);
+
+      if (!activeVariant[0]?.exists) {
+        throw new BadRequestException(
+          'At least one variant must remain ACTIVE',
+        );
+      }
+
       const currentTranslationsLangCodes =
         existingProduct.product_translations.map((v) => v.lang_code);
 
@@ -708,27 +752,6 @@ export class ProductsService {
               updated_at: now,
             },
           });
-      }
-
-      // 删除变体
-      if (variantsToDelete && variantsToDelete.length > 0) {
-        const toDeleteIds = variantsToDelete.map((id) => BigInt(id));
-        const invalidIds = toDeleteIds.filter(
-          (id) => !currentVariantIds.includes(id),
-        );
-        if (invalidIds.length > 0) {
-          throw new BadRequestException(
-            `Variant IDs [${invalidIds.join(', ')}] do not belong to product ${id}`,
-          );
-        }
-        await tx
-          .delete(variant_products)
-          .where(
-            and(
-              eq(variant_products.product_id, productId),
-              inArray(variant_products.id, toDeleteIds),
-            ),
-          );
       }
 
       if (files !== undefined) {
