@@ -32,8 +32,6 @@ expect object LocalAppLocale {
 @Composable
 fun AppEnvironment(content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalAppLocale provides customAppLocale) {
-        key(customAppLocale) {
-            content()
-        }
+        content()
     }
 }

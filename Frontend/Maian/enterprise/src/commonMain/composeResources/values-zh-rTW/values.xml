@@ -64,7 +64,7 @@
     <string name="price_with_vat_value">含稅：%1$s</string>
     <string name="price_without_vat_value">未稅：%1$s</string>
     <string name="moq_value">最低起訂量：%1$d</string>
-    <string name="upload_progress">上傳中：%1$d%%</string>
+    <string name="upload_progress">上傳中：%1$d%</string>
     <string name="upload_failed_retry">上傳失敗\n點擊重試</string>
     <string name="upload_media">上傳</string>
     <string name="add_media">新增媒體</string>

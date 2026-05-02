@@ -28,10 +28,9 @@ actual class SharedUploadApi actual constructor(val client: HttpClient) {
             formData = formData {
                 append(
                     key = "file",
-                    value = ChannelProvider {
+                    value = ChannelProvider(totalSize) {
                         // desktop 用的 CIO 引擎更加适配Channel
                         file.file.readChannel()
-                        //file.source().buffered().inputStream().toByteReadChannel()
                     },
                     headers = Headers.build {
                         append(

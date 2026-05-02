@@ -140,8 +140,12 @@ fun ProductsListScreen(
         val isRefreshing = loadState.refresh is LoadState.Loading
         val isError = loadState.refresh is LoadState.Error
 
+        val density = LocalDensity.current
+        var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
+
         if (isTableMode) {
             ProductTableView(
+                Modifier.padding(top = filterFlowRowHeight),
                 paginatedProducts,
                 fakeProducts,
                 viewModel.sortBy,
@@ -159,9 +163,17 @@ fun ProductsListScreen(
                 isRefreshing,
                 isError
             )
+
+            ProductFilterChipsRow(
+                viewModel = viewModel,
+                showSortChip = false,
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp, top = padding.calculateTopPadding())
+                    .onGloballyPositioned { coordinates ->
+                        filterFlowRowHeight = with(density) { coordinates.size.height.toDp() }
+                    }
+            )
         } else {
-            val density = LocalDensity.current
-            var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
             Box(Modifier.fillMaxSize()) {
                 ProductWaterfallView(
                     paginatedProducts,

@@ -1,4 +1,4 @@
-﻿package org.dsqrwym.enterprise.ui.components.product
+package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +36,7 @@ import maian.shared.generated.resources.edit
 import maian.shared.generated.resources.out_of_stock
 import maian.shared.generated.resources.product_image_with_name
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
+import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.data.products.displayName
@@ -443,32 +444,6 @@ fun ProductGridItem(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PermissionTooltip(
-    enabled: Boolean,
-    text: String,
-    content: @Composable () -> Unit,
-) {
-    if (enabled) {
-        content()
-        return
-    }
-
-    TooltipBox(
-        positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        tooltip = {
-            PlainTooltip {
-                SelectionContainer {
-                    Text(text)
-                }
-            }
-        },
-        state = rememberTooltipState()
-    ) {
-        content()
-    }
-}
 
 
 

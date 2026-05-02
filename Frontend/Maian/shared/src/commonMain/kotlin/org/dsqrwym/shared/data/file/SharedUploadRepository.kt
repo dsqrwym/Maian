@@ -2,6 +2,7 @@ package org.dsqrwym.shared.data.file
 
 import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,7 +12,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.reset_unknown_error
-import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
@@ -42,7 +42,7 @@ class SharedUploadRepository(
             )
 
             // scope.launch 会立即返回一个 Job 实例
-            val job = scope.launch {
+            val job = scope.launch(Dispatchers.Default) {
                 try {
                     val result =
                         withAuthOrError { user ->

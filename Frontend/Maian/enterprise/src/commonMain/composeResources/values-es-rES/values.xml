@@ -64,7 +64,7 @@
     <string name="price_with_vat_value">IVA: %1$s</string>
     <string name="price_without_vat_value">Neto: %1$s</string>
     <string name="moq_value">Pedido mín.: %1$d</string>
-    <string name="upload_progress">Subiendo: %1$d%%</string>
+    <string name="upload_progress">Subiendo: %1$d%</string>
     <string name="upload_failed_retry">Error al subir\nToca para reintentar</string>
     <string name="upload_media">Subir</string>
     <string name="add_media">Añadir multimedia</string>

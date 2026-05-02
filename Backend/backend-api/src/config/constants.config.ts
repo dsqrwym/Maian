@@ -56,6 +56,8 @@ export const ENV = {
   FILE_UPLOAD_DIR: 'FILE_UPLOAD_DIR',
   // 存储驱动切换
   STORAGE_TYPE: 'STORAGE_TYPE',
+  // 文件同步开关（默认 false，开启后云端+本地双写+回退）
+  FILE_SYNC_ENABLED: 'FILE_SYNC_ENABLED',
   // 存储桶名称
   R2_BUCKET_NAME: 'R2_BUCKET_NAME',
   R2_ENDPOINT: 'R2_ENDPOINT',

@@ -64,7 +64,7 @@
     <string name="price_with_vat_value">IVA: %1$s</string>
     <string name="price_without_vat_value">Net: %1$s</string>
     <string name="moq_value">Comanda mín.: %1$d</string>
-    <string name="upload_progress">Pujant: %1$d%%</string>
+    <string name="upload_progress">Pujant: %1$d%</string>
     <string name="upload_failed_retry">La pujada ha fallat\nToca per a tornar-ho a intentar</string>
     <string name="upload_media">Puja</string>
     <string name="add_media">Afig multimèdia</string>

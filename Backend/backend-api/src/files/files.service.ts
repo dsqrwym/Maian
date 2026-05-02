@@ -44,8 +44,9 @@ export class FilesService {
     user: UserPayload,
     query: IUploadFileForWholesalerDto,
   ) {
-    const { pathKey, file_hash, file_name, mime_type, file_size } =
-      await this.storage.upload(buffer, filename);
+    const uploadResult = await this.storage.upload(buffer, filename);
+    const { pathKey, file_hash, file_name, mime_type, file_size, cloudSynced } =
+      uploadResult;
 
     const file = await this.drizzle.db.transaction(async (tx) => {
       const [createdOrUpdatedFile] = await tx
@@ -56,10 +57,14 @@ export class FilesService {
           mime_type,
           file_size: BigInt(file_size),
           storage_key: pathKey,
+          cloud_synced: cloudSynced ?? true, // 如果没有 cloudSynced 字段，默认为 true
         })
         .onConflictDoUpdate({
           target: files.file_hash,
-          set: { to_delete: false },
+          set: {
+            to_delete: false,
+            ...(cloudSynced === true ? { cloud_synced: true } : {}), // 更新时明确同步成功，才把它改成 true
+          },
         })
         .returning({ id: files.id });
 

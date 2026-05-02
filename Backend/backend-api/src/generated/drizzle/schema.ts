@@ -237,6 +237,7 @@ export const files = pgTable(
       .default(sql`(now() AT TIME ZONE 'utc'::text)`)
       .notNull(),
     to_delete: boolean().default(false).notNull(),
+    cloud_synced: boolean().default(true).notNull(),
   },
   (table) => [
     index('idx_files_created_at').using(

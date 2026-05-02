@@ -51,8 +51,30 @@ export class LocalStorageDriver implements StorageDriver {
     return this.tempDir;
   }
 
+  getBaseDir(): string {
+    return this.baseDir;
+  }
+
   getPathKey(filePath: string): string {
     return path.relative(this.baseDir, filePath).split(path.sep).join('/'); // jpg/abc.jpg
+  }
+
+  /**
+   * 将 pathKey 解析为本地绝对路径，防止路径穿越攻击
+   */
+  resolvePathKey(pathKey: string): string {
+    const nativePath = pathKey.split('/').join(path.sep);
+    const fullPath = path.resolve(this.baseDir, nativePath);
+
+    // 防止路径穿越攻击
+    if (
+      fullPath !== this.baseDir &&
+      !fullPath.startsWith(this.baseDir + path.sep)
+    ) {
+      throw new BadRequestException('Invalid file path');
+    }
+
+    return fullPath;
   }
 
   async writeToTemp(input: Buffer | Readable): Promise<{
@@ -61,7 +83,6 @@ export class LocalStorageDriver implements StorageDriver {
     mime_type: string;
     file_size: number;
   }> {
-    // 随机数转32进制字符串 0.随机 -> 0.随机0-9+a-z slice 去掉 "0."
     const temp = `temp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const tempFilePath = path.join(this.tempDir, temp);
 
@@ -69,63 +90,57 @@ export class LocalStorageDriver implements StorageDriver {
     const writeStream = fs.createWriteStream(tempFilePath);
 
     let file_size = 0;
-    let mime_type = 'application/octet-stream';
     let headerBuffer = Buffer.alloc(0);
-    let mimeChecked = false;
 
     const stream: Readable = Buffer.isBuffer(input)
       ? Readable.from(input)
       : input;
 
-    await new Promise<void>((resolve, reject) => {
-      stream.on('data', (chunk: Buffer) => {
-        hashStream.update(chunk);
-        file_size += chunk.length;
+    try {
+      await new Promise<void>((resolve, reject) => {
+        stream.on('data', (chunk: Buffer) => {
+          hashStream.update(chunk);
+          file_size += chunk.length;
 
-        if (!mimeChecked) {
-          headerBuffer = Buffer.concat([headerBuffer, chunk]);
-          if (headerBuffer.length >= 4100) {
-            mimeChecked = true;
-            fileTypeFromBuffer(headerBuffer)
-              .then((ft) => {
-                if (ft) {
-                  mime_type = ft.mime;
-                  this.validateFileType(mime_type);
-                }
-              })
-              .catch(reject);
+          if (headerBuffer.length < 4100) {
+            headerBuffer = Buffer.concat([headerBuffer, chunk]).subarray(
+              0,
+              4100,
+            );
           }
-        }
+        });
+
+        stream.pipe(writeStream);
+
+        writeStream.on('finish', resolve);
+        writeStream.on('error', (err) => {
+          this.logger.error(
+            { err, tempFilePath },
+            'Error writing temporary file',
+          );
+          reject(err);
+        });
+        stream.on('error', (err) => {
+          this.logger.error(
+            { err, tempFilePath },
+            'Error reading input stream',
+          );
+          reject(err);
+        });
       });
 
-      stream.pipe(writeStream);
-      writeStream.on('finish', resolve);
-      writeStream.on('error', (err) => {
-        this.logger.error(
-          { err, tempFilePath },
-          'Error writing temporary file',
-        );
-        reject(err);
-      });
-      stream.on('error', (err) => {
-        this.logger.error({ err, tempFilePath }, 'Error reading input stream');
-        reject(err);
-      });
-    });
+      const mime_type = await this.detectAndValidateMime(headerBuffer);
 
-    // 处理极小文件没达到 4100 字节的情况
-    if (!mimeChecked) {
-      const ft = await fileTypeFromBuffer(headerBuffer);
-      if (ft) mime_type = ft.mime;
-      this.validateFileType(mime_type);
+      return {
+        tempFilePath,
+        hash: hashStream.digest('hex'),
+        mime_type,
+        file_size,
+      };
+    } catch (err) {
+      await fs.promises.unlink(tempFilePath).catch(() => {});
+      throw err;
     }
-
-    return {
-      tempFilePath,
-      hash: hashStream.digest('hex'),
-      mime_type,
-      file_size,
-    };
   }
 
   /**
@@ -140,7 +155,7 @@ export class LocalStorageDriver implements StorageDriver {
 
   async generateFilePath(ext: string, hash: string): Promise<string> {
     const relativeKey = this.getRelativePathKey(hash, ext);
-    const fullPath = path.resolve(this.baseDir, relativeKey);
+    const fullPath = this.resolvePathKey(relativeKey);
     // 确保目录存在
     await fs.promises.mkdir(path.dirname(fullPath), { recursive: true });
     return fullPath;
@@ -150,6 +165,18 @@ export class LocalStorageDriver implements StorageDriver {
     if (!ALLOWED_MIMES.has(mime)) {
       throw new BadRequestException(`File type '${mime}' is not allowed`);
     }
+  }
+
+  /**
+   * 检测并验证 MIME 类型
+   */
+  private async detectAndValidateMime(headerBuffer: Buffer): Promise<string> {
+    const type = await fileTypeFromBuffer(headerBuffer);
+    const mime = type?.mime ?? 'application/octet-stream';
+
+    this.validateFileType(mime);
+
+    return mime;
   }
 
   async upload(
@@ -177,11 +204,11 @@ export class LocalStorageDriver implements StorageDriver {
       // 小文件：一次性 hash + 写入
       const hash = await this.hashService.hashWithCrypto(input);
       const filePath = await this.generateFilePath(ext, hash);
-      const type = await fileTypeFromBuffer(input);
-      let mime_type = 'application/octet-stream';
-      if (type) mime_type = type.mime;
-      this.validateFileType(mime_type);
+
+      // 使用统一的 MIME 检测和验证逻辑
+      const mime_type = await this.detectAndValidateMime(input);
       const file_size = input.length;
+
       result = {
         pathKey: this.getPathKey(filePath),
         file_hash: hash,
@@ -192,8 +219,11 @@ export class LocalStorageDriver implements StorageDriver {
 
       try {
         const fileHandle = await fs.promises.open(filePath, 'wx'); // 文件存在会抛错
-        await fileHandle.writeFile(input);
-        await fileHandle.close();
+        try {
+          await fileHandle.writeFile(input);
+        } finally {
+          await fileHandle.close();
+        }
       } catch (err: unknown) {
         const error = err as NodeJS.ErrnoException;
         if (error.code !== 'EEXIST') {
@@ -249,8 +279,7 @@ export class LocalStorageDriver implements StorageDriver {
   }
 
   async delete(pathOrKey: string): Promise<void> {
-    const nativePath = pathOrKey.split('/').join(path.sep);
-    const fullPath = path.join(this.baseDir, nativePath);
+    const fullPath = this.resolvePathKey(pathOrKey);
     try {
       await fs.promises.unlink(fullPath);
     } catch (err: unknown) {
@@ -266,8 +295,7 @@ export class LocalStorageDriver implements StorageDriver {
   }
 
   createReadStream(pathOrKey: string): Readable {
-    const nativePath = pathOrKey.split('/').join(path.sep);
-    const fullPath = path.join(this.baseDir, nativePath);
+    const fullPath = this.resolvePathKey(pathOrKey);
     try {
       const stream = fs.createReadStream(fullPath);
       stream.on('error', (err) => {

@@ -1,4 +1,4 @@
-﻿package org.dsqrwym.enterprise.ui.components.product
+package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupPositionProvider
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.collections.immutable.toPersistentList
 import maian.enterprise.generated.resources.EnterpriseRes
@@ -27,6 +26,7 @@ import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductSortField.*
 import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.drawable.SharedIcons
+import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.shared.ui.components.buttons.MyTextButton
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
@@ -63,6 +63,7 @@ enum class ProductColumn {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class)
 @Composable
 fun ProductTableView(
+    modifier: Modifier = Modifier,
     paginatedProducts: LazyPagingItems<Product>,
     fakeProducts: List<Product>,
     sortBy: SharedProductSortField?,
@@ -418,7 +419,7 @@ fun ProductTableView(
         when {
             isRefreshing -> {
                 Table(
-                    modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
+                    modifier = modifier.padding(padding).fillMaxSize().padding(16.dp),
                     itemsCount = fakeProducts.size,
                     itemAt = { index -> fakeProducts[index] },
                     columns = columns,
@@ -437,7 +438,7 @@ fun ProductTableView(
 
             else -> {
                 Table(
-                    modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
+                    modifier = modifier.padding(padding).fillMaxSize().padding(16.dp),
                     itemsCount = paginatedProducts.itemCount,
                     itemAt = { index -> paginatedProducts[index] },
                     columns = columns,
@@ -463,33 +464,6 @@ private fun SharedProductSortField.toProductColumn(): ProductColumn? =
         MIN_ORDER_QTY -> ProductColumn.MinOrderQty
     }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PermissionTooltip(
-    enabled: Boolean,
-    text: String,
-    positionProvider: PopupPositionProvider,
-    content: @Composable () -> Unit,
-) {
-    if (enabled) {
-        content()
-        return
-    }
-
-    TooltipBox(
-        state = rememberTooltipState(),
-        positionProvider = positionProvider,
-        tooltip = {
-            PlainTooltip {
-                SelectionContainer {
-                    Text(text)
-                }
-            }
-        },
-    ) {
-        content()
-    }
-}
 
 
 

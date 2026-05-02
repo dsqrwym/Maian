@@ -34,7 +34,17 @@ export class CloudflareStorageDriver implements StorageDriver {
       'default-bucket-name',
     );
 
+    const syncEnabled = config.get<string>(ENV.FILE_SYNC_ENABLED) === 'true';
+
     this.client = new S3Client({
+      // 同步文件开启时代表可以 fallback 到本地，设置超时时间更加激进，重试更加少
+      ...(syncEnabled && {
+        requestHandler: {
+          connectionTimeout: 3_000,
+          socketTimeout: 20_000,
+        },
+        maxAttempts: 2,
+      }),
       region: 'auto',
       endpoint: this.config.get<string>(
         ENV.R2_ENDPOINT,

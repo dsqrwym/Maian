@@ -66,7 +66,7 @@
     <string name="price_with_vat_value">TVA : %1$s</string>
     <string name="price_without_vat_value">Net : %1$s</string>
     <string name="moq_value">Commande min. : %1$d</string>
-    <string name="upload_progress">Importation : %1$d%%</string>
+    <string name="upload_progress">Importation : %1$d%</string>
     <string name="upload_failed_retry">Échec de l’importation\nAppuyez pour réessayer</string>
     <string name="upload_media">Importer</string>
     <string name="add_media">Ajouter un média</string>
