@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="category_management">Gestión de categorías</string>
 
     <string name="category_name_tax_setting">Configuración del nombre y del tipo impositivo de la categoría</string>
@@ -30,5 +30,6 @@
     <string name="no_other_language_translation">No hay traducciones en otros idiomas</string>
     <string name="translations_count">%1$s idiomas añadidos</string>
     <string name="media_file_too_large_mb">El archivo "%1$s" es demasiado grande: %2$d MB</string>
+    <string name="delete_category_conflict">No se puede eliminar esta categoría porque es la categoría principal de uno o más productos. Cambia la categoría principal de los productos antes de eliminarla.</string>
 </resources>
 

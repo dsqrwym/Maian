@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="category_management">Category Management</string>
 
     <string name="category_name_tax_setting">Category Name and Tax Settings</string>
@@ -30,5 +30,6 @@
     <string name="no_other_language_translation">No translations in other languages</string>
     <string name="translations_count">%1$s languages added</string>
     <string name="media_file_too_large_mb">File "%1$s" is too large: %2$d MB</string>
+    <string name="delete_category_conflict">Cannot delete this category because it is the primary category of one or more products. Please change the products&apos; primary category before deleting.</string>
 </resources>
 

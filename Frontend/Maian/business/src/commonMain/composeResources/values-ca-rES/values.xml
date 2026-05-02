@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="category_management">Gestió de categories</string>
 
     <string name="category_name_tax_setting">Configuració del nom i de l'impost de la categoria</string>
@@ -30,5 +30,6 @@
     <string name="no_other_language_translation">No hi ha traduccions en altres idiomes</string>
     <string name="translations_count">%1$s idiomes afegits</string>
     <string name="media_file_too_large_mb">El fitxer "%1$s" és massa gran: %2$d MB</string>
+    <string name="delete_category_conflict">No es pot eliminar esta categoria perquè és la categoria principal d\'un o més productes. Canvia la categoria principal dels productes abans d\'eliminar-la.</string>
 </resources>
 

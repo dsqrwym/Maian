@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="category_management">类别管理</string>
 
     <string name="category_name_tax_setting">类别的名称和税率设置</string>
@@ -30,4 +30,5 @@
     <string name="no_other_language_translation">暂无其他语言翻译</string>
     <string name="translations_count">已添加%1$s种语言翻译</string>
     <string name="media_file_too_large_mb">文件“%1$s”太大：%2$d MB</string>
+    <string name="delete_category_conflict">无法删除此类别，因为它是至少一个产品的主分类。请先更改相关产品的主分类后再删除。</string>
 </resources>

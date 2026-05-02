@@ -11,13 +11,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import io.ktor.http.HttpStatusCode
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.delete_category_conflict
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.delete_failed
 import maian.shared.generated.resources.delete_success
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.domain.category.CategoryNode
-import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
@@ -115,12 +117,15 @@ class CategoriesListViewModel(
                 }
 
                 is SharedResponseResult.Error -> {
-                    if (SharedResponseResult.shouldShowToUser(result.type)) {
-                        result.message?.let { mySnackbarViewModel.showError(it) }
-                    } else {
-                        val message = getString(SharedRes.string.delete_failed)
-                        mySnackbarViewModel.showError(message)
+                    val message = when (result.type) {
+                        HttpStatusCode.Conflict -> getString(BusinessRes.string.delete_category_conflict)
+                        else -> if (SharedResponseResult.shouldShowToUser(result.type)) {
+                            result.message ?: getString(SharedRes.string.delete_failed)
+                        } else {
+                            getString(SharedRes.string.delete_failed)
+                        }
                     }
+                    mySnackbarViewModel.showError(message)
                 }
             }
             isLoading = false

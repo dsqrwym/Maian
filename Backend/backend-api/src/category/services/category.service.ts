@@ -37,6 +37,7 @@ import {
 import {
   categories,
   category_translations,
+  product_categories,
 } from '#/generated/drizzle/schema.js';
 import { escapeLike, toUnaccent } from '#/utils/string.util.js';
 import { UserRole } from '#/generated/drizzle/enums.js';
@@ -517,6 +518,28 @@ export class CategoryService {
     ) {
       throw new ForbiddenException(
         'You do not have permission to delete categories',
+      );
+    }
+
+    // 检查是否为某个产品依赖的 primary category
+    const primaryCategorySubQuery = this.drizzle.db
+      .select({ one: sql<number>`1` })
+      .from(product_categories)
+      .where(
+        and(
+          eq(product_categories.category_id, id),
+          eq(product_categories.is_primary, true),
+        ),
+      );
+
+    const [primaryRef] = (await this.drizzle.db
+      .select({ exists: exists(primaryCategorySubQuery) })
+      .from(sql`(VALUES (1)) AS tmp`)
+      .execute()) as { exists: boolean }[];
+
+    if (primaryRef?.exists) {
+      throw new ConflictException(
+        'Cannot delete category: it is the primary category of one or more products. Please change the primary category of those products first.',
       );
     }
 

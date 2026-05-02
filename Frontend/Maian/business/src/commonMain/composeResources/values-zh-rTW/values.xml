@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="category_management">類別管理</string>
 
     <string name="category_name_tax_setting">類別名稱與稅率設定</string>
@@ -30,5 +30,6 @@
     <string name="no_other_language_translation">暫無其他語言翻譯</string>
     <string name="translations_count">已新增 %1$s 種語言</string>
     <string name="media_file_too_large_mb">檔案「%1$s」太大：%2$d MB</string>
+    <string name="delete_category_conflict">無法刪除此類別，因為它是至少一個產品的主分類。請先更改相關產品的主分類後再刪除。</string>
 </resources>
 
