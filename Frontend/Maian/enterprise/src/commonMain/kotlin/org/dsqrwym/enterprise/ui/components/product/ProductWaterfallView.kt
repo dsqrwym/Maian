@@ -13,10 +13,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.*
+import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -29,13 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import maian.enterprise.generated.resources.*
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.edit
+import maian.shared.generated.resources.out_of_stock
+import maian.shared.generated.resources.product_image_with_name
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.SharedOverlayContentBox
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
@@ -63,6 +67,9 @@ fun ProductWaterfallView(
     onPreview: (Product) -> Unit,
     onEdit: (Product) -> Unit,
     onDelete: (Product) -> Unit,
+    canEdit: Boolean,
+    canDelete: Boolean,
+    noPermissionText: String,
     padding: PaddingValues,
     isRefreshing: Boolean,
     isError: Boolean,
@@ -117,11 +124,13 @@ fun ProductWaterfallView(
                             product = null, // null 触发内部 shimmer
                             isRefreshing = true,
                             platform = platform,
-                            onClick = {},
                             onImageClick = {},
                             onPreview = {},
                             onEdit = {},
-                            onDelete = {}
+                            onDelete = {},
+                            canEdit = canEdit,
+                            canDelete = canDelete,
+                            noPermissionText = noPermissionText,
                         )
                     }
                 } else {
@@ -140,10 +149,12 @@ fun ProductWaterfallView(
                                 isRefreshing = false,
                                 platform = platform,
                                 onImageClick = { updateCurrentProduct(product) },
-                                onClick = { },
                                 onPreview = { onPreview(product) },
                                 onEdit = { onEdit(product) },
-                                onDelete = { onDelete(product) }
+                                onDelete = { onDelete(product) },
+                                canEdit = canEdit,
+                                canDelete = canDelete,
+                                noPermissionText = noPermissionText,
                             )
                         }
                     }
@@ -171,22 +182,26 @@ fun ProductWaterfallView(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductGridItem(
     product: Product?,
     isRefreshing: Boolean,
     platform: Platform,
-    onClick: () -> Unit,
     onImageClick: () -> Unit,
     onPreview: () -> Unit,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    canEdit: Boolean = true,
+    canDelete: Boolean = true,
+    noPermissionText: String = "",
 ) {
     // 如果 product 为空 (placeholder) 或者正在刷新，显示骨架屏
     val isLoading = product == null || isRefreshing
+    val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
+
 
     OutlinedCard(
-        onClick = { if (!isLoading) onClick() },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column {
@@ -202,17 +217,20 @@ fun ProductGridItem(
                     )
                 },
                 overlaySurfaceColor = product?.let {
-                    if (it.totalStock > 0) MaterialTheme.colorScheme.primaryContainer else
+                    if (it.hasStock) MaterialTheme.colorScheme.primaryContainer else
                         MaterialTheme.colorScheme.errorContainer
                 } ?: MaterialTheme.colorScheme.errorContainer,
                 topEndOverlay = {
                     product?.let {
                         SelectionContainer {
                             Text(
-                                text = if (it.totalStock > 0) stringResource(EnterpriseRes.string.stock_count, it.totalStock) else stringResource(SharedRes.string.out_of_stock),
+                                text = if (it.hasStock) stringResource(
+                                    EnterpriseRes.string.stock_count,
+                                    it.totalStock
+                                ) else stringResource(SharedRes.string.out_of_stock),
                                 style = MaterialTheme.typography.labelSmall,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                color = if (it.totalStock > 0) MaterialTheme.colorScheme.onPrimaryContainer
+                                color = if (it.hasStock) MaterialTheme.colorScheme.onPrimaryContainer
                                 else MaterialTheme.colorScheme.onErrorContainer
                             )
                         }
@@ -220,12 +238,13 @@ fun ProductGridItem(
                 },
             ) {
                 product?.let {
+                    val model = product.mainImage?.url(product.id) ?: SharedIcons.MaianLogo
                     SharedAsyncImage(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight()
-                            .clickable(onClick = onImageClick),
-                        model = it.mainImage.url(it.id),
+                            .then(product.mainImage?.let { Modifier.clickable(onClick = onImageClick) } ?: Modifier),
+                        model = model,
                         contentDescription = stringResource(SharedRes.string.product_image_with_name, it.name),
                         placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
                         zoomable = false,
@@ -262,40 +281,76 @@ fun ProductGridItem(
                                 )
                             }
                             Spacer(Modifier.width(6.dp))
-                            SelectionContainer {
-                                Text(
-                                    text = item.mainCategory.localizedName(LanguageManager.getCurrent().code),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+                            val categoryLang = item.mainCategory.nameTranslation
+                            val category: @Composable () -> Unit = {
+                                SelectionContainer {
+                                    Text(
+                                        text = item.mainCategory.name,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                            if (categoryLang.isBlank()) {
+                                category()
+                            } else {
+                                TooltipBox(
+                                    state = rememberTooltipState(),
+                                    positionProvider = positionProvider,
+                                    tooltip = { PlainTooltip { Text(categoryLang) } }
+                                ) { category() }
                             }
                         }
 
                         Spacer(Modifier.height(4.dp))
 
                         // 产品名称 (主标题)
-                        SelectionContainer {
-                            Text(
-                                text = item.name,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-
-                        // 副标题 (次级标题)
-                        if (item.title.isNotEmpty() && item.title != item.name) {
+                        val nameLang = item.nameTranslationsText
+                        val name: @Composable () -> Unit = {
                             SelectionContainer {
                                 Text(
-                                    text = item.title,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    text = item.name,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
                                 )
+                            }
+                        }
+                        if (nameLang.isBlank()) {
+                            name()
+                        } else {
+                            TooltipBox(
+                                state = rememberTooltipState(),
+                                positionProvider = positionProvider,
+                                tooltip = { PlainTooltip { Text(nameLang) } }
+                            ) { name() }
+                        }
+
+                        // 副标题 (次级标题)
+                        if (item.title.isNotBlank() && item.title != item.name) {
+                            val titleLang = item.titleTranslationsText
+                            val text: @Composable () -> Unit = {
+                                SelectionContainer {
+                                    Text(
+                                        text = item.title,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
+                            if (titleLang.isBlank()) {
+                                text()
+                            } else {
+                                TooltipBox(
+                                    state = rememberTooltipState(),
+                                    positionProvider = positionProvider,
+                                    tooltip = { PlainTooltip { Text(titleLang) } }
+                                ) { text() }
                             }
                         }
 
@@ -314,13 +369,19 @@ fun ProductGridItem(
                             SelectionContainer {
                                 Column {
                                     Text(
-                                        text = stringResource(EnterpriseRes.string.price_with_vat_value, item.minPriceIva),
+                                        text = stringResource(
+                                            EnterpriseRes.string.price_with_vat_value,
+                                            item.minPriceIva
+                                        ),
                                         style = MaterialTheme.typography.labelLarge,
                                         fontWeight = FontWeight.ExtraBold,
                                         color = MaterialTheme.colorScheme.primary
                                     )
                                     Text(
-                                        text = stringResource(EnterpriseRes.string.price_without_vat_value, item.minPrice),
+                                        text = stringResource(
+                                            EnterpriseRes.string.price_without_vat_value,
+                                            item.minPrice
+                                        ),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -360,18 +421,52 @@ fun ProductGridItem(
                             modifier = Modifier.size(20.dp)
                         )
                     }
-                    IconButton(onClick = onEdit) {
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = stringResource(SharedRes.string.edit),
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.size(20.dp)
+                    PermissionTooltip(canEdit, noPermissionText) {
+                        IconButton(onClick = onEdit, enabled = canEdit) {
+                            Icon(
+                                imageVector = Icons.Outlined.Edit,
+                                contentDescription = stringResource(SharedRes.string.edit),
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+                    PermissionTooltip(canDelete, noPermissionText) {
+                        BusinessOutlinedDeleteButton(
+                            enabled = canDelete,
+                            onDelete = onDelete,
                         )
                     }
-                    BusinessOutlinedDeleteButton(onDelete = onDelete)
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PermissionTooltip(
+    enabled: Boolean,
+    text: String,
+    content: @Composable () -> Unit,
+) {
+    if (enabled) {
+        content()
+        return
+    }
+
+    TooltipBox(
+        positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+        tooltip = {
+            PlainTooltip {
+                SelectionContainer {
+                    Text(text)
+                }
+            }
+        },
+        state = rememberTooltipState()
+    ) {
+        content()
     }
 }
 

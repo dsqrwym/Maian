@@ -26,5 +26,11 @@ class ProductApi(val client: HttpClient) {
     suspend fun getProductForUpdate(id: String): ApiResponse<ProductResponseForUpdate> =
         client.get(ApiConfig.ProductPath.getProductForUpdate(id)).body()
 
+    suspend fun deleteProduct(id: String): ApiResponse<Unit> {
+        return client.delete(ApiConfig.ProductPath.PRODUCT) {
+            url { appendPathSegments(id) }
+        }.body()
+    }
+
 }
 

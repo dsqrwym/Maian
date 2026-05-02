@@ -28,7 +28,10 @@ fun BusinessCategoryPath(path: List<String>, categoryName: String) {
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )
-        path.forEach {
+        path.forEachIndexed { index, it ->
+            if (index != 0 ) {
+                Text("->", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             Text(
                 it,
                 color = if (it != categoryName) Color.Unspecified else MaterialTheme.colorScheme.primary,

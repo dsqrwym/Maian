@@ -20,6 +20,8 @@ import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.add_product
 import maian.enterprise.generated.resources.search_products
 import maian.shared.generated.resources.*
+import org.dsqrwym.enterprise.domain.product.Product
+import org.dsqrwym.enterprise.permissions.canManageEnterpriseProducts
 import org.dsqrwym.enterprise.ui.components.product.ProductTableView
 import org.dsqrwym.enterprise.ui.components.product.ProductWaterfallView
 import org.dsqrwym.enterprise.ui.model.ProductPlaceholders
@@ -30,8 +32,10 @@ import org.dsqrwym.shared.data.displayName
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.containers.UiState
+import org.dsqrwym.shared.ui.components.dialog.SharedConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
@@ -47,6 +51,7 @@ import ua.wwind.table.ExperimentalTableApi
 @Composable
 fun ProductsListScreen(
     viewModel: ProductsListViewModel = koinViewModel(),
+    userRole: UserRole? = null,
     onNavigateToCreate: () -> Unit = {},
     onNavigateToEdit: (String) -> Unit = {},
 ) {
@@ -54,17 +59,32 @@ fun ProductsListScreen(
     val searchQuery = viewModel.searchQuery
     val paginatedProducts = viewModel.pagedProducts.collectAsLazyPagingItems()
     val currentProduct = viewModel.currentProduct
+    val deleteProduct = viewModel.deleteProduct
     val windowWidthSizeClass = LocalWindowSizeClass.current
     val isTableMode = windowWidthSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
+    val canManageProducts = userRole?.canManageEnterpriseProducts() == true
+    val noPermissionText = stringResource(SharedRes.string.error_no_permission)
     SharedTransparentScaffold(
         topBarScrollBehavior = scrollBehavior,
-        showOverlayDialog = currentProduct != null || viewModel.showFilterDialog || viewModel.showSortDialog,
+        showOverlayDialog = currentProduct != null ||
+                deleteProduct != null ||
+                viewModel.showFilterDialog ||
+                viewModel.showSortDialog,
         overlayContent = {
             currentProduct?.let {
-                SharedImageViewDialog(
-                    model = it.mainImage.url(it.id),
-                    imageName = it.name,
-                    onDismissRequest = { viewModel.updateCurrentProduct(null) }
+                it.mainImage?.url(it.id)?.let { model ->
+                    SharedImageViewDialog(
+                        model = model,
+                        imageName = it.name,
+                        onDismissRequest = { viewModel.updateCurrentProduct(null) }
+                    )
+                }
+            }
+            deleteProduct?.let {
+                ProductConfirmDeleteDialog(
+                    product = it,
+                    onDismiss = { viewModel.updateDeleteProduct(null) },
+                    onConfirm = { viewModel.deleteProduct(it) }
                 )
             }
             if (viewModel.showFilterDialog) {
@@ -107,11 +127,12 @@ fun ProductsListScreen(
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             buttonState = UiState.Idle,
-            buttonEnabled = true,
+            buttonEnabled = canManageProducts,
             onButtonClick = onNavigateToCreate,
             buttonText = stringResource(EnterpriseRes.string.add_product),
             buttonIcon = Icons.Filled.Add,
-            buttonIconDescription = stringResource(EnterpriseRes.string.add_product)
+            buttonIconDescription = stringResource(EnterpriseRes.string.add_product),
+            disabledTooltipText = noPermissionText,
         )
     ) { padding, scrollBehavior ->
         val fakeProducts = remember { ProductPlaceholders.generateFakeProducts(9) }
@@ -130,7 +151,10 @@ fun ProductsListScreen(
                 viewModel::updateSortDir,
                 {},
                 { onNavigateToEdit(it.id) },
-                {},
+                viewModel::updateDeleteProduct,
+                canManageProducts,
+                canManageProducts,
+                noPermissionText,
                 padding,
                 isRefreshing,
                 isError
@@ -147,7 +171,10 @@ fun ProductsListScreen(
                     viewModel::updateCurrentProduct,
                     {},
                     { onNavigateToEdit(it.id) },
-                    {},
+                    viewModel::updateDeleteProduct,
+                    canManageProducts,
+                    canManageProducts,
+                    noPermissionText,
                     padding,
                     isRefreshing,
                     isError
@@ -164,6 +191,27 @@ fun ProductsListScreen(
             }
         }
     }
+}
+
+@Composable
+private fun ProductConfirmDeleteDialog(
+    product: Product,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    val content = """
+        ${stringResource(SharedRes.string.product_name)}: ${product.name}
+        ${stringResource(SharedRes.string.product_code)}: ${product.code}
+
+        ${stringResource(SharedRes.string.confirm_delete_message)}
+    """.trimIndent()
+
+    SharedConfirmDeleteDialog(
+        title = stringResource(SharedRes.string.delete),
+        text = content,
+        onDismissRequest = onDismiss,
+        onConfirm = onConfirm,
+    )
 }
 
 private val productSortFields = listOf(

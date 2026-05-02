@@ -16,7 +16,7 @@ data class ProductResponse(
     override val code: String,
     override val name: String,
     @SerialName("main_image")
-    override val mainImage: SharedProductFile,
+    override val mainImage: SharedProductFile?,
     override val title: String,
     @SerialName("total_stock")
     override val totalStock: Int,

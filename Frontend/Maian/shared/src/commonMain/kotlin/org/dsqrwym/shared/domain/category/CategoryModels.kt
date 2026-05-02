@@ -11,6 +11,11 @@ data class CategorySummary(
     val iva: String? = null,
     val translations: List<CategoryTranslation> = emptyList()
 ) {
+    val nameTranslation: String
+        get() = translations.joinToString("\n") {
+            "${it.langCode}: ${it.name}"
+        }
+
     fun localizedName(languageCode: String): String =
         translations.firstOrNull { it.langCode == languageCode }?.name ?: name
 

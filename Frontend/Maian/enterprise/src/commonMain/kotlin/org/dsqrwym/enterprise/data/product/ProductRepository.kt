@@ -147,4 +147,8 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
     suspend fun getProductForUpdate(id: String): SharedResponseResult<ProductResponseForUpdate> {
         return safeApiCall { productApi.getProductForUpdate(id) }
     }
+
+    suspend fun deleteProduct(id: String): SharedResponseResult<Unit> {
+        return safeApiCall { productApi.deleteProduct(id) }.notifyUpdated()
+    }
 }

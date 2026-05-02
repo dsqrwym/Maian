@@ -12,7 +12,7 @@ abstract class SharedProductResponse {
     abstract val name: String
 
     @SerialName("main_image")
-    abstract val mainImage: SharedProductFile
+    abstract val mainImage: SharedProductFile?
     abstract val title: String
 
     @SerialName("total_stock")

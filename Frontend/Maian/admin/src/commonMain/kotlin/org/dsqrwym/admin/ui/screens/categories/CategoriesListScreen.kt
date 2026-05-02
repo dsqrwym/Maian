@@ -33,6 +33,7 @@ import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
 import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
+import org.dsqrwym.admin.permissions.canDeleteAdminCategory
 import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.user.UserRole
@@ -262,6 +263,7 @@ fun CategoryListItem(
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
+    val canDeleteCategory = userRole?.canDeleteAdminCategory() == true
     OutlinedCard(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -353,7 +355,7 @@ fun CategoryListItem(
                 TooltipBox(
                     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
                     tooltip = {
-                        if (userRole != UserRole.SUPERADMIN) {
+                        if (!canDeleteCategory) {
                             PlainTooltip {
                                 SelectionContainer {
                                     Text(stringResource(SharedRes.string.error_no_permission))
@@ -364,7 +366,7 @@ fun CategoryListItem(
                     state = rememberTooltipState()
                 ) {
                     BusinessOutlinedDeleteButton(
-                        enabled = userRole == UserRole.SUPERADMIN,
+                        enabled = canDeleteCategory,
                         onDelete = onDelete
                     )
                 }

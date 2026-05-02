@@ -1,6 +1,7 @@
 package org.dsqrwym.shared.ui.components.scaffold
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
@@ -28,6 +29,7 @@ data class SharedTransparentScaffoldFabButtonState(
     val buttonText: String,
     val buttonIcon: ImageVector,
     val buttonIconDescription: String? = null,
+    val disabledTooltipText: String? = null,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,16 +98,39 @@ fun SharedTransparentScaffold(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FabButton(fabButtonState: SharedTransparentScaffoldFabButtonState) {
-    MyExtendedFloatingActionButton(
-        buttonState = fabButtonState.buttonState,
-        enabled = fabButtonState.buttonEnabled,
-        modifier = Modifier.padding(end = 16.dp),
-        icon = {
-            Icon(fabButtonState.buttonIcon, fabButtonState.buttonIconDescription)
+    val buttonContent: @Composable () -> Unit = {
+        MyExtendedFloatingActionButton(
+            buttonState = fabButtonState.buttonState,
+            enabled = fabButtonState.buttonEnabled,
+            modifier = Modifier.padding(end = 16.dp),
+            icon = {
+                Icon(fabButtonState.buttonIcon, fabButtonState.buttonIconDescription)
+            },
+            text = { Text(fabButtonState.buttonText) },
+            onClick = fabButtonState.onButtonClick
+        )
+    }
+
+    val disabledTooltipText = fabButtonState.disabledTooltipText
+    if (fabButtonState.buttonEnabled || disabledTooltipText == null) {
+        buttonContent()
+        return
+    }
+
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+        tooltip = {
+            PlainTooltip {
+                SelectionContainer {
+                    Text(disabledTooltipText)
+                }
+            }
         },
-        text = { Text(fabButtonState.buttonText) },
-        onClick = fabButtonState.onButtonClick
-    )
+        state = rememberTooltipState()
+    ) {
+        buttonContent()
+    }
 }

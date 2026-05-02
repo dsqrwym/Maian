@@ -264,7 +264,7 @@ export class ProductsService {
     // LEFT JOIN LATERAL 关联主查询，查询主图
     const mainImgLateral = this.drizzle.db
       .select({
-        main_image: sql<{ id: string; mime_type: string }>`
+        main_image: sql<{ id: string; mime_type: string } | null>`
       jsonb_build_object(
         'id', ${files.id},
         'mime_type', ${files.mime_type}

@@ -89,6 +89,7 @@ fun App() {
                             categoryNavEntry(navigationState)
                             entry<SharedDashboardScreen> {
                                 ProductsListScreen(
+                                    userRole = user.userRole,
                                     onNavigateToCreate = { navigationState.navigate(ProductCreate) },
                                     onNavigateToEdit = { navigationState.navigate(ProductEdit(it)) }
                                 )

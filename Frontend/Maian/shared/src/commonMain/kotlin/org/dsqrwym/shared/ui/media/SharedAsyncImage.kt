@@ -4,6 +4,7 @@ import NotificationDuration
 import NotificationType
 import Notify
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isSecondaryPressed
@@ -63,6 +65,16 @@ fun SharedAsyncImage(
     enableContextMenu: Boolean = true,
     imageName: String? = null
 ) {
+    if (model is ImageVector) {
+        Image(
+            painter = rememberVectorPainter(model),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            alignment = alignment,
+            contentScale = contentScale,
+        )
+        return
+    }
     var isLoading by remember { mutableStateOf(true) }
     var loadedPainterState by remember { mutableStateOf<AsyncImagePainter.State.Success?>(null) }
     val isCompactWidth = LocalWindowSizeClass.current.widthSizeClass == WindowWidthSizeClass.Compact

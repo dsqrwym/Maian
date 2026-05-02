@@ -9,7 +9,7 @@ data class Product(
     val id: String,
     val code: String,
     val name: String,
-    val mainImage: ProductImage,
+    val mainImage: ProductImage?,
     val title: String,
     val totalStock: Int,
     val minOrderQty: Int,

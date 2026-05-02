@@ -13,9 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupPositionProvider
 import androidx.paging.compose.LazyPagingItems
 import kotlinx.collections.immutable.toPersistentList
-import maian.enterprise.generated.resources.*
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.product_preview
+import maian.enterprise.generated.resources.product_preview_tooltip
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.util.uawwindtablekmp.cellWithModifier
@@ -56,6 +59,7 @@ enum class ProductColumn {
     Status,         // 状态
     Actions         // 操作
 }
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class)
 @Composable
 fun ProductTableView(
@@ -69,6 +73,9 @@ fun ProductTableView(
     onPreview: (Product) -> Unit,
     onEdit: (Product) -> Unit,
     onDelete: (Product) -> Unit,
+    canEdit: Boolean,
+    canDelete: Boolean,
+    noPermissionText: String,
     padding: PaddingValues,
     isRefreshing: Boolean,
     isError: Boolean,
@@ -93,15 +100,18 @@ fun ProductTableView(
                 resizable(false)
                 align(Alignment.Center)
                 cellWithModifier(
-                    { product -> Modifier.size(60.dp).clickable { updateCurrentProduct(product) } }
+                    { product ->
+                        Modifier.size(60.dp).clickable { product.mainImage?.let { updateCurrentProduct(product) } }
+                    }
                 ) { product ->
                     if (isRefreshing) {
-                        Image(SharedIcons.MaianLogo, "加载中", Modifier.placeholderWithShimmer(true))
+                        Image(SharedIcons.MaianLogo, SharedIcons.MaianLogo.name, Modifier.placeholderWithShimmer(true))
                     } else {
+                        val model = product.mainImage?.url(product.id) ?: SharedIcons.MaianLogo
                         SharedAsyncImage(
                             modifier = Modifier.size(60.dp),
                             placeholder = rememberVectorPainter(SharedIcons.MaianLogo),
-                            model = product.mainImage.url(product.id),
+                            model = model,
                             zoomable = false,
                             enableContextMenu = false,
                             contentDescription = productImageText,
@@ -109,7 +119,7 @@ fun ProductTableView(
                     }
                 }
             }
-            // 2. 产品名称 (支持排序)
+            // 产品名称 (支持排序)
             column(ProductColumn.Name, valueOf = { it.name }) {
                 header(productNameText)
                 sortable() // 开启UI排序
@@ -120,29 +130,36 @@ fun ProductTableView(
                             .copyOnInteraction(SharedClipboardData.Text(it.name))
                     }
                 ) { product ->
-                    TooltipBox(
-                        state = rememberTooltipState(),
-                        positionProvider = positionProvider,
-                        tooltip = {
-                            PlainTooltip {
-                                SelectionContainer {
-                                    Text(
-                                        product.nameTranslationsText,
-                                        modifier = Modifier.copyOnInteraction(SharedClipboardData.Text(product.nameTranslationsText))
-                                    )
-                                }
-                            }
-                        }
-                    ) {
+                    val nameLang = product.nameTranslationsText
+                    val text: @Composable () -> Unit = {
                         Text(
                             product.name,
                             Modifier.padding(horizontal = 6.dp).placeholderWithShimmer(isRefreshing)
                         )
                     }
+
+                    if (nameLang.isBlank()) {
+                        text()
+                    } else {
+                        TooltipBox(
+                            state = rememberTooltipState(),
+                            positionProvider = positionProvider,
+                            tooltip = {
+                                PlainTooltip {
+                                    SelectionContainer {
+                                        Text(
+                                            nameLang,
+                                            modifier = Modifier.copyOnInteraction(SharedClipboardData.Text(nameLang))
+                                        )
+                                    }
+                                }
+                            }
+                        ) { text() }
+                    }
                 }
             }
 
-            // 3. 产品标题
+            // 产品标题
             column(ProductColumn.Title, valueOf = { it.title }) {
                 header(productTitleText)
                 autoWidth()
@@ -153,29 +170,35 @@ fun ProductTableView(
                             .copyOnInteraction(SharedClipboardData.Text(it.title))
                     }
                 ) { product ->
-                    TooltipBox(
-                        state = rememberTooltipState(),
-                        positionProvider = positionProvider,
-                        tooltip = {
-                            PlainTooltip {
-                                SelectionContainer {
-                                    Text(
-                                        product.titleTranslationsText,
-                                        Modifier.copyOnInteraction(SharedClipboardData.Text(product.titleTranslationsText))
-                                    )
-                                }
-                            }
-                        }
-                    ) {
+                    val titleLang = product.titleTranslationsText
+                    val text: @Composable () -> Unit = {
                         Text(
                             product.title,
                             Modifier.padding(horizontal = 6.dp).placeholderWithShimmer(isRefreshing)
                         )
                     }
+                    if (titleLang.isBlank()) {
+                        text()
+                    } else {
+                        TooltipBox(
+                            state = rememberTooltipState(),
+                            positionProvider = positionProvider,
+                            tooltip = {
+                                PlainTooltip {
+                                    SelectionContainer {
+                                        Text(
+                                            titleLang,
+                                            Modifier.copyOnInteraction(SharedClipboardData.Text(titleLang))
+                                        )
+                                    }
+                                }
+                            }
+                        ) { text() }
+                    }
                 }
             }
 
-            // 4. 编码
+            // 编码
             column(ProductColumn.Code, valueOf = { it.code }) {
                 header(productCodeText)
                 autoWidth()
@@ -190,7 +213,7 @@ fun ProductTableView(
                 }
             }
 
-            // 5. 类别
+            // 类别
             column(ProductColumn.Category, valueOf = { it.mainCategory }) {
                 header(productCategoryText)
                 autoWidth()
@@ -201,14 +224,35 @@ fun ProductTableView(
                             .copyOnInteraction(SharedClipboardData.Text(it.mainCategory.name))
                     }
                 ) {
-                    Text(
-                        it.mainCategory.name,
-                        Modifier.padding(horizontal = 6.dp).placeholderWithShimmer(isRefreshing)
-                    )
+                    val categoryLang = it.mainCategory.nameTranslation
+                    val text: @Composable () -> Unit = {
+                        Text(
+                            it.mainCategory.name,
+                            Modifier.padding(horizontal = 6.dp).placeholderWithShimmer(isRefreshing)
+                        )
+                    }
+                    if (categoryLang.isBlank()) {
+                        text()
+                    } else {
+                        TooltipBox(
+                            state = rememberTooltipState(),
+                            positionProvider = positionProvider,
+                            tooltip = {
+                                PlainTooltip {
+                                    SelectionContainer {
+                                        Text(
+                                            categoryLang,
+                                            Modifier.copyOnInteraction(SharedClipboardData.Text(categoryLang))
+                                        )
+                                    }
+                                }
+                            }
+                        ) { text() }
+                    }
                 }
             }
 
-            // 6. 总库存
+            // 总库存
             column(ProductColumn.TotalStock, valueOf = { it.totalStock }) {
                 header(productTotalStockText)
                 autoWidth()
@@ -226,7 +270,7 @@ fun ProductTableView(
                 }
             }
 
-            // 7. 最低不含税价
+            // 最低不含税价
             column(ProductColumn.Price, valueOf = { it.minPrice }) {
                 header(productPriceWithoutVatText)
                 autoWidth()
@@ -242,7 +286,7 @@ fun ProductTableView(
                 }
             }
 
-            // 8. 最低含税价
+            // 最低含税价
             column(ProductColumn.PriceIva, valueOf = { it.minPriceIva }) {
                 header(productPriceWithVatText)
                 autoWidth()
@@ -258,7 +302,7 @@ fun ProductTableView(
                 }
             }
 
-            // 9. 起订量
+            // 起订量
             column(ProductColumn.MinOrderQty, valueOf = { it.minOrderQty }) {
                 header(productMinOrderQtyText)
                 autoWidth()
@@ -277,7 +321,7 @@ fun ProductTableView(
                 }
             }
 
-            // 10. 状态
+            // 状态
             column(ProductColumn.Status, valueOf = { it.status }) {
                 header(statusText)
                 autoWidth()
@@ -291,7 +335,7 @@ fun ProductTableView(
                 }
             }
 
-            // 11. 操作
+            // 操作
             column(ProductColumn.Actions, valueOf = { null }) {
                 header(productActionsText)
                 autoWidth()
@@ -299,14 +343,30 @@ fun ProductTableView(
                 cell { product, _ ->
                     DisableSelection {
                         Row(Modifier.placeholderWithShimmer(isRefreshing)) {
-                            MyTextButton(text = stringResource(SharedRes.string.edit)){ onEdit(product) }
+                            PermissionTooltip(canEdit, noPermissionText, positionProvider) {
+                                MyTextButton(
+                                    text = stringResource(SharedRes.string.edit),
+                                    isEnabled = canEdit,
+                                ) { onEdit(product) }
+                            }
                             TooltipBox(
                                 state = rememberTooltipState(),
                                 positionProvider = positionProvider,
                                 tooltip = { PlainTooltip { Text(stringResource(EnterpriseRes.string.product_preview_tooltip)) } }
-                            ) { MyTextButton(text = stringResource(EnterpriseRes.string.product_preview)) { onPreview(product) } }
+                            ) {
+                                MyTextButton(text = stringResource(EnterpriseRes.string.product_preview)) {
+                                    onPreview(
+                                        product
+                                    )
+                                }
+                            }
 
-                            MyTextButton(text = stringResource(SharedRes.string.delete)) { onDelete(product) }
+                            PermissionTooltip(canDelete, noPermissionText, positionProvider) {
+                                MyTextButton(
+                                    text = stringResource(SharedRes.string.delete),
+                                    isEnabled = canDelete,
+                                ) { onDelete(product) }
+                            }
                         }
                     }
 
@@ -383,7 +443,7 @@ fun ProductTableView(
                     columns = columns,
                     state = tableState,
                     placeholderRow = {
-                       SharedNotFoundPlaceholder()
+                        SharedNotFoundPlaceholder()
                     }
                 )
             }
@@ -402,6 +462,34 @@ private fun SharedProductSortField.toProductColumn(): ProductColumn? =
         PRICE_IVA -> ProductColumn.PriceIva
         MIN_ORDER_QTY -> ProductColumn.MinOrderQty
     }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PermissionTooltip(
+    enabled: Boolean,
+    text: String,
+    positionProvider: PopupPositionProvider,
+    content: @Composable () -> Unit,
+) {
+    if (enabled) {
+        content()
+        return
+    }
+
+    TooltipBox(
+        state = rememberTooltipState(),
+        positionProvider = positionProvider,
+        tooltip = {
+            PlainTooltip {
+                SelectionContainer {
+                    Text(text)
+                }
+            }
+        },
+    ) {
+        content()
+    }
+}
 
 
 

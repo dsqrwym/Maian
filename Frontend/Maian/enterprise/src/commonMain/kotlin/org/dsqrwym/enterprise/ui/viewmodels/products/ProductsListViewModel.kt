@@ -11,6 +11,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.delete_failed
+import maian.shared.generated.resources.delete_success
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.product.ProductRepository
 import org.dsqrwym.enterprise.domain.product.Product
@@ -22,6 +25,7 @@ import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
+import org.jetbrains.compose.resources.getString
 
 data class SearchQuery(
     val query: String,
@@ -43,7 +47,11 @@ class ProductsListViewModel(
     var totalItemsCount by mutableStateOf(0)
 
     var currentProduct by mutableStateOf<Product?>(null)
-    private set
+        private set
+    var deleteProduct by mutableStateOf<Product?>(null)
+        private set
+    var isDeletingProduct by mutableStateOf(false)
+        private set
 
     // 搜索条件和过滤类型
     var searchQuery by mutableStateOf("")
@@ -78,8 +86,9 @@ class ProductsListViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedProducts = combine(
         productQuery,
+        repository.updateEvents.onStart { emit(Unit) },
         refreshTrigger.onStart { emit(Unit) }
-    ) { query, _ -> query }
+    ) { query, _, _ -> query }
         .flatMapLatest { queryDto ->
             createPager(
                 query = queryDto.query,
@@ -172,6 +181,35 @@ class ProductsListViewModel(
 
     fun updateCurrentProduct(product: Product?) {
         currentProduct = product
+    }
+
+    fun updateDeleteProduct(product: Product?) {
+        deleteProduct = product
+    }
+
+    fun deleteProduct(product: Product) {
+        if (isDeletingProduct) return
+        viewModelScope.launch {
+            isDeletingProduct = true
+            try {
+                when (val result = repository.deleteProduct(product.id)) {
+                    is SharedResponseResult.Success -> {
+                        mySnackbarHostState.showSuccess(getString(SharedRes.string.delete_success))
+                        updateDeleteProduct(null)
+                    }
+
+                    is SharedResponseResult.Error -> {
+                        if (SharedResponseResult.shouldShowToUser(result.type)) {
+                            result.message?.let { mySnackbarHostState.showError(it) }
+                        } else {
+                            mySnackbarHostState.showError(getString(SharedRes.string.delete_failed))
+                        }
+                    }
+                }
+            } finally {
+                isDeletingProduct = false
+            }
+        }
     }
 
     fun refresh() {

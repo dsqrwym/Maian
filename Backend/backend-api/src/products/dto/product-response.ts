@@ -26,5 +26,5 @@ export interface IProductResponse {
   main_image: {
     id: string;
     mime_type: string;
-  };
+  } | null;
 }
