@@ -194,9 +194,9 @@ export class ProductsService {
       case ProductSortField.AVAILABLE_STOCK:
         return sql.raw(`"variantAggregates"."total_stock"`);
       case ProductSortField.PRICE_IVA:
-        return sql.raw(`"variantAggregates"."min_price_iva"`);
+        return sql.raw(`"variantAggregates"."min_price_iva"::numeric`);
       case ProductSortField.PRICE:
-        return sql.raw(`"variantAggregates"."min_price"`);
+        return sql.raw(`"variantAggregates"."min_price"::numeric`);
       default:
         return undefined;
     }
