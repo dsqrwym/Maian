@@ -151,6 +151,13 @@
     <string name="menu_open_content_description">Ouvrir le menu</string>
     <string name="dashboard">Accueil</string>
     <string name="profile">Mon compte</string>
+    <string name="products">Produits</string>
+    <string name="categories">Catégories</string>
+    <string name="more">Plus</string>
+    <string name="search_products">Rechercher des produits</string>
+    <string name="search_categories">Rechercher des catégories</string>
+    <string name="no_products">Aucun produit trouvé</string>
+    <string name="no_categories">Aucune catégorie trouvée</string>
 
     <string name="theme_light_mode">Mode clair</string>
     <string name="theme_dark_mode">Mode sombre</string>
@@ -249,10 +256,15 @@
     <string name="product_code">Code produit</string>
     <string name="product_category">Catégorie</string>
     <string name="product_total_stock">Stock total</string>
+    <string name="product_stock_count">Stock : %1$d</string>
     <string name="product_price">Prix</string>
     <string name="product_price_with_vat">Prix TTC</string>
     <string name="product_price_without_vat">Prix HT</string>
+    <string name="product_price_with_vat_value">TVA : %1$s</string>
+    <string name="product_price_without_vat_value">Net : %1$s</string>
     <string name="product_min_order_qty">Quantité minimale de commande</string>
+    <string name="product_moq_value">Commande min. : %1$d</string>
+    <string name="product_preview">Aperçu</string>
     <string name="product_actions">Actions</string>
     <string name="product_status_active">Actif</string>
     <string name="product_status_inactive">Inactif</string>

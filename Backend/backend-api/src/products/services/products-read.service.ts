@@ -38,6 +38,7 @@ import { IProductResponse } from '../dto/product-response.js';
 import { escapeLike, toUnaccent } from '#/utils/string.util.js';
 import { ENV } from '#/config/constants.config.js';
 import { subject } from '@casl/ability';
+import { caslHasField, caslToDrizzle } from '#/casl/casl-to-drizzle.js';
 
 @Injectable()
 export class ProductsReadService {
@@ -51,21 +52,6 @@ export class ProductsReadService {
       this.configService.get<number>(ENV.MAX_SEARCH_TERMS, 10),
     );
     this.logger.setContext(ProductsReadService.name);
-  }
-
-  getReadListPermission(user: UserPayload) {
-    switch (user.userRole) {
-      case UserRole.ADMIN:
-      case UserRole.SUPERADMIN:
-      case UserRole.RETAILER:
-        return undefined;
-      case UserRole.WHOLESALER:
-        return user.userId;
-      case UserRole.DELIVERY:
-      case UserRole.SUPPORT:
-      case UserRole.WAREHOUSE:
-        return user.wholesalerId;
-    }
   }
 
   getSortFieldDrizzle(sortBy?: ProductSortField, langCode?: string) {
@@ -111,7 +97,24 @@ export class ProductsReadService {
     }
     const isRetailer = user.userRole === UserRole.RETAILER;
     // 根据用户角色获取读取权限
-    const permissionCondition = this.getReadListPermission(user);
+    const abilityCondition = caslToDrizzle(
+      ability,
+      Action.Read,
+      'products',
+      products,
+    );
+    const statusRestricted = caslHasField(
+      ability,
+      Action.Read,
+      'products',
+      'status',
+    );
+    const userIdRestricted = caslHasField(
+      ability,
+      Action.Read,
+      'products',
+      'user_id',
+    );
 
     const { search, langCode, wholesaler_id, status } = query;
     const category_id = query.category_id
@@ -267,10 +270,6 @@ export class ProductsReadService {
     // 构建 WHERE 条件
     const whereConditions: (SQL | undefined)[] = [];
 
-    if (permissionCondition) {
-      whereConditions.push(eq(products.user_id, permissionCondition));
-    }
-
     if (search) {
       // 精确匹配跨字段关键词
       const searchTerms = escapeLike(toUnaccent(search))
@@ -349,13 +348,16 @@ export class ProductsReadService {
       );
     }
 
-    if (!permissionCondition && wholesaler_id) {
+    // 权限条件没有user_id
+    if (!userIdRestricted && wholesaler_id) {
       whereConditions.push(eq(products.user_id, wholesaler_id));
     }
 
-    if (isRetailer) {
-      whereConditions.push(eq(products.status, 'ACTIVE'));
-    } else if (status) {
+    if (abilityCondition) {
+      whereConditions.push(abilityCondition);
+    }
+    // 权限条件没有status
+    if (!statusRestricted && status) {
       whereConditions.push(eq(products.status, status));
     }
 

@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -125,7 +125,7 @@ private fun ProductEditScreenContent(
         title = {
             BusinessTitleIconRow(
                 if (translationTabs.isNotEmpty()) translationTabs[0].first.name else "",
-                Icons.Outlined.Category,
+                Icons.Outlined.Inventory2,
                 stringResource(SharedRes.string.category),
                 isLoading
             )

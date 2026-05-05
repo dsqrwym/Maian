@@ -9,13 +9,51 @@ import kotlinx.serialization.Serializable
 object RegisterScreen : NavKey
 
 @Serializable
-@SerialName("supplier")
-object SuppliersScreen : NavKey
+@SerialName("products")
+object ProductsScreen : NavKey
 
 @Serializable
-@SerialName("basket")
-object BasketScreen : NavKey
+@SerialName("categories")
+object CategoriesScreen : NavKey
 
 @Serializable
-@SerialName("chat")
-object ChatScreen : NavKey
+@SerialName("distributors")
+object DistributorsScreen : NavKey
+
+@Serializable
+@SerialName("category_browse")
+data class CategoryBrowseRoute(
+    val id: String,
+    val name: String,
+    val level: Int,
+    val parentId: String? = null,
+    val distributorId: String? = null,
+    val pathNames: List<String> = emptyList(),
+    val railFallbackCategories: List<CategoryBrowseRouteCategory> = emptyList(),
+) : NavKey
+
+@Serializable
+data class CategoryBrowseRouteCategory(
+    val id: String,
+    val name: String,
+    val level: Int,
+    val parentId: String? = null,
+)
+
+@Serializable
+@SerialName("distributor_home")
+data class DistributorHomeScreen(
+    val id: String,
+    val userId: String? = null,
+    val username: String? = null,
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val email: String? = null,
+    val telephone: String? = null,
+    val cif: String? = null,
+    val companyName: String? = null,
+) : NavKey
+
+@Serializable
+@SerialName("product_detail_placeholder")
+data class ProductDetailPlaceholderScreen(val productId: String) : NavKey

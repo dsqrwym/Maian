@@ -154,6 +154,13 @@
     <string name="menu_open_content_description">Obrir menú</string>
     <string name="dashboard">Inici</string>
     <string name="profile">El meu</string>
+    <string name="products">Productes</string>
+    <string name="categories">Categories</string>
+    <string name="more">Més</string>
+    <string name="search_products">Busca productes</string>
+    <string name="search_categories">Busca categories</string>
+    <string name="no_products">No s'han trobat productes</string>
+    <string name="no_categories">No s'han trobat categories</string>
 
     <string name="theme_light_mode">Mode clar</string>
     <string name="theme_dark_mode">Mode fosc</string>
@@ -252,10 +259,15 @@
     <string name="product_code">Codi del producte</string>
     <string name="product_category">Categoria</string>
     <string name="product_total_stock">Estoc total</string>
+    <string name="product_stock_count">Estoc: %1$d</string>
     <string name="product_price">Preu</string>
     <string name="product_price_with_vat">Preu amb IVA</string>
     <string name="product_price_without_vat">Preu sense IVA</string>
+    <string name="product_price_with_vat_value">IVA: %1$s</string>
+    <string name="product_price_without_vat_value">Net: %1$s</string>
     <string name="product_min_order_qty">Quantitat mínima de comanda</string>
+    <string name="product_moq_value">Comanda mín.: %1$d</string>
+    <string name="product_preview">Vista prèvia</string>
     <string name="product_actions">Accions</string>
     <string name="product_status_active">Actiu</string>
     <string name="product_status_inactive">Inactiu</string>

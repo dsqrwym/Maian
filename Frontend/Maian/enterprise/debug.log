@@ -1,1 +1,2 @@
 [0408/231853.761:FATAL:cef\libcef_dll\ctocpp\request_context_handler_ctocpp.cc:84] CefRequestContextHandler_0_CToCpp called with invalid version -1
+[0505/215936.577:WARNING:cef\libcef\common\resource_util.cc:83] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.

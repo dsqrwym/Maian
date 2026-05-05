@@ -41,7 +41,7 @@ fun SharedTransparentScaffold(
     overlayContent: @Composable BoxScope.() -> Unit,
     title: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
-    fabButtonState: SharedTransparentScaffoldFabButtonState,
+    fabButtonState: SharedTransparentScaffoldFabButtonState? = null,
     content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit
 ) {
     val windowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass
@@ -78,13 +78,13 @@ fun SharedTransparentScaffold(
                     actions = {
                         actions()
                         if (windowWidthSizeClass == WindowWidthSizeClass.Compact) return@CenterAlignedTopAppBar
-                        FabButton(fabButtonState)
+                        fabButtonState?.let { FabButton(it) }
                     }
                 )
             },
             floatingActionButton = {
                 if (windowWidthSizeClass != WindowWidthSizeClass.Compact) return@Scaffold
-                FabButton(fabButtonState)
+                fabButtonState?.let { FabButton(it) }
             }
         ) { padding ->
             Box(

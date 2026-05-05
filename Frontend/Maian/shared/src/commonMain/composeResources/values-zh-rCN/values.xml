@@ -155,6 +155,13 @@
     <string name="menu_open_content_description">打开菜单</string>
     <string name="dashboard">首页</string>
     <string name="profile">我的</string>
+    <string name="products">产品</string>
+    <string name="categories">类别</string>
+    <string name="more">更多</string>
+    <string name="search_products">搜索产品</string>
+    <string name="search_categories">搜索类别</string>
+    <string name="no_products">未找到产品</string>
+    <string name="no_categories">未找到类别</string>
 
     <string name="theme_light_mode">浅色模式</string>
     <string name="theme_dark_mode">深色模式</string>
@@ -254,10 +261,15 @@
     <string name="product_code">产品编码</string>
     <string name="product_category">类别</string>
     <string name="product_total_stock">总库存</string>
+    <string name="product_stock_count">库存：%1$d</string>
     <string name="product_price">价格</string>
     <string name="product_price_with_vat">含税价格</string>
     <string name="product_price_without_vat">未税价格</string>
+    <string name="product_price_with_vat_value">含税：%1$s</string>
+    <string name="product_price_without_vat_value">未税：%1$s</string>
     <string name="product_min_order_qty">最低起订量</string>
+    <string name="product_moq_value">最低起订量：%1$d</string>
+    <string name="product_preview">预览</string>
     <string name="product_actions">操作</string>
     <string name="product_status_active">启用</string>
     <string name="product_status_inactive">停用</string>

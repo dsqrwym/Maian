@@ -1,6 +1,7 @@
 package org.dsqrwym.shared.data.file
 
 import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.WebFile
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.size
 import io.ktor.client.*
@@ -28,8 +29,9 @@ import kotlin.math.min
 fun PlatformFile.toByteReadChannel(scope: CoroutineScope): ByteReadChannel {
     // 使用 Ktor 的 GlobalScope.writer 或指定 scope 的 writer
     // 它会返回一个 ByteReadChannel，我们在 lambda 里往 channel 写数据
-    return scope.writer(Dispatchers.Default) {
-        val jsFile = this@toByteReadChannel.file
+    return scope.writer(Dispatchers.Main) {
+        val wrapper = this@toByteReadChannel.webFile as WebFile.FileWrapper
+        val jsFile = wrapper.file
         val chunkSize = 64 * 1024 // 提高到 64KB 减少 JS/Wasm 切换开销
         var offset = 0
         val totalSize = jsFile.size.toDouble() // WasmJS 中 size 是 JsNumber，转为 Int

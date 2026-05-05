@@ -2,7 +2,6 @@ package org.dsqrwym.business.ui.components.tooltip
 
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.*
-import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.PopupPositionProvider
 
@@ -11,7 +10,7 @@ import androidx.compose.ui.window.PopupPositionProvider
 fun PermissionTooltip(
     enabled: Boolean,
     text: String,
-    positionProvider: PopupPositionProvider = rememberTooltipPositionProvider(),
+    positionProvider: PopupPositionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
     content: @Composable () -> Unit,
 ) {
     if (enabled) {

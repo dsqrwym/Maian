@@ -1,25 +1,25 @@
 package org.dsqrwym.standard
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Chat
-import androidx.compose.material.icons.outlined.ShopTwo
-import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.categories
+import maian.standard.generated.resources.distributors
 import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.chat
-import maian.standard.generated.resources.shopping_cart
-import maian.standard.generated.resources.wholesalers
+import maian.shared.generated.resources.products
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.drawable.SharedImages
-import org.dsqrwym.shared.navigation.SharedDashboardScreen
 import org.dsqrwym.shared.navigation.SharedInitialScreen
 import org.dsqrwym.shared.navigation.SharedLoginScreen
 import org.dsqrwym.shared.navigation.SharedNavigationRoot
@@ -28,9 +28,12 @@ import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
-import org.dsqrwym.standard.navigation.BasketScreen
-import org.dsqrwym.standard.navigation.ChatScreen
-import org.dsqrwym.standard.navigation.SuppliersScreen
+import org.dsqrwym.standard.navigation.CategoriesScreen
+import org.dsqrwym.standard.navigation.CategoryBrowseRoute
+import org.dsqrwym.standard.navigation.DistributorHomeScreen
+import org.dsqrwym.standard.navigation.DistributorsScreen
+import org.dsqrwym.standard.navigation.ProductDetailPlaceholderScreen
+import org.dsqrwym.standard.navigation.ProductsScreen
 import org.dsqrwym.standard.navigation.naventry.authNavEntry
 import org.dsqrwym.standard.navigation.naventry.menuNavEntry
 import org.koin.compose.currentKoinScope
@@ -50,9 +53,12 @@ fun App() {
         SerializersModule {
             polymorphic(NavKey::class) {
                 subclass(org.dsqrwym.standard.navigation.RegisterScreen::class)
-                subclass(SuppliersScreen::class)
-                subclass(BasketScreen::class)
-                subclass(ChatScreen::class)
+                subclass(ProductsScreen::class)
+                subclass(CategoriesScreen::class)
+                subclass(CategoryBrowseRoute::class)
+                subclass(DistributorsScreen::class)
+                subclass(DistributorHomeScreen::class)
+                subclass(ProductDetailPlaceholderScreen::class)
             }
         }
     }
@@ -79,31 +85,30 @@ fun App() {
             is AuthState.Authenticated -> {
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
                 val menuList = listOf(
-                    SharedMenuItemState(SharedMenuItem.Dashboard),
                     SharedMenuItemState(
                         SharedMenuItem(
-                            route = SuppliersScreen,
-                            label = StandardRes.string.wholesalers,
-                            icon = Icons.Outlined.ShopTwo,
-                            iconContentDescription = StandardRes.string.wholesalers,
+                            route = ProductsScreen,
+                            label = SharedRes.string.products,
+                            icon = Icons.Outlined.Inventory2,
+                            iconContentDescription = SharedRes.string.products,
                             isPrimary = true,
                         )
                     ),
                     SharedMenuItemState(
                         SharedMenuItem(
-                            route = ChatScreen,
-                            label = StandardRes.string.chat,
-                            icon = Icons.AutoMirrored.Outlined.Chat,
-                            iconContentDescription = StandardRes.string.chat,
+                            route = CategoriesScreen,
+                            label = SharedRes.string.categories,
+                            icon = Icons.Outlined.Category,
+                            iconContentDescription = SharedRes.string.categories,
                             isPrimary = true,
                         )
                     ),
                     SharedMenuItemState(
                         SharedMenuItem(
-                            route = BasketScreen,
-                            label = StandardRes.string.shopping_cart,
-                            icon = Icons.Outlined.ShoppingCart,
-                            iconContentDescription = StandardRes.string.shopping_cart,
+                            route = DistributorsScreen,
+                            label = StandardRes.string.distributors,
+                            icon = Icons.Outlined.Storefront,
+                            iconContentDescription = StandardRes.string.distributors,
                             isPrimary = true,
                         )
                     ),
@@ -119,7 +124,7 @@ fun App() {
                     userRole = UserRole.RETAILER,
                 )
                 val navigationState = rememberSharedNavigationState(
-                    startRoute = SharedDashboardScreen,
+                    startRoute = ProductsScreen,
                     topLevelRoutes = menuConfig.getVisibleItems().map { it.item.route },
                     extraSerializersModule = standardSerializersModule,
                 )
@@ -131,7 +136,7 @@ fun App() {
                         onNavigate = navigationState::navigateToTopLevel,
                     ) {
                         SharedNavigationRoot(navigationState) {
-                            menuNavEntry(menuViewModel)
+                            menuNavEntry(menuViewModel, navigationState)
                         }
                     }
                 }

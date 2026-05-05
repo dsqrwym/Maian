@@ -23,6 +23,8 @@ export interface ICategoryQueryDto extends IPaginationQueryDto {
 
   withChildrenCount?: boolean;
 
+  includePublic?: boolean;
+
   productFilterMode?: 'self' | 'descendant';
 
   type?: CategoryType;

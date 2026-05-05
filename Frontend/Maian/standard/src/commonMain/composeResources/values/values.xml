@@ -5,6 +5,10 @@
     <string name="register_failed">Registration Failed</string>
 
     <string name="wholesalers">Wholesalers</string>
+    <string name="distributors">Distributors</string>
+    <string name="search_distributors">Search distributors</string>
+    <string name="no_distributors">No distributors found</string>
+    <string name="product_detail_coming_soon">Product detail is not available yet.</string>
     <string name="chat">Messages</string>
     <string name="shopping_cart">Cart</string>
 </resources>

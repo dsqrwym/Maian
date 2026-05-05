@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -121,7 +121,7 @@ private fun ProductCreateScreenContent(
         title = {
             BusinessTitleIconRow(
                 stringResource(SharedRes.string.create),
-                Icons.Outlined.ShoppingBag,
+                Icons.Outlined.Inventory2,
                 stringResource(EnterpriseRes.string.product)
             )
         },

@@ -7,6 +7,7 @@ import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.domain.category.toDomain
 import org.dsqrwym.shared.data.category.SharedCategoryApi
+import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.mapper.toDomain
@@ -67,10 +68,12 @@ class CategoryRepository(
         limit: Int = 100,
         needIva: Boolean = false,
         maxLevel: Int = 3,
+        productFilterMode: SharedCategoryProductFilterMode? = null,
     ): SharedResponseResult<ApiResponseList<CategorySummary>> {
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             maxLevel = maxLevel,
+            productFilterMode = productFilterMode,
             page = page,
             limit = limit,
             fields = buildList {

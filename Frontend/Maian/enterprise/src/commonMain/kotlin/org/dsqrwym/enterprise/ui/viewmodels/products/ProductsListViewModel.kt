@@ -18,6 +18,7 @@ import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.enterprise.data.product.ProductRepository
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
 import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
@@ -168,7 +169,15 @@ class ProductsListViewModel(
     }
 
     suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
-        return when (val result = categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 3)) {
+        return when (
+            val result = categoryRepository.getCategoriesByLevel(
+                search = query,
+                page = page,
+                limit = limit,
+                maxLevel = 3,
+                productFilterMode = SharedCategoryProductFilterMode.SELF,
+            )
+        ) {
             is SharedResponseResult.Success -> result.data?.items ?: emptyList()
             is SharedResponseResult.Error -> {
                 if (SharedResponseResult.shouldShowToUser(result.type)) {

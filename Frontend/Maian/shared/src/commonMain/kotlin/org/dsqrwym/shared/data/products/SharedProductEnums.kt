@@ -43,6 +43,20 @@ enum class SharedProductSortField {
     NAME, TITLE, CATEGORY, PRODUCT_CODE, MIN_ORDER_QTY, AVAILABLE_STOCK, PRICE_IVA, PRICE
 }
 
+val sharedEnterpriseProductSortFields = listOf(
+    SharedProductSortField.NAME,
+    SharedProductSortField.TITLE,
+    SharedProductSortField.PRODUCT_CODE,
+    SharedProductSortField.CATEGORY,
+    SharedProductSortField.AVAILABLE_STOCK,
+    SharedProductSortField.PRICE,
+    SharedProductSortField.PRICE_IVA,
+    SharedProductSortField.MIN_ORDER_QTY,
+)
+
+val sharedRetailProductSortFields = sharedEnterpriseProductSortFields
+    .filterNot { it == SharedProductSortField.CATEGORY }
+
 fun SharedProductSortField.toStringResource(): StringResource =
     when (this) {
         SharedProductSortField.NAME -> SharedRes.string.product_sort_name

@@ -12,3 +12,12 @@ enum class SharedCategorySelectField() {
     RELATIONS,
     TRANSLATIONS
 }
+
+enum class SharedCategorySortField {
+    LEVEL
+}
+
+enum class SharedCategoryProductFilterMode {
+    SELF,
+    DESCENDANT
+}

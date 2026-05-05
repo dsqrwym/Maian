@@ -22,6 +22,7 @@ import {
   eq,
   exists,
   ilike,
+  inArray,
   isNotNull,
   isNull,
   lte,
@@ -40,6 +41,7 @@ import { UserRole } from '#/generated/drizzle/enums.js';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '#/config/constants.config.js';
 import { alias } from 'drizzle-orm/pg-core';
+import { caslToDrizzle } from '#/casl/casl-to-drizzle.js';
 
 @Injectable()
 export class CategoryReadService {
@@ -53,7 +55,95 @@ export class CategoryReadService {
     this.logger.setContext(CategoryReadService.name);
   }
 
-  // 主要针对批发商端
+  /**
+   * 构建当前分类是否有产品关联的 EXISTS 条件。
+   * mode = self:
+   *   只判断当前 category 自己是否直接关联产品。
+   *   适合 enterprise / 后台筛选。
+   * mode = descendant:
+   *   判断当前 category 自己、子类、孙类是否有关联产品。
+   *   适合 standard 零售端分类浏览。
+   * ownerId:
+   *   用于零售商进入某个批发商店铺时，只判断该批发商的产品。
+   *   例如 ownerId = wholesalerId。
+   */
+  buildProductLinkedCondition = (
+    mode: 'self' | 'descendant',
+    ability: AppAbility,
+    ownerId?: string,
+  ): SQL => {
+    let productCondition = caslToDrizzle(
+      ability,
+      Action.Read,
+      'products',
+      products,
+    );
+    //ownerId 用于当零售商进入批发商店铺页面只看批发商的产品
+
+    if (mode === 'self') {
+      return exists(
+        this.drizzle.db
+          .select({ one: sql<number>`1` })
+          .from(product_categories)
+          .innerJoin(products, eq(product_categories.product_id, products.id))
+          .where(
+            and(
+              eq(product_categories.category_id, categories.id),
+              productCondition,
+              // 如果指定批发商，只看该批发商产品
+              ownerId ? eq(products.user_id, ownerId) : undefined,
+            ),
+          )
+          .limit(1),
+      );
+    }
+
+    productCondition = caslToDrizzle(
+      ability,
+      Action.Read,
+      'products',
+      products,
+    );
+
+    const linkedCategory = alias(categories, 'linked_category');
+    const child = alias(categories, 'child');
+
+    return exists(
+      this.drizzle.db
+        .select({ one: sql`1` })
+        // 产品类别是否关联
+        .from(product_categories)
+        // 产品是否关联
+        .innerJoin(products, eq(products.id, product_categories.product_id))
+        // 类别是否关联
+        .innerJoin(
+          linkedCategory,
+          eq(linkedCategory.id, product_categories.category_id),
+        )
+        .where(
+          and(
+            or(
+              // 是否等于当前类别
+              eq(linkedCategory.id, categories.id),
+              // 是否等于当前类别的子类
+              eq(linkedCategory.parent_id, categories.id),
+              // 是否等于当前类别的孙类
+              inArray(
+                linkedCategory.parent_id,
+                this.drizzle.db
+                  .select({ id: child.id })
+                  .from(child)
+                  .where(eq(child.parent_id, categories.id)),
+              ),
+            ),
+            productCondition,
+            // 如果指定批发商，只看该批发商产品
+            ownerId ? eq(products.user_id, ownerId) : undefined,
+          ),
+        ),
+    );
+  };
+
   getReadListPermission(user: UserPayload) {
     switch (user.userRole) {
       case UserRole.ADMIN:
@@ -68,46 +158,6 @@ export class CategoryReadService {
         return user.wholesalerId;
     }
   }
-
-  buildProductLinkedCondition = (
-    mode: 'self' | 'descendant',
-    ownerId?: string,
-  ): SQL => {
-    if (mode === 'self') {
-      return exists(
-        this.drizzle.db
-          .select({ one: sql<number>`1` })
-          .from(product_categories)
-          .innerJoin(products, eq(product_categories.product_id, products.id))
-          .where(
-            and(
-              eq(product_categories.category_id, categories.id),
-              ownerId ? eq(products.user_id, ownerId) : undefined,
-            ),
-          )
-          .limit(1),
-      );
-    }
-
-    return exists(sql`
-      (SELECT 1
-      FROM product_categories pc
-      JOIN products p ON p.id = pc.product_id
-      JOIN categories linked_category ON linked_category.id = pc.category_id
-      WHERE (
-        linked_category.id = ${categories.id}
-        -- 是否等于当前类别的子类 --
-        OR linked_category.parent_id = ${categories.id}
-        -- 是否等于当前类别的孙类 --
-        OR linked_category.parent_id IN (
-          SELECT child.id
-          FROM categories child
-          WHERE child.parent_id = ${categories.id}
-        )
-      )
-      ${ownerId ? sql`AND p.user_id = ${ownerId}` : sql``})
-    `);
-  };
 
   async findAllUseDrizzle(
     query: ICategoryQueryDto,
@@ -267,7 +317,11 @@ export class CategoryReadService {
 
     // 处理权限逻辑
     if (permissionCondition === undefined) {
-      if (userId) whereConditions.push(eq(categories.user_id, userId));
+      if (userId && query.includePublic) {
+        whereConditions.push(
+          or(isNull(categories.user_id), eq(categories.user_id, userId)),
+        );
+      } else if (userId) whereConditions.push(eq(categories.user_id, userId));
       else if (type === CategoryType.PRIVATE)
         whereConditions.push(isNotNull(categories.user_id));
       else if (type === CategoryType.PUBLIC)
@@ -291,6 +345,7 @@ export class CategoryReadService {
       whereConditions.push(
         this.buildProductLinkedCondition(
           query.productFilterMode,
+          ability,
           permissionCondition ?? userId,
         ),
       );
@@ -305,10 +360,25 @@ export class CategoryReadService {
     const finalWhere = and(...whereConditions);
 
     const sortOrder = query.sort_order ?? 'asc';
+
+    /**
+     * public category 排在前面：
+     *   user_id IS NULL => 0
+     *   user_id IS NOT NULL => 1
+     */
+    const visibilitySort = sql`CASE WHEN ${categories.user_id} IS NULL THEN 0 ELSE 1 END`;
+
     const orderByExpr =
       query.sort_by === 'level'
-        ? sql`${categories.level} ${sql.raw(sortOrder)}, ${localizedNameSort} ASC`
-        : sql`${localizedNameSort} ${sql.raw(sortOrder)}`;
+        ? sql`
+        ${visibilitySort} ASC,
+        ${categories.level} ${sql.raw(sortOrder)},
+        ${localizedNameSort} ASC
+      `
+        : sql`
+        ${visibilitySort} ASC,
+        ${localizedNameSort} ${sql.raw(sortOrder)}
+      `;
 
     // 执行查询
     const [items, countResult] = await Promise.all([

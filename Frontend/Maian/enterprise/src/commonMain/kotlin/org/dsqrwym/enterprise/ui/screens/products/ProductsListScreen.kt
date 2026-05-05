@@ -3,13 +3,15 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -18,7 +20,6 @@ import maian.business.generated.resources.parent_category_with_name
 import maian.business.generated.resources.select_parent_category
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.add_product
-import maian.enterprise.generated.resources.search_products
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.permissions.canManageEnterpriseProducts
@@ -28,18 +29,20 @@ import org.dsqrwym.enterprise.ui.model.ProductPlaceholders
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductsListViewModel
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.data.OrderDir
-import org.dsqrwym.shared.data.displayName
-import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.data.products.sharedEnterpriseProductSortFields
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
+import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.SharedConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
+import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
+import org.dsqrwym.shared.ui.components.product.SharedProductSortDialog
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
@@ -95,34 +98,49 @@ fun ProductsListScreen(
             }
         },
         title = {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                SearchBarDefaults.InputField(
-                    modifier = Modifier.weight(0.8f),
-                    query = searchQuery,
-                    onQueryChange = viewModel::updateSearchQuery,
-                    onSearch = { viewModel.refresh() },
-                    expanded = false,
-                    onExpandedChange = {},
-                    placeholder = { Text(stringResource(EnterpriseRes.string.search_products)) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, stringResource(EnterpriseRes.string.search_products)) },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            SharedCloseButton { viewModel.updateSearchQuery("") }
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    SearchBarDefaults.InputField(
+                        modifier = Modifier.weight(0.8f),
+                        query = searchQuery,
+                        onQueryChange = viewModel::updateSearchQuery,
+                        onSearch = { viewModel.refresh() },
+                        expanded = false,
+                        onExpandedChange = {},
+                        placeholder = { Text(stringResource(SharedRes.string.search_products)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.Search,
+                                stringResource(SharedRes.string.search_products)
+                            )
+                        },
+                        trailingIcon = {
+                            if (searchQuery.isNotEmpty()) {
+                                SharedCloseButton { viewModel.updateSearchQuery("") }
+                            } else {
+                                SharedScannerButton { viewModel.updateSearchQuery(it) }
+                            }
+                        }
+                    )
+                    IconButton(onClick = { viewModel.updateShowFilterDialog(true) }) {
+                        Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
+                    }
+                    if (!isTableMode) {
+                        IconButton(onClick = { viewModel.updateShowSortDialog(true) }) {
+                            Icon(Icons.Outlined.SwapVert, stringResource(SharedRes.string.sort))
                         }
                     }
+                }
+
+                ProductFilterChipsRow(
+                    viewModel = viewModel,
+                    showSortChip = !isTableMode,
+                    modifier = Modifier.fillMaxWidth()
                 )
-                IconButton(onClick = { viewModel.updateShowFilterDialog(true) }, modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
-                }
-                if (!isTableMode) {
-                    IconButton(onClick = { viewModel.updateShowSortDialog(true) }, modifier = Modifier.size(48.dp)) {
-                        Icon(Icons.Outlined.SwapVert, stringResource(SharedRes.string.sort))
-                    }
-                }
             }
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
@@ -140,12 +158,9 @@ fun ProductsListScreen(
         val isRefreshing = loadState.refresh is LoadState.Loading
         val isError = loadState.refresh is LoadState.Error
 
-        val density = LocalDensity.current
-        var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
-
         if (isTableMode) {
             ProductTableView(
-                Modifier.padding(top = filterFlowRowHeight),
+                Modifier,
                 paginatedProducts,
                 fakeProducts,
                 viewModel.sortBy,
@@ -164,43 +179,22 @@ fun ProductsListScreen(
                 isError
             )
 
-            ProductFilterChipsRow(
-                viewModel = viewModel,
-                showSortChip = false,
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp, top = padding.calculateTopPadding())
-                    .onGloballyPositioned { coordinates ->
-                        filterFlowRowHeight = with(density) { coordinates.size.height.toDp() }
-                    }
-            )
-        } else {
-            Box(Modifier.fillMaxSize()) {
-                ProductWaterfallView(
-                    paginatedProducts,
-                    fakeProducts,
-                    scrollBehavior,
-                    filterFlowRowHeight,
-                    viewModel::updateCurrentProduct,
-                    {},
-                    { onNavigateToEdit(it.id) },
-                    viewModel::updateDeleteProduct,
-                    canManageProducts,
-                    canManageProducts,
-                    noPermissionText,
-                    padding,
-                    isRefreshing,
-                    isError
-                )
 
-                ProductFilterChipsRow(
-                    viewModel = viewModel,
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp, top = padding.calculateTopPadding())
-                        .onGloballyPositioned { coordinates ->
-                            filterFlowRowHeight = with(density) { coordinates.size.height.toDp() }
-                        }
-                )
-            }
+        } else {
+            ProductWaterfallView(
+                paginatedProducts,
+                scrollBehavior,
+                viewModel::updateCurrentProduct,
+                {},
+                { onNavigateToEdit(it.id) },
+                viewModel::updateDeleteProduct,
+                canManageProducts,
+                canManageProducts,
+                noPermissionText,
+                padding,
+                isRefreshing,
+                isError
+            )
         }
     }
 }
@@ -225,17 +219,6 @@ private fun ProductConfirmDeleteDialog(
         onConfirm = onConfirm,
     )
 }
-
-private val productSortFields = listOf(
-    SharedProductSortField.NAME,
-    SharedProductSortField.TITLE,
-    SharedProductSortField.PRODUCT_CODE,
-    SharedProductSortField.CATEGORY,
-    SharedProductSortField.AVAILABLE_STOCK,
-    SharedProductSortField.PRICE,
-    SharedProductSortField.PRICE_IVA,
-    SharedProductSortField.MIN_ORDER_QTY,
-)
 
 @Composable
 private fun ProductFilterDialog(
@@ -267,13 +250,13 @@ private fun ProductFilterDialog(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(SharedRes.string.status), style = MaterialTheme.typography.labelLarge)
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FilterChip(
+                        ElevatedFilterChip(
                             selected = viewModel.filterStatus == null,
                             onClick = { viewModel.updateFilterStatus(null) },
                             label = { Text(stringResource(SharedRes.string.all)) },
                         )
                         SharedProductStatus.entries.forEach { status ->
-                            FilterChip(
+                            ElevatedFilterChip(
                                 selected = viewModel.filterStatus == status,
                                 onClick = { viewModel.updateFilterStatus(status) },
                                 label = { Text(status.displayName()) },
@@ -295,42 +278,12 @@ private fun ProductFilterDialog(
 private fun ProductSortDialog(
     viewModel: ProductsListViewModel,
 ) {
-    AlertDialog(
+    SharedProductSortDialog(
+        selectedSortBy = viewModel.sortBy,
+        sortDir = viewModel.sortDir,
+        fields = sharedEnterpriseProductSortFields,
+        onToggleSort = viewModel::toggleSort,
         onDismissRequest = { viewModel.updateShowSortDialog(false) },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.SwapVert, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(SharedRes.string.sort), style = MaterialTheme.typography.titleMedium)
-                }
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    productSortFields.forEach { field ->
-                        val selected = viewModel.sortBy == field
-                        val label = field.displayName()
-                        FilterChip(
-                            selected = selected,
-                            onClick = { viewModel.toggleSort(field) },
-                            label = {
-                                if (selected) {
-                                    SortDirectionLabel(label = label, sortDir = viewModel.sortDir)
-                                } else {
-                                    Text(label)
-                                }
-                            },
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = { viewModel.updateShowSortDialog(false) }) {
-                Text(stringResource(SharedRes.string.close))
-            }
-        }
     )
 }
 
@@ -362,36 +315,13 @@ private fun ProductFilterChipsRow(
             )
         }
         if (showSortChip) {
-            viewModel.sortBy?.let { field ->
-                ElevatedFilterChip(
-                    selected = true,
-                    onClick = { viewModel.updateSortDir(if (viewModel.sortDir == OrderDir.ASC) OrderDir.DESC else OrderDir.ASC) },
-                    label = {
-                        SortDirectionLabel(
-                            label = "${stringResource(SharedRes.string.sort)}: ${field.displayName()}",
-                            sortDir = viewModel.sortDir
-                        )
-                    },
-                )
-            }
+            SharedProductSortChip(
+                sortBy = viewModel.sortBy,
+                sortDir = viewModel.sortDir,
+                onToggleDirection = {
+                    viewModel.updateSortDir(if (viewModel.sortDir == OrderDir.ASC) OrderDir.DESC else OrderDir.ASC)
+                },
+            )
         }
-    }
-}
-
-@Composable
-private fun SortDirectionLabel(
-    label: String,
-    sortDir: OrderDir,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text("$label ${sortDir.displayName()}")
-        Icon(
-            imageVector = if (sortDir == OrderDir.ASC) Icons.Outlined.ArrowUpward else Icons.Outlined.ArrowDownward,
-            contentDescription = null,
-            modifier = Modifier.size(16.dp)
-        )
     }
 }
