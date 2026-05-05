@@ -1,13 +1,13 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { CategoryService } from '#/category/services/category.service.js';
+import { CategoryService } from '#/category/category.service.js';
 import {
   ICreateCategoryDto,
   validateCreateCategory,
-} from '../dto/create-category.dto.js';
+} from './dto/create-category.dto.js';
 import {
   IUpdateCategoryDto,
   validateUpdateCategory,
-} from '../dto/update-category.dto.js';
+} from './dto/update-category.dto.js';
 import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { RolesGuard } from '#/common/guards/roles.guard.js';
 import type { FastifyRequest } from 'fastify';
@@ -15,14 +15,14 @@ import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.
 import {
   ICategoryQueryDto,
   validateCategoryQuery,
-} from '../dto/category-query.dto.js';
+} from './dto/category-query.dto.js';
 import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { ADMIN_ROLES } from '#/admin/admin.constants.js';
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
-import { ICategoryResponse } from '../dto/category-response.dto.js';
+import { ICategoryResponse } from './dto/category-response.dto.js';
 import { UserRole } from '#/generated/drizzle/enums.js';
 import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 
