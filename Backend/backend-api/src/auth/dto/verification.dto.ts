@@ -6,7 +6,10 @@ import {
   TagsUuid,
 } from '#/utils/typia/validators/auth.validator.js';
 import { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
-import { TagsBCP47Language } from '#/utils/typia/validators/language.validator.js';
+import {
+  TagsBCP47Language,
+  TagsLanguage,
+} from '#/utils/typia/validators/language.validator.js';
 import { isObject } from '#/utils/is.utils.js';
 import { cleanString } from '#/utils/string.util.js';
 import { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
@@ -59,7 +62,7 @@ export interface IVerifyEmailQueryDto {
 
   token: TagsNotBlank;
 
-  lang?: TagsBCP47Language;
+  lang?: TagsLanguage;
 }
 
 export class VerifyCodeResponseDto {

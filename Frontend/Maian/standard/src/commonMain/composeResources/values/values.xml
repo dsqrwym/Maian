@@ -8,6 +8,9 @@
     <string name="distributors">Distributors</string>
     <string name="search_distributors">Search distributors</string>
     <string name="no_distributors">No distributors found</string>
+    <string name="wholesaler_scope_label">Wholesaler: %1$s</string>
+    <string name="back_to_all">Back to all</string>
+    <string name="current_wholesaler">Current</string>
     <string name="product_detail_coming_soon">Product detail is not available yet.</string>
     <string name="chat">Messages</string>
     <string name="shopping_cart">Cart</string>

@@ -280,5 +280,21 @@
     <string name="product_sort_price">價格</string>
     <string name="product_sort_price_without_vat">未稅價格</string>
     <string name="product_sort_min_order_qty">起訂量</string>
+    <string name="product_detail">產品詳情</string>
+    <string name="media">媒體</string>
+    <string name="variants">規格</string>
+    <string name="description">描述</string>
+    <string name="no_description">暫無描述。</string>
+    <string name="quantity">數量</string>
+    <string name="add_to_cart">加入購物車</string>
+    <string name="available_stock_value">可用庫存：%1$d</string>
+    <string name="sale_unit_qty_value">銷售單位：%1$d</string>
+    <string name="max_purchasable_qty_value">最多：%1$d</string>
+    <string name="below_min_order_qty">低於最低起訂量。</string>
+    <string name="above_available_stock">超過可購買庫存。</string>
+    <string name="not_purchasable">不可購買</string>
+    <string name="no_variants">暫無規格。</string>
+    <string name="product_media">產品媒體</string>
+    <string name="video_content_description">影片</string>
 </resources>
 

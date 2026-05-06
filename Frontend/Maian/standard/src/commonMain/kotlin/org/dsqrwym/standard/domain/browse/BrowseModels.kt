@@ -1,7 +1,9 @@
 package org.dsqrwym.standard.domain.browse
 
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
+import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.domain.category.CategoryTranslation
+import org.dsqrwym.shared.localization.getLocalizedValue
 import org.dsqrwym.shared.network.ApiConfig
 
 enum class BrowseScope {
@@ -16,6 +18,21 @@ data class RetailProductImage(
 ) {
     fun url(productId: String): String =
         ApiConfig.FilePath.productFile(productId, id.toString())
+}
+
+data class RetailProductDetailMedia(
+    val fileId: String,
+    val mimeType: String,
+    val sort: Int,
+) {
+    val isImage: Boolean
+        get() = mimeType.startsWith("image/")
+
+    val isVideo: Boolean
+        get() = mimeType.startsWith("video/")
+
+    fun url(productId: String): String =
+        ApiConfig.FilePath.productFile(productId, fileId)
 }
 
 data class RetailProduct(
@@ -55,6 +72,91 @@ data class RetailCategory(
     fun localizedPathNames(languageCode: String): List<String> =
         if (pathNames.isEmpty()) listOf(localizedName(languageCode))
         else pathNames.dropLast(1) + localizedName(languageCode)
+}
+
+data class RetailProductDetailCategory(
+    val id: String,
+    val name: String,
+    val iva: String?,
+    val isPrimary: Boolean,
+    val translations: List<CategoryTranslation>,
+) {
+    fun localizedName(languageCode: String): String =
+        getLocalizedValue(
+            langCode = languageCode,
+            translations = translations,
+            translationLangCode = { it.langCode },
+            translatedValue = { it.name },
+            fallback = name,
+        ) ?: name
+}
+
+data class RetailProductDetailTranslation(
+    val langCode: String,
+    val name: String,
+    val title: String?,
+    val description: String?,
+)
+
+data class RetailProductVariant(
+    val id: String,
+    val productCode: String,
+    val typeSale: SharedProductSaleVariant,
+    val price: String,
+    val priceIva: String,
+    val availableStock: Int,
+    val saleUnitQty: Int,
+    val sort: Int,
+    val minOrderQty: Int,
+) {
+    val maxPurchasableUnits: Int
+        get() = availableStock / saleUnitQty.coerceAtLeast(1)
+
+    val isPurchasable: Boolean
+        get() = availableStock > 0 && maxPurchasableUnits >= minOrderQty
+}
+
+data class RetailProductDetail(
+    val id: String,
+    val name: String,
+    val title: String?,
+    val description: String?,
+    val iva: String,
+    val productCode: String,
+    val media: List<RetailProductDetailMedia>,
+    val categories: List<RetailProductDetailCategory>,
+    val translations: List<RetailProductDetailTranslation>,
+    val variants: List<RetailProductVariant>,
+) {
+    val mainCategory: RetailProductDetailCategory?
+        get() = categories.firstOrNull { it.isPrimary } ?: categories.firstOrNull()
+
+    fun localizedName(languageCode: String): String =
+        getLocalizedValue(
+            langCode = languageCode,
+            translations = translations,
+            translationLangCode = { it.langCode },
+            translatedValue = { it.name },
+            fallback = name,
+        ) ?: name
+
+    fun localizedTitle(languageCode: String): String? =
+        getLocalizedValue(
+            langCode = languageCode,
+            translations = translations,
+            translationLangCode = { it.langCode },
+            translatedValue = { it.title },
+            fallback = title,
+        )
+
+    fun localizedDescription(languageCode: String): String? =
+        getLocalizedValue(
+            langCode = languageCode,
+            translations = translations,
+            translationLangCode = { it.langCode },
+            translatedValue = { it.description },
+            fallback = description,
+        )
 }
 
 data class RetailDistributor(

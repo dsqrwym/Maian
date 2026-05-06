@@ -79,10 +79,6 @@ kotlin {
             api(libs.table.core)
             // kotlin 高性能持久化不可变集合库， table依赖需要
             api(libs.kotlinx.collections.immutable)
-            // 富文本编辑器
-            api(libs.richeditor.compose)
-            // 颜色选择器
-            api(libs.composePipette)
             implementation(project(":shared"))
         }
 

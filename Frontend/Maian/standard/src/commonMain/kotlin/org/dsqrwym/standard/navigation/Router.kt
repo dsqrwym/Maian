@@ -57,3 +57,7 @@ data class DistributorHomeScreen(
 @Serializable
 @SerialName("product_detail_placeholder")
 data class ProductDetailPlaceholderScreen(val productId: String) : NavKey
+
+@Serializable
+@SerialName("product_detail")
+data class ProductDetailScreen(val productId: String) : NavKey

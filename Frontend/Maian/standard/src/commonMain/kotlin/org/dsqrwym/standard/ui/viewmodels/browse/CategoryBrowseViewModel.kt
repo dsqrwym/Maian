@@ -50,7 +50,6 @@ class CategoryBrowseViewModel(
         private set
     var categorySearchText by mutableStateOf("")
         private set
-    // Left rail fallback data used while a new category level is loading.
     var railFallbackCategories by mutableStateOf<List<RetailCategory>>(emptyList())
         private set
     var languageCode by mutableStateOf(LanguageManager.getCurrent().code)
@@ -211,8 +210,13 @@ class CategoryBrowseViewModel(
                     val currentCode = LanguageManager.getCurrentLanguage()
                     if (languageCode == currentCode) return@collectLatest
                     languageCode = currentCode
-                    if (isConfigured && selectedCategory == null) {
-                        refreshInitialCategory.emit(Unit)
+                    if (isConfigured) {
+                        if (selectedCategory == null) {
+                            refreshInitialCategory.emit(Unit)
+                        } else {
+                            // 重新构建 selectedCategory 的 pathNames 使用新语言
+                            updateSelectedCategoryPathNames()
+                        }
                     }
                 }
         }
@@ -265,6 +269,19 @@ class CategoryBrowseViewModel(
 
     fun dismissImagePreview() {
         imagePreviewProduct = null
+    }
+
+    private fun updateSelectedCategoryPathNames() {
+        val current = selectedCategory ?: return
+        // 由于父路径名称没有翻译数据，我们只能翻译当前选中的类别
+        // pathNames 的父级部分仍然是原始名称，但当前类别会正确翻译
+        val newPathNames = if (current.pathNames.isEmpty()) {
+            listOf(current.localizedName(languageCode))
+        } else {
+            // 保持路径结构，但用新语言的本地化名称替换最后一项
+            current.pathNames.dropLast(1) + current.localizedName(languageCode)
+        }
+        selectedCategory = current.copy(pathNames = newPathNames)
     }
 
     private suspend fun loadInitialCategory() {

@@ -20,7 +20,7 @@ composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
 compottieLite = "2.1.0" #2.0.3
 datatableMaterial3 = "0.12.0" #0.11.7
-filekitCore = "0.14.0" #0.13.0
+filekitCore = "0.13.0" #0.13.0 不更新直到 composemediaplayer = "0.10.0" 0.10.1
 haze = "1.7.2" #1.7.2
 jmail = "2.1.0" #2.0.2
 koinCore = "4.2.1" #4.2.0
@@ -33,6 +33,7 @@ kscan = "0.8.1"
 ktor = "3.4.3" #3.4.2
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
+mediaplayerKmp = "2.1.0"
 multiplatformSettings = "1.3.0"
 navigation3Runtime = "1.1.1" #1.1.0
 multiplatform-nav3-ui = "1.1.0" #1.0.0-alpha06
@@ -92,6 +93,7 @@ jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:naviga
 jetbrains-material3-adaptiveNavigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "compose-multiplatform-adaptive" }
 jetbrains-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "compose-multiplatform-lifecycle" }
 journeyapps-zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref= "zxingAndroid"}
+mediaplayer-kmp = { module = "io.github.khubaibkhan4:mediaplayer-kmp", version.ref = "mediaplayerKmp" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }

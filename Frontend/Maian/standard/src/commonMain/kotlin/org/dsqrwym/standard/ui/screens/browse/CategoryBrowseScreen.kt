@@ -37,6 +37,8 @@ fun CategoryBrowseScreen(
     distributorId: String? = null,
     rootCategory: RetailCategory? = null,
     initialRailFallbackCategories: List<RetailCategory> = emptyList(),
+    wholesalerName: String? = null,
+    onClearWholesalerScope: (() -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null,
     onProductClick: (String) -> Unit,
     onCategoryClick: (RetailCategory, List<RetailCategory>, String) -> Unit = { _, _, _ -> },
@@ -60,7 +62,7 @@ fun CategoryBrowseScreen(
     val products = viewModel.pagedProducts.collectAsLazyPagingItems()
     val railFallbackCategories = viewModel.railFallbackCategories.ifEmpty { initialRailFallbackCategories }
     val childCategorySnapshot = childCategories.loadedItems()
-        .map { category -> category.withBrowseContextFrom(viewModel.selectedCategory) }
+        .map { category -> category.withBrowseContextFrom(viewModel.selectedCategory, languageCode) }
 
     SharedTransparentScaffold(
         onNavigateBack = onNavigateBack,
@@ -75,25 +77,31 @@ fun CategoryBrowseScreen(
             }
         },
         title = {
-            SearchBarDefaults.InputField(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                query = categorySearchText,
-                onQueryChange = viewModel::updateCategorySearchText,
-                onSearch = {},
-                expanded = false,
-                onExpandedChange = {},
-                placeholder = { Text(stringResource(SharedRes.string.search_categories)) },
-                trailingIcon = {
-                    if (categorySearchText.isNotEmpty()) {
-                        SharedCloseButton(onClick = viewModel::clearCategorySearch)
-                    }
-                },
-                colors = SearchBarDefaults.inputFieldColors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
-                ),
-            )
+            Column {
+                WholesalerScopeBanner(
+                    wholesalerName = wholesalerName,
+                    onClearScope = onClearWholesalerScope,
+                )
+                SearchBarDefaults.InputField(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    query = categorySearchText,
+                    onQueryChange = viewModel::updateCategorySearchText,
+                    onSearch = {},
+                    expanded = false,
+                    onExpandedChange = {},
+                    placeholder = { Text(stringResource(SharedRes.string.search_categories)) },
+                    trailingIcon = {
+                        if (categorySearchText.isNotEmpty()) {
+                            SharedCloseButton(onClick = viewModel::clearCategorySearch)
+                        }
+                    },
+                    colors = SearchBarDefaults.inputFieldColors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
+                )
+            }
         },
     ) { padding, scrollBehavior ->
         PermanentNavigationDrawer(
@@ -110,7 +118,12 @@ fun CategoryBrowseScreen(
                     itemName = { it.localizedName(languageCode) },
                     drawerWidth = 118.dp,
                     onSelect = { category ->
-                        viewModel.selectCategory(category.withBrowseContextFrom(viewModel.selectedCategory))
+                        viewModel.selectCategory(
+                            category.withBrowseContextFrom(
+                                viewModel.selectedCategory,
+                                languageCode
+                            )
+                        )
                     },
                 )
             },
@@ -125,7 +138,7 @@ fun CategoryBrowseScreen(
                     itemName = { it.localizedName(languageCode) },
                     onSelect = { category ->
                         onCategoryClick(
-                            category.withBrowseContextFrom(viewModel.selectedCategory),
+                            category.withBrowseContextFrom(viewModel.selectedCategory, languageCode),
                             childCategorySnapshot,
                             languageCode,
                         )
@@ -171,17 +184,20 @@ private fun LazyPagingItems<RetailCategory>.loadedItems(): List<RetailCategory> 
     (0 until itemCount).mapNotNull { index -> peek(index) }
 
 // Backend relations are not requested; the browse position supplies parentId/path locally.
-private fun RetailCategory.withBrowseContextFrom(currentCategory: RetailCategory?): RetailCategory {
-    currentCategory ?: return copy(parentId = null, pathNames = listOf(name))
+private fun RetailCategory.withBrowseContextFrom(
+    currentCategory: RetailCategory?,
+    languageCode: String
+): RetailCategory {
+    currentCategory ?: return copy(parentId = null, pathNames = listOf(localizedName(languageCode)))
     return if (level == currentCategory.level) {
         copy(
             parentId = currentCategory.parentId,
-            pathNames = currentCategory.pathNames.dropLast(1) + name,
+            pathNames = currentCategory.pathNames.dropLast(1) + localizedName(languageCode),
         )
     } else {
         copy(
             parentId = currentCategory.id,
-            pathNames = currentCategory.pathNames + name,
+            pathNames = currentCategory.pathNames + localizedName(languageCode),
         )
     }
 }

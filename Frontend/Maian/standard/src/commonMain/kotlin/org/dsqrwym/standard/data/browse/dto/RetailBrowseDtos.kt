@@ -5,12 +5,18 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
+import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.data.products.dto.SharedProductFile
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.standard.domain.browse.RetailCategory
+import org.dsqrwym.standard.domain.browse.RetailProductDetail
+import org.dsqrwym.standard.domain.browse.RetailProductDetailCategory
+import org.dsqrwym.standard.domain.browse.RetailProductDetailMedia
+import org.dsqrwym.standard.domain.browse.RetailProductDetailTranslation
 import org.dsqrwym.standard.domain.browse.RetailDistributor
 import org.dsqrwym.standard.domain.browse.RetailProduct
 import org.dsqrwym.standard.domain.browse.RetailProductImage
+import org.dsqrwym.standard.domain.browse.RetailProductVariant
 import org.dsqrwym.shared.domain.category.CategoryTranslation
 
 @Serializable
@@ -76,6 +82,118 @@ fun RetailCategoryResponse.toDomain(): RetailCategory =
         parentId = parent?.id,
         pathNames = parent.pathNames() + name,
         translations = translations.map { CategoryTranslation(it.langCode, it.name) },
+    )
+
+@Serializable
+data class RetailProductDetailResponse(
+    val id: String,
+    val name: String,
+    val title: String? = null,
+    val description: String? = null,
+    val iva: String,
+    @SerialName("product_code")
+    val productCode: String,
+    @SerialName("products_files")
+    val productFiles: List<RetailProductDetailFileResponse> = emptyList(),
+    @SerialName("product_categories")
+    val productCategories: List<RetailProductDetailCategoryResponse> = emptyList(),
+    @SerialName("product_translations")
+    val productTranslations: List<RetailProductDetailTranslationResponse> = emptyList(),
+    @SerialName("variant_products")
+    val variantProducts: List<RetailProductVariantResponse> = emptyList(),
+)
+
+@Serializable
+data class RetailProductDetailFileResponse(
+    val sort: Int,
+    @SerialName("file_id")
+    val fileId: String,
+    @SerialName("mime_type")
+    val mimeType: String,
+)
+
+@Serializable
+data class RetailProductDetailCategoryResponse(
+    val id: String,
+    val name: String,
+    val iva: String? = null,
+    @SerialName("is_primary")
+    val isPrimary: Boolean = false,
+    @SerialName("category_translations")
+    val translations: List<SharedCategoryTranslation> = emptyList(),
+)
+
+@Serializable
+data class RetailProductDetailTranslationResponse(
+    val name: String,
+    val title: String? = null,
+    val description: String? = null,
+    @SerialName("lang_code")
+    val langCode: String,
+)
+
+@Serializable
+data class RetailProductVariantResponse(
+    val id: String,
+    @SerialName("product_code")
+    val productCode: String,
+    @SerialName("type_sale")
+    val typeSale: SharedProductSaleVariant,
+    val price: String,
+    @SerialName("price_iva")
+    val priceIva: String,
+    @SerialName("available_stock")
+    val availableStock: Int,
+    @SerialName("sale_unit_qty")
+    val saleUnitQty: Int,
+    val sort: Int,
+    @SerialName("min_order_qty")
+    val minOrderQty: Int,
+)
+
+fun RetailProductDetailResponse.toDomain(): RetailProductDetail =
+    RetailProductDetail(
+        id = id,
+        name = name,
+        title = title,
+        description = description,
+        iva = iva,
+        productCode = productCode,
+        media = productFiles
+            .sortedBy { it.sort }
+            .map { RetailProductDetailMedia(fileId = it.fileId, mimeType = it.mimeType, sort = it.sort) },
+        categories = productCategories.map { category ->
+            RetailProductDetailCategory(
+                id = category.id,
+                name = category.name,
+                iva = category.iva,
+                isPrimary = category.isPrimary,
+                translations = category.translations.map { CategoryTranslation(it.langCode, it.name) },
+            )
+        },
+        translations = productTranslations.map { translation ->
+            RetailProductDetailTranslation(
+                langCode = translation.langCode,
+                name = translation.name,
+                title = translation.title,
+                description = translation.description,
+            )
+        },
+        variants = variantProducts
+            .sortedBy { it.sort }
+            .map { variant ->
+                RetailProductVariant(
+                    id = variant.id,
+                    productCode = variant.productCode,
+                    typeSale = variant.typeSale,
+                    price = variant.price,
+                    priceIva = variant.priceIva,
+                    availableStock = variant.availableStock,
+                    saleUnitQty = variant.saleUnitQty,
+                    sort = variant.sort,
+                    minOrderQty = variant.minOrderQty,
+                )
+            },
     )
 
 private fun RetailCategoryParentResponse?.pathNames(): List<String> =

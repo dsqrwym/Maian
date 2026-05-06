@@ -11,11 +11,12 @@ import type { OrderByEnum } from '#/common/enums/sort.enum.js';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { ProductStatus } from '#/generated/drizzle/enums.js';
+import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
 
 export interface IProductListQueryDto extends IPaginationQueryDto {
   search?: string; // 搜索关键字 (用于 name, title, product_code)
 
-  langCode?: string; // 用于指定返回 lang 中的哪个字段
+  langCode?: TagsLanguage; // 用于指定返回 lang 中的哪个字段
 
   category_id?: TagsIntegerString; // 按主分类或关联分类过滤
 

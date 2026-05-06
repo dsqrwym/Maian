@@ -55,4 +55,8 @@ export class ProductsService {
   async getForUpdate(id: string, ability: AppAbility) {
     return this.productsReadService.getForUpdate(id, ability);
   }
+
+  async getProductDetail(id: string, langCode: string, ability: AppAbility) {
+    return this.productsReadService.getProductDetail(id, langCode, ability);
+  }
 }

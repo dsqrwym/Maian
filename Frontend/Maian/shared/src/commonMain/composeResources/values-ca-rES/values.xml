@@ -282,5 +282,21 @@
     <string name="product_sort_price">Preu</string>
     <string name="product_sort_price_without_vat">Preu sense IVA</string>
     <string name="product_sort_min_order_qty">Comanda mínima</string>
+    <string name="product_detail">Detall del producte</string>
+    <string name="media">Mitjans</string>
+    <string name="variants">Variants</string>
+    <string name="description">Descripció</string>
+    <string name="no_description">No hi ha cap descripció disponible.</string>
+    <string name="quantity">Quantitat</string>
+    <string name="add_to_cart">Afegir a la cistella</string>
+    <string name="available_stock_value">Estoc disponible: %1$d</string>
+    <string name="sale_unit_qty_value">Unitat de venda: %1$d</string>
+    <string name="max_purchasable_qty_value">Màx.: %1$d</string>
+    <string name="below_min_order_qty">Per sota de la comanda mínima.</string>
+    <string name="above_available_stock">Supera l'estoc disponible.</string>
+    <string name="not_purchasable">No comprable</string>
+    <string name="no_variants">No hi ha variants disponibles.</string>
+    <string name="product_media">Mitjans del producte</string>
+    <string name="video_content_description">Vídeo</string>
 </resources>
 

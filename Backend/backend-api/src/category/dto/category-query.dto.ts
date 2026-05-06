@@ -7,11 +7,12 @@ import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { OrderByEnum } from '#/common/enums/sort.enum.js';
+import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
 
 export interface ICategoryQueryDto extends IPaginationQueryDto {
   search?: string & tags.Example<'Keywords for name search'>; // 用于 name 和 lang 模糊搜索
 
-  langCode?: string & tags.MaxLength<15> & tags.Example<'zh-CH'>; // 用于指定返回 lang 中的哪个字段，不验证因为不影响系统逻辑
+  langCode?: TagsLanguage; // 用于指定返回 lang 中的哪个字段，不验证因为不影响系统逻辑
 
   userId?: TagsUuid;
 

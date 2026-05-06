@@ -13,13 +13,11 @@ import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
 import org.dsqrwym.shared.network.model.ApiResponseList
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
-import org.dsqrwym.standard.data.browse.dto.RetailCategoryResponse
-import org.dsqrwym.standard.data.browse.dto.RetailDistributorResponse
-import org.dsqrwym.standard.data.browse.dto.RetailProductResponse
-import org.dsqrwym.standard.data.browse.dto.toDomain
+import org.dsqrwym.standard.data.browse.dto.*
 import org.dsqrwym.standard.domain.browse.RetailCategory
 import org.dsqrwym.standard.domain.browse.RetailDistributor
 import org.dsqrwym.standard.domain.browse.RetailProduct
+import org.dsqrwym.standard.domain.browse.RetailProductDetail
 
 class RetailBrowseRepository(
     private val productApi: SharedProductApi,
@@ -62,6 +60,16 @@ class RetailBrowseRepository(
                 }
             )
 
+            is SharedResponseResult.Error -> result
+        }
+    }
+
+    suspend fun getProductDetail(
+        id: String,
+        langCode: String? = null,
+    ): SharedResponseResult<RetailProductDetail> {
+        return when (val result = safeApiCall { productApi.getProduct<RetailProductDetailResponse>(id, langCode) }) {
+            is SharedResponseResult.Success -> SharedResponseResult.Success(result.data?.toDomain())
             is SharedResponseResult.Error -> result
         }
     }
@@ -116,12 +124,17 @@ class RetailBrowseRepository(
      */
     suspend fun getProductBrowseCategories(
         langCode: String? = null,
+        wholesalerId: String? = null,
         page: Int = 1,
         limit: Int = 20,
     ): SharedResponseResult<ApiResponseList<RetailCategory>> {
         val query = SharedFindCategoryDto(
             langCode = langCode,
-            type = SharedCategoryType.PUBLIC,
+            // 如果没有批发商，显示公共分类
+            type = if (wholesalerId == null) SharedCategoryType.PUBLIC else null,
+            userId = wholesalerId,
+            // 保证有wholesalerId时，Public + Private
+            includePublic = wholesalerId != null,
             fields = listOf(SharedCategorySelectField.TRANSLATIONS),
             productFilterMode = SharedCategoryProductFilterMode.SELF,
             sortBy = SharedCategorySortField.LEVEL,

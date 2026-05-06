@@ -14,6 +14,10 @@ import {
   IProductListQueryDto,
   validateProductListQuery,
 } from './dto/product-list-query.dto.js';
+import {
+  IProductDetailQueryDto,
+  validateProductDetailQuery,
+} from './dto/product-detail-query.dto.js';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { TypedBody } from '#/utils/typia/typed-body.typia.js';
@@ -161,6 +165,99 @@ export class ProductsController {
     }[];
   }> {
     return this.productsService.getForUpdate(id, req.ability);
+  }
+
+  /**
+   * Get product data required for the details form.
+   *
+   * Returns the current product state including variants, translations,
+   * files, and categories. The response can be directly used to populate
+   * an details form.
+   *
+   * @param {string} id - Product ID
+   * @param query
+   * @param query.langCode - Language code for translations
+   * @param {FastifyRequest} req - Request object with user ability
+   * @returns {Promise<{
+   *   products_files: { sort: number; file_id: bigint }[];
+   *   name: string;
+   *   id: bigint;
+   *   title: string | null;
+   *   description: string | null;
+   *   iva: string;
+   *   product_code: string;
+   *   product_categories: {
+   *     name: string;
+   *     id: bigint;
+   *     iva: string | null;
+   *     category_translations: { name: string; lang_code: string }[];
+   *     is_primary: boolean;
+   *   }[];
+   *   product_translations: {
+   *     name: string;
+   *     title: string | null;
+   *     description: string | null;
+   *     lang_code: string;
+   *   }[];
+   *   variant_products: {
+   *     id: bigint;
+   *     product_code: string;
+   *     type_sale: SaleVariant;
+   *     price: string;
+   *     price_iva: string;
+   *     available_stock: number;
+   *     sort: number;
+   *     min_order_qty: number;
+   *   }[];
+   * }>}
+   */
+  @TypedRoute.Get(':id')
+  async getProductDetail(
+    @TypedParam('id') id: TagsIntegerString,
+    @TypedQuery(validateProductDetailQuery) query: IProductDetailQueryDto,
+    @Req() req: FastifyRequest,
+  ): Promise<{
+    products_files: {
+      sort: number;
+      file_id: bigint;
+      mime_type: string;
+    }[];
+    name: string;
+    id: bigint;
+    title: string | null;
+    description: string | null;
+    iva: string;
+    product_code: string;
+    product_categories: {
+      name: string;
+      id: bigint;
+      iva: string | null;
+      category_translations: { name: string; lang_code: string }[];
+      is_primary: boolean;
+    }[];
+    product_translations: {
+      name: string;
+      title: string | null;
+      description: string | null;
+      lang_code: string;
+    }[];
+    variant_products: {
+      id: bigint;
+      product_code: string;
+      type_sale: SaleVariant;
+      price: string;
+      price_iva: string;
+      available_stock: number;
+      sale_unit_qty: number;
+      sort: number;
+      min_order_qty: number;
+    }[];
+  }> {
+    return this.productsService.getProductDetail(
+      id,
+      query.langCode,
+      req.ability,
+    );
   }
 
   /**

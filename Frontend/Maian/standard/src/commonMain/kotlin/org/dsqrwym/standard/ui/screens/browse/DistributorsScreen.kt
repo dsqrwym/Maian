@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.load_failed
 import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.current_wholesaler
 import maian.standard.generated.resources.no_distributors
 import maian.standard.generated.resources.search_distributors
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
@@ -30,6 +32,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 fun DistributorsScreen(
     onNavigateBack: (() -> Unit)? = null,
+    selectedWholesalerId: String? = null,
+    selectedWholesaler: RetailDistributor? = null,
     onDistributorClick: (RetailDistributor) -> Unit,
     viewModel: DistributorsViewModel = koinViewModel(),
 ) {
@@ -71,6 +75,12 @@ fun DistributorsScreen(
                 .padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            val displayDistributors = remember(viewModel.distributors, selectedWholesalerId, selectedWholesaler) {
+                buildList {
+                    selectedWholesaler?.let(::add)
+                    addAll(viewModel.distributors.filterNot { it.id == selectedWholesalerId })
+                }
+            }
 
             when {
                 viewModel.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -81,17 +91,24 @@ fun DistributorsScreen(
                     Text(viewModel.error ?: stringResource(SharedRes.string.load_failed))
                 }
 
-                viewModel.distributors.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                displayDistributors.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(stringResource(StandardRes.string.no_distributors))
                 }
 
-                else -> LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(bottom = 16.dp),
-                ) {
-                    items(viewModel.distributors, key = { it.id }) { distributor ->
-                        DistributorCard(distributor, onClick = { onDistributorClick(distributor) })
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(bottom = 16.dp),
+                    ) {
+                        items(displayDistributors, key = { it.id }) { distributor ->
+                            val selected = distributor.id == selectedWholesalerId
+                            DistributorCard(
+                                distributor = distributor,
+                                selected = selected,
+                                onClick = { onDistributorClick(distributor) },
+                            )
+                        }
                     }
                 }
             }
@@ -102,12 +119,20 @@ fun DistributorsScreen(
 @Composable
 fun DistributorCard(
     distributor: RetailDistributor,
+    selected: Boolean = false,
     onClick: () -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
+        colors = if (selected) {
+            CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            )
+        } else {
+            CardDefaults.elevatedCardColors()
+        },
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
@@ -137,6 +162,18 @@ fun DistributorCard(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+            }
+            if (selected) {
+                AssistChip(
+                    onClick = onClick,
+                    label = { Text(stringResource(StandardRes.string.current_wholesaler), maxLines = 1) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.CheckCircle,
+                            contentDescription = stringResource(StandardRes.string.current_wholesaler),
+                        )
+                    },
+                )
             }
         }
     }

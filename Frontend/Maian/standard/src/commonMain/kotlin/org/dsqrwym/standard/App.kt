@@ -12,8 +12,8 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.categories
-import maian.standard.generated.resources.distributors
 import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.wholesalers
 import maian.shared.generated.resources.products
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthState
@@ -33,6 +33,7 @@ import org.dsqrwym.standard.navigation.CategoryBrowseRoute
 import org.dsqrwym.standard.navigation.DistributorHomeScreen
 import org.dsqrwym.standard.navigation.DistributorsScreen
 import org.dsqrwym.standard.navigation.ProductDetailPlaceholderScreen
+import org.dsqrwym.standard.navigation.ProductDetailScreen
 import org.dsqrwym.standard.navigation.ProductsScreen
 import org.dsqrwym.standard.navigation.naventry.authNavEntry
 import org.dsqrwym.standard.navigation.naventry.menuNavEntry
@@ -59,6 +60,7 @@ fun App() {
                 subclass(DistributorsScreen::class)
                 subclass(DistributorHomeScreen::class)
                 subclass(ProductDetailPlaceholderScreen::class)
+                subclass(ProductDetailScreen::class)
             }
         }
     }
@@ -106,9 +108,9 @@ fun App() {
                     SharedMenuItemState(
                         SharedMenuItem(
                             route = DistributorsScreen,
-                            label = StandardRes.string.distributors,
+                            label = StandardRes.string.wholesalers,
                             icon = Icons.Outlined.Storefront,
-                            iconContentDescription = StandardRes.string.distributors,
+                            iconContentDescription = StandardRes.string.wholesalers,
                             isPrimary = true,
                         )
                     ),

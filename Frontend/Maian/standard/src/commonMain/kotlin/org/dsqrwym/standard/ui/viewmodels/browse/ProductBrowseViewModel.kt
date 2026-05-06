@@ -221,6 +221,7 @@ class ProductBrowseViewModel(
             isLoadingMoreCategories = append
             val result = repository.getProductBrowseCategories(
                 langCode = languageCode,
+                wholesalerId = distributorIdState,
                 page = page,
                 limit = categoryPageSize,
             )

@@ -66,6 +66,7 @@ object ApiConfig {
 
     object ProductPath {
         const val PRODUCT = "${BASE_URL}/product"
+        fun product(id: String) = "${PRODUCT}/$id"
         fun getProductForUpdate(id: String) = "${PRODUCT}/$id/update"
     }
 }

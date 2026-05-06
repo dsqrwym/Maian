@@ -31,7 +31,7 @@ import {
   sql,
 } from 'drizzle-orm';
 import { Action } from '#/casl/actions.js';
-import { UserRole } from '#/generated/drizzle/enums.js';
+import { ProductStatus, UserRole } from '#/generated/drizzle/enums.js';
 import { ProductListSelectField, ProductSortField } from '../product.enums.js';
 import { IProductListQueryDto } from '../dto/product-list-query.dto.js';
 import { IProductResponse } from '../dto/product-response.js';
@@ -508,6 +508,127 @@ export class ProductsReadService {
       iva: product.iva,
       product_code: product.product_code,
       status: product.status,
+      product_categories: product.product_categories.map((category) => ({
+        id: category.category.id,
+        name: category.category.name,
+        iva: category.category.iva,
+        category_translations: category.category.category_translations,
+        is_primary: category.is_primary,
+      })),
+      product_translations: product.product_translations,
+      variant_products: product.variant_products,
+    };
+  }
+
+  async getProductDetail(id: string, langCode: string, ability: AppAbility) {
+    if (!ability.can(Action.Read, 'products')) {
+      throw new ForbiddenException(
+        'You do not have permission to read products',
+      );
+    }
+    const productAbilityCondition = caslToDrizzle(
+      ability,
+      Action.Read,
+      'products',
+      products,
+    );
+    const variantAbilityCondition = caslToDrizzle(
+      ability,
+      Action.Read,
+      'variant_products',
+      variant_products,
+    );
+
+    const product = await this.drizzle.db.query.products.findFirst({
+      where: and(eq(products.id, BigInt(id)), productAbilityCondition),
+      columns: {
+        id: true,
+        user_id: true,
+        iva: true,
+        name: true,
+        title: true,
+        description: true,
+        product_code: true,
+      },
+      with: {
+        products_files: {
+          columns: { file_id: true, sort: true },
+          with: { file: { columns: { mime_type: true } } },
+        },
+        product_categories: {
+          columns: { is_primary: true },
+          with: {
+            category: {
+              columns: {
+                id: true,
+                name: true,
+                iva: true,
+              },
+              with: {
+                category_translations: {
+                  where: eq(category_translations.lang_code, langCode),
+                  columns: { lang_code: true, name: true },
+                },
+              },
+            },
+          },
+        },
+        product_translations: {
+          where: eq(product_translations.lang_code, langCode),
+          columns: {
+            lang_code: true,
+            name: true,
+            title: true,
+            description: true,
+          },
+        },
+        variant_products: {
+          where: and(variantAbilityCondition),
+          columns: {
+            id: true,
+            sort: true,
+            price: true,
+            type_sale: true,
+            price_iva: true,
+            product_code: true,
+            sale_unit_qty: true,
+            min_order_qty: true,
+            available_stock: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    if (
+      !ability.can(
+        Action.Read,
+        subject('products', {
+          user_id: product.user_id,
+          status: ProductStatus.ACTIVE,
+        }),
+      )
+    ) {
+      throw new ForbiddenException(
+        'You do not have permission to read that product',
+      );
+    }
+
+    return {
+      products_files: product.products_files.map((file) => ({
+        file_id: file.file_id,
+        sort: file.sort,
+        mime_type: file.file.mime_type,
+      })),
+      name: product.name,
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      iva: product.iva,
+      product_code: product.product_code,
       product_categories: product.product_categories.map((category) => ({
         id: category.category.id,
         name: category.category.name,

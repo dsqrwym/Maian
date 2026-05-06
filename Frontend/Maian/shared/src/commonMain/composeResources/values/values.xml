@@ -281,5 +281,21 @@
     <string name="product_sort_price">Price</string>
     <string name="product_sort_price_without_vat">Price without VAT</string>
     <string name="product_sort_min_order_qty">MOQ</string>
+    <string name="product_detail">Product detail</string>
+    <string name="media">Media</string>
+    <string name="variants">Variants</string>
+    <string name="description">Description</string>
+    <string name="no_description">No description available.</string>
+    <string name="quantity">Quantity</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="available_stock_value">Available stock: %1$d</string>
+    <string name="sale_unit_qty_value">Unit size: %1$d</string>
+    <string name="max_purchasable_qty_value">Max: %1$d</string>
+    <string name="below_min_order_qty">Below minimum order quantity.</string>
+    <string name="above_available_stock">Exceeds purchasable stock.</string>
+    <string name="not_purchasable">Not purchasable</string>
+    <string name="no_variants">No variants available.</string>
+    <string name="product_media">Product media</string>
+    <string name="video_content_description">Video</string>
 </resources>
 

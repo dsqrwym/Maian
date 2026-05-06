@@ -158,7 +158,7 @@ kotlin {
             // coil image
             api(libs.coil.compose)
             api(libs.coil.network.ktor3)
-
+            // 视频
             api(libs.composemediaplayer)
 
             // 图片放大操作
@@ -175,9 +175,10 @@ kotlin {
             // 精准计算
             implementation(libs.bignum)
 
-            // 回国
-            api(libs.compose.multiplatform.media.player)
-
+            // 富文本编辑器
+            api(libs.richeditor.compose)
+            // 颜色选择器
+            api(libs.composePipette)
         }
 
         // 公共测试源码集

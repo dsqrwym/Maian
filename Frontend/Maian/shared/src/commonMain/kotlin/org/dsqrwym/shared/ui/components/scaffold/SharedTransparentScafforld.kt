@@ -42,6 +42,7 @@ fun SharedTransparentScaffold(
     title: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
     fabButtonState: SharedTransparentScaffoldFabButtonState? = null,
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit
 ) {
     val windowWidthSizeClass = LocalWindowSizeClass.current.widthSizeClass
@@ -85,7 +86,22 @@ fun SharedTransparentScaffold(
             floatingActionButton = {
                 if (windowWidthSizeClass != WindowWidthSizeClass.Compact) return@Scaffold
                 fabButtonState?.let { FabButton(it) }
-            }
+            },
+            bottomBar = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .hazeEffect(hazeState, hazeStyle) {
+                            alpha = 0.66f
+                            progressive = HazeProgressive.verticalGradient(
+                                startIntensity = 0.18f,
+                                endIntensity = 0.18f
+                            )
+                        }
+                ) {
+                    bottomBar()
+                }
+            },
         ) { padding ->
             Box(
                 modifier = Modifier

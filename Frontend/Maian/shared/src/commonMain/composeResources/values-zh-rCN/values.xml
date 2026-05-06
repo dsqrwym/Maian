@@ -284,5 +284,21 @@
     <string name="product_sort_price">价格</string>
     <string name="product_sort_price_without_vat">未税价格</string>
     <string name="product_sort_min_order_qty">起订量</string>
+    <string name="product_detail">产品详情</string>
+    <string name="media">媒体</string>
+    <string name="variants">规格</string>
+    <string name="description">描述</string>
+    <string name="no_description">暂无描述。</string>
+    <string name="quantity">数量</string>
+    <string name="add_to_cart">加入购物车</string>
+    <string name="available_stock_value">可用库存：%1$d</string>
+    <string name="sale_unit_qty_value">销售单位：%1$d</string>
+    <string name="max_purchasable_qty_value">最多：%1$d</string>
+    <string name="below_min_order_qty">低于最低起订量。</string>
+    <string name="above_available_stock">超过可购买库存。</string>
+    <string name="not_purchasable">不可购买</string>
+    <string name="no_variants">暂无规格。</string>
+    <string name="product_media">产品媒体</string>
+    <string name="video_content_description">视频</string>
 </resources>
 

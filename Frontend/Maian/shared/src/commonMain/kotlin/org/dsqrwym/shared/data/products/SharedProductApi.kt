@@ -23,4 +23,10 @@ class SharedProductApi(val client: HttpClient) {
             parameter("limit", query.limit)
         }.body()
     }
+
+    suspend inline fun <reified T> getProduct(id: String, langCode: String? = null): ApiResponse<T> {
+        return client.get(ApiConfig.ProductPath.product(id)) {
+            langCode?.let { parameter("langCode", it) }
+        }.body()
+    }
 }

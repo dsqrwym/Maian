@@ -279,5 +279,21 @@
     <string name="product_sort_price">Prix</string>
     <string name="product_sort_price_without_vat">Prix HT</string>
     <string name="product_sort_min_order_qty">Commande min.</string>
+    <string name="product_detail">Détail du produit</string>
+    <string name="media">Médias</string>
+    <string name="variants">Variantes</string>
+    <string name="description">Description</string>
+    <string name="no_description">Aucune description disponible.</string>
+    <string name="quantity">Quantité</string>
+    <string name="add_to_cart">Ajouter au panier</string>
+    <string name="available_stock_value">Stock disponible : %1$d</string>
+    <string name="sale_unit_qty_value">Unité de vente : %1$d</string>
+    <string name="max_purchasable_qty_value">Max. : %1$d</string>
+    <string name="below_min_order_qty">Inférieur à la quantité minimum.</string>
+    <string name="above_available_stock">Dépasse le stock disponible.</string>
+    <string name="not_purchasable">Non achetable</string>
+    <string name="no_variants">Aucune variante disponible.</string>
+    <string name="product_media">Médias du produit</string>
+    <string name="video_content_description">Vidéo</string>
 </resources>
 

@@ -40,6 +40,8 @@ fun ProductBrowseScreen(
     scope: BrowseScope,
     distributorId: String? = null,
     categoryId: String? = null,
+    wholesalerName: String? = null,
+    onClearWholesalerScope: (() -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null,
     onProductClick: (String) -> Unit,
     viewModel: ProductBrowseViewModel = koinViewModel(),
@@ -78,6 +80,10 @@ fun ProductBrowseScreen(
         },
         title = {
             Column {
+                WholesalerScopeBanner(
+                    wholesalerName = wholesalerName,
+                    onClearScope = onClearWholesalerScope,
+                )
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,

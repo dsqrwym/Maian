@@ -2,7 +2,11 @@ import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import type { AppAbility } from '../casl-types.js';
 import { Action } from '../actions.js';
 import type { UserPayload } from '#/auth/auth.types.js';
-import { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
+import {
+  ProductStatus,
+  UserRole,
+  UserStatus,
+} from '#/generated/drizzle/enums.js';
 
 export class CaslAbilityFactory {
   constructor() {}
@@ -40,7 +44,9 @@ export class CaslAbilityFactory {
         });
         cannot(Action.Read, 'users', { status: UserStatus.PENDING_REVIEW });
         can(Action.Read, 'categories');
-        can(Action.Read, 'products', { status: 'ACTIVE' });
+        can(Action.Read, 'products', { status: ProductStatus.ACTIVE });
+        // 这个只是用于将 零售商只能看 ACTIVE variant 也可以转为 where conditions
+        can(Action.Read, 'variant_products', { status: ProductStatus.ACTIVE });
         can(Action.Read, 'products_files');
         break;
       case UserRole.WHOLESALER:

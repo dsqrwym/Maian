@@ -71,6 +71,14 @@ fun Modifier.paddingWithoutTop(padding: PaddingValues): Modifier {
     )
 }
 
+@Composable
+fun Modifier.paddingWithoutTopAndButton(padding: PaddingValues): Modifier {
+    return this.padding(
+        start = padding.calculateStartPadding(LayoutDirection.Ltr),
+        end = padding.calculateEndPadding(LayoutDirection.Ltr)
+    )
+}
+
 
 /**
  * Modifier: 支持长按（移动端）或快捷键（桌面端 Ctrl/Cmd + C）复制文本

@@ -38,11 +38,12 @@ import io.github.vinceglb.filekit.dialogs.FileKitMode
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import maian.enterprise.generated.resources.*
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.product_image
 import maian.shared.generated.resources.status_error_content_description
 import org.dsqrwym.business.ui.media.MediaPickerViewModel
-import org.dsqrwym.business.ui.media.model.MediaType
 import org.dsqrwym.business.ui.media.model.MediaSource
+import org.dsqrwym.business.ui.media.model.MediaType
 import org.dsqrwym.business.ui.media.model.UploadMediaItem
 import org.dsqrwym.business.ui.media.model.UploadState
 import org.dsqrwym.enterprise.ui.components.containers.ReorderableContentBox
