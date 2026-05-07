@@ -3,8 +3,8 @@ package org.dsqrwym.standard.di.browse
 import org.dsqrwym.standard.data.browse.RetailBrowseRepository
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStateHolder
 import org.dsqrwym.standard.ui.viewmodels.browse.CategoryBrowseViewModel
-import org.dsqrwym.standard.ui.viewmodels.browse.DistributorHomeViewModel
-import org.dsqrwym.standard.ui.viewmodels.browse.DistributorsViewModel
+import org.dsqrwym.standard.ui.viewmodels.browse.WholesalerHomeViewModel
+import org.dsqrwym.standard.ui.viewmodels.browse.WholesalersViewModel
 import org.dsqrwym.standard.ui.viewmodels.browse.ProductBrowseViewModel
 import org.dsqrwym.standard.ui.viewmodels.browse.ProductDetailViewModel
 import org.koin.core.module.dsl.viewModel
@@ -16,6 +16,6 @@ val standardBrowseModule = module {
     viewModel<ProductBrowseViewModel> { ProductBrowseViewModel(get(), get()) }
     viewModel<ProductDetailViewModel> { ProductDetailViewModel(get(), get()) }
     viewModel<CategoryBrowseViewModel> { CategoryBrowseViewModel(get(), get()) }
-    viewModel<DistributorsViewModel> { DistributorsViewModel(get()) }
-    viewModel<DistributorHomeViewModel> { DistributorHomeViewModel() }
+    viewModel<WholesalersViewModel> { WholesalersViewModel(get()) }
+    viewModel<WholesalerHomeViewModel> { WholesalerHomeViewModel() }
 }

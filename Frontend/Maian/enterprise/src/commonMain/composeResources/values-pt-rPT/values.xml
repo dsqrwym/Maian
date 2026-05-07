@@ -1,22 +1,17 @@
 ﻿<resources>
-    <string name="button_register_new_account">Registar nova conta</string>
-    <string name="register_account_title">Criar conta</string>
-    <string name="register_success">Registo bem-sucedido</string>
-    <string name="register_failed">Falha no registo</string>
 
-    <string name="wholesalers">Grossistas</string>
 
     <string name="login_tab_employee">Funcionário</string>
     <string name="field_wholesaler_id_label">ID do grossista</string>
     <string name="field_wholesaler_id_placeholder">Introduza o seu ID de grossista</string>
-    <string name="error_wholesaler_id_required">O ID do grossista é obrigatório ao iniciar sessão com nome de utilizador</string>
+    <string name="error_wholesaler_id_required">O ID do grossista é obrigatório ao iniciar sess?o com nome de utilizador</string>
 
-    <string name="register_section_company_info">Informações da Empresa</string>
+    <string name="register_section_company_info">Informa??es da Empresa</string>
     <string name="field_company_name_label">Nome da Empresa</string>
     <string name="field_company_name_placeholder">Insira o nome da empresa</string>
     <string name="field_company_type_label">Tipo de Empresa</string>
     <string name="field_company_type_placeholder">Selecione o tipo de empresa</string>
-    <string name="icon_content_description_company">Ícone da empresa</string>
+    <string name="icon_content_description_company">ícone da empresa</string>
 
     <string name="category_management_description">
         Ver e pesquisar categorias, criar as suas próprias categorias de produtos e gerir nomes multilíngues.
@@ -30,28 +25,28 @@
     <string name="company_type_other">Outro</string>
     <string name="add_product">Adicionar produto</string>
     <string name="product">Produto</string>
-    <string name="product_preview">Pré-visualização</string>
-    <string name="product_preview_tooltip">Pré-visualização da página do produto que os retalhistas verão</string>
+    <string name="product_preview">Pré-visualiza??o</string>
+    <string name="product_preview_tooltip">Pré-visualiza??o da página do produto que os retalhistas ver?o</string>
     <string name="product_description">Detalhes do produto</string>
-    <string name="product_description_placeholder">Introduza a descrição detalhada do produto</string>
-    <string name="product_preview_outline">Resumo da pré-visualização</string>
-    <string name="product_preview_placeholder">Esta área está reservada para o fluxo completo de pré-visualização do produto.</string>
+    <string name="product_description_placeholder">Introduza a descri??o detalhada do produto</string>
+    <string name="product_preview_outline">Resumo da pré-visualiza??o</string>
+    <string name="product_preview_placeholder">Esta área está reservada para o fluxo completo de pré-visualiza??o do produto.</string>
     <string name="product_preview_name">Nome: %1$s</string>
     <string name="product_preview_title">Título: %1$s</string>
     <string name="product_preview_category">Categoria: %1$s</string>
     <string name="product_preview_tax_rate">Taxa de imposto: %1$s</string>
     <string name="product_preview_status">Estado: %1$s</string>
     <string name="product_preview_media_count">Multimédia: %1$d</string>
-    <string name="product_not_filled">Não preenchido</string>
-    <string name="product_not_selected">Não selecionado</string>
+    <string name="product_not_filled">N?o preenchido</string>
+    <string name="product_not_selected">N?o selecionado</string>
     <string name="products_added_variants_count">%1$d variantes adicionadas</string>
     <string name="add_product_variant">Adicionar variante do produto</string>
-    <string name="sales_information">Informações de venda</string>
+    <string name="sales_information">Informa??es de venda</string>
     <string name="sale_unit">Unidade de venda</string>
-    <string name="sale_unit_conversion">Conversão de unidades</string>
+    <string name="sale_unit_conversion">Convers?o de unidades</string>
     <string name="enter_product_code">Introduza o código do produto</string>
-    <string name="price_information">Informações de preço</string>
-    <string name="inventory_information">Informações de inventário</string>
+    <string name="price_information">Informa??es de pre?o</string>
+    <string name="inventory_information">Informa??es de inventário</string>
     <string name="available_stock">Stock disponível</string>
     <string name="enter_available_stock">Introduza a quantidade atual em stock</string>
     <string name="low_stock_threshold">Alerta de stock baixo</string>
@@ -71,11 +66,12 @@
     <string name="release_to_delete">Solte para eliminar</string>
     <string name="drag_here_to_delete">Arraste para aqui para eliminar</string>
     <string name="product_form_media_title">Ficheiros multimédia</string>
-    <string name="product_form_media_subtitle_mb">Prima sem soltar e arraste para reordenar. A primeira imagem será a imagem principal. Cada ficheiro não pode exceder %1$d MB.</string>
-    <string name="product_form_translations_title">Informações do produto (multilingue)</string>
-    <string name="product_form_translations_subtitle">Adicione nomes e descrições em diferentes idiomas. O idioma principal é apresentado por predefinição; os restantes são usados na apresentação multilingue. É obrigatório preencher pelo menos um idioma.</string>
+    <string name="product_form_media_subtitle_mb">Prima sem soltar e arraste para reordenar. A primeira imagem será a imagem principal. Cada ficheiro n?o pode exceder %1$d MB.</string>
+    <string name="product_form_translations_title">Informa??es do produto (multilingue)</string>
+    <string name="product_form_translations_subtitle">Adicione nomes e descri??es em diferentes idiomas. O idioma principal é apresentado por predefini??o; os restantes s?o usados na apresenta??o multilingue. é obrigatório preencher pelo menos um idioma.</string>
     <string name="product_form_attributes_title">Atributos do produto</string>
     <string name="product_form_attributes_subtitle">Configure os atributos básicos do produto, incluindo categoria, taxa de imposto e estado.</string>
     <string name="product_form_sku_title">Lista de SKU</string>
-    <string name="product_form_sku_subtitle">Cada produto precisa de pelo menos uma variante de venda (SKU). Pode criar variantes para diferentes embalagens, especificações ou preços. São suportadas até 50 variantes.</string>
+    <string name="product_form_sku_subtitle">Cada produto precisa de pelo menos uma variante de venda (SKU). Pode criar variantes para diferentes embalagens, especifica??es ou pre?os. S?o suportadas até 50 variantes.</string>
 </resources>
+

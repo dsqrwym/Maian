@@ -6,9 +6,9 @@
     <string name="button_wechat_logo_content_description">Icono de WeChat</string>
     <string name="icon_content_description_email">Icono de correo electrónico</string>
     <string name="icon_content_description_person">Icono de usuario</string>
-    <string name="icon_content_description_lock">Icono de contraseña</string>
+    <string name="icon_content_description_lock">Icono de contrase?a</string>
     <string name="icon_content_description_language">Botón para cambiar el idioma</string>
-    <string name="icon_content_description_password_toggle_visibility">Mostrar/ocultar contraseña</string>
+    <string name="icon_content_description_password_toggle_visibility">Mostrar/ocultar contrase?a</string>
     <string name="icon_content_description_dismiss">Cerrar</string>
 
 
@@ -29,7 +29,7 @@
 
     <!-- Botones de inicio de sesión -->
     <string name="button_login">Iniciar sesión</string>
-    <string name="button_forget_password">Olvidé mi contraseña</string>
+    <string name="button_forget_password">Olvidé mi contrase?a</string>
     <string name="button_other_login_methods">Otros métodos de inicio de sesión</string>
     <string name="button_google_login">Iniciar sesión con Google</string>
     <string name="button_wechat_login">Iniciar sesión con WeChat</string>
@@ -37,8 +37,8 @@
     <!-- Campos de inicio de sesión -->
     <string name="field_username_or_email_label">Nombre de usuario o correo electrónico</string>
     <string name="field_username_or_email_placeholder">Introduce tu nombre de usuario o correo</string>
-    <string name="field_password_label">Contraseña</string>
-    <string name="field_password_placeholder">Introduce tu contraseña</string>
+    <string name="field_password_label">Contrase?a</string>
+    <string name="field_password_placeholder">Introduce tu contrase?a</string>
     <string name="field_username_label">Nombre de usuario</string>
     <string name="field_username_placeholder">Introduzca el nombre de usuario</string>
 
@@ -48,18 +48,18 @@
     <string name="validation_username_cannot_contain_at">El nombre de usuario no puede contener el carácter "@"</string>
     <string name="validation_username_length_invalid">El nombre de usuario debe tener entre 3 y 30 caracteres</string>
     <string name="validation_email_domain_not_supported">El dominio de correo example.com no está soportado</string>
-    <string name="validation_password_empty">La contraseña no puede estar vacía</string>
-    <string name="validation_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
-    <string name="validation_password_missing_uppercase">La contraseña debe contener al menos una letra mayúscula</string>
-    <string name="validation_password_missing_lowercase">La contraseña debe contener al menos una letra minúscula</string>
-    <string name="validation_password_missing_digit">La contraseña debe contener al menos un número</string>
+    <string name="validation_password_empty">La contrase?a no puede estar vacía</string>
+    <string name="validation_password_too_short">La contrase?a debe tener al menos 6 caracteres</string>
+    <string name="validation_password_missing_uppercase">La contrase?a debe contener al menos una letra mayúscula</string>
+    <string name="validation_password_missing_lowercase">La contrase?a debe contener al menos una letra minúscula</string>
+    <string name="validation_password_missing_digit">La contrase?a debe contener al menos un número</string>
 
 
     <!-- ===================== Pantalla inicial ===================== -->
     <string name="initial_screen_welcome">Bienvenido a</string>
     <string name="initial_screen_platform_name">Plataforma MaiAn</string>
     <string name="initial_screen_instruction">Por favor, inicia sesión o regístrate para continuar</string>
-    <string name="initial_screen_quick_login_hint">⏫ Inicio rápido con Google o WeChat ⏫</string>
+    <string name="initial_screen_quick_login_hint">? Inicio rápido con Google o WeChat ?</string>
 
     <!-- Acuerdo de usuario y privacidad -->
     <string name="agreement_warning">Debes aceptar el Acuerdo de Usuario y la Política de Privacidad para continuar</string>
@@ -67,13 +67,13 @@
     <string name="agreement_section_user_agreement">Acuerdo de Usuario</string>
     <string name="agreement_section_privacy_policy">Política de Privacidad</string>
 
-    <!-- ===================== Olvidé mi contraseña ===================== -->
+    <!-- ===================== Olvidé mi contrase?a ===================== -->
     <string name="reset_email_label">Correo electrónico</string>
     <string name="reset_email_placeholder">Introduce tu correo</string>
-    <string name="reset_new_password_label">Nueva contraseña</string>
-    <string name="reset_repeat_password_label">Repetir nueva contraseña</string>
-    <string name="reset_repeat_password_placeholder">Vuelve a introducir la nueva contraseña</string>
-    <string name="reset_repeat_password_mismatch">La contraseña introducida no coincide con la nueva</string>
+    <string name="reset_new_password_label">Nueva contrase?a</string>
+    <string name="reset_repeat_password_label">Repetir nueva contrase?a</string>
+    <string name="reset_repeat_password_placeholder">Vuelve a introducir la nueva contrase?a</string>
+    <string name="reset_repeat_password_mismatch">La contrase?a introducida no coincide con la nueva</string>
 
 
     <string name="register_email_already_registered">Este correo electrónico ya está registrado. Por favor, inicie sesión.</string>
@@ -81,13 +81,13 @@
 
 
     <string name="login_success">Inicio de sesión exitoso</string>
-    <string name="login_error_username_or_password">Usuario o contraseña incorrectos</string>
-    <string name="login_error_email_or_password">Correo electrónico o contraseña incorrectos</string>
+    <string name="login_error_username_or_password">Usuario o contrase?a incorrectos</string>
+    <string name="login_error_email_or_password">Correo electrónico o contrase?a incorrectos</string>
 
 
     <string name="reset_verify_email">Verificar correo</string>
     <string name="reset_verify">Verificar</string>
-    <string name="reset_change_password">Cambiar contraseña</string>
+    <string name="reset_change_password">Cambiar contrase?a</string>
 
     <!-- Mensajes de error -->
     <string name="reset_unknown_error">Error desconocido</string>
@@ -109,7 +109,7 @@
     <string name="otp_resend">Reenviar</string>
     <string name="otp_send">Enviar código de verificación</string>
 
-    <!-- ===================== OTP & Restablecer contraseña ===================== -->
+    <!-- ===================== OTP & Restablecer contrase?a ===================== -->
     <string name="otp_code_sent">Código de verificación enviado, revisa tu correo</string>
     <string name="otp_code_invalid_or_expired">Código inválido o caducado</string>
     <string name="otp_code_verified">Verificado. Debes completar la operación antes de %1$s</string>
@@ -128,7 +128,7 @@
     <string name="request_too_frequent">Demasiadas solicitudes, inténtalo de nuevo más tarde</string>
     <string name="email_not_found">Correo electrónico no encontrado</string>
 
-    <string name="password_reset_success">Contraseña cambiada con éxito</string>
+    <string name="password_reset_success">Contrase?a cambiada con éxito</string>
 
     <string name="field_cannot_be_empty">No puede estar vacío</string>
     <string name="field_required">Obligatorio</string>
@@ -147,7 +147,7 @@
     <string name="address_input_postal_code">Introduzca el código postal</string>
     <string name="address_no_match">No hay coincidencias</string>
 
-    <string name="reset_password_title">Restablecer contraseña</string>
+    <string name="reset_password_title">Restablecer contrase?a</string>
 
     <string name="menu_content_description">Menú</string>
     <string name="menu_drawer_more_functions">Más funciones</string>
@@ -184,7 +184,7 @@
     <string name="phone_hint_invalid_with_format">(Actualmente analizado como: %1$s)</string>
 
     <string name="create">Crear</string>
-    <string name="add">Añadir</string>
+    <string name="add">A?adir</string>
     <string name="update">Actualizar</string>
     <string name="not_found">No se encontraron resultados</string>
     <string name="load_failed">Error al cargar, toca para reintentar</string>
@@ -216,7 +216,7 @@
 
     <string name="tax_rate">Tasa de impuesto</string>
     <string name="confirm">Confirmar</string>
-    <string name="confirm_delete_title">¿Eliminar el elemento seleccionado?</string>
+    <string name="confirm_delete_title">?Eliminar el elemento seleccionado?</string>
     <string name="confirm_delete_message">Esta acción no se puede deshacer.</string>
     <string name="image_content_description">Imagen</string>
     <string name="video_play_pause_content_description">Reproducir o pausar vídeo</string>
@@ -289,7 +289,7 @@
     <string name="description">Descripción</string>
     <string name="no_description">No hay descripción disponible.</string>
     <string name="quantity">Cantidad</string>
-    <string name="add_to_cart">Añadir a la cesta</string>
+    <string name="add_to_cart">A?adir a la cesta</string>
     <string name="available_stock_value">Stock disponible: %1$d</string>
     <string name="sale_unit_qty_value">Unidad de venta: %1$d</string>
     <string name="max_purchasable_qty_value">Máx.: %1$d</string>
@@ -299,5 +299,11 @@
     <string name="no_variants">No hay variantes disponibles.</string>
     <string name="product_media">Medios del producto</string>
     <string name="video_content_description">Vídeo</string>
+    <string name="button_register_new_account">Registrar nueva cuenta</string>
+    <string name="register_account_title">Crear cuenta</string>
+    <string name="register_success">Registro exitoso</string>
+    <string name="register_failed">Registro fallido</string>
+    <string name="wholesalers">Mayoristas</string>
 </resources>
+
 

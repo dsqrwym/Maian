@@ -1,10 +1,5 @@
 ﻿<resources>
-    <string name="button_register_new_account">注册新账户</string>
-    <string name="register_account_title">注册账号</string>
-    <string name="register_success">注册成功</string>
-    <string name="register_failed">注册失败</string>
 
-    <string name="wholesalers">批发商</string>
 
     <string name="login_tab_employee">员工</string>
     <string name="field_wholesaler_id_label">批发商编号</string>
@@ -79,3 +74,4 @@
     <string name="product_form_sku_title">SKU 列表</string>
     <string name="product_form_sku_subtitle">每个产品至少需要一个销售变体（SKU）。你可以为不同包装、规格或价格创建多个变体。最多支持 50 个变体。</string>
 </resources>
+

@@ -1,5 +1,11 @@
 package org.dsqrwym.standard.ui.screens.browse
 
+/**
+ * 分类浏览界面
+ * 提供三栏布局的分类浏览体验：左侧分类导航、右侧子分类网格、产品瀑布流
+ * 支持搜索、图片预览、路径导航等功能
+ */
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -34,7 +40,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 fun CategoryBrowseScreen(
     scope: BrowseScope,
-    distributorId: String? = null,
+    wholesalerId: String? = null,
     rootCategory: RetailCategory? = null,
     initialRailFallbackCategories: List<RetailCategory> = emptyList(),
     wholesalerName: String? = null,
@@ -45,10 +51,10 @@ fun CategoryBrowseScreen(
     onPathClick: (Int) -> Unit = {},
     viewModel: CategoryBrowseViewModel = koinViewModel(),
 ) {
-    LaunchedEffect(scope, distributorId, rootCategory?.id) {
+    LaunchedEffect(scope, wholesalerId, rootCategory?.id) {
         viewModel.configure(
             scope = scope,
-            wholesalerId = distributorId,
+            wholesalerId = wholesalerId,
             rootCategory = rootCategory,
             initialRailFallbackCategories = initialRailFallbackCategories,
         )
@@ -78,6 +84,7 @@ fun CategoryBrowseScreen(
         },
         title = {
             Column {
+                // 批发商范围横幅
                 WholesalerScopeBanner(
                     wholesalerName = wholesalerName,
                     onClearScope = onClearWholesalerScope,
@@ -104,6 +111,7 @@ fun CategoryBrowseScreen(
             }
         },
     ) { padding, scrollBehavior ->
+        // 永久导航抽屉（左侧分类导航）
         PermanentNavigationDrawer(
             modifier = Modifier
                 .fillMaxSize()
@@ -128,6 +136,7 @@ fun CategoryBrowseScreen(
                 )
             },
         ) {
+            // 右侧内容区域
             Column(
                 modifier = Modifier.fillMaxSize().padding(start = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -179,22 +188,26 @@ fun CategoryBrowseScreen(
     }
 }
 
-// Read only loaded Paging items; peek avoids triggering new loads.
+/**
+ * 获取LazyPagingItems中已加载的项目
+ * @return 已加载的分类列表
+ */
 private fun LazyPagingItems<RetailCategory>.loadedItems(): List<RetailCategory> =
     (0 until itemCount).mapNotNull { index -> peek(index) }
 
-// Backend relations are not requested; the browse position supplies parentId/path locally.
 private fun RetailCategory.withBrowseContextFrom(
     currentCategory: RetailCategory?,
     languageCode: String
 ): RetailCategory {
     currentCategory ?: return copy(parentId = null, pathNames = listOf(localizedName(languageCode)))
     return if (level == currentCategory.level) {
+        // 同级分类：使用相同的父分类ID，替换路径名称的最后一项
         copy(
             parentId = currentCategory.parentId,
             pathNames = currentCategory.pathNames.dropLast(1) + localizedName(languageCode),
         )
     } else {
+        // 子分类：使用当前分类作为父分类，追加到路径名称
         copy(
             parentId = currentCategory.id,
             pathNames = currentCategory.pathNames + localizedName(languageCode),

@@ -1,10 +1,5 @@
 ﻿<resources>
-    <string name="button_register_new_account">Registrar nueva cuenta</string>
-    <string name="register_account_title">Crear cuenta</string>
-    <string name="register_success">Registro exitoso</string>
-    <string name="register_failed">Registro fallido</string>
 
-    <string name="wholesalers">Mayoristas</string>
 
     <string name="login_tab_employee">Empleado</string>
     <string name="field_wholesaler_id_label">ID de mayorista</string>
@@ -28,7 +23,7 @@
     <string name="company_type_cooperative">Cooperativa</string>
     <string name="company_type_civil_company">Sociedad civil</string>
     <string name="company_type_other">Otro</string>
-    <string name="add_product">Añadir producto</string>
+    <string name="add_product">A?adir producto</string>
     <string name="product">Producto</string>
     <string name="product_preview">Vista previa</string>
     <string name="product_preview_tooltip">Vista previa de la página del producto que verán los minoristas</string>
@@ -44,8 +39,8 @@
     <string name="product_preview_media_count">Multimedia: %1$d</string>
     <string name="product_not_filled">No completado</string>
     <string name="product_not_selected">No seleccionado</string>
-    <string name="products_added_variants_count">%1$d variantes añadidas</string>
-    <string name="add_product_variant">Añadir variante de producto</string>
+    <string name="products_added_variants_count">%1$d variantes a?adidas</string>
+    <string name="add_product_variant">A?adir variante de producto</string>
     <string name="sales_information">Información de venta</string>
     <string name="sale_unit">Unidad de venta</string>
     <string name="sale_unit_conversion">Conversión de unidades</string>
@@ -66,16 +61,17 @@
     <string name="upload_progress">Subiendo: %1$d%</string>
     <string name="upload_failed_retry">Error al subir\nToca para reintentar</string>
     <string name="upload_media">Subir</string>
-    <string name="add_media">Añadir multimedia</string>
+    <string name="add_media">A?adir multimedia</string>
     <string name="remove_media">Eliminar multimedia</string>
     <string name="release_to_delete">Suelta para eliminar</string>
     <string name="drag_here_to_delete">Arrastra aquí para eliminar</string>
     <string name="product_form_media_title">Archivos multimedia</string>
     <string name="product_form_media_subtitle_mb">Mantén pulsado y arrastra para ordenar. La primera imagen será la principal. Cada archivo no puede superar %1$d MB.</string>
     <string name="product_form_translations_title">Información del producto (multilingüe)</string>
-    <string name="product_form_translations_subtitle">Añade nombres y descripciones en distintos idiomas. El idioma principal se muestra por defecto; los demás se usan para la visualización multilingüe. Se debe completar al menos un idioma.</string>
+    <string name="product_form_translations_subtitle">A?ade nombres y descripciones en distintos idiomas. El idioma principal se muestra por defecto; los demás se usan para la visualización multilingüe. Se debe completar al menos un idioma.</string>
     <string name="product_form_attributes_title">Atributos del producto</string>
     <string name="product_form_attributes_subtitle">Configura los atributos básicos del producto, incluida la categoría, el tipo impositivo y el estado.</string>
     <string name="product_form_sku_title">Lista de SKU</string>
     <string name="product_form_sku_subtitle">Cada producto necesita al menos una variante de venta (SKU). Puedes crear variantes para distintos embalajes, especificaciones o precios. Se admiten hasta 50 variantes.</string>
 </resources>
+

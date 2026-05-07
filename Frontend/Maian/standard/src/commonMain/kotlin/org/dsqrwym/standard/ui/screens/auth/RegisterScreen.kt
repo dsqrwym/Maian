@@ -29,9 +29,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import maian.shared.generated.resources.*
-import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.button_register_new_account
-import maian.standard.generated.resources.register_account_title
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider
@@ -63,7 +60,7 @@ fun RegisterScreen(
     val nextButtonText = when (registerViewModel.currentStep) {
         1 -> stringResource(SharedRes.string.reset_verify_email)
         2 -> stringResource(SharedRes.string.reset_verify)
-        3 -> stringResource(StandardRes.string.button_register_new_account)
+        3 -> stringResource(SharedRes.string.button_register_new_account)
         else -> stringResource(SharedRes.string.reset_unknown_error)
     }
 
@@ -81,7 +78,7 @@ fun RegisterScreen(
             .padding(26.dp),
     ) {
         Column(Modifier.fillMaxSize().verticalScroll(scrollState)) {
-            AuthTopBar(title = stringResource(StandardRes.string.register_account_title)) {
+            AuthTopBar(title = stringResource(SharedRes.string.register_account_title)) {
                 onBackButtonClick()
             }
 

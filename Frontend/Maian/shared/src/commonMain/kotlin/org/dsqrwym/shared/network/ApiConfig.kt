@@ -54,6 +54,8 @@ object ApiConfig {
     object FilePath {
         private const val FILES = "${BASE_URL}/files"
         const val UPLOAD_FILE_RAW = "${FILES}/upload-raw"
+        const val VIDEO_PLAY_TOKEN = "${FILES}/video/play-token"
+        const val VIDEO_STREAM = "${FILES}/video/stream"
 
         const val PRODUCT_FILE = "${FILES}/product-file"
         fun productFile(productId: String, fileId: String): String =

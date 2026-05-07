@@ -38,6 +38,7 @@ class ProductDetailViewModel(
         private set
 
     private var productId: String? = null
+    private var lastLoadedLanguageCode: String? = null
 
     val quantity: Int?
         get() = quantityText.toIntOrNull()
@@ -57,17 +58,19 @@ class ProductDetailViewModel(
     }
 
     fun loadProduct(id: String) {
-        if (productId == id && product != null) return
+        if (productId == id && product != null && lastLoadedLanguageCode == languageCode) return
         productId = id
         viewModelScope.launch {
             isLoading = true
             when (val result = repository.getProductDetail(id, languageCode)) {
                 is SharedResponseResult.Success -> {
                     product = result.data
+                    lastLoadedLanguageCode = languageCode
                     selectDefaultVariant(result.data)
                 }
 
                 is SharedResponseResult.Error -> {
+                    lastLoadedLanguageCode = null
                     product = null
                     if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }

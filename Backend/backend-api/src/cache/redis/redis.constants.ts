@@ -6,6 +6,7 @@ export const REDIS_KEYS = {
   CSRF_BLACKLIST_PREFIX: 'blacklist-csrf', // csrf token 黑名单
   SESSION_REVOKED_PREFIX: 'session-revoked', // 会话已注销
   LOGIN_ATTEMPTS_PREFIX: 'login_attempts', // 登录尝试
+  VIDEO_PLAY_PREFIX: 'video:play', // 视频播放 token jti
 
   // Builders
   // 构造完整键名
@@ -17,6 +18,7 @@ export const REDIS_KEYS = {
   // 生成用于跟踪登录尝试和锁定状态的缓存键
   loginAttemptsKey: (userId: string) =>
     `${REDIS_KEYS.LOGIN_ATTEMPTS_PREFIX}:${userId}`,
+  videoPlayJtiKey: (jti: string) => `${REDIS_KEYS.VIDEO_PLAY_PREFIX}:${jti}`,
 
   setWithTtlSeconds: (seconds: number) => seconds * 1000,
 } as const;

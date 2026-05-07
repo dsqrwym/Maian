@@ -9,9 +9,6 @@ import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import maian.enterprise.generated.resources.EnterpriseRes
-import maian.enterprise.generated.resources.register_failed
-import maian.enterprise.generated.resources.register_success
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.data.auth.AuthRepository
 import org.dsqrwym.enterprise.data.auth.dto.CompleteRegisterRequest
@@ -391,7 +388,7 @@ class RegisterViewModel(
                 )
                 when (val result = authRepository.completeResister(req)) {
                     is SharedResponseResult.Success -> {
-                        mySnackbarViewModel.showSuccess(getString(EnterpriseRes.string.register_success))
+                        mySnackbarViewModel.showSuccess(getString(SharedRes.string.register_success))
                         currentStep++
                         UserPreference.setUserSelectRole(loginType = LoginType.WHOLESALER)
                         emitNavigation(NavigationEvent.ToRoute(SharedLoginScreen(email)))
@@ -404,7 +401,7 @@ class RegisterViewModel(
                             mySnackbarViewModel.showError(getString(SharedRes.string.token_invalid_or_expired))
                             resetRegister()
                         } else {
-                            mySnackbarViewModel.showError(getString(EnterpriseRes.string.register_failed))
+                            mySnackbarViewModel.showError(getString(SharedRes.string.register_failed))
                             resetRegister()
                         }
                     }

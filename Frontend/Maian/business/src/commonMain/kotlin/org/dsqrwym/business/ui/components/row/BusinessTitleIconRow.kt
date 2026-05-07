@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.dsqrwym.shared.util.row.SharedRowLayout
 
@@ -22,7 +23,10 @@ fun BusinessTitleIconRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = SharedRowLayout.arrangement
     ) {
-        Text(titleText)
         Icon(icon, iconContentDescription)
+        Text(
+            titleText, Modifier.weight(1f, false), maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }

@@ -1,4 +1,4 @@
-﻿package org.dsqrwym.enterprise.ui.components.product
+package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -226,12 +226,10 @@ fun MediaGridItem(
                     }
 
                     is MediaSource.Remote -> {
-                        SharedAsyncImage(
-                            model = source.url,
-                            contentDescription = stringResource(EnterpriseRes.string.upload_media),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize().hazeSource(hazeState),
-                            zoomable = false,
+                        SharedVideoPlayer(
+                            source.url,
+                            Modifier.hazeSource(hazeState),
+                            showProgressBar = false,
                             enableContextMenu = false
                         )
                     }
@@ -265,7 +263,10 @@ fun MediaGridItem(
                                 modifier = Modifier.size(32.dp),
                             )
                             Text(
-                                text = stringResource(EnterpriseRes.string.upload_progress, (item.progress * 100).toInt().coerceIn(0, 100)),
+                                text = stringResource(
+                                    EnterpriseRes.string.upload_progress,
+                                    (item.progress * 100).toInt().coerceIn(0, 100)
+                                ),
                                 style = MaterialTheme.typography.labelSmall
                             )
                         }
@@ -369,7 +370,9 @@ fun MediaRemoveGridItem(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = if (isHovering) stringResource(EnterpriseRes.string.release_to_delete) else stringResource(EnterpriseRes.string.drag_here_to_delete),
+                text = if (isHovering) stringResource(EnterpriseRes.string.release_to_delete) else stringResource(
+                    EnterpriseRes.string.drag_here_to_delete
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = if (isHovering) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.primary
             )

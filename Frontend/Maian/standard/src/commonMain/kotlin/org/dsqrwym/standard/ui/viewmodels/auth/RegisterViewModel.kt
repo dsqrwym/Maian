@@ -10,9 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.*
-import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.register_failed
-import maian.standard.generated.resources.register_success
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.location.SharedLocationRepository
 import org.dsqrwym.shared.data.location.dto.CityDto
@@ -347,7 +344,7 @@ class RegisterViewModel(
             )
             when (val result = authRepository.completeRegister(req)) {
                 is SharedResponseResult.Success -> {
-                    mySnackbarViewModel.showSuccess(getString(StandardRes.string.register_success))
+                    mySnackbarViewModel.showSuccess(getString(SharedRes.string.register_success))
                     currentStep++
                     emitNavigation(NavigationEvent.ToRoute(SharedLoginScreen(email)))
                 }
@@ -359,7 +356,7 @@ class RegisterViewModel(
                         mySnackbarViewModel.showError(getString(SharedRes.string.token_invalid_or_expired))
                         resetRegister()
                     } else {
-                        mySnackbarViewModel.showError(getString(StandardRes.string.register_failed))
+                        mySnackbarViewModel.showError(getString(SharedRes.string.register_failed))
                         resetRegister()
                     }
                 }

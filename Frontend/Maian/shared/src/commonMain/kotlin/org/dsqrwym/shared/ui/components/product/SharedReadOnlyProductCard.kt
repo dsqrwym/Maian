@@ -44,7 +44,7 @@ fun SharedReadOnlyProductCard(
     titleTranslation: String? = null,
     statusText: String? = null,
     isLoading: Boolean = false,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
     onImageClick: (() -> Unit)? = null,
     showActions: Boolean = false,
     actions: @Composable RowScope.() -> Unit = {},
@@ -52,7 +52,10 @@ fun SharedReadOnlyProductCard(
     val platform = remember { getPlatform() }
     val hasStock = totalStock > 0
     val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
-    OutlinedCard(modifier = modifier.fillMaxWidth().clickable(onClick = onClick)) {
+    OutlinedCard(
+        modifier = modifier.fillMaxWidth()
+            .then(if (onClick == null) Modifier else Modifier.clickable(onClick = onClick))
+    ) {
         Column {
             SharedOverlayContentBox(
                 isLoading = isLoading,
@@ -118,7 +121,10 @@ fun SharedReadOnlyProductCard(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
                                 .placeholderWithShimmer(isLoading)
-                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f), RoundedCornerShape(4.dp))
+                                .background(
+                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                    RoundedCornerShape(4.dp)
+                                )
                                 .padding(horizontal = 4.dp, vertical = 1.dp),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

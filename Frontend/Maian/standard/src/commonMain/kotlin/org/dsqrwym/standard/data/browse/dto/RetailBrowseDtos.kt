@@ -1,5 +1,11 @@
 package org.dsqrwym.standard.data.browse.dto
 
+/**
+ * 零售浏览数据传输对象
+ * 定义API响应的数据结构和到领域模型的转换函数
+ * 提供数据层和领域层之间的映射
+ */
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
@@ -13,7 +19,7 @@ import org.dsqrwym.standard.domain.browse.RetailProductDetail
 import org.dsqrwym.standard.domain.browse.RetailProductDetailCategory
 import org.dsqrwym.standard.domain.browse.RetailProductDetailMedia
 import org.dsqrwym.standard.domain.browse.RetailProductDetailTranslation
-import org.dsqrwym.standard.domain.browse.RetailDistributor
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
 import org.dsqrwym.standard.domain.browse.RetailProduct
 import org.dsqrwym.standard.domain.browse.RetailProductImage
 import org.dsqrwym.standard.domain.browse.RetailProductVariant
@@ -203,7 +209,7 @@ private fun RetailCategoryParentResponse?.pathNames(): List<String> =
         .asReversed()
 
 @Serializable
-data class RetailDistributorResponse(
+data class RetailWholesalerResponse(
     val id: String,
     @SerialName("user_id")
     val userId: String? = null,
@@ -218,8 +224,8 @@ data class RetailDistributorResponse(
     val profile: JsonObject? = null,
 )
 
-fun RetailDistributorResponse.toDomain(): RetailDistributor =
-    RetailDistributor(
+fun RetailWholesalerResponse.toDomain(): RetailWholesaler =
+    RetailWholesaler(
         id = id,
         userId = userId,
         username = username,

@@ -73,6 +73,7 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
                     LanguageMenuItem(item, onClick = {
                         LanguageManager.setLocaleLanguage(item.code)
                         SharedUserPreferences.setUserLanguage(item.code)
+                        expanded = !expanded
                     })
                 }
             }

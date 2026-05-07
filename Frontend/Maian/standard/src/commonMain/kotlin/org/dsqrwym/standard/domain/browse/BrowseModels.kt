@@ -1,5 +1,11 @@
 package org.dsqrwym.standard.domain.browse
 
+/**
+ * 浏览模块的领域模型
+ * 定义了浏览功能相关的所有数据结构和业务规则
+ * 包括产品、分类、批发商等核心实体
+ */
+
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.domain.category.CategoryTranslation
@@ -159,7 +165,7 @@ data class RetailProductDetail(
         )
 }
 
-data class RetailDistributor(
+data class RetailWholesaler(
     val id: String,
     val userId: String?,
     val username: String?,

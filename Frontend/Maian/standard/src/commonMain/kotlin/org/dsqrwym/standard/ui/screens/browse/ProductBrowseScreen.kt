@@ -1,5 +1,11 @@
 package org.dsqrwym.standard.ui.screens.browse
 
+/**
+ * 产品浏览界面
+ * 提供产品搜索、排序、分类过滤等功能
+ * 支持瀑布流布局展示和图片预览
+ */
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreHoriz
@@ -38,7 +44,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 fun ProductBrowseScreen(
     scope: BrowseScope,
-    distributorId: String? = null,
+    wholesalerId: String? = null,
     categoryId: String? = null,
     wholesalerName: String? = null,
     onClearWholesalerScope: (() -> Unit)? = null,
@@ -46,8 +52,8 @@ fun ProductBrowseScreen(
     onProductClick: (String) -> Unit,
     viewModel: ProductBrowseViewModel = koinViewModel(),
 ) {
-    LaunchedEffect(scope, distributorId, categoryId) {
-        viewModel.configure(scope, distributorId, categoryId)
+    LaunchedEffect(scope, wholesalerId, categoryId) {
+        viewModel.configure(scope, wholesalerId, categoryId)
     }
     val languageCode = viewModel.languageCode
 
@@ -80,6 +86,7 @@ fun ProductBrowseScreen(
         },
         title = {
             Column {
+                // 批发商范围横幅
                 WholesalerScopeBanner(
                     wholesalerName = wholesalerName,
                     onClearScope = onClearWholesalerScope,

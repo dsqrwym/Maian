@@ -1,10 +1,5 @@
 ﻿<resources>
-    <string name="button_register_new_account">Register New Account</string>
-    <string name="register_account_title">Create Account</string>
-    <string name="register_success">Registration Successful</string>
-    <string name="register_failed">Registration Failed</string>
 
-    <string name="wholesalers">Wholesalers</string>
 
     <string name="login_tab_employee">Employee</string>
     <string name="field_wholesaler_id_label">Wholesaler ID</string>
@@ -79,4 +74,5 @@
     <string name="product_form_sku_title">SKU list</string>
     <string name="product_form_sku_subtitle">Each product needs at least one sales variant (SKU). You can create variants for different packaging, specifications, or prices. Up to 50 variants are supported.</string>
 </resources>
+
 

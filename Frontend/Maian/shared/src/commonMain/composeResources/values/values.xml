@@ -69,7 +69,7 @@
     <string name="initial_screen_welcome">Welcome to</string>
     <string name="initial_screen_platform_name">MaiAn Platform</string>
     <string name="initial_screen_instruction">Please login or register to continue</string>
-    <string name="initial_screen_quick_login_hint">⏫ Quick login with Google or WeChat ⏫</string>
+    <string name="initial_screen_quick_login_hint">? Quick login with Google or WeChat ?</string>
 
     <!-- User Agreement & Privacy -->
     <string name="agreement_warning">Please agree to the user agreement and privacy policy to continue</string>
@@ -297,5 +297,11 @@
     <string name="no_variants">No variants available.</string>
     <string name="product_media">Product media</string>
     <string name="video_content_description">Video</string>
+    <string name="button_register_new_account">Register New Account</string>
+    <string name="register_account_title">Create Account</string>
+    <string name="register_success">Registration Successful</string>
+    <string name="register_failed">Registration Failed</string>
+    <string name="wholesalers">Wholesalers</string>
 </resources>
+
 

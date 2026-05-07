@@ -255,7 +255,7 @@ fun LoginTypeTabs(
             onClick = { onLoginTypeChange(LoginType.WHOLESALER) },
             text = {
                 Text(
-                    text = stringResource(EnterpriseRes.string.wholesalers),
+                    text = stringResource(SharedRes.string.wholesalers),
                     fontWeight = if (selectedLoginType == LoginType.WHOLESALER) FontWeight.Bold else FontWeight.Normal
                 )
             }

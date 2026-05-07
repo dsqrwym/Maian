@@ -294,10 +294,13 @@ export class LocalStorageDriver implements StorageDriver {
     }
   }
 
-  createReadStream(pathOrKey: string): Readable {
+  createReadStream(
+    pathOrKey: string,
+    options?: { start?: number; end?: number },
+  ): Readable {
     const fullPath = this.resolvePathKey(pathOrKey);
     try {
-      const stream = fs.createReadStream(fullPath);
+      const stream = fs.createReadStream(fullPath, options);
       stream.on('error', (err) => {
         const e = err as NodeJS.ErrnoException;
         if (e.code === 'ENOENT') {

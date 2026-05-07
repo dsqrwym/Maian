@@ -1,10 +1,5 @@
 ﻿<resources>
-    <string name="button_register_new_account">Créer un nouveau compte</string>
-    <string name="register_account_title">Créer un compte</string>
-    <string name="register_success">Inscription réussie</string>
-    <string name="register_failed">Échec de l'inscription</string>
 
-    <string name="wholesalers">Grossistes</string>
 
     <string name="login_tab_employee">Employé</string>
     <string name="field_wholesaler_id_label">Identifiant du grossiste</string>
@@ -18,7 +13,7 @@
     <string name="field_company_name_placeholder">Entrez le nom de l'entreprise</string>
     <string name="field_company_type_label">Type d\'entreprise</string>
     <string name="field_company_type_placeholder">Sélectionnez le type d'entreprise</string>
-    <string name="icon_content_description_company">Icône de l'entreprise</string>
+    <string name="icon_content_description_company">Ic?ne de l'entreprise</string>
 
     <string name="category_management_description">
         Voir et rechercher des catégories, créer vos propres catégories de produits et gérer les noms multilingues.
@@ -32,12 +27,12 @@
     <string name="company_type_other">Autre</string>
     <string name="add_product">Ajouter un produit</string>
     <string name="product">Produit</string>
-    <string name="product_preview">Aperçu</string>
-    <string name="product_preview_tooltip">Aperçu de la page produit que verront les détaillants</string>
+    <string name="product_preview">Aper?u</string>
+    <string name="product_preview_tooltip">Aper?u de la page produit que verront les détaillants</string>
     <string name="product_description">Détails du produit</string>
     <string name="product_description_placeholder">Saisissez la description détaillée du produit</string>
-    <string name="product_preview_outline">Résumé de l’aperçu</string>
-    <string name="product_preview_placeholder">Cette zone est réservée au flux complet d’aperçu du produit.</string>
+    <string name="product_preview_outline">Résumé de l’aper?u</string>
+    <string name="product_preview_placeholder">Cette zone est réservée au flux complet d’aper?u du produit.</string>
     <string name="product_preview_name">Nom : %1$s</string>
     <string name="product_preview_title">Titre : %1$s</string>
     <string name="product_preview_category">Catégorie : %1$s</string>
@@ -66,11 +61,11 @@
     <string name="price_without_vat_value">Net : %1$s</string>
     <string name="moq_value">Commande min. : %1$d</string>
     <string name="upload_progress">Importation : %1$d%</string>
-    <string name="upload_failed_retry">Échec de l’importation\nAppuyez pour réessayer</string>
+    <string name="upload_failed_retry">échec de l’importation\nAppuyez pour réessayer</string>
     <string name="upload_media">Importer</string>
     <string name="add_media">Ajouter un média</string>
     <string name="remove_media">Supprimer le média</string>
-    <string name="release_to_delete">Relâchez pour supprimer</string>
+    <string name="release_to_delete">Relachez pour supprimer</string>
     <string name="drag_here_to_delete">Glissez ici pour supprimer</string>
     <string name="product_form_media_title">Fichiers multimédias</string>
     <string name="product_form_media_subtitle_mb">Maintenez appuyé et faites glisser pour réordonner. La première image sera l'image principale. Chaque fichier ne doit pas dépasser %1$d Mo.</string>
@@ -81,3 +76,4 @@
     <string name="product_form_sku_title">Liste des SKU</string>
     <string name="product_form_sku_subtitle">Chaque produit nécessite au moins une variante de vente (SKU). Vous pouvez créer des variantes pour différents emballages, spécifications ou prix. Jusqu’à 50 variantes sont prises en charge.</string>
 </resources>
+

@@ -7,9 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import maian.enterprise.generated.resources.EnterpriseRes
-import maian.enterprise.generated.resources.button_register_new_account
 import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.button_register_new_account
 import maian.shared.generated.resources.initial_screen_quick_login_hint
 import org.dsqrwym.business.ui.components.auth.BusinessInitialTitle
 import org.dsqrwym.shared.data.local.SharedUserPreferences
@@ -69,7 +68,7 @@ fun InitialScreen(
 
             MyTextButton(
                 modifier = Modifier.fillMaxWidth(0.56f),
-                text = stringResource(EnterpriseRes.string.button_register_new_account),
+                text = stringResource(SharedRes.string.button_register_new_account),
                 isEnabled = isNavEnabled,
             ) { onRegisterClick() }
 

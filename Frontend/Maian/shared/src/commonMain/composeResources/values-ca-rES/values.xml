@@ -67,7 +67,7 @@
     <string name="initial_screen_welcome">Benvingut a</string>
     <string name="initial_screen_platform_name">Plataforma MaiAn</string>
     <string name="initial_screen_instruction">Si us plau, inicia sessió o registra’t per continuar</string>
-    <string name="initial_screen_quick_login_hint">⏫ Inici ràpid amb Google o WeChat ⏫</string>
+    <string name="initial_screen_quick_login_hint">? Inici ràpid amb Google o WeChat ?</string>
 
     <!-- Acord d’usuari i privadesa -->
     <string name="agreement_warning">Has d’acceptar l’Acord d’Usuari i la Política de Privadesa per continuar</string>
@@ -81,7 +81,7 @@
     <string name="reset_new_password_label">Nova contrasenya</string>
     <string name="reset_repeat_password_label">Repetir nova contrasenya</string>
     <string name="reset_repeat_password_placeholder">Torni a introduir la nova contrasenya</string>
-    <string name="reset_repeat_password_mismatch">La contrasenya introduïda no coincideix amb la nova</string>
+    <string name="reset_repeat_password_mismatch">La contrasenya introdu?da no coincideix amb la nova</string>
 
     <string name="reset_verify_email">Verificar correu</string>
     <string name="reset_verify">Verificar</string>
@@ -97,7 +97,7 @@
     <string name="error_serialization">Resposta inesperada del servidor. Torna-ho a intentar.</string>
     <string name="error_connect_timeout">No s’ha pogut connectar amb el servidor. Comprova la teua connexió a internet.</string>
     <string name="error_socket_timeout">El servidor ha tardat massa a respondre. Torna-ho a intentar més tard.</string>
-    <string name="error_io">S’ha produït un error de xarxa. Comprova la teua connexió.</string>
+    <string name="error_io">S’ha produ?t un error de xarxa. Comprova la teua connexió.</string>
     <string name="error_generic">La sol·licitud de xarxa ha fallat. Torna-ho a intentar.</string>
     <string name="error_no_permission">No té permís per accedir a aquesta funció o recurs.</string>
 
@@ -124,7 +124,7 @@
     <string name="expire_absolute">abans de %1$s</string>
 
     <string name="request_too_frequent">Massa sol·licituds, torna-ho a provar més tard</string>
-    <string name="email_not_found">Adreça de correu no trobada</string>
+    <string name="email_not_found">Adre?a de correu no trobada</string>
 
     <string name="password_reset_success">Contrasenya canviada correctament</string>
 
@@ -133,7 +133,7 @@
     <string name="field_required">Obligatori</string>
     <string name="field_optional">Opcional</string>
 
-    <string name="section_address">Adreça</string>
+    <string name="section_address">Adre?a</string>
     <string name="address_country">País</string>
     <string name="address_search_or_select_country">Cerca o selecciona un país</string>
     <string name="address_state_or_province">Província/Estat</string>
@@ -141,7 +141,7 @@
     <string name="address_city">Ciutat</string>
     <string name="address_input_or_select_city">Introdueix o selecciona ciutat</string>
     <string name="address_street">Carrer</string>
-    <string name="address_input_detail">Introdueix l'adreça completa</string>
+    <string name="address_input_detail">Introdueix l'adre?a completa</string>
     <string name="address_postal_code">Codi postal</string>
     <string name="address_input_postal_code">Introdueix el codi postal</string>
     <string name="address_no_match">No hi ha coincidències</string>
@@ -167,7 +167,7 @@
     <string name="theme_follow_system">Seguir el sistema</string>
 
     <string name="field_telephone_label">Número de telèfon</string>
-    <string name="field_telephone_placeholder">Introduïu el número de telèfon</string>
+    <string name="field_telephone_placeholder">Introdu?u el número de telèfon</string>
 
     <string name="phone_error_empty">El número de telèfon no pot estar buit</string>
     <string name="phone_error_invalid">Número de telèfon no vàlid</string>
@@ -178,7 +178,7 @@
     <string name="phone_error_not_a_number">L\'entrada no és un número de telèfon vàlid</string>
     <string name="phone_error_too_short_after_idd">El número és massa curt després de la marcació internacional</string>
     <string name="phone_error_format_incorrect">Format de número de telèfon incorrecte</string>
-    <string name="phone_error_validation_failed">S\'ha produït un error en validar el número de telèfon</string>
+    <string name="phone_error_validation_failed">S\'ha produ?t un error en validar el número de telèfon</string>
 
     <string name="phone_hint_invalid_with_format">(Actualment analitzat com: %1$s)</string>
 
@@ -218,7 +218,7 @@
     <string name="confirm_delete_title">Vols eliminar l'element seleccionat?</string>
     <string name="confirm_delete_message">Esta acció no es pot desfer.</string>
     <string name="image_content_description">Imatge</string>
-    <string name="video_play_pause_content_description">Reproduïx o pausa el vídeo</string>
+    <string name="video_play_pause_content_description">Reprodu?x o pausa el vídeo</string>
     <string name="video_toggle_fullscreen_content_description">Activa o desactiva la pantalla completa</string>
     <string name="toast_success_content_description">Correcte</string>
     <string name="toast_info_content_description">Informació</string>
@@ -298,5 +298,11 @@
     <string name="no_variants">No hi ha variants disponibles.</string>
     <string name="product_media">Mitjans del producte</string>
     <string name="video_content_description">Vídeo</string>
+    <string name="button_register_new_account">Registrar un nou compte</string>
+    <string name="register_account_title">Crear un compte</string>
+    <string name="register_success">Registre exitós</string>
+    <string name="register_failed">Error de registre</string>
+    <string name="wholesalers">Majoristes</string>
 </resources>
+
 

@@ -19,23 +19,23 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.load_failed
 import maian.standard.generated.resources.StandardRes
 import maian.standard.generated.resources.current_wholesaler
-import maian.standard.generated.resources.no_distributors
-import maian.standard.generated.resources.search_distributors
+import maian.standard.generated.resources.no_wholesalers
+import maian.standard.generated.resources.search_wholesalers
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
-import org.dsqrwym.standard.domain.browse.RetailDistributor
-import org.dsqrwym.standard.ui.viewmodels.browse.DistributorsViewModel
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
+import org.dsqrwym.standard.ui.viewmodels.browse.WholesalersViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DistributorsScreen(
+fun WholesalersScreen(
     onNavigateBack: (() -> Unit)? = null,
     selectedWholesalerId: String? = null,
-    selectedWholesaler: RetailDistributor? = null,
-    onDistributorClick: (RetailDistributor) -> Unit,
-    viewModel: DistributorsViewModel = koinViewModel(),
+    selectedWholesaler: RetailWholesaler? = null,
+    onWholesalerClick: (RetailWholesaler) -> Unit,
+    viewModel: WholesalersViewModel = koinViewModel(),
 ) {
     LaunchedEffect(Unit) {
         viewModel.ensureLoaded()
@@ -57,8 +57,8 @@ fun DistributorsScreen(
                     onSearch = { viewModel.submitSearch() },
                     expanded = false,
                     onExpandedChange = {},
-                    placeholder = { Text(stringResource(StandardRes.string.search_distributors)) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, stringResource(StandardRes.string.search_distributors)) },
+                    placeholder = { Text(stringResource(StandardRes.string.search_wholesalers)) },
+                    leadingIcon = { Icon(Icons.Outlined.Search, stringResource(StandardRes.string.search_wholesalers)) },
                     trailingIcon = {
                         if (viewModel.searchText.isNotEmpty()) {
                             SharedCloseButton(onClick = viewModel::clearSearch)
@@ -75,10 +75,10 @@ fun DistributorsScreen(
                 .padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            val displayDistributors = remember(viewModel.distributors, selectedWholesalerId, selectedWholesaler) {
+            val displayWholesalers = remember(viewModel.wholesalers, selectedWholesalerId, selectedWholesaler) {
                 buildList {
                     selectedWholesaler?.let(::add)
-                    addAll(viewModel.distributors.filterNot { it.id == selectedWholesalerId })
+                    addAll(viewModel.wholesalers.filterNot { it.id == selectedWholesalerId })
                 }
             }
 
@@ -91,8 +91,8 @@ fun DistributorsScreen(
                     Text(viewModel.error ?: stringResource(SharedRes.string.load_failed))
                 }
 
-                displayDistributors.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(stringResource(StandardRes.string.no_distributors))
+                displayWholesalers.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(stringResource(StandardRes.string.no_wholesalers))
                 }
 
                 else -> {
@@ -101,12 +101,12 @@ fun DistributorsScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         contentPadding = PaddingValues(bottom = 16.dp),
                     ) {
-                        items(displayDistributors, key = { it.id }) { distributor ->
+                        items(displayWholesalers, key = { it.id }) { distributor ->
                             val selected = distributor.id == selectedWholesalerId
-                            DistributorCard(
+                            WholesalerCard(
                                 distributor = distributor,
                                 selected = selected,
-                                onClick = { onDistributorClick(distributor) },
+                                onClick = { onWholesalerClick(distributor) },
                             )
                         }
                     }
@@ -117,8 +117,8 @@ fun DistributorsScreen(
 }
 
 @Composable
-fun DistributorCard(
-    distributor: RetailDistributor,
+fun WholesalerCard(
+    distributor: RetailWholesaler,
     selected: Boolean = false,
     onClick: () -> Unit,
 ) {

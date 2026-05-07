@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import maian.standard.generated.resources.StandardRes
@@ -21,17 +20,17 @@ import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.standard.domain.browse.BrowseScope
 import org.dsqrwym.standard.domain.browse.RetailCategory
-import org.dsqrwym.standard.domain.browse.RetailDistributor
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
 import org.dsqrwym.standard.navigation.CategoryBrowseRoute
 import org.dsqrwym.standard.navigation.CategoryBrowseRouteCategory
 import org.dsqrwym.standard.navigation.CategoriesScreen
-import org.dsqrwym.standard.navigation.DistributorHomeScreen
-import org.dsqrwym.standard.navigation.DistributorsScreen
+import org.dsqrwym.standard.navigation.WholesalerHomeScreen
+import org.dsqrwym.standard.navigation.WholesalersScreen
 import org.dsqrwym.standard.navigation.ProductDetailPlaceholderScreen
 import org.dsqrwym.standard.navigation.ProductDetailScreen
 import org.dsqrwym.standard.navigation.ProductsScreen
 import org.dsqrwym.standard.ui.screens.browse.CategoryBrowseScreen
-import org.dsqrwym.standard.ui.screens.browse.DistributorsScreen as DistributorsContent
+import org.dsqrwym.standard.ui.screens.browse.WholesalersScreen as DistributorsContent
 import org.dsqrwym.standard.ui.screens.browse.ProductBrowseScreen
 import org.dsqrwym.standard.ui.screens.browse.ProductDetailScreen as ProductDetailContent
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStateHolder
@@ -48,7 +47,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
         val scopeState = browseScope.state
         ProductBrowseScreen(
             scope = if (scopeState.wholesalerId == null) BrowseScope.GLOBAL else BrowseScope.DISTRIBUTOR,
-            distributorId = scopeState.wholesalerId,
+            wholesalerId = scopeState.wholesalerId,
             wholesalerName = scopeState.wholesalerName,
             onClearWholesalerScope = browseScope::clearWholesaler,
             onProductClick = { productId ->
@@ -62,7 +61,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
         val scopeState = browseScope.state
         CategoryBrowseScreen(
             scope = if (scopeState.wholesalerId == null) BrowseScope.GLOBAL else BrowseScope.DISTRIBUTOR,
-            distributorId = scopeState.wholesalerId,
+            wholesalerId = scopeState.wholesalerId,
             wholesalerName = scopeState.wholesalerName,
             onClearWholesalerScope = browseScope::clearWholesaler,
             onProductClick = { productId ->
@@ -72,7 +71,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
                 navigationState.navigate(
                     category.toCategoryBrowseRoute(
                         languageCode = languageCode,
-                        distributorId = scopeState.wholesalerId,
+                        wholesalerId = scopeState.wholesalerId,
                         railFallbackCategories = railFallbackCategories,
                     )
                 )
@@ -83,13 +82,13 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
     entry<CategoryBrowseRoute> { route ->
         val browseScope: BrowseScopeStateHolder = currentKoinScope().get()
         val scopeState = browseScope.state
-        val distributorId = route.distributorId
+        val wholesalerId = route.wholesalerId
         CategoryBrowseScreen(
-            scope = if (distributorId == null) BrowseScope.GLOBAL else BrowseScope.DISTRIBUTOR,
-            distributorId = distributorId,
+            scope = if (wholesalerId == null) BrowseScope.GLOBAL else BrowseScope.DISTRIBUTOR,
+            wholesalerId = wholesalerId,
             rootCategory = route.toRetailCategory(),
-            initialRailFallbackCategories = route.railFallbackCategories.toRetailCategories(distributorId),
-            wholesalerName = scopeState.wholesalerName.takeIf { distributorId != null && scopeState.wholesalerId == distributorId },
+            initialRailFallbackCategories = route.railFallbackCategories.toRetailCategories(wholesalerId),
+            wholesalerName = scopeState.wholesalerName.takeIf { wholesalerId != null && scopeState.wholesalerId == wholesalerId },
             onClearWholesalerScope = {
                 browseScope.clearWholesaler()
                 navigationState.navigateToTopLevel(CategoriesScreen)
@@ -102,7 +101,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
                 navigationState.navigate(
                     category.toCategoryBrowseRoute(
                         languageCode = languageCode,
-                        distributorId = distributorId,
+                        wholesalerId = wholesalerId,
                         railFallbackCategories = railFallbackCategories,
                     )
                 )
@@ -115,24 +114,24 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
         )
     }
 
-    entry<DistributorsScreen> {
+    entry<WholesalersScreen> {
         val browseScope: BrowseScopeStateHolder = currentKoinScope().get()
         val scopeState = browseScope.state
         DistributorsContent(
             selectedWholesalerId = scopeState.wholesalerId,
             selectedWholesaler = scopeState.wholesaler,
-            onDistributorClick = { wholesaler ->
+            onWholesalerClick = { wholesaler ->
                 browseScope.selectWholesaler(wholesaler)
                 navigationState.navigateToTopLevel(ProductsScreen)
             }
         )
     }
 
-    entry<DistributorHomeScreen> { route ->
+    entry<WholesalerHomeScreen> { route ->
         val browseScope: BrowseScopeStateHolder = currentKoinScope().get()
         LaunchedEffect(route.id) {
             browseScope.selectWholesaler(
-                RetailDistributor(
+                RetailWholesaler(
                     id = route.id,
                     userId = route.userId,
                     username = route.username,
@@ -183,7 +182,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
 
 private fun RetailCategory.toCategoryBrowseRoute(
     languageCode: String,
-    distributorId: String? = null,
+    wholesalerId: String? = null,
     railFallbackCategories: List<RetailCategory> = emptyList(),
 ): CategoryBrowseRoute =
     CategoryBrowseRoute(
@@ -191,7 +190,7 @@ private fun RetailCategory.toCategoryBrowseRoute(
         name = localizedName(languageCode),
         level = level,
         parentId = parentId,
-        distributorId = distributorId,
+        wholesalerId = wholesalerId,
         pathNames = localizedPathNames(languageCode),
         railFallbackCategories = railFallbackCategories.map { it.toCategoryBrowseRouteCategory(languageCode) },
     )
@@ -209,19 +208,19 @@ private fun CategoryBrowseRoute.toRetailCategory(): RetailCategory =
         id = id,
         name = name,
         level = level,
-        ownerUserId = distributorId,
+        ownerUserId = wholesalerId,
         parentId = parentId,
         pathNames = pathNames.ifEmpty { listOf(name) },
         translations = emptyList(),
     )
 
-private fun List<CategoryBrowseRouteCategory>.toRetailCategories(distributorId: String?): List<RetailCategory> =
+private fun List<CategoryBrowseRouteCategory>.toRetailCategories(wholesalerId: String?): List<RetailCategory> =
     map { category ->
         RetailCategory(
             id = category.id,
             name = category.name,
             level = category.level,
-            ownerUserId = distributorId,
+            ownerUserId = wholesalerId,
             parentId = category.parentId,
             pathNames = listOf(category.name),
             translations = emptyList(),

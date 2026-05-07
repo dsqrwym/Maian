@@ -1,10 +1,5 @@
 ﻿<resources>
-    <string name="button_register_new_account">Registrar un nou compte</string>
-    <string name="register_account_title">Crear un compte</string>
-    <string name="register_success">Registre exitós</string>
-    <string name="register_failed">Error de registre</string>
 
-    <string name="wholesalers">Majoristes</string>
 
     <string name="login_tab_employee">Empleat</string>
     <string name="field_wholesaler_id_label">ID de majorista</string>
@@ -13,7 +8,7 @@
 
     <string name="register_section_company_info">Informació de l'empresa</string>
     <string name="field_company_name_label">Nom de l'empresa</string>
-    <string name="field_company_name_placeholder">Introduïu el nom de l'empresa</string>
+    <string name="field_company_name_placeholder">Introdu?u el nom de l'empresa</string>
     <string name="field_company_type_label">Tipus d'empresa</string>
     <string name="field_company_type_placeholder">Seleccioneu el tipus d'empresa</string>
     <string name="icon_content_description_company">Icona d'empresa</string>
@@ -33,7 +28,7 @@
     <string name="product_preview">Vista prèvia</string>
     <string name="product_preview_tooltip">Vista prèvia de la pàgina del producte que voran els detallistes</string>
     <string name="product_description">Detalls del producte</string>
-    <string name="product_description_placeholder">Introduïx la descripció detallada del producte</string>
+    <string name="product_description_placeholder">Introdu?x la descripció detallada del producte</string>
     <string name="product_preview_outline">Resum de vista prèvia</string>
     <string name="product_preview_placeholder">Esta àrea està reservada per al flux complet de vista prèvia del producte.</string>
     <string name="product_preview_name">Nom: %1$s</string>
@@ -49,15 +44,15 @@
     <string name="sales_information">Informació de venda</string>
     <string name="sale_unit">Unitat de venda</string>
     <string name="sale_unit_conversion">Conversió d'unitats</string>
-    <string name="enter_product_code">Introduïx el codi del producte</string>
+    <string name="enter_product_code">Introdu?x el codi del producte</string>
     <string name="price_information">Informació de preus</string>
     <string name="inventory_information">Informació d'inventari</string>
     <string name="available_stock">Estoc disponible</string>
-    <string name="enter_available_stock">Introduïx la quantitat actual d'estoc</string>
+    <string name="enter_available_stock">Introdu?x la quantitat actual d'estoc</string>
     <string name="low_stock_threshold">Avís d'estoc baix</string>
-    <string name="enter_low_stock_threshold">Introduïx la quantitat per a l'avís d'estoc baix</string>
+    <string name="enter_low_stock_threshold">Introdu?x la quantitat per a l'avís d'estoc baix</string>
     <string name="select_main_product_category">Selecciona la categoria principal del producte</string>
-    <string name="product_title_placeholder">Introduïx un títol breu del producte</string>
+    <string name="product_title_placeholder">Introdu?x un títol breu del producte</string>
     <string name="main_language">Idioma principal</string>
     <string name="stock_count">Estoc: %1$d</string>
     <string name="price_with_vat_value">IVA: %1$s</string>
@@ -79,3 +74,4 @@
     <string name="product_form_sku_title">Llista d'SKU</string>
     <string name="product_form_sku_subtitle">Cada producte necessita almenys una variant de venda (SKU). Pots crear variants per a diferents embalatges, formats o preus. S'admeten fins a 50 variants.</string>
 </resources>
+

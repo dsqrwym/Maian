@@ -17,6 +17,7 @@ import androidx.paging.compose.LazyPagingItems
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.path
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
+import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
 
@@ -71,7 +72,7 @@ fun <T : Any> SharedCategoryRail(
     itemName: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
-    drawerWidth: Dp = 108.dp,
+    drawerWidth: Dp = 128.dp,
     drawerContainerColor: Color = Color.Transparent,
 ) {
     val isLoading =
@@ -87,7 +88,7 @@ fun <T : Any> SharedCategoryRail(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = SharedColumnLayout.arrangement,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (showFallbackDuringRefresh) {

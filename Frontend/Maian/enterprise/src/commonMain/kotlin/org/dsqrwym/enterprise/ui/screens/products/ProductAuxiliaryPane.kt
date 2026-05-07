@@ -1,9 +1,12 @@
 ﻿package org.dsqrwym.enterprise.ui.screens.products
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,20 +15,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.translations_count
-import maian.enterprise.generated.resources.*
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.product_name
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.product
+import maian.enterprise.generated.resources.product_description
+import maian.enterprise.generated.resources.product_description_placeholder
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
 import org.dsqrwym.business.ui.components.richtext.BusinessRichTextEditor
+import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliarySurface
 import org.dsqrwym.enterprise.MenuConfig
+import org.dsqrwym.enterprise.domain.product.mapper.toSharedProductDetailPreview
 import org.dsqrwym.enterprise.ui.components.product.TranslationTabRow
 import org.dsqrwym.enterprise.ui.screens.categories.AddLanguageDialog
 import org.dsqrwym.enterprise.ui.viewmodels.products.BaseProductFormViewModel
-import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
-import org.dsqrwym.shared.ui.components.cards.FormCard
 import org.dsqrwym.shared.ui.components.containers.HazeContainer
+import org.dsqrwym.shared.ui.components.product.detail.SharedProductDetailPreviewPanel
 import org.dsqrwym.shared.util.modifier.paddingTopForMenu
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
@@ -73,13 +79,11 @@ fun ProductAuxiliaryPane(
                     ),
                     navigationIcon = { SharedCloseButton(onClick = onClose) },
                     title = {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(currentTranslation.name)
-                            Icon(Icons.Outlined.ShoppingBag, stringResource(SharedRes.string.product_name))
-                        }
+                        BusinessTitleIconRow(
+                            currentTranslation.name,
+                            Icons.Outlined.Inventory2,
+                            stringResource(EnterpriseRes.string.product)
+                        )
                     },
                     actions = {
                         MenuConfig.topBarActions.forEach {
@@ -131,28 +135,13 @@ fun ProductAuxiliaryPane(
                     }
 
                     BusinessAuxiliarySurface.Preview -> {
-                        FormCard(title = stringResource(EnterpriseRes.string.product_preview_outline)) {
-                            Text(
-                                text = stringResource(EnterpriseRes.string.product_preview_placeholder),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-
-                            Spacer(Modifier.height(16.dp))
-
-                            Text(stringResource(EnterpriseRes.string.product_preview_name, currentTranslation.name.ifBlank { stringResource(EnterpriseRes.string.product_not_filled) }))
-                            Text(stringResource(EnterpriseRes.string.product_preview_title, currentTranslation.title.orEmpty().ifBlank { stringResource(EnterpriseRes.string.product_not_filled) }))
-                            Text(stringResource(EnterpriseRes.string.product_preview_category, viewModel.filterCategory?.name ?: stringResource(EnterpriseRes.string.product_not_selected)))
-                            Text(stringResource(EnterpriseRes.string.product_preview_tax_rate, viewModel.productIva.ifBlank { stringResource(EnterpriseRes.string.product_not_filled) }))
-                            Text(stringResource(EnterpriseRes.string.product_preview_status, viewModel.productStatus.displayName()))
-                            Text(stringResource(EnterpriseRes.string.product_preview_media_count, viewModel.mediaPicker.mediaItems.size))
-                        }
+                        SharedProductDetailPreviewPanel(
+                            modifier = Modifier.fillMaxSize(),
+                            product = viewModel.toSharedProductDetailPreview(LanguageManager.getCurrent().code),
+                        )
                     }
                 }
             }
         }
     }
 }
-
-
-

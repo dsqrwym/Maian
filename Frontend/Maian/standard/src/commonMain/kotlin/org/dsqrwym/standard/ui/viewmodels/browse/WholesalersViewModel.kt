@@ -8,14 +8,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.standard.data.browse.RetailBrowseRepository
-import org.dsqrwym.standard.domain.browse.RetailDistributor
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
 
-class DistributorsViewModel(
+class WholesalersViewModel(
     private val repository: RetailBrowseRepository,
 ) : ViewModel() {
     var searchText by mutableStateOf("")
         private set
-    var distributors by mutableStateOf<List<RetailDistributor>>(emptyList())
+    var wholesalers by mutableStateOf<List<RetailWholesaler>>(emptyList())
         private set
     var isLoading by mutableStateOf(false)
         private set
@@ -28,7 +28,7 @@ class DistributorsViewModel(
     fun ensureLoaded() {
         if (loaded) return
         loaded = true
-        loadDistributors()
+        loadWholesalers()
     }
 
     fun updateSearchText(value: String) {
@@ -37,23 +37,23 @@ class DistributorsViewModel(
 
     fun submitSearch() {
         submittedSearch = searchText
-        loadDistributors()
+        loadWholesalers()
     }
 
     fun clearSearch() {
         searchText = ""
         submittedSearch = ""
-        loadDistributors()
+        loadWholesalers()
     }
 
-    private fun loadDistributors() {
+    private fun loadWholesalers() {
         viewModelScope.launch {
             isLoading = true
             error = null
-            when (val result = repository.getDistributors(search = submittedSearch)) {
-                is SharedResponseResult.Success -> distributors = result.data?.items.orEmpty()
+            when (val result = repository.getWholesalers(search = submittedSearch)) {
+                is SharedResponseResult.Success -> wholesalers = result.data?.items.orEmpty()
                 is SharedResponseResult.Error -> {
-                    distributors = emptyList()
+                    wholesalers = emptyList()
                     error = result.message
                 }
             }

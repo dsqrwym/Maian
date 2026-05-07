@@ -72,10 +72,16 @@ export class SyncStorageDriver implements StorageDriver {
     };
   }
 
-  async createReadStream(pathOrKey: string): Promise<Readable> {
+  async createReadStream(
+    pathOrKey: string,
+    options?: { start?: number; end?: number },
+  ): Promise<Readable> {
     // 先尝试从云端读取
     try {
-      const cloudStream = await this.cloudDriver.createReadStream(pathOrKey);
+      const cloudStream = await this.cloudDriver.createReadStream(
+        pathOrKey,
+        options,
+      );
       this.logger.debug({ pathOrKey }, 'Reading file from cloud');
       return cloudStream;
     } catch (err: unknown) {
@@ -97,8 +103,8 @@ export class SyncStorageDriver implements StorageDriver {
         );
       }
 
-      // 2. 回退到本地
-      return this.localDriver.createReadStream(pathOrKey);
+      // 回退到本地
+      return this.localDriver.createReadStream(pathOrKey, options);
     }
   }
 

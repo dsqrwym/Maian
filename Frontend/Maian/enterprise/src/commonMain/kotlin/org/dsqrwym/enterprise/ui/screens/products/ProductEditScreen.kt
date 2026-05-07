@@ -1,17 +1,18 @@
 package org.dsqrwym.enterprise.ui.screens.products
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -70,6 +71,9 @@ fun ProductEditScreen(
                 onToggleRichTextEditor = {
                     workspaceState.toggle(BusinessAuxiliarySurface.Editor)
                 },
+                onTogglePreview = {
+                    workspaceState.toggle(BusinessAuxiliarySurface.Preview)
+                },
             )
         },
         auxiliaryContent = { surface ->
@@ -89,6 +93,7 @@ private fun ProductEditScreenContent(
     viewModel: ProductEditViewModel,
     isAuxiliaryOpen: Boolean,
     onToggleRichTextEditor: () -> Unit,
+    onTogglePreview: () -> Unit,
 ) {
     val isLoading = viewModel.isLoading
     val mediaPicker = viewModel.mediaPicker
@@ -123,12 +128,24 @@ private fun ProductEditScreenContent(
             )
         },
         title = {
-            BusinessTitleIconRow(
-                if (translationTabs.isNotEmpty()) translationTabs[0].first.name else "",
-                Icons.Outlined.Inventory2,
-                stringResource(SharedRes.string.category),
-                isLoading
-            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BusinessTitleIconRow(
+                    if (translationTabs.isNotEmpty()) translationTabs[0].first.name else "",
+                    Icons.Outlined.Inventory2,
+                    stringResource(SharedRes.string.category),
+                    isLoading
+                )
+
+                IconButton(onClick = onTogglePreview) {
+                    Icon(
+                        Icons.Outlined.Visibility,
+                        contentDescription = stringResource(EnterpriseRes.string.product_preview),
+                    )
+                }
+            }
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             viewModel.editFormUiState,

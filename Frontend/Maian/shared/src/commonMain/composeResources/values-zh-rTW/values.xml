@@ -65,7 +65,7 @@
     <string name="initial_screen_welcome">歡迎來到</string>
     <string name="initial_screen_platform_name">賣安平台</string>
     <string name="initial_screen_instruction">請選擇登入或註冊以繼續</string>
-    <string name="initial_screen_quick_login_hint">⏫ 支援 Google、微信 快速登入 ⏫</string>
+    <string name="initial_screen_quick_login_hint">? 支援 Google、微信 快速登入 ?</string>
 
     <!-- 使用者協議與隱私 -->
     <string name="agreement_warning">請先同意使用者協議及隱私政策才能繼續</string>
@@ -296,5 +296,11 @@
     <string name="no_variants">暫無規格。</string>
     <string name="product_media">產品媒體</string>
     <string name="video_content_description">影片</string>
+    <string name="button_register_new_account">註冊新帳戶</string>
+    <string name="register_account_title">註冊帳號</string>
+    <string name="register_success">註冊成功</string>
+    <string name="register_failed">註冊失敗</string>
+    <string name="wholesalers">批發商</string>
 </resources>
+
 

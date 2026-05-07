@@ -34,13 +34,9 @@ import io.github.vinceglb.filekit.nameWithoutExtension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.copied_to_clipboard
-import maian.shared.generated.resources.file_saved_with_name
-import maian.shared.generated.resources.unable_to_copy_resource
-import maian.shared.generated.resources.video_play_pause_content_description
-import maian.shared.generated.resources.video_toggle_fullscreen_content_description
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.LocalWindowSizeClass
+import org.dsqrwym.shared.data.file.SharedVideoPlayRepository
 import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.clipboard.rememberClipboardCopier
 import org.dsqrwym.shared.util.file.saveFile
@@ -51,6 +47,7 @@ import org.dsqrwym.shared.util.platform.getPlatform
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.min
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,25 +62,95 @@ fun SharedVideoPlayer(
     enableContextMenu: Boolean = true,
 ) {
     val playerState = rememberVideoPlayerState()
-    val isFinished = remember(playerState.positionText, playerState.isPlaying) {
-        playerState.isFinished()
-    }
 
     LaunchedEffect(file) {
         playerState.openFile(file, InitialPlayerState.PAUSE)
+    }
+
+    val copyToClipboard = rememberClipboardCopier()
+    val unableToCopy = stringResource(SharedRes.string.unable_to_copy_resource)
+    val copiedToClipboard = stringResource(SharedRes.string.copied_to_clipboard)
+    val scope = rememberCoroutineScope()
+
+    SharedVideoPlayerContent(
+        playerState = playerState,
+        modifier = modifier,
+        showPlayPauseButton = showPlayPauseButton,
+        showProgressBar = showProgressBar,
+        showFullScreenButton = showFullScreenButton,
+        enableContextMenu = enableContextMenu,
+        isExtraLoading = false,
+        onCopy = {
+            onCopyVideo(file, unableToCopy, copiedToClipboard, copyToClipboard)
+        },
+        onSave = {
+            onSaveVideo(scope, file)
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SharedVideoPlayer(
+    url: String,
+    modifier: Modifier = Modifier,
+    showPlayPauseButton: Boolean = true,
+    showProgressBar: Boolean = true,
+    showFullScreenButton: Boolean = true,
+    enableContextMenu: Boolean = true,
+    repository: SharedVideoPlayRepository = remember { SharedVideoPlayRepository() },
+) {
+    val playerState = rememberVideoPlayerState()
+    var isResolvingUrl by remember(url) { mutableStateOf(false) }
+
+    LaunchedEffect(url) {
+        isResolvingUrl = true
+        val playableUrl = when (val result = repository.resolvePlayableUrl(url)) {
+            is org.dsqrwym.shared.network.model.SharedResponseResult.Success -> result.data ?: url
+            is org.dsqrwym.shared.network.model.SharedResponseResult.Error -> url
+        }
+        playerState.openUri(playableUrl, InitialPlayerState.PAUSE)
+        isResolvingUrl = false
+    }
+
+    SharedVideoPlayerContent(
+        playerState = playerState,
+        modifier = modifier,
+        showPlayPauseButton = showPlayPauseButton,
+        showProgressBar = showProgressBar,
+        showFullScreenButton = showFullScreenButton,
+        enableContextMenu = enableContextMenu,
+        isExtraLoading = isResolvingUrl,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SharedVideoPlayerContent(
+    playerState: io.github.kdroidfilter.composemediaplayer.VideoPlayerState,
+    modifier: Modifier,
+    showPlayPauseButton: Boolean,
+    showProgressBar: Boolean,
+    showFullScreenButton: Boolean,
+    enableContextMenu: Boolean,
+    isExtraLoading: Boolean,
+    onCopy: (() -> Unit)? = null,
+    onSave: (() -> Unit)? = null,
+) {
+    val isFinished = remember(playerState.positionText, playerState.isPlaying) {
+        playerState.isFinished()
     }
 
     var areControlsVisible by remember { mutableStateOf(true) }
 
     LaunchedEffect(areControlsVisible, playerState.isPlaying) {
         if (areControlsVisible && playerState.isPlaying) {
-            delay(3000)
+            delay(3000.milliseconds)
             areControlsVisible = false
         }
     }
 
     val isCompactWidth = LocalWindowSizeClass.current.widthSizeClass == WindowWidthSizeClass.Compact
-    val copyToClipboard = rememberClipboardCopier()
     var showMenu by remember { mutableStateOf(false) }
     var isLongPressMenu by remember { mutableStateOf(false) }
     var menuOffset by remember { mutableStateOf(Offset.Zero) }
@@ -93,7 +160,7 @@ fun SharedVideoPlayer(
         playerState = playerState,
         modifier = Modifier.fillMaxSize(),
         overlay = {
-            if (playerState.isLoading) {
+            if (playerState.isLoading || isExtraLoading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     LinearProgressIndicator()
                 }
@@ -251,22 +318,14 @@ fun SharedVideoPlayer(
                     }
                 }
 
-                if (enableContextMenu) {
-                    val unableToCopy = stringResource(SharedRes.string.unable_to_copy_resource)
-                    val copiedToClipboard = stringResource(SharedRes.string.copied_to_clipboard)
-                    val scope = rememberCoroutineScope()
-
+                if (enableContextMenu && onCopy != null && onSave != null) {
                     SharedMediaContextMenu(
                         showMenu = showMenu,
                         onDismiss = { showMenu = false },
                         useBottomSheet = isLongPressMenu, // Based on your logic: compact width or long press trigger
                         clickOffset = menuOffset,
-                        onCopy = {
-                            onCopyVideo(file, unableToCopy, copiedToClipboard, copyToClipboard)
-                        },
-                        onSave = {
-                            onSaveVideo(scope, file)
-                        }
+                        onCopy = onCopy,
+                        onSave = onSave,
                     )
                 }
             }

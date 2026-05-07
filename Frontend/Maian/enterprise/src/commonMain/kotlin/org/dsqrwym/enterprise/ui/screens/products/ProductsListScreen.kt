@@ -5,11 +5,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,6 +20,7 @@ import maian.business.generated.resources.parent_category_with_name
 import maian.business.generated.resources.select_parent_category
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.add_product
+import maian.enterprise.generated.resources.product_preview
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.permissions.canManageEnterpriseProducts
@@ -33,6 +34,7 @@ import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.data.products.sharedEnterpriseProductSortFields
 import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -41,6 +43,7 @@ import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
+import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
 import org.dsqrwym.shared.ui.components.product.SharedProductSortDialog
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
@@ -62,6 +65,7 @@ fun ProductsListScreen(
     val searchQuery = viewModel.searchQuery
     val paginatedProducts = viewModel.pagedProducts.collectAsLazyPagingItems()
     val currentProduct = viewModel.currentProduct
+    val previewProduct = viewModel.previewProduct
     val deleteProduct = viewModel.deleteProduct
     val windowWidthSizeClass = LocalWindowSizeClass.current
     val isTableMode = windowWidthSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
@@ -70,6 +74,7 @@ fun ProductsListScreen(
     SharedTransparentScaffold(
         topBarScrollBehavior = scrollBehavior,
         showOverlayDialog = currentProduct != null ||
+                previewProduct != null ||
                 deleteProduct != null ||
                 viewModel.showFilterDialog ||
                 viewModel.showSortDialog,
@@ -82,6 +87,12 @@ fun ProductsListScreen(
                         onDismissRequest = { viewModel.updateCurrentProduct(null) }
                     )
                 }
+            }
+            previewProduct?.let {
+                ProductPreviewDialog(
+                    product = it,
+                    onDismiss = { viewModel.updatePreviewProduct(null) }
+                )
             }
             deleteProduct?.let {
                 ProductConfirmDeleteDialog(
@@ -168,7 +179,7 @@ fun ProductsListScreen(
                 viewModel::updateCurrentProduct,
                 viewModel::updateSortBy,
                 viewModel::updateSortDir,
-                {},
+                viewModel::updatePreviewProduct,
                 { onNavigateToEdit(it.id) },
                 viewModel::updateDeleteProduct,
                 canManageProducts,
@@ -185,7 +196,7 @@ fun ProductsListScreen(
                 paginatedProducts,
                 scrollBehavior,
                 viewModel::updateCurrentProduct,
-                {},
+                viewModel::updatePreviewProduct,
                 { onNavigateToEdit(it.id) },
                 viewModel::updateDeleteProduct,
                 canManageProducts,
@@ -198,6 +209,58 @@ fun ProductsListScreen(
         }
     }
 }
+
+@Composable
+private fun ProductPreviewDialog(
+    product: Product,
+    onDismiss: () -> Unit,
+) {
+    val languageCode = remember { LanguageManager.getCurrent().code }
+    var showImagePreview by remember(product.id) { mutableStateOf(false) }
+    if (showImagePreview) {
+        product.mainImage?.url(product.id)?.let { imageUrl ->
+            SharedImageViewDialog(
+                model = imageUrl,
+                imageName = product.localizedName(languageCode),
+                onDismissRequest = { showImagePreview = false },
+            )
+        }
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Outlined.Inventory2, contentDescription = null) },
+        title = { Text(stringResource(EnterpriseRes.string.product_preview)) },
+        text = {
+            SharedReadOnlyProductCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(max = 360.dp),
+                isLoading = false,
+                name = product.localizedName(languageCode),
+                title = product.localizedTitle(languageCode),
+                code = product.code,
+                imageUrl = product.mainImage?.url(product.id),
+                minPrice = product.minPrice,
+                minPriceIva = product.minPriceIva,
+                totalStock = product.totalStock,
+                minOrderQty = product.minOrderQty,
+                onClick = {},
+                onImageClick = { showImagePreview = true },
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(SharedRes.string.close))
+            }
+        }
+    )
+}
+
+private fun Product.localizedName(languageCode: String): String =
+    translations.firstOrNull { it.langCode == languageCode }?.name ?: name
+
+private fun Product.localizedTitle(languageCode: String): String? =
+    translations.firstOrNull { it.langCode == languageCode }?.title ?: title
 
 @Composable
 private fun ProductConfirmDeleteDialog(

@@ -64,7 +64,7 @@ fun RegisterScreen(
     val nextButtonText = when (registerViewModel.currentStep) {
         1 -> stringResource(SharedRes.string.reset_verify_email)
         2 -> stringResource(SharedRes.string.reset_verify)
-        3 -> stringResource(EnterpriseRes.string.register_account_title)
+        3 -> stringResource(SharedRes.string.button_register_new_account)
         else -> stringResource(SharedRes.string.reset_unknown_error)
     }
 

@@ -30,8 +30,8 @@ import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
 import org.dsqrwym.standard.navigation.CategoriesScreen
 import org.dsqrwym.standard.navigation.CategoryBrowseRoute
-import org.dsqrwym.standard.navigation.DistributorHomeScreen
-import org.dsqrwym.standard.navigation.DistributorsScreen
+import org.dsqrwym.standard.navigation.WholesalerHomeScreen
+import org.dsqrwym.standard.navigation.WholesalersScreen
 import org.dsqrwym.standard.navigation.ProductDetailPlaceholderScreen
 import org.dsqrwym.standard.navigation.ProductDetailScreen
 import org.dsqrwym.standard.navigation.ProductsScreen
@@ -57,8 +57,8 @@ fun App() {
                 subclass(ProductsScreen::class)
                 subclass(CategoriesScreen::class)
                 subclass(CategoryBrowseRoute::class)
-                subclass(DistributorsScreen::class)
-                subclass(DistributorHomeScreen::class)
+                subclass(WholesalersScreen::class)
+                subclass(WholesalerHomeScreen::class)
                 subclass(ProductDetailPlaceholderScreen::class)
                 subclass(ProductDetailScreen::class)
             }
@@ -107,10 +107,10 @@ fun App() {
                     ),
                     SharedMenuItemState(
                         SharedMenuItem(
-                            route = DistributorsScreen,
-                            label = StandardRes.string.wholesalers,
+                            route = WholesalersScreen,
+                            label = SharedRes.string.wholesalers,
                             icon = Icons.Outlined.Storefront,
-                            iconContentDescription = StandardRes.string.wholesalers,
+                            iconContentDescription = SharedRes.string.wholesalers,
                             isPrimary = true,
                         )
                     ),

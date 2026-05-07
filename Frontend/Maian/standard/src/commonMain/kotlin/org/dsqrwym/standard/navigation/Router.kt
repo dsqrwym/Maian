@@ -17,8 +17,8 @@ object ProductsScreen : NavKey
 object CategoriesScreen : NavKey
 
 @Serializable
-@SerialName("distributors")
-object DistributorsScreen : NavKey
+@SerialName("wholesalers")
+object WholesalersScreen : NavKey
 
 @Serializable
 @SerialName("category_browse")
@@ -27,7 +27,7 @@ data class CategoryBrowseRoute(
     val name: String,
     val level: Int,
     val parentId: String? = null,
-    val distributorId: String? = null,
+    val wholesalerId: String? = null,
     val pathNames: List<String> = emptyList(),
     val railFallbackCategories: List<CategoryBrowseRouteCategory> = emptyList(),
 ) : NavKey
@@ -42,7 +42,7 @@ data class CategoryBrowseRouteCategory(
 
 @Serializable
 @SerialName("distributor_home")
-data class DistributorHomeScreen(
+data class WholesalerHomeScreen(
     val id: String,
     val userId: String? = null,
     val username: String? = null,

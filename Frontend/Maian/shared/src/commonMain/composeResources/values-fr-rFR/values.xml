@@ -1,23 +1,23 @@
 ﻿<resources>
     <!-- ===================== Descriptions de contenu ===================== -->
     <string name="login_background_content_description">Arrière-plan de l'écran de connexion</string>
-    <string name="button_google_logo_content_description">Icône Google</string>
+    <string name="button_google_logo_content_description">Ic?ne Google</string>
     <string name="button_back_button_content_description">Bouton retour</string>
-    <string name="button_wechat_logo_content_description">Icône WeChat</string>
-    <string name="icon_content_description_email">Icône email</string>
-    <string name="icon_content_description_person">Icône utilisateur</string>
-    <string name="icon_content_description_lock">Icône mot de passe</string>
+    <string name="button_wechat_logo_content_description">Ic?ne WeChat</string>
+    <string name="icon_content_description_email">Ic?ne email</string>
+    <string name="icon_content_description_person">Ic?ne utilisateur</string>
+    <string name="icon_content_description_lock">Ic?ne mot de passe</string>
     <string name="icon_content_description_language">Bouton de changement de langue</string>
     <string name="icon_content_description_password_toggle_visibility">Afficher/masquer le mot de passe</string>
     <string name="icon_content_description_dismiss">Fermer</string>
 
 
-    <!-- États -->
+    <!-- états -->
     <string name="status_error_content_description">Erreur</string>
     <string name="status_completed_content_description">Terminé</string>
     <string name="status_in_progress_content_description">En cours</string>
 
-    <!-- ===================== Écran de connexion ===================== -->
+    <!-- ===================== écran de connexion ===================== -->
     <string name="login_title">Connexion</string>
     <string name="login_subtitle">Veuillez vous connecter pour continuer</string>
 
@@ -61,15 +61,15 @@
     <string name="register_email_already_registered">Cette adresse e-mail est déjà enregistrée. Veuillez vous connecter.</string>
     <string name="register_username_already_registered">Ce nom d’utilisateur est déjà utilisé. Veuillez en choisir un autre.</string>
 
-    <!-- ===================== Écran initial ===================== -->
+    <!-- ===================== écran initial ===================== -->
     <string name="initial_screen_welcome">Bienvenue sur</string>
     <string name="initial_screen_platform_name">Plateforme MaiAn</string>
     <string name="initial_screen_instruction">Veuillez vous connecter ou créer un compte pour continuer</string>
-    <string name="initial_screen_quick_login_hint">⏫ Connexion rapide avec Google ou WeChat ⏫</string>
+    <string name="initial_screen_quick_login_hint">? Connexion rapide avec Google ou WeChat ?</string>
 
     <!-- Accord utilisateur et confidentialité -->
     <string name="agreement_warning">Veuillez accepter le contrat utilisateur et la politique de confidentialité pour continuer</string>
-    <string name="agreement_section_agreement_text_template">J'ai lu et j'accepte « %s » et « %s »</string>
+    <string name="agreement_section_agreement_text_template">J'ai lu et j'accepte ? %s ? et ? %s ?</string>
     <string name="agreement_section_user_agreement">Contrat utilisateur</string>
     <string name="agreement_section_privacy_policy">Politique de confidentialité</string>
 
@@ -133,7 +133,7 @@
     <string name="section_address">Adresse</string>
     <string name="address_country">Pays</string>
     <string name="address_search_or_select_country">Rechercher ou sélectionner un pays</string>
-    <string name="address_state_or_province">Province/État</string>
+    <string name="address_state_or_province">Province/état</string>
     <string name="address_input_or_select_state_or_province">Saisir ou sélectionner province/état</string>
     <string name="address_city">Ville</string>
     <string name="address_input_or_select_city">Saisir ou sélectionner ville</string>
@@ -183,7 +183,7 @@
     <string name="add">Ajouter</string>
     <string name="update">Renouveler</string>
     <string name="not_found">Aucun résultat trouvé</string>
-    <string name="load_failed">Échec du chargement, cliquez pour réessayer</string>
+    <string name="load_failed">échec du chargement, cliquez pour réessayer</string>
     <string name="edit">Modifier</string>
     <string name="delete">Supprimer</string>
     <string name="undo">Annuler</string>
@@ -196,11 +196,11 @@
     <string name="user">Utilisateur</string>
 
     <string name="delete_success">Suppression réussie</string>
-    <string name="delete_failed">Échec de la suppression</string>
+    <string name="delete_failed">échec de la suppression</string>
     <string name="translation_deleted">Traduction supprimée</string>
     <string name="variant_deleted">Variante supprimée</string>
     <string name="create_success">Création réussie</string>
-    <string name="create_failed">Échec de la création</string>
+    <string name="create_failed">échec de la création</string>
     <string name="update_success">Mise à jour réussie</string>
     <string name="update_failed">La mise à jour a échoué</string>
     <string name="update_conflict_preserved_changes">Une partie du contenu a été modifiée par quelqu’un d’autre. Vos modifications ont été conservées. Veuillez vérifier puis relancer la mise à jour.</string>
@@ -222,11 +222,11 @@
     <string name="toast_warning_content_description">Avertissement</string>
     <string name="toast_error_content_description">Erreur</string>
     <string name="navigation_title_fallback">Titre</string>
-    <string name="navigation_item_icon_fallback">Icône de l’élément de menu</string>
-    <string name="navigation_item_label_fallback">Élément de navigation</string>
-    <string name="menu_item_tooltip_title_fallback">Élément de menu</string>
+    <string name="navigation_item_icon_fallback">Ic?ne de l’élément de menu</string>
+    <string name="navigation_item_label_fallback">élément de navigation</string>
+    <string name="menu_item_tooltip_title_fallback">élément de menu</string>
     <string name="menu_item_tooltip_text_fallback">Détails de l’élément de menu</string>
-    <string name="menu_item_tooltip_fallback">Élément de menu</string>
+    <string name="menu_item_tooltip_fallback">élément de menu</string>
     <string name="product_image_with_name">Image du produit : %1$s</string>
     
     <!-- ===================== Actions communes (Shared) ===================== -->
@@ -238,13 +238,13 @@
     <string name="copied_to_clipboard">Copié dans le presse-papiers</string>
     <string name="copied_files_to_clipboard">Fichiers copiés dans le presse-papiers</string>
     <string name="copied_image_to_clipboard">Image copiée dans le presse-papiers</string>
-    <string name="copied_text_to_clipboard_with_value">« %1$s » copié dans le presse-papiers</string>
-    <string name="copy_failed">Échec de la copie</string>
+    <string name="copied_text_to_clipboard_with_value">? %1$s ? copié dans le presse-papiers</string>
+    <string name="copy_failed">échec de la copie</string>
 
     <!-- Notifications d'enregistrement d'image -->
-    <string name="image_saved_with_name">Image « %1$s » enregistrée</string>
-    <string name="file_saved_with_name">Fichier « %1$s » enregistré</string>
-    <string name="image_saved_to_gallery_with_name">Image « %1$s » enregistrée dans la galerie</string>
+    <string name="image_saved_with_name">Image ? %1$s ? enregistrée</string>
+    <string name="file_saved_with_name">Fichier ? %1$s ? enregistré</string>
+    <string name="image_saved_to_gallery_with_name">Image ? %1$s ? enregistrée dans la galerie</string>
     <string name="status">Statut</string>
     <string name="sort">Trier</string>
     <string name="order_dir_ascending">Croissant</string>
@@ -264,12 +264,12 @@
     <string name="product_price_without_vat_value">Net : %1$s</string>
     <string name="product_min_order_qty">Quantité minimale de commande</string>
     <string name="product_moq_value">Commande min. : %1$d</string>
-    <string name="product_preview">Aperçu</string>
+    <string name="product_preview">Aper?u</string>
     <string name="product_actions">Actions</string>
     <string name="product_status_active">Actif</string>
     <string name="product_status_inactive">Inactif</string>
     <string name="sale_variant_unit">Unité</string>
-    <string name="sale_variant_box">Boîte</string>
+    <string name="sale_variant_box">Bo?te</string>
     <string name="sale_variant_pack">Lot</string>
     <string name="product_sort_name">Nom</string>
     <string name="product_sort_title">Titre</string>
@@ -295,5 +295,11 @@
     <string name="no_variants">Aucune variante disponible.</string>
     <string name="product_media">Médias du produit</string>
     <string name="video_content_description">Vidéo</string>
+    <string name="button_register_new_account">Créer un nouveau compte</string>
+    <string name="register_account_title">Créer un compte</string>
+    <string name="register_success">Inscription réussie</string>
+    <string name="register_failed">échec de l'inscription</string>
+    <string name="wholesalers">Grossistes</string>
 </resources>
+
 

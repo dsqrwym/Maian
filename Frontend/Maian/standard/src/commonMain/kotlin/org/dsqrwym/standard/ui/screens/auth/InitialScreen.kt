@@ -20,8 +20,6 @@ import org.dsqrwym.shared.ui.components.containers.FloatingBreathingBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.jetbrains.compose.resources.stringResource
 import maian.shared.generated.resources.*
-import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.button_register_new_account
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -70,7 +68,7 @@ fun InitialScreen(
 
             MyTextButton(
                 modifier = Modifier.fillMaxWidth(0.56f),
-                text = stringResource(StandardRes.string.button_register_new_account),
+                text = stringResource(SharedRes.string.button_register_new_account),
                 isEnabled = isNavEnabled,
             ) { onRegisterClick() }
 

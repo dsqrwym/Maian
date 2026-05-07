@@ -210,12 +210,21 @@ export class CloudflareStorageDriver implements StorageDriver {
   /**
    * 通过 NestJS 代理读取流，以便进行权限检查
    */
-  async createReadStream(pathOrKey: string): Promise<Readable> {
+  async createReadStream(
+    pathOrKey: string,
+    options?: { start?: number; end?: number },
+  ): Promise<Readable> {
     try {
+      const range =
+        options?.start !== undefined || options?.end !== undefined
+          ? `bytes=${options.start ?? 0}-${options.end ?? ''}`
+          : undefined;
+
       const response = await this.client.send(
         new GetObjectCommand({
           Bucket: this.bucket,
           Key: pathOrKey,
+          Range: range,
         }),
       );
 

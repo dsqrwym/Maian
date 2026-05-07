@@ -49,6 +49,8 @@ class ProductsListViewModel(
 
     var currentProduct by mutableStateOf<Product?>(null)
         private set
+    var previewProduct by mutableStateOf<Product?>(null)
+        private set
     var deleteProduct by mutableStateOf<Product?>(null)
         private set
     var isDeletingProduct by mutableStateOf(false)
@@ -126,10 +128,6 @@ class ProductsListViewModel(
         searchQuery = query
     }
 
-    fun updateFilterCategoryId(categoryId: String?) {
-        filterCategoryId = categoryId
-    }
-
     fun updateFilterCategory(category: CategorySummary?) {
         filterCategory = category
         filterCategoryId = category?.id
@@ -190,6 +188,10 @@ class ProductsListViewModel(
 
     fun updateCurrentProduct(product: Product?) {
         currentProduct = product
+    }
+
+    fun updatePreviewProduct(product: Product?) {
+        previewProduct = product
     }
 
     fun updateDeleteProduct(product: Product?) {

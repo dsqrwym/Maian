@@ -29,9 +29,13 @@ export abstract class StorageDriver {
   /**
    * 读取文件
    * @param pathOrKey 文件存储路径或唯一键
+   * @param options
    * @returns 返回 Node.js 可读流
    */
-  abstract createReadStream(pathOrKey: string): Promise<Readable> | Readable;
+  abstract createReadStream(
+    pathOrKey: string,
+    options?: { start?: number; end?: number },
+  ): Promise<Readable> | Readable;
 
   /**
    * 可选：生成短期签名 URL（适用于 S3、OSS 等场景）

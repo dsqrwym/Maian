@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -22,6 +23,7 @@ import {
   user_uploads,
 } from '#/generated/drizzle/schema.js';
 import { and, eq, sql } from 'drizzle-orm';
+import { FILE_ERROR } from './constants/files.constants.js';
 
 @Injectable()
 export class FilesService {
@@ -88,7 +90,7 @@ export class FilesService {
     return { id: file.id.toString() };
   }
 
-  async getProductFileById(query: IProductFilesQueryDto, ability: AppAbility) {
+  async verifyProductFile(query: IProductFilesQueryDto, ability: AppAbility) {
     const { product_id, file_id } = query;
 
     const [file] = await this.drizzle.db
@@ -124,10 +126,66 @@ export class FilesService {
     ) {
       throw new ForbiddenException('You are not allowed to read this file');
     }
+
+    return file;
+  }
+
+  async getProductFileById(query: IProductFilesQueryDto, ability: AppAbility) {
+    const file = await this.verifyProductFile(query, ability);
+
     return {
       stream: this.storage.createReadStream(file.storage_key),
       mime_type: file.mime_type,
       filename: file.file_name,
     };
+  }
+
+  async getVideoFileMetaById(fileId: string, productId: string) {
+    const [file] = await this.drizzle.db
+      .select({
+        storage_key: files.storage_key,
+        mime_type: files.mime_type,
+        file_name: files.file_name,
+        file_size: files.file_size,
+      })
+      .from(files)
+      .innerJoin(products_files, eq(files.id, products_files.file_id))
+      .where(
+        and(
+          eq(files.id, BigInt(fileId)),
+          eq(products_files.product_id, BigInt(productId)),
+        ),
+      )
+      .limit(1);
+
+    if (!file) {
+      throw new NotFoundException(FILE_ERROR.FILE_NOT_FOUND);
+    }
+
+    if (!file.mime_type.startsWith('video/')) {
+      throw new BadRequestException(FILE_ERROR.FILE_NOT_VIDEO);
+    }
+
+    return {
+      storage_key: file.storage_key,
+      mime_type: file.mime_type,
+      filename: file.file_name,
+      file_size: Number(file.file_size),
+    };
+  }
+
+  async createVideoFileStream(
+    storageKey: string,
+    start?: number,
+    end?: number,
+  ) {
+    if (start === undefined && end === undefined) {
+      return this.storage.createReadStream(storageKey);
+    }
+
+    return this.storage.createReadStream(storageKey, {
+      start,
+      end,
+    });
   }
 }

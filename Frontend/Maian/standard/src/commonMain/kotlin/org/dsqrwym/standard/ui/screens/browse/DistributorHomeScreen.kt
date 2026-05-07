@@ -15,20 +15,20 @@ import maian.shared.generated.resources.categories
 import maian.shared.generated.resources.products
 import org.dsqrwym.standard.domain.browse.BrowseScope
 import org.dsqrwym.standard.domain.browse.RetailCategory
-import org.dsqrwym.standard.domain.browse.RetailDistributor
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
-import org.dsqrwym.standard.ui.viewmodels.browse.DistributorHomeViewModel
+import org.dsqrwym.standard.ui.viewmodels.browse.WholesalerHomeViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DistributorHomeScreen(
-    distributor: RetailDistributor,
+fun WholesalerHomeScreen(
+    distributor: RetailWholesaler,
     onNavigateBack: (() -> Unit)? = null,
     onProductClick: (String) -> Unit,
     onCategoryClick: (RetailCategory, List<RetailCategory>, String) -> Unit = { _, _, _ -> },
-    viewModel: DistributorHomeViewModel = koinViewModel(),
+    viewModel: WholesalerHomeViewModel = koinViewModel(),
 ) {
     SharedTransparentScaffold(
         onNavigateBack = onNavigateBack,
@@ -43,7 +43,7 @@ fun DistributorHomeScreen(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            DistributorHeader(distributor)
+            WholesalerHeader(distributor)
             PrimaryTabRow(selectedTabIndex = viewModel.selectedTab) {
                 Tab(
                     selected = viewModel.selectedTab == 0,
@@ -61,13 +61,13 @@ fun DistributorHomeScreen(
             when (viewModel.selectedTab) {
                 0 -> ProductBrowseScreen(
                     scope = BrowseScope.DISTRIBUTOR,
-                    distributorId = distributor.id,
+                    wholesalerId = distributor.id,
                     onProductClick = onProductClick,
                 )
 
                 else -> CategoryBrowseScreen(
                     scope = BrowseScope.DISTRIBUTOR,
-                    distributorId = distributor.id,
+                    wholesalerId = distributor.id,
                     onProductClick = onProductClick,
                     onCategoryClick = onCategoryClick,
                 )
@@ -77,7 +77,7 @@ fun DistributorHomeScreen(
 }
 
 @Composable
-private fun DistributorHeader(distributor: RetailDistributor) {
+private fun WholesalerHeader(distributor: RetailWholesaler) {
     Surface(tonalElevation = 2.dp) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp),

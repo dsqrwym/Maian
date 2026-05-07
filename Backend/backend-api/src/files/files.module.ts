@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { FilesService } from './files.service.js';
 import { FilesController } from './files.controller.js';
+import { FileVideoPlayTokenService } from './services/file-video-play-token.service.js';
 import { STORAGE_DRIVER } from './storage/storage-key.js';
 import { LocalStorageDriver } from './storage/local-storage.driver.js';
 import { CloudflareStorageDriver } from './storage/cloudflare-storage.driver.js';
@@ -10,13 +11,15 @@ import { ENV } from '#/config/constants.config.js';
 import { DrizzleModule } from '#/drizzle/drizzle.module.js';
 import { CommonModule } from '#/common/common.module.js';
 import { PinoLogger } from 'nestjs-pino';
+import { JwtModule } from '@nestjs/jwt';
 
 @Global()
 @Module({
   controllers: [FilesController],
-  imports: [DrizzleModule, CommonModule],
+  imports: [DrizzleModule, CommonModule, JwtModule],
   providers: [
     FilesService,
+    FileVideoPlayTokenService,
     LocalStorageDriver,
     CloudflareStorageDriver,
     SyncStorageDriver,
@@ -64,6 +67,7 @@ import { PinoLogger } from 'nestjs-pino';
   ],
   exports: [
     FilesService,
+    FileVideoPlayTokenService,
     STORAGE_DRIVER,
     LocalStorageDriver,
     CloudflareStorageDriver,

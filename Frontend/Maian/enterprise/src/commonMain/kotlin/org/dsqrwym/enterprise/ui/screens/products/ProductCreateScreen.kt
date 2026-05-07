@@ -1,17 +1,18 @@
 package org.dsqrwym.enterprise.ui.screens.products
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,9 @@ fun ProductCreateScreen(
                 onToggleRichTextEditor = {
                     workspaceState.toggle(BusinessAuxiliarySurface.Editor)
                 },
+                onTogglePreview = {
+                    workspaceState.toggle(BusinessAuxiliarySurface.Preview)
+                },
             )
         },
         auxiliaryContent = { surface ->
@@ -86,6 +90,7 @@ private fun ProductCreateScreenContent(
     viewModel: ProductCreateViewModel,
     isAuxiliaryOpen: Boolean,
     onToggleRichTextEditor: () -> Unit,
+    onTogglePreview: () -> Unit,
 ) {
     val mediaPicker = viewModel.mediaPicker
 
@@ -119,11 +124,22 @@ private fun ProductCreateScreenContent(
             )
         },
         title = {
-            BusinessTitleIconRow(
-                stringResource(SharedRes.string.create),
-                Icons.Outlined.Inventory2,
-                stringResource(EnterpriseRes.string.product)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                BusinessTitleIconRow(
+                    stringResource(SharedRes.string.create),
+                    Icons.Outlined.Inventory2,
+                    stringResource(EnterpriseRes.string.product)
+                )
+                IconButton(onClick = onTogglePreview) {
+                    Icon(
+                        Icons.Outlined.Visibility,
+                        contentDescription = stringResource(EnterpriseRes.string.product_preview),
+                    )
+                }
+            }
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
             viewModel.createFormUiState,
