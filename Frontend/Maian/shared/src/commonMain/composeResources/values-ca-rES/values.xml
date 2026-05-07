@@ -1,4 +1,5 @@
 ﻿<resources>
+
     <!-- ===================== Descripció de contingut ===================== -->
     <string name="login_background_content_description">Fons de la pantalla d’inici de sessió</string>
     <string name="button_google_logo_content_description">Icona de Google</string>
@@ -7,10 +8,9 @@
     <string name="icon_content_description_email">Icona de correu electrònic</string>
     <string name="icon_content_description_person">Icona d’usuari</string>
     <string name="icon_content_description_lock">Icona de contrasenya</string>
-    <string name="icon_content_description_language">Botó per canviar l'idioma</string>
+    <string name="icon_content_description_language">Botó per a canviar l'idioma</string>
     <string name="icon_content_description_password_toggle_visibility">Mostra/amaga la contrasenya</string>
     <string name="icon_content_description_dismiss">Tancar</string>
-
 
     <!-- Estat -->
     <string name="status_error_content_description">Error</string>
@@ -19,131 +19,128 @@
 
     <!-- ===================== Pantalla d’inici de sessió ===================== -->
     <string name="login_title">Iniciar sessió</string>
-    <string name="login_subtitle">Si us plau, inicia sessió per continuar</string>
+    <string name="login_subtitle">Per favor, inicia sessió per a continuar</string>
 
     <string name="session_expired">La teua sessió ha caducat. Torna a iniciar sessió.</string>
     <string name="session_revoked">El teu compte s'ha tancat en un altre dispositiu o ha sigut finalitzat per un administrador.</string>
     <string name="csrf_invalid">La validació de seguretat ha fallat. Actualitza la pàgina o torna a iniciar sessió.</string>
     <string name="session_not_found">Sessió no trobada. Torna a iniciar sessió.</string>
-    <string name="token_invalid_or_expired">El token no és vàlid o ha caducat, si us plau, obtingueu-ne un de nou</string>
+    <string name="token_invalid_or_expired">El token no és vàlid o ha caducat. Per favor, obtín-ne un de nou.</string>
 
     <!-- Botons d’inici de sessió -->
     <string name="button_login">Iniciar sessió</string>
     <string name="button_forget_password">He oblidat la contrasenya</string>
-    <string name="button_other_login_methods">Altres maneres d’iniciar sessió</string>
+    <string name="button_other_login_methods">Altres formes d’iniciar sessió</string>
     <string name="button_google_login">Inicia sessió amb Google</string>
     <string name="button_wechat_login">Inicia sessió amb WeChat</string>
 
     <!-- Camps d’inici de sessió -->
     <string name="field_username_or_email_label">Nom d’usuari o correu electrònic</string>
-    <string name="field_username_or_email_placeholder">Introdueix el teu nom d’usuari o correu</string>
+    <string name="field_username_or_email_placeholder">Introduïx el teu nom d’usuari o correu electrònic</string>
     <string name="field_password_label">Contrasenya</string>
-    <string name="field_password_placeholder">Introdueix la teua contrasenya</string>
+    <string name="field_password_placeholder">Introduïx la teua contrasenya</string>
     <string name="field_username_label">Nom d'usuari</string>
-    <string name="field_username_placeholder">Introdueix el nom d’usuari</string>
-
+    <string name="field_username_placeholder">Introduïx el nom d’usuari</string>
 
     <!-- Missatges de validació -->
-    <string name="validation_username_or_email_empty">El nom d’usuari o correu no pot estar buit</string>
-    <string name="validation_username_cannot_contain_at">El nom d'usuari no pot contenir el caràcter "@"</string>
+    <string name="validation_username_or_email_empty">El nom d’usuari o correu electrònic no pot estar buit</string>
+    <string name="validation_username_cannot_contain_at">El nom d'usuari no pot contindre el caràcter "@"</string>
     <string name="validation_username_length_invalid">El nom d’usuari ha de tindre entre 3 i 30 caràcters</string>
     <string name="validation_email_domain_not_supported">El domini example.com no està suportat</string>
     <string name="validation_password_empty">La contrasenya no pot estar buida</string>
     <string name="validation_password_too_short">La contrasenya ha de tindre almenys 6 caràcters</string>
-    <string name="validation_password_missing_uppercase">La contrasenya ha de contenir almenys una lletra majúscula</string>
-    <string name="validation_password_missing_lowercase">La contrasenya ha de contenir almenys una lletra minúscula</string>
-    <string name="validation_password_missing_digit">La contrasenya ha de contenir almenys un número</string>
+    <string name="validation_password_missing_uppercase">La contrasenya ha de contindre almenys una lletra majúscula</string>
+    <string name="validation_password_missing_lowercase">La contrasenya ha de contindre almenys una lletra minúscula</string>
+    <string name="validation_password_missing_digit">La contrasenya ha de contindre almenys un número</string>
 
     <string name="login_success">Inici de sessió correcte</string>
     <string name="login_error_username_or_password">Nom d'usuari o contrasenya incorrectes</string>
     <string name="login_error_email_or_password">Correu electrònic o contrasenya incorrectes</string>
 
-    <string name="register_email_already_registered">Aquest correu electrònic ja està registrat. Si us plau, inicieu sessió.</string>
-    <string name="register_username_already_registered">Aquest nom d’usuari ja està en ús. Proveu-ne un altre.</string>
-
-
+    <string name="register_email_already_registered">Este correu electrònic ja està registrat. Per favor, inicia sessió.</string>
+    <string name="register_username_already_registered">Este nom d’usuari ja està en ús. Prova’n un altre.</string>
 
     <!-- ===================== Pantalla inicial ===================== -->
     <string name="initial_screen_welcome">Benvingut a</string>
     <string name="initial_screen_platform_name">Plataforma MaiAn</string>
-    <string name="initial_screen_instruction">Si us plau, inicia sessió o registra’t per continuar</string>
-    <string name="initial_screen_quick_login_hint">? Inici ràpid amb Google o WeChat ?</string>
+    <string name="initial_screen_instruction">Per favor, inicia sessió o registra’t per a continuar</string>
+    <string name="initial_screen_quick_login_hint">⏫ Inici ràpid amb Google o WeChat ⏫</string>
 
     <!-- Acord d’usuari i privadesa -->
-    <string name="agreement_warning">Has d’acceptar l’Acord d’Usuari i la Política de Privadesa per continuar</string>
+    <string name="agreement_warning">Has d’acceptar l’Acord d’Usuari i la Política de Privadesa per a continuar</string>
     <string name="agreement_section_agreement_text_template">He llegit i accepte “%s” i “%s”</string>
     <string name="agreement_section_user_agreement">Acord d’Usuari</string>
     <string name="agreement_section_privacy_policy">Política de Privadesa</string>
 
     <!-- ===================== He oblidat la contrasenya ===================== -->
     <string name="reset_email_label">Correu electrònic</string>
-    <string name="reset_email_placeholder">Introdueix el teu correu</string>
+    <string name="reset_email_placeholder">Introduïx el teu correu electrònic</string>
     <string name="reset_new_password_label">Nova contrasenya</string>
-    <string name="reset_repeat_password_label">Repetir nova contrasenya</string>
-    <string name="reset_repeat_password_placeholder">Torni a introduir la nova contrasenya</string>
-    <string name="reset_repeat_password_mismatch">La contrasenya introdu?da no coincideix amb la nova</string>
+    <string name="reset_repeat_password_label">Repetix la nova contrasenya</string>
+    <string name="reset_repeat_password_placeholder">Torna a introduir la nova contrasenya</string>
+    <string name="reset_repeat_password_mismatch">La contrasenya introduïda no coincidix amb la nova</string>
 
-    <string name="reset_verify_email">Verificar correu</string>
+    <string name="reset_verify_email">Verificar correu electrònic</string>
     <string name="reset_verify">Verificar</string>
     <string name="reset_change_password">Canviar contrasenya</string>
 
     <!-- Missatges d’error -->
     <string name="reset_unknown_error">Error desconegut</string>
-    <string name="reset_fill_otp">Si us plau, introdueix el codi de verificació</string>
+    <string name="reset_fill_otp">Per favor, introduïx el codi de verificació</string>
     <string name="reset_otp_error">Codi de verificació incorrecte</string>
-    <string name="reset_email_format_error">Format de correu no vàlid</string>
+    <string name="reset_email_format_error">Format de correu electrònic no vàlid</string>
 
     <string name="error_no_transformation">Alguna cosa ha fallat. Torna-ho a intentar més tard.</string>
     <string name="error_serialization">Resposta inesperada del servidor. Torna-ho a intentar.</string>
     <string name="error_connect_timeout">No s’ha pogut connectar amb el servidor. Comprova la teua connexió a internet.</string>
     <string name="error_socket_timeout">El servidor ha tardat massa a respondre. Torna-ho a intentar més tard.</string>
-    <string name="error_io">S’ha produ?t un error de xarxa. Comprova la teua connexió.</string>
+    <string name="error_io">S’ha produït un error de xarxa. Comprova la teua connexió.</string>
     <string name="error_generic">La sol·licitud de xarxa ha fallat. Torna-ho a intentar.</string>
-    <string name="error_no_permission">No té permís per accedir a aquesta funció o recurs.</string>
-
-
+    <string name="error_no_permission">No tens permís per a accedir a esta funció o recurs.</string>
 
     <!-- Codi OTP -->
     <string name="otp_resend">Reenviar</string>
     <string name="otp_send">Enviar codi de verificació</string>
 
     <!-- ===================== OTP & Restablir contrasenya ===================== -->
-    <string name="otp_code_sent">Codi de verificació enviat, revisa el teu correu</string>
+    <string name="otp_code_sent">Codi de verificació enviat. Revisa el teu correu electrònic.</string>
     <string name="otp_code_invalid_or_expired">Codi no vàlid o caducat</string>
     <string name="otp_code_verified">Verificat. Has de completar l’operació abans de %1$s</string>
+
     <plurals name="expire_seconds">
         <item quantity="one">%1$d segon</item>
         <item quantity="other">%1$d segons</item>
     </plurals>
+
     <plurals name="expire_minutes">
         <item quantity="one">%1$d minut</item>
         <item quantity="other">%1$d minuts</item>
     </plurals>
+
     <string name="expire_minutes_seconds">%1$s %2$s</string>
     <string name="expire_prefix">%1$s</string>
     <string name="expire_absolute">abans de %1$s</string>
 
-    <string name="request_too_frequent">Massa sol·licituds, torna-ho a provar més tard</string>
-    <string name="email_not_found">Adre?a de correu no trobada</string>
+    <string name="request_too_frequent">Massa sol·licituds. Torna-ho a provar més tard.</string>
+    <string name="email_not_found">Adreça de correu electrònic no trobada</string>
 
     <string name="password_reset_success">Contrasenya canviada correctament</string>
-
 
     <string name="field_cannot_be_empty">No pot estar buit</string>
     <string name="field_required">Obligatori</string>
     <string name="field_optional">Opcional</string>
 
-    <string name="section_address">Adre?a</string>
+    <string name="section_address">Adreça</string>
     <string name="address_country">País</string>
-    <string name="address_search_or_select_country">Cerca o selecciona un país</string>
+    <string name="address_search_or_select_country">Busca o selecciona un país</string>
     <string name="address_state_or_province">Província/Estat</string>
-    <string name="address_input_or_select_state_or_province">Introdueix o selecciona província/estat</string>
+    <string name="address_input_or_select_state_or_province">Introduïx o selecciona una província/estat</string>
     <string name="address_city">Ciutat</string>
-    <string name="address_input_or_select_city">Introdueix o selecciona ciutat</string>
+    <string name="address_input_or_select_city">Introduïx o selecciona una ciutat</string>
     <string name="address_street">Carrer</string>
-    <string name="address_input_detail">Introdueix l'adre?a completa</string>
+    <string name="address_input_detail">Introduïx l'adreça completa</string>
     <string name="address_postal_code">Codi postal</string>
-    <string name="address_input_postal_code">Introdueix el codi postal</string>
+    <string name="address_input_postal_code">Introduïx el codi postal</string>
     <string name="address_no_match">No hi ha coincidències</string>
 
     <string name="reset_password_title">Restablir contrasenya</string>
@@ -152,13 +149,16 @@
     <string name="menu_drawer_more_functions">Més funcions</string>
     <string name="menu_close_content_description">Tancar menú</string>
     <string name="menu_open_content_description">Obrir menú</string>
+
     <string name="dashboard">Inici</string>
-    <string name="profile">El meu</string>
+    <string name="profile">El meu perfil</string>
     <string name="products">Productes</string>
     <string name="categories">Categories</string>
     <string name="more">Més</string>
+
     <string name="search_products">Busca productes</string>
     <string name="search_categories">Busca categories</string>
+
     <string name="no_products">No s'han trobat productes</string>
     <string name="no_categories">No s'han trobat categories</string>
 
@@ -167,32 +167,32 @@
     <string name="theme_follow_system">Seguir el sistema</string>
 
     <string name="field_telephone_label">Número de telèfon</string>
-    <string name="field_telephone_placeholder">Introdu?u el número de telèfon</string>
+    <string name="field_telephone_placeholder">Introduïu el número de telèfon</string>
 
     <string name="phone_error_empty">El número de telèfon no pot estar buit</string>
     <string name="phone_error_invalid">Número de telèfon no vàlid</string>
     <string name="phone_error_invalid_country_code">Codi de país no vàlid</string>
     <string name="phone_error_too_short">El número de telèfon és massa curt</string>
     <string name="phone_error_too_long">El número de telèfon és massa llarg</string>
-    <string name="phone_error_invalid_length">Longitud de número de telèfon incorrecta</string>
-    <string name="phone_error_not_a_number">L\'entrada no és un número de telèfon vàlid</string>
+    <string name="phone_error_invalid_length">Longitud incorrecta del número de telèfon</string>
+    <string name="phone_error_not_a_number">L'entrada no és un número de telèfon vàlid</string>
     <string name="phone_error_too_short_after_idd">El número és massa curt després de la marcació internacional</string>
-    <string name="phone_error_format_incorrect">Format de número de telèfon incorrecte</string>
-    <string name="phone_error_validation_failed">S\'ha produ?t un error en validar el número de telèfon</string>
+    <string name="phone_error_format_incorrect">Format del número de telèfon incorrecte</string>
+    <string name="phone_error_validation_failed">S’ha produït un error en validar el número de telèfon</string>
 
     <string name="phone_hint_invalid_with_format">(Actualment analitzat com: %1$s)</string>
 
     <string name="create">Crear</string>
     <string name="add">Afegir</string>
-    <string name="update">Renovar</string>
+    <string name="update">Actualitzar</string>
     <string name="not_found">No s'han trobat resultats</string>
-    <string name="load_failed">Error en carregar, toca per reintentar</string>
+    <string name="load_failed">Error en carregar. Toca per a tornar-ho a intentar.</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
-    <string name="undo">Desfés</string>
+    <string name="undo">Desfer</string>
     <string name="path">Ruta</string>
     <string name="clear">Esborrar</string>
-    <string name="not_set">No establert</string>
+    <string name="not_set">No establit</string>
     <string name="all">Tot</string>
     <string name="filter">Filtrar</string>
     <string name="close">Tancar</string>
@@ -202,11 +202,17 @@
     <string name="delete_failed">Error en eliminar</string>
     <string name="translation_deleted">Traducció eliminada</string>
     <string name="variant_deleted">Variant eliminada</string>
+
     <string name="create_success">Creat correctament</string>
     <string name="create_failed">Error en crear</string>
     <string name="update_success">Actualització correcta</string>
     <string name="update_failed">L'actualització ha fallat</string>
-    <string name="update_conflict_preserved_changes">Alguns continguts han estat modificats per una altra persona. S'han conservat els teus canvis. Revisa-ho i torna a actualitzar.</string>
+
+    <string name="update_conflict_preserved_changes">
+        Alguns continguts han sigut modificats per una altra persona.
+        S'han conservat els teus canvis.
+        Revisa-ho i torna a actualitzar.
+    </string>
 
     <string name="category">Categoria</string>
 
@@ -214,66 +220,84 @@
     <string name="basic_info">Informació bàsica</string>
 
     <string name="tax_rate">Taxa d'impost</string>
-    <string name="confirm">Confirma</string>
+
+    <string name="confirm">Confirmar</string>
+
     <string name="confirm_delete_title">Vols eliminar l'element seleccionat?</string>
     <string name="confirm_delete_message">Esta acció no es pot desfer.</string>
+
     <string name="image_content_description">Imatge</string>
-    <string name="video_play_pause_content_description">Reprodu?x o pausa el vídeo</string>
+    <string name="video_play_pause_content_description">Reproduïx o pausa el vídeo</string>
     <string name="video_toggle_fullscreen_content_description">Activa o desactiva la pantalla completa</string>
+
     <string name="toast_success_content_description">Correcte</string>
     <string name="toast_info_content_description">Informació</string>
     <string name="toast_warning_content_description">Avís</string>
     <string name="toast_error_content_description">Error</string>
+
     <string name="navigation_title_fallback">Títol</string>
     <string name="navigation_item_icon_fallback">Icona de l'element del menú</string>
     <string name="navigation_item_label_fallback">Element de navegació</string>
+
     <string name="menu_item_tooltip_title_fallback">Element del menú</string>
     <string name="menu_item_tooltip_text_fallback">Detalls de l'element del menú</string>
     <string name="menu_item_tooltip_fallback">Element del menú</string>
+
     <string name="product_image_with_name">Imatge del producte: %1$s</string>
-    
+
     <!-- ===================== Accions comunes (Shared) ===================== -->
     <string name="copy">Copiar</string>
-    <string name="save">Desar</string>
+    <string name="save">Guardar</string>
 
     <!-- Notificacions de còpia/porta-retalls -->
-    <string name="unable_to_copy_resource">No es pot copiar aquest recurs</string>
+    <string name="unable_to_copy_resource">No es pot copiar este recurs</string>
     <string name="copied_to_clipboard">Copiat al porta-retalls</string>
     <string name="copied_files_to_clipboard">Fitxers copiats al porta-retalls</string>
     <string name="copied_image_to_clipboard">Imatge copiada al porta-retalls</string>
     <string name="copied_text_to_clipboard_with_value">S'ha copiat "%1$s" al porta-retalls</string>
     <string name="copy_failed">Error en copiar</string>
 
-    <!-- Notificacions de desament d'imatge -->
-    <string name="image_saved_with_name">Imatge "%1$s" desada</string>
-    <string name="file_saved_with_name">Fitxer "%1$s" desat</string>
-    <string name="image_saved_to_gallery_with_name">Imatge "%1$s" desada a la galeria</string>
+    <!-- Notificacions de guardat d'imatge -->
+    <string name="image_saved_with_name">Imatge "%1$s" guardada</string>
+    <string name="file_saved_with_name">Fitxer "%1$s" guardat</string>
+    <string name="image_saved_to_gallery_with_name">Imatge "%1$s" guardada a la galeria</string>
+
     <string name="status">Estat</string>
-    <string name="sort">Ordena</string>
+    <string name="sort">Ordenar</string>
     <string name="order_dir_ascending">Ascendent</string>
     <string name="order_dir_descending">Descendent</string>
+
     <string name="out_of_stock">Sense estoc</string>
+
     <string name="product_image">Imatge del producte</string>
     <string name="product_name">Nom del producte</string>
     <string name="product_title">Títol del producte</string>
     <string name="product_code">Codi del producte</string>
     <string name="product_category">Categoria</string>
+
     <string name="product_total_stock">Estoc total</string>
     <string name="product_stock_count">Estoc: %1$d</string>
+
     <string name="product_price">Preu</string>
     <string name="product_price_with_vat">Preu amb IVA</string>
     <string name="product_price_without_vat">Preu sense IVA</string>
+
     <string name="product_price_with_vat_value">IVA: %1$s</string>
     <string name="product_price_without_vat_value">Net: %1$s</string>
+
     <string name="product_min_order_qty">Quantitat mínima de comanda</string>
     <string name="product_moq_value">Comanda mín.: %1$d</string>
+
     <string name="product_preview">Vista prèvia</string>
     <string name="product_actions">Accions</string>
+
     <string name="product_status_active">Actiu</string>
     <string name="product_status_inactive">Inactiu</string>
+
     <string name="sale_variant_unit">Unitat</string>
     <string name="sale_variant_box">Caixa</string>
     <string name="sale_variant_pack">Paquet</string>
+
     <string name="product_sort_name">Nom</string>
     <string name="product_sort_title">Títol</string>
     <string name="product_sort_code">Codi</string>
@@ -282,27 +306,37 @@
     <string name="product_sort_price">Preu</string>
     <string name="product_sort_price_without_vat">Preu sense IVA</string>
     <string name="product_sort_min_order_qty">Comanda mínima</string>
+
     <string name="product_detail">Detall del producte</string>
-    <string name="media">Mitjans</string>
+
+    <string name="media">Multimèdia</string>
     <string name="variants">Variants</string>
     <string name="description">Descripció</string>
+
     <string name="no_description">No hi ha cap descripció disponible.</string>
+
     <string name="quantity">Quantitat</string>
     <string name="add_to_cart">Afegir a la cistella</string>
+
     <string name="available_stock_value">Estoc disponible: %1$d</string>
     <string name="sale_unit_qty_value">Unitat de venda: %1$d</string>
     <string name="max_purchasable_qty_value">Màx.: %1$d</string>
-    <string name="below_min_order_qty">Per sota de la comanda mínima.</string>
+
+    <string name="below_min_order_qty">Per davall de la comanda mínima.</string>
     <string name="above_available_stock">Supera l'estoc disponible.</string>
-    <string name="not_purchasable">No comprable</string>
+
+    <string name="not_purchasable">No es pot comprar</string>
     <string name="no_variants">No hi ha variants disponibles.</string>
-    <string name="product_media">Mitjans del producte</string>
+
+    <string name="product_media">Multimèdia del producte</string>
     <string name="video_content_description">Vídeo</string>
+
     <string name="button_register_new_account">Registrar un nou compte</string>
     <string name="register_account_title">Crear un compte</string>
-    <string name="register_success">Registre exitós</string>
+
+    <string name="register_success">Registre correcte</string>
     <string name="register_failed">Error de registre</string>
+
     <string name="wholesalers">Majoristes</string>
+
 </resources>
-
-

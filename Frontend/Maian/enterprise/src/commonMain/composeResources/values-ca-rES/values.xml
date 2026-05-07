@@ -3,19 +3,19 @@
 
     <string name="login_tab_employee">Empleat</string>
     <string name="field_wholesaler_id_label">ID de majorista</string>
-    <string name="field_wholesaler_id_placeholder">Introdueix el teu ID de majorista</string>
-    <string name="error_wholesaler_id_required">Cal l’ID de majorista per iniciar sessió amb nom d’usuari</string>
+    <string name="field_wholesaler_id_placeholder">Introduïx el teu ID de majorista</string>
+    <string name="error_wholesaler_id_required">Cal l’ID de majorista per a iniciar sessió amb nom d’usuari</string>
 
     <string name="register_section_company_info">Informació de l'empresa</string>
     <string name="field_company_name_label">Nom de l'empresa</string>
-    <string name="field_company_name_placeholder">Introdu?u el nom de l'empresa</string>
+    <string name="field_company_name_placeholder">Introduïx el nom de l'empresa</string>
     <string name="field_company_type_label">Tipus d'empresa</string>
-    <string name="field_company_type_placeholder">Seleccioneu el tipus d'empresa</string>
+    <string name="field_company_type_placeholder">Selecciona el tipus d'empresa</string>
     <string name="icon_content_description_company">Icona d'empresa</string>
 
     <string name="category_management_description">
-        Veure i cercar categories, crear les teves pròpies categories de productes i gestionar noms multilingües.
-        Admet fins a tres nivells de nidificació (1 → 2 → 3).
+        Consulta i busca categories, crea les teues pròpies categories de productes i gestiona noms multilingües.
+        Admet fins a tres nivells de jerarquia (1 → 2 → 3).
     </string>
     <string name="company_type_limited_company">Societat limitada (S.L.)</string>
     <string name="company_type_public_limited_company">Societat anònima (S.A.)</string>
@@ -28,8 +28,9 @@
     <string name="product_preview">Vista prèvia</string>
     <string name="product_preview_tooltip">Vista prèvia de la pàgina del producte que voran els detallistes</string>
     <string name="product_description">Detalls del producte</string>
-    <string name="product_description_placeholder">Introdu?x la descripció detallada del producte</string>
-    <string name="product_preview_outline">Resum de vista prèvia</string>
+    <string name="product_description_placeholder">Introduïx la descripció detallada del producte</string>
+
+    <string name="product_preview_outline">Resum de la vista prèvia</string>
     <string name="product_preview_placeholder">Esta àrea està reservada per al flux complet de vista prèvia del producte.</string>
     <string name="product_preview_name">Nom: %1$s</string>
     <string name="product_preview_title">Títol: %1$s</string>
@@ -44,15 +45,20 @@
     <string name="sales_information">Informació de venda</string>
     <string name="sale_unit">Unitat de venda</string>
     <string name="sale_unit_conversion">Conversió d'unitats</string>
-    <string name="enter_product_code">Introdu?x el codi del producte</string>
+
+    <string name="enter_product_code">Introduïx el codi del producte</string>
+
     <string name="price_information">Informació de preus</string>
     <string name="inventory_information">Informació d'inventari</string>
     <string name="available_stock">Estoc disponible</string>
-    <string name="enter_available_stock">Introdu?x la quantitat actual d'estoc</string>
+    <string name="enter_available_stock">Introduïx la quantitat actual d'estoc</string>
+
     <string name="low_stock_threshold">Avís d'estoc baix</string>
-    <string name="enter_low_stock_threshold">Introdu?x la quantitat per a l'avís d'estoc baix</string>
+    <string name="enter_low_stock_threshold">Introduïx la quantitat per a l'avís d'estoc baix</string>
+
     <string name="select_main_product_category">Selecciona la categoria principal del producte</string>
-    <string name="product_title_placeholder">Introdu?x un títol breu del producte</string>
+    <string name="product_title_placeholder">Introduïx un títol breu del producte</string>
+
     <string name="main_language">Idioma principal</string>
     <string name="stock_count">Estoc: %1$d</string>
     <string name="price_with_vat_value">IVA: %1$s</string>
@@ -66,12 +72,33 @@
     <string name="release_to_delete">Solta per a eliminar</string>
     <string name="drag_here_to_delete">Arrossega ací per a eliminar</string>
     <string name="product_form_media_title">Fitxers multimèdia</string>
-    <string name="product_form_media_subtitle_mb">Mantín premut i arrossega per a ordenar. La primera imatge serà la principal. Cada fitxer no pot superar %1$d MB.</string>
-    <string name="product_form_translations_title">Informació del producte (multilingüe)</string>
-    <string name="product_form_translations_subtitle">Afig noms i descripcions en diferents idiomes. L'idioma principal es mostra per defecte; els altres s'usen per a la visualització multilingüe. Cal omplir almenys un idioma.</string>
-    <string name="product_form_attributes_title">Atributs del producte</string>
-    <string name="product_form_attributes_subtitle">Configura els atributs bàsics del producte, incloent categoria, tipus impositiu i estat.</string>
-    <string name="product_form_sku_title">Llista d'SKU</string>
-    <string name="product_form_sku_subtitle">Cada producte necessita almenys una variant de venda (SKU). Pots crear variants per a diferents embalatges, formats o preus. S'admeten fins a 50 variants.</string>
-</resources>
 
+    <string name="product_form_media_subtitle_mb">
+        Mantín premut i arrossega per a ordenar. La primera imatge serà la principal.
+        Cada fitxer no pot superar %1$d MB.
+    </string>
+
+    <string name="product_form_translations_title">Informació del producte (multilingüe)</string>
+
+    <string name="product_form_translations_subtitle">
+        Afig noms i descripcions en diferents idiomes. L'idioma principal es mostra per defecte;
+        els altres s'utilitzen per a la visualització multilingüe.
+        Cal omplir almenys un idioma.
+    </string>
+
+    <string name="product_form_attributes_title">Atributs del producte</string>
+
+    <string name="product_form_attributes_subtitle">
+        Configura els atributs bàsics del producte, incloent la categoria,
+        el tipus impositiu i l'estat.
+    </string>
+
+    <string name="product_form_sku_title">Llista d'SKU</string>
+
+    <string name="product_form_sku_subtitle">
+        Cada producte necessita almenys una variant de venda (SKU).
+        Pots crear variants per a diferents embalatges, formats o preus.
+        S'admeten fins a 50 variants.
+    </string>
+
+</resources>

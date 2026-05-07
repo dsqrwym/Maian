@@ -1,35 +1,35 @@
 ﻿<resources>
-    <!-- ===================== Descri??o comum (Content Description) ===================== -->
-    <string name="login_background_content_description">Fundo da página de login</string>
-    <string name="button_google_logo_content_description">ícone do Google</string>
-    <string name="button_back_button_content_description">Bot?o de voltar</string>
-    <string name="button_wechat_logo_content_description">ícone do WeChat</string>
-    <string name="icon_content_description_email">ícone de e-mail</string>
-    <string name="icon_content_description_person">ícone de utilizador</string>
-    <string name="icon_content_description_lock">ícone de palavra-passe</string>
-    <string name="icon_content_description_language">Bot?o de mudan?a de idioma</string>
-    <string name="icon_content_description_password_toggle_visibility">Alternar visibilidade da palavra-passe</string>
+    <!-- ===================== Descrição comum (Content Description) ===================== -->
+    <string name="login_background_content_description">Fundo da página de início de sessão</string>
+    <string name="button_google_logo_content_description">Ícone do Google</string>
+    <string name="button_back_button_content_description">Botão de voltar</string>
+    <string name="button_wechat_logo_content_description">Ícone do WeChat</string>
+    <string name="icon_content_description_email">Ícone de e-mail</string>
+    <string name="icon_content_description_person">Ícone de utilizador</string>
+    <string name="icon_content_description_lock">Ícone de palavra-passe</string>
+    <string name="icon_content_description_language">Botão de mudança de idioma</string>
+    <string name="icon_content_description_password_toggle_visibility">Mostrar/ocultar palavra-passe</string>
     <string name="icon_content_description_dismiss">Fechar</string>
-
 
     <!-- Estado -->
     <string name="status_error_content_description">Erro</string>
     <string name="status_completed_content_description">Concluído</string>
     <string name="status_in_progress_content_description">Em progresso</string>
 
-    <!-- ===================== Ecr? de login (Login Screen) ===================== -->
-    <string name="login_title">Iniciar sess?o</string>
-    <string name="login_subtitle">Por favor, inicie sess?o para continuar</string>
+    <!-- ===================== Ecrã de login (Login Screen) ===================== -->
+    <string name="login_title">Iniciar sessão</string>
+    <string name="login_subtitle">Por favor, inicie sessão para continuar</string>
 
-    <string name="session_expired">A sess?o expirou, por favor inicie sess?o novamente</string>
-    <string name="session_revoked">A conta foi terminada noutro dispositivo ou pelo administrador</string>
-    <string name="csrf_invalid">A verifica??o de seguran?a falhou, atualize a página ou volte a iniciar sess?o</string>
-    <string name="session_not_found">Sess?o inválida, por favor inicie sess?o novamente</string>
-    <string name="token_invalid_or_expired">O token é inválido ou expirou, por favor obtenha um novo</string>
-    <!-- Bot?es de login -->
+    <string name="session_expired">A sessão expirou. Por favor, inicie sessão novamente.</string>
+    <string name="session_revoked">A conta foi terminada noutro dispositivo ou por um administrador.</string>
+    <string name="csrf_invalid">A verificação de segurança falhou. Atualize a página ou volte a iniciar sessão.</string>
+    <string name="session_not_found">Sessão inválida. Por favor, inicie sessão novamente.</string>
+    <string name="token_invalid_or_expired">O token é inválido ou expirou. Por favor, obtenha um novo.</string>
+
+    <!-- Botões de login -->
     <string name="button_login">Entrar</string>
-    <string name="button_forget_password">Esqueceu-se da palavra-passe</string>
-    <string name="button_other_login_methods">Outros métodos de login</string>
+    <string name="button_forget_password">Esqueci-me da palavra-passe</string>
+    <string name="button_other_login_methods">Outros métodos de início de sessão</string>
     <string name="button_google_login">Entrar com Google</string>
     <string name="button_wechat_login">Entrar com WeChat</string>
 
@@ -41,37 +41,35 @@
     <string name="field_username_label">Nome de utilizador</string>
     <string name="field_username_placeholder">Introduza o nome de utilizador</string>
 
-
-    <!-- Valida??es -->
-    <string name="validation_username_or_email_empty">O nome de utilizador ou e-mail n?o pode estar vazio</string>
-    <string name="validation_username_cannot_contain_at">O nome de utilizador n?o pode conter “@”</string>
+    <!-- Validações -->
+    <string name="validation_username_or_email_empty">O nome de utilizador ou e-mail não pode estar vazio</string>
+    <string name="validation_username_cannot_contain_at">O nome de utilizador não pode conter “@”</string>
     <string name="validation_username_length_invalid">O nome de utilizador deve ter entre 3 e 30 caracteres</string>
-    <string name="validation_email_domain_not_supported">O domínio example.com n?o é suportado</string>
-    <string name="validation_password_empty">A palavra-passe n?o pode estar vazia</string>
+    <string name="validation_email_domain_not_supported">O domínio example.com não é suportado</string>
+    <string name="validation_password_empty">A palavra-passe não pode estar vazia</string>
     <string name="validation_password_too_short">A palavra-passe deve ter pelo menos 6 caracteres</string>
     <string name="validation_password_missing_uppercase">A palavra-passe deve conter pelo menos uma letra maiúscula</string>
     <string name="validation_password_missing_lowercase">A palavra-passe deve conter pelo menos uma letra minúscula</string>
     <string name="validation_password_missing_digit">A palavra-passe deve conter pelo menos um número</string>
 
     <!-- Mensagens de login -->
-    <string name="login_success">Sess?o iniciada com sucesso</string>
+    <string name="login_success">Sessão iniciada com sucesso</string>
     <string name="login_error_username_or_password">Nome de utilizador ou palavra-passe incorretos</string>
     <string name="login_error_email_or_password">E-mail ou palavra-passe incorretos</string>
 
-    <string name="register_email_already_registered">Este e-mail já está registado. Por favor, inicie sess?o.</string>
+    <string name="register_email_already_registered">Este e-mail já está registado. Por favor, inicie sessão.</string>
     <string name="register_username_already_registered">Este nome de utilizador já está a ser usado. Tente outro.</string>
 
-
-    <!-- ===================== Ecr? inicial (Initial Screen) ===================== -->
-    <string name="initial_screen_welcome">Bem-vindo ao</string>
+    <!-- ===================== Ecrã inicial (Initial Screen) ===================== -->
+    <string name="initial_screen_welcome">Bem-vindo à</string>
     <string name="initial_screen_platform_name">Plataforma MaiAn</string>
-    <string name="initial_screen_instruction">Por favor, escolha iniciar sess?o ou registar-se para continuar</string>
-    <string name="initial_screen_quick_login_hint">? Suporte para login rápido com Google e WeChat ?</string>
+    <string name="initial_screen_instruction">Por favor, inicie sessão ou registe-se para continuar</string>
+    <string name="initial_screen_quick_login_hint">⏫ Início rápido com Google ou WeChat ⏫</string>
 
     <!-- Termos & Privacidade -->
-    <string name="agreement_warning">Aceite os Termos de Utiliza??o e a Política de Privacidade para continuar</string>
-    <string name="agreement_section_agreement_text_template">Li e concordo com os “%s” e a “%s”</string>
-    <string name="agreement_section_user_agreement">Termos de Utiliza??o</string>
+    <string name="agreement_warning">Aceite os Termos de Utilização e a Política de Privacidade para continuar</string>
+    <string name="agreement_section_agreement_text_template">Li e aceito os “%s” e a “%s”</string>
+    <string name="agreement_section_user_agreement">Termos de Utilização</string>
     <string name="agreement_section_privacy_policy">Política de Privacidade</string>
 
     <!-- ===================== Recuperar palavra-passe (Reset Password) ===================== -->
@@ -80,7 +78,7 @@
     <string name="reset_new_password_label">Nova palavra-passe</string>
     <string name="reset_repeat_password_label">Repetir nova palavra-passe</string>
     <string name="reset_repeat_password_placeholder">Repita a nova palavra-passe</string>
-    <string name="reset_repeat_password_mismatch">As palavras-passe n?o coincidem</string>
+    <string name="reset_repeat_password_mismatch">As palavras-passe não coincidem</string>
 
     <string name="reset_verify_email">Verificar e-mail</string>
     <string name="reset_verify">Verificar</string>
@@ -88,74 +86,79 @@
 
     <!-- Mensagens de erro -->
     <string name="reset_unknown_error">Erro desconhecido</string>
-    <string name="reset_fill_otp">Introduza o código de verifica??o</string>
-    <string name="reset_otp_error">Código de verifica??o incorreto</string>
+    <string name="reset_fill_otp">Introduza o código de verificação</string>
+    <string name="reset_otp_error">Código de verificação incorreto</string>
     <string name="reset_email_format_error">Formato de e-mail inválido</string>
 
-    <string name="error_no_transformation">Ocorreu um erro, tente novamente mais tarde.</string>
-    <string name="error_serialization">Resposta do servidor inválida, tente novamente.</string>
-    <string name="error_connect_timeout">N?o foi possível ligar ao servidor, verifique a sua liga??o à internet.</string>
-    <string name="error_socket_timeout">Tempo de resposta do servidor excedido, tente novamente mais tarde.</string>
-    <string name="error_io">Erro de rede, verifique a sua liga??o.</string>
-    <string name="error_generic">Falha na requisi??o, tente novamente.</string>
-    <string name="error_no_permission">N?o tem permiss?o para aceder a esta funcionalidade ou recurso.</string>
-
+    <string name="error_no_transformation">Ocorreu um erro. Tente novamente mais tarde.</string>
+    <string name="error_serialization">Resposta do servidor inválida. Tente novamente.</string>
+    <string name="error_connect_timeout">Não foi possível ligar ao servidor. Verifique a sua ligação à Internet.</string>
+    <string name="error_socket_timeout">Tempo de resposta do servidor excedido. Tente novamente mais tarde.</string>
+    <string name="error_io">Erro de rede. Verifique a sua ligação.</string>
+    <string name="error_generic">Falha no pedido. Tente novamente.</string>
+    <string name="error_no_permission">Não tem permissão para aceder a esta funcionalidade ou recurso.</string>
 
     <!-- Código OTP -->
     <string name="otp_resend">Reenviar</string>
-    <string name="otp_send">Enviar código de verifica??o</string>
+    <string name="otp_send">Enviar código de verificação</string>
 
-    <!-- ===================== OTP & Redefini??o de palavra-passe ===================== -->
-    <string name="otp_code_sent">Código de verifica??o enviado, verifique o seu e-mail</string>
+    <!-- ===================== OTP & Redefinição de palavra-passe ===================== -->
+    <string name="otp_code_sent">Código de verificação enviado. Verifique o seu e-mail.</string>
     <string name="otp_code_invalid_or_expired">Código inválido ou expirado</string>
-    <string name="otp_code_verified">Verificado. Precisa de concluir a opera??o %1$s</string>
+    <string name="otp_code_verified">Verificado. Precisa de concluir a operação antes de %1$s</string>
+
     <plurals name="expire_seconds">
         <item quantity="one">%1$d segundo</item>
         <item quantity="other">%1$d segundos</item>
     </plurals>
+
     <plurals name="expire_minutes">
         <item quantity="one">%1$d minuto</item>
         <item quantity="other">%1$d minutos</item>
     </plurals>
+
     <string name="expire_minutes_seconds">%1$s %2$s</string>
     <string name="expire_prefix">em %1$s</string>
     <string name="expire_absolute">antes de %1$s</string>
 
-    <string name="request_too_frequent">Muitas solicita??es, tente novamente mais tarde</string>
-    <string name="email_not_found">E-mail n?o encontrado</string>
+    <string name="request_too_frequent">Muitas solicitações. Tente novamente mais tarde.</string>
+    <string name="email_not_found">E-mail não encontrado</string>
 
     <string name="password_reset_success">Palavra-passe alterada com sucesso</string>
 
-    <string name="field_cannot_be_empty">N?o pode estar vazio</string>
+    <string name="field_cannot_be_empty">Não pode estar vazio</string>
     <string name="field_required">Obrigatório</string>
     <string name="field_optional">Opcional</string>
 
-    <string name="section_address">Endere?o</string>
+    <string name="section_address">Endereço</string>
     <string name="address_country">País</string>
     <string name="address_search_or_select_country">Pesquisar ou selecionar país</string>
     <string name="address_state_or_province">Estado/Província</string>
-    <string name="address_input_or_select_state_or_province">Digite ou selecione estado/província</string>
+    <string name="address_input_or_select_state_or_province">Introduza ou selecione estado/província</string>
     <string name="address_city">Cidade</string>
-    <string name="address_input_or_select_city">Digite ou selecione cidade</string>
+    <string name="address_input_or_select_city">Introduza ou selecione cidade</string>
     <string name="address_street">Rua</string>
-    <string name="address_input_detail">Digite o endere?o completo</string>
+    <string name="address_input_detail">Introduza o endereço completo</string>
     <string name="address_postal_code">Código postal</string>
-    <string name="address_input_postal_code">Digite o código postal</string>
-    <string name="address_no_match">Sem correspondência</string>
+    <string name="address_input_postal_code">Introduza o código postal</string>
+    <string name="address_no_match">Sem correspondências</string>
 
-    <string name="reset_password_title">Redefinir senha</string>
+    <string name="reset_password_title">Repor palavra-passe</string>
 
     <string name="menu_content_description">Menu</string>
-    <string name="menu_drawer_more_functions">Mais fun??es</string>
+    <string name="menu_drawer_more_functions">Mais funções</string>
     <string name="menu_close_content_description">Fechar menu</string>
     <string name="menu_open_content_description">Abrir menu</string>
+
     <string name="dashboard">Início</string>
     <string name="profile">A minha conta</string>
     <string name="products">Produtos</string>
     <string name="categories">Categorias</string>
     <string name="more">Mais</string>
+
     <string name="search_products">Pesquisar produtos</string>
     <string name="search_categories">Pesquisar categorias</string>
+
     <string name="no_products">Nenhum produto encontrado</string>
     <string name="no_categories">Nenhuma categoria encontrada</string>
 
@@ -164,16 +167,16 @@
     <string name="theme_follow_system">Seguir o sistema</string>
 
     <string name="field_telephone_label">Número de telefone</string>
-    <string name="field_telephone_placeholder">Insira o número de telefone</string>
+    <string name="field_telephone_placeholder">Introduza o número de telefone</string>
 
-    <string name="phone_error_empty">O número de telefone n?o pode estar vazio</string>
+    <string name="phone_error_empty">O número de telefone não pode estar vazio</string>
     <string name="phone_error_invalid">Número de telefone inválido</string>
     <string name="phone_error_invalid_country_code">Código de país inválido</string>
     <string name="phone_error_too_short">O número de telefone é muito curto</string>
     <string name="phone_error_too_long">O número de telefone é muito longo</string>
     <string name="phone_error_invalid_length">Comprimento do número de telefone incorreto</string>
-    <string name="phone_error_not_a_number">A entrada n?o é um número de telefone válido</string>
-    <string name="phone_error_too_short_after_idd">Número muito curto após a marca??o internacional</string>
+    <string name="phone_error_not_a_number">A entrada não é um número de telefone válido</string>
+    <string name="phone_error_too_short_after_idd">Número muito curto após a marcação internacional</string>
     <string name="phone_error_format_incorrect">Formato do número de telefone incorreto</string>
     <string name="phone_error_validation_failed">Ocorreu um erro ao validar o número de telefone</string>
 
@@ -181,15 +184,15 @@
 
     <string name="create">Criar</string>
     <string name="add">Adicionar</string>
-    <string name="update">Renovar</string>
+    <string name="update">Atualizar</string>
     <string name="not_found">Nenhum resultado encontrado</string>
-    <string name="load_failed">Falha ao carregar, toque para tentar novamente</string>
+    <string name="load_failed">Falha ao carregar. Toque para tentar novamente.</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
     <string name="undo">Anular</string>
     <string name="path">Caminho</string>
     <string name="clear">Limpar</string>
-    <string name="not_set">N?o definido</string>
+    <string name="not_set">Não definido</string>
     <string name="all">Todos</string>
     <string name="filter">Filtrar</string>
     <string name="close">Fechar</string>
@@ -197,51 +200,56 @@
 
     <string name="delete_success">Eliminado com sucesso</string>
     <string name="delete_failed">Falha ao eliminar</string>
-    <string name="translation_deleted">Tradu??o eliminada</string>
+    <string name="translation_deleted">Tradução eliminada</string>
     <string name="variant_deleted">Variante eliminada</string>
     <string name="create_success">Criado com sucesso</string>
     <string name="create_failed">Falha ao criar</string>
-    <string name="update_success">Atualiza??o bem-sucedida</string>
-    <string name="update_failed">Falha na atualiza??o</string>
-    <string name="update_conflict_preserved_changes">Parte do conteúdo foi modificada por outra pessoa. As suas altera??es foram preservadas. Confirme e volte a atualizar.</string>
+    <string name="update_success">Atualização bem-sucedida</string>
+    <string name="update_failed">Falha na atualização</string>
+    <string name="update_conflict_preserved_changes">Parte do conteúdo foi modificada por outra pessoa. As suas alterações foram preservadas. Confirme e volte a atualizar.</string>
 
     <string name="category">Categoria</string>
 
     <string name="cancel">Cancelar</string>
-    <string name="basic_info">Informa??es básicas</string>
+    <string name="basic_info">Informações básicas</string>
 
     <string name="tax_rate">Taxa</string>
     <string name="confirm">Confirmar</string>
     <string name="confirm_delete_title">Eliminar o item selecionado?</string>
-    <string name="confirm_delete_message">Esta a??o n?o pode ser anulada.</string>
+    <string name="confirm_delete_message">Esta ação não pode ser anulada.</string>
+
     <string name="image_content_description">Imagem</string>
     <string name="video_play_pause_content_description">Reproduzir ou pausar vídeo</string>
-    <string name="video_toggle_fullscreen_content_description">Alternar ecr? inteiro</string>
+    <string name="video_toggle_fullscreen_content_description">Alternar ecrã inteiro</string>
+
     <string name="toast_success_content_description">Sucesso</string>
-    <string name="toast_info_content_description">Informa??o</string>
+    <string name="toast_info_content_description">Informação</string>
     <string name="toast_warning_content_description">Aviso</string>
     <string name="toast_error_content_description">Erro</string>
+
     <string name="navigation_title_fallback">Título</string>
-    <string name="navigation_item_icon_fallback">ícone do item de menu</string>
-    <string name="navigation_item_label_fallback">Item de navega??o</string>
+    <string name="navigation_item_icon_fallback">Ícone do item de menu</string>
+    <string name="navigation_item_label_fallback">Item de navegação</string>
+
     <string name="menu_item_tooltip_title_fallback">Item de menu</string>
     <string name="menu_item_tooltip_text_fallback">Detalhes do item de menu</string>
     <string name="menu_item_tooltip_fallback">Item de menu</string>
+
     <string name="product_image_with_name">Imagem do produto: %1$s</string>
-    
-    <!-- ===================== A??es comuns (Shared) ===================== -->
+
+    <!-- ===================== Ações comuns (Shared) ===================== -->
     <string name="copy">Copiar</string>
     <string name="save">Guardar</string>
 
-    <!-- Notifica??es de cópia/área de transferência -->
-    <string name="unable_to_copy_resource">N?o é possível copiar este recurso</string>
+    <!-- Notificações de cópia/área de transferência -->
+    <string name="unable_to_copy_resource">Não é possível copiar este recurso</string>
     <string name="copied_to_clipboard">Copiado para a área de transferência</string>
     <string name="copied_files_to_clipboard">Ficheiros copiados para a área de transferência</string>
     <string name="copied_image_to_clipboard">Imagem copiada para a área de transferência</string>
     <string name="copied_text_to_clipboard_with_value">Copiado "%1$s" para a área de transferência</string>
     <string name="copy_failed">Falha ao copiar</string>
 
-    <!-- Notifica??es de guardar imagem -->
+    <!-- Notificações de guardar imagem -->
     <string name="image_saved_with_name">Imagem "%1$s" guardada</string>
     <string name="file_saved_with_name">Ficheiro "%1$s" guardado</string>
     <string name="image_saved_to_gallery_with_name">Imagem "%1$s" guardada na galeria</string>
@@ -250,57 +258,76 @@
     <string name="sort">Ordenar</string>
     <string name="order_dir_ascending">Ascendente</string>
     <string name="order_dir_descending">Descendente</string>
+
     <string name="out_of_stock">Sem stock</string>
+
     <string name="product_image">Imagem do produto</string>
     <string name="product_name">Nome do produto</string>
     <string name="product_title">Título do produto</string>
     <string name="product_code">Código do produto</string>
     <string name="product_category">Categoria</string>
+
     <string name="product_total_stock">Stock total</string>
     <string name="product_stock_count">Stock: %1$d</string>
-    <string name="product_price">Pre?o</string>
-    <string name="product_price_with_vat">Pre?o com IVA</string>
-    <string name="product_price_without_vat">Pre?o sem IVA</string>
+
+    <string name="product_price">Preço</string>
+    <string name="product_price_with_vat">Preço com IVA</string>
+    <string name="product_price_without_vat">Preço sem IVA</string>
+
     <string name="product_price_with_vat_value">IVA: %1$s</string>
     <string name="product_price_without_vat_value">Líquido: %1$s</string>
+
     <string name="product_min_order_qty">Quantidade mínima de encomenda</string>
     <string name="product_moq_value">Pedido mín.: %1$d</string>
-    <string name="product_preview">Pré-visualiza??o</string>
-    <string name="product_actions">A??es</string>
+
+    <string name="product_preview">Pré-visualização</string>
+    <string name="product_actions">Ações</string>
+
     <string name="product_status_active">Ativo</string>
     <string name="product_status_inactive">Inativo</string>
+
     <string name="sale_variant_unit">Unidade</string>
     <string name="sale_variant_box">Caixa</string>
     <string name="sale_variant_pack">Pack</string>
+
     <string name="product_sort_name">Nome</string>
     <string name="product_sort_title">Título</string>
     <string name="product_sort_code">Código</string>
     <string name="product_sort_category">Categoria</string>
     <string name="product_sort_stock">Stock</string>
-    <string name="product_sort_price">Pre?o</string>
-    <string name="product_sort_price_without_vat">Pre?o sem IVA</string>
+    <string name="product_sort_price">Preço</string>
+    <string name="product_sort_price_without_vat">Preço sem IVA</string>
     <string name="product_sort_min_order_qty">Encomenda mín.</string>
+
     <string name="product_detail">Detalhe do produto</string>
-    <string name="media">Media</string>
+
+    <string name="media">Multimédia</string>
     <string name="variants">Variantes</string>
-    <string name="description">Descri??o</string>
-    <string name="no_description">Sem descri??o disponível.</string>
+    <string name="description">Descrição</string>
+
+    <string name="no_description">Sem descrição disponível.</string>
+
     <string name="quantity">Quantidade</string>
     <string name="add_to_cart">Adicionar ao carrinho</string>
+
     <string name="available_stock_value">Stock disponível: %1$d</string>
     <string name="sale_unit_qty_value">Unidade de venda: %1$d</string>
     <string name="max_purchasable_qty_value">Máx.: %1$d</string>
+
     <string name="below_min_order_qty">Abaixo da quantidade mínima.</string>
     <string name="above_available_stock">Excede o stock disponível.</string>
-    <string name="not_purchasable">N?o comprável</string>
+
+    <string name="not_purchasable">Não comprável</string>
     <string name="no_variants">Sem variantes disponíveis.</string>
-    <string name="product_media">Media do produto</string>
+
+    <string name="product_media">Multimédia do produto</string>
     <string name="video_content_description">Vídeo</string>
+
     <string name="button_register_new_account">Registar nova conta</string>
     <string name="register_account_title">Criar conta</string>
+
     <string name="register_success">Registo bem-sucedido</string>
     <string name="register_failed">Falha no registo</string>
+
     <string name="wholesalers">Grossistas</string>
 </resources>
-
-

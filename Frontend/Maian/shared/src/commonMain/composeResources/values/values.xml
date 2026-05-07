@@ -69,7 +69,7 @@
     <string name="initial_screen_welcome">Welcome to</string>
     <string name="initial_screen_platform_name">MaiAn Platform</string>
     <string name="initial_screen_instruction">Please login or register to continue</string>
-    <string name="initial_screen_quick_login_hint">? Quick login with Google or WeChat ?</string>
+    <string name="initial_screen_quick_login_hint">⏫ Quick login with Google or WeChat ⏫</string>
 
     <!-- User Agreement & Privacy -->
     <string name="agreement_warning">Please agree to the user agreement and privacy policy to continue</string>
