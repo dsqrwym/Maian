@@ -12,9 +12,8 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.categories
-import maian.standard.generated.resources.StandardRes
-import maian.standard.generated.resources.wholesalers
 import maian.shared.generated.resources.products
+import maian.shared.generated.resources.wholesalers
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
@@ -28,13 +27,7 @@ import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
-import org.dsqrwym.standard.navigation.CategoriesScreen
-import org.dsqrwym.standard.navigation.CategoryBrowseRoute
-import org.dsqrwym.standard.navigation.WholesalerHomeScreen
-import org.dsqrwym.standard.navigation.WholesalersScreen
-import org.dsqrwym.standard.navigation.ProductDetailPlaceholderScreen
-import org.dsqrwym.standard.navigation.ProductDetailScreen
-import org.dsqrwym.standard.navigation.ProductsScreen
+import org.dsqrwym.standard.navigation.*
 import org.dsqrwym.standard.navigation.naventry.authNavEntry
 import org.dsqrwym.standard.navigation.naventry.menuNavEntry
 import org.koin.compose.currentKoinScope
@@ -53,7 +46,7 @@ fun App() {
     val standardSerializersModule = remember {
         SerializersModule {
             polymorphic(NavKey::class) {
-                subclass(org.dsqrwym.standard.navigation.RegisterScreen::class)
+                subclass(RegisterScreen::class)
                 subclass(ProductsScreen::class)
                 subclass(CategoriesScreen::class)
                 subclass(CategoryBrowseRoute::class)

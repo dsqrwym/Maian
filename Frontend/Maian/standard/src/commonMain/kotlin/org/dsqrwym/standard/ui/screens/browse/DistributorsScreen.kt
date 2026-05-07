@@ -9,7 +9,9 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -19,8 +21,6 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.load_failed
 import maian.standard.generated.resources.StandardRes
 import maian.standard.generated.resources.current_wholesaler
-import maian.standard.generated.resources.no_wholesalers
-import maian.standard.generated.resources.search_wholesalers
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.standard.domain.browse.RetailWholesaler
@@ -57,8 +57,13 @@ fun WholesalersScreen(
                     onSearch = { viewModel.submitSearch() },
                     expanded = false,
                     onExpandedChange = {},
-                    placeholder = { Text(stringResource(StandardRes.string.search_wholesalers)) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, stringResource(StandardRes.string.search_wholesalers)) },
+                    placeholder = { Text("search wholesaler") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Search,
+                            "search wholesaler"
+                        )
+                    },
                     trailingIcon = {
                         if (viewModel.searchText.isNotEmpty()) {
                             SharedCloseButton(onClick = viewModel::clearSearch)
@@ -92,7 +97,7 @@ fun WholesalersScreen(
                 }
 
                 displayWholesalers.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(stringResource(StandardRes.string.no_wholesalers))
+                    Text("")
                 }
 
                 else -> {

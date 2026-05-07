@@ -1,6 +1,5 @@
 ﻿<resources>
-
-    <string name="chat">瑷婃伅</string>
-    <string name="shopping_cart">璩肩墿杌?/string>
+    <string name="chat">訊息</string>
+    <string name="shopping_cart">購物車</string>
 </resources>
 
