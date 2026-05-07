@@ -1,8 +1,11 @@
 version:0
-string|button_register_new_account|UmVnaXN0ZXIgTmV3IEFjY291bnQ=
+string|back_to_all|QmFjayB0byBhbGw=
 string|chat|TWVzc2FnZXM=
-string|register_account_title|Q3JlYXRlIEFjY291bnQ=
-string|register_failed|UmVnaXN0cmF0aW9uIEZhaWxlZA==
-string|register_success|UmVnaXN0cmF0aW9uIFN1Y2Nlc3NmdWw=
+string|current_wholesaler|Q3VycmVudA==
+string|distributors|RGlzdHJpYnV0b3Jz
+string|no_distributors|Tm8gZGlzdHJpYnV0b3JzIGZvdW5k
+string|product_detail_coming_soon|UHJvZHVjdCBkZXRhaWwgaXMgbm90IGF2YWlsYWJsZSB5ZXQu
+string|search_distributors|U2VhcmNoIGRpc3RyaWJ1dG9ycw==
 string|shopping_cart|Q2FydA==
+string|wholesaler_scope_label|V2hvbGVzYWxlcjogJTEkcw==
 string|wholesalers|V2hvbGVzYWxlcnM=

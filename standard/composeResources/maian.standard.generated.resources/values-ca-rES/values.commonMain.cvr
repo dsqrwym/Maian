@@ -1,8 +1,3 @@
 version:0
-string|button_register_new_account|UmVnaXN0cmFyIHVuIG5vdSBjb21wdGU=
 string|chat|TWlzc2F0Z2Vz
-string|register_account_title|Q3JlYXIgdW4gY29tcHRl
-string|register_failed|RXJyb3IgZGUgcmVnaXN0cmU=
-string|register_success|UmVnaXN0cmUgZXhpdMOzcw==
 string|shopping_cart|Q2lzdGVsbGE=
-string|wholesalers|TWFqb3Jpc3Rlcw==
