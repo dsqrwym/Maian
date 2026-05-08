@@ -1,11 +1,16 @@
 package org.dsqrwym.shared.util.lazygrid
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
-import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedLoadingDotsIndicator
 
 object SharedLazyGridLayout {
     val arrangement = Arrangement.spacedBy(12.dp)
@@ -13,14 +18,22 @@ object SharedLazyGridLayout {
     val Padding = 16.dp
 
     fun LazyStaggeredGridScope.appendLoadingIndicator() {
-        item(span = StaggeredGridItemSpan.FullLine) {
-            SharedCircularProgressIndicator()
+        item(span = StaggeredGridItemSpan.SingleLane) {
+            Box(
+                modifier = Modifier.fillMaxSize().heightIn(min = 100.dp).animateItem(),
+                contentAlignment = Alignment.Center
+            ) {
+                SharedLoadingDotsIndicator()
+            }
         }
     }
 
     fun LazyStaggeredGridScope.appendErrorRetry(retry: () -> Unit) {
         item(span = StaggeredGridItemSpan.FullLine) {
-            SharedRetryButton(retry = retry)
+            Box(
+                modifier = Modifier.fillMaxSize().animateItem(),
+                contentAlignment = Alignment.Center
+            ) { SharedRetryButton(retry) }
         }
     }
 }

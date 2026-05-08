@@ -29,7 +29,6 @@ data class CategoryBrowseRoute(
     val parentId: String? = null,
     val wholesalerId: String? = null,
     val pathNames: List<String> = emptyList(),
-    val railFallbackCategories: List<CategoryBrowseRouteCategory> = emptyList(),
 ) : NavKey
 
 @Serializable

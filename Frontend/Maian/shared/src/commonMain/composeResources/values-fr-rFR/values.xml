@@ -272,8 +272,8 @@
     <string name="product_price_with_vat">Prix TTC</string>
     <string name="product_price_without_vat">Prix HT</string>
 
-    <string name="product_price_with_vat_value">TVA : %1$s</string>
-    <string name="product_price_without_vat_value">Net : %1$s</string>
+    <string name="product_price_with_vat_value">TVA : %1$s€</string>
+    <string name="product_price_without_vat_value">Net : %1$s€</string>
 
     <string name="product_min_order_qty">Quantité minimale de commande</string>
     <string name="product_moq_value">Commande min. : %1$d</string>

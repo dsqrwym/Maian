@@ -16,16 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.load_failed
-import maian.shared.generated.resources.no_categories
 import maian.shared.generated.resources.search_categories
+import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.category.SharedCategoryPathRow
 import org.dsqrwym.shared.ui.components.category.SharedCategoryRail
 import org.dsqrwym.shared.ui.components.category.SharedChildCategoryGrid
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
-import org.dsqrwym.shared.ui.components.placeholder.SharedPlainNotFoundPlaceholder
-import org.dsqrwym.shared.ui.components.product.SharedProductRefreshError
 import org.dsqrwym.shared.ui.components.product.SharedProductWaterfall
 import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
@@ -42,12 +39,11 @@ fun CategoryBrowseScreen(
     scope: BrowseScope,
     wholesalerId: String? = null,
     rootCategory: RetailCategory? = null,
-    initialRailFallbackCategories: List<RetailCategory> = emptyList(),
     wholesalerName: String? = null,
     onClearWholesalerScope: (() -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null,
     onProductClick: (String) -> Unit,
-    onCategoryClick: (RetailCategory, List<RetailCategory>, String) -> Unit = { _, _, _ -> },
+    onCategoryClick: (RetailCategory, String) -> Unit = { _, _ -> },
     onPathClick: (Int) -> Unit = {},
     viewModel: CategoryBrowseViewModel = koinViewModel(),
 ) {
@@ -56,7 +52,6 @@ fun CategoryBrowseScreen(
             scope = scope,
             wholesalerId = wholesalerId,
             rootCategory = rootCategory,
-            initialRailFallbackCategories = initialRailFallbackCategories,
         )
     }
     val languageCode = viewModel.languageCode
@@ -66,9 +61,6 @@ fun CategoryBrowseScreen(
     val railCategories = viewModel.pagedRailCategories.collectAsLazyPagingItems()
     val childCategories = viewModel.pagedChildCategories.collectAsLazyPagingItems()
     val products = viewModel.pagedProducts.collectAsLazyPagingItems()
-    val railFallbackCategories = viewModel.railFallbackCategories.ifEmpty { initialRailFallbackCategories }
-    val childCategorySnapshot = childCategories.loadedItems()
-        .map { category -> category.withBrowseContextFrom(viewModel.selectedCategory, languageCode) }
 
     SharedTransparentScaffold(
         onNavigateBack = onNavigateBack,
@@ -93,7 +85,7 @@ fun CategoryBrowseScreen(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     query = categorySearchText,
                     onQueryChange = viewModel::updateCategorySearchText,
-                    onSearch = {},
+                    onSearch = { viewModel.refreshCategorySearch() },
                     expanded = false,
                     onExpandedChange = {},
                     placeholder = { Text(stringResource(SharedRes.string.search_categories)) },
@@ -115,12 +107,10 @@ fun CategoryBrowseScreen(
         PermanentNavigationDrawer(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 8.dp),
+                .padding(padding),
             drawerContent = {
                 SharedCategoryRail(
                     categories = railCategories,
-                    fallbackCategories = railFallbackCategories,
                     selectedId = viewModel.selectedCategory?.id,
                     itemId = { it.id },
                     itemName = { it.localizedName(languageCode) },
@@ -148,7 +138,6 @@ fun CategoryBrowseScreen(
                     onSelect = { category ->
                         onCategoryClick(
                             category.withBrowseContextFrom(viewModel.selectedCategory, languageCode),
-                            childCategorySnapshot,
                             languageCode,
                         )
                     },
@@ -162,38 +151,17 @@ fun CategoryBrowseScreen(
                     )
                 }
 
-                when {
-                    viewModel.selectedCategory == null -> SharedPlainNotFoundPlaceholder(
-                        description = stringResource(SharedRes.string.no_categories),
-                    )
-
-                    products.loadState.refresh is androidx.paging.LoadState.Error -> {
-                        val error = products.loadState.refresh as androidx.paging.LoadState.Error
-                        SharedProductRefreshError(
-                            message = error.error.message ?: stringResource(SharedRes.string.load_failed),
-                            onRetry = { products.retry() },
-                        )
-                    }
-
-                    else -> CategoryProductGrid(
-                        products = products,
-                        languageCode = languageCode,
-                        onProductClick = onProductClick,
-                        onProductImageClick = viewModel::showImagePreview,
-                        scrollBehavior = scrollBehavior,
-                    )
-                }
+                CategoryProductGrid(
+                    products = products,
+                    languageCode = languageCode,
+                    onProductClick = onProductClick,
+                    onProductImageClick = viewModel::showImagePreview,
+                    scrollBehavior = scrollBehavior,
+                )
             }
         }
     }
 }
-
-/**
- * 获取LazyPagingItems中已加载的项目
- * @return 已加载的分类列表
- */
-private fun LazyPagingItems<RetailCategory>.loadedItems(): List<RetailCategory> =
-    (0 until itemCount).mapNotNull { index -> peek(index) }
 
 private fun RetailCategory.withBrowseContextFrom(
     currentCategory: RetailCategory?,
@@ -228,20 +196,10 @@ private fun CategoryProductGrid(
         paginatedProducts = products,
         scrollBehavior = scrollBehavior,
         padding = PaddingValues(0.dp),
-        topContentHeight = 0.dp,
-        isRefreshing = products.loadState.refresh is androidx.paging.LoadState.Loading,
-        isError = products.loadState.refresh is androidx.paging.LoadState.Error,
         key = { index -> products.peek(index)?.id ?: index },
-        errorContent = {
-            val error = products.loadState.refresh as? androidx.paging.LoadState.Error
-            SharedProductRefreshError(
-                message = error?.error?.message ?: stringResource(SharedRes.string.load_failed),
-                onRetry = { products.retry() },
-            )
-        },
     ) { product ->
         SharedReadOnlyProductCard(
-            isLoading = products.loadState.refresh is androidx.paging.LoadState.Loading,
+            isLoading = products.isRefreshing,
             name = product.localizedName(languageCode),
             title = product.localizedTitle(languageCode),
             code = product.code,

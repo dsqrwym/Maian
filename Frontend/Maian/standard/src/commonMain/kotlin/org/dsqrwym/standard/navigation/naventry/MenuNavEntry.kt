@@ -15,27 +15,20 @@ import maian.standard.generated.resources.StandardRes
 import maian.standard.generated.resources.product_detail_coming_soon
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.navigation.SharedProfileScreen
+import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
-import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.standard.domain.browse.BrowseScope
 import org.dsqrwym.standard.domain.browse.RetailCategory
 import org.dsqrwym.standard.domain.browse.RetailWholesaler
-import org.dsqrwym.standard.navigation.CategoryBrowseRoute
-import org.dsqrwym.standard.navigation.CategoryBrowseRouteCategory
-import org.dsqrwym.standard.navigation.CategoriesScreen
-import org.dsqrwym.standard.navigation.WholesalerHomeScreen
-import org.dsqrwym.standard.navigation.WholesalersScreen
-import org.dsqrwym.standard.navigation.ProductDetailPlaceholderScreen
-import org.dsqrwym.standard.navigation.ProductDetailScreen
-import org.dsqrwym.standard.navigation.ProductsScreen
+import org.dsqrwym.standard.navigation.*
 import org.dsqrwym.standard.ui.screens.browse.CategoryBrowseScreen
-import org.dsqrwym.standard.ui.screens.browse.WholesalersScreen as DistributorsContent
 import org.dsqrwym.standard.ui.screens.browse.ProductBrowseScreen
-import org.dsqrwym.standard.ui.screens.browse.ProductDetailScreen as ProductDetailContent
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStateHolder
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.currentKoinScope
+import org.dsqrwym.standard.ui.screens.browse.ProductDetailScreen as ProductDetailContent
+import org.dsqrwym.standard.ui.screens.browse.WholesalersScreen as DistributorsContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun EntryProviderScope<NavKey>.menuNavEntry(
@@ -67,12 +60,11 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
             onProductClick = { productId ->
                 navigationState.navigate(ProductDetailScreen(productId))
             },
-            onCategoryClick = { category, railFallbackCategories, languageCode ->
+            onCategoryClick = { category,  languageCode ->
                 navigationState.navigate(
                     category.toCategoryBrowseRoute(
                         languageCode = languageCode,
                         wholesalerId = scopeState.wholesalerId,
-                        railFallbackCategories = railFallbackCategories,
                     )
                 )
             },
@@ -87,7 +79,6 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
             scope = if (wholesalerId == null) BrowseScope.GLOBAL else BrowseScope.DISTRIBUTOR,
             wholesalerId = wholesalerId,
             rootCategory = route.toRetailCategory(),
-            initialRailFallbackCategories = route.railFallbackCategories.toRetailCategories(wholesalerId),
             wholesalerName = scopeState.wholesalerName.takeIf { wholesalerId != null && scopeState.wholesalerId == wholesalerId },
             onClearWholesalerScope = {
                 browseScope.clearWholesaler()
@@ -97,12 +88,11 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
             onProductClick = { productId ->
                 navigationState.navigate(ProductDetailScreen(productId))
             },
-            onCategoryClick = { category, railFallbackCategories, languageCode ->
+            onCategoryClick = { category, languageCode ->
                 navigationState.navigate(
                     category.toCategoryBrowseRoute(
                         languageCode = languageCode,
                         wholesalerId = wholesalerId,
-                        railFallbackCategories = railFallbackCategories,
                     )
                 )
             },
@@ -183,7 +173,6 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
 private fun RetailCategory.toCategoryBrowseRoute(
     languageCode: String,
     wholesalerId: String? = null,
-    railFallbackCategories: List<RetailCategory> = emptyList(),
 ): CategoryBrowseRoute =
     CategoryBrowseRoute(
         id = id,
@@ -192,15 +181,6 @@ private fun RetailCategory.toCategoryBrowseRoute(
         parentId = parentId,
         wholesalerId = wholesalerId,
         pathNames = localizedPathNames(languageCode),
-        railFallbackCategories = railFallbackCategories.map { it.toCategoryBrowseRouteCategory(languageCode) },
-    )
-
-private fun RetailCategory.toCategoryBrowseRouteCategory(languageCode: String): CategoryBrowseRouteCategory =
-    CategoryBrowseRouteCategory(
-        id = id,
-        name = localizedName(languageCode),
-        level = level,
-        parentId = parentId,
     )
 
 private fun CategoryBrowseRoute.toRetailCategory(): RetailCategory =
@@ -213,16 +193,3 @@ private fun CategoryBrowseRoute.toRetailCategory(): RetailCategory =
         pathNames = pathNames.ifEmpty { listOf(name) },
         translations = emptyList(),
     )
-
-private fun List<CategoryBrowseRouteCategory>.toRetailCategories(wholesalerId: String?): List<RetailCategory> =
-    map { category ->
-        RetailCategory(
-            id = category.id,
-            name = category.name,
-            level = category.level,
-            ownerUserId = wholesalerId,
-            parentId = category.parentId,
-            pathNames = listOf(category.name),
-            translations = emptyList(),
-        )
-    }

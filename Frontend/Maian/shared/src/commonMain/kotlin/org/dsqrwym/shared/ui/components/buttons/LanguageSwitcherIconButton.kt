@@ -32,7 +32,6 @@ import org.jetbrains.compose.resources.stringResource
 fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp) {
     var expanded by remember { mutableStateOf(false) }
     val supportedLanguages = remember { LanguageManager.SupportedLanguages.entries }
-    val onClick: () -> Unit = { expanded = !expanded }
 
     Row(
         modifier = modifier.padding(padding),
@@ -43,7 +42,7 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
          * The Text button to toggle the language switcher dropdown menu.
          * 切换语言切换器下拉菜单的文本按钮。
          */
-        TextButton(modifier = Modifier.animateContentSize(), onClick = onClick) {
+        TextButton(modifier = Modifier.animateContentSize(), onClick = { expanded = true }) {
             /**
              * The text displaying the current language.
              * 显示当前语言的文本。
@@ -73,7 +72,7 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
                     LanguageMenuItem(item, onClick = {
                         LanguageManager.setLocaleLanguage(item.code)
                         SharedUserPreferences.setUserLanguage(item.code)
-                        expanded = !expanded
+                        expanded = false
                     })
                 }
             }
@@ -93,6 +92,7 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
 @Composable
 fun LanguageMenuItem(item: LanguageManager.SupportedLanguages, onClick: () -> Unit) {
     DropdownMenuItem(
+        modifier = Modifier.animateContentSize(),
         onClick = onClick,
         text = { Text(item.displayName) }
     )

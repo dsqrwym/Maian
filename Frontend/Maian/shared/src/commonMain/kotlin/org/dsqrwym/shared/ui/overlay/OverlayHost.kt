@@ -1,6 +1,8 @@
 package org.dsqrwym.shared.ui.overlay
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +45,11 @@ fun OverlayHost(content: @Composable () -> Unit) {
                                 endIntensity = 0.18f
                             )
                             alpha = 0.8f
+                        }.clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            overlayState.hide()
                         }
                 )
             }

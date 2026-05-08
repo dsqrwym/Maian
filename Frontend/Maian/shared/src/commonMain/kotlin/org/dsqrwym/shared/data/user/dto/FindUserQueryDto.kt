@@ -3,7 +3,7 @@ package org.dsqrwym.shared.data.user.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.dsqrwym.shared.data.OrderDir
-import org.dsqrwym.shared.data.pagination.PaginationQuery
+import org.dsqrwym.shared.paging.data.PaginationQuery
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.data.user.UserStatus
 

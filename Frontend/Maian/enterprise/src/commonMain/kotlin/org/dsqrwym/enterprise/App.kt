@@ -86,7 +86,7 @@ fun App() {
                         onNavigate = navigationState::navigateToTopLevel,
                     ) {
                         SharedNavigationRoot(navigationState) {
-                            categoryNavEntry(navigationState)
+                            categoryNavEntry(navigationState, user.userRole)
                             entry<SharedDashboardScreen> {
                                 ProductsListScreen(
                                     userRole = user.userRole,

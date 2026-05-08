@@ -2,7 +2,7 @@ package org.dsqrwym.shared.data.products.dto
 
 import kotlinx.serialization.Serializable
 import org.dsqrwym.shared.data.OrderDir
-import org.dsqrwym.shared.data.pagination.PaginationQuery
+import org.dsqrwym.shared.paging.data.PaginationQuery
 import org.dsqrwym.shared.data.products.SharedProductListSelectField
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus

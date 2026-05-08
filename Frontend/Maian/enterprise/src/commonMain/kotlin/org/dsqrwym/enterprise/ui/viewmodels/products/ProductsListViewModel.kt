@@ -19,11 +19,11 @@ import org.dsqrwym.enterprise.data.product.ProductRepository
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
-import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.network.model.SharedResponseResult
+import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.getString
@@ -40,12 +40,10 @@ class ProductsListViewModel(
     private val repository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val mySnackbarHostState: MySnackbarViewModel,
-) :
-    ViewModel() {
+) : ViewModel() {
     private val _refreshTrigger = MutableSharedFlow<Unit>(replay = 0)
     private val refreshTrigger = _refreshTrigger.asSharedFlow()
     val pageSize = 20
-    var totalItemsCount by mutableStateOf(0)
 
     var currentProduct by mutableStateOf<Product?>(null)
         private set
@@ -58,8 +56,6 @@ class ProductsListViewModel(
 
     // 搜索条件和过滤类型
     var searchQuery by mutableStateOf("")
-        private set
-    var filterCategoryId by mutableStateOf<String?>(null)
         private set
     var filterCategory by mutableStateOf<CategorySummary?>(null)
         private set
@@ -77,7 +73,7 @@ class ProductsListViewModel(
         snapshotFlow { searchQuery }
             .debounce(SharedUiTiming.searchDebounce)
             .distinctUntilChanged(),
-        snapshotFlow { filterCategoryId }
+        snapshotFlow { filterCategory?.id }
             .distinctUntilChanged(),
         snapshotFlow { filterStatus }.distinctUntilChanged(),
         snapshotFlow { sortBy }.distinctUntilChanged(),
@@ -109,7 +105,6 @@ class ProductsListViewModel(
                     )
                 ) {
                     is SharedResponseResult.Success -> {
-                        totalItemsCount = result.data?.pagination?.total ?: 0
                         result.data?.items ?: emptyList()
                     }
 
@@ -130,7 +125,6 @@ class ProductsListViewModel(
 
     fun updateFilterCategory(category: CategorySummary?) {
         filterCategory = category
-        filterCategoryId = category?.id
     }
 
     fun removeFilterCategory() {
@@ -202,24 +196,21 @@ class ProductsListViewModel(
         if (isDeletingProduct) return
         viewModelScope.launch {
             isDeletingProduct = true
-            try {
-                when (val result = repository.deleteProduct(product.id)) {
-                    is SharedResponseResult.Success -> {
-                        mySnackbarHostState.showSuccess(getString(SharedRes.string.delete_success))
-                        updateDeleteProduct(null)
-                    }
+            when (val result = repository.deleteProduct(product.id)) {
+                is SharedResponseResult.Success -> {
+                    mySnackbarHostState.showSuccess(getString(SharedRes.string.delete_success))
+                    updateDeleteProduct(null)
+                }
 
-                    is SharedResponseResult.Error -> {
-                        if (SharedResponseResult.shouldShowToUser(result.type)) {
-                            result.message?.let { mySnackbarHostState.showError(it) }
-                        } else {
-                            mySnackbarHostState.showError(getString(SharedRes.string.delete_failed))
-                        }
+                is SharedResponseResult.Error -> {
+                    if (SharedResponseResult.shouldShowToUser(result.type)) {
+                        result.message?.let { mySnackbarHostState.showError(it) }
+                    } else {
+                        mySnackbarHostState.showError(getString(SharedRes.string.delete_failed))
                     }
                 }
-            } finally {
-                isDeletingProduct = false
             }
+            isDeletingProduct = false
         }
     }
 

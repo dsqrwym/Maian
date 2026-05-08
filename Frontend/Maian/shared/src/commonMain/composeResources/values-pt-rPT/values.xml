@@ -274,8 +274,8 @@
     <string name="product_price_with_vat">Preço com IVA</string>
     <string name="product_price_without_vat">Preço sem IVA</string>
 
-    <string name="product_price_with_vat_value">IVA: %1$s</string>
-    <string name="product_price_without_vat_value">Líquido: %1$s</string>
+    <string name="product_price_with_vat_value">IVA: %1$s€</string>
+    <string name="product_price_without_vat_value">Líquido: %1$s€</string>
 
     <string name="product_min_order_qty">Quantidade mínima de encomenda</string>
     <string name="product_moq_value">Pedido mín.: %1$d</string>

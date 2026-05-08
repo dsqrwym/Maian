@@ -6,7 +6,7 @@ import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategorySortField
 import org.dsqrwym.shared.data.category.SharedCategoryType
-import org.dsqrwym.shared.data.pagination.PaginationQuery
+import org.dsqrwym.shared.paging.data.PaginationQuery
 
 // isPrivate = false -> userID = not null
 // userID = null or value

@@ -7,12 +7,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.*
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -109,6 +110,17 @@ fun SharedReadOnlyProductCard(
             }
 
             Column(Modifier.padding(SharedColumnLayout.padding), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                var priceY by remember { mutableStateOf<Float?>(null) }
+                var statusY by remember { mutableStateOf<Float?>(null) }
+
+                val statusIsSecondLine by remember {
+                    derivedStateOf {
+                        val p = priceY
+                        val s = statusY
+                        p != null && s != null && s > p + 1f
+                    }
+                }
+
                 FlowRow(
                     verticalArrangement = Arrangement.Center,
                     itemVerticalAlignment = Alignment.CenterVertically,
@@ -206,17 +218,18 @@ fun SharedReadOnlyProductCard(
                     }
                 }
 
-                Spacer(Modifier.height(2.dp))
                 HorizontalDivider()
-                Spacer(Modifier.height(2.dp))
 
-                Row(
+                FlowRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
-                    SelectionContainer {
-                        Column {
+                    Column(modifier = Modifier.onGloballyPositioned {
+                        priceY = it.positionInParent().y
+                    }) {
+
+                        SelectionContainer {
                             minPriceIva?.let {
                                 Text(
                                     modifier = Modifier.placeholderWithShimmer(isLoading),
@@ -226,7 +239,9 @@ fun SharedReadOnlyProductCard(
                                     color = MaterialTheme.colorScheme.primary,
                                 )
                             }
-                            minPrice?.let {
+                        }
+                        minPrice?.let {
+                            SelectionContainer {
                                 Text(
                                     modifier = Modifier.placeholderWithShimmer(isLoading),
                                     text = stringResource(SharedRes.string.product_price_without_vat_value, it),
@@ -237,8 +252,18 @@ fun SharedReadOnlyProductCard(
                         }
                     }
 
-                    SelectionContainer {
-                        Column(horizontalAlignment = Alignment.End) {
+                    Column(
+                        modifier = Modifier
+                            .onGloballyPositioned {
+                                statusY = it.positionInParent().y
+                            },
+                        horizontalAlignment = if (statusIsSecondLine) {
+                            Alignment.Start
+                        } else {
+                            Alignment.End
+                        }
+                    ) {
+                        SelectionContainer {
                             Text(
                                 modifier = Modifier.placeholderWithShimmer(isLoading),
                                 text = stringResource(SharedRes.string.product_moq_value, minOrderQty),
@@ -247,7 +272,9 @@ fun SharedReadOnlyProductCard(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )
-                            statusText?.takeIf { it.isNotBlank() }?.let {
+                        }
+                        statusText?.takeIf { it.isNotBlank() }?.let {
+                            SelectionContainer {
                                 Text(
                                     modifier = Modifier.placeholderWithShimmer(isLoading),
                                     text = it,

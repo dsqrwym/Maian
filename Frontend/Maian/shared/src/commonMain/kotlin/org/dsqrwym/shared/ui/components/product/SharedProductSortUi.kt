@@ -17,6 +17,7 @@ import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.displayName
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -28,6 +29,7 @@ fun SharedProductSortDialog(
     onDismissRequest: () -> Unit,
 ) {
     AlertDialog(
+        properties = transparentDialogProperties(),
         onDismissRequest = onDismissRequest,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {

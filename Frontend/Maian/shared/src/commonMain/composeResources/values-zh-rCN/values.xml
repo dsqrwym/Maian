@@ -265,8 +265,8 @@
     <string name="product_price">价格</string>
     <string name="product_price_with_vat">含税价格</string>
     <string name="product_price_without_vat">未税价格</string>
-    <string name="product_price_with_vat_value">含税：%1$s</string>
-    <string name="product_price_without_vat_value">未税：%1$s</string>
+    <string name="product_price_with_vat_value">含税：%1$s€</string>
+    <string name="product_price_without_vat_value">未税：%1$s€</string>
     <string name="product_min_order_qty">最低起订量</string>
     <string name="product_moq_value">最低起订量：%1$d</string>
     <string name="product_preview">预览</string>

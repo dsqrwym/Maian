@@ -9,6 +9,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.delete
@@ -42,19 +43,20 @@ fun BusinessOutlinedDeleteButton(
 @Composable
 fun BusinessDeleteIconButton(
     modifier: Modifier = Modifier,
+    iconSize: Dp? = 18.dp,
     enabled: Boolean = true,
     isLoading: Boolean = false,
     onDelete: () -> Unit,
-){
+) {
     IconButton(
         onClick = onDelete,
-        modifier = modifier.size(32.dp).placeholderWithShimmer(isLoading),
+        modifier = modifier.placeholderWithShimmer(isLoading),
         enabled = enabled
     ) {
         Icon(
             Icons.Outlined.Delete,
             stringResource(SharedRes.string.delete),
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.then(if (iconSize != null) Modifier.size(iconSize) else Modifier),
             tint = MaterialTheme.colorScheme.error
         )
     }

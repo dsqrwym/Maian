@@ -26,7 +26,6 @@ open class SharedMenuActions(
         content = { toolTipAnchorPosition ->
             var expanded by remember { mutableStateOf(false) }
             val supportedLanguages by remember { mutableStateOf(LanguageManager.SupportedLanguages.entries) }
-            val onClick: () -> Unit = { expanded = !expanded }
             TooltipBox(
                 positionProvider = rememberTooltipPositionProvider(toolTipAnchorPosition),
                 tooltip = {
@@ -38,7 +37,7 @@ open class SharedMenuActions(
                 },
                 state = rememberTooltipState()
             ) {
-                IconButton(onClick = onClick) {
+                IconButton(onClick = { expanded = true }) {
                     Icon(
                         imageVector = Icons.Outlined.Language,
                         contentDescription = stringResource(SharedRes.string.icon_content_description_language),
@@ -59,6 +58,7 @@ open class SharedMenuActions(
                             LanguageMenuItem(item, onClick = {
                                 LanguageManager.setLocaleLanguage(item.code)
                                 SharedUserPreferences.setUserLanguage(item.code)
+                                expanded = false
                             })
                         }
                     }

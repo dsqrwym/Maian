@@ -10,10 +10,10 @@ import org.dsqrwym.shared.data.category.SharedCategoryApi
 import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
 import org.dsqrwym.shared.data.category.SharedCategoryType
-import org.dsqrwym.shared.data.category.mapper.toDomain
 import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
+import org.dsqrwym.shared.data.category.mapper.toDomain
 import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.network.model.ApiResponseList

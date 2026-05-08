@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.edit
 import maian.shared.generated.resources.product_preview
@@ -35,19 +36,17 @@ fun ProductWaterfallView(
     noPermissionText: String,
     padding: PaddingValues,
     isRefreshing: Boolean,
-    isError: Boolean,
 ) {
     SharedProductWaterfall(
         paginatedProducts = paginatedProducts,
         scrollBehavior = scrollBehavior,
         padding = padding,
-        isRefreshing = isRefreshing,
-        isError = isError,
         applyPaddingWithoutTop = true,
         includeMenuTopPadding = true,
-        key = { index -> paginatedProducts.peek(index)?.id ?: index },
+        key = {  paginatedProducts.itemKey { it.id } },
     ) { product ->
         ProductGridItem(
+            modifier = Modifier.animateItem(),
             product = product,
             isRefreshing = isRefreshing,
             onImageClick = { updateCurrentProduct(product) },
@@ -63,6 +62,7 @@ fun ProductWaterfallView(
 
 @Composable
 fun ProductGridItem(
+    modifier: Modifier = Modifier,
     product: Product,
     isRefreshing: Boolean,
     onImageClick: () -> Unit,
@@ -74,6 +74,7 @@ fun ProductGridItem(
     noPermissionText: String = "",
 ) {
     SharedReadOnlyProductCard(
+        modifier = modifier,
         name = product.name,
         title = product.title,
         code = product.code,

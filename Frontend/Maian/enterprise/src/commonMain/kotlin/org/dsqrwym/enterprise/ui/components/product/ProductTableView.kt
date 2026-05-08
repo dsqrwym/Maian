@@ -5,6 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.*
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.Composable
@@ -14,11 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import kotlinx.collections.immutable.toPersistentList
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.product_preview
 import maian.enterprise.generated.resources.product_preview_tooltip
 import maian.shared.generated.resources.*
+import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
+import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.util.uawwindtablekmp.cellWithModifier
 import org.dsqrwym.shared.data.OrderDir
@@ -26,10 +32,13 @@ import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductSortField.*
 import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.drawable.SharedIcons
-import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
-import org.dsqrwym.shared.ui.components.buttons.MyTextButton
+import org.dsqrwym.shared.paging.hasLoadError
+import org.dsqrwym.shared.paging.isAppendingOrPrepending
+import org.dsqrwym.shared.paging.isEmptyResult
+import org.dsqrwym.shared.paging.isInitialLoading
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
+import org.dsqrwym.shared.ui.components.progressindicators.SharedLoadingDotsIndicator
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.modifier.copyOnInteraction
@@ -44,6 +53,7 @@ import ua.wwind.table.data.SortOrder
 import ua.wwind.table.state.SortState
 import ua.wwind.table.state.rememberTableState
 import ua.wwind.table.tableColumns
+import kotlin.uuid.ExperimentalUuidApi
 
 
 enum class ProductColumn {
@@ -60,12 +70,11 @@ enum class ProductColumn {
     Actions         // 操作
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTableApi::class, ExperimentalUuidApi::class)
 @Composable
 fun ProductTableView(
     modifier: Modifier = Modifier,
     paginatedProducts: LazyPagingItems<Product>,
-    fakeProducts: List<Product>,
     sortBy: SharedProductSortField?,
     sortDir: OrderDir,
     updateCurrentProduct: (Product) -> Unit,
@@ -79,7 +88,6 @@ fun ProductTableView(
     noPermissionText: String,
     padding: PaddingValues,
     isRefreshing: Boolean,
-    isError: Boolean,
 ) {
     val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
     val productImageText = stringResource(SharedRes.string.product_image)
@@ -343,30 +351,38 @@ fun ProductTableView(
                 align(Alignment.Center)
                 cell { product, _ ->
                     DisableSelection {
-                        Row(Modifier.placeholderWithShimmer(isRefreshing)) {
+                        Row(
+                            Modifier.placeholderWithShimmer(isRefreshing),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
                             PermissionTooltip(canEdit, noPermissionText, positionProvider) {
-                                MyTextButton(
-                                    text = stringResource(SharedRes.string.edit),
-                                    isEnabled = canEdit,
-                                ) { onEdit(product) }
+                                IconButton(onClick = { onEdit(product) }, enabled = canEdit) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Edit,
+                                        contentDescription = stringResource(SharedRes.string.edit),
+                                        tint = MaterialTheme.colorScheme.secondary,
+                                    )
+                                }
                             }
                             TooltipBox(
                                 state = rememberTooltipState(),
                                 positionProvider = positionProvider,
                                 tooltip = { PlainTooltip { Text(stringResource(EnterpriseRes.string.product_preview_tooltip)) } }
                             ) {
-                                MyTextButton(text = stringResource(EnterpriseRes.string.product_preview)) {
-                                    onPreview(
-                                        product
+                                IconButton(onClick = {
+                                    onPreview(product)
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Visibility,
+                                        contentDescription = stringResource(EnterpriseRes.string.product_preview),
+                                        tint = MaterialTheme.colorScheme.secondary,
                                     )
                                 }
                             }
 
                             PermissionTooltip(canDelete, noPermissionText, positionProvider) {
-                                MyTextButton(
-                                    text = stringResource(SharedRes.string.delete),
-                                    isEnabled = canDelete,
-                                ) { onDelete(product) }
+                                BusinessDeleteIconButton(enabled = canDelete, iconSize = null) { onDelete(product) }
                             }
                         }
                     }
@@ -415,38 +431,38 @@ fun ProductTableView(
         }
     }
 
-    paginatedProducts.apply {
-        when {
-            isRefreshing -> {
-                Table(
-                    modifier = modifier.padding(padding).fillMaxSize().padding(16.dp),
-                    itemsCount = fakeProducts.size,
-                    itemAt = { index -> fakeProducts[index] },
-                    columns = columns,
-                    state = tableState,
-                    placeholderRow = {
-                        SharedNotFoundPlaceholder()
-                    }
-                )
-            }
+    when {
+        paginatedProducts.isInitialLoading -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) { SharedLoadingDotsIndicator(Modifier.fillMaxSize(0.5f)) }
 
-            isError -> SharedRetryButton { retry() }
+        paginatedProducts.hasLoadError -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) { SharedRetryButton { paginatedProducts.retry() } }
 
-            paginatedProducts.itemCount == 0 -> {
-                SharedNotFoundPlaceholder()
-            }
+        paginatedProducts.isEmptyResult -> {
+            SharedNotFoundPlaceholder()
+        }
 
-            else -> {
-                Table(
-                    modifier = modifier.padding(padding).fillMaxSize().padding(16.dp),
-                    itemsCount = paginatedProducts.itemCount,
-                    itemAt = { index -> paginatedProducts[index] },
-                    columns = columns,
-                    state = tableState,
-                    placeholderRow = {
-                        SharedNotFoundPlaceholder()
-                    }
-                )
+        else -> {
+            Table(
+                modifier = modifier.padding(padding).fillMaxSize().padding(16.dp),
+                itemsCount = paginatedProducts.itemCount,
+                itemAt = { index -> paginatedProducts[index] },
+                columns = columns,
+                rowKey = { _, _ -> paginatedProducts.itemKey { it.id } },
+                state = tableState,
+                placeholderRow = {
+                    SharedLoadingDotsIndicator()
+                }
+            )
+            if (paginatedProducts.isAppendingOrPrepending) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) { SharedLoadingDotsIndicator(Modifier.fillMaxSize(0.5f)) }
             }
         }
     }

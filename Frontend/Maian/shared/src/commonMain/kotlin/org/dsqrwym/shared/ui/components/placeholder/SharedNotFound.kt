@@ -26,7 +26,7 @@ fun SharedNotFoundPlaceholder(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NotFoundAnimation(modifier = Modifier.fillMaxHeight(0.5f))
+        NotFoundAnimation(modifier = Modifier.fillMaxHeight(0.5f).widthIn(min = 200.dp, max = 300.dp))
         Text(
             text = description,
             style = MaterialTheme.typography.bodyLarge,
@@ -40,7 +40,7 @@ fun SharedPlainNotFoundPlaceholder(
     description: String = stringResource(SharedRes.string.not_found),
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Text(

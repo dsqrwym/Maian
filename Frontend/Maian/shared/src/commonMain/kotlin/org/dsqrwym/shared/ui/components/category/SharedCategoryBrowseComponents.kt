@@ -12,13 +12,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.no_categories
 import maian.shared.generated.resources.path
+import org.dsqrwym.shared.paging.*
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
+import org.dsqrwym.shared.ui.components.placeholder.SharedPlainNotFoundPlaceholder
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
+import org.dsqrwym.shared.util.colum.SharedLazyColumnLayout.appendErrorRetry
+import org.dsqrwym.shared.util.colum.SharedLazyColumnLayout.appendLoadingIndicator
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
+import org.dsqrwym.shared.util.row.SharedRowLayout
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -31,7 +36,7 @@ fun SharedCategoryPathRow(
     if (pathNames.size < 2) return
     FlowRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = SharedRowLayout.arrangement,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
@@ -66,7 +71,6 @@ fun SharedCategoryPathRow(
 @Composable
 fun <T : Any> SharedCategoryRail(
     categories: LazyPagingItems<T>,
-    fallbackCategories: List<T>,
     selectedId: String?,
     itemId: (T) -> String,
     itemName: @Composable (T) -> String,
@@ -75,67 +79,50 @@ fun <T : Any> SharedCategoryRail(
     drawerWidth: Dp = 128.dp,
     drawerContainerColor: Color = Color.Transparent,
 ) {
-    val isLoading =
-        categories.loadState.append is LoadState.Loading || categories.loadState.refresh is LoadState.Loading
-    val showFallbackDuringRefresh =
-        categories.loadState.refresh is LoadState.Loading &&
-                categories.itemCount == 0 &&
-                fallbackCategories.isNotEmpty()
+    val isLoading = categories.isRefreshing
 
     PermanentDrawerSheet(
         modifier = modifier.width(drawerWidth).fillMaxHeight(),
         drawerContainerColor = drawerContainerColor,
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = SharedColumnLayout.arrangement,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            if (showFallbackDuringRefresh) {
-                items(
-                    count = fallbackCategories.size,
-                    key = { index -> itemId(fallbackCategories[index]) },
-                ) { index ->
-                    val category = fallbackCategories[index]
-                    NavigationDrawerItem(
-                        modifier = Modifier.placeholderWithShimmer(true),
-                        selected = selectedId == itemId(category),
-                        onClick = {},
-                        label = {
-                            Text(
-                                itemName(category),
-                                maxLines = 3,
-                                softWrap = true,
-                                overflow = TextOverflow.Ellipsis,
+        if (categories.isEmptyResult) {
+            SharedPlainNotFoundPlaceholder(stringResource(SharedRes.string.no_categories))
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = SharedColumnLayout.arrangement,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                if (categories.isInitialLoading) {
+                    appendLoadingIndicator()
+                } else if (categories.hasLoadError) {
+                    appendErrorRetry { categories.retry() }
+                } else {
+                    items(
+                        count = categories.itemCount,
+                        key = { index -> categories.peek(index)?.let(itemId) ?: index },
+                    ) { index ->
+                        categories[index]?.let { category ->
+                            NavigationDrawerItem(
+                                modifier = Modifier.placeholderWithShimmer(isLoading),
+                                selected = selectedId == itemId(category),
+                                onClick = { onSelect(category) },
+                                label = {
+                                    Text(
+                                        itemName(category),
+                                        maxLines = 3,
+                                        softWrap = true,
+                                        overflow = TextOverflow.Ellipsis,
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
+                                },
                             )
-                        },
-                    )
-                }
-            } else {
-                items(
-                    count = categories.itemCount,
-                    key = { index -> categories.peek(index)?.let(itemId) ?: index },
-                ) { index ->
-                    categories[index]?.let { category ->
-                        NavigationDrawerItem(
-                            modifier = Modifier.placeholderWithShimmer(isLoading),
-                            selected = selectedId == itemId(category),
-                            onClick = { onSelect(category) },
-                            label = {
-                                Text(
-                                    itemName(category),
-                                    maxLines = 3,
-                                    softWrap = true,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            },
-                        )
+                        }
                     }
                 }
-            }
-            if (categories.loadState.append is LoadState.Error) {
-                item {
-                    SharedRetryButton { categories.retry() }
+
+                if (categories.isAppendingOrPrepending) {
+                    appendLoadingIndicator()
                 }
             }
         }
@@ -148,35 +135,33 @@ fun <T : Any> SharedChildCategoryGrid(
     itemName: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
-    shouldHideWhenEmpty: Boolean = true,
 ) {
-    if (shouldHideWhenEmpty && categories.itemCount == 0 && categories.loadState.refresh !is LoadState.Loading) return
-    val isLoading =
-        categories.loadState.append is LoadState.Loading || categories.loadState.refresh is LoadState.Loading
+    if (categories.isEmptyResult) return
+    val isLoading = categories.isRefreshing
 
     FlowRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = SharedRowLayout.arrangement,
+        verticalArrangement = SharedColumnLayout.arrangement,
     ) {
-        repeat(categories.itemCount) { index ->
-            categories[index]?.let { category ->
-                ElevatedAssistChip(
-                    modifier = Modifier.placeholderWithShimmer(isLoading),
-                    onClick = { onSelect(category) },
-                    label = {
-                        Text(
-                            itemName(category),
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                )
-            }
-        }
-
-        if (categories.loadState.append is LoadState.Error) {
+        if (categories.hasLoadError) {
             SharedRetryButton { categories.retry() }
+        } else {
+            repeat(categories.itemCount) { index ->
+                categories[index]?.let { category ->
+                    ElevatedAssistChip(
+                        modifier = Modifier.placeholderWithShimmer(isLoading),
+                        onClick = { onSelect(category) },
+                        label = {
+                            Text(
+                                itemName(category),
+                                maxLines = 3,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        },
+                    )
+                }
+            }
         }
     }
 }

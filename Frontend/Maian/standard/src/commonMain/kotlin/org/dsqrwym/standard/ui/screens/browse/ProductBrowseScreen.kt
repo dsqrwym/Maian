@@ -22,17 +22,22 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.sharedRetailProductSortFields
+import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
-import org.dsqrwym.shared.ui.components.product.*
+import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
+import org.dsqrwym.shared.ui.components.product.SharedProductSortDialog
+import org.dsqrwym.shared.ui.components.product.SharedProductWaterfall
+import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
+import org.dsqrwym.shared.util.colum.SharedColumnLayout
+import org.dsqrwym.shared.util.row.SharedRowLayout
 import org.dsqrwym.standard.domain.browse.BrowseScope
 import org.dsqrwym.standard.domain.browse.RetailCategory
 import org.dsqrwym.standard.domain.browse.RetailProduct
@@ -58,9 +63,6 @@ fun ProductBrowseScreen(
     val languageCode = viewModel.languageCode
 
     val paginatedProducts = viewModel.pagedProducts.collectAsLazyPagingItems()
-    val loadState = paginatedProducts.loadState
-    val isRefreshing = loadState.refresh is LoadState.Loading
-    val refreshError = loadState.refresh as? LoadState.Error
     val preview = viewModel.imagePreviewProduct
 
     SharedTransparentScaffold(
@@ -142,8 +144,6 @@ fun ProductBrowseScreen(
             languageCode = languageCode,
             onProductClick = onProductClick,
             onProductImageClick = viewModel::showImagePreview,
-            isRefreshing = isRefreshing,
-            refreshError = refreshError,
             scrollBehavior = scrollBehavior,
             padding = padding,
         )
@@ -158,7 +158,7 @@ private fun ProductBrowseTopOverlay(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = SharedColumnLayout.arrangement,
     ) {
         ProductSortChipRow(viewModel = viewModel)
         CategoryTabs(
@@ -276,8 +276,6 @@ private fun PaginatedProductGrid(
     languageCode: String,
     onProductClick: (String) -> Unit,
     onProductImageClick: (RetailProduct) -> Unit,
-    isRefreshing: Boolean,
-    refreshError: LoadState.Error?,
     scrollBehavior: TopAppBarScrollBehavior,
     padding: PaddingValues,
 ) {
@@ -285,19 +283,11 @@ private fun PaginatedProductGrid(
         paginatedProducts = paginatedProducts,
         scrollBehavior = scrollBehavior,
         padding = padding,
-        isRefreshing = isRefreshing,
-        isError = refreshError != null,
         includeMenuTopPadding = true,
         key = { index -> paginatedProducts.peek(index)?.id ?: index },
-        errorContent = {
-            SharedProductRefreshError(
-                message = refreshError?.error?.message ?: stringResource(SharedRes.string.load_failed),
-                onRetry = { paginatedProducts.retry() },
-            )
-        },
     ) {
         SharedReadOnlyProductCard(
-            isLoading = isRefreshing,
+            isLoading = paginatedProducts.isRefreshing,
             name = it.localizedName(languageCode),
             title = it.localizedTitle(languageCode),
             code = it.code,
@@ -319,8 +309,8 @@ private fun ProductSortChipRow(
 ) {
     FlowRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = SharedRowLayout.arrangement,
+        verticalArrangement = SharedColumnLayout.arrangement,
     ) {
         SharedProductSortChip(
             sortBy = viewModel.sortBy,

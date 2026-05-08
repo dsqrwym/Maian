@@ -12,13 +12,11 @@ import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -28,27 +26,35 @@ import maian.admin.generated.resources.platform_category
 import maian.admin.generated.resources.select_wholesaler
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
+import org.dsqrwym.admin.permissions.canDeleteAdminCategory
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
 import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
-import org.dsqrwym.admin.permissions.canDeleteAdminCategory
-import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.category.SharedCategoryType
+import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.domain.category.CategoryNode
+import org.dsqrwym.shared.paging.hasLoadError
+import org.dsqrwym.shared.paging.isAppendingOrPrepending
+import org.dsqrwym.shared.paging.isEmptyResult
+import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
-import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
-import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
+import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
+import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
+import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendErrorRetry
+import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendLoadingIndicator
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
@@ -88,31 +94,35 @@ fun CategoriesListScreen(
             }
         },
         title = {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                SearchBarDefaults.InputField(
-                    modifier = Modifier.weight(0.8f),
-                    query = searchQuery,
-                    onQueryChange = viewModel::updateSearchQuery,
-                    onSearch = { viewModel.refresh() },
-                    expanded = false,
-                    onExpandedChange = {},
-                    placeholder = { Text(stringResource(BusinessRes.string.search_category)) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, null) },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            SharedCloseButton {
-                                viewModel.updateSearchQuery("")
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    SearchBarDefaults.InputField(
+                        modifier = Modifier.weight(0.8f),
+                        query = searchQuery,
+                        onQueryChange = viewModel::updateSearchQuery,
+                        onSearch = { viewModel.refresh() },
+                        expanded = false,
+                        onExpandedChange = {},
+                        placeholder = { Text(stringResource(BusinessRes.string.search_category)) },
+                        leadingIcon = { Icon(Icons.Outlined.Search, null) },
+                        trailingIcon = {
+                            if (searchQuery.isNotEmpty()) {
+                                SharedCloseButton {
+                                    viewModel.updateSearchQuery("")
+                                }
                             }
                         }
+                    )
+                    IconButton(onClick = { viewModel.updateShowFilterDialog(true) }, modifier = Modifier.size(48.dp)) {
+                        Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
                     }
-                )
-                IconButton(onClick = { viewModel.updateShowFilterDialog(true) }, modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
                 }
+                // 过滤标签
+                FilterChipsRow(viewModel)
             }
         },
         fabButtonState = SharedTransparentScaffoldFabButtonState(
@@ -125,8 +135,6 @@ fun CategoriesListScreen(
         ),
     )
     { padding, scrollBehavior ->
-        val density = LocalDensity.current
-        var filterFlowRowHeight by remember { mutableStateOf(0.dp) }
         val isRefreshing = lazyPagingItems.loadState.refresh is LoadState.Loading
         val pullRefreshState = rememberPullToRefreshState()
         PullToRefreshBox(
@@ -146,107 +154,51 @@ fun CategoriesListScreen(
                 )
             }
         ) {
-            Box {
-                if (lazyPagingItems.itemCount == 0 && lazyPagingItems.loadState.isIdle) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                Icons.Outlined.Category,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                tint = MaterialTheme.colorScheme.outline
-                            )
-                            Spacer(Modifier.height(16.dp))
-                            Text(
-                                stringResource(SharedRes.string.not_found),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.outline
-                            )
-                        }
+            if (lazyPagingItems.isEmptyResult) {
+                SharedNotFoundPlaceholder()
+            } else {
+                // 类别列表
+                LazyVerticalStaggeredGrid(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .padding(horizontal = SharedLazyGridLayout.Padding),
+                    columns = StaggeredGridCells.Adaptive(minSize = 330.dp),
+                    horizontalArrangement = SharedLazyGridLayout.arrangement,
+                    verticalItemSpacing = SharedLazyGridLayout.verticalItemSpacing,
+                ) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        Spacer(Modifier.height(padding.calculateTopPadding()))
                     }
-                } else {
-                    // 类别列表
-                    LazyVerticalStaggeredGrid(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .nestedScroll(scrollBehavior.nestedScrollConnection)
-                            .padding(horizontal = 16.dp),
-                        columns = StaggeredGridCells.Adaptive(minSize = 380.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalItemSpacing = 12.dp,
-                    ) {
-                        item(span = StaggeredGridItemSpan.FullLine) {
-                            Spacer(Modifier.height(padding.calculateTopPadding()))
-                            Spacer(Modifier.fillMaxWidth().height(filterFlowRowHeight).heightIn(min = 28.dp))
-                        }
+                    if (lazyPagingItems.hasLoadError) {
+                        appendErrorRetry { lazyPagingItems.retry() }
+                    } else {
+                        val isCategoryLoading =
+                            viewModel.isLoading || lazyPagingItems.isRefreshing
 
-                        // 加载状态
-                        lazyPagingItems.apply {
-                            when {
-                                loadState.isIdle -> {
-                                    items(lazyPagingItems.itemCount) { index ->
-                                        val category = lazyPagingItems[index]
-                                        if (category != null) {
-                                            CategoryListItem(
-                                                isLoading = viewModel.isLoading,
-                                                categoriesListViewmodel = viewModel,
-                                                category = category,
-                                                userRole = userRole,
-                                                onEdit = { onNavigateToEdit(category.id.toString()) },
-                                                onDelete = { viewModel.updateShowDeleteDialog(category) }
-                                            )
-                                        }
-                                    }
-                                }
-
-                                loadState.refresh is LoadState.Loading -> {
-                                    repeat(9) {
-                                        item {
-                                            CategoryListItem(
-                                                isLoading = true,
-                                                categoriesListViewmodel = viewModel,
-                                                category = CategoryNode(
-                                                    id = it.toLong(),
-                                                    name = "",
-                                                ),
-                                                onEdit = {},
-                                                onDelete = {}
-                                            )
-                                        }
-                                    }
-                                }
-
-                                loadState.prepend is LoadState.Loading || loadState.append is LoadState.Loading -> {
-                                    item(span = StaggeredGridItemSpan.FullLine) {
-                                        SharedCircularProgressIndicator()
-                                    }
-                                }
-
-
-                                loadState.append is LoadState.Error || loadState.prepend is LoadState.Error -> {
-                                    item(span = StaggeredGridItemSpan.FullLine) {
-                                        SharedRetryButton { retry() }
-                                    }
-                                }
+                        items(lazyPagingItems.itemCount) { index ->
+                            lazyPagingItems[index]?.let {
+                                CategoryListItem(
+                                    modifier = Modifier.animateItem(),
+                                    isLoading = isCategoryLoading,
+                                    categoriesListViewmodel = viewModel,
+                                    category = it,
+                                    userRole = userRole,
+                                    onEdit = { onNavigateToEdit(it.id.toString()) },
+                                    onDelete = { viewModel.updateShowDeleteDialog(it) }
+                                )
                             }
                         }
+                    }
 
-                        item {
-                            Spacer(Modifier.height(28.dp))
-                        }
+                    if (lazyPagingItems.isAppendingOrPrepending) {
+                        appendLoadingIndicator()
+                    }
+
+                    item {
+                        Spacer(Modifier.height(28.dp))
                     }
                 }
-                // 过滤标签
-                FilterChipsRow(
-                    viewModel,
-                    Modifier.padding(start = 8.dp, end = 8.dp, top = padding.calculateTopPadding())
-                        .onGloballyPositioned { coordinates ->
-                            filterFlowRowHeight = with(density) { coordinates.size.height.toDp() }
-                        }
-                )
             }
         }
     }
@@ -304,8 +256,8 @@ fun CategoryListItem(
                             )
                         }
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
+                        FlowRow(
+                            verticalArrangement = Arrangement.Center,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
@@ -366,6 +318,7 @@ fun CategoryListItem(
                     state = rememberTooltipState()
                 ) {
                     BusinessOutlinedDeleteButton(
+                        modifier = Modifier.align(Alignment.Bottom),
                         enabled = canDeleteCategory,
                         onDelete = onDelete
                     )
@@ -381,6 +334,7 @@ fun FilterDialog(
 ) {
     val categoryType = viewModel.filterCategoryType
     AlertDialog(
+        properties = transparentDialogProperties(),
         onDismissRequest = { viewModel.updateShowFilterDialog(false) },
         text = {
             SelectionContainer {
@@ -481,9 +435,8 @@ private fun FilterChipsRow(
     viewModel: CategoriesListViewModel,
     modifier: Modifier = Modifier
 ) {
-    FlowRow(
+    SharedFilterChipsRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         viewModel.filterCategoryType?.let {
             ElevatedFilterChip(

@@ -282,8 +282,8 @@
     <string name="product_price_with_vat">Preu amb IVA</string>
     <string name="product_price_without_vat">Preu sense IVA</string>
 
-    <string name="product_price_with_vat_value">IVA: %1$s</string>
-    <string name="product_price_without_vat_value">Net: %1$s</string>
+    <string name="product_price_with_vat_value">Amb IVA: %1$s€</string>
+    <string name="product_price_without_vat_value">Net: %1$s€</string>
 
     <string name="product_min_order_qty">Quantitat mínima de comanda</string>
     <string name="product_moq_value">Comanda mín.: %1$d</string>

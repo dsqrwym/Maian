@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.FilterList
-import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.*
@@ -13,20 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
+import androidx.compose.ui.window.Dialog
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.parent_category_with_name
 import maian.business.generated.resources.select_parent_category
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.add_product
-import maian.enterprise.generated.resources.product_preview
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.permissions.canManageEnterpriseProducts
 import org.dsqrwym.enterprise.ui.components.product.ProductTableView
 import org.dsqrwym.enterprise.ui.components.product.ProductWaterfallView
-import org.dsqrwym.enterprise.ui.model.ProductPlaceholders
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductsListViewModel
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.data.OrderDir
@@ -35,6 +32,7 @@ import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.data.products.sharedEnterpriseProductSortFields
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.containers.UiState
@@ -43,11 +41,13 @@ import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
-import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
 import org.dsqrwym.shared.ui.components.product.SharedProductSortDialog
+import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
+import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -164,16 +164,12 @@ fun ProductsListScreen(
             disabledTooltipText = noPermissionText,
         )
     ) { padding, scrollBehavior ->
-        val fakeProducts = remember { ProductPlaceholders.generateFakeProducts(9) }
-        val loadState = paginatedProducts.loadState
-        val isRefreshing = loadState.refresh is LoadState.Loading
-        val isError = loadState.refresh is LoadState.Error
+        val isRefreshing = paginatedProducts.isRefreshing || viewModel.isDeletingProduct
 
         if (isTableMode) {
             ProductTableView(
                 Modifier,
                 paginatedProducts,
-                fakeProducts,
                 viewModel.sortBy,
                 viewModel.sortDir,
                 viewModel::updateCurrentProduct,
@@ -187,7 +183,6 @@ fun ProductsListScreen(
                 noPermissionText,
                 padding,
                 isRefreshing,
-                isError
             )
 
 
@@ -204,7 +199,6 @@ fun ProductsListScreen(
                 noPermissionText,
                 padding,
                 isRefreshing,
-                isError
             )
         }
     }
@@ -226,40 +220,29 @@ private fun ProductPreviewDialog(
             )
         }
     }
-    AlertDialog(
+    Dialog(
         onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Outlined.Inventory2, contentDescription = null) },
-        title = { Text(stringResource(EnterpriseRes.string.product_preview)) },
-        text = {
-            SharedReadOnlyProductCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .widthIn(max = 360.dp),
-                isLoading = false,
-                name = product.localizedName(languageCode),
-                title = product.localizedTitle(languageCode),
-                code = product.code,
-                imageUrl = product.mainImage?.url(product.id),
-                minPrice = product.minPrice,
-                minPriceIva = product.minPriceIva,
-                totalStock = product.totalStock,
-                minOrderQty = product.minOrderQty,
-                onClick = {},
-                onImageClick = { showImagePreview = true },
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(SharedRes.string.close))
-            }
-        }
-    )
+        properties = transparentDialogProperties(),
+    ) {
+        SharedReadOnlyProductCard(
+            modifier = Modifier.widthIn(max = 300.dp),
+            name = product.localizedName(languageCode),
+            title = product.localizedTitle(languageCode),
+            code = product.code,
+            imageUrl = product.mainImage?.url(product.id),
+            minPrice = product.minPrice,
+            minPriceIva = product.minPriceIva,
+            totalStock = product.totalStock,
+            minOrderQty = product.minOrderQty,
+            onImageClick = { showImagePreview = true },
+        )
+    }
 }
 
 private fun Product.localizedName(languageCode: String): String =
     translations.firstOrNull { it.langCode == languageCode }?.name ?: name
 
-private fun Product.localizedTitle(languageCode: String): String? =
+private fun Product.localizedTitle(languageCode: String): String =
     translations.firstOrNull { it.langCode == languageCode }?.title ?: title
 
 @Composable
@@ -288,6 +271,7 @@ private fun ProductFilterDialog(
     viewModel: ProductsListViewModel,
 ) {
     AlertDialog(
+        properties = transparentDialogProperties(),
         onDismissRequest = { viewModel.updateShowFilterDialog(false) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -356,11 +340,7 @@ private fun ProductFilterChipsRow(
     showSortChip: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
-    FlowRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
+    SharedFilterChipsRow(modifier = modifier) {
         viewModel.filterCategory?.let {
             ElevatedFilterChip(
                 selected = true,

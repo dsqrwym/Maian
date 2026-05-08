@@ -8,11 +8,16 @@ import org.dsqrwym.business.navigation.CategoryEdit
 import org.dsqrwym.enterprise.ui.screens.categories.CategoriesListScreen
 import org.dsqrwym.enterprise.ui.screens.categories.CategoryCreateScreen
 import org.dsqrwym.enterprise.ui.screens.categories.CategoryEditScreen
+import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 
-fun EntryProviderScope<NavKey>.categoryNavEntry(viewModel: SharedNavigationState) {
+fun EntryProviderScope<NavKey>.categoryNavEntry(
+    viewModel: SharedNavigationState,
+    userRole: UserRole? = null,
+) {
     entry<Categories> {
         CategoriesListScreen(
+            userRole = userRole,
             onNavigateToCreate = {
                 viewModel.navigate(CategoryCreate)
             },

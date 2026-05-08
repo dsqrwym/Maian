@@ -40,6 +40,7 @@ import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorC
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -178,6 +179,7 @@ internal fun AddLanguageDialog(
     onAdd: (String, String) -> Unit
 ) {
     AlertDialog(
+        properties = transparentDialogProperties(),
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Outlined.Language, contentDescription = "Language") },
         title = { Text(stringResource(BusinessRes.string.add_language_translation)) },

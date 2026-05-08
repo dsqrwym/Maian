@@ -18,10 +18,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
 import org.dsqrwym.shared.network.model.SharedResponseResult
+import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.standard.data.browse.RetailBrowseRepository
@@ -79,8 +79,6 @@ class CategoryBrowseViewModel(
         private set  // 当前预览的产品图片
     var categorySearchText by mutableStateOf("")
         private set  // 分类搜索文本
-    var railFallbackCategories by mutableStateOf<List<RetailCategory>>(emptyList())
-        private set  // 左侧导航栏的备用分类数据
     var languageCode by mutableStateOf(LanguageManager.getCurrent().code)
         private set  // 当前语言代码
 
@@ -89,7 +87,8 @@ class CategoryBrowseViewModel(
     private var wholesalerIdState by mutableStateOf<String?>(null)  // 批发商ID状态
     private var configuredKey: String? = null  // 配置键值，用于避免重复配置
     private var isConfigured by mutableStateOf(false)  // 是否已配置标志
-    private val refreshInitialCategory = MutableSharedFlow<Unit>(replay = 0)  // 初始分类刷新触发器
+    private val refreshInitialCategory = MutableSharedFlow<Unit>()  // 初始分类刷新触发器
+    private val refreshSearchCategory = MutableSharedFlow<Unit>()
 
     /**
      * 防抖处理的分类搜索流
@@ -119,7 +118,8 @@ class CategoryBrowseViewModel(
         railLocation,
         snapshotFlow { wholesalerIdState to languageCode }.distinctUntilChanged(),
         snapshotFlow { isConfigured }.distinctUntilChanged(),
-    ) { search, rail, config, configured ->
+        refreshSearchCategory.asSharedFlow().onStart { emit(Unit) }
+    ) { search, rail, config, configured, _ ->
         // 构建查询参数
         CategoryPageQuery(
             search = search,
@@ -145,12 +145,7 @@ class CategoryBrowseViewModel(
                     languageCode = query.languageCode,
                     page = page,
                     pageSize = pageSize,
-                ).also { items ->
-                    // 第一页数据作为备用数据，提升用户体验
-                    if (page == 1 && items.isNotEmpty()) {
-                        railFallbackCategories = items
-                    }
-                }
+                )
             }.flow
         }
         .cachedIn(viewModelScope)
@@ -166,7 +161,8 @@ class CategoryBrowseViewModel(
         snapshotFlow { selectedCategory }.distinctUntilChanged(),
         snapshotFlow { wholesalerIdState to languageCode }.distinctUntilChanged(),
         snapshotFlow { isConfigured }.distinctUntilChanged(),
-    ) { search, selected, config, configured ->
+        refreshSearchCategory.asSharedFlow().onStart { emit(Unit) }
+    ) { search, selected, config, configured, _ ->
         // 如果是第3级分类，则没有子分类
         if (selected?.level == 3) {
             return@combine CategoryPageQuery(
@@ -293,18 +289,12 @@ class CategoryBrowseViewModel(
      * @param scope 浏览范围（全局/批发商/分类）
      * @param wholesalerId 批发商ID
      * @param rootCategory 根分类，null表示从顶级开始
-     * @param initialRailFallbackCategories 初始备用分类数据，提升用户体验
      */
     fun configure(
         scope: BrowseScope,
         wholesalerId: String?,
         rootCategory: RetailCategory?,
-        initialRailFallbackCategories: List<RetailCategory> = emptyList(),
     ) {
-        // 优化用户体验：新导航页先接收上一页已经加载好的同级数据，随后再由 paging 刷新替换
-        if (initialRailFallbackCategories.isNotEmpty()) {
-            railFallbackCategories = initialRailFallbackCategories
-        }
         // 生成配置键值，避免重复配置
         val key = "$scope|$wholesalerId|${rootCategory?.id}"
         if (configuredKey == key) return  // 配置未变化，跳过
@@ -340,6 +330,12 @@ class CategoryBrowseViewModel(
 
     fun dismissImagePreview() {
         imagePreviewProduct = null
+    }
+
+    fun refreshCategorySearch() {
+        viewModelScope.launch {
+            refreshSearchCategory.emit(Unit)
+        }
     }
 
     private fun updateSelectedCategoryPathNames() {

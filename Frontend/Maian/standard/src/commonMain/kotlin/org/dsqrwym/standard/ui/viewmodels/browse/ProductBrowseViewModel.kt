@@ -18,11 +18,11 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.OrderDir
-import org.dsqrwym.shared.data.pagination.createPager
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
 import org.dsqrwym.shared.network.model.SharedResponseResult
+import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.standard.data.browse.RetailBrowseRepository
@@ -205,10 +205,6 @@ class ProductBrowseViewModel(
         searchText = value
     }
 
-    fun submitSearch() {
-        refresh()
-    }
-
     fun clearSearch() {
         searchText = ""
     }
@@ -239,7 +235,7 @@ class ProductBrowseViewModel(
         showSortDialog = show
     }
 
-    fun refresh() {
+    fun submitSearch() {
         viewModelScope.launch {
             refreshTrigger.emit(Unit)
         }

@@ -1,4 +1,4 @@
-package org.dsqrwym.shared.data.pagination
+package org.dsqrwym.shared.paging.data
 
 interface PaginationQuery {
     val page: Int
