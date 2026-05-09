@@ -55,6 +55,126 @@ export class CategoryReadService {
     this.logger.setContext(CategoryReadService.name);
   }
 
+  private selfMatch(pattern: string) {
+    return or(
+      ilike(categories.name_unaccent, pattern),
+      exists(
+        this.drizzle.db
+          .select({ one: sql<number>`1` })
+          .from(category_translations)
+          .where(
+            and(
+              eq(category_translations.category_id, categories.id),
+              ilike(category_translations.name_unaccent, pattern),
+            ),
+          ),
+      ),
+    );
+  }
+
+  /**
+   * 构建当前分类是否有属于用户的子类别的 EXISTS 条件。
+   * 用于：
+   * enterprise 用户在根据父类别过滤时 排除掉没有子类别的类别
+   * @param ownerId
+   * @private
+   */
+  private buildHasChildrenOfUserCondition(ownerId: string): SQL {
+    const child = alias(categories, 'filter_child_categories');
+
+    return exists(
+      this.drizzle.db
+        .select({ one: sql<number>`1` })
+        .from(child)
+        .where(
+          and(eq(child.parent_id, categories.id), eq(child.user_id, ownerId)),
+        ),
+    );
+  }
+
+  /**
+   * 构建当前分类是否有产品关联的 EXISTS 条件。
+   * mode = self:
+   *   只判断当前 category 自己是否直接关联产品。
+   *   适合 enterprise / 后台筛选。
+   * mode = descendant:
+   *   判断当前 category 自己、子类、孙类是否有关联产品。
+   *   适合 standard 零售端分类浏览。
+   *   @param search
+   *   @param mode
+   *   @private
+   */
+  private buildCategorySearchCondition(
+    search: string,
+    mode: 'self' | 'descendant',
+  ): (SQL | undefined)[] {
+    const searchTerms = escapeLike(toUnaccent(search))
+      .split(/\s+/)
+      .filter((s) => s.length > 0)
+      .slice(0, this.MAX_SEARCH_TERMS);
+
+    const isSelfMode = mode === 'self';
+
+    /**
+     * 向下搜索的分类：可能是子类，也可能是孙类
+     */
+    const descendant = alias(categories, 'search_descendant');
+    /**
+     * 当前分类即 descendant 的直接子类
+     */
+    const directChild = alias(categories, 'search_direct_child');
+
+    return searchTerms.map((key) => {
+      const pattern = `%${key}%`;
+
+      const selfMatch = this.selfMatch(pattern);
+
+      if (isSelfMode) {
+        return selfMatch;
+      }
+
+      const descendantMatch = exists(
+        this.drizzle.db
+          .select({ one: sql<number>`1` })
+          .from(descendant)
+          .where(
+            and(
+              // 匹配搜索分类的条件
+              or(
+                ilike(descendant.name_unaccent, pattern),
+                exists(
+                  this.drizzle.db
+                    .select({ one: sql<number>`1` })
+                    .from(category_translations)
+                    .where(
+                      and(
+                        eq(category_translations.category_id, descendant.id),
+                        ilike(category_translations.name_unaccent, pattern),
+                      ),
+                    ),
+                ),
+              ),
+              // 同时必须是 主查询分类的某个子类和孙类
+              or(
+                // eq 匹配子类
+                eq(descendant.parent_id, categories.id),
+                // 子查询获取 分类的直接子类 判断 descendant 是否属于当前分类的某个直接子类 即主查询的孙类
+                inArray(
+                  descendant.parent_id,
+                  this.drizzle.db
+                    .select({ id: directChild.id })
+                    .from(directChild)
+                    .where(eq(directChild.parent_id, categories.id)),
+                ),
+              ),
+            ),
+          ),
+      );
+
+      return or(selfMatch, descendantMatch);
+    });
+  }
+
   /**
    * 构建当前分类是否有产品关联的 EXISTS 条件。
    * mode = self:
@@ -67,7 +187,7 @@ export class CategoryReadService {
    *   用于零售商进入某个批发商店铺时，只判断该批发商的产品。
    *   例如 ownerId = wholesalerId。
    */
-  buildProductLinkedCondition = (
+  private buildProductLinkedCondition = (
     mode: 'self' | 'descendant',
     ability: AppAbility,
     ownerId?: string,
@@ -144,7 +264,7 @@ export class CategoryReadService {
     );
   };
 
-  getReadListPermission(user: UserPayload) {
+  private getReadListPermission(user: UserPayload) {
     switch (user.userRole) {
       case UserRole.ADMIN:
       case UserRole.SUPERADMIN:
@@ -170,6 +290,7 @@ export class CategoryReadService {
     }
     const permissionCondition = this.getReadListPermission(user);
     const { langCode, search, userId, fields, type, page, limit } = query;
+    const ownerId = permissionCondition ?? userId;
     const parentId = query.parentId ? BigInt(query.parentId) : undefined;
     const iva = fields?.includes(CategorySelectField.IVA);
     const level = fields?.includes(CategorySelectField.LEVEL);
@@ -251,7 +372,7 @@ export class CategoryReadService {
           children: sql<ICategoryResponseRelation[]>`COALESCE((
             SELECT jsonb_agg(jsonb_build_object(${buildJsonFields('ch')}))
             FROM categories ch WHERE ch.parent_id = ${categories.id}
-            ${userId ? sql`AND ch.user_id = ${userId}` : sql``}
+            ${ownerId ? sql`AND ch.user_id = ${ownerId}` : sql``}
           ), '[]'::jsonb)`,
         }),
       })
@@ -289,34 +410,14 @@ export class CategoryReadService {
     const whereConditions: (SQL | undefined)[] = [];
 
     if (search) {
-      const searchTerms = escapeLike(toUnaccent(search))
-        .split(/\s+/)
-        .filter((s) => s.length > 0)
-        .slice(0, this.MAX_SEARCH_TERMS);
-
-      searchTerms.forEach((key) => {
-        const pattern = `%${key}%`;
-        whereConditions.push(
-          or(
-            ilike(categories.name_unaccent, pattern),
-            exists(
-              this.drizzle.db
-                .select({ one: sql<number>`1` })
-                .from(category_translations)
-                .where(
-                  and(
-                    eq(category_translations.category_id, categories.id),
-                    ilike(category_translations.name_unaccent, pattern),
-                  ),
-                ),
-            ),
-          ),
-        );
-      });
+      whereConditions.push(
+        ...this.buildCategorySearchCondition(search, query.searchMatchMode),
+      );
     }
 
     // 处理权限逻辑
     if (permissionCondition === undefined) {
+      // 零售商和管理端
       if (userId && query.includePublic) {
         whereConditions.push(
           or(isNull(categories.user_id), eq(categories.user_id, userId)),
@@ -327,15 +428,22 @@ export class CategoryReadService {
       else if (type === CategoryType.PUBLIC)
         whereConditions.push(isNull(categories.user_id));
     } else {
-      if (userId)
+      // 批发商端 enterprise
+      if (userId) {
         whereConditions.push(eq(categories.user_id, permissionCondition));
-      else
+      } else {
         whereConditions.push(
           or(
             eq(categories.user_id, permissionCondition),
             isNull(categories.user_id),
           ),
         );
+      }
+      if (query.onlyWithOwnedChildren) {
+        whereConditions.push(
+          this.buildHasChildrenOfUserCondition(permissionCondition),
+        );
+      }
     }
 
     if (parentId != undefined) {
@@ -346,7 +454,7 @@ export class CategoryReadService {
         this.buildProductLinkedCondition(
           query.productFilterMode,
           ability,
-          permissionCondition ?? userId,
+          ownerId,
         ),
       );
     }

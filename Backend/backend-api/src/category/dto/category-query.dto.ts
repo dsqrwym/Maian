@@ -26,6 +26,10 @@ export interface ICategoryQueryDto extends IPaginationQueryDto {
 
   includePublic?: boolean;
 
+  onlyWithOwnedChildren?: boolean;
+
+  searchMatchMode: 'self' | 'descendant';
+
   productFilterMode?: 'self' | 'descendant';
 
   type?: CategoryType;
@@ -44,6 +48,9 @@ export const validateCategoryQuery: IRequestQueryValidator.IAssert<ICategoryQuer
     assert: (input): ICategoryQueryDto => {
       const search = input.get('search');
       if (search) input.set('search', cleanString(search));
+      const searchMatchMode = input.get('searchMatchMode');
+      // 默认 self mode
+      if (!searchMatchMode) input.set('searchMatchMode', 'self');
 
       return validateCategoryQueryFunction(input);
     },
