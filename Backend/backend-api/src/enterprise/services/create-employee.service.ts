@@ -5,7 +5,7 @@ import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '#/auth/auth.constants.js';
 import { HashService } from '#/common/hash/hash.service.js';
 import { addDays } from '#/utils/date.utils.js';
 import { MailService } from '#/mail/mail.service.js';
-import { WholesalerProfileType } from '../types/wholesaler-profile.type.js';
+import { IWholesalerProfile } from '#/enterprise/types/IWholesalerProfile.js';
 import { RoleI18nService } from '#/common/i18n/role.i18n.js';
 import { UserRole } from '#/generated/drizzle/enums.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
@@ -95,7 +95,7 @@ export class CreateEmployeeService {
     });
 
     const link = `${AUTH_VERIFY_EMAIL_PATH}?token=${result.token}&userId=${result.employeeId}&lang=${result.lang}`;
-    const wholesalerData = result.profile as unknown as WholesalerProfileType;
+    const wholesalerData = result.profile as unknown as IWholesalerProfile;
     const position = this.roleI18nService.translateRole(userRole, result.lang);
 
     await this.mailService.sendEmployeeVerifyEmail({
@@ -138,7 +138,7 @@ export class CreateEmployeeService {
           username: employeeUsername,
           password: '',
           telephone: dto.telephone,
-          cif: dto.cif,
+          tax_id: dto.cif,
           first_name: dto.first_name,
           last_name: dto.last_name,
         })
@@ -172,7 +172,7 @@ export class CreateEmployeeService {
     });
 
     const link = `${AUTH_VERIFY_EMAIL_PATH}?token=${result.token}&userId=${result.employeeId}&lang=${result.lang}`;
-    const wholesalerData = result.profile as WholesalerProfileType;
+    const wholesalerData = result.profile as IWholesalerProfile;
     const position = this.roleI18nService.translateRole(userRole, result.lang);
 
     await this.mailService.sendEmployeeVerifyEmail({

@@ -54,7 +54,8 @@ open class VerifyOtpCodeViewModelBase(
         whenSuccess: (Boolean) -> Unit,
         whenError: () -> Unit
     ) {
-        this.email = email
+        val trimmedEmail = email.take(100)
+        this.email = trimmedEmail
         // cancel any in-flight check
         emailCheckJob?.cancel()
         isCheckingEmail = false
@@ -63,6 +64,10 @@ open class VerifyOtpCodeViewModelBase(
         emailExists = null
         if (!isFormatValid) {
             emailError = SharedRes.string.reset_email_format_error
+            return
+        }
+        if (email.endsWith("@example.com", ignoreCase = true)) {
+            emailError = SharedRes.string.validation_email_domain_not_supported
             return
         }
         emailError = null

@@ -89,9 +89,7 @@ fun ResetPasswordScreen(
                     enabled = enabled,
                     value = email,
                     onValueChange = {
-                        if (it.length <= 255 && !it.contains("\n")) {
-                            resetPasswordViewModel.updateEmail(it)
-                        }
+                        resetPasswordViewModel.updateEmail(it)
                     },
                     error = resetPasswordViewModel.emailError.asString(),
                     labelText = stringResource(SharedRes.string.reset_email_label),

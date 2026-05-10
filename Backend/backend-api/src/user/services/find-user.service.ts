@@ -167,7 +167,7 @@ export class FindUserService {
         ...(first_name && { first_name: users.first_name }),
         ...(last_name && { last_name: users.last_name }),
         ...(telephone && { telephone: users.telephone }),
-        ...(cif && { cif: users.cif }),
+        ...(cif && { cif: users.tax_id }),
         ...(profile && { profile: users.profile }),
       })
       .from(users)
@@ -184,7 +184,7 @@ export class FindUserService {
           ilike(users.last_name, searchPattern),
           ilike(users.email, searchPattern),
           ilike(users.telephone, searchPattern),
-          ilike(users.cif, searchPattern),
+          ilike(users.tax_id, searchPattern),
           ilike(users.user_id, searchPattern),
         ),
       );

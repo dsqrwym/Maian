@@ -54,6 +54,8 @@ export class CaslAbilityFactory {
         can(Action.Manage, 'categories', { user_id: user.userId });
         can(Action.Manage, 'products', { user_id: user.userId });
         can(Action.Manage, 'products_files', { user_id: user.userId });
+        can(Action.Update, 'users', { id: user.userId });
+        can(Action.Read, 'users', { id: user.userId });
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');

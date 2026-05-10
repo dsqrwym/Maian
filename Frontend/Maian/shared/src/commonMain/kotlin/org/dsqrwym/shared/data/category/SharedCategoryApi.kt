@@ -18,9 +18,11 @@ class SharedCategoryApi(val client: HttpClient) {
             query.level?.let { parameter("level", it) }
             query.type?.let { parameter("type", it) }
             query.maxLevel?.let { parameter("maxLevel", it) }
+            query.searchMatchMode?.let { parameter("searchMatchMode", it.toString().lowercase()) }
             query.productFilterMode?.let { parameter("productFilterMode", it.toString().lowercase()) }
             query.fields?.forEach { parameter("fields", it.toString().lowercase()) }
             query.withChildrenCount?.let { parameter("withChildrenCount", it) }
+            query.onlyWithOwnedChildren?.let { parameter("onlyWithOwnedChildren", it) }
             query.includePublic?.let { parameter("includePublic", it) }
             query.sortBy?.let { parameter("sort_by", it.toString().lowercase()) }
             query.sortOrder?.let { parameter("sort_order", it.value) }

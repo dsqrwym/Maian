@@ -7,6 +7,8 @@ package org.dsqrwym.standard.ui.screens.browse
  */
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +19,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.search_categories
+import maian.shared.generated.resources.search_products
 import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.category.SharedCategoryPathRow
@@ -89,6 +92,12 @@ fun CategoryBrowseScreen(
                     expanded = false,
                     onExpandedChange = {},
                     placeholder = { Text(stringResource(SharedRes.string.search_categories)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Search,
+                            stringResource(SharedRes.string.search_products)
+                        )
+                    },
                     trailingIcon = {
                         if (categorySearchText.isNotEmpty()) {
                             SharedCloseButton(onClick = viewModel::clearCategorySearch)

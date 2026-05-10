@@ -53,4 +53,24 @@ export class CheckUserService {
       .from(sql`(VALUES (1)) AS tmp`)) as { exists: boolean }[];
     return user?.exists ?? false;
   }
+
+  async checkUserTaxId(taxId: string, userId: string, role: UserRole) {
+    const [user] = (await this.drizzleService.db
+      .select({
+        exists: exists(
+          this.drizzleService.db
+            .select({ one: sql<number>`1` })
+            .from(users)
+            .where(
+              and(
+                eq(users.tax_id, taxId),
+                eq(users.role, role),
+                ne(users.id, userId),
+              ),
+            ),
+        ),
+      })
+      .from(sql`(VALUES (1)) AS tmp`)) as { exists: boolean }[];
+    return user?.exists ?? false;
+  }
 }

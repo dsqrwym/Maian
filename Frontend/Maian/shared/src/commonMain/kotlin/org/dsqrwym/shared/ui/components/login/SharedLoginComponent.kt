@@ -31,15 +31,12 @@ fun UsernameOrEmailField(
     error: String?,
     focusManager: FocusManager
 ) {
-    var isEmail by remember { mutableStateOf(validateEmail(value)) }
+    val isEmail by remember { mutableStateOf(validateEmail(value)) }
     val focusRequester = remember { FocusRequester() }
     MyOutlinedTextField(
         value = value,
         onValueChange = {
-            if (it.length <= 255 && !it.contains("\n")) {
-                onValueChange(it)
-                isEmail = validateEmail(it)
-            }
+            onValueChange(it)
         },
         semanticsPropertyReceiver = {
             contentType = if (isEmail) ContentType.EmailAddress else ContentType.Username

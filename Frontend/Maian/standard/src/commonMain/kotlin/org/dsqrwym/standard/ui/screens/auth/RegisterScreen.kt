@@ -93,9 +93,7 @@ fun RegisterScreen(
                         enabled = enabled,
                         value = registerViewModel.email,
                         onValueChange = {
-                            if (it.length <= 255 && !it.contains("\n")) {
-                                registerViewModel.updateEmail(it)
-                            }
+                            registerViewModel.updateEmail(it)
                         },
                         error = registerViewModel.emailError.asString(),
                         labelText = stringResource(SharedRes.string.reset_email_label),
@@ -361,7 +359,9 @@ private fun AddressInputSection(
         placeholderText = stringResource(SharedRes.string.address_input_detail),
         error = registerViewModel.streetError.asString(),
         value = registerViewModel.street,
-        onValueChange = { registerViewModel.updateStreet(it) },
+        onValueChange = {
+            registerViewModel.updateStreet(it)
+        },
         imeAction = ImeAction.Next,
         onImeAction = {
             focusManager.moveFocus(FocusDirection.Next)
@@ -380,7 +380,9 @@ private fun AddressInputSection(
         error = registerViewModel.zipCodeError.asString(),
         leadingIcon = Icons.Outlined.Pin,
         value = registerViewModel.zipCode,
-        onValueChange = { registerViewModel.updateZipCode(it) },
+        onValueChange = {
+            registerViewModel.updateZipCode(it)
+        },
         imeAction = ImeAction.Done,
         onImeAction = {
             focusManager.clearFocus()

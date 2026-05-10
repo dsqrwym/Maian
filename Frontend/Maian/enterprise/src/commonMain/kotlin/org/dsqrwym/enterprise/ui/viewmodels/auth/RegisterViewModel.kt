@@ -122,8 +122,9 @@ class RegisterViewModel(
     var isLoadingCities by mutableStateOf(false)
 
     fun updateCompanyName(value: String) {
-        companyName = value
-        companyNameError = if (value.isBlank()) SharedRes.string.field_cannot_be_empty
+        val trimmedValue = value.take(100)
+        companyName = trimmedValue
+        companyNameError = if (trimmedValue.isBlank()) SharedRes.string.field_cannot_be_empty
         else null
     }
 
@@ -134,14 +135,16 @@ class RegisterViewModel(
     }
 
     fun updateStreet(value: String) {
-        street = value
-        streetError = if (value.isBlank()) SharedRes.string.field_cannot_be_empty
+        val trimmedValue = value.take(200)
+        street = trimmedValue
+        streetError = if (trimmedValue.isBlank()) SharedRes.string.field_cannot_be_empty
         else null
     }
 
     fun updateZipCode(value: String) {
-        zipCode = value
-        zipCodeError = if (value.isBlank()) SharedRes.string.field_cannot_be_empty
+        val trimmedValue = value.take(10)
+        zipCode = trimmedValue
+        zipCodeError = if (trimmedValue.isBlank()) SharedRes.string.field_cannot_be_empty
         else null
     }
 

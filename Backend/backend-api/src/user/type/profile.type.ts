@@ -1,3 +1,7 @@
+/**
+ * 已过期，目前项目不在考虑使用这些字段
+ * @deprecated
+ */
 export interface BaseProfile {
   contact_name?: string; // 联系人姓名
   documents?: Document[]; // 资质/证件文件

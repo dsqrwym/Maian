@@ -73,7 +73,11 @@ class AuthRepository(
             authApi.completeRegister(
                 req.copy(
                     email = req.email.trim(),
-                    username = req.username?.trim()
+                    username = req.username?.trim(),
+                    address = req.address.copy(
+                        street = req.address.street.trim(),
+                        zipCode = req.address.zipCode.trim()
+                    )
                 )
             )
         }

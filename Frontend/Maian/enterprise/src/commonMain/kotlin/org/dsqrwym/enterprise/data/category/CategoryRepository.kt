@@ -69,10 +69,12 @@ class CategoryRepository(
         needIva: Boolean = false,
         maxLevel: Int = 3,
         productFilterMode: SharedCategoryProductFilterMode? = null,
+        onlyWithOwnedChildren: Boolean? = null
     ): SharedResponseResult<ApiResponseList<CategorySummary>> {
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             maxLevel = maxLevel,
+            onlyWithOwnedChildren = onlyWithOwnedChildren,
             productFilterMode = productFilterMode,
             page = page,
             limit = limit,

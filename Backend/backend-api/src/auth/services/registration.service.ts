@@ -11,7 +11,7 @@ import { IRegisterRetailerDto } from '../dto/register-retailer.dto.js';
 import { HashService } from '#/common/hash/hash.service.js';
 import { ISendNormalRegisterMailDto } from '../dto/register.dto.js';
 import { IRegisterWholesalerDto } from '../dto/register-wholesaler.dto.js';
-import { WholesalerProfileType } from '#/enterprise/types/wholesaler-profile.type.js';
+import { IWholesalerProfile } from '#/enterprise/types/IWholesalerProfile.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import {
   configurations,
@@ -163,7 +163,7 @@ export class RegistrationService {
         dto.password,
       );
 
-      const wholesalerProfile: WholesalerProfileType = {
+      const wholesalerProfile: IWholesalerProfile = {
         company_name: dto.company_name,
         company_type: dto.company_type,
       };

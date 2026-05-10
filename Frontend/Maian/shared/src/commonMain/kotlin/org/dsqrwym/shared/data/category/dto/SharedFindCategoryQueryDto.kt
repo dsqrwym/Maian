@@ -19,13 +19,15 @@ data class SharedFindCategoryDto(
     val level: Int? = null,
     val maxLevel: Int? = null,           // 最大嵌套等级
     val withChildrenCount: Boolean? = null, // 放回计数
-    val includePublic: Boolean? = null, // 包含公共分类
+    val onlyWithOwnedChildren: Boolean? = null, // enterprise 只返回拥有用户子类别的
+    val includePublic: Boolean? = null, // standard 包含公共分类
+    val searchMatchMode: SharedCategoryProductFilterMode? = null,
     val productFilterMode: SharedCategoryProductFilterMode? = null,
     val type: SharedCategoryType? = null,      // PRIVATE / PUBLIC / ALL = NULL
     val fields: List<SharedCategorySelectField>? = null,
     val sortBy: SharedCategorySortField? = null,
     val sortOrder: OrderDir? = null,
     override val page: Int = 1,
-    override val limit: Int = 50,
+    override val limit: Int = 20,
 ) : PaginationQuery
 

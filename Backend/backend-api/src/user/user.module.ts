@@ -4,6 +4,8 @@ import { CheckUserController } from './controllers/check-user.controller.js';
 import { FindUserController } from './controllers/find-user.controller.js';
 import { FindUserService } from './services/find-user.service.js';
 import { RouterModule } from '@nestjs/core';
+import { WholesalerProfileService } from './services/wholesaler-profile.service.js';
+import { WholesalerProfileController } from './controllers/wholesaler-profile.controller.js';
 
 @Module({
   imports: [
@@ -14,7 +16,11 @@ import { RouterModule } from '@nestjs/core';
       },
     ]),
   ],
-  controllers: [CheckUserController, FindUserController],
-  providers: [CheckUserService, FindUserService],
+  controllers: [
+    CheckUserController,
+    FindUserController,
+    WholesalerProfileController,
+  ],
+  providers: [CheckUserService, FindUserService, WholesalerProfileService],
 })
 export class UserModule {}

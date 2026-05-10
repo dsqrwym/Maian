@@ -50,7 +50,7 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         pinoHttp: {
-          autoLogging: false,
+          autoLogging: config.get<string>(ENV.NODE_ENV) !== 'production',
           transport:
             config.get<string>(ENV.NODE_ENV) !== 'production'
               ? {
@@ -78,8 +78,10 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
                 ]
               : undefined,
         },
-        exclude: ['/(.*)'], // 排除所有路径，防止它为每个请求自动创建日志对象
-        useExisting: true,
+        exclude:
+          config.get<string>(ENV.NODE_ENV) === 'production'
+            ? ['/(.*)']
+            : undefined, // 排除所有路径，防止它为每个请求自动创建日志对象
       }),
     }),
     JwtModule.registerAsync({

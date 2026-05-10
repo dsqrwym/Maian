@@ -7,7 +7,6 @@ import type {
   TagsUuid,
 } from '#/utils/typia/validators/auth.validator.js';
 import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
-import type { tags } from 'typia';
 import typia from 'typia';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { BadRequestException } from '@nestjs/common';
@@ -15,6 +14,7 @@ import { isObject } from '#/utils/is.utils.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { TagsBasicTelephone } from '#/utils/typia/validators/telephone.validator.js';
 import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
+import type { TagsCompanyName } from '#/utils/typia/validators/user.validator.js';
 
 /**
  * Enum for Spanish company types
@@ -56,7 +56,7 @@ export interface IRegisterWholesalerDto {
    * Company's legal name
    * 公司名称
    */
-  company_name: TagsNotBlank & tags.MaxLength<100>;
+  company_name: TagsCompanyName;
 
   /**
    * Company type (Spain)

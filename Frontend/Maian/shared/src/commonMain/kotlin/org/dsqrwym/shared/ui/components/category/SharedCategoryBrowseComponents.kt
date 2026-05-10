@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.ui.components.category
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -104,7 +105,7 @@ fun <T : Any> SharedCategoryRail(
                     ) { index ->
                         categories[index]?.let { category ->
                             NavigationDrawerItem(
-                                modifier = Modifier.placeholderWithShimmer(isLoading),
+                                modifier = Modifier.animateItem().placeholderWithShimmer(isLoading),
                                 selected = selectedId == itemId(category),
                                 onClick = { onSelect(category) },
                                 label = {
@@ -150,7 +151,7 @@ fun <T : Any> SharedChildCategoryGrid(
             repeat(categories.itemCount) { index ->
                 categories[index]?.let { category ->
                     ElevatedAssistChip(
-                        modifier = Modifier.placeholderWithShimmer(isLoading),
+                        modifier = Modifier.animateContentSize().placeholderWithShimmer(isLoading),
                         onClick = { onSelect(category) },
                         label = {
                             Text(

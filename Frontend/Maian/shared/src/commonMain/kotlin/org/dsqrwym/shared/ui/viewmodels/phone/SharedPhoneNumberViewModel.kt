@@ -90,15 +90,16 @@ class SharedPhoneNumberViewModel(private val locationRepository: SharedLocationR
      * @param value 新的电话号码值
      */
     fun updatePhoneNumber(value: String) {
-        phoneNumber = value
+        val trimmedValue = value.take(25)
+        phoneNumber = trimmedValue
 
         // 取消之前的验证任务
         validationJob?.cancel()
 
-        if (value.isBlank()) {
+        if (trimmedValue.isBlank()) {
             errorMessage = SharedRes.string.phone_error_empty
-            phoneNumber = value
-            formattedPhoneNumber = value
+            phoneNumber = trimmedValue
+            formattedPhoneNumber = trimmedValue
             validationState = PhoneValidationState.Invalid
             return
         }
@@ -106,7 +107,7 @@ class SharedPhoneNumberViewModel(private val locationRepository: SharedLocationR
         validationJob = viewModelScope.launch {
             validationState = PhoneValidationState.Validating
             delay(SharedUiTiming.availabilityCheckDelay)
-            validatePhoneNumber(value, getDetectRegion())
+            validatePhoneNumber(trimmedValue, getDetectRegion())
         }
     }
 

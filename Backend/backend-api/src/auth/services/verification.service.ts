@@ -23,7 +23,7 @@ import { MailService } from '#/mail/mail.service.js';
 import { HashService } from '#/common/hash/hash.service.js';
 import { randomUUID } from 'node:crypto';
 import { RegisterEmailJob } from '#/mail/mail.types.js';
-import { WholesalerProfileType } from '#/enterprise/types/wholesaler-profile.type.js';
+import { IWholesalerProfile } from '#/enterprise/types/IWholesalerProfile.js';
 import { renderTemplate } from '#/utils/hbs-renderer.js';
 import { FastifyReply } from 'fastify';
 import { I18nService } from 'nestjs-i18n';
@@ -318,7 +318,7 @@ export class VerificationService {
         });
 
         const wholesalerProfile =
-          profile?.profile as unknown as WholesalerProfileType;
+          profile?.profile as unknown as IWholesalerProfile;
 
         const companyName = wholesalerProfile.company_name || 'unknow';
 
@@ -469,7 +469,7 @@ export class VerificationService {
           .from(users)
           .where(eq(users.user_id, wholesalerUserId));
 
-        const wholesalerProfile = profile?.profile as WholesalerProfileType;
+        const wholesalerProfile = profile?.profile as IWholesalerProfile;
 
         const companyName = wholesalerProfile.company_name || 'unknow';
 

@@ -50,3 +50,23 @@ export const validateICheckUserUsernameQueryDto: IRequestQueryValidator.IAssert<
       return validateICheckUserUsernameQueryDtoFunction(input);
     },
   };
+
+/**
+ * 检查当前用户的身份范围是否已经使用了
+ */
+export interface ICheckUserTaxIdQueryDto {
+  taxId: string;
+}
+export const validateICheckUserTaxIdQueryDtoFunction =
+  typia.http.createAssertQuery<ICheckUserTaxIdQueryDto>();
+export const validateICheckUserTaxIdQueryDto: IRequestQueryValidator.IAssert<ICheckUserTaxIdQueryDto> =
+  {
+    type: 'assert',
+    assert: (input: URLSearchParams): ICheckUserTaxIdQueryDto => {
+      const taxId = input.get('taxId');
+      if (taxId) {
+        input.set('taxId', cleanString(taxId));
+      }
+      return validateICheckUserTaxIdQueryDtoFunction(input);
+    },
+  };

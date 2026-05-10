@@ -74,8 +74,9 @@ class LoginViewModel(
     var loginUiState by mutableStateOf(UiState.Idle)
 
     fun updateEmail(email: String) {
-        this.email = email
-        emailError = validateUsernameOrEmail(email)
+        val trimmedEmail = email.take(100)
+        this.email = trimmedEmail
+        emailError = validateUsernameOrEmail(trimmedEmail)
         if (isEmail.value && selectedLoginType == LoginType.EMPLOYEE) {
             wholesalerIdError = null
         }

@@ -21,9 +21,9 @@ import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.standard.data.browse.dto.*
 import org.dsqrwym.standard.domain.browse.RetailCategory
-import org.dsqrwym.standard.domain.browse.RetailWholesaler
 import org.dsqrwym.standard.domain.browse.RetailProduct
 import org.dsqrwym.standard.domain.browse.RetailProductDetail
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
 
 /**
  * 零售浏览数据仓库
@@ -121,7 +121,6 @@ class RetailBrowseRepository(
      * @param type 分类类型（公共/私有）
      * @param userId 用户ID，用于查询私有分类
      * @param includePublic 是否包含公共分类
-     * @param productFilterMode 产品过滤模式
      * @param page 页码，默认第1页
      * @param limit 每页数量，默认100条
      * @return 分类列表的响应结果
@@ -134,7 +133,6 @@ class RetailBrowseRepository(
         type: SharedCategoryType? = null,
         userId: String? = null,
         includePublic: Boolean? = null,
-        productFilterMode: SharedCategoryProductFilterMode? = null,
         page: Int = 1,
         limit: Int = 100,
     ): SharedResponseResult<ApiResponseList<RetailCategory>> {
@@ -145,7 +143,10 @@ class RetailBrowseRepository(
             includePublic = includePublic,
             parentId = parentId,
             level = level,
-            productFilterMode = productFilterMode,
+            // 分类页使用 DESCENDANT，保证父类会因子孙类有产品而保留
+            productFilterMode = SharedCategoryProductFilterMode.DESCENDANT,
+            // DESCENDANT，保证父类会因为子孙类匹配而保留
+            searchMatchMode = SharedCategoryProductFilterMode.DESCENDANT,
             type = type,
             fields = listOf(
                 SharedCategorySelectField.LEVEL,        // 分类层级
@@ -237,7 +238,6 @@ class RetailBrowseRepository(
      * @param wholesalerId 批发商ID
      * @param parentId 父分类ID
      * @param level 分类层级
-     * @param productFilterMode 产品过滤模式，默认DESCENDANT
      * @param page 页码
      * @param limit 每页数量
      * @return 分类列表的响应结果
@@ -248,7 +248,6 @@ class RetailBrowseRepository(
         wholesalerId: String?,
         parentId: String?,
         level: Int?,
-        productFilterMode: SharedCategoryProductFilterMode? = SharedCategoryProductFilterMode.DESCENDANT,
         page: Int = 1,
         limit: Int = 30,
     ): SharedResponseResult<ApiResponseList<RetailCategory>> {
@@ -265,8 +264,6 @@ class RetailBrowseRepository(
             userId = wholesalerId,
             // 进入批发商页面时，要求后端返回 public + 该批发商 private
             includePublic = wholesalerId != null,
-            // 分类页使用 DESCENDANT，保证父类会因子孙类有产品而保留
-            productFilterMode = productFilterMode,
             page = page,
             limit = limit,
         )

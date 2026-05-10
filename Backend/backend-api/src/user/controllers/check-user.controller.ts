@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Req } from '@nestjs/common';
 import { CheckUserService } from '../services/check-user.service.js';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { CacheTTL } from '@nestjs/cache-manager';
@@ -6,11 +6,14 @@ import { SECOND } from '#/utils/date.utils.js';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ICheckUserEmailQueryDto,
+  ICheckUserTaxIdQueryDto,
   ICheckUserUsernameQueryDto,
   validateICheckUserEmailQueryDto,
+  validateICheckUserTaxIdQueryDto,
   validateICheckUserUsernameQueryDto,
 } from '../dto/check-user-query.dto.js';
 import { TypedQuery, TypedRoute } from '@nestia/core';
+import { FastifyRequest } from 'fastify';
 
 /**
  * Controller for checking user credential availability (email and username)
@@ -116,5 +119,29 @@ export class CheckUserController {
     query: ICheckUserUsernameQueryDto,
   ): Promise<boolean> {
     return this.userCheckService.checkUsernameUsed(query);
+  }
+
+  /**
+   * Check if an tax id is already registered.
+   *
+   * Returns true if the tax id is already in use, false otherwise.
+   *
+   * @param {ICheckUserTaxIdQueryDto} query - Contains email to check
+   * @param req
+   * @returns {Promise<boolean>} Whether the tax id is already registered
+   */
+  @TypedRoute.Get('tax_id')
+  @ApiOperation({
+    summary: 'Check if tax_id is already used by same role',
+  })
+  async checkUserTaxIdUsed(
+    @TypedQuery(validateICheckUserTaxIdQueryDto) query: ICheckUserTaxIdQueryDto,
+    @Req() req: FastifyRequest,
+  ): Promise<boolean> {
+    return this.userCheckService.checkUserTaxId(
+      query.taxId,
+      req.user.userId,
+      req.user.userRole,
+    );
   }
 }

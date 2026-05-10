@@ -991,7 +991,7 @@ export const users = pgTable(
       sql`(now() AT TIME ZONE 'utc'::text)`,
     ),
     role: UserRole().notNull(),
-    cif: varchar({ length: 20 }),
+    tax_id: varchar({ length: 20 }),
     updated_by: uuid(),
   },
   (table) => [

@@ -75,7 +75,12 @@ class AuthRepository(
                 dto.copy(
                     email = dto.email.trim(),
                     username = dto.username?.trim(),
-                    companyName = dto.companyName.trim()
+                    companyName = dto.companyName.trim(),
+                    telephone = dto.telephone.trim(),
+                    address = dto.address.copy(
+                        street = dto.address.street.trim(),
+                        zipCode = dto.address.zipCode.trim()
+                    )
                 )
             )
         }
