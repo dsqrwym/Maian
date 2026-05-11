@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import maian.admin.generated.resources.AdminRes
 import maian.admin.generated.resources.platform_category
 import maian.admin.generated.resources.select_wholesaler
@@ -176,7 +177,7 @@ fun CategoriesListScreen(
                         val isCategoryLoading =
                             viewModel.isLoading || lazyPagingItems.isRefreshing
 
-                        items(lazyPagingItems.itemCount) { index ->
+                        items(lazyPagingItems.itemCount, key = { lazyPagingItems.itemKey { it.id } }) { index ->
                             lazyPagingItems[index]?.let {
                                 CategoryListItem(
                                     modifier = Modifier.animateItem(),

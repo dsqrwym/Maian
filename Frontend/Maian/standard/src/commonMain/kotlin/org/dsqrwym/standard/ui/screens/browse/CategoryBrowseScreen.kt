@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.search_categories
 import maian.shared.generated.resources.search_products
@@ -205,7 +206,7 @@ private fun CategoryProductGrid(
         paginatedProducts = products,
         scrollBehavior = scrollBehavior,
         padding = PaddingValues(0.dp),
-        key = { index -> products.peek(index)?.id ?: index },
+        key = { products.itemKey { it.id } },
     ) { product ->
         SharedReadOnlyProductCard(
             isLoading = products.isRefreshing,

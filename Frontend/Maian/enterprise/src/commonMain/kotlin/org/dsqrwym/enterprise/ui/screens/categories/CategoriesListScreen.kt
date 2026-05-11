@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
@@ -170,7 +171,7 @@ fun CategoriesListScreen(
                         val isCategoryLoading =
                             lazyPagingItems.isRefreshing || viewModel.isLoading
 
-                        items(lazyPagingItems.itemCount) { index ->
+                        items(lazyPagingItems.itemCount, key = { lazyPagingItems.itemKey { it.id } }) { index ->
                             lazyPagingItems[index]?.let {
                                 CategoryListItem(
                                     modifier = Modifier.animateItem(),

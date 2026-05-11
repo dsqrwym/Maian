@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.sharedRetailProductSortFields
@@ -284,7 +285,7 @@ private fun PaginatedProductGrid(
         scrollBehavior = scrollBehavior,
         padding = padding,
         includeMenuTopPadding = true,
-        key = { index -> paginatedProducts.peek(index)?.id ?: index },
+        key = { paginatedProducts.itemKey { it.id } },
     ) {
         SharedReadOnlyProductCard(
             isLoading = paginatedProducts.isRefreshing,

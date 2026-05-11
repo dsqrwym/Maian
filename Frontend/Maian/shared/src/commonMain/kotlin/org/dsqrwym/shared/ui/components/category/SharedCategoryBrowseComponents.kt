@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.no_categories
 import maian.shared.generated.resources.path
@@ -101,7 +102,7 @@ fun <T : Any> SharedCategoryRail(
                 } else {
                     items(
                         count = categories.itemCount,
-                        key = { index -> categories.peek(index)?.let(itemId) ?: index },
+                        key = { categories.itemKey { itemId(it) } },
                     ) { index ->
                         categories[index]?.let { category ->
                             NavigationDrawerItem(
