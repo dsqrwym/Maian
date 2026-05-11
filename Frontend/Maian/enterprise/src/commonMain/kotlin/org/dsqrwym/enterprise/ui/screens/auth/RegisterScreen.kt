@@ -29,10 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.*
-import org.dsqrwym.enterprise.data.auth.dto.SpanishCompanyType
-import org.dsqrwym.enterprise.data.auth.dto.displayName
-import org.dsqrwym.enterprise.data.auth.dto.toStringResource
 import org.dsqrwym.enterprise.ui.viewmodels.auth.RegisterViewModel
+import org.dsqrwym.shared.data.user.SpanishCompanyType
+import org.dsqrwym.shared.data.user.toStringResource
 import org.dsqrwym.shared.di.auth.SharedAuthScope
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.ui.components.MyHorizontalDivider

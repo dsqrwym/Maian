@@ -6,6 +6,7 @@ import type {
 import { cleanString } from '#/utils/string.util.js';
 import typia from 'typia';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
+import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 
 /**
  * DTO for checking email availability
@@ -33,6 +34,7 @@ export const validateICheckUserEmailQueryDto: IRequestQueryValidator.IAssert<ICh
  * 检查用户名可用性的数据传输对象
  */
 export interface ICheckUserUsernameQueryDto {
+  userId?: TagsIntegerString;
   username: TagsUsername;
   wholesalerId?: TagsWholesalerId;
   isAdmin?: boolean;
@@ -55,6 +57,7 @@ export const validateICheckUserUsernameQueryDto: IRequestQueryValidator.IAssert<
  * 检查当前用户的身份范围是否已经使用了
  */
 export interface ICheckUserTaxIdQueryDto {
+  id?: TagsIntegerString;
   taxId: string;
 }
 export const validateICheckUserTaxIdQueryDtoFunction =

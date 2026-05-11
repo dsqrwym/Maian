@@ -43,6 +43,8 @@ fun FormCard(
     uiState: UiState = UiState.Idle,
     enabled: Boolean = true,
     showStepIndicator: Boolean = false,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     content: @Composable ColumnScope.(enabled: Boolean) -> Unit
 ) {
     val elevation by animateDpAsState(
@@ -127,7 +129,11 @@ fun FormCard(
 
             // Form content
             Box {
-                Column(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = verticalArrangement,
+                    horizontalAlignment = horizontalAlignment,
+                ) {
                     content(enabled)
                 }
 

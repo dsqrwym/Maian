@@ -36,9 +36,14 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
     suspend fun checkUserNameExist(
         username: String,
         wholesalerId: String? = null,
-        isAdmin: Boolean = false
+        isAdmin: Boolean = false,
+        userId: String? = null
     ): SharedResponseResult<Boolean> {
-        return safeApiCall { api.checkUserNameExist(username.trim(), wholesalerId, isAdmin) }
+        return safeApiCall { api.checkUserNameExist(username.trim(), wholesalerId, isAdmin, userId) }
+    }
+
+    suspend fun checkTaxIdExist(taxId: String): SharedResponseResult<Boolean> {
+        return safeApiCall { api.checkTaxIdExists(taxId.trim().uppercase()) }
     }
 
     suspend fun sendVerifyCode(sendVerificationCodeRequest: SharedSendVerificationCodeRequest): SharedResponseResult<Unit> {
@@ -60,5 +65,3 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
         return safeApiCall { api.logout() }
     }
 }
-
-

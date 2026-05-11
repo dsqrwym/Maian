@@ -1,5 +1,12 @@
 package org.dsqrwym.shared.data.user
 
+import androidx.compose.runtime.Composable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import maian.shared.generated.resources.*
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+
 /**
  * 用户角色枚举
  */
@@ -24,3 +31,41 @@ enum class UserStatus {
     APPROVED,
     BANNED
 }
+
+
+/**
+ * 西班牙公司类型枚举
+ */
+@Serializable
+enum class SpanishCompanyType {
+    @SerialName("S.L.")
+    SL, // Sociedad Limitada（有限责任公司）
+
+    @SerialName("S.A.")
+    SA, // Sociedad Anónima（股份有限公司）
+
+    @SerialName("Autónomo")
+    AUTONOMO, // 个体户
+
+    @SerialName("Cooperativa")
+    COOPERATIVA, // 合作社
+
+    @SerialName("Sociedad Civil")
+    SOCIEDAD_CIVIL, // 民事公司
+
+    @SerialName("Otros")
+    OTROS
+}
+
+fun SpanishCompanyType.toStringResource(): StringResource =
+    when (this) {
+        SpanishCompanyType.SL -> SharedRes.string.company_type_limited_company
+        SpanishCompanyType.SA -> SharedRes.string.company_type_public_limited_company
+        SpanishCompanyType.AUTONOMO -> SharedRes.string.company_type_self_employed
+        SpanishCompanyType.COOPERATIVA -> SharedRes.string.company_type_cooperative
+        SpanishCompanyType.SOCIEDAD_CIVIL -> SharedRes.string.company_type_civil_company
+        SpanishCompanyType.OTROS -> SharedRes.string.company_type_other
+    }
+
+@Composable
+fun SpanishCompanyType.displayName(): String = stringResource(toStringResource())

@@ -32,10 +32,11 @@ import type { IVideoStreamQueryDto } from './dto/video-play-query.dto.js';
 import { SkipResponseInterceptor } from '#/common/guards/decorator/skip-response-interceptor.decorator.js';
 import * as mime from 'mime-types';
 import * as path from 'path';
-import { TypedQuery, TypedRoute } from '@nestia/core';
+import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { PassThrough } from 'node:stream';
 import { FILE_ERROR } from './constants/files.constants.js';
 import { PinoLogger } from 'nestjs-pino';
+import { ProductFilesService } from './services/product-files.service.js';
 
 /**
  * Controller for file upload and retrieval
@@ -46,6 +47,7 @@ import { PinoLogger } from 'nestjs-pino';
 export class FilesController {
   constructor(
     private readonly filesService: FilesService,
+    private readonly productFilesService: ProductFilesService,
     private readonly fileVideoPlayTokenService: FileVideoPlayTokenService,
     private readonly logger: PinoLogger,
   ) {}
@@ -161,11 +163,31 @@ export class FilesController {
     @Req() req: FastifyRequest,
   ): Promise<StreamableFile> {
     const { stream, mime_type, filename } =
-      await this.filesService.getProductFileById(query, req.ability);
+      await this.productFilesService.getProductFileById(query, req.ability);
 
     return new StreamableFile(await stream, {
       type: mime_type,
       disposition: `inline; filename="${encodeURIComponent(filename)}"`,
+    });
+  }
+
+  /**
+   * @ignore
+   */
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiProduces('application/octet-stream')
+  @Get('user/:user_id/image')
+  @SkipResponseInterceptor()
+  async getUserImageByUserId(
+    @TypedParam('user_id') userId: string,
+  ): Promise<StreamableFile> {
+    const { stream, mime_type, filename } =
+      await this.filesService.getImageByUserId(userId);
+
+    return new StreamableFile(await stream, {
+      type: mime_type,
+      disposition: `inline; filename*=UTF-8''${encodeURIComponent(filename)}`,
     });
   }
 
@@ -181,7 +203,7 @@ export class FilesController {
     @Req() req: FastifyRequest,
   ): Promise<{ playToken: string }> {
     // 复用现有权限检查逻辑 - 检查用户是否有权限访问该文件
-    await this.filesService.verifyProductFile(query, req.ability);
+    await this.productFilesService.verifyProductFile(query, req.ability);
 
     const playToken = await this.fileVideoPlayTokenService.createPlayToken(
       query.product_id,
@@ -199,6 +221,7 @@ export class FilesController {
   /**
    * 临时 Token 视频访问接口
    * 不使用普通 Authorization header，通过 playToken 验证权限
+   * @ignore
    */
   @TypedRoute.Get('video/stream')
   @ApiProduces('video/*')
@@ -207,7 +230,7 @@ export class FilesController {
     @TypedQuery() query: IVideoStreamQueryDto,
     @Headers('range') range: string | undefined,
     @Res() reply: FastifyReply,
-  ): Promise<void> {
+  ) {
     const { playToken, file_id, product_id } = query;
 
     if (!playToken) {
@@ -216,7 +239,7 @@ export class FilesController {
 
     await this.fileVideoPlayTokenService.verifyPlayToken(query);
 
-    const file = await this.filesService.getVideoFileMetaById(
+    const file = await this.productFilesService.getVideoFileMetaById(
       file_id,
       product_id,
     );
@@ -232,7 +255,7 @@ export class FilesController {
     );
 
     if (!range) {
-      const stream = await this.filesService.createVideoFileStream(
+      const stream = await this.productFilesService.createVideoFileStream(
         file.storage_key,
       );
 
@@ -274,7 +297,7 @@ export class FilesController {
 
     const safeEnd = Math.min(end, fileSize - 1);
 
-    const stream = await this.filesService.createVideoFileStream(
+    const stream = await this.productFilesService.createVideoFileStream(
       file.storage_key,
       start,
       safeEnd,

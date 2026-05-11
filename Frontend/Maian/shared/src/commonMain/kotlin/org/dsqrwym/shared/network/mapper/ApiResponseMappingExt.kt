@@ -3,6 +3,7 @@ package org.dsqrwym.shared.network.mapper
 import io.ktor.http.*
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.error_no_permission
+import maian.shared.generated.resources.error_serialization
 import maian.shared.generated.resources.update_conflict_preserved_changes
 import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.model.SharedResponseResult
@@ -43,6 +44,11 @@ suspend fun <T> ApiResponse<T>.toSharedResponseResult(): SharedResponseResult<T>
         HttpStatusCode.Conflict.value -> SharedResponseResult.Error(
             HttpStatusCode.Conflict,
             getString(SharedRes.string.update_conflict_preserved_changes)
+        )
+
+        HttpStatusCode.InternalServerError.value -> SharedResponseResult.Error(
+            HttpStatusCode.InternalServerError,
+            getString(SharedRes.string.error_serialization)
         )
 
         else -> SharedResponseResult.Error(HttpStatusCode.fromValue(statusCode), message)

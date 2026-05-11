@@ -13,6 +13,7 @@ import org.dsqrwym.enterprise.navigation.ProductCreate
 import org.dsqrwym.enterprise.navigation.ProductEdit
 import org.dsqrwym.enterprise.navigation.naventry.authNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.categoryNavEntry
+import org.dsqrwym.enterprise.navigation.naventry.profileNavEntry
 import org.dsqrwym.enterprise.ui.screens.products.ProductCreateScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductEditScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductsListScreen
@@ -111,34 +112,7 @@ fun App() {
                                 )
                             }
 
-                            entry<SharedProfileScreen> {
-                                val mySnackbarViewModel: MySnackbarViewModel = currentKoinScope().get()
-                                val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
-
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                ) {
-                                    ElevatedButton(
-                                        onClick = {
-                                            authSessionViewModel.logout()
-                                        }
-                                    ) {
-                                        Text("Logout")
-                                    }
-
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showInfo("INFO") }) {
-                                        Text("INFO")
-                                    }
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showError("ERROR") }) {
-                                        Text("ERROR")
-                                    }
-                                    ElevatedButton(onClick = { mySnackbarViewModel.showSuccess("SUCCESS") }) {
-                                        Text("SUCCESS")
-                                    }
-                                }
-                            }
+                            profileNavEntry(navigationState, user.userRole)
                         }
                     }
                 }

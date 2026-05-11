@@ -5,15 +5,20 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { IUpdateWholesalerProfileDto } from '#/user/dto/update-wholesaler-profile.dto.js';
 import { AppAbility } from '#/casl/casl-types.js';
 import { Action } from '#/casl/actions.js';
-import { files, user_uploads, users } from '#/generated/drizzle/schema.js';
+import {
+  directions,
+  files,
+  user_uploads,
+  users,
+} from '#/generated/drizzle/schema.js';
 import { and, eq, exists, ne, sql } from 'drizzle-orm';
 import { IWholesalerProfile } from '#/enterprise/types/IWholesalerProfile.js';
 import { buildMergedUpdate } from '#/utils/patch.utils.js';
 import { IMAGE_MIME_TYPES } from '#/config/fastify-multipart.config.js';
-import { UserRole } from '#/generated/drizzle/enums.js';
+import { AddressType, UserRole } from '#/generated/drizzle/enums.js';
+import { IUpdateWholesalerProfileDto } from '#/enterprise/dto/update-wholesaler-profile.dto.js';
 
 @Injectable()
 export class WholesalerProfileService {
@@ -94,8 +99,15 @@ export class WholesalerProfileService {
       tax_id,
       first_name,
       last_name,
+      profile_image_file_id,
       ...newProfile
     } = dto;
+    const imageFileId =
+      profile_image_file_id === undefined
+        ? undefined
+        : profile_image_file_id === null
+          ? null
+          : BigInt(profile_image_file_id);
 
     return this.drizzle.db.transaction(async (tx) => {
       const profile = await tx
@@ -109,8 +121,8 @@ export class WholesalerProfileService {
       }
 
       // 检查 LOGO 是否为图片并属于用户
-      if (newProfile.logo_file_id) {
-        await this.validateAndCheckFiles(newProfile.logo_file_id, id, tx);
+      if (profile_image_file_id) {
+        await this.validateAndCheckFiles(profile_image_file_id, id, tx);
       }
 
       // 更改税号前先检查是否是唯一的 WHOLESALER 税号
@@ -125,6 +137,7 @@ export class WholesalerProfileService {
         .update(users)
         .set({
           profile: mergedProfile,
+          profile_image_file_id: imageFileId,
           tax_id,
           telephone,
           username,
@@ -145,14 +158,32 @@ export class WholesalerProfileService {
     const wholesalerProfile = await this.drizzle.db.query.users.findFirst({
       where: eq(users.id, id),
       columns: {
+        id: true,
         email: true,
         user_id: true,
         first_name: true,
+        profile_image_file_id: true,
         last_name: true,
         telephone: true,
         username: true,
-        tax_id: true,
         profile: true,
+        tax_id: true,
+      },
+      with: {
+        directions: {
+          columns: {
+            street: true,
+            zip_code: true,
+          },
+          with: {
+            province: { columns: { name: true, name_local: true, id: true } },
+            city: { columns: { name: true, name_local: true, id: true } },
+            country: {
+              columns: { name: true, name_local: true, iso_numeric: true },
+            },
+          },
+          where: eq(directions.type, AddressType.STORE),
+        },
       },
     });
 
@@ -161,14 +192,17 @@ export class WholesalerProfileService {
     }
 
     return {
+      id: wholesalerProfile.id,
       email: wholesalerProfile.email,
       user_id: wholesalerProfile.user_id,
       first_name: wholesalerProfile.first_name,
+      profile_image_file_id: wholesalerProfile.profile_image_file_id,
       last_name: wholesalerProfile.last_name,
       username: wholesalerProfile.username,
       telephone: wholesalerProfile.telephone,
       tax_id: wholesalerProfile.tax_id,
       profile: wholesalerProfile.profile as IWholesalerProfile,
+      store_directions: wholesalerProfile.directions[0] ?? null,
     };
   }
 }

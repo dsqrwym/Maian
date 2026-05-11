@@ -34,6 +34,7 @@ sealed class PhoneValidationState {
  */
 class SharedPhoneNumberViewModel(private val locationRepository: SharedLocationRepository) : ViewModel() {
 
+    var isOptional: Boolean = false
     val phoneNumberUtil: PhoneNumberUtil by lazy {
         PhoneNumberUtil.createInstance(defaultMetadataLoader())
     }
@@ -96,13 +97,14 @@ class SharedPhoneNumberViewModel(private val locationRepository: SharedLocationR
         // 取消之前的验证任务
         validationJob?.cancel()
 
-        if (trimmedValue.isBlank()) {
+        if (!isOptional && trimmedValue.isBlank()) {
             errorMessage = SharedRes.string.phone_error_empty
             phoneNumber = trimmedValue
             formattedPhoneNumber = trimmedValue
             validationState = PhoneValidationState.Invalid
             return
         }
+        errorMessage = null
 
         validationJob = viewModelScope.launch {
             validationState = PhoneValidationState.Validating
@@ -115,6 +117,9 @@ class SharedPhoneNumberViewModel(private val locationRepository: SharedLocationR
      * 验证电话号码
      */
     private fun validatePhoneNumber(number: String, region: String) {
+        if (isOptional && number.isBlank()) {
+            return
+        }
         try {
             // 解析电话号码
             val parsedNumber: PhoneNumber = phoneNumberUtil.parse(number, region)

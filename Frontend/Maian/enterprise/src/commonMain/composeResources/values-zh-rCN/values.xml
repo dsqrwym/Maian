@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="login_tab_employee">员工</string>
     <string name="field_wholesaler_id_label">批发商编号</string>
     <string name="field_wholesaler_id_placeholder">请输入您的批发商编号</string>

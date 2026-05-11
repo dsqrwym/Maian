@@ -29,11 +29,27 @@ class SharedAuthApi(private val client: HttpClient) {
         }.body()
     }
 
-    suspend fun checkUserNameExist(username: String, wholesalerID: String?, isAdmin: Boolean): ApiResponse<Boolean> {
+    /**
+     * Check whether a tax id is already used by the same role (true=used/exist, false=not used).
+     * 检查相同角色的税号是否已经被使用（true=已使用/存在，false=未使用/不存在）。
+     */
+    suspend fun checkTaxIdExists(taxId: String): ApiResponse<Boolean> {
+        return client.get(ApiConfig.UserPath.CHECK_TAX_ID) {
+            parameter("taxId", taxId)
+        }.body()
+    }
+
+    suspend fun checkUserNameExist(
+        username: String,
+        wholesalerID: String?,
+        isAdmin: Boolean,
+        userId: String? = null
+    ): ApiResponse<Boolean> {
         return client.get(ApiConfig.UserPath.CHECK_USERNAME) {
             parameter("username", username)
-            parameter("wholesalerId", wholesalerID)
+            wholesalerID?.let { parameter("wholesalerId", it) }
             parameter("isAdmin", isAdmin)
+            userId?.let { parameter("userId", it) }
         }.body()
     }
 

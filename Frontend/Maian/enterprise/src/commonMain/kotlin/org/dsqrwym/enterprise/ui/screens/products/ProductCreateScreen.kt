@@ -165,6 +165,7 @@ private fun ProductCreateScreenContent(
             }
             item {
                 FormCard(
+                    modifier = Modifier.animateItem(),
                     title = stringResource(EnterpriseRes.string.product_form_media_title),
                     subtitle = stringResource(EnterpriseRes.string.product_form_media_subtitle_mb, maxSize),
                     uiState = mediaPicker.mediaPickerUiState
@@ -174,6 +175,7 @@ private fun ProductCreateScreenContent(
             }
             item {
                 FormCard(
+                    modifier = Modifier.animateItem(),
                     title = stringResource(EnterpriseRes.string.product_form_translations_title),
                     subtitle = stringResource(EnterpriseRes.string.product_form_translations_subtitle),
                     uiState = viewModel.productTranslationUiState
@@ -194,6 +196,7 @@ private fun ProductCreateScreenContent(
             }
             item {
                 FormCard(
+                    modifier = Modifier.animateItem(),
                     title = stringResource(EnterpriseRes.string.product_form_attributes_title),
                     subtitle = stringResource(EnterpriseRes.string.product_form_attributes_subtitle),
                     uiState = viewModel.productMetaDataUiState
@@ -216,6 +219,7 @@ private fun ProductCreateScreenContent(
             }
             item(span = if (skuTabs.size > 1) StaggeredGridItemSpan.FullLine else null) {
                 FormCard(
+                    modifier = Modifier.animateItem(),
                     title = stringResource(EnterpriseRes.string.product_form_sku_title),
                     subtitle = stringResource(EnterpriseRes.string.product_form_sku_subtitle),
                     uiState = viewModel.productVariantUiState

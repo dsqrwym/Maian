@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import maian.shared.generated.resources.*
 import org.dsqrwym.enterprise.data.auth.AuthRepository
 import org.dsqrwym.enterprise.data.auth.dto.CompleteRegisterRequest
-import org.dsqrwym.enterprise.data.auth.dto.SpanishCompanyType
 import org.dsqrwym.enterprise.data.local.UserPreference
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.location.SharedLocationRepository
@@ -20,6 +19,7 @@ import org.dsqrwym.shared.data.location.dto.CityDto
 import org.dsqrwym.shared.data.location.dto.CountryDto
 import org.dsqrwym.shared.data.location.dto.DirectionRequest
 import org.dsqrwym.shared.data.location.dto.ProvinceDto
+import org.dsqrwym.shared.data.user.SpanishCompanyType
 import org.dsqrwym.shared.navigation.SharedLoginScreen
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable

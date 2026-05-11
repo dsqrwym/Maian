@@ -13,11 +13,19 @@ import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
 import { isObject } from '#/utils/is.utils.js';
 import { cleanString } from '#/utils/string.util.js';
 import { isValidSpanishTaxId } from '#/utils/is-spain-tax-id.js';
+import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 
 export interface IUpdateWholesalerProfileDto extends Partial<IWholesalerProfile> {
   first_name?: TagsFirstName | null;
 
   last_name?: TagsLastName | null;
+
+  /**
+   * Company logo file id.
+   * 商家 Logo 文件 ID。关联 files.id。
+   *
+   */
+  profile_image_file_id?: TagsIntegerString | null;
 
   /**
    * Spanish tax/person/business identifier basic format.

@@ -6,7 +6,6 @@ import type {
   TagsWholesalerDisplayName,
   TagsWholesalerMinimumOrderAmount,
 } from '#/utils/typia/validators/user.validator.js';
-import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 
 export interface IWholesalerProfile {
   /**
@@ -50,13 +49,6 @@ export interface IWholesalerProfile {
    * "Reparto en Benidorm, Altea y La Nucía."
    */
   delivery_area_description?: TagsWholesalerDeliveryAreaDescription | null;
-
-  /**
-   * Company logo file id.
-   * 商家 Logo 文件 ID。关联 files.id。
-   *
-   */
-  logo_file_id?: TagsIntegerString | null;
 
   /**
    * Minimum order amount.

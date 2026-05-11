@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
 
     <!-- ===================== Descripció de contingut ===================== -->
     <string name="login_background_content_description">Fons de la pantalla d’inici de sessió</string>
@@ -338,5 +338,47 @@
     <string name="register_failed">Error de registre</string>
 
     <string name="wholesalers">Majoristes</string>
+    <string name="invalid_tax_id">Format d'identificació fiscal espanyola no vàlid (DNI/NIE/CIF)</string>
+    <string name="tax_id_already_exists">Este identificador fiscal ja està registrat</string>
+
+    <!-- ===================== Perfil (Shared) ===================== -->
+    <string name="edit_profile">Editar perfil</string>
+    <string name="company_logo">Logo de l'empresa</string>
+    <string name="account_info">Informació del compte</string>
+    <string name="contact_info">Informació de contacte</string>
+    <string name="store_address">Direcció de la botiga</string>
+    <string name="business_settings">Configuració comercial</string>
+    <string name="display_name">Nom per a mostrar</string>
+    <string name="first_name">Nom</string>
+    <string name="last_name">Cognom</string>
+    <string name="tax_id">NIF/CIF</string>
+    <string name="delivery_area">Zona de repartiment</string>
+    <string name="minimum_order_amount">Import mínim de comanda</string>
+    <string name="delivery_available">Entrega disponible</string>
+    <string name="pickup_available">Recollida disponible</string>
+    <string name="logout">Tancar sessió</string>
+    <string name="select_logo">Seleccionar logo</string>
+    <string name="delete_logo">Eliminar logo</string>
+    <string name="company_info">Informació de l'empresa</string>
+    <string name="company_name">Nom de l'empresa</string>
+    <string name="company_type">Tipus d'empresa</string>
+    <string name="display_name_placeholder">Introduïx el nom visible de la botiga</string>
+    <string name="description_placeholder">Introduïx la presentació i descripció de la botiga</string>
+    <string name="first_name_placeholder">Introduïx el nom</string>
+    <string name="last_name_placeholder">Introduïx els cognoms</string>
+    <string name="tax_id_placeholder">Introduïx el NIF, NIE o DNI</string>
+    <string name="minimum_order_amount_placeholder">Introduïx l'import mínim acceptat de la comanda</string>
+    <string name="delivery_area_placeholder">Introduïx la presentació o descripció de la zona de repartiment</string>
+    <string name="profile_user_id_value">ID: %1$s</string>
+    <string name="amount_euro_value">%1$s€</string>
+    <string name="minimum_order_amount_value">Import mínim de comanda: %1$s</string>
+    
+    <!-- Tipus d'empresa (Shared) -->
+    <string name="company_type_limited_company">Societat Limitada (S.L.)</string>
+    <string name="company_type_public_limited_company">Societat Anònima (S.A.)</string>
+    <string name="company_type_self_employed">Autònom</string>
+    <string name="company_type_cooperative">Cooperativa</string>
+    <string name="company_type_civil_company">Societat Civil</string>
+    <string name="company_type_other">Altres</string>
 
 </resources>

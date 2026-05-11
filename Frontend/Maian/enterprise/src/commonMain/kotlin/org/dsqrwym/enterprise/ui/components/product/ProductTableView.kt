@@ -435,7 +435,7 @@ fun ProductTableView(
         paginatedProducts.isInitialLoading -> Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
-        ) { SharedLoadingDotsIndicator(Modifier.fillMaxSize(0.5f)) }
+        ) { SharedLoadingDotsIndicator() }
 
         paginatedProducts.hasLoadError -> Box(
             modifier = Modifier.fillMaxSize(),
@@ -462,7 +462,7 @@ fun ProductTableView(
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
-                ) { SharedLoadingDotsIndicator(Modifier.fillMaxSize(0.5f)) }
+                ) { SharedLoadingDotsIndicator() }
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <!-- ===================== 公共描述 (Content Description) ===================== -->
     <string name="login_background_content_description">登录界面的背景</string>
     <string name="button_google_logo_content_description">Google 图标</string>
@@ -305,6 +305,48 @@
     <string name="register_success">注册成功</string>
     <string name="register_failed">注册失败</string>
     <string name="wholesalers">批发商</string>
+    <string name="invalid_tax_id">西班牙税号格式无效（DNI/NIE/CIF）</string>
+    <string name="tax_id_already_exists">该税号已被注册</string>
+
+    <!-- ===================== 个人资料 (Shared) ===================== -->
+    <string name="edit_profile">编辑资料</string>
+    <string name="company_logo">商家 Logo</string>
+    <string name="account_info">账户信息</string>
+    <string name="contact_info">联系信息</string>
+    <string name="store_address">经营地址</string>
+    <string name="business_settings">配送设定</string>
+    <string name="display_name">展示名称</string>
+    <string name="first_name">名字</string>
+    <string name="last_name">姓氏</string>
+    <string name="tax_id">税号</string>
+    <string name="delivery_area">配送范围</string>
+    <string name="minimum_order_amount">最低起订金额</string>
+    <string name="delivery_available">支持配送</string>
+    <string name="pickup_available">支持自提</string>
+    <string name="logout">退出登录</string>
+    <string name="select_logo">选择 Logo</string>
+    <string name="delete_logo">删除 Logo</string>
+    <string name="company_info">企业信息</string>
+    <string name="company_name">公司名称</string>
+    <string name="company_type">公司类型</string>
+    <string name="display_name_placeholder">请输入店铺展示名称</string>
+    <string name="description_placeholder">请输入店铺介绍与描述</string>
+    <string name="first_name_placeholder">请输入名字</string>
+    <string name="last_name_placeholder">请输入姓氏</string>
+    <string name="tax_id_placeholder">请输入税号，可以是 NIF、NIE 或 DNI</string>
+    <string name="minimum_order_amount_placeholder">请输入最小可接受的订单金额</string>
+    <string name="delivery_area_placeholder">请输入配送区域介绍或描述</string>
+    <string name="profile_user_id_value">ID：%1$s</string>
+    <string name="amount_euro_value">%1$s€</string>
+    <string name="minimum_order_amount_value">最低起订金额：%1$s</string>
+    
+    <!-- 公司类型 (Shared) -->
+    <string name="company_type_limited_company">有限责任公司（S.L.）</string>
+    <string name="company_type_public_limited_company">股份有限公司（S.A.）</string>
+    <string name="company_type_self_employed">个体经营者</string>
+    <string name="company_type_cooperative">合作社</string>
+    <string name="company_type_civil_company">民事合伙公司</string>
+    <string name="company_type_other">其他</string>
 </resources>
 
 

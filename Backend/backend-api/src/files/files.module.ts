@@ -12,6 +12,7 @@ import { DrizzleModule } from '#/drizzle/drizzle.module.js';
 import { CommonModule } from '#/common/common.module.js';
 import { PinoLogger } from 'nestjs-pino';
 import { JwtModule } from '@nestjs/jwt';
+import { ProductFilesService } from './services/product-files.service.js';
 
 @Global()
 @Module({
@@ -19,6 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [DrizzleModule, CommonModule, JwtModule],
   providers: [
     FilesService,
+    ProductFilesService,
     FileVideoPlayTokenService,
     LocalStorageDriver,
     CloudflareStorageDriver,

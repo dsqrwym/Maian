@@ -3,6 +3,7 @@ package org.dsqrwym.shared.ui.components.input.outlinedfields
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import maian.shared.generated.resources.SharedRes
@@ -19,6 +20,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun OutlinedPhoneNumberField(
     phoneNumberViewModel: SharedPhoneNumberViewModel,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     imeAction: ImeAction = ImeAction.Done,
     onImeAction: () -> Unit = {},
@@ -30,6 +32,7 @@ fun OutlinedPhoneNumberField(
     }
 
     MyOutlinedTextField(
+        modifier = modifier,
         enabled = enabled,
         value = phoneNumberViewModel.phoneNumber,
         onValueChange = {
@@ -43,7 +46,7 @@ fun OutlinedPhoneNumberField(
         }" else null,
         leadingIcon = Icons.Outlined.Phone,
         leadingIconContentDescription = stringResource(SharedRes.string.field_telephone_label),
-        trailingIcon = { CheckingTrailingIcon(phoneNumberViewModel.isValidating) },
+        trailingIcon = { CheckingTrailingIcon(if (phoneNumberViewModel.isOptional && phoneNumberViewModel.phoneNumber.isBlank()) false else phoneNumberViewModel.isValidating) },
         labelText = stringResource(SharedRes.string.field_telephone_label),
         placeholderText = stringResource(SharedRes.string.field_telephone_placeholder),
         visualTransformation = PhoneNumberVisualTransformation(phoneNumberViewModel.phoneNumberUtil, region),

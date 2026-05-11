@@ -129,6 +129,7 @@ fun CategoryCreateScreen(
                     viewModel::updateCategoryName,
                     viewModel::updateCategoryIva,
                     viewModel::formatIvaTwoDecimal,
+                    modifier = Modifier.animateItem(),
                 )
             }
 
@@ -142,6 +143,7 @@ fun CategoryCreateScreen(
                     viewModel::updateFilterUser,
                     viewModel::removeUserIdFilter,
                     viewModel::findWholesalers,
+                    modifier = Modifier.animateItem(),
                 )
             }
 
@@ -153,6 +155,7 @@ fun CategoryCreateScreen(
                     viewModel::updateFilterParentCategory,
                     viewModel::removeParentIdFilter,
                     viewModel::findParentCategories,
+                    modifier = Modifier.animateItem(),
                 )
             }
 
@@ -166,6 +169,7 @@ fun CategoryCreateScreen(
                     viewModel::showAddLanguageDialog,
                     viewModel::removeTranslation,
                     viewModel::upsertTranslation,
+                    modifier = Modifier.animateItem(),
                 )
             }
         }

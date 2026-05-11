@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <!-- ===================== Descrição comum (Content Description) ===================== -->
     <string name="login_background_content_description">Fundo da página de início de sessão</string>
     <string name="button_google_logo_content_description">Ícone do Google</string>
@@ -330,4 +330,46 @@
     <string name="register_failed">Falha no registo</string>
 
     <string name="wholesalers">Grossistas</string>
+    <string name="invalid_tax_id">Formato de identificação fiscal espanhola inválido (DNI/NIE/CIF)</string>
+    <string name="tax_id_already_exists">Este identificador fiscal já está registado</string>
+
+    <!-- ===================== Perfil (Shared) ===================== -->
+    <string name="edit_profile">Editar perfil</string>
+    <string name="company_logo">Logótipo da empresa</string>
+    <string name="account_info">Informações da conta</string>
+    <string name="contact_info">Informações de contacto</string>
+    <string name="store_address">Morada da loja</string>
+    <string name="business_settings">Configurações comerciais</string>
+    <string name="display_name">Nome de exibição</string>
+    <string name="first_name">Primeiro nome</string>
+    <string name="last_name">Apelido</string>
+    <string name="tax_id">NIF/NIPC</string>
+    <string name="delivery_area">Área de entrega</string>
+    <string name="minimum_order_amount">Valor mínimo de encomenda</string>
+    <string name="delivery_available">Entrega disponível</string>
+    <string name="pickup_available">Levantamento disponível</string>
+    <string name="logout">Terminar sessão</string>
+    <string name="select_logo">Selecionar logótipo</string>
+    <string name="delete_logo">Eliminar logótipo</string>
+    <string name="company_info">Informações da empresa</string>
+    <string name="company_name">Nome da empresa</string>
+    <string name="company_type">Tipo de empresa</string>
+    <string name="display_name_placeholder">Introduza o nome visível da loja</string>
+    <string name="description_placeholder">Introduza a apresentação e descrição da loja</string>
+    <string name="first_name_placeholder">Introduza o nome próprio</string>
+    <string name="last_name_placeholder">Introduza o apelido</string>
+    <string name="tax_id_placeholder">Introduza o NIF, NIE ou DNI</string>
+    <string name="minimum_order_amount_placeholder">Introduza o valor mínimo aceitável da encomenda</string>
+    <string name="delivery_area_placeholder">Introduza a apresentação ou descrição da área de entrega</string>
+    <string name="profile_user_id_value">ID: %1$s</string>
+    <string name="amount_euro_value">%1$s€</string>
+    <string name="minimum_order_amount_value">Valor mínimo da encomenda: %1$s</string>
+    
+    <!-- Tipos de empresa (Shared) -->
+    <string name="company_type_limited_company">Sociedade Limitada (S.L.)</string>
+    <string name="company_type_public_limited_company">Sociedade Anónima (S.A.)</string>
+    <string name="company_type_self_employed">Trabalhador independente</string>
+    <string name="company_type_cooperative">Cooperativa</string>
+    <string name="company_type_civil_company">Sociedade civil</string>
+    <string name="company_type_other">Outro</string>
 </resources>

@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
 
     <string name="login_tab_employee">Funcionário</string>
     <string name="field_wholesaler_id_label">ID do grossista</string>

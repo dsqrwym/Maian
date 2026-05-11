@@ -42,7 +42,7 @@ export const variant_productsRelations = relations(variant_products, ({one, many
 	order_details: many(order_details),
 }));
 
-export const usersRelations = relations(users, ({many}) => ({
+export const usersRelations = relations(users, ({one, many}) => ({
 	variant_products_created_by: many(variant_products, {
 		relationName: "variant_products_created_by_users_id"
 	}),
@@ -81,6 +81,10 @@ export const usersRelations = relations(users, ({many}) => ({
 	}),
 	orders_wholesaler_id: many(orders, {
 		relationName: "orders_wholesaler_id_users_id"
+	}),
+	file: one(files, {
+		fields: [users.profile_image_file_id],
+		references: [files.id]
 	}),
 	user_uploads: many(user_uploads),
 	chat_participants: many(chat_participants),
@@ -186,6 +190,7 @@ export const message_filesRelations = relations(message_files, ({one}) => ({
 export const filesRelations = relations(files, ({many}) => ({
 	message_files: many(message_files),
 	products_files: many(products_files),
+	users: many(users),
 	user_uploads: many(user_uploads),
 }));
 

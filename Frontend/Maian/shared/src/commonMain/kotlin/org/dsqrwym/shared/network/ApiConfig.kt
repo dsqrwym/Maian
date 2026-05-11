@@ -1,10 +1,10 @@
 package org.dsqrwym.shared.network
 
 object ApiConfig {
-    const val BASE_URL: String = "https://api.dsqrwym.es/maian"
+    //const val BASE_URL: String = "https://api.dsqrwym.es/maian"
 
     //const val BASE_URL: String = "https://northflank.dsqrwym.es/maian"
-    //const val BASE_URL: String = "http://127.0.0.1:3000/maian"
+    const val BASE_URL: String = "http://127.0.0.1:3000/maian"
     const val CONNECT_TIMEOUT_MILLIS = 10_000L
     const val REQUEST_TIMEOUT_MILLIS = 60_000L
     const val ENABLE_LOGGING = true
@@ -41,6 +41,7 @@ object ApiConfig {
         const val USER = "${BASE_URL}/user"
         const val CHECK_MAIL = "${USER}/check/mail"
         const val CHECK_USERNAME = "${USER}/check/username"
+        const val CHECK_TAX_ID = "${USER}/check/tax_id"
     }
 
     object LocationsPath {
@@ -60,6 +61,10 @@ object ApiConfig {
         const val PRODUCT_FILE = "${FILES}/product-file"
         fun productFile(productId: String, fileId: String): String =
             "${PRODUCT_FILE}?product_id=$productId&file_id=$fileId"
+
+        fun file(fileId: String): String = "${FILES}/$fileId"
+
+        fun userImage(userId: String, fileId: String? = null) = "${FILES}/user/$userId/image?file_id=$fileId"
     }
 
     object CategoryPath {

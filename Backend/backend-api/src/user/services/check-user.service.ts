@@ -29,6 +29,7 @@ export class CheckUserService {
   }
 
   async checkUsernameUsed(query: ICheckUserUsernameQueryDto) {
+    const userId = query.userId;
     let username = query.username;
     if (query.isAdmin) {
       username = makeUsername(UserRole.ADMIN, username);
@@ -46,6 +47,7 @@ export class CheckUserService {
               and(
                 eq(users.username, username),
                 ne(users.status, UserStatus.PENDING_VERIFICATION),
+                userId ? ne(users.id, userId) : undefined,
               ),
             ),
         ),

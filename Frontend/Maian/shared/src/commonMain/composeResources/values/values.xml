@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <!-- ===================== Content Descriptions ===================== -->
     <string name="login_background_content_description">Login screen background</string>
     <string name="button_google_logo_content_description">Google icon</string>
@@ -302,6 +302,47 @@
     <string name="register_success">Registration Successful</string>
     <string name="register_failed">Registration Failed</string>
     <string name="wholesalers">Wholesalers</string>
-</resources>
+    <string name="invalid_tax_id">Invalid Spanish tax ID format (DNI/NIE/CIF)</string>
+    <string name="tax_id_already_exists">This tax ID is already registered</string>
 
+    <!-- ===================== Profile (Shared) ===================== -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="company_logo">Company Logo</string>
+    <string name="account_info">Account Information</string>
+    <string name="contact_info">Contact Information</string>
+    <string name="store_address">Store Address</string>
+    <string name="business_settings">Business Settings</string>
+    <string name="display_name">Display Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="tax_id">Tax ID</string>
+    <string name="delivery_area">Delivery Area</string>
+    <string name="minimum_order_amount">Minimum Order Amount</string>
+    <string name="delivery_available">Delivery Available</string>
+    <string name="pickup_available">Pickup Available</string>
+    <string name="logout">Logout</string>
+    <string name="select_logo">Select Logo</string>
+    <string name="delete_logo">Delete Logo</string>
+    <string name="company_info">Company Information</string>
+    <string name="company_name">Company Name</string>
+    <string name="company_type">Company Type</string>
+    <string name="display_name_placeholder">Enter the store display name</string>
+    <string name="description_placeholder">Enter the store introduction and description</string>
+    <string name="first_name_placeholder">Enter first name</string>
+    <string name="last_name_placeholder">Enter last name</string>
+    <string name="tax_id_placeholder">Enter tax ID, such as NIF, NIE, or DNI</string>
+    <string name="minimum_order_amount_placeholder">Enter the minimum acceptable order amount</string>
+    <string name="delivery_area_placeholder">Enter the delivery area introduction or description</string>
+    <string name="profile_user_id_value">ID: %1$s</string>
+    <string name="amount_euro_value">%1$s€</string>
+    <string name="minimum_order_amount_value">Minimum order amount: %1$s</string>
+    
+    <!-- Company Types (Shared) -->
+    <string name="company_type_limited_company">Limited Company (S.L.)</string>
+    <string name="company_type_public_limited_company">Public Limited Company (S.A.)</string>
+    <string name="company_type_self_employed">Self-employed</string>
+    <string name="company_type_cooperative">Cooperative</string>
+    <string name="company_type_civil_company">Civil Company</string>
+    <string name="company_type_other">Other</string>
+</resources>
 

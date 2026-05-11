@@ -3,6 +3,7 @@ package org.dsqrwym.enterprise.di
 import org.dsqrwym.enterprise.di.auth.enterpriseAuthModule
 import org.dsqrwym.enterprise.di.categories.categoriesModule
 import org.dsqrwym.enterprise.di.products.productsModule
+import org.dsqrwym.enterprise.di.profile.profileModule
 import org.dsqrwym.shared.di.sharedInitKoin
 
 fun enterpriseInitKoin(){
@@ -11,5 +12,6 @@ fun enterpriseInitKoin(){
         modules(enterpriseAuthModule)
         modules(categoriesModule)
         modules(productsModule)
+        modules(profileModule)
     }
 }

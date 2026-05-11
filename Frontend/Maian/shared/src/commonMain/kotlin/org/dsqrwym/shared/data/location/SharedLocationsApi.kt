@@ -6,8 +6,8 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import org.dsqrwym.shared.data.location.dto.*
 import org.dsqrwym.shared.network.ApiConfig
-import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.HttpClientProvider
+import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.util.log.SharedLog
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
@@ -37,9 +37,7 @@ class SharedLocationsApi(private val client: HttpClient) {
      * - 自动缓存结果，避免重复请求
      */
     suspend fun getRealRegionCode(): IpApiResponse {
-        val platform = getPlatform()
-        val client =
-            if (platform.type is PlatformType.Web) HttpClientProvider.publicClient else HttpClientProvider.client
+        val client = HttpClientProvider.publicClient
 
         val endpoints = if (getPlatform().type is PlatformType.Web) listOf("https://ipinfo.io/json") else listOf(
             "https://ipapi.co/json/",

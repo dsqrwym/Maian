@@ -29,11 +29,11 @@ sealed class OptionalField<out T> {
      * 字段存在且有具体值。
      * @param value 字段值。
      */
-    data class Value<T : Any>(val value: T) : OptionalField<T>()
+    data class Value<T>(val value: T) : OptionalField<T>()
 }
 
 @JvmName("mapNullable")
-inline fun <T : Any, R : Any> OptionalField<T>?.map(transform: (T) -> R): OptionalField<R>? {
+inline fun <T, R> OptionalField<T>?.map(transform: (T) -> R): OptionalField<R>? {
     return when (this) {
         null -> null
         is OptionalField.Undefined -> OptionalField.Undefined
@@ -42,14 +42,14 @@ inline fun <T : Any, R : Any> OptionalField<T>?.map(transform: (T) -> R): Option
 }
 
 @JvmName("mapNotNull")
-inline fun <T : Any, R : Any> OptionalField<T>.map(transform: (T) -> R): OptionalField<R> {
+inline fun <T, R> OptionalField<T>.map(transform: (T) -> R): OptionalField<R> {
     return when (this) {
         is OptionalField.Undefined -> OptionalField.Undefined
         is OptionalField.Value -> transform(value).let { OptionalField.Value(it) }
     }
 }
 
-fun <T : Any> OptionalField<T>?.getValOrNull(): T? = when (this) {
+fun <T> OptionalField<T>?.getValOrNull(): T? = when (this) {
     null -> null
     is OptionalField.Undefined -> null
     is OptionalField.Value -> value
@@ -71,7 +71,10 @@ fun String.toOptionalField(): OptionalField<String> = OptionalField.Value(this)
 @JvmName("toIntOptionalFieldNotNullable")
 fun Int.toOptionalField(): OptionalField<Int> = OptionalField.Value(this)
 
-class OptionalFieldSerializer<T : Any>(
+@JvmName("toBooleanOptionalFieldNotNullable")
+fun Boolean.toOptionalField(): OptionalField<Boolean> = OptionalField.Value(this)
+
+class OptionalFieldSerializer<T>(
     private val valueSerializer: KSerializer<T>
 ) : KSerializer<OptionalField<T>> {
     override val descriptor: SerialDescriptor =

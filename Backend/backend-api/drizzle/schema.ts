@@ -149,8 +149,16 @@ export const categories = pgTable("categories", {
 	deleted_at: timestamp({ mode: 'string' }),
 }, (table) => [
 	uniqueIndex("categories_name_unique_public").using("btree", table.name.asc().nullsLast().op("text_ops")).where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
-	uniqueIndex("categories_user_name_unique_private").using("btree", table.user_id.asc().nullsLast().op("uuid_ops"), table.name.asc().nullsLast().op("text_ops")).where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
+	uniqueIndex("categories_user_name_unique_private").using("btree", table.user_id.asc().nullsLast().op("text_ops"), table.name.asc().nullsLast().op("text_ops")).where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
 	index("idx_categories_name_unaccent").using("btree", sql`lower(name_unaccent)`),
+	index("idx_categories_name_unaccent_trgm").using("gin", table.name_unaccent.asc().nullsLast().op("gin_trgm_ops")).where(sql`(deleted_at IS NULL)`),
+	index("idx_categories_parent_id").using("btree", table.parent_id.asc().nullsLast().op("int8_ops")).where(sql`(deleted_at IS NULL)`),
+	index("idx_categories_private_user_level_name").using("btree", table.user_id.asc().nullsLast().op("uuid_ops"), table.level.asc().nullsLast().op("int2_ops"), table.name.asc().nullsLast().op("uuid_ops")).where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
+	index("idx_categories_private_user_parent_name").using("btree", table.user_id.asc().nullsLast().op("uuid_ops"), table.parent_id.asc().nullsLast().op("uuid_ops"), table.name.asc().nullsLast().op("text_ops")).where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
+	index("idx_categories_public_level_name").using("btree", table.level.asc().nullsLast().op("int2_ops"), table.name.asc().nullsLast().op("text_ops")).where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
+	index("idx_categories_public_parent_level_name_all").using("btree", table.parent_id.asc().nullsLast().op("int8_ops"), table.level.asc().nullsLast().op("text_ops"), table.name.asc().nullsLast().op("text_ops")).where(sql`(user_id IS NULL)`),
+	index("idx_categories_public_parent_name").using("btree", table.parent_id.asc().nullsLast().op("int8_ops"), table.name.asc().nullsLast().op("text_ops")).where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
+	index("idx_categories_user_parent_level_name").using("btree", table.user_id.asc().nullsLast().op("text_ops"), table.parent_id.asc().nullsLast().op("int8_ops"), table.level.asc().nullsLast().op("text_ops"), table.name.asc().nullsLast().op("uuid_ops")),
 	foreignKey({
 			columns: [table.created_by],
 			foreignColumns: [users.id],
@@ -333,6 +341,8 @@ export const products = pgTable("products", {
 }, (table) => [
 	index("idx_products_name_unaccent").using("btree", sql`lower(name_unaccent)`),
 	index("idx_products_title_unaccent").using("btree", sql`lower(title_unaccent)`),
+	index("idx_products_user_id_id").using("btree", table.user_id.asc().nullsLast().op("int8_ops"), table.id.asc().nullsLast().op("uuid_ops")),
+	index("idx_products_user_status_id").using("btree", table.user_id.asc().nullsLast().op("uuid_ops"), table.status.asc().nullsLast().op("uuid_ops"), table.id.asc().nullsLast().op("enum_ops")),
 	foreignKey({
 			columns: [table.created_by],
 			foreignColumns: [users.id],
@@ -580,9 +590,16 @@ export const users = pgTable("users", {
 	created_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`).notNull(),
 	updated_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`),
 	role: UserRole().notNull(),
-	cif: varchar({ length: 20 }),
+	tax_id: varchar({ length: 20 }),
 	updated_by: uuid(),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	profile_image_file_id: bigint({ mode: "number" }),
 }, (table) => [
+	foreignKey({
+			columns: [table.profile_image_file_id],
+			foreignColumns: [files.id],
+			name: "users_profile_image_file_id_fkey"
+		}).onDelete("set null"),
 	unique("users_user_id_key").on(table.user_id),
 	unique("users_username_key").on(table.username),
 	unique("users_email_key").on(table.email),
@@ -633,6 +650,9 @@ export const product_categories = pgTable("product_categories", {
 	category_id: bigint({ mode: "number" }).notNull(),
 	is_primary: boolean().default(false).notNull(),
 }, (table) => [
+	index("idx_product_categories_category_id").using("btree", table.category_id.asc().nullsLast().op("int8_ops")),
+	index("idx_product_categories_category_product").using("btree", table.category_id.asc().nullsLast().op("int8_ops"), table.product_id.asc().nullsLast().op("int8_ops")),
+	index("idx_product_categories_product_id").using("btree", table.product_id.asc().nullsLast().op("int8_ops")),
 	foreignKey({
 			columns: [table.category_id],
 			foreignColumns: [categories.id],
@@ -658,6 +678,7 @@ export const category_translations = pgTable("category_translations", {
 }, (table) => [
 	index("idx_category_translations_lang_code").using("btree", table.lang_code.asc().nullsLast().op("text_ops")),
 	index("idx_category_translations_name_unaccent").using("btree", sql`lower(name_unaccent)`),
+	index("idx_category_translations_name_unaccent_trgm").using("gin", table.name_unaccent.asc().nullsLast().op("gin_trgm_ops")),
 	foreignKey({
 			columns: [table.updated_by],
 			foreignColumns: [users.id],

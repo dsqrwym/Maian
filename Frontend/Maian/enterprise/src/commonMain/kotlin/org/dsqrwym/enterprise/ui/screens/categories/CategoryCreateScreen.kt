@@ -120,6 +120,7 @@ fun CategoryCreateScreen(
                     viewModel::updateCategoryName,
                     viewModel::updateCategoryIva,
                     viewModel::formatIvaTwoDecimal,
+                    modifier = Modifier.animateItem(),
                 )
             }
 
@@ -131,6 +132,7 @@ fun CategoryCreateScreen(
                     viewModel::updateFilterCategory,
                     viewModel::removeFilterCategory,
                     viewModel::findCategories,
+                    modifier = Modifier.animateItem(),
                 )
             }
 
@@ -144,6 +146,7 @@ fun CategoryCreateScreen(
                     viewModel::showAddLanguageDialog,
                     viewModel::removeTranslation,
                     viewModel::upsertTranslation,
+                    modifier = Modifier.animateItem(),
                 )
             }
         }

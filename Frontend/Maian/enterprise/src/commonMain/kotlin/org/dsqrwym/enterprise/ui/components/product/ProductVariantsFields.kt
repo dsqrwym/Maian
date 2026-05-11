@@ -92,7 +92,7 @@ fun ProductVariantsFields(
     ) {
         item(span = StaggeredGridItemSpan.FullLine) {
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.animateItem().fillMaxWidth(),
                 horizontalArrangement = SharedLazyGridLayout.arrangement,
                 itemVerticalAlignment = Alignment.CenterVertically,
             ) {
@@ -119,6 +119,7 @@ fun ProductVariantsFields(
         }
         itemsIndexed(variants, key = { _, item -> item.id ?: Uuid.generateV4() }) { index, item ->
             ReorderableItem(
+                modifier = Modifier.animateItem(),
                 state = reorderableState,
                 key = item.id ?: "",
             ) { isSelfDragging ->
