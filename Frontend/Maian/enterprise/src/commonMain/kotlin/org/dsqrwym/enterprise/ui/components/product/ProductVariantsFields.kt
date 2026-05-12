@@ -1,4 +1,4 @@
-﻿package org.dsqrwym.enterprise.ui.components.product
+package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -424,6 +424,7 @@ fun ProductVariantFields(
                 modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 min = 1,
+                max = 1000000,
                 enabled = saleUnitEnabled,
                 value = saleUnitQty.toString(),
                 onValueChange = onSaleUnitQtyChange,
@@ -505,6 +506,7 @@ fun ProductVariantFields(
                 modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 min = 1,
+                max = 1000000,
                 value = minOrderQty.toString(),
                 onValueChange = onMinOrderQtyChange,
                 leadingIcon = Icons.Outlined.LooksOne,

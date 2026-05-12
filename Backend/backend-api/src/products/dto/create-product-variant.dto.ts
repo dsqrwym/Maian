@@ -29,7 +29,7 @@ export interface ICreateVariantDto {
 
   sale_unit_qty: TagsUInt4 & tags.Minimum<1> & tags.Maximum<1000000>; // 换算因子 (例如：1 箱 = 24 件)， 最大一百万应该足够了
 
-  min_order_qty: TagsUInt4 & tags.Minimum<1>; // 最小起订量 (以销售单位计)
+  min_order_qty: TagsUInt4 & tags.Minimum<1> & tags.Maximum<1000000>; // 最小起订量 (以销售单位计)
 
   status: ProductStatus;
 
