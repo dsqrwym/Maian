@@ -1,5 +1,19 @@
-﻿<resources>
+<resources>
+    <string name="wholesalers">批發商</string>
+    <string name="distributors">分銷商</string>
+    <string name="search_distributors">搜尋分銷商</string>
+    <string name="no_distributors">未找到分銷商</string>
+    <string name="wholesaler_scope_label">批發商：%1$s</string>
+    <string name="back_to_all">返回全部</string>
+    <string name="current_wholesaler">目前</string>
+    <string name="search_wholesalers">搜尋批發商</string>
+    <string name="no_wholesalers">未找到批發商</string>
+    <string name="wholesaler_sort_display_name">名稱</string>
+    <string name="wholesaler_sort_company_name">公司名稱</string>
+    <string name="wholesaler_sort_city">城市</string>
+    <string name="wholesaler_sort_province">省份</string>
+    <string name="wholesaler_sort_minimum_order_amount">最低起訂金額</string>
+    <string name="product_detail_coming_soon">產品詳情暫不可用。</string>
     <string name="chat">訊息</string>
     <string name="shopping_cart">購物車</string>
 </resources>
-

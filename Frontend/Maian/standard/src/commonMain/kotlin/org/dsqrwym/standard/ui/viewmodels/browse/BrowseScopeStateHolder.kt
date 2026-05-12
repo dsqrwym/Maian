@@ -41,6 +41,7 @@ class BrowseScopeStateHolder {
      * @param wholesaler 要选中的批发商
      */
     fun selectWholesaler(wholesaler: RetailWholesaler) {
+        // 存的是浏览范围
         state = BrowseScopeState(
             wholesalerId = wholesaler.id,
             wholesalerName = wholesaler.displayName,
@@ -53,6 +54,7 @@ class BrowseScopeStateHolder {
      * 重置状态为全局浏览范围
      */
     fun clearWholesaler() {
+        // 我清掉这个以后，产品和分类页就都回到全局模式了
         state = BrowseScopeState()
     }
 }

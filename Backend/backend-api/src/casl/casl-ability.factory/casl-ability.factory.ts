@@ -59,16 +59,19 @@ export class CaslAbilityFactory {
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');
+        can(Action.Read, 'users', { id: user.wholesalerId });
         can(Action.Read, 'products', { user_id: user.wholesalerId });
         can(Action.Read, 'products_files', { user_id: user.wholesalerId });
         break;
       case UserRole.SUPPORT:
         can(Action.Access, 'Enterprise');
+        can(Action.Read, 'users', { id: user.wholesalerId });
         can(Action.Read, 'products', { user_id: user.wholesalerId });
         can(Action.Read, 'products_files', { user_id: user.wholesalerId });
         break;
       case UserRole.WAREHOUSE: {
         can(Action.Access, 'Enterprise');
+        can(Action.Read, 'users', { id: user.wholesalerId });
         can(Action.Manage, 'categories', { user_id: user.wholesalerId });
         can(Action.Manage, 'products', { user_id: user.wholesalerId });
         can(Action.Manage, 'products_files', { user_id: user.wholesalerId });

@@ -1,8 +1,8 @@
 package org.dsqrwym.enterprise.data.profile
 
 import org.dsqrwym.enterprise.data.profile.dto.UpdateWholesalerProfileDto
-import org.dsqrwym.enterprise.data.profile.dto.WholesalerProfileResponseDto
 import org.dsqrwym.shared.data.SharedObservableRepository
+import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.serialization.map

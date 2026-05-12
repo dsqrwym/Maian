@@ -356,6 +356,10 @@
     <string name="minimum_order_amount">Import mínim de comanda</string>
     <string name="delivery_available">Entrega disponible</string>
     <string name="pickup_available">Recollida disponible</string>
+    <string name="delivery">Entrega</string>
+    <string name="pickup">Recollida</string>
+    <string name="min_order_fmt">Comanda mín.: %1$s</string>
+    <string name="exit">Ix</string>
     <string name="logout">Tancar sessió</string>
     <string name="select_logo">Seleccionar logo</string>
     <string name="delete_logo">Eliminar logo</string>
@@ -372,6 +376,11 @@
     <string name="profile_user_id_value">ID: %1$s</string>
     <string name="amount_euro_value">%1$s€</string>
     <string name="minimum_order_amount_value">Import mínim de comanda: %1$s</string>
+    <string name="wholesaler_sort_display_name">Nom</string>
+    <string name="wholesaler_sort_company_name">Nom de l'empresa</string>
+    <string name="wholesaler_sort_city">Ciutat</string>
+    <string name="wholesaler_sort_province">Província</string>
+    <string name="wholesaler_sort_minimum_order_amount">Comanda mínima</string>
     
     <!-- Tipus d'empresa (Shared) -->
     <string name="company_type_limited_company">Societat Limitada (S.L.)</string>

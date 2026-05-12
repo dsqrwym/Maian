@@ -40,17 +40,9 @@ data class CategoryBrowseRouteCategory(
 )
 
 @Serializable
-@SerialName("distributor_home")
-data class WholesalerHomeScreen(
+@SerialName("wholesaler_profile")
+data class WholesalerProfileRoute(
     val id: String,
-    val userId: String? = null,
-    val username: String? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val email: String? = null,
-    val telephone: String? = null,
-    val cif: String? = null,
-    val companyName: String? = null,
 ) : NavKey
 
 @Serializable

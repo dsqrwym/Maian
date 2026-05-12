@@ -1,6 +1,19 @@
-﻿<resources>
-
+<resources>
+    <string name="wholesalers">Grossistes</string>
+    <string name="distributors">Distributeurs</string>
+    <string name="search_distributors">Rechercher des distributeurs</string>
+    <string name="no_distributors">Aucun distributeur trouvé</string>
+    <string name="wholesaler_scope_label">Grossiste : %1$s</string>
+    <string name="back_to_all">Retour à tout</string>
+    <string name="current_wholesaler">Actuel</string>
+    <string name="search_wholesalers">Rechercher des grossistes</string>
+    <string name="no_wholesalers">Aucun grossiste trouvé</string>
+    <string name="wholesaler_sort_display_name">Nom</string>
+    <string name="wholesaler_sort_company_name">Nom de l'entreprise</string>
+    <string name="wholesaler_sort_city">Ville</string>
+    <string name="wholesaler_sort_province">Province</string>
+    <string name="wholesaler_sort_minimum_order_amount">Commande minimale</string>
+    <string name="product_detail_coming_soon">Le détail du produit n'est pas encore disponible.</string>
     <string name="chat">Messages</string>
     <string name="shopping_cart">Panier</string>
 </resources>
-

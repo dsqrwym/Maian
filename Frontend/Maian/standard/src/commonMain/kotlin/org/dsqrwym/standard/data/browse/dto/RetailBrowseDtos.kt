@@ -228,13 +228,14 @@ fun RetailWholesalerResponse.toDomain(): RetailWholesaler =
     RetailWholesaler(
         id = id,
         userId = userId,
-        username = username,
-        firstName = firstName,
-        lastName = lastName,
-        email = email,
-        telephone = telephone,
-        cif = cif,
+        displayName = profile?.get("displayName")?.jsonPrimitive?.content
+            ?: profile?.get("display_name")?.jsonPrimitive?.content
+            ?: listOfNotNull(firstName, lastName).joinToString(" ").takeIf { it.isNotBlank() }
+            ?: username,
         companyName = profile?.get("companyName")?.jsonPrimitive?.content
             ?: profile?.get("company_name")?.jsonPrimitive?.content
-            ?: profile?.get("businessName")?.jsonPrimitive?.content,
+            ?: profile?.get("businessName")?.jsonPrimitive?.content
+            ?: email
+            ?: userId
+            ?: id,
     )

@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.ui.screens.browse
+package org.dsqrwym.standard.ui.screens.browse.product
 
 /**
  * 产品浏览界面
@@ -28,6 +28,7 @@ import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.sharedRetailProductSortFields
+import org.dsqrwym.shared.domain.profile.WholesalerCardData
 import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
@@ -42,6 +43,7 @@ import org.dsqrwym.shared.util.row.SharedRowLayout
 import org.dsqrwym.standard.domain.browse.BrowseScope
 import org.dsqrwym.standard.domain.browse.RetailCategory
 import org.dsqrwym.standard.domain.browse.RetailProduct
+import org.dsqrwym.standard.ui.component.WholesalerStoreBanner
 import org.dsqrwym.standard.ui.viewmodels.browse.ProductBrowseViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -52,13 +54,14 @@ fun ProductBrowseScreen(
     scope: BrowseScope,
     wholesalerId: String? = null,
     categoryId: String? = null,
-    wholesalerName: String? = null,
+    wholesalerData: WholesalerCardData? = null,
     onClearWholesalerScope: (() -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null,
     onProductClick: (String) -> Unit,
     viewModel: ProductBrowseViewModel = koinViewModel(),
 ) {
     LaunchedEffect(scope, wholesalerId, categoryId) {
+        // 我进来先把路由上的范围喂给 VM，后面搜索和分页都按这个范围走
         viewModel.configure(scope, wholesalerId, categoryId)
     }
     val languageCode = viewModel.languageCode
@@ -89,10 +92,11 @@ fun ProductBrowseScreen(
         },
         title = {
             Column {
+                // 我在产品和分类页才显示店铺条，批发商详情页别再塞这个
                 // 批发商范围横幅
-                WholesalerScopeBanner(
-                    wholesalerName = wholesalerName,
-                    onClearScope = onClearWholesalerScope,
+                WholesalerStoreBanner(
+                    data = wholesalerData,
+                    onExit = onClearWholesalerScope ?: {},
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
@@ -188,6 +192,7 @@ private fun CategoryTabs(
     val tabContainerColor = TabRowDefaults.primaryContainerColor.copy(alpha = 0.6f)
     val selectedCategoryIndex = categories.indexOfFirst { it.id == selectedCategoryId }
     Row(modifier = Modifier.fillMaxWidth()) {
+        // 我把“全部”单独做成固定 tab，后面的分类才横向滚动
         val text = stringResource(SharedRes.string.all)
         val textMeasurer = rememberTextMeasurer()
         val textStyle = MaterialTheme.typography.titleSmall
@@ -285,6 +290,7 @@ private fun PaginatedProductGrid(
         scrollBehavior = scrollBehavior,
         padding = padding,
         includeMenuTopPadding = true,
+        // 我这里的 key 只认产品 id，刷新和瀑布流重排时别用 index
         key = { paginatedProducts.itemKey { it.id } },
     ) {
         SharedReadOnlyProductCard(

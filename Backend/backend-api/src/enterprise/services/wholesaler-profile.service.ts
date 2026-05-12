@@ -156,7 +156,7 @@ export class WholesalerProfileService {
     }
 
     const wholesalerProfile = await this.drizzle.db.query.users.findFirst({
-      where: eq(users.id, id),
+      where: and(eq(users.id, id), eq(users.role, UserRole.WHOLESALER)),
       columns: {
         id: true,
         email: true,

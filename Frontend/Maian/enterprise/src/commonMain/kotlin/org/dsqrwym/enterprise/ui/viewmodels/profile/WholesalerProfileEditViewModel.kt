@@ -16,7 +16,7 @@ import maian.shared.generated.resources.*
 import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.enterprise.data.profile.WholesalerProfileRepository
 import org.dsqrwym.enterprise.data.profile.dto.UpdateWholesalerProfileDto
-import org.dsqrwym.enterprise.data.profile.dto.WholesalerProfileResponseDto
+import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository

@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
+import org.dsqrwym.shared.data.user.dto.FindWholesalerQueryDto
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.model.ApiResponseList
@@ -26,6 +27,19 @@ class SharedUserApi(val client: HttpClient) {
             query.selectUserRole?.let { parameter("selectUserRole", it) }
             query.orderBy?.let { parameter("orderBy", it.value) }
             query.orderDir?.let { parameter("orderDir", it.value) }
+            parameter("page", query.page)
+            parameter("limit", query.limit)
+        }.body()
+    }
+
+    suspend inline fun <reified T> getWholesalers(query: FindWholesalerQueryDto): ApiResponse<ApiResponseList<T>> {
+        return client.get(ApiConfig.UserPath.WHOLESALERS) {
+            query.search?.let { parameter("search", it) }
+            query.deliveryAvailable?.let { parameter("delivery_available", it) }
+            query.pickupAvailable?.let { parameter("pickup_available", it) }
+            query.companyType?.let { parameter("company_type", it.value) }
+            parameter("orderBy", query.orderBy.value)
+            parameter("orderDir", query.orderDir.value)
             parameter("page", query.page)
             parameter("limit", query.limit)
         }.body()

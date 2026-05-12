@@ -358,6 +358,10 @@
     <string name="minimum_order_amount">Importe mínimo de pedido</string>
     <string name="delivery_available">Entrega disponible</string>
     <string name="pickup_available">Recogida disponible</string>
+    <string name="delivery">Entrega</string>
+    <string name="pickup">Recogida</string>
+    <string name="min_order_fmt">Pedido mín.: %1$s</string>
+    <string name="exit">Salir</string>
     <string name="logout">Cerrar sesión</string>
     <string name="select_logo">Seleccionar logo</string>
     <string name="delete_logo">Eliminar logo</string>
@@ -374,6 +378,11 @@
     <string name="profile_user_id_value">ID: %1$s</string>
     <string name="amount_euro_value">%1$s€</string>
     <string name="minimum_order_amount_value">Importe mínimo de pedido: %1$s</string>
+    <string name="wholesaler_sort_display_name">Nombre</string>
+    <string name="wholesaler_sort_company_name">Nombre de empresa</string>
+    <string name="wholesaler_sort_city">Ciudad</string>
+    <string name="wholesaler_sort_province">Provincia</string>
+    <string name="wholesaler_sort_minimum_order_amount">Pedido mínimo</string>
     
     <!-- Tipos de empresa (Shared) -->
     <string name="company_type_limited_company">Sociedad Limitada (S.L.)</string>

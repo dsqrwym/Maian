@@ -6,8 +6,11 @@ package org.dsqrwym.standard.domain.browse
  * 包括产品、分类、批发商等核心实体
  */
 
-import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
+import org.dsqrwym.shared.data.location.dto.CityDto
+import org.dsqrwym.shared.data.location.dto.ProvinceDto
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
+import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
+import org.dsqrwym.shared.data.user.SpanishCompanyType
 import org.dsqrwym.shared.domain.category.CategoryTranslation
 import org.dsqrwym.shared.localization.getLocalizedValue
 import org.dsqrwym.shared.network.ApiConfig
@@ -69,9 +72,6 @@ data class RetailCategory(
     val pathNames: List<String> = listOf(name),
     val translations: List<CategoryTranslation>,
 ) {
-    val isPrivate: Boolean
-        get() = ownerUserId != null
-
     fun localizedName(languageCode: String): String =
         translations.firstOrNull { it.langCode == languageCode }?.name ?: name
 
@@ -168,22 +168,15 @@ data class RetailProductDetail(
 data class RetailWholesaler(
     val id: String,
     val userId: String?,
-    val username: String?,
-    val firstName: String?,
-    val lastName: String?,
-    val email: String?,
-    val telephone: String?,
-    val cif: String?,
-    val companyName: String?,
-) {
-    val displayName: String
-        get() = companyName
-            ?: listOfNotNull(firstName, lastName).joinToString(" ").takeIf { it.isNotBlank() }
-            ?: username
-            ?: email
-            ?: userId
-            ?: id
-
-    val secondaryText: String
-        get() = listOfNotNull(cif, telephone, email).firstOrNull { it.isNotBlank() } ?: ""
-}
+    val displayName: String? = null,
+    val companyName: String,
+    val companyType: SpanishCompanyType? = null,
+    val description: String? = null,
+    val logoFileId: String? = null,
+    val deliveryAvailable: Boolean? = null,
+    val pickupAvailable: Boolean? = null,
+    val minimumOrderAmount: String? = null,
+    val deliveryAreaDescription: String? = null,
+    val city: CityDto? = null,
+    val province: ProvinceDto? = null,
+)

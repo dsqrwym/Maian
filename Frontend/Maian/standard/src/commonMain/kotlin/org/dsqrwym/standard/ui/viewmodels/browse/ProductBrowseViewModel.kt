@@ -192,6 +192,7 @@ class ProductBrowseViewModel(
         categoryId: String?,
     ) {
         val key = "$scope|$wholesalerId|$categoryId"
+        //  key 挡一下重复配置，不然 Compose 重组会把分类页码和列表状态反复洗掉
         if (configuredKey == key) return
         configuredKey = key
         this.scope = scope
@@ -250,6 +251,7 @@ class ProductBrowseViewModel(
     }
 
     private fun resetAndLoadCategories() {
+        // 重置顶部分类时连页码一起归零，不然后续“更多”会接到旧页后面
         categoryPage = 1
         categories = emptyList()
         canLoadMoreCategories = false

@@ -13,17 +13,15 @@ import org.dsqrwym.shared.data.products.SharedProductApi
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.dto.SharedFindProductDto
+import org.dsqrwym.shared.data.user.SpanishCompanyType
 import org.dsqrwym.shared.data.user.SharedUserApi
-import org.dsqrwym.shared.data.user.UserRole
-import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
+import org.dsqrwym.shared.data.user.dto.FindWholesalerQueryDto
+import org.dsqrwym.shared.data.user.dto.WholesalerSortField
 import org.dsqrwym.shared.network.model.ApiResponseList
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.standard.data.browse.dto.*
-import org.dsqrwym.standard.domain.browse.RetailCategory
-import org.dsqrwym.standard.domain.browse.RetailProduct
-import org.dsqrwym.standard.domain.browse.RetailProductDetail
-import org.dsqrwym.standard.domain.browse.RetailWholesaler
+import org.dsqrwym.standard.domain.browse.*
 
 /**
  * 零售浏览数据仓库
@@ -67,6 +65,7 @@ class RetailBrowseRepository(
         page: Int = 1,
         limit: Int = 30,
     ): SharedResponseResult<ApiResponseList<RetailProduct>> {
+        // 我在仓库这一层把空搜索吃掉，后面 paging 就不用一直猜空字符串算不算过滤
         val query = SharedFindProductDto(
             search = search?.trim()?.takeIf { it.isNotEmpty() },
             langCode = langCode,
@@ -80,6 +79,7 @@ class RetailBrowseRepository(
         )
         return when (val result = safeApiCall { productApi.getProducts<RetailProductResponse>(query) }) {
             is SharedResponseResult.Success -> {
+                // 我这里马上转成 standard 自己的 domain，UI 那边就别碰后端字段了
                 SharedResponseResult.Success(
                     result.data?.let {
                         ApiResponseList(
@@ -136,6 +136,7 @@ class RetailBrowseRepository(
         page: Int = 1,
         limit: Int = 100,
     ): SharedResponseResult<ApiResponseList<RetailCategory>> {
+        // 我用一个通用分类查询兜住产品页、分类页两种入口，差别都塞在 query 里
         val query = SharedFindCategoryDto(
             search = search?.trim()?.takeIf { it.isNotEmpty() },
             langCode = langCode,
@@ -194,6 +195,7 @@ class RetailBrowseRepository(
         page: Int = 1,
         limit: Int = 20,
     ): SharedResponseResult<ApiResponseList<RetailCategory>> {
+        // 我这里拿的是产品页顶部那排分类，只要直接挂了商品的分类就够了
         val query = SharedFindCategoryDto(
             langCode = langCode,
             // 如果没有批发商，显示公共分类
@@ -251,6 +253,7 @@ class RetailBrowseRepository(
         page: Int = 1,
         limit: Int = 30,
     ): SharedResponseResult<ApiResponseList<RetailCategory>> {
+        // 我让分类页一直走这个入口，店铺模式和全局模式的差别就在 wholesalerId/includePublic
         return getCategories(
             langCode = langCode,
             search = search,
@@ -280,24 +283,26 @@ class RetailBrowseRepository(
      */
     suspend fun getWholesalers(
         search: String? = null,
+        deliveryAvailable: Boolean? = null,
+        pickupAvailable: Boolean? = null,
+        companyType: SpanishCompanyType? = null,
+        orderBy: WholesalerSortField = WholesalerSortField.DISPLAY_NAME,
+        orderDir: OrderDir = OrderDir.ASC,
         page: Int = 1,
-        limit: Int = 50,
+        limit: Int = 20,
     ): SharedResponseResult<ApiResponseList<RetailWholesaler>> {
-        val query = FindUserQueryDto(
+        // 我把批发商列表也按 paging 的写法包起来，筛选排序都在这个 query 里收口
+        val query = FindWholesalerQueryDto(
             search = search?.trim()?.takeIf { it.isNotEmpty() },
-            role = UserRole.WHOLESALER,  // 只查询批发商角色
-            userId = true,
-            username = true,
-            email = true,
-            firstName = true,
-            lastName = true,
-            telephone = true,
-            cif = true,
-            profile = true,  // 需要profile字段获取公司名称
+            deliveryAvailable = deliveryAvailable,
+            pickupAvailable = pickupAvailable,
+            companyType = companyType,
+            orderBy = orderBy,
+            orderDir = orderDir,
             page = page,
             limit = limit,
         )
-        return when (val result = safeApiCall { userApi.getUsers<RetailWholesalerResponse>(query) }) {
+        return when (val result = safeApiCall { userApi.getWholesalers<WholesalerListItemDto>(query) }) {
             is SharedResponseResult.Success -> {
                 // 成功响应：转换为批发商领域模型
                 SharedResponseResult.Success(

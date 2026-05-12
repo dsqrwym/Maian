@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.ui.screens.browse
+package org.dsqrwym.standard.ui.screens.browse.product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

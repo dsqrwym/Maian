@@ -30,6 +30,7 @@ import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
 import org.dsqrwym.standard.navigation.*
 import org.dsqrwym.standard.navigation.naventry.authNavEntry
 import org.dsqrwym.standard.navigation.naventry.menuNavEntry
+import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStateHolder
 import org.koin.compose.currentKoinScope
 
 /**
@@ -51,7 +52,7 @@ fun App() {
                 subclass(CategoriesScreen::class)
                 subclass(CategoryBrowseRoute::class)
                 subclass(WholesalersScreen::class)
-                subclass(WholesalerHomeScreen::class)
+                subclass(WholesalerProfileRoute::class)
                 subclass(ProductDetailPlaceholderScreen::class)
                 subclass(ProductDetailScreen::class)
             }
@@ -79,6 +80,7 @@ fun App() {
 
             is AuthState.Authenticated -> {
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
+                val browseScope: BrowseScopeStateHolder = currentKoinScope().get()
                 val menuList = listOf(
                     SharedMenuItemState(
                         SharedMenuItem(
@@ -128,7 +130,14 @@ fun App() {
                     SharedAdaptiveNavigation(
                         menuConfig = menuConfig,
                         currentRoute = navigationState.currentTopLevelRoute,
-                        onNavigate = navigationState::navigateToTopLevel,
+                        onNavigate = { route ->
+                            navigationState.navigateToTopLevel(route)
+                            if (route == WholesalersScreen) {
+                                browseScope.state.wholesalerId?.let { wholesalerId ->
+                                    navigationState.navigate(WholesalerProfileRoute(wholesalerId))
+                                }
+                            }
+                        },
                     ) {
                         SharedNavigationRoot(navigationState) {
                             menuNavEntry(menuViewModel, navigationState)

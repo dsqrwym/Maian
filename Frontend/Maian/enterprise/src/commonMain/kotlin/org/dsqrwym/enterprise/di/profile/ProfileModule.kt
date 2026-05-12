@@ -8,7 +8,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val profileModule = module {
-    single { WholesalerProfileApi(get()) }
+    single { WholesalerProfileApi(get(), get()) }
     single { WholesalerProfileRepository(get()) }
     viewModel<WholesalerProfileViewModel> { WholesalerProfileViewModel(get(), get()) }
     viewModel<WholesalerProfileEditViewModel> {

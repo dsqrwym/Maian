@@ -1,6 +1,19 @@
-﻿<resources>
-
+<resources>
+    <string name="wholesalers">Majoristes</string>
+    <string name="distributors">Distribuïdors</string>
+    <string name="search_distributors">Busca distribuïdors</string>
+    <string name="no_distributors">No s'han trobat distribuïdors</string>
+    <string name="wholesaler_scope_label">Majoriste: %1$s</string>
+    <string name="back_to_all">Torna a tot</string>
+    <string name="current_wholesaler">Actual</string>
+    <string name="search_wholesalers">Busca majoristes</string>
+    <string name="no_wholesalers">No s'han trobat majoristes</string>
+    <string name="wholesaler_sort_display_name">Nom</string>
+    <string name="wholesaler_sort_company_name">Nom de l'empresa</string>
+    <string name="wholesaler_sort_city">Ciutat</string>
+    <string name="wholesaler_sort_province">Província</string>
+    <string name="wholesaler_sort_minimum_order_amount">Comanda mínima</string>
+    <string name="product_detail_coming_soon">El detall del producte encara no està disponible.</string>
     <string name="chat">Missatges</string>
     <string name="shopping_cart">Cistella</string>
 </resources>
-

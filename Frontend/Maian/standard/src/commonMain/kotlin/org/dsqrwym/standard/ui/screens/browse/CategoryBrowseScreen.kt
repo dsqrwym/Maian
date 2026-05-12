@@ -21,6 +21,7 @@ import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.search_categories
 import maian.shared.generated.resources.search_products
+import org.dsqrwym.shared.domain.profile.WholesalerCardData
 import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.category.SharedCategoryPathRow
@@ -33,6 +34,7 @@ import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.standard.domain.browse.BrowseScope
 import org.dsqrwym.standard.domain.browse.RetailCategory
 import org.dsqrwym.standard.domain.browse.RetailProduct
+import org.dsqrwym.standard.ui.component.WholesalerStoreBanner
 import org.dsqrwym.standard.ui.viewmodels.browse.CategoryBrowseViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -43,7 +45,7 @@ fun CategoryBrowseScreen(
     scope: BrowseScope,
     wholesalerId: String? = null,
     rootCategory: RetailCategory? = null,
-    wholesalerName: String? = null,
+    wholesalerData: WholesalerCardData? = null,
     onClearWholesalerScope: (() -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null,
     onProductClick: (String) -> Unit,
@@ -81,9 +83,9 @@ fun CategoryBrowseScreen(
         title = {
             Column {
                 // 批发商范围横幅
-                WholesalerScopeBanner(
-                    wholesalerName = wholesalerName,
-                    onClearScope = onClearWholesalerScope,
+                WholesalerStoreBanner(
+                    data = wholesalerData,
+                    onExit = onClearWholesalerScope ?: {},
                 )
                 SearchBarDefaults.InputField(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),

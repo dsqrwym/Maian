@@ -7,5 +7,6 @@ import { ProductsReadService } from '#/products/services/products-read.service.j
 @Module({
   controllers: [ProductsController],
   providers: [ProductsService, ProductsReadService, ProductsWriteService],
+  exports: [ProductsReadService],
 })
 export class ProductsModule {}

@@ -323,6 +323,10 @@
     <string name="minimum_order_amount">最低起订金额</string>
     <string name="delivery_available">支持配送</string>
     <string name="pickup_available">支持自提</string>
+    <string name="delivery">配送</string>
+    <string name="pickup">自提</string>
+    <string name="min_order_fmt">最低起订：%1$s</string>
+    <string name="exit">退出</string>
     <string name="logout">退出登录</string>
     <string name="select_logo">选择 Logo</string>
     <string name="delete_logo">删除 Logo</string>
@@ -339,6 +343,11 @@
     <string name="profile_user_id_value">ID：%1$s</string>
     <string name="amount_euro_value">%1$s€</string>
     <string name="minimum_order_amount_value">最低起订金额：%1$s</string>
+    <string name="wholesaler_sort_display_name">名称</string>
+    <string name="wholesaler_sort_company_name">公司名</string>
+    <string name="wholesaler_sort_city">城市</string>
+    <string name="wholesaler_sort_province">省份</string>
+    <string name="wholesaler_sort_minimum_order_amount">最低起订金额</string>
     
     <!-- 公司类型 (Shared) -->
     <string name="company_type_limited_company">有限责任公司（S.L.）</string>

@@ -104,6 +104,7 @@ class CategoryBrowseViewModel(
      */
     private val railLocation = snapshotFlow {
         val selected = selectedCategory
+        // 左栏看的是当前分类的同级列表，所以拿 parentId 和 level 就够了
         (selected?.parentId) to (selected?.level ?: 1)  // 返回父分类ID和当前层级
     }.distinctUntilChanged()
 
@@ -120,6 +121,7 @@ class CategoryBrowseViewModel(
         snapshotFlow { isConfigured }.distinctUntilChanged(),
         refreshSearchCategory.asSharedFlow().onStart { emit(Unit) }
     ) { search, rail, config, configured, _ ->
+        // 左侧 rail 和搜索框共用搜索词，换层级时也会重新建分页
         // 构建查询参数
         CategoryPageQuery(
             search = search,
@@ -163,6 +165,7 @@ class CategoryBrowseViewModel(
         snapshotFlow { isConfigured }.distinctUntilChanged(),
         refreshSearchCategory.asSharedFlow().onStart { emit(Unit) }
     ) { search, selected, config, configured, _ ->
+        // 第三级就直接给空子分类
         // 如果是第3级分类，则没有子分类
         if (selected?.level == 3) {
             return@combine CategoryPageQuery(
@@ -226,7 +229,7 @@ class CategoryBrowseViewModel(
         .filter { it.second }
         .map { it.first }
         .flatMapLatest { query ->
-            // 如果没有选中分类，返回空数据
+            // 只有选中分类以后才开始拉商品，不然右侧瀑布流先空着
             if (query.categoryId == null) {
                 return@flatMapLatest flowOf(PagingData.empty())
             }
@@ -297,6 +300,7 @@ class CategoryBrowseViewModel(
     ) {
         // 生成配置键值，避免重复配置
         val key = "$scope|$wholesalerId|${rootCategory?.id}"
+        // 挡重组，分类页面一重建 pager 就会闪
         if (configuredKey == key) return  // 配置未变化，跳过
         configuredKey = key
         this.scope = scope
@@ -351,6 +355,7 @@ class CategoryBrowseViewModel(
     }
 
     private suspend fun loadInitialCategory() {
+        // 第一次进分类页会选第一个一级分类，让右边产品区有东西可看
         val items = loadCategoriesPage(
             search = categorySearchText,
             parentId = null,
@@ -360,7 +365,6 @@ class CategoryBrowseViewModel(
             page = 1,
             pageSize = categoryPageSize,
         )
-        // 如果还没有选中分类，默认选中第一个
         if (selectedCategory == null) {
             selectedCategory = items.firstOrNull()
         }

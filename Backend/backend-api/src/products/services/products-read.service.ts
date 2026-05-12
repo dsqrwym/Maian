@@ -26,12 +26,17 @@ import {
   exists,
   ilike,
   like,
+  notInArray,
   or,
   SQL,
   sql,
 } from 'drizzle-orm';
 import { Action } from '#/casl/actions.js';
-import { ProductStatus, UserRole } from '#/generated/drizzle/enums.js';
+import {
+  ProductStatus,
+  UserRole,
+  UserStatus,
+} from '#/generated/drizzle/enums.js';
 import { ProductListSelectField, ProductSortField } from '../product.enums.js';
 import { IProductListQueryDto } from '../dto/product-list-query.dto.js';
 import { IProductResponse } from '../dto/product-response.js';
@@ -39,6 +44,7 @@ import { escapeLike, toUnaccent } from '#/utils/string.util.js';
 import { ENV } from '#/config/constants.config.js';
 import { subject } from '@casl/ability';
 import { caslHasField, caslToDrizzle } from '#/casl/casl-to-drizzle.js';
+import { users } from '../../../drizzle/schema.js';
 
 @Injectable()
 export class ProductsReadService {
@@ -54,16 +60,36 @@ export class ProductsReadService {
     this.logger.setContext(ProductsReadService.name);
   }
 
+  buildVisibleWholesalerOwnerCondition(): SQL {
+    return exists(
+      this.drizzle.db
+        .select({ one: sql<number>`1` })
+        .from(users)
+        .where(
+          and(
+            eq(users.id, products.user_id),
+            eq(users.role, UserRole.WHOLESALER),
+            notInArray(users.status, [
+              UserStatus.INACTIVE,
+              UserStatus.BANNED,
+              UserStatus.PENDING_VERIFICATION,
+              UserStatus.PENDING_REVIEW,
+            ]),
+          ),
+        ),
+    );
+  }
+
   getSortFieldDrizzle(sortBy?: ProductSortField, langCode?: string) {
     // COALESCE 代表 如果左值为 null 则返回右值，缺点是没有索引 以后优化
     switch (sortBy) {
       case ProductSortField.NAME:
         return langCode
-          ? sql`COALESCE("localizedSortLateral"."sort_name", ${products.name})`
+          ? sql`COALESCE("productTranslationsLateral"."sort_name", ${products.name})`
           : products.name;
       case ProductSortField.TITLE:
         return langCode
-          ? sql`COALESCE("localizedSortLateral"."sort_title", ${products.title})`
+          ? sql`COALESCE("productTranslationsLateral"."sort_title", ${products.title})`
           : products.title;
       case ProductSortField.CATEGORY:
         return sql.raw(`("mainCategoryLateral"."main_category"->>'name')`);
@@ -233,6 +259,18 @@ export class ProductsReadService {
             ),
             '[]'::jsonb
           )`.as('product_translations'),
+        // 将排序字段集中在 翻译查询 如果存在 langCode 就按照翻译 排序。 不用max会报错因为聚合只能和聚合一起
+        sort_name: langCode
+          ? sql<string | null>`MAX(${product_translations.name})`.as(
+              'sort_name',
+            )
+          : sql<string | null>`NULL`.as('sort_name'),
+
+        sort_title: langCode
+          ? sql<string | null>`MAX(${product_translations.title})`.as(
+              'sort_title',
+            )
+          : sql<string | null>`NULL`.as('sort_title'),
       })
       .from(product_translations)
       .where(
@@ -263,12 +301,20 @@ export class ProductsReadService {
       .from(products)
       .leftJoinLateral(variantAggregates, sql`TRUE`)
       .leftJoinLateral(mainImgLateral, sql`TRUE`)
-      .leftJoinLateral(mainCategoryLateral, sql`TRUE`)
       .leftJoinLateral(translationsLateral, sql`TRUE`)
       .$dynamic();
 
+    if (category) {
+      productQuery.leftJoinLateral(mainCategoryLateral, sql`TRUE`);
+    }
+
     // 构建 WHERE 条件
     const whereConditions: (SQL | undefined)[] = [];
+
+    // 对于零售商不应该看到 状态不对的批发商产品
+    if (user.userRole === UserRole.RETAILER) {
+      whereConditions.push(this.buildVisibleWholesalerOwnerCondition());
+    }
 
     if (search) {
       // 精确匹配跨字段关键词
@@ -359,31 +405,6 @@ export class ProductsReadService {
     // 权限条件没有status
     if (!statusRestricted && status) {
       whereConditions.push(eq(products.status, status));
-    }
-
-    // 如果存在语言过滤 那么添加按照当前语言排序
-    if (langCode) {
-      const localizedSortLateral = this.drizzle.db
-        .select({
-          sort_name: sql<string>`${product_translations.name}`.as('sort_name'),
-          sort_title: sql<string>`${product_translations.title}`.as(
-            'sort_title',
-          ),
-        })
-        .from(product_translations)
-        .where(
-          and(
-            eq(product_translations.product_id, products.id),
-            eq(product_translations.lang_code, langCode),
-          ),
-        )
-        .limit(1)
-        .as('localizedSortLateral');
-
-      productQuery = productQuery.leftJoinLateral(
-        localizedSortLateral,
-        sql`TRUE`,
-      );
     }
 
     productQuery = productQuery

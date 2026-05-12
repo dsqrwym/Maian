@@ -1,7 +1,6 @@
-package org.dsqrwym.enterprise.domain.profile
+package org.dsqrwym.shared.domain.profile
 
-import org.dsqrwym.enterprise.data.profile.dto.WholesalerProfileResponseDto
-import org.dsqrwym.shared.domain.profile.WholesalerCardData
+import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 
 fun WholesalerProfileResponseDto.toCardData() = WholesalerCardData(
     id = id,
@@ -15,7 +14,6 @@ fun WholesalerProfileResponseDto.toCardData() = WholesalerCardData(
     pickupAvailable = profile?.pickupAvailable,
     minimumOrderAmount = profile?.minimumOrderAmount,
     deliveryAreaDescription = profile?.deliveryAreaDescription,
-    // 扩展字段
     email = email,
     telephone = telephone,
     taxId = taxId,

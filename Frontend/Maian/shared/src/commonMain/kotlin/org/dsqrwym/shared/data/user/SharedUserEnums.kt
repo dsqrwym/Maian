@@ -57,6 +57,16 @@ enum class SpanishCompanyType {
     OTROS
 }
 
+val SpanishCompanyType.value: String
+    get() = when (this) {
+        SpanishCompanyType.SL -> "S.L."
+        SpanishCompanyType.SA -> "S.A."
+        SpanishCompanyType.AUTONOMO -> "Autónomo"
+        SpanishCompanyType.COOPERATIVA -> "Cooperativa"
+        SpanishCompanyType.SOCIEDAD_CIVIL -> "Sociedad Civil"
+        SpanishCompanyType.OTROS -> "Otros"
+    }
+
 fun SpanishCompanyType.toStringResource(): StringResource =
     when (this) {
         SpanishCompanyType.SL -> SharedRes.string.company_type_limited_company

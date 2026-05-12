@@ -19,6 +19,7 @@ import maian.shared.generated.resources.delete_failed
 import maian.shared.generated.resources.delete_success
 import org.dsqrwym.enterprise.data.category.CategoryRepository
 import org.dsqrwym.shared.domain.category.CategoryNode
+import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -131,5 +132,23 @@ class CategoriesListViewModel(
             isLoading = false
         }
         deleteCategory = null
+    }
+
+    override suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+        // maxLevel 2 保证都是父元素
+        // onlyWithOwnedChildren = true 保证父类别必须有用户的子类别
+        when (val result =
+            categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 2, onlyWithOwnedChildren = true)) {
+            is SharedResponseResult.Success -> {
+                return result.data?.items ?: emptyList()
+            }
+
+            is SharedResponseResult.Error -> {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    result.message?.let { mySnackbarViewModel.showError(it) }
+                }
+            }
+        }
+        return emptyList()
     }
 }

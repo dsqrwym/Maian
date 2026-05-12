@@ -234,15 +234,6 @@ fun CategoryListItem(
                                 text = category.name,
                                 style = MaterialTheme.typography.titleMedium
                             )
-                            AssistChip(
-                                onClick = {},
-                                label = {
-                                    Text(
-                                        stringResource(BusinessRes.string.private_category),
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                }
-                            )
                         }
 
                         FlowRow(

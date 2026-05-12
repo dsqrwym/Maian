@@ -24,7 +24,7 @@ abstract class BaseCategoryFilterViewmodel(
         // maxLevel 2 保证都是父元素
         // onlyWithOwnedChildren = true 保证父类别必须有用户的子类别
         when (val result =
-            categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 2, onlyWithOwnedChildren = true)) {
+            categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 2)) {
             is SharedResponseResult.Success -> {
                 return result.data?.items ?: emptyList()
             }

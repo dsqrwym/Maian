@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.data.profile.dto
+package org.dsqrwym.shared.data.profile
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

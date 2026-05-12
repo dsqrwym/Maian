@@ -320,6 +320,10 @@
     <string name="minimum_order_amount">Minimum Order Amount</string>
     <string name="delivery_available">Delivery Available</string>
     <string name="pickup_available">Pickup Available</string>
+    <string name="delivery">Delivery</string>
+    <string name="pickup">Pickup</string>
+    <string name="min_order_fmt">Min. order: %1$s</string>
+    <string name="exit">Exit</string>
     <string name="logout">Logout</string>
     <string name="select_logo">Select Logo</string>
     <string name="delete_logo">Delete Logo</string>
@@ -336,6 +340,11 @@
     <string name="profile_user_id_value">ID: %1$s</string>
     <string name="amount_euro_value">%1$s€</string>
     <string name="minimum_order_amount_value">Minimum order amount: %1$s</string>
+    <string name="wholesaler_sort_display_name">Name</string>
+    <string name="wholesaler_sort_company_name">Company name</string>
+    <string name="wholesaler_sort_city">City</string>
+    <string name="wholesaler_sort_province">Province</string>
+    <string name="wholesaler_sort_minimum_order_amount">Minimum order amount</string>
     
     <!-- Company Types (Shared) -->
     <string name="company_type_limited_company">Limited Company (S.L.)</string>
@@ -345,4 +354,3 @@
     <string name="company_type_civil_company">Civil Company</string>
     <string name="company_type_other">Other</string>
 </resources>
-

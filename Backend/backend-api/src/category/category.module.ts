@@ -6,6 +6,7 @@ import { CheckCategoryController } from './controllers/check-category.controller
 import { CheckCategoryService } from './services/check-category.service.js';
 import { CategoryReadService } from '#/category/services/category-read.service.js';
 import { CategoryWriteService } from '#/category/services/category-write.service.js';
+import { ProductsModule } from '#/products/products.module.js';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CategoryWriteService } from '#/category/services/category-write.service
         module: CategoryModule,
       },
     ]),
+    ProductsModule,
   ],
   controllers: [CategoryController, CheckCategoryController],
   providers: [

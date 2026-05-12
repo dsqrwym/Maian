@@ -13,6 +13,7 @@ import {
   files,
   message_files,
   products_files,
+  users,
 } from '#/generated/drizzle/schema.js';
 import { and, asc, eq, gt, inArray, lt, notExists, sql } from 'drizzle-orm';
 
@@ -84,6 +85,12 @@ export class CleanupFilesService {
                   .select({ one: sql<number>`1` })
                   .from(products_files)
                   .where(eq(products_files.file_id, files.id)),
+              ),
+              notExists(
+                this.drizzleService.db
+                  .select({ one: sql<number>`1` })
+                  .from(users)
+                  .where(eq(users.profile_image_file_id, files.id)),
               ),
             ),
           );
