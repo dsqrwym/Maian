@@ -16,4 +16,6 @@
     <string name="product_detail_coming_soon">El detall del producte encara no està disponible.</string>
     <string name="chat">Missatges</string>
     <string name="shopping_cart">Cistella</string>
+    <string name="cart_item_added">Afegit a la cistella</string>
+    <string name="product_information_changed_retry">La informació del producte ha canviat. Torna-ho a intentar.</string>
 </resources>

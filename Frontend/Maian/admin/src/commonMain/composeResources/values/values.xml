@@ -9,8 +9,5 @@
     <string name="category_visible_to_all_tip">This category will be accessible to all users</string>
     <string name="wholesaler_selected">Wholesaler selected</string>
 
-    <string name="category_management_description">
-        View and search categories, and create private or platform-wide categories for wholesalers or all platform users.
-        Supports editing (name, translations) and deleting (only super administrators can delete). Categories can have up to three levels (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">View and search categories, and create private or platform-wide categories for wholesalers or all platform users.\nSupports editing (name, translations) and deleting (only super administrators can delete). Categories can have up to three levels (1 → 2 → 3).</string>
 </resources>

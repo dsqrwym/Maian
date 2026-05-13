@@ -149,7 +149,10 @@ fun CategoryBrowseScreen(
                     itemName = { it.localizedName(languageCode) },
                     onSelect = { category ->
                         onCategoryClick(
-                            category.withBrowseContextFrom(viewModel.selectedCategory, languageCode),
+                            category.withBrowseContextFrom(
+                                viewModel.selectedCategory,
+                                languageCode
+                            ),
                             languageCode,
                         )
                     },
@@ -208,7 +211,7 @@ private fun CategoryProductGrid(
         paginatedProducts = products,
         scrollBehavior = scrollBehavior,
         padding = PaddingValues(0.dp),
-        key = { products.itemKey { it.id } },
+        key =  products.itemKey { it.id } ,
     ) { product ->
         SharedReadOnlyProductCard(
             isLoading = products.isRefreshing,

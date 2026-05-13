@@ -290,8 +290,7 @@ private fun PaginatedProductGrid(
         scrollBehavior = scrollBehavior,
         padding = padding,
         includeMenuTopPadding = true,
-        // 我这里的 key 只认产品 id，刷新和瀑布流重排时别用 index
-        key = { paginatedProducts.itemKey { it.id } },
+        key = paginatedProducts.itemKey { it.id },
     ) {
         SharedReadOnlyProductCard(
             isLoading = paginatedProducts.isRefreshing,

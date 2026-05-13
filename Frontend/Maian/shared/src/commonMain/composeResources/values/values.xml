@@ -22,9 +22,7 @@
     <string name="login_subtitle">Please login to continue</string>
 
     <string name="session_expired">Your session has expired. Please log in again.</string>
-    <string name="session_revoked">Your account has been logged out on another device or terminated by an
-        administrator.
-    </string>
+    <string name="session_revoked">Your account has been logged out on another device or terminated by an administrator.</string>
     <string name="csrf_invalid">Security validation failed. Please refresh the page or log in again.</string>
     <string name="session_not_found">Session not found. Please log in again.</string>
     <string name="token_invalid_or_expired">Token is invalid or expired, please obtain a new one</string>

@@ -9,8 +9,5 @@
     <string name="category_visible_to_all_tip">此类别将对所有用户开放</string>
     <string name="wholesaler_selected">已选择批发商</string>
 
-    <string name="category_management_description">
-        可查看与搜索类别，为批发商或全平台用户创建私人类别与全平台类别。
-        支持编辑（名称、翻译）及删除（仅超级管理员可删除）。类别最多支持三层嵌套（1 → 2 → 3）。
-    </string>
+    <string name="category_management_description">可查看与搜索类别，为批发商或全平台用户创建私人类别与全平台类别。 \n支持编辑（名称、翻译）及删除（仅超级管理员可删除）。类别最多支持三层嵌套（1 → 2 → 3）。</string>
 </resources>

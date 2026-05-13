@@ -24,14 +24,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.blurEffect
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.login_background_content_description
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.login_background_content_description
 
 
 /**
@@ -54,7 +55,7 @@ fun BackgroundImage(
     glassTintColor: Color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.38f),
     content: @Composable () -> Unit
 ) {
-    val hazeState = remember { HazeState(initialBlurEnabled = true) }
+    val hazeState = remember { HazeState() }
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val isLandscape = maxWidth > maxHeight
@@ -96,10 +97,12 @@ fun BackgroundImage(
                     .hazeEffect( // 应用 hazeChild 到这个 Box
                         state = hazeState
                     ) {
-                        style = HazeStyle.Unspecified.copy(
-                            blurRadius = blurRadius,
-                            backgroundColor = glassTintColor
-                        )
+                        blurEffect {
+                            style = HazeBlurStyle.Unspecified.copy(
+                                blurRadius = blurRadius,
+                                backgroundColor = glassTintColor
+                            )
+                        }
                     }
             )
         }

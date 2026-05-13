@@ -17,6 +17,7 @@ import { HashService } from '#/common/hash/hash.service.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { user_sessions } from '#/generated/drizzle/schema.js';
 import { and, eq, sql } from 'drizzle-orm';
+import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
 export class SessionService {
@@ -31,7 +32,7 @@ export class SessionService {
     // 查找会话，并注销
     const result = await this.drizzleService.db
       .update(user_sessions)
-      .set({ revoked: true, last_active: sql`(NOW() AT TIME ZONE 'UTC')` })
+      .set({ revoked: true, last_active: SQL_NOW })
       .where(
         and(
           eq(user_sessions.session_id, sessionData.sessionId),

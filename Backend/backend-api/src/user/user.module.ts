@@ -3,19 +3,11 @@ import { CheckUserService } from './services/check-user.service.js';
 import { CheckUserController } from './controllers/check-user.controller.js';
 import { FindUserController } from './controllers/find-user.controller.js';
 import { FindUserService } from './services/find-user.service.js';
-import { RouterModule } from '@nestjs/core';
 import { ReadWholesalerService } from '#/user/services/read-wholesaler.services.js';
 import { ReadWholesalerController } from '#/user/controllers/read-wholesaler.controller.js';
 
 @Module({
-  imports: [
-    RouterModule.register([
-      {
-        path: 'user',
-        module: UserModule,
-      },
-    ]),
-  ],
+  imports: [],
   controllers: [
     CheckUserController,
     FindUserController,

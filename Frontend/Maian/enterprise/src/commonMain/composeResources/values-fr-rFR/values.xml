@@ -3,9 +3,7 @@
     <string name="login_tab_employee">Employé</string>
     <string name="field_wholesaler_id_label">Identifiant du grossiste</string>
     <string name="field_wholesaler_id_placeholder">Entrez votre identifiant de grossiste</string>
-    <string name="error_wholesaler_id_required">
-        L’identifiant du grossiste est requis lors de la connexion avec un nom d’utilisateur
-    </string>
+    <string name="error_wholesaler_id_required">L’identifiant du grossiste est requis lors de la connexion avec un nom d’utilisateur</string>
 
     <string name="register_section_company_info">Informations sur l'entreprise</string>
     <string name="field_company_name_label">Nom de l'entreprise</string>
@@ -14,10 +12,7 @@
     <string name="field_company_type_placeholder">Sélectionnez le type d'entreprise</string>
     <string name="icon_content_description_company">Icône de l'entreprise</string>
 
-    <string name="category_management_description">
-        Voir et rechercher des catégories, créer vos propres catégories de produits et gérer les noms multilingues.
-        Prend en charge jusqu'à trois niveaux de hiérarchie (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">Voir et rechercher des catégories, créer vos propres catégories de produits et gérer les noms multilingues.\n Prend en charge jusqu'à trois niveaux de hiérarchie (1 → 2 → 3).</string>
 
     <string name="company_type_limited_company">Société à responsabilité limitée (S.L.)</string>
     <string name="company_type_public_limited_company">Société anonyme (S.A.)</string>
@@ -35,9 +30,7 @@
     <string name="product_description_placeholder">Saisissez la description détaillée du produit</string>
 
     <string name="product_preview_outline">Résumé de l’aperçu</string>
-    <string name="product_preview_placeholder">
-        Cette zone est réservée au flux complet d’aperçu du produit.
-    </string>
+    <string name="product_preview_placeholder">Cette zone est réservée au flux complet d’aperçu du produit.</string>
 
     <string name="product_preview_name">Nom : %1$s</string>
     <string name="product_preview_title">Titre : %1$s</string>
@@ -65,17 +58,11 @@
     <string name="enter_available_stock">Saisissez la quantité actuellement en stock</string>
 
     <string name="low_stock_threshold">Alerte de stock faible</string>
-    <string name="enter_low_stock_threshold">
-        Saisissez la quantité d’alerte de stock faible
-    </string>
+    <string name="enter_low_stock_threshold">Saisissez la quantité d’alerte de stock faible</string>
 
-    <string name="select_main_product_category">
-        Sélectionnez la catégorie principale du produit
-    </string>
+    <string name="select_main_product_category">Sélectionnez la catégorie principale du produit</string>
 
-    <string name="product_title_placeholder">
-        Saisissez un titre court pour le produit
-    </string>
+    <string name="product_title_placeholder">Saisissez un titre court pour le produit</string>
 
     <string name="main_language">Langue principale</string>
 
@@ -86,9 +73,7 @@
 
     <string name="upload_progress">Importation : %1$d%</string>
 
-    <string name="upload_failed_retry">
-        Échec de l’importation\nAppuyez pour réessayer
-    </string>
+    <string name="upload_failed_retry">Échec de l’importation\nAppuyez pour réessayer</string>
 
     <string name="upload_media">Importer</string>
     <string name="add_media">Ajouter un média</string>
@@ -99,37 +84,18 @@
 
     <string name="product_form_media_title">Fichiers multimédias</string>
 
-    <string name="product_form_media_subtitle_mb">
-        Maintenez appuyé et faites glisser pour réorganiser.
-        La première image sera l'image principale.
-        Chaque fichier ne doit pas dépasser %1$d Mo.
-    </string>
+    <string name="product_form_media_subtitle_mb">Maintenez appuyé et faites glisser pour réorganiser.\nLa première image sera l'image principale.\nChaque fichier ne doit pas dépasser %1$d Mo.</string>
 
-    <string name="product_form_translations_title">
-        Informations produit (multilingue)
-    </string>
+    <string name="product_form_translations_title">Informations produit (multilingue)</string>
 
-    <string name="product_form_translations_subtitle">
-        Ajoutez des noms et descriptions dans différentes langues.
-        La langue principale est affichée par défaut ;
-        les autres servent à l’affichage multilingue.
-        Au moins une langue est requise.
-    </string>
+    <string name="product_form_translations_subtitle">Ajoutez des noms et descriptions dans différentes langues.\nLa langue principale est affichée par défaut;\nles autres servent à l’affichage multilingue.\nAu moins une langue est requise.</string>
 
     <string name="product_form_attributes_title">Attributs du produit</string>
 
-    <string name="product_form_attributes_subtitle">
-        Définissez les attributs de base du produit,
-        notamment la catégorie, le taux de taxe et le statut.
-    </string>
+    <string name="product_form_attributes_subtitle">Définissez les attributs de base du produit, notamment la catégorie, le taux de taxe et le statut.</string>
 
     <string name="product_form_sku_title">Liste des SKU</string>
 
-    <string name="product_form_sku_subtitle">
-        Chaque produit nécessite au moins une variante de vente (SKU).
-        Vous pouvez créer des variantes pour différents emballages,
-        spécifications ou prix.
-        Jusqu'à 50 variantes sont prises en charge.
-    </string>
+    <string name="product_form_sku_subtitle">Chaque produit nécessite au moins une variante de vente (SKU).\nVous pouvez créer des variantes pour différents emballages, spécifications ou prix. \nJusqu'à 50 variantes sont prises en charge.</string>
 
 </resources>

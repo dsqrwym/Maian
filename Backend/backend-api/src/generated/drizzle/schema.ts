@@ -6,17 +6,17 @@ import {
   varchar,
   unique,
   char,
+  integer,
+  index,
   check,
   bigint,
-  timestamp,
-  numeric,
-  integer,
-  jsonb,
-  uuid,
-  uniqueIndex,
-  index,
   text,
+  timestamp,
   boolean,
+  uniqueIndex,
+  uuid,
+  numeric,
+  jsonb,
   date,
   doublePrecision,
   primaryKey,
@@ -155,64 +155,20 @@ export const countries = pgTable(
   ],
 );
 
-export const variant_products = pgTable(
-  'variant_products',
+export const cities = pgTable(
+  'cities',
   {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'variant_products_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    product_id: bigint({ mode: 'bigint' }).notNull(),
-    type_sale: SaleVariant().notNull(),
-    price: numeric({ precision: 10, scale: 2 }).notNull(),
-    price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
-    available_stock: integer().notNull(),
-    sort: smallint().notNull(),
-    attributes: jsonb(),
-    status: ProductStatus().default('ACTIVE').notNull(),
-    product_code: varchar({ length: 50 }).notNull(),
-    reserved_stock: integer().default(0).notNull(),
-    low_stock_threshold: integer().default(0).notNull(),
-    sale_unit_qty: integer().default(1).notNull(),
-    min_order_qty: integer().default(1).notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
-    created_by: uuid().notNull(),
-    updated_by: uuid(),
+    id: serial().primaryKey().notNull(),
+    province_id: integer().notNull(),
+    name: varchar({ length: 100 }).notNull(),
+    name_local: varchar({ length: 100 }).notNull(),
   },
   (table) => [
     foreignKey({
-      columns: [table.created_by],
-      foreignColumns: [users.id],
-      name: 'variant_products_created_by_fkey',
-    }),
-    foreignKey({
-      columns: [table.product_id],
-      foreignColumns: [products.id],
-      name: 'variant_products_product_id_fkey',
+      columns: [table.province_id],
+      foreignColumns: [provinces.id],
+      name: 'cities_province_id_fkey',
     }).onDelete('cascade'),
-    foreignKey({
-      columns: [table.updated_by],
-      foreignColumns: [users.id],
-      name: 'variant_products_updated_by_fkey',
-    }),
-    check('variant_available_stock_check', sql`available_stock >= 0`),
-    check('variant_low_stock_threshold_check', sql`low_stock_threshold >= 0`),
-    check('variant_min_order_qty_check', sql`min_order_qty >= 1`),
-    check('variant_price_check', sql`price >= (0)::numeric`),
-    check('variant_price_iva_check', sql`price_iva >= (0)::numeric`),
-    check('variant_reserved_stock_check', sql`reserved_stock >= 0`),
-    check('variant_sale_unit_qty_check', sql`sale_unit_qty >= 1`),
-    check('variant_sort_check', sql`sort >= 0`),
   ],
 );
 
@@ -249,58 +205,6 @@ export const files = pgTable(
       'files_file_name_check',
       sql`(file_name)::text ~* '^[^\\/:\*\?"<>\|]{1,255}\.[a-z0-9]+$'::text`,
     ),
-  ],
-);
-
-export const cities = pgTable(
-  'cities',
-  {
-    id: serial().primaryKey().notNull(),
-    province_id: integer().notNull(),
-    name: varchar({ length: 100 }).notNull(),
-    name_local: varchar({ length: 100 }).notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.province_id],
-      foreignColumns: [provinces.id],
-      name: 'cities_province_id_fkey',
-    }).onDelete('cascade'),
-  ],
-);
-
-export const cart_details = pgTable(
-  'cart_details',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'cart_details_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    cart_id: bigint({ mode: 'bigint' }).notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    variant_products_id: bigint({ mode: 'bigint' }),
-    quantity: integer().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.cart_id],
-      foreignColumns: [carts.id],
-      name: 'cart_details_cart_id_fkey',
-    }).onDelete('cascade'),
-    foreignKey({
-      columns: [table.variant_products_id],
-      foreignColumns: [variant_products.id],
-      name: 'cart_details_variant_products_id_fkey',
-    }).onDelete('cascade'),
-    check('cart_details_quantity_check', sql`quantity > 0`),
   ],
 );
 
@@ -343,10 +247,15 @@ export const categories = pgTable(
     uniqueIndex('categories_user_name_unique_private')
       .using(
         'btree',
-        table.user_id.asc().nullsLast().op('text_ops'),
-        table.name.asc().nullsLast().op('text_ops'),
+        table.user_id.asc().nullsLast().op('uuid_ops'),
+        table.name.asc().nullsLast().op('uuid_ops'),
       )
       .where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
+    index('idx_categories_level_id').using(
+      'btree',
+      table.level.asc().nullsLast().op('int8_ops'),
+      table.id.asc().nullsLast().op('int2_ops'),
+    ),
     index('idx_categories_name_unaccent').using(
       'btree',
       sql`lower(name_unaccent)`,
@@ -357,48 +266,53 @@ export const categories = pgTable(
     index('idx_categories_parent_id')
       .using('btree', table.parent_id.asc().nullsLast().op('int8_ops'))
       .where(sql`(deleted_at IS NULL)`),
+    index('idx_categories_parent_id_id').using(
+      'btree',
+      table.parent_id.asc().nullsLast().op('int8_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
+    ),
     index('idx_categories_private_user_level_name')
       .using(
         'btree',
-        table.user_id.asc().nullsLast().op('uuid_ops'),
-        table.level.asc().nullsLast().op('int2_ops'),
-        table.name.asc().nullsLast().op('uuid_ops'),
+        table.user_id.asc().nullsLast().op('text_ops'),
+        table.level.asc().nullsLast().op('uuid_ops'),
+        table.name.asc().nullsLast().op('int2_ops'),
       )
       .where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_private_user_parent_name')
       .using(
         'btree',
         table.user_id.asc().nullsLast().op('uuid_ops'),
-        table.parent_id.asc().nullsLast().op('uuid_ops'),
-        table.name.asc().nullsLast().op('text_ops'),
+        table.parent_id.asc().nullsLast().op('text_ops'),
+        table.name.asc().nullsLast().op('uuid_ops'),
       )
       .where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_public_level_name')
       .using(
         'btree',
-        table.level.asc().nullsLast().op('int2_ops'),
+        table.level.asc().nullsLast().op('text_ops'),
         table.name.asc().nullsLast().op('text_ops'),
       )
       .where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_public_parent_level_name_all')
       .using(
         'btree',
-        table.parent_id.asc().nullsLast().op('int8_ops'),
+        table.parent_id.asc().nullsLast().op('text_ops'),
         table.level.asc().nullsLast().op('text_ops'),
-        table.name.asc().nullsLast().op('text_ops'),
+        table.name.asc().nullsLast().op('int8_ops'),
       )
       .where(sql`(user_id IS NULL)`),
     index('idx_categories_public_parent_name')
       .using(
         'btree',
         table.parent_id.asc().nullsLast().op('int8_ops'),
-        table.name.asc().nullsLast().op('text_ops'),
+        table.name.asc().nullsLast().op('int8_ops'),
       )
       .where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_user_parent_level_name').using(
       'btree',
-      table.user_id.asc().nullsLast().op('text_ops'),
-      table.parent_id.asc().nullsLast().op('int8_ops'),
+      table.user_id.asc().nullsLast().op('uuid_ops'),
+      table.parent_id.asc().nullsLast().op('text_ops'),
       table.level.asc().nullsLast().op('text_ops'),
       table.name.asc().nullsLast().op('uuid_ops'),
     ),
@@ -422,8 +336,86 @@ export const categories = pgTable(
       foreignColumns: [users.id],
       name: 'categories_user_id_fkey',
     }).onDelete('cascade'),
-    check('categories_iva_check', sql`iva >= (0)::numeric`),
+    check('categories', sql`(iva >= (0)::numeric) AND (iva <= (100)::numeric)`),
     check('categories_level_check', sql`(level >= 1) AND (level <= 3)`),
+  ],
+);
+
+export const variant_products = pgTable(
+  'variant_products',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
+      name: 'variant_products_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    product_id: bigint({ mode: 'bigint' }).notNull(),
+    type_sale: SaleVariant().notNull(),
+    price: numeric({ precision: 10, scale: 2 }).notNull(),
+    price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
+    available_stock: integer().notNull(),
+    sort: smallint().notNull(),
+    attributes: jsonb(),
+    status: ProductStatus().default('ACTIVE').notNull(),
+    product_code: varchar({ length: 50 }).notNull(),
+    reserved_stock: integer().default(0).notNull(),
+    low_stock_threshold: integer().default(0).notNull(),
+    sale_unit_qty: integer().default(1).notNull(),
+    min_order_qty: integer().default(1).notNull(),
+    updated_at: timestamp({ mode: 'string' }).default(
+      sql`(now() AT TIME ZONE 'utc'::text)`,
+    ),
+    created_by: uuid().notNull(),
+    updated_by: uuid(),
+  },
+  (table) => [
+    index('idx_variant_products_product_id_price_iva').using(
+      'btree',
+      table.product_id.asc().nullsLast().op('int8_ops'),
+      table.price_iva.asc().nullsLast().op('int8_ops'),
+    ),
+    foreignKey({
+      columns: [table.created_by],
+      foreignColumns: [users.id],
+      name: 'variant_products_created_by_fkey',
+    }),
+    foreignKey({
+      columns: [table.product_id],
+      foreignColumns: [products.id],
+      name: 'variant_products_product_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.updated_by],
+      foreignColumns: [users.id],
+      name: 'variant_products_updated_by_fkey',
+    }),
+    check('variant_available_stock_check', sql`available_stock >= 0`),
+    check('variant_low_stock_threshold_check', sql`low_stock_threshold >= 0`),
+    check(
+      'variant_min_order_qty_check',
+      sql`(min_order_qty >= 1) AND (min_order_qty <= 1000000)`,
+    ),
+    check(
+      'variant_price_check',
+      sql`(price >= (0)::numeric) AND (price <= 10000000.00)`,
+    ),
+    check(
+      'variant_price_iva_check',
+      sql`(price_iva >= (0)::numeric) AND (price_iva <= 20000000.00)`,
+    ),
+    check('variant_reserved_stock_check', sql`reserved_stock >= 0`),
+    check(
+      'variant_sale_unit_qty_check',
+      sql`(sale_unit_qty >= 1) AND (sale_unit_qty <= 1000000)`,
+    ),
+    check('variant_sort_check', sql`sort >= 0`),
   ],
 );
 
@@ -549,31 +541,6 @@ export const products_files = pgTable(
   ],
 );
 
-export const carts = pgTable(
-  'carts',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'cart_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    user_id: uuid().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.user_id],
-      foreignColumns: [users.id],
-      name: 'carts_user_id_fkey',
-    }).onDelete('cascade'),
-  ],
-);
-
 export const configurations = pgTable(
   'configurations',
   {
@@ -623,81 +590,6 @@ export const deliveries = pgTable(
       foreignColumns: [users.id],
       name: 'deliveries_delivery_person_fkey',
     }).onDelete('set null'),
-  ],
-);
-
-export const products = pgTable(
-  'products',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'products_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    user_id: uuid().notNull(),
-    name: varchar({ length: 50 }).notNull(),
-    title: varchar({ length: 100 }),
-    description: text(),
-    iva: numeric({ precision: 5, scale: 2 }).notNull(),
-    status: ProductStatus().default('ACTIVE').notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-    product_code: varchar({ length: 50 }).notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
-    created_by: uuid().notNull(),
-    updated_by: uuid(),
-    name_unaccent: text().generatedAlwaysAs(
-      sql`immutable_unaccent((name)::text)`,
-    ),
-    title_unaccent: text().generatedAlwaysAs(
-      sql`immutable_unaccent((title)::text)`,
-    ),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    version: bigint({ mode: 'bigint' }).default(1n).notNull(),
-    deleted_at: timestamp({ mode: 'string' }),
-  },
-  (table) => [
-    index('idx_products_name_unaccent').using(
-      'btree',
-      sql`lower(name_unaccent)`,
-    ),
-    index('idx_products_title_unaccent').using(
-      'btree',
-      sql`lower(title_unaccent)`,
-    ),
-    index('idx_products_user_id_id').using(
-      'btree',
-      table.user_id.asc().nullsLast().op('int8_ops'),
-      table.id.asc().nullsLast().op('uuid_ops'),
-    ),
-    index('idx_products_user_status_id').using(
-      'btree',
-      table.user_id.asc().nullsLast().op('uuid_ops'),
-      table.status.asc().nullsLast().op('uuid_ops'),
-      table.id.asc().nullsLast().op('enum_ops'),
-    ),
-    foreignKey({
-      columns: [table.created_by],
-      foreignColumns: [users.id],
-      name: 'products_created_by_fkey',
-    }),
-    foreignKey({
-      columns: [table.updated_by],
-      foreignColumns: [users.id],
-      name: 'products_updated_by_fkey',
-    }),
-    foreignKey({
-      columns: [table.user_id],
-      foreignColumns: [users.id],
-      name: 'products_user_id_fkey',
-    }).onDelete('cascade'),
-    check('products_iva_check', sql`iva >= (0)::numeric`),
   ],
 );
 
@@ -760,6 +652,89 @@ export const directions = pgTable(
       foreignColumns: [users.id],
       name: 'directions_user_id_fkey',
     }).onDelete('cascade'),
+  ],
+);
+
+export const products = pgTable(
+  'products',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
+      name: 'products_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    user_id: uuid().notNull(),
+    name: varchar({ length: 50 }).notNull(),
+    title: varchar({ length: 100 }),
+    description: text(),
+    iva: numeric({ precision: 5, scale: 2 }).notNull(),
+    status: ProductStatus().default('ACTIVE').notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+    product_code: varchar({ length: 50 }).notNull(),
+    updated_at: timestamp({ mode: 'string' }).default(
+      sql`(now() AT TIME ZONE 'utc'::text)`,
+    ),
+    created_by: uuid().notNull(),
+    updated_by: uuid(),
+    name_unaccent: text().generatedAlwaysAs(
+      sql`immutable_unaccent((name)::text)`,
+    ),
+    title_unaccent: text().generatedAlwaysAs(
+      sql`immutable_unaccent((title)::text)`,
+    ),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    version: bigint({ mode: 'bigint' }).default(1n).notNull(),
+    deleted_at: timestamp({ mode: 'string' }),
+  },
+  (table) => [
+    index('idx_products_name_unaccent').using(
+      'btree',
+      sql`lower(name_unaccent)`,
+    ),
+    index('idx_products_status_id').using(
+      'btree',
+      table.status.asc().nullsLast().op('enum_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
+    ),
+    index('idx_products_title_unaccent').using(
+      'btree',
+      sql`lower(title_unaccent)`,
+    ),
+    index('idx_products_user_id_id').using(
+      'btree',
+      table.user_id.asc().nullsLast().op('int8_ops'),
+      table.id.asc().nullsLast().op('uuid_ops'),
+    ),
+    index('idx_products_user_status_id').using(
+      'btree',
+      table.user_id.asc().nullsLast().op('int8_ops'),
+      table.status.asc().nullsLast().op('enum_ops'),
+      table.id.asc().nullsLast().op('enum_ops'),
+    ),
+    foreignKey({
+      columns: [table.created_by],
+      foreignColumns: [users.id],
+      name: 'products_created_by_fkey',
+    }),
+    foreignKey({
+      columns: [table.updated_by],
+      foreignColumns: [users.id],
+      name: 'products_updated_by_fkey',
+    }),
+    foreignKey({
+      columns: [table.user_id],
+      foreignColumns: [users.id],
+      name: 'products_user_id_fkey',
+    }).onDelete('cascade'),
+    check(
+      'products_iva_check',
+      sql`(iva >= (0)::numeric) AND (iva <= (100)::numeric)`,
+    ),
   ],
 );
 
@@ -1058,6 +1033,11 @@ export const users = pgTable(
     profile_image_file_id: bigint({ mode: 'bigint' }),
   },
   (table) => [
+    index('idx_users_wholesaler_active_id')
+      .using('btree', table.id.asc().nullsLast().op('uuid_ops'))
+      .where(
+        sql`((role = 'WHOLESALER'::"UserRole") AND (status <> ALL (ARRAY['PENDING_REVIEW'::"UserStatus", 'PENDING_VERIFICATION'::"UserStatus", 'BANNED'::"UserStatus", 'INACTIVE'::"UserStatus"])))`,
+      ),
     foreignKey({
       columns: [table.profile_image_file_id],
       foreignColumns: [files.id],
@@ -1066,6 +1046,102 @@ export const users = pgTable(
     unique('users_user_id_key').on(table.user_id),
     unique('users_username_key').on(table.username),
     unique('users_email_key').on(table.email),
+  ],
+);
+
+export const carts = pgTable(
+  'carts',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
+      name: 'carts_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    retailer_id: uuid().notNull(),
+    wholesaler_id: uuid().notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+    updated_at: timestamp({ mode: 'string' }).default(
+      sql`(now() AT TIME ZONE 'utc'::text)`,
+    ),
+  },
+  (table) => [
+    index('idx_carts_wholesaler_id').using(
+      'btree',
+      table.wholesaler_id.asc().nullsLast().op('uuid_ops'),
+    ),
+    foreignKey({
+      columns: [table.retailer_id],
+      foreignColumns: [users.id],
+      name: 'carts_retailer_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.wholesaler_id],
+      foreignColumns: [users.id],
+      name: 'carts_wholesaler_id_fkey',
+    }).onDelete('cascade'),
+    unique('carts_user_wholesaler_unique').on(
+      table.retailer_id,
+      table.wholesaler_id,
+    ),
+    check('carts_user_wholesaler_different', sql`retailer_id <> wholesaler_id`),
+  ],
+);
+
+export const cart_details = pgTable(
+  'cart_details',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
+      name: 'cart_details_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    cart_id: bigint({ mode: 'bigint' }).notNull(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    variant_products_id: bigint({ mode: 'bigint' }).notNull(),
+    quantity: integer().notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+    updated_at: timestamp({ mode: 'string' }).default(
+      sql`(now() AT TIME ZONE 'utc'::text)`,
+    ),
+  },
+  (table) => [
+    index('idx_cart_details_cart_id').using(
+      'btree',
+      table.cart_id.asc().nullsLast().op('int8_ops'),
+    ),
+    index('idx_cart_details_variant_products_id').using(
+      'btree',
+      table.variant_products_id.asc().nullsLast().op('int8_ops'),
+    ),
+    foreignKey({
+      columns: [table.cart_id],
+      foreignColumns: [carts.id],
+      name: 'cart_details_cart_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.variant_products_id],
+      foreignColumns: [variant_products.id],
+      name: 'cart_details_variant_products_id_fkey',
+    }).onDelete('cascade'),
+    unique('cart_details_cart_variant_unique').on(
+      table.cart_id,
+      table.variant_products_id,
+    ),
+    check(
+      'cart_details_quantity_check',
+      sql`(quantity >= 1) AND (quantity <= 1000000)`,
+    ),
   ],
 );
 
@@ -1184,6 +1260,11 @@ export const category_translations = pgTable(
     updated_by: uuid(),
   },
   (table) => [
+    index('idx_category_translations_category_lang').using(
+      'btree',
+      table.category_id.asc().nullsLast().op('text_ops'),
+      table.lang_code.asc().nullsLast().op('int8_ops'),
+    ),
     index('idx_category_translations_lang_code').using(
       'btree',
       table.lang_code.asc().nullsLast().op('text_ops'),

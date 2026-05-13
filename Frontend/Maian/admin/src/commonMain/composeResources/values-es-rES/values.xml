@@ -9,8 +9,5 @@
     <string name="category_visible_to_all_tip">Esta categoría estará disponible para todos los usuarios</string>
     <string name="wholesaler_selected">Mayorista seleccionado</string>
 
-    <string name="category_management_description">
-        Consulte y busque categorías, y cree categorías privadas o de plataforma para mayoristas o usuarios de toda la plataforma.
-        Admite edición (nombre, traducciones) y eliminación (solo los superadministradores pueden eliminar). Se permiten hasta tres niveles de jerarquía (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">Consulte y busque categorías, y cree categorías privadas o de plataforma para mayoristas o usuarios de toda la plataforma.\nAdmite edición (nombre, traducciones) y eliminación (solo los superadministradores pueden eliminar). Se permiten hasta tres niveles de jerarquía (1 → 2 → 3).</string>
 </resources>

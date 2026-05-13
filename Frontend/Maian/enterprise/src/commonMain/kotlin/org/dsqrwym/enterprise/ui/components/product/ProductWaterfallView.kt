@@ -43,7 +43,7 @@ fun ProductWaterfallView(
         padding = padding,
         applyPaddingWithoutTop = true,
         includeMenuTopPadding = true,
-        key = {  paginatedProducts.itemKey { it.id } },
+        key =  paginatedProducts.itemKey { it.id } ,
     ) { product ->
         ProductGridItem(
             modifier = Modifier.animateItem(),

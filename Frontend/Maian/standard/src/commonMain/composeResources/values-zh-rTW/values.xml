@@ -16,4 +16,6 @@
     <string name="product_detail_coming_soon">產品詳情暫不可用。</string>
     <string name="chat">訊息</string>
     <string name="shopping_cart">購物車</string>
+    <string name="cart_item_added">已加入購物籃</string>
+    <string name="product_information_changed_retry">商品資訊已更新，請重試</string>
 </resources>

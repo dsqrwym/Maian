@@ -14,6 +14,7 @@ import type { Cache } from 'cache-manager';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { and, eq, sql } from 'drizzle-orm';
 import { user_sessions } from '#/generated/drizzle/schema.js';
+import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
 export class TokenService {
@@ -134,7 +135,7 @@ export class TokenService {
       try {
         await this.drizzleService.db
           .update(user_sessions)
-          .set({ revoked: true, last_active: sql`(NOW() AT TIME ZONE 'UTC')` })
+          .set({ revoked: true, last_active: SQL_NOW })
           .where(
             and(
               eq(user_sessions.session_id, payload.sessionId),
@@ -189,7 +190,7 @@ export class TokenService {
       .update(user_sessions)
       .set({
         refresh_token: hashedRefreshToken,
-        last_active: sql`(NOW() AT TIME ZONE 'UTC')`,
+        last_active: SQL_NOW,
       })
       .where(eq(user_sessions.session_id, payload.sessionId))
       .then(() => {

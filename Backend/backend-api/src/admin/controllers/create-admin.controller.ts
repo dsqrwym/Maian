@@ -21,7 +21,7 @@ import { TypedRoute } from '@nestia/core';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @RolesAllowed(UserRole.SUPERADMIN)
-@Controller('create-admin')
+@Controller('create')
 export class CreateAdminController {
   constructor(private readonly createAdminService: CreateAdminService) {}
 

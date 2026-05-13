@@ -16,7 +16,7 @@ import { TypedParam, TypedRoute } from '@nestia/core';
  * @class LocationsController
  */
 @ApiTags('Locations')
-@Controller('locations')
+@Controller()
 @CacheTTL(DAY)
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}

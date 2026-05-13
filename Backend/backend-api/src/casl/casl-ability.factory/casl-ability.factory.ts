@@ -37,6 +37,7 @@ export class CaslAbilityFactory {
       case UserRole.RETAILER:
         can(Action.Access, 'Standard');
         can(Action.Read, 'users', { role: UserRole.WHOLESALER });
+        can(Action.Manage, 'carts', { retailer_id: user.userId });
         cannot(Action.Read, 'users', { status: UserStatus.INACTIVE });
         cannot(Action.Read, 'users', { status: UserStatus.BANNED });
         cannot(Action.Read, 'users', {

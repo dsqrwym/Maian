@@ -102,7 +102,7 @@ fun <T : Any> SharedCategoryRail(
                 } else {
                     items(
                         count = categories.itemCount,
-                        key = { categories.itemKey { itemId(it) } },
+                        key = categories.itemKey { itemId(it) } ,
                     ) { index ->
                         categories[index]?.let { category ->
                             NavigationDrawerItem(

@@ -21,11 +21,8 @@
     <string name="login_subtitle">Por favor, inicia sesión para continuar</string>
 
     <string name="session_expired">Tu sesión ha caducado. Por favor, inicia sesión de nuevo.</string>
-    <string name="session_revoked">Tu cuenta se ha cerrado en otro dispositivo o ha sido finalizada por un
-        administrador.
-    </string>
-    <string name="csrf_invalid">La validación de seguridad ha fallado. Actualiza la página o vuelve a iniciar sesión.
-    </string>
+    <string name="session_revoked">Tu cuenta se ha cerrado en otro dispositivo o ha sido finalizada por un administrador.</string>
+    <string name="csrf_invalid">La validación de seguridad ha fallado. Actualiza la página o vuelve a iniciar sesión.</string>
     <string name="session_not_found">Sesión no encontrada. Por favor, inicia sesión de nuevo.</string>
     <string name="token_invalid_or_expired">El token no es válido o ha caducado. Por favor, obtén uno nuevo.</string>
 
@@ -45,17 +42,14 @@
     <string name="field_username_placeholder">Introduce el nombre de usuario</string>
 
     <!-- Mensajes de validación -->
-    <string name="validation_username_or_email_empty">El nombre de usuario o correo electrónico no puede estar vacío
-    </string>
+    <string name="validation_username_or_email_empty">El nombre de usuario o correo electrónico no puede estar vacío</string>
     <string name="validation_username_cannot_contain_at">El nombre de usuario no puede contener el carácter "@"</string>
     <string name="validation_username_length_invalid">El nombre de usuario debe tener entre 3 y 30 caracteres</string>
     <string name="validation_email_domain_not_supported">El dominio de correo example.com no está soportado</string>
     <string name="validation_password_empty">La contraseña no puede estar vacía</string>
     <string name="validation_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
-    <string name="validation_password_missing_uppercase">La contraseña debe contener al menos una letra mayúscula
-    </string>
-    <string name="validation_password_missing_lowercase">La contraseña debe contener al menos una letra minúscula
-    </string>
+    <string name="validation_password_missing_uppercase">La contraseña debe contener al menos una letra mayúscula</string>
+    <string name="validation_password_missing_lowercase">La contraseña debe contener al menos una letra minúscula</string>
     <string name="validation_password_missing_digit">La contraseña debe contener al menos un número</string>
 
     <!-- ===================== Pantalla inicial ===================== -->
@@ -65,8 +59,7 @@
     <string name="initial_screen_quick_login_hint">⏫ Inicio rápido con Google o WeChat ⏫</string>
 
     <!-- Acuerdo de usuario y privacidad -->
-    <string name="agreement_warning">Debes aceptar el Acuerdo de Usuario y la Política de Privacidad para continuar
-    </string>
+    <string name="agreement_warning">Debes aceptar el Acuerdo de Usuario y la Política de Privacidad para continuar</string>
     <string name="agreement_section_agreement_text_template">He leído y acepto “%s” y “%s”</string>
     <string name="agreement_section_user_agreement">Acuerdo de Usuario</string>
     <string name="agreement_section_privacy_policy">Política de Privacidad</string>
@@ -79,9 +72,7 @@
     <string name="reset_repeat_password_placeholder">Vuelve a introducir la nueva contraseña</string>
     <string name="reset_repeat_password_mismatch">La contraseña introducida no coincide con la nueva</string>
 
-    <string name="register_email_already_registered">Este correo electrónico ya está registrado. Por favor, inicia
-        sesión.
-    </string>
+    <string name="register_email_already_registered">Este correo electrónico ya está registrado. Por favor, inicia sesión.</string>
     <string name="register_username_already_registered">Este nombre de usuario ya está en uso. Prueba con otro.</string>
 
     <string name="login_success">Inicio de sesión correcto</string>
@@ -214,9 +205,7 @@
     <string name="create_failed">Error al crear</string>
     <string name="update_success">Actualización correcta</string>
     <string name="update_failed">La actualización ha fallado</string>
-    <string name="update_conflict_preserved_changes">Parte del contenido ha sido modificado por otra persona. Se han
-        conservado tus cambios. Revísalo y vuelve a actualizar.
-    </string>
+    <string name="update_conflict_preserved_changes">Parte del contenido ha sido modificado por otra persona. Se han conservado tus cambios. Revísalo y vuelve a actualizar.</string>
 
     <string name="category">Categoría</string>
 

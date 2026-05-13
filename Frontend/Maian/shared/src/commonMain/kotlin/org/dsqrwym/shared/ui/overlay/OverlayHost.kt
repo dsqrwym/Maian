@@ -10,7 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import dev.chrisbanes.haze.*
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.blur.HazeProgressive
+import dev.chrisbanes.haze.blur.blurEffect
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 import org.dsqrwym.shared.theme.MyHazeStyles
 
 /**
@@ -39,12 +44,15 @@ fun OverlayHost(content: @Composable () -> Unit) {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.Transparent)
-                        .hazeEffect(rootHazeState, hazeStyle) {
-                            progressive = HazeProgressive.verticalGradient(
-                                startIntensity = 0.18f,
-                                endIntensity = 0.18f
-                            )
-                            alpha = 0.8f
+                        .hazeEffect(rootHazeState) {
+                            blurEffect {
+                                style = hazeStyle
+                                progressive = HazeProgressive.verticalGradient(
+                                    startIntensity = 0.18f,
+                                    endIntensity = 0.18f
+                                )
+                                alpha = 0.8f
+                            }
                         }.clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }

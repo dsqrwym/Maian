@@ -19,14 +19,15 @@ import {
   category_translations,
   product_categories,
 } from '#/generated/drizzle/schema.js';
+import { SQL_NOW, SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
-export class CategoryWriteService {
+export class WriteCategoryService {
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
   ) {
-    this.logger.setContext(CategoryWriteService.name);
+    this.logger.setContext(WriteCategoryService.name);
   }
 
   async create(
@@ -61,7 +62,7 @@ export class CategoryWriteService {
         );
       const existing = (await tx
         .select({ exists: exists(existingCategorySubQuery) })
-        .from(sql`(VALUES (1)) AS tmp`)
+        .from(SQL_TEMP_TABLE)
         .execute()) as { exists: boolean }[];
 
       if (existing[0]?.exists) {
@@ -186,7 +187,7 @@ export class CategoryWriteService {
         .set({
           ...(name !== undefined && { name: name }),
           ...(iva !== undefined && { iva: iva }),
-          updated_at: sql`(NOW() AT TIME ZONE 'UTC')`,
+          updated_at: SQL_NOW,
           updated_by: user.userId,
           version: sql`${categories.version} + 1`,
         })
@@ -227,7 +228,7 @@ export class CategoryWriteService {
             ],
             set: {
               name: sql`EXCLUDED.name`,
-              updated_at: sql`(NOW() AT TIME ZONE 'UTC')`,
+              updated_at: SQL_NOW,
               updated_by: user.userId,
             },
           });
@@ -269,7 +270,7 @@ export class CategoryWriteService {
 
     const [primaryRef] = (await this.drizzle.db
       .select({ exists: exists(primaryCategorySubQuery) })
-      .from(sql`(VALUES (1)) AS tmp`)
+      .from(SQL_TEMP_TABLE)
       .execute()) as { exists: boolean }[];
 
     if (primaryRef?.exists) {

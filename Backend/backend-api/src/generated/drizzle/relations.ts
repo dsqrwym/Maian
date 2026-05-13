@@ -3,13 +3,11 @@ import {
   countries,
   provinces,
   currencies,
+  cities,
   users,
+  categories,
   variant_products,
   products,
-  cities,
-  carts,
-  cart_details,
-  categories,
   discounts,
   files,
   message_files,
@@ -25,6 +23,8 @@ import {
   notifications,
   user_sessions,
   verification_tokens,
+  carts,
+  cart_details,
   user_uploads,
   chat_participants,
   product_categories,
@@ -54,125 +54,12 @@ export const currenciesRelations = relations(currencies, ({ many }) => ({
   countries: many(countries),
 }));
 
-export const variant_productsRelations = relations(
-  variant_products,
-  ({ one, many }) => ({
-    user_created_by: one(users, {
-      fields: [variant_products.created_by],
-      references: [users.id],
-      relationName: 'variant_products_created_by_users_id',
-    }),
-    product: one(products, {
-      fields: [variant_products.product_id],
-      references: [products.id],
-    }),
-    user_updated_by: one(users, {
-      fields: [variant_products.updated_by],
-      references: [users.id],
-      relationName: 'variant_products_updated_by_users_id',
-    }),
-    cart_details: many(cart_details),
-    order_details: many(order_details),
-  }),
-);
-
-export const usersRelations = relations(users, ({ one, many }) => ({
-  variant_products_created_by: many(variant_products, {
-    relationName: 'variant_products_created_by_users_id',
-  }),
-  variant_products_updated_by: many(variant_products, {
-    relationName: 'variant_products_updated_by_users_id',
-  }),
-  categories_created_by: many(categories, {
-    relationName: 'categories_created_by_users_id',
-  }),
-  categories_updated_by: many(categories, {
-    relationName: 'categories_updated_by_users_id',
-  }),
-  categories_user_id: many(categories, {
-    relationName: 'categories_user_id_users_id',
-  }),
-  discounts: many(discounts),
-  carts: many(carts),
-  configurations: many(configurations),
-  deliveries: many(deliveries),
-  products_created_by: many(products, {
-    relationName: 'products_created_by_users_id',
-  }),
-  products_updated_by: many(products, {
-    relationName: 'products_updated_by_users_id',
-  }),
-  products_user_id: many(products, {
-    relationName: 'products_user_id_users_id',
-  }),
-  directions: many(directions),
-  messages: many(messages),
-  notifications: many(notifications),
-  user_sessions: many(user_sessions),
-  verification_tokens: many(verification_tokens),
-  orders_retailer_id: many(orders, {
-    relationName: 'orders_retailer_id_users_id',
-  }),
-  orders_wholesaler_id: many(orders, {
-    relationName: 'orders_wholesaler_id_users_id',
-  }),
-  file: one(files, {
-    fields: [users.profile_image_file_id],
-    references: [files.id],
-  }),
-  user_uploads: many(user_uploads),
-  chat_participants: many(chat_participants),
-  category_translations: many(category_translations),
-  product_translations: many(product_translations),
-}));
-
-export const productsRelations = relations(products, ({ one, many }) => ({
-  variant_products: many(variant_products),
-  products_files: many(products_files),
-  user_created_by: one(users, {
-    fields: [products.created_by],
-    references: [users.id],
-    relationName: 'products_created_by_users_id',
-  }),
-  user_updated_by: one(users, {
-    fields: [products.updated_by],
-    references: [users.id],
-    relationName: 'products_updated_by_users_id',
-  }),
-  user_user_id: one(users, {
-    fields: [products.user_id],
-    references: [users.id],
-    relationName: 'products_user_id_users_id',
-  }),
-  product_categories: many(product_categories),
-  product_translations: many(product_translations),
-}));
-
 export const citiesRelations = relations(cities, ({ one, many }) => ({
   province: one(provinces, {
     fields: [cities.province_id],
     references: [provinces.id],
   }),
   directions: many(directions),
-}));
-
-export const cart_detailsRelations = relations(cart_details, ({ one }) => ({
-  cart: one(carts, {
-    fields: [cart_details.cart_id],
-    references: [carts.id],
-  }),
-  variant_product: one(variant_products, {
-    fields: [cart_details.variant_products_id],
-    references: [variant_products.id],
-  }),
-}));
-
-export const cartsRelations = relations(carts, ({ one, many }) => ({
-  cart_details: many(cart_details),
-  user: one(users, {
-    fields: [carts.user_id],
-    references: [users.id],
-  }),
 }));
 
 export const categoriesRelations = relations(categories, ({ one, many }) => ({
@@ -201,6 +88,105 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
   }),
   product_categories: many(product_categories),
   category_translations: many(category_translations),
+}));
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  categories_created_by: many(categories, {
+    relationName: 'categories_created_by_users_id',
+  }),
+  categories_updated_by: many(categories, {
+    relationName: 'categories_updated_by_users_id',
+  }),
+  categories_user_id: many(categories, {
+    relationName: 'categories_user_id_users_id',
+  }),
+  variant_products_created_by: many(variant_products, {
+    relationName: 'variant_products_created_by_users_id',
+  }),
+  variant_products_updated_by: many(variant_products, {
+    relationName: 'variant_products_updated_by_users_id',
+  }),
+  discounts: many(discounts),
+  configurations: many(configurations),
+  deliveries: many(deliveries),
+  directions: many(directions),
+  products_created_by: many(products, {
+    relationName: 'products_created_by_users_id',
+  }),
+  products_updated_by: many(products, {
+    relationName: 'products_updated_by_users_id',
+  }),
+  products_user_id: many(products, {
+    relationName: 'products_user_id_users_id',
+  }),
+  messages: many(messages),
+  notifications: many(notifications),
+  user_sessions: many(user_sessions),
+  verification_tokens: many(verification_tokens),
+  orders_retailer_id: many(orders, {
+    relationName: 'orders_retailer_id_users_id',
+  }),
+  orders_wholesaler_id: many(orders, {
+    relationName: 'orders_wholesaler_id_users_id',
+  }),
+  file: one(files, {
+    fields: [users.profile_image_file_id],
+    references: [files.id],
+  }),
+  carts_retailer_id: many(carts, {
+    relationName: 'carts_retailer_id_users_id',
+  }),
+  carts_wholesaler_id: many(carts, {
+    relationName: 'carts_wholesaler_id_users_id',
+  }),
+  user_uploads: many(user_uploads),
+  chat_participants: many(chat_participants),
+  category_translations: many(category_translations),
+  product_translations: many(product_translations),
+}));
+
+export const variant_productsRelations = relations(
+  variant_products,
+  ({ one, many }) => ({
+    user_created_by: one(users, {
+      fields: [variant_products.created_by],
+      references: [users.id],
+      relationName: 'variant_products_created_by_users_id',
+    }),
+    product: one(products, {
+      fields: [variant_products.product_id],
+      references: [products.id],
+    }),
+    user_updated_by: one(users, {
+      fields: [variant_products.updated_by],
+      references: [users.id],
+      relationName: 'variant_products_updated_by_users_id',
+    }),
+    order_details: many(order_details),
+    cart_details: many(cart_details),
+  }),
+);
+
+export const productsRelations = relations(products, ({ one, many }) => ({
+  variant_products: many(variant_products),
+  products_files: many(products_files),
+  user_created_by: one(users, {
+    fields: [products.created_by],
+    references: [users.id],
+    relationName: 'products_created_by_users_id',
+  }),
+  user_updated_by: one(users, {
+    fields: [products.updated_by],
+    references: [users.id],
+    relationName: 'products_updated_by_users_id',
+  }),
+  user_user_id: one(users, {
+    fields: [products.user_id],
+    references: [users.id],
+    relationName: 'products_user_id_users_id',
+  }),
+  product_categories: many(product_categories),
+  product_translations: many(product_translations),
 }));
 
 export const discountsRelations = relations(discounts, ({ one }) => ({
@@ -361,6 +347,31 @@ export const verification_tokensRelations = relations(
     }),
   }),
 );
+
+export const cartsRelations = relations(carts, ({ one, many }) => ({
+  user_retailer_id: one(users, {
+    fields: [carts.retailer_id],
+    references: [users.id],
+    relationName: 'carts_retailer_id_users_id',
+  }),
+  user_wholesaler_id: one(users, {
+    fields: [carts.wholesaler_id],
+    references: [users.id],
+    relationName: 'carts_wholesaler_id_users_id',
+  }),
+  cart_details: many(cart_details),
+}));
+
+export const cart_detailsRelations = relations(cart_details, ({ one }) => ({
+  cart: one(carts, {
+    fields: [cart_details.cart_id],
+    references: [carts.id],
+  }),
+  variant_product: one(variant_products, {
+    fields: [cart_details.variant_products_id],
+    references: [variant_products.id],
+  }),
+}));
 
 export const user_uploadsRelations = relations(user_uploads, ({ one }) => ({
   file: one(files, {

@@ -19,6 +19,7 @@ import { buildMergedUpdate } from '#/utils/patch.utils.js';
 import { IMAGE_MIME_TYPES } from '#/config/fastify-multipart.config.js';
 import { AddressType, UserRole } from '#/generated/drizzle/enums.js';
 import { IUpdateWholesalerProfileDto } from '#/enterprise/dto/update-wholesaler-profile.dto.js';
+import { SQL_NOW, SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
 export class WholesalerProfileService {
@@ -42,7 +43,7 @@ export class WholesalerProfileService {
 
     const existing = (await db
       .select({ exists: exists(alreadyExistWholesalerTaxId) })
-      .from(sql`(VALUES (1)) AS tmp`)
+      .from(SQL_TEMP_TABLE)
       .execute()) as { exists: boolean }[];
 
     if (existing[0]?.exists) {
@@ -144,7 +145,7 @@ export class WholesalerProfileService {
           first_name,
           last_name,
           updated_by: id,
-          updated_at: sql`(NOW() AT TIME ZONE 'UTC')`,
+          updated_at: SQL_NOW,
         })
         .where(eq(users.id, id));
     });

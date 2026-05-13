@@ -1,7 +1,6 @@
 import type { SaleVariant } from '#/generated/drizzle/enums.js';
 import { ProductStatus } from '#/generated/drizzle/enums.js';
 import type { TagsSort } from '#/utils/typia/validators/sort.validator.js';
-import type { tags } from 'typia';
 import typia from 'typia';
 import type {
   TagsPrice,
@@ -11,6 +10,7 @@ import type {
 import type { TagsUInt4 } from '#/utils/typia/tags/number.tags.js';
 import { isObject } from '#/utils/is.utils.js';
 import { BadRequestException } from '@nestjs/common';
+import type { TagsQuantity } from '#/utils/typia/validators/quantity.validator.js';
 
 export interface ICreateVariantDto {
   // --- 核心销售和定价字段 (variant_products) ---
@@ -27,9 +27,9 @@ export interface ICreateVariantDto {
 
   available_stock: TagsUInt4; // 初始库存
 
-  sale_unit_qty: TagsUInt4 & tags.Minimum<1> & tags.Maximum<1000000>; // 换算因子 (例如：1 箱 = 24 件)， 最大一百万应该足够了
+  sale_unit_qty: TagsQuantity; // 换算因子 (例如：1 箱 = 24 件)， 最大一百万应该足够了
 
-  min_order_qty: TagsUInt4 & tags.Minimum<1> & tags.Maximum<1000000>; // 最小起订量 (以销售单位计)
+  min_order_qty: TagsQuantity; // 最小起订量 (以销售单位计)
 
   status: ProductStatus;
 

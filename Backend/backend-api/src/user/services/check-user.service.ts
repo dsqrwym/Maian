@@ -5,6 +5,7 @@ import { makeUsername } from '#/utils/user.utils.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { and, eq, exists, ne, sql } from 'drizzle-orm';
 import { users } from '#/generated/drizzle/schema.js';
+import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
 export class CheckUserService {
@@ -24,7 +25,7 @@ export class CheckUserService {
             ),
         ),
       })
-      .from(sql`(VALUES (1)) AS tmp`)) as { exists: boolean }[];
+      .from(SQL_TEMP_TABLE)) as { exists: boolean }[];
     return user?.exists ?? false;
   }
 
@@ -52,7 +53,7 @@ export class CheckUserService {
             ),
         ),
       })
-      .from(sql`(VALUES (1)) AS tmp`)) as { exists: boolean }[];
+      .from(SQL_TEMP_TABLE)) as { exists: boolean }[];
     return user?.exists ?? false;
   }
 
@@ -72,7 +73,7 @@ export class CheckUserService {
             ),
         ),
       })
-      .from(sql`(VALUES (1)) AS tmp`)) as { exists: boolean }[];
+      .from(SQL_TEMP_TABLE)) as { exists: boolean }[];
     return user?.exists ?? false;
   }
 }

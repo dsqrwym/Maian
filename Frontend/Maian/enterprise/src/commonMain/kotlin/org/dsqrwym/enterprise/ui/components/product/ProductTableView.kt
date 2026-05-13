@@ -452,7 +452,7 @@ fun ProductTableView(
                 itemsCount = paginatedProducts.itemCount,
                 itemAt = { index -> paginatedProducts[index] },
                 columns = columns,
-                rowKey = { _, _ -> paginatedProducts.itemKey { it.id } },
+                rowKey = { _, index -> paginatedProducts.peek(index)?.id ?: "product-key-$index" },
                 state = tableState,
                 placeholderRow = {
                     SharedLoadingDotsIndicator()

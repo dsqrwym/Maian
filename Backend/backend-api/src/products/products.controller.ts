@@ -35,7 +35,7 @@ import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 @ApiTags('Product Management')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('product')
+@Controller()
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -256,6 +256,7 @@ export class ProductsController {
     return this.productsService.getProductDetail(
       id,
       query.langCode,
+      req.user,
       req.ability,
     );
   }

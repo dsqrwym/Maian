@@ -16,4 +16,6 @@
     <string name="product_detail_coming_soon">El detalle del producto aún no está disponible.</string>
     <string name="chat">Mensajes</string>
     <string name="shopping_cart">Cesta</string>
+    <string name="cart_item_added">Añadido a la cesta</string>
+    <string name="product_information_changed_retry">La información del producto ha cambiado. Inténtalo de nuevo.</string>
 </resources>

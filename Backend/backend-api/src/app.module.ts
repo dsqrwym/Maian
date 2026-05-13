@@ -15,7 +15,7 @@ import { MailModule } from './mail/mail.module.js';
 //  认证模块
 import { AuthModule } from './auth/auth.module.js';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor.js';
-import { Reflector } from '@nestjs/core';
+import { Reflector, RouterModule } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter.js';
 import { JwtExceptionFilter } from './common/filters/jwt-exception.filter.js';
 import { ScheduleTaskModule } from './schedule-tasks/schedule-task.module.js';
@@ -33,6 +33,7 @@ import { CategoryModule } from './category/category.module.js';
 import { ProductsModule } from './products/products.module.js';
 import { FilesModule } from './files/files.module.js';
 import { DrizzleModule } from './drizzle/drizzle.module.js';
+import { CartsModule } from '#/carts/carts.module.js';
 
 @Module({
   imports: [
@@ -112,6 +113,20 @@ import { DrizzleModule } from './drizzle/drizzle.module.js';
     AdminModule,
     CategoryModule,
     ProductsModule,
+    CartsModule,
+
+    // 注册模块前的 prefix
+    RouterModule.register([
+      { path: 'files', module: FilesModule },
+      { path: 'auth', module: AuthModule },
+      { path: 'locations', module: LocationsModule },
+      { path: 'user', module: UserModule },
+      { path: 'enterprise', module: EnterpriseModule },
+      { path: 'admin', module: AdminModule },
+      { path: 'category', module: CategoryModule },
+      { path: 'product', module: ProductsModule },
+      { path: 'carts', module: CartsModule },
+    ]),
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应
   providers: [

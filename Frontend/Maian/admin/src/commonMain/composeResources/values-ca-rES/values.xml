@@ -9,8 +9,5 @@
     <string name="category_visible_to_all_tip">Aquesta categoria estarà disponible per a tots els usuaris</string>
     <string name="wholesaler_selected">Majorista seleccionat</string>
 
-    <string name="category_management_description">
-        Consulta i cerca categories, i crea categories privades o de plataforma per a majoristes o per a tots els usuaris.
-        Permet editar (nom, traduccions) i suprimir (només els superadministradors poden suprimir). Les categories poden tenir fins a tres nivells (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">Consulta i cerca categories, i crea categories privades o de plataforma per a majoristes o per a tots els usuaris.\nPermet editar (nom, traduccions) i suprimir (només els superadministradors poden suprimir). Les categories poden tenir fins a tres nivells (1 → 2 → 3).</string>
 </resources>

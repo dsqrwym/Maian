@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
 import { UserPayload } from '#/auth/auth.types.js';
-import { CategoryReadService } from './services/category-read.service.js';
-import { CategoryWriteService } from '#/category/services/category-write.service.js';
+import { ReadCategoryService } from './services/read-category.service.js';
+import { WriteCategoryService } from './services/write-category.service.js';
 import { PinoLogger } from 'nestjs-pino';
 import { ICreateCategoryDto } from '#/category/dto/create-category.dto.js';
 import { AppAbility } from '#/casl/casl-types.js';
@@ -14,8 +14,8 @@ import { IUpdateCategoryDto } from '#/category/dto/update-category.dto.js';
 export class CategoryService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly categoryWriteService: CategoryWriteService,
-    private readonly categoryReadService: CategoryReadService,
+    private readonly categoryWriteService: WriteCategoryService,
+    private readonly categoryReadService: ReadCategoryService,
   ) {
     this.logger.setContext(CategoryService.name);
   }

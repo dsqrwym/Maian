@@ -13,10 +13,7 @@
     <string name="field_company_type_placeholder">Selecciona el tipus d'empresa</string>
     <string name="icon_content_description_company">Icona d'empresa</string>
 
-    <string name="category_management_description">
-        Consulta i busca categories, crea les teues pròpies categories de productes i gestiona noms multilingües.
-        Admet fins a tres nivells de jerarquia (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">Consulta i busca categories, crea les teues pròpies categories de productes i gestiona noms multilingües.\nAdmet fins a tres nivells de jerarquia (1 → 2 → 3).</string>
     <string name="company_type_limited_company">Societat limitada (S.L.)</string>
     <string name="company_type_public_limited_company">Societat anònima (S.A.)</string>
     <string name="company_type_self_employed">Autònom</string>
@@ -73,32 +70,18 @@
     <string name="drag_here_to_delete">Arrossega ací per a eliminar</string>
     <string name="product_form_media_title">Fitxers multimèdia</string>
 
-    <string name="product_form_media_subtitle_mb">
-        Mantín premut i arrossega per a ordenar. La primera imatge serà la principal.
-        Cada fitxer no pot superar %1$d MB.
-    </string>
+    <string name="product_form_media_subtitle_mb">Mantín premut i arrossega per a ordenar. La primera imatge serà la principal.\nCada fitxer no pot superar %1$d MB.</string>
 
     <string name="product_form_translations_title">Informació del producte (multilingüe)</string>
 
-    <string name="product_form_translations_subtitle">
-        Afig noms i descripcions en diferents idiomes. L'idioma principal es mostra per defecte;
-        els altres s'utilitzen per a la visualització multilingüe.
-        Cal omplir almenys un idioma.
-    </string>
+    <string name="product_form_translations_subtitle">Afig noms i descripcions en diferents idiomes. L'idioma principal es mostra per defecte;\nels altres s'utilitzen per a la visualització multilingüe.\nCal omplir almenys un idioma.</string>
 
     <string name="product_form_attributes_title">Atributs del producte</string>
 
-    <string name="product_form_attributes_subtitle">
-        Configura els atributs bàsics del producte, incloent la categoria,
-        el tipus impositiu i l'estat.
-    </string>
+    <string name="product_form_attributes_subtitle">Configura els atributs bàsics del producte, incloent la categoria, el tipus impositiu i l'estat.</string>
 
     <string name="product_form_sku_title">Llista d'SKU</string>
 
-    <string name="product_form_sku_subtitle">
-        Cada producte necessita almenys una variant de venda (SKU).
-        Pots crear variants per a diferents embalatges, formats o preus.
-        S'admeten fins a 50 variants.
-    </string>
+    <string name="product_form_sku_subtitle">Cada producte necessita almenys una variant de venda (SKU). \nPots crear variants per a diferents embalatges, formats o preus. \nS'admeten fins a 50 variants.</string>
 
 </resources>

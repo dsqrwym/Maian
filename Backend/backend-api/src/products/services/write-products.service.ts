@@ -32,9 +32,10 @@ import {
   variant_products,
 } from '#/generated/drizzle/schema.js';
 import { and, eq, exists, inArray, sql } from 'drizzle-orm';
+import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
-export class ProductsWriteService {
+export class WriteProductsService {
   private readonly MAX_VARIANTS_PRODUCT: number;
   constructor(
     private readonly drizzle: DrizzleService,
@@ -44,7 +45,7 @@ export class ProductsWriteService {
     this.MAX_VARIANTS_PRODUCT = Number(
       this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
     );
-    this.logger.setContext(ProductsWriteService.name);
+    this.logger.setContext(WriteProductsService.name);
   }
 
   async create(
@@ -353,7 +354,7 @@ export class ProductsWriteService {
               ),
           ),
         })
-        .from(sql`(VALUES (1)) AS tmp`);
+        .from(SQL_TEMP_TABLE);
 
       if (!activeVariant[0]?.exists) {
         throw new BadRequestException(

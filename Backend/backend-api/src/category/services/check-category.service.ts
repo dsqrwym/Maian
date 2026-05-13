@@ -6,6 +6,7 @@ import {
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { categories } from '#/generated/drizzle/schema.js';
 import { and, eq, exists, isNull, ne, sql } from 'drizzle-orm';
+import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 @Injectable()
 export class CheckCategoryService {
   constructor(private readonly drizzle: DrizzleService) {}
@@ -23,7 +24,7 @@ export class CheckCategoryService {
       );
     const [result] = (await this.drizzle.db
       .select({ exists: exists(subquery) })
-      .from(sql`(VALUES (1)) AS tmp`)
+      .from(SQL_TEMP_TABLE)
       .execute()) as { exists: boolean }[];
 
     return result?.exists ?? false;
@@ -44,7 +45,7 @@ export class CheckCategoryService {
       );
     const [result] = (await this.drizzle.db
       .select({ exists: exists(subquery) })
-      .from(sql`(VALUES (1)) AS tmp`)
+      .from(SQL_TEMP_TABLE)
       .execute()) as { exists: boolean }[];
     return result?.exists ?? false;
   }

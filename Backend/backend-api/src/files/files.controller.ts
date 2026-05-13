@@ -43,7 +43,7 @@ import { ProductFilesService } from './services/product-files.service.js';
  * @class FilesController
  */
 @ApiTags('File Management')
-@Controller('files')
+@Controller()
 export class FilesController {
   constructor(
     private readonly filesService: FilesService,

@@ -11,10 +11,7 @@
     <string name="field_company_type_placeholder">請選擇公司類型</string>
     <string name="icon_content_description_company">公司圖標</string>
 
-    <string name="category_management_description">
-        查看與搜尋類別、建立自己的商品類別，並管理多語言名稱。
-        支援最多三層巢狀（1 → 2 → 3）。
-    </string>
+    <string name="category_management_description">查看與搜尋類別、建立自己的商品類別，並管理多語言名稱。\n支援最多三層巢狀（1 → 2 → 3）。</string>
     <string name="company_type_limited_company">有限責任公司（S.L.）</string>
     <string name="company_type_public_limited_company">股份有限公司（S.A.）</string>
     <string name="company_type_self_employed">個體經營者</string>

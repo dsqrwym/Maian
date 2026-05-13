@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.blur.blurEffect
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
@@ -57,12 +57,15 @@ fun SharedTransparentScaffold(
             containerColor = Color.Transparent,
             topBar = {
                 CenterAlignedTopAppBar(
-                    modifier = Modifier.paddingTopForMenu().hazeEffect(hazeState, hazeStyle) {
-                        alpha = 0.66f
-                        progressive = HazeProgressive.verticalGradient(
-                            startIntensity = 0.18f,
-                            endIntensity = 0.18f
-                        )
+                    modifier = Modifier.paddingTopForMenu().hazeEffect(hazeState) {
+                        blurEffect {
+                            style = hazeStyle
+                            alpha = 0.66f
+                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.verticalGradient(
+                                startIntensity = 0.18f,
+                                endIntensity = 0.18f
+                            )
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
@@ -91,12 +94,15 @@ fun SharedTransparentScaffold(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .hazeEffect(hazeState, hazeStyle) {
-                            alpha = 0.66f
-                            progressive = HazeProgressive.verticalGradient(
-                                startIntensity = 0.18f,
-                                endIntensity = 0.18f
-                            )
+                        .hazeEffect(hazeState) {
+                            blurEffect {
+                                style = hazeStyle
+                                alpha = 0.66f
+                                progressive = dev.chrisbanes.haze.blur.HazeProgressive.verticalGradient(
+                                    startIntensity = 0.18f,
+                                    endIntensity = 0.18f
+                                )
+                            }
                         }
                 ) {
                     bottomBar()

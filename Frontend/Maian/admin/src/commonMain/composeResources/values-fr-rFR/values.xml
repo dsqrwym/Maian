@@ -9,8 +9,5 @@
     <string name="category_visible_to_all_tip">Cette catégorie sera accessible à tous les utilisateurs</string>
     <string name="wholesaler_selected">Grossiste sélectionné</string>
 
-    <string name="category_management_description">
-        Consulter et rechercher des catégories, et créer des catégories privées ou générales pour les grossistes ou pour tous les utilisateurs de la plateforme.
-        Prend en charge l’édition (nom, traductions) et la suppression (réservée aux super-administrateurs). Les catégories peuvent comporter jusqu’à trois niveaux (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">Consulter et rechercher des catégories, et créer des catégories privées ou générales pour les grossistes ou pour tous les utilisateurs de la plateforme. \nPrend en charge l’édition (nom, traductions) et la suppression (réservée aux super-administrateurs). Les catégories peuvent comporter jusqu’à trois niveaux (1 → 2 → 3).</string>
 </resources>

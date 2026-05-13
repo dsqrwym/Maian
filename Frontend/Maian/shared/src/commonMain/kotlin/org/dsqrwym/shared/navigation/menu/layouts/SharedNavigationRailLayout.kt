@@ -13,16 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.blur.blurEffect
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.menu_close_content_description
-import maian.shared.generated.resources.menu_open_content_description
-import maian.shared.generated.resources.navigation_item_icon_fallback
-import maian.shared.generated.resources.navigation_item_label_fallback
-import maian.shared.generated.resources.navigation_title_fallback
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.theme.MyHazeStyles
@@ -77,7 +72,10 @@ fun SharedNavigationRailLayout(
                     }
                 },
                 title = {
-                    Text(currentItem?.item?.label.asString() ?: stringResource(SharedRes.string.navigation_title_fallback))
+                    Text(
+                        currentItem?.item?.label.asString()
+                            ?: stringResource(SharedRes.string.navigation_title_fallback)
+                    )
                 },
                 actions = {
                     menuConfig.topBarActions?.forEach {
@@ -85,13 +83,15 @@ fun SharedNavigationRailLayout(
                     }
                 },
                 modifier = Modifier.fillMaxWidth().hazeEffect(state = topBarHazeState) {
-                    progressive = HazeProgressive.verticalGradient(
-                        startIntensity = 0.8f,
-                        endIntensity = 0f,
-                        preferPerformance = false // 设为 true 可提升性能但降低质量
-                    )
-                    style = topBarHazeStyle
-                    alpha = 0.85f
+                    blurEffect {
+                        progressive = dev.chrisbanes.haze.blur.HazeProgressive.verticalGradient(
+                            startIntensity = 0.8f,
+                            endIntensity = 0f,
+                            preferPerformance = false // 设为 true 可提升性能但降低质量
+                        )
+                        style = topBarHazeStyle
+                        alpha = 0.85f
+                    }
                 }
             )
         },
@@ -119,13 +119,15 @@ fun SharedNavigationRailLayout(
                 NavigationRail(
                     containerColor = Color.Transparent.copy(alpha = 0.5f),
                     modifier = Modifier.hazeEffect(state = railHazeState) {
-                        progressive = HazeProgressive.horizontalGradient(
-                            startIntensity = 0.8f,
-                            endIntensity = 0f,
-                            preferPerformance = false // 设为 true 可提升性能但降低质量
-                        )
-                        style = topBarHazeStyle
-                        alpha = 1f
+                        blurEffect {
+                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.horizontalGradient(
+                                startIntensity = 0.8f,
+                                endIntensity = 0f,
+                                preferPerformance = false // 设为 true 可提升性能但降低质量
+                            )
+                            style = topBarHazeStyle
+                            alpha = 1f
+                        }
                     }
                 ) {
                     Spacer(Modifier.height(paddingValues.calculateTopPadding()))
@@ -180,7 +182,11 @@ fun SharedNavigationRailItem(
                     }
                 }
             },
-            label = { Text(state.item.label.asString() ?: stringResource(SharedRes.string.navigation_item_label_fallback)) },
+            label = {
+                Text(
+                    state.item.label.asString()
+                )
+            },
             selected = isSameRoute(currentRoute, state.item.route),
             onClick = { onNavigate(state.item.route) }
         )

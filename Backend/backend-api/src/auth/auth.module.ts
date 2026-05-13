@@ -14,16 +14,11 @@ import { RegistrationController } from './controllers/registration.controller.js
 import { LoginController } from './controllers/login.controller.js';
 import { RefreshTokenController } from './controllers/refresh-token.controller.js';
 import { SessionController } from './controllers/session.controller.js';
-import { RouterModule } from '@nestjs/core';
 import { ResetPasswordController } from './controllers/reset-password.controller.js';
 import { EmailVerificationController } from './controllers/email-verification.controller.js';
 
 @Module({
-  imports: [
-    RouterModule.register([{ path: 'auth', module: AuthModule }]),
-    PassportModule,
-    MailModule,
-  ], // 引入邮件模块
+  imports: [PassportModule, MailModule], // 引入邮件模块
   providers: [
     AuthService,
     JwtStrategy,

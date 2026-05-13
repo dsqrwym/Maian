@@ -15,17 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.blur.blurEffect
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.launch
-import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.menu_close_content_description
-import maian.shared.generated.resources.menu_open_content_description
-import maian.shared.generated.resources.navigation_item_icon_fallback
-import maian.shared.generated.resources.navigation_item_label_fallback
-import maian.shared.generated.resources.navigation_title_fallback
+import maian.shared.generated.resources.*
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.theme.MyHazeStyles
@@ -80,12 +75,14 @@ fun SharedBottomNavigationLayout(
             if (drawerItems.isNotEmpty()) {
                 ModalDrawerSheet(
                     modifier = Modifier.fillMaxWidth(0.58f).hazeEffect(state = drawerHazeState) {
-                        style = drawerHazeStyle
-                        alpha = 1f
-                        progressive = HazeProgressive.horizontalGradient(
-                            startIntensity = 0.6f,
-                            endIntensity = 0f
-                        )
+                        blurEffect {
+                            style = drawerHazeStyle
+                            alpha = 1f
+                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.horizontalGradient(
+                                startIntensity = 0.6f,
+                                endIntensity = 0f
+                            )
+                        }
                     },
                     drawerContainerColor = Color.Transparent.copy(alpha = 0.5f),
                 ) {
@@ -119,7 +116,7 @@ fun SharedBottomNavigationLayout(
                                             )
                                         }
                                     },
-                                    label = { Text(state.item.label.asString() ?: stringResource(SharedRes.string.navigation_item_label_fallback)) },
+                                    label = { Text(state.item.label.asString()) },
                                     selected = isSameRoute(currentRoute, state.item.route),
                                     onClick = {
                                         onNavigate(state.item.route)
@@ -171,21 +168,23 @@ fun SharedBottomNavigationLayout(
                         }
                     },
                     modifier = Modifier.hazeEffect(state = topBarHazeState) {
-                        progressive = HazeProgressive.verticalGradient(
-                            startIntensity = 2f,
-                            endIntensity = 0.05f,
-                            preferPerformance = false // 设为 true 可提升性能但降低质量
-                        )
-                        style = topBarHazeStyle
-                        alpha = when {
-                            scrollBehavior.state.collapsedFraction > 0f -> {
-                                // 滚动时：根据折叠程度增加到 1.0
-                                0.38f + (scrollBehavior.state.collapsedFraction * 0.6f)
-                            }
+                        blurEffect {
+                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.verticalGradient(
+                                startIntensity = 2f,
+                                endIntensity = 0.05f,
+                                preferPerformance = false // 设为 true 可提升性能但降低质量
+                            )
+                            style = topBarHazeStyle
+                            alpha = when {
+                                scrollBehavior.state.collapsedFraction > 0f -> {
+                                    // 滚动时：根据折叠程度增加到 1.0
+                                    0.38f + (scrollBehavior.state.collapsedFraction * 0.6f)
+                                }
 
-                            else -> {
-                                // 顶部时：保持 40% 透明度，让内容若隐若现
-                                0.38f
+                                else -> {
+                                    // 顶部时：保持 40% 透明度，让内容若隐若现
+                                    0.38f
+                                }
                             }
                         }
                     }
@@ -208,7 +207,7 @@ fun SharedBottomNavigationLayout(
                                     }
                                 }
                             },
-                            label = { Text(state.item.label.asString() ?: stringResource(SharedRes.string.navigation_item_label_fallback)) },
+                            label = { Text(state.item.label.asString()) },
                             selected = isSameRoute(currentRoute, state.item.route),
                             onClick = { onNavigate(state.item.route) }
                         )

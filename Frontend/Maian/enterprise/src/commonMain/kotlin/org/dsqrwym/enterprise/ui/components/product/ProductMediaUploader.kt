@@ -30,7 +30,7 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.blur.blurEffect
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
@@ -245,10 +245,13 @@ fun MediaGridItem(
                 modifier = Modifier
                     .matchParentSize()
                     .pointerInput(Unit) {} // 阻止点击穿透
-                    .hazeEffect(hazeState, hazeStyle) {
-                        progressive = HazeProgressive.RadialGradient(
-                            radiusIntensity = 0.6f
-                        )
+                    .hazeEffect(hazeState) {
+                        blurEffect {
+                            style =  hazeStyle
+                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.RadialGradient(
+                                radiusIntensity = 0.6f
+                            )
+                        }
                     }
             ) {
                 when (item.uploadState) {

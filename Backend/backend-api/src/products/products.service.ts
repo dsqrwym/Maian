@@ -4,16 +4,16 @@ import { IUpdateProductDto } from './dto/update-product.dto.js';
 import { AppAbility } from '#/casl/casl-types.js';
 import { UserPayload } from '#/auth/auth.types.js';
 import { PinoLogger } from 'nestjs-pino';
-import { ProductsWriteService } from '#/products/services/products-write.service.js';
-import { ProductsReadService } from '#/products/services/products-read.service.js';
+import { WriteProductsService } from './services/write-products.service.js';
+import { ReadProductsService } from './services/read-products.service.js';
 import { IProductListQueryDto } from '#/products/dto/product-list-query.dto.js';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private readonly logger: PinoLogger,
-    private readonly productsWriteService: ProductsWriteService,
-    private readonly productsReadService: ProductsReadService,
+    private readonly productsWriteService: WriteProductsService,
+    private readonly productsReadService: ReadProductsService,
   ) {
     this.logger.setContext(ProductsService.name);
   }
@@ -56,7 +56,17 @@ export class ProductsService {
     return this.productsReadService.getForUpdate(id, ability);
   }
 
-  async getProductDetail(id: string, langCode: string, ability: AppAbility) {
-    return this.productsReadService.getProductDetail(id, langCode, ability);
+  async getProductDetail(
+    id: string,
+    langCode: string,
+    user: UserPayload,
+    ability: AppAbility,
+  ) {
+    return this.productsReadService.getProductDetail(
+      id,
+      langCode,
+      user,
+      ability,
+    );
   }
 }

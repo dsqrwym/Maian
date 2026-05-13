@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.ui.components.product.detail
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -16,6 +17,8 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.add_to_cart
 import maian.shared.generated.resources.quantity
 import org.dsqrwym.shared.domain.product.SharedProductDetailVariant
+import org.dsqrwym.shared.ui.components.containers.StateContent
+import org.dsqrwym.shared.ui.components.containers.UiState
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -24,9 +27,13 @@ fun SharedProductBottomCartBar(
     selectedVariant: SharedProductDetailVariant?,
     quantityText: String,
     canAddToCart: Boolean,
+    addToCartUiState: UiState = UiState.Idle,
     onQuantityChange: (String) -> Unit,
     onQuantityStep: (Int) -> Unit,
+    onAddToCartClick: () -> Unit = {},
 ) {
+    val canEditQuantity = selectedVariant != null && addToCartUiState != UiState.Loading
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -42,7 +49,7 @@ fun SharedProductBottomCartBar(
         ) {
             IconButton(
                 onClick = { onQuantityStep(-1) },
-                enabled = selectedVariant != null,
+                enabled = canEditQuantity,
                 colors = IconButtonDefaults.iconButtonColors().copy(
                     contentColor = MaterialTheme.colorScheme.outline,
                 )
@@ -56,7 +63,7 @@ fun SharedProductBottomCartBar(
                     .widthIn(min = 72.dp, max = 150.dp),
                 value = quantityText,
                 onValueChange = onQuantityChange,
-                enabled = selectedVariant != null,
+                enabled = canEditQuantity,
                 singleLine = true,
                 label = { Text(stringResource(SharedRes.string.quantity)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -64,7 +71,7 @@ fun SharedProductBottomCartBar(
 
             IconButton(
                 onClick = { onQuantityStep(1) },
-                enabled = selectedVariant != null,
+                enabled = canEditQuantity,
                 colors = IconButtonDefaults.iconButtonColors().copy(
                     contentColor = MaterialTheme.colorScheme.outline,
                 )
@@ -74,13 +81,25 @@ fun SharedProductBottomCartBar(
         }
 
         ElevatedButton(
-            modifier = Modifier.widthIn(min = 150.dp),
-            enabled = canAddToCart,
-            onClick = {},
+            modifier = Modifier
+                .animateContentSize()
+                .then(
+                    if (addToCartUiState == UiState.Idle) Modifier.widthIn(min = 150.dp)
+                    else Modifier
+                ),
+            enabled = canAddToCart && addToCartUiState == UiState.Idle,
+            onClick = onAddToCartClick,
         ) {
-            Icon(Icons.Outlined.AddShoppingCart, contentDescription = null)
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(SharedRes.string.add_to_cart))
+            StateContent(state = addToCartUiState) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Outlined.AddShoppingCart,
+                        contentDescription = stringResource(SharedRes.string.add_to_cart),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(SharedRes.string.add_to_cart))
+                }
+            }
         }
     }
 }

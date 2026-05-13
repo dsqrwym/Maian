@@ -177,7 +177,7 @@ fun CategoriesListScreen(
                         val isCategoryLoading =
                             viewModel.isLoading || lazyPagingItems.isRefreshing
 
-                        items(lazyPagingItems.itemCount, key = { lazyPagingItems.itemKey { it.id } }) { index ->
+                        items(lazyPagingItems.itemCount, key =  lazyPagingItems.itemKey { it.id }) { index ->
                             lazyPagingItems[index]?.let {
                                 CategoryListItem(
                                     modifier = Modifier.animateItem(),

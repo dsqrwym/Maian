@@ -13,10 +13,7 @@
     <string name="field_company_type_placeholder">Select company type</string>
     <string name="icon_content_description_company">Company icon</string>
 
-    <string name="category_management_description">
-        View and search categories, create your own product categories, and manage multilingual names.
-        Supports up to three levels of nesting (1 → 2 → 3).
-    </string>
+    <string name="category_management_description">View and search categories, create your own product categories, and manage multilingual names.\nSupports up to three levels of nesting (1 → 2 → 3).</string>
     <string name="company_type_limited_company">Limited company (S.L.)</string>
     <string name="company_type_public_limited_company">Public limited company (S.A.)</string>
     <string name="company_type_self_employed">Self-employed</string>

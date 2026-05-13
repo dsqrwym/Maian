@@ -520,6 +520,7 @@ fun ProductVariantFields(
                 modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
                 min = 0,
+                max = Int.MAX_VALUE,
                 value = availableStock.toString(),
                 onValueChange = onAvailableStockChange,
                 leadingIcon = Icons.Outlined.Inventory2,
@@ -533,6 +534,7 @@ fun ProductVariantFields(
         MyOutlinedIntegerField(
             modifier = Modifier.placeholderWithShimmer(isLoading),
             min = 0,
+            max = Int.MAX_VALUE,
             value = if (lowStockThreshold == 0) "" else lowStockThreshold.toString(),
             onValueChange = { it?.let { onLowStockThresholdChange(it) } },
             leadingIcon = Icons.Outlined.NotificationImportant,

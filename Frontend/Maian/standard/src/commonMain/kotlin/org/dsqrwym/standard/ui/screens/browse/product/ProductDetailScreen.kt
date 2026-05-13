@@ -49,6 +49,7 @@ fun ProductDetailScreen(
     val selectedVariant = viewModel.selectedVariant
     val quantityText = viewModel.quantityText
     val addToCartEnabled = viewModel.canAddToCart
+    val addToCartUiState = viewModel.addToCartUiState
     val productUi = product?.toSharedDetailUi(languageCode)
 
     SharedTransparentScaffold(
@@ -84,8 +85,10 @@ fun ProductDetailScreen(
                 selectedVariant = selectedVariant?.toSharedVariant(),
                 quantityText = quantityText,
                 canAddToCart = addToCartEnabled,
+                addToCartUiState = addToCartUiState,
                 onQuantityChange = viewModel::updateQuantity,
                 onQuantityStep = viewModel::updateStepQuantity,
+                onAddToCartClick = viewModel::onAddToCartClick,
             )
         }
     ) { padding, scrollBehavior ->

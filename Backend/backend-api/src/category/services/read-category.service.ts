@@ -42,19 +42,20 @@ import { ConfigService } from '@nestjs/config';
 import { ENV } from '#/config/constants.config.js';
 import { alias, unionAll } from 'drizzle-orm/pg-core';
 import { caslToDrizzle } from '#/casl/casl-to-drizzle.js';
-import { ProductsReadService } from '#/products/services/products-read.service.js';
+import { ReadProductsService } from '#/products/services/read-products.service.js';
+import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
-export class CategoryReadService {
+export class ReadCategoryService {
   private readonly MAX_SEARCH_TERMS: number;
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly config: ConfigService,
-    private readonly productReadService: ProductsReadService,
+    private readonly productReadService: ReadProductsService,
   ) {
     this.MAX_SEARCH_TERMS = this.config.get<number>(ENV.MAX_SEARCH_TERMS, 10);
-    this.logger.setContext(CategoryReadService.name);
+    this.logger.setContext(ReadCategoryService.name);
   }
 
   private selfMatch(pattern: string) {
@@ -437,10 +438,10 @@ export class CategoryReadService {
     }
 
     if (translations || langCode) {
-      mainQuery = mainQuery.leftJoinLateral(transLateral, sql`TRUE`);
+      mainQuery = mainQuery.leftJoinLateral(transLateral, SQL_TRUE);
     }
     if (query.withChildrenCount) {
-      mainQuery = mainQuery.leftJoinLateral(childrenCountLateral, sql`TRUE`);
+      mainQuery = mainQuery.leftJoinLateral(childrenCountLateral, SQL_TRUE);
     }
 
     // 动态 WHERE 条件

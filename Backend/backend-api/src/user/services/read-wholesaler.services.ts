@@ -19,6 +19,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { WholesalerSortField } from '#/user/user.enums.js';
 import { OrderByEnum } from '#/common/enums/sort.enum.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
+import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
 export class ReadWholesalerService {
@@ -240,7 +241,7 @@ export class ReadWholesalerService {
           province: directionLateral.province,
         })
         .from(users)
-        .leftJoinLateral(directionLateral, sql`TRUE`)
+        .leftJoinLateral(directionLateral, SQL_TRUE)
         .where(whereClause)
         .orderBy(
           sortDirection,
@@ -255,7 +256,7 @@ export class ReadWholesalerService {
           total: count(),
         })
         .from(users)
-        .leftJoinLateral(directionLateral, sql`TRUE`)
+        .leftJoinLateral(directionLateral, SQL_TRUE)
         .where(whereClause),
     ]);
 

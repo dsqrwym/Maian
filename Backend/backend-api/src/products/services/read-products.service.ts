@@ -9,6 +9,7 @@ import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { AppAbility } from '#/casl/casl-types.js';
 import { UserPayload } from '#/auth/auth.types.js';
 import {
+  carts,
   categories,
   category_translations,
   files,
@@ -45,9 +46,10 @@ import { ENV } from '#/config/constants.config.js';
 import { subject } from '@casl/ability';
 import { caslHasField, caslToDrizzle } from '#/casl/casl-to-drizzle.js';
 import { users } from '../../../drizzle/schema.js';
+import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
-export class ProductsReadService {
+export class ReadProductsService {
   private readonly MAX_SEARCH_TERMS: number;
   constructor(
     private readonly drizzle: DrizzleService,
@@ -57,7 +59,7 @@ export class ProductsReadService {
     this.MAX_SEARCH_TERMS = Number(
       this.configService.get<number>(ENV.MAX_SEARCH_TERMS, 10),
     );
-    this.logger.setContext(ProductsReadService.name);
+    this.logger.setContext(ReadProductsService.name);
   }
 
   buildVisibleWholesalerOwnerCondition(): SQL {
@@ -299,13 +301,13 @@ export class ProductsReadService {
         product_translations: translationsLateral.product_translations,
       })
       .from(products)
-      .leftJoinLateral(variantAggregates, sql`TRUE`)
-      .leftJoinLateral(mainImgLateral, sql`TRUE`)
-      .leftJoinLateral(translationsLateral, sql`TRUE`)
+      .leftJoinLateral(variantAggregates, SQL_TRUE)
+      .leftJoinLateral(mainImgLateral, SQL_TRUE)
+      .leftJoinLateral(translationsLateral, SQL_TRUE)
       .$dynamic();
 
     if (category) {
-      productQuery.leftJoinLateral(mainCategoryLateral, sql`TRUE`);
+      productQuery.leftJoinLateral(mainCategoryLateral, SQL_TRUE);
     }
 
     // 构建 WHERE 条件
@@ -541,7 +543,12 @@ export class ProductsReadService {
     };
   }
 
-  async getProductDetail(id: string, langCode: string, ability: AppAbility) {
+  async getProductDetail(
+    id: string,
+    langCode: string,
+    user: UserPayload,
+    ability: AppAbility,
+  ) {
     if (!ability.can(Action.Read, 'products')) {
       throw new ForbiddenException(
         'You do not have permission to read products',
@@ -559,6 +566,7 @@ export class ProductsReadService {
       'variant_products',
       variant_products,
     );
+    const isRetailer = user.userRole === UserRole.RETAILER;
 
     const product = await this.drizzle.db.query.products.findFirst({
       where: and(eq(products.id, BigInt(id)), productAbilityCondition),
@@ -616,6 +624,33 @@ export class ProductsReadService {
             min_order_qty: true,
             available_stock: true,
           },
+          // 如果是 零售商 就放回其购物篮对于该产品的数据l
+          /*
+          这个写法解析不出来，等升级
+          ...(isRetailer && {
+            with: {
+              cart_details: {
+                columns: { quantity: true },
+                with: {
+                  cart: {
+                    where: eq(carts.retailer_id, user.userId),
+                    columns: { retailer_id: true },
+                  },
+                },
+              },
+            },
+          }),*/
+          with: {
+            cart_details: {
+              columns: { quantity: true },
+              with: {
+                cart: {
+                  where: eq(carts.retailer_id, user.userId),
+                  columns: { retailer_id: true },
+                },
+              },
+            },
+          },
         },
       },
     });
@@ -658,7 +693,31 @@ export class ProductsReadService {
         is_primary: category.is_primary,
       })),
       product_translations: product.product_translations,
-      variant_products: product.variant_products,
+      variant_products: product.variant_products.map((variant) => {
+        const retailerCartQuantity = isRetailer
+          ? (variant.cart_details?.find(
+              (it) => it.cart?.retailer_id === user.userId,
+            )?.quantity ?? 0)
+          : 0;
+        // 业务限制在 js number 有效范围内 而且是整数所以 不需要 big number
+        const reservedByCart = retailerCartQuantity * variant.sale_unit_qty;
+
+        const available_stock = Math.max(
+          0,
+          variant.available_stock - reservedByCart,
+        );
+        return {
+          id: variant.id,
+          sort: variant.sort,
+          price: variant.price,
+          type_sale: variant.type_sale,
+          price_iva: variant.price_iva,
+          product_code: variant.product_code,
+          sale_unit_qty: variant.sale_unit_qty,
+          min_order_qty: variant.min_order_qty,
+          available_stock,
+        };
+      }),
     };
   }
 }
