@@ -69,7 +69,7 @@ object ApiConfig {
 
         fun file(fileId: String): String = "${FILES}/$fileId"
 
-        fun userImage(userId: String, fileId: String? = null) = "${FILES}/user/$userId/image?file_id=$fileId"
+        fun userImage(userId: String, fileId: String) = "${FILES}/user/$userId/image?file_id=$fileId"
     }
 
     object CategoryPath {

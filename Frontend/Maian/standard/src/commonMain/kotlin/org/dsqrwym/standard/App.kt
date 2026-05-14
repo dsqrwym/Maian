@@ -145,17 +145,13 @@ fun App() {
                         menuConfig = menuConfig,
                         currentRoute = navigationState.currentTopLevelRoute,
                         onNavigate = { route ->
-                            val previousTopLevelRoute = navigationState.currentTopLevelRoute.toStandardTopLevelRoute()
                             navigationState.navigateToTopLevel(route)
                             if (route == WholesalersScreen) {
-                                BrowseScopeStore.state.wholesalerId?.let { wholesalerId ->
-                                    navigationState.replace(
-                                        WholesalerProfileRoute(
-                                            id = wholesalerId,
-                                            returnTopLevelRoute = previousTopLevelRoute ?: StandardTopLevelRoute.PRODUCTS,
-                                            onBackScopeAction = WholesalerProfileScopeAction.CLEAR_ON_BACK,
-                                        )
-                                    )
+                                val wholesalerId = BrowseScopeStore.state.wholesalerId
+                                if (wholesalerId == null) {
+                                    navigationState.replace(WholesalersScreen)
+                                } else {
+                                    navigationState.replace(WholesalerProfileRoute(id = wholesalerId))
                                 }
                             }
                         },

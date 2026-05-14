@@ -25,14 +25,6 @@ object WholesalersScreen : NavKey
 object CartScreen : NavKey
 
 @Serializable
-enum class StandardTopLevelRoute {
-    PRODUCTS,
-    CATEGORIES,
-    WHOLESALERS,
-    CART,
-}
-
-@Serializable
 @SerialName("category_browse")
 data class CategoryBrowseRoute(
     val id: String,
@@ -44,36 +36,11 @@ data class CategoryBrowseRoute(
 ) : NavKey
 
 @Serializable
-enum class WholesalerProfileScopeAction {
-    NONE,
-    CLEAR_ON_BACK,
-}
-
-@Serializable
 @SerialName("wholesaler_profile")
 data class WholesalerProfileRoute(
     val id: String,
-    val returnTopLevelRoute: StandardTopLevelRoute? = null,
-    val onBackScopeAction: WholesalerProfileScopeAction = WholesalerProfileScopeAction.NONE,
 ) : NavKey
 
 @Serializable
 @SerialName("product_detail")
 data class ProductDetailScreen(val productId: String) : NavKey
-
-fun NavKey.toStandardTopLevelRoute(): StandardTopLevelRoute? =
-    when (this) {
-        ProductsScreen -> StandardTopLevelRoute.PRODUCTS
-        CategoriesScreen -> StandardTopLevelRoute.CATEGORIES
-        WholesalersScreen -> StandardTopLevelRoute.WHOLESALERS
-        CartScreen -> StandardTopLevelRoute.CART
-        else -> null
-    }
-
-fun StandardTopLevelRoute.toNavKey(): NavKey =
-    when (this) {
-        StandardTopLevelRoute.PRODUCTS -> ProductsScreen
-        StandardTopLevelRoute.CATEGORIES -> CategoriesScreen
-        StandardTopLevelRoute.WHOLESALERS -> WholesalersScreen
-        StandardTopLevelRoute.CART -> CartScreen
-    }

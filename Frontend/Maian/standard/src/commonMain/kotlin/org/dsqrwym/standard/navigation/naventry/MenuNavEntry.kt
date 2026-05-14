@@ -22,14 +22,13 @@ import org.dsqrwym.standard.navigation.CategoryBrowseRoute
 import org.dsqrwym.standard.navigation.ProductDetailScreen
 import org.dsqrwym.standard.navigation.ProductsScreen
 import org.dsqrwym.standard.navigation.WholesalerProfileRoute
-import org.dsqrwym.standard.navigation.WholesalerProfileScopeAction
 import org.dsqrwym.standard.navigation.WholesalersScreen
-import org.dsqrwym.standard.navigation.toNavKey
 import org.dsqrwym.standard.ui.screens.browse.CategoryBrowseScreen
 import org.dsqrwym.standard.ui.screens.browse.product.ProductBrowseScreen
 import org.dsqrwym.standard.ui.screens.cart.StandardCartScreen
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
 import org.koin.compose.currentKoinScope
+import org.dsqrwym.standard.domain.browse.toRetailWholesaler
 import org.dsqrwym.standard.ui.screens.browse.product.ProductDetailScreen as ProductDetailContent
 import org.dsqrwym.standard.ui.screens.browse.wholesaler.WholesalerProfileScreen as WholesalerProfileContent
 import org.dsqrwym.standard.ui.screens.browse.wholesaler.WholesalersScreen as WholesalersContent
@@ -109,8 +108,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
     entry<WholesalersScreen> {
         WholesalersContent(
             onWholesalerClick = { wholesaler ->
-                BrowseScopeStore.selectWholesaler(wholesaler)
-                navigationState.navigateToTopLevel(ProductsScreen)
+                navigationState.navigate(WholesalerProfileRoute(id = wholesaler.id))
             },
         )
     }
@@ -135,19 +133,16 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
         WholesalerProfileContent(
             wholesalerId = route.id,
             onNavigateBack = {
-                if (route.onBackScopeAction == WholesalerProfileScopeAction.CLEAR_ON_BACK) {
-                    BrowseScopeStore.clearWholesaler()
+                val isRootDetail = navigationState.backStack.size <= 1
+                BrowseScopeStore.clearWholesaler()
+                if (isRootDetail) {
+                    navigationState.replace(WholesalersScreen)
+                } else {
+                    navigationState.pop()
                 }
-                route.returnTopLevelRoute
-                    ?.let {
-                        val targetRoute = it.toNavKey()
-                        if (navigationState.currentTopLevelRoute == targetRoute) {
-                            navigationState.replace(targetRoute)
-                        } else {
-                            navigationState.navigateToTopLevel(targetRoute)
-                        }
-                    }
-                    ?: navigationState.pop()
+            },
+            onProfileLoaded = { profile ->
+                BrowseScopeStore.selectWholesaler(profile.toRetailWholesaler(route.id))
             },
         )
     }

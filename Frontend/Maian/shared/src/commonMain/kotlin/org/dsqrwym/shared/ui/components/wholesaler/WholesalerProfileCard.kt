@@ -339,7 +339,7 @@ private fun WholesalerLogo(
     ) {
         userId?.let { userId ->
             SharedAsyncImage(
-                model = ApiConfig.FilePath.userImage(userId, fileId),
+                model = fileId?.let { ApiConfig.FilePath.userImage(userId, it) },
                 modifier = Modifier.fillMaxSize()
                     .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
                 contentDescription = stringResource(SharedRes.string.wholesalers),

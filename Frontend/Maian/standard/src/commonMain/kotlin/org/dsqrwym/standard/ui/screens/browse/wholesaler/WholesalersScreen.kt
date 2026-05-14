@@ -18,8 +18,8 @@ import maian.standard.generated.resources.no_wholesalers
 import maian.standard.generated.resources.search_wholesalers
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.user.SpanishCompanyType
-import org.dsqrwym.shared.data.user.toStringResource
 import org.dsqrwym.shared.data.user.dto.WholesalerSortField
+import org.dsqrwym.shared.data.user.toStringResource
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
@@ -65,8 +65,9 @@ fun WholesalersScreen(
         overlayContent = {
             previewWholesaler?.logoFileId?.let { logoFileId ->
                 SharedImageViewDialog(
-                    model = ApiConfig.FilePath.userImage(previewWholesaler!!.id, logoFileId),
-                    imageName = previewWholesaler!!.displayName ?: previewWholesaler!!.companyName,
+                    model = previewWholesaler?.id.takeIf { it != null }
+                        ?.let { ApiConfig.FilePath.userImage(it, logoFileId) } ?: "",
+                    imageName = previewWholesaler?.displayName ?: previewWholesaler?.companyName,
                     onDismissRequest = { previewWholesaler = null },
                 )
             }

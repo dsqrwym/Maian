@@ -441,7 +441,7 @@ private fun LogoPickerContent(
                         .pointerInput(Unit) {} // 阻止点击穿透
                         .hazeEffect(hazeState) {
                             blurEffect {
-                                style =  hazeStyle
+                                style = hazeStyle
                                 progressive = dev.chrisbanes.haze.blur.HazeProgressive.RadialGradient(
                                     radiusIntensity = 0.6f
                                 )

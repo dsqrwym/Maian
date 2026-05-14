@@ -54,7 +54,14 @@ fun WholesalerProfileScreen(
         overlayContent = {
             if (profile?.logoFileId == null) return@SharedTransparentScaffold
             SharedImageViewDialog(
-                model = profile.id?.let { ApiConfig.FilePath.userImage(it, profile.logoFileId) } ?: "",
+                model = profile.id?.let {
+                    profile.logoFileId?.let { fileId ->
+                        ApiConfig.FilePath.userImage(
+                            it,
+                            fileId
+                        )
+                    }
+                } ?: "",
                 onDismissRequest = { showImageDialog = false },
             )
         },

@@ -1,10 +1,7 @@
 package org.dsqrwym.standard.ui.screens.cart
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -17,8 +14,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import maian.standard.generated.resources.StandardRes
 import maian.standard.generated.resources.cart_empty
-import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
+import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.SharedConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
@@ -210,8 +207,61 @@ private fun CartContent(
                             )
                         }
                     }
-                    state.cart?.groups.orEmpty().forEach { group ->
-                        item(key = "cart-group-${group.wholesaler.id}") {
+                    val groups = state.cart?.groups.orEmpty()
+                    val useSingleWholesalerLayout = groups.size == 1
+                    if (useSingleWholesalerLayout) {
+                        val group = groups.first()
+                        item(
+                            key = "cart-group-${group.wholesaler.id}-header",
+                            span = StaggeredGridItemSpan.FullLine,
+                        ) {
+                            CartSingleWholesalerHeaderCard(
+                                modifier = Modifier.animateItem(),
+                                group = group,
+                                selectingWholesalerId = state.selectingWholesalerId,
+                                isLoading = state.isContentRefreshing,
+                                isWholesalerScoped = state.isWholesalerScoped,
+                                onWholesalerImageClick = onWholesalerImageClick,
+                                onWholesalerScopeClick = onWholesalerScopeClick,
+                            )
+                        }
+                        items(
+                            group.items,
+                            key = { item -> "cart-item-${item.cartDetailId}" },
+                        ) { item ->
+                            CartSingleWholesalerItemCard(
+                                modifier = Modifier.animateItem(),
+                                item = item,
+                                updatingCartDetailId = state.updatingCartDetailId,
+                                deletingCartDetailId = state.deletingCartDetailId,
+                                isLoading = state.isContentRefreshing,
+                                onProductImageClick = onProductImageClick,
+                                onProductDetailClick = onProductDetailClick,
+                                onQuantityChange = onQuantityChange,
+                                onDeleteItem = onDeleteItem,
+                            )
+                        }
+                        item(
+                            key = "cart-group-${group.wholesaler.id}-footer",
+                            span = StaggeredGridItemSpan.FullLine,
+                        ) {
+                            CartSingleWholesalerFooterCard(
+                                modifier = Modifier.animateItem(),
+                                group = group,
+                                updatingCartDetailId = state.updatingCartDetailId,
+                                deletingCartDetailId = state.deletingCartDetailId,
+                                deletingWholesalerId = state.deletingWholesalerId,
+                                selectingWholesalerId = state.selectingWholesalerId,
+                                isLoading = state.isContentRefreshing,
+                                onClearWholesalerCart = onClearWholesalerCart,
+                                onCreateOrder = onCreateOrder,
+                            )
+                        }
+                    } else {
+                        items(
+                            groups,
+                            key = { group -> "cart-group-${group.wholesaler.id}" },
+                        ) { group ->
                             CartGroupCard(
                                 modifier = Modifier.animateItem(),
                                 group = group,
@@ -232,6 +282,7 @@ private fun CartContent(
                             )
                         }
                     }
+
                     item(span = StaggeredGridItemSpan.FullLine) {
                         Spacer(Modifier.height(28.dp))
                     }
