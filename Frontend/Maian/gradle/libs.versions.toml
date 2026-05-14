@@ -18,7 +18,7 @@ composeMultiplatformMediaPlayer = "1.0.53" #1.0.52
 composePipette = "2.0.0"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
-compottieLite = "2.1.0" #2.0.3
+compottieLite = "2.2.0-beta01" #2.1.0
 datatableMaterial3 = "0.12.0" #0.11.7
 filekitCore = "0.13.0" #0.13.0 不更新直到 composemediaplayer = "0.10.0" 0.10.1
 haze = "2.0.0-alpha02" #1.7.2

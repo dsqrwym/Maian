@@ -538,7 +538,7 @@ export class ReadProductsService {
         category_translations: category.category.category_translations,
         is_primary: category.is_primary,
       })),
-      product_translations: product.product_translations,
+      product_translations: product.product_translations ?? [],
       variant_products: product.variant_products,
     };
   }

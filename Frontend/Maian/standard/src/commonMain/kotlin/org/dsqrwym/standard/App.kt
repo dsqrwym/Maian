@@ -3,8 +3,10 @@ package org.dsqrwym.standard
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
@@ -14,6 +16,7 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.categories
 import maian.shared.generated.resources.products
 import maian.shared.generated.resources.wholesalers
+import maian.standard.generated.resources.*
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
@@ -30,7 +33,7 @@ import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
 import org.dsqrwym.standard.navigation.*
 import org.dsqrwym.standard.navigation.naventry.authNavEntry
 import org.dsqrwym.standard.navigation.naventry.menuNavEntry
-import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStateHolder
+import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
 import org.koin.compose.currentKoinScope
 
 /**
@@ -52,8 +55,8 @@ fun App() {
                 subclass(CategoriesScreen::class)
                 subclass(CategoryBrowseRoute::class)
                 subclass(WholesalersScreen::class)
+                subclass(CartScreen::class)
                 subclass(WholesalerProfileRoute::class)
-                subclass(ProductDetailPlaceholderScreen::class)
                 subclass(ProductDetailScreen::class)
             }
         }
@@ -62,6 +65,9 @@ fun App() {
     AppRoot { authState ->
         when (authState) {
             is AuthState.Unauthenticated -> {
+                LaunchedEffect(Unit) {
+                    BrowseScopeStore.clearWholesaler()
+                }
                 val navigationState = rememberSharedNavigationState(
                     initRoute = if (SharedUserPreferences.isUserAgreed()) {
                         SharedLoginScreen()
@@ -80,7 +86,6 @@ fun App() {
 
             is AuthState.Authenticated -> {
                 val menuViewModel: SharedMenuViewModel = currentKoinScope().get()
-                val browseScope: BrowseScopeStateHolder = currentKoinScope().get()
                 val menuList = listOf(
                     SharedMenuItemState(
                         SharedMenuItem(
@@ -109,6 +114,15 @@ fun App() {
                             isPrimary = true,
                         )
                     ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            route = CartScreen,
+                            label = StandardRes.string.shopping_cart,
+                            icon = Icons.Outlined.ShoppingCart,
+                            iconContentDescription = StandardRes.string.shopping_cart,
+                            isPrimary = true,
+                        )
+                    ),
                     SharedMenuItemState(SharedMenuItem.Profile),
                 )
                 val topBarActions: List<SharedMenuActions> = listOf(
@@ -131,10 +145,17 @@ fun App() {
                         menuConfig = menuConfig,
                         currentRoute = navigationState.currentTopLevelRoute,
                         onNavigate = { route ->
+                            val previousTopLevelRoute = navigationState.currentTopLevelRoute.toStandardTopLevelRoute()
                             navigationState.navigateToTopLevel(route)
                             if (route == WholesalersScreen) {
-                                browseScope.state.wholesalerId?.let { wholesalerId ->
-                                    navigationState.navigate(WholesalerProfileRoute(wholesalerId))
+                                BrowseScopeStore.state.wholesalerId?.let { wholesalerId ->
+                                    navigationState.replace(
+                                        WholesalerProfileRoute(
+                                            id = wholesalerId,
+                                            returnTopLevelRoute = previousTopLevelRoute ?: StandardTopLevelRoute.PRODUCTS,
+                                            onBackScopeAction = WholesalerProfileScopeAction.CLEAR_ON_BACK,
+                                        )
+                                    )
                                 }
                             }
                         },

@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.*
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.cart_exit_wholesaler_scope
 import org.dsqrwym.shared.domain.profile.WholesalerCardData
 import org.jetbrains.compose.resources.stringResource
 
@@ -28,7 +30,7 @@ fun WholesalerStoreBanner(
 
     val displayName = data.displayName?.takeIf { it.isNotBlank() } ?: data.companyName
     val location = data.city?.nameLocal ?: data.city?.name
-        ?: data.province?.nameLocal ?: data.province?.name
+    ?: data.province?.nameLocal ?: data.province?.name
 
     Surface(
         modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
@@ -101,22 +103,44 @@ fun WholesalerStoreBanner(
                 }
             }
 
-            OutlinedButton(
-                onClick = onExit,
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 5.dp),
-                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)),
+            ExitWholesalerModeButton(
+                Modifier,
+                onExit,
+                border = BorderStroke(
+                    0.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+                ),
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                ),
-            ) {
-                Icon(Icons.Outlined.Close, contentDescription = null, modifier = Modifier.size(14.dp))
-                Spacer(Modifier.width(3.dp))
-                Text(
-                    text = stringResource(SharedRes.string.exit),
-                    style = MaterialTheme.typography.labelSmall,
                 )
-            }
+            )
         }
+    }
+}
+
+@Composable
+fun ExitWholesalerModeButton(
+    modifier: Modifier = Modifier,
+    onExit: () -> Unit,
+    border: BorderStroke? = null,
+    colors: ButtonColors = ButtonDefaults.outlinedButtonColors()
+) {
+    OutlinedButton(
+        modifier = modifier,
+        onClick = onExit,
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 5.dp),
+        border = border,
+        colors = colors
+    ) {
+        Icon(
+            Icons.Outlined.Close,
+            contentDescription = stringResource(StandardRes.string.cart_exit_wholesaler_scope),
+            modifier = Modifier.size(14.dp)
+        )
+        Spacer(Modifier.width(3.dp))
+        Text(
+            text = stringResource(SharedRes.string.exit),
+            style = MaterialTheme.typography.labelSmall,
+        )
     }
 }
 

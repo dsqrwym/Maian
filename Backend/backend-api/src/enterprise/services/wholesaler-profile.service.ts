@@ -13,7 +13,7 @@ import {
   user_uploads,
   users,
 } from '#/generated/drizzle/schema.js';
-import { and, eq, exists, ne, sql } from 'drizzle-orm';
+import { and, eq, exists, ne } from 'drizzle-orm';
 import { IWholesalerProfile } from '#/enterprise/types/IWholesalerProfile.js';
 import { buildMergedUpdate } from '#/utils/patch.utils.js';
 import { IMAGE_MIME_TYPES } from '#/config/fastify-multipart.config.js';
@@ -63,7 +63,7 @@ export class WholesalerProfileService {
     ownerId: string,
     db: DrizzleDb,
   ) {
-    const validateFiles = await db
+    const [validateFiles] = await db
       .select({ mime_type: files.mime_type })
       .from(files)
       .innerJoin(user_uploads, eq(user_uploads.file_id, files.id))
@@ -72,11 +72,11 @@ export class WholesalerProfileService {
       )
       .limit(1);
 
-    if (!validateFiles[0]) {
+    if (!validateFiles) {
       throw new BadRequestException('File not found');
     }
 
-    const mime_type = validateFiles[0].mime_type;
+    const mime_type = validateFiles.mime_type;
 
     if (!IMAGE_MIME_TYPES.has(mime_type)) {
       throw new BadRequestException(`Invalid file mime type: ${mime_type}`);

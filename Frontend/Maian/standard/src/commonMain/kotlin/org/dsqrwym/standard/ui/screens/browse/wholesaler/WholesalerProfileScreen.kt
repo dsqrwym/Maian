@@ -15,6 +15,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.wholesalers
+import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.domain.profile.toCardData
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
@@ -33,6 +34,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun WholesalerProfileScreen(
     wholesalerId: String,
     onNavigateBack: () -> Unit,
+    onProfileLoaded: (WholesalerProfileResponseDto) -> Unit = {},
     viewModel: WholesalerProfileViewModel = koinViewModel(),
 ) {
     var showImageDialog by remember { mutableStateOf(false) }
@@ -41,6 +43,9 @@ fun WholesalerProfileScreen(
 
     LaunchedEffect(wholesalerId) {
         viewModel.loadProfile(wholesalerId)
+    }
+    LaunchedEffect(profile?.id) {
+        profile?.let(onProfileLoaded)
     }
 
     SharedTransparentScaffold(

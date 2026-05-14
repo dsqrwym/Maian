@@ -5,7 +5,7 @@ import type { FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
 import { TypedQuery, TypedRoute } from '@nestia/core';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
-import { ReadWholesalerService } from '#/user/services/read-wholesaler.services.js';
+import { ReadWholesalerService } from '../services/read-wholesaler.service.js';
 import {
   IFindWholesalerQueryDto,
   validateWholesalerQuery,

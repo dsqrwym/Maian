@@ -15,11 +15,12 @@ import {
   users,
   variant_products,
 } from '#/generated/drizzle/schema.js';
-import { and, eq, notInArray } from 'drizzle-orm';
+import { and, eq, exists, notInArray, sql } from 'drizzle-orm';
 import { ProductStatus, UserStatus } from '#/generated/drizzle/enums.js';
 import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
 import { PinoLogger } from 'nestjs-pino';
 import { CART_ERRORS } from '#/carts/cart.constants.js';
+import { IUpdateCartItem } from '#/carts/dto/update-cart-item.dto.js';
 
 @Injectable()
 export class WriteCartsService {
@@ -79,7 +80,7 @@ export class WriteCartsService {
         throw new NotFoundException(CART_ERRORS.VARIANT_NOT_FOUND_OR_INVALID);
       }
 
-      const upsertCart = tx.$with('upsert_cart').as(
+      const upsertCart = tx.$with('upsertCart').as(
         tx
           .insert(carts)
           .values({
@@ -145,5 +146,162 @@ export class WriteCartsService {
           },
         });
     });
+  }
+
+  async updateQuantity(
+    dto: IUpdateCartItem,
+    cartDetailId: string,
+    retailer_id: string,
+    ability: AppAbility,
+  ) {
+    if (!ability.can(Action.Update, 'carts')) {
+      throw new ForbiddenException(
+        'You do not have permission to update a cart item',
+      );
+    }
+
+    const quantity = dto.quantity;
+    const cartDetailIdBigInt = BigInt(cartDetailId);
+
+    await this.drizzle.db.transaction(async (tx) => {
+      const [item] = await tx
+        .select({
+          available_stock: variant_products.available_stock,
+          sale_unit_qty: variant_products.sale_unit_qty,
+          min_order_qty: variant_products.min_order_qty,
+        })
+        .from(cart_details)
+        .innerJoin(carts, eq(carts.id, cart_details.cart_id))
+        .innerJoin(
+          variant_products,
+          eq(variant_products.id, cart_details.variant_products_id),
+        )
+        .innerJoin(products, eq(products.id, variant_products.product_id))
+        .innerJoin(users, eq(users.id, products.user_id))
+        .where(
+          and(
+            eq(cart_details.id, cartDetailIdBigInt),
+            eq(carts.retailer_id, retailer_id),
+            eq(variant_products.status, ProductStatus.ACTIVE),
+            eq(products.status, ProductStatus.ACTIVE),
+            notInArray(users.status, [
+              UserStatus.BANNED,
+              UserStatus.INACTIVE,
+              UserStatus.PENDING_REVIEW,
+              UserStatus.PENDING_VERIFICATION,
+            ]),
+          ),
+        )
+        .limit(1);
+
+      if (!item) {
+        throw new NotFoundException(CART_ERRORS.VARIANT_NOT_FOUND_OR_INVALID);
+      }
+
+      if (quantity < item.min_order_qty) {
+        throw new BadRequestException(CART_ERRORS.QUANTITY_BELOW_MIN_ORDER);
+      }
+
+      const requiredStock = quantity * item.sale_unit_qty;
+
+      if (requiredStock > item.available_stock) {
+        throw new BadRequestException(CART_ERRORS.NOT_ENOUGH_STOCK);
+      }
+
+      const updateCartDetail = tx.$with('updateCartDetail').as(
+        tx
+          .update(cart_details)
+          .set({
+            quantity,
+            updated_at: SQL_NOW,
+          })
+          .where(eq(cart_details.id, cartDetailIdBigInt))
+          .returning({
+            cart_id: cart_details.cart_id,
+          }),
+      );
+
+      const [updated] = await tx
+        .with(updateCartDetail)
+        .update(carts)
+        .set({
+          updated_at: SQL_NOW,
+        })
+        .from(updateCartDetail)
+        .where(eq(carts.id, updateCartDetail.cart_id))
+        .returning({
+          id: carts.id,
+        });
+
+      if (!updated) {
+        throw new NotFoundException(CART_ERRORS.CART_ITEM_NOT_FOUND);
+      }
+    });
+  }
+
+  async deleteCartItem(
+    cartDetailId: string,
+    retailer_id: string,
+    ability: AppAbility,
+  ) {
+    if (!ability.can(Action.Delete, 'carts')) {
+      throw new ForbiddenException(
+        'You do not have permission to delete a cart item',
+      );
+    }
+
+    const [deleted] = await this.drizzle.db
+      .delete(cart_details)
+      .where(
+        and(
+          eq(cart_details.id, BigInt(cartDetailId)),
+          exists(
+            this.drizzle.db
+              .select({ one: sql`1` })
+              .from(carts)
+              .where(
+                and(
+                  eq(carts.id, cart_details.cart_id),
+                  eq(carts.retailer_id, retailer_id),
+                ),
+              ),
+          ),
+        ),
+      )
+      .returning({
+        id: cart_details.id,
+      });
+
+    if (!deleted) {
+      throw new NotFoundException(CART_ERRORS.CART_ITEM_NOT_FOUND);
+    }
+  }
+
+  async deleteCart(
+    wholesalerId: string,
+    retailerId: string,
+    ability: AppAbility,
+  ) {
+    if (!ability.can(Action.Delete, 'carts')) {
+      throw new ForbiddenException(
+        'You do not have permission to delete a cart',
+      );
+    }
+
+    const [deleted] = await this.drizzle.db
+      .delete(carts)
+      .where(
+        and(
+          eq(carts.wholesaler_id, wholesalerId),
+          eq(carts.retailer_id, retailerId),
+        ),
+      )
+      .returning({
+        id: carts.id,
+      });
+
+    if (!deleted) {
+      throw new NotFoundException(CART_ERRORS.CART_NOT_FOUND);
+    }
   }
 }

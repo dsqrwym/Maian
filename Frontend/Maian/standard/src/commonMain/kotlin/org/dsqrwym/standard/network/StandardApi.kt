@@ -10,6 +10,13 @@ object StandardApi {
     }
 
     object CartPath {
+        const val CARTS = "${ApiConfig.BASE_URL}/carts"
         const val CART_ITEMS = "${ApiConfig.BASE_URL}/carts/items"
+
+        fun cartItem(cartDetailId: String): String =
+            "${CART_ITEMS}/$cartDetailId"
+
+        fun cartWholesaler(wholesalerId: String): String =
+            "${CARTS}/wholesalers/$wholesalerId"
     }
 }
