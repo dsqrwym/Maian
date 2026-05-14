@@ -16,11 +16,11 @@ import maian.shared.generated.resources.*
 import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.enterprise.data.profile.WholesalerProfileRepository
 import org.dsqrwym.enterprise.data.profile.dto.UpdateWholesalerProfileDto
-import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository
 import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
+import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.data.user.SpanishCompanyType
 import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.navigation.core.SharedNavigable
@@ -62,6 +62,7 @@ class WholesalerProfileEditViewModel(
     val saveButtonEnabled by derivedStateOf {
         // 是否正在加载
         !isLoading && saveUiState == UiState.Idle
+                && uploadImage != UiState.Loading
                 // 是否存在 username
                 && isValidUserName()
                 // 是否存在 taxId
@@ -70,6 +71,7 @@ class WholesalerProfileEditViewModel(
                 && isValidCompanyName()
                 // 校验 phoneNumber
                 && isValidPhoneNumber()
+                && hasPendingChanges()
     }
 
     fun isValidCompanyName(): Boolean {
@@ -78,7 +80,7 @@ class WholesalerProfileEditViewModel(
 
     fun isValidUserName(): Boolean {
         if (isCheckingUsername) return false
-        return usernameError == null && !usernameExists
+        return username.isNotBlank() && usernameError == null && !usernameExists
     }
 
     fun isValidTaxId(): Boolean {
@@ -222,10 +224,10 @@ class WholesalerProfileEditViewModel(
         usernameError = validateUsername(username)
         usernameExists = false
 
-        if (usernameError != null) return
-
         usernameCheckJob?.cancel()
         isCheckingUsername = false
+
+        if (usernameError != null) return
 
         usernameCheckJob = viewModelScope.launch {
             isCheckingUsername = true
@@ -423,5 +425,30 @@ class WholesalerProfileEditViewModel(
                 null
             }
         }
+    }
+
+    private fun normalizedOptional(value: String?): String? = value?.trim()?.takeIf { it.isNotBlank() }
+
+    private fun normalizedAmount(value: String?): String = value?.trim()?.takeIf { it.isNotBlank() } ?: "0.00"
+
+    private fun hasPendingChanges(): Boolean {
+        val initial = initialProfile ?: return false
+        val profile = initial.profile
+
+        return normalizedOptional(initial.firstName) != normalizedOptional(firstName) ||
+                normalizedOptional(initial.lastName) != normalizedOptional(lastName) ||
+                normalizedOptional(initial.username) != normalizedOptional(username) ||
+                normalizedOptional(initial.taxId) != normalizedOptional(taxId) ||
+                normalizedOptional(initial.telephone) != normalizedOptional(phoneNumberViewModel.phoneNumber) ||
+                (profile?.companyName ?: "") != companyName.trim() ||
+                (profile?.companyType ?: SpanishCompanyType.SL) != selectedCompanyType ||
+                normalizedOptional(profile?.displayName) != normalizedOptional(displayName) ||
+                normalizedOptional(profile?.description) != normalizedOptional(description) ||
+                normalizedOptional(profile?.deliveryAreaDescription) != normalizedOptional(deliveryAreaDescription) ||
+                normalizedAmount(profile?.minimumOrderAmount) != normalizedAmount(minimumOrderAmount) ||
+                (profile?.deliveryAvailable ?: false) != deliveryAvailable ||
+                (profile?.pickupAvailable ?: false) != pickupAvailable ||
+                initial.logoFileId != logoFileId ||
+                pendingLogoFile != null
     }
 }

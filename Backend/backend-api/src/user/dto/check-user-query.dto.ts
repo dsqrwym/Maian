@@ -1,6 +1,7 @@
 import type {
   TagsEmail,
   TagsUsername,
+  TagsUuid,
   TagsWholesalerId,
 } from '#/utils/typia/validators/auth.validator.js';
 import { cleanString } from '#/utils/string.util.js';
@@ -34,7 +35,7 @@ export const validateICheckUserEmailQueryDto: IRequestQueryValidator.IAssert<ICh
  * 检查用户名可用性的数据传输对象
  */
 export interface ICheckUserUsernameQueryDto {
-  userId?: TagsIntegerString;
+  userId?: TagsUuid;
   username: TagsUsername;
   wholesalerId?: TagsWholesalerId;
   isAdmin?: boolean;

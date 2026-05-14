@@ -57,6 +57,7 @@ fun App() {
                 subclass(WholesalersScreen::class)
                 subclass(CartScreen::class)
                 subclass(WholesalerProfileRoute::class)
+                subclass(RetailerProfileEdit::class)
                 subclass(ProductDetailScreen::class)
             }
         }

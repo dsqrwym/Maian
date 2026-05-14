@@ -1,7 +1,5 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
-import { AppAbility } from '#/casl/casl-types.js';
-import { Action } from '#/casl/actions.js';
 import { PinoLogger } from 'nestjs-pino';
 import { UserPayload } from '#/auth/auth.types.js';
 import { ICartsQueryDto } from '#/carts/dto/carts-query.dto.js';
@@ -38,12 +36,7 @@ export class ReadCartsService {
   async getMyCartInfo(
     query: ICartsQueryDto,
     retailer: UserPayload,
-    ability: AppAbility,
   ): Promise<ICartResponse> {
-    if (!ability.can(Action.Read, 'carts')) {
-      throw new ForbiddenException('You do not permission to read carts');
-    }
-
     const { langCode, wholesaler_id } = query;
 
     const profile = users.profile;

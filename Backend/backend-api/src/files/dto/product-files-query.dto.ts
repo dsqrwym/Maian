@@ -5,8 +5,3 @@ export interface IProductFilesQueryDto {
 
   file_id: TagsIntegerString;
 }
-
-export interface IUserImageQueryDto {
-  user_id: TagsIntegerString;
-  file_id: TagsIntegerString;
-}

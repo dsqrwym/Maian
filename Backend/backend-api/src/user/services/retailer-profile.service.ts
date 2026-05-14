@@ -1,0 +1,155 @@
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { subject } from '@casl/ability';
+import { and, eq } from 'drizzle-orm';
+
+import { Action } from '#/casl/actions.js';
+import type { AppAbility } from '#/casl/casl-types.js';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
+import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
+import { AddressType, UserRole } from '#/generated/drizzle/enums.js';
+import { directions, users } from '#/generated/drizzle/schema.js';
+import type { IUpdateRetailerProfileDto } from '#/user/dto/update-retailer-profile.dto.js';
+import type { RetailerProfileResponseDto } from '#/user/dto/retailer-profile-response.dto.js';
+import type { IRetailerProfile } from '#/user/type/retailer-profile.type.js';
+import { buildMergedUpdate } from '#/utils/patch.utils.js';
+import {
+  checkUserTaxId,
+  validateAndCheckUserFiles,
+} from '#/utils/db/user.db.utils.js';
+
+@Injectable()
+export class RetailerProfileService {
+  constructor(private readonly drizzle: DrizzleService) {}
+
+  async updateRetailerProfile(
+    id: string,
+    dto: IUpdateRetailerProfileDto,
+    ability: AppAbility,
+  ) {
+    if (!ability.can(Action.Update, subject('users', { id }))) {
+      throw new ForbiddenException(
+        'You are not allowed to update this profile',
+      );
+    }
+
+    const {
+      telephone,
+      username,
+      tax_id,
+      first_name,
+      last_name,
+      profile_image_file_id,
+      ...newProfile
+    } = dto;
+    const imageFileId =
+      profile_image_file_id === undefined
+        ? undefined
+        : profile_image_file_id === null
+          ? null
+          : BigInt(profile_image_file_id);
+
+    return this.drizzle.db.transaction(async (tx) => {
+      const [retailer] = await tx
+        .select({
+          profile: users.profile,
+          status: users.status,
+        })
+        .from(users)
+        .where(and(eq(users.id, id), eq(users.role, UserRole.RETAILER)))
+        .for('update');
+
+      if (!retailer) {
+        throw new ForbiddenException('User not found');
+      }
+
+      if (profile_image_file_id) {
+        await validateAndCheckUserFiles(profile_image_file_id, id, tx);
+      }
+
+      if (tax_id !== null && tax_id !== undefined) {
+        await checkUserTaxId(id, tax_id, UserRole.RETAILER, tx);
+      }
+
+      const retailerProfile = (retailer.profile ?? {}) as IRetailerProfile;
+      const mergedProfile = buildMergedUpdate(retailerProfile, newProfile);
+
+      await tx
+        .update(users)
+        .set({
+          profile: mergedProfile,
+          profile_image_file_id: imageFileId,
+          tax_id,
+          telephone,
+          username,
+          first_name,
+          last_name,
+          updated_by: id,
+          updated_at: SQL_NOW,
+        })
+        .where(eq(users.id, id));
+    });
+  }
+
+  async getRetailerProfile(
+    id: string,
+    ability: AppAbility,
+  ): Promise<RetailerProfileResponseDto> {
+    if (!ability.can(Action.Read, subject('users', { id }))) {
+      throw new ForbiddenException('You are not allowed to read this profile');
+    }
+
+    const retailerProfile = await this.drizzle.db.query.users.findFirst({
+      where: and(eq(users.id, id), eq(users.role, UserRole.RETAILER)),
+      columns: {
+        id: true,
+        email: true,
+        user_id: true,
+        first_name: true,
+        profile_image_file_id: true,
+        last_name: true,
+        telephone: true,
+        username: true,
+        profile: true,
+        tax_id: true,
+      },
+      with: {
+        directions: {
+          columns: {
+            street: true,
+            zip_code: true,
+          },
+          with: {
+            province: { columns: { name: true, name_local: true, id: true } },
+            city: { columns: { name: true, name_local: true, id: true } },
+            country: {
+              columns: { name: true, name_local: true, iso_numeric: true },
+            },
+          },
+          where: eq(directions.type, AddressType.STORE),
+        },
+      },
+    });
+
+    if (!retailerProfile) {
+      throw new NotFoundException('User not found');
+    }
+
+    return {
+      id: retailerProfile.id,
+      email: retailerProfile.email,
+      user_id: retailerProfile.user_id,
+      first_name: retailerProfile.first_name,
+      profile_image_file_id: retailerProfile.profile_image_file_id,
+      last_name: retailerProfile.last_name,
+      username: retailerProfile.username,
+      telephone: retailerProfile.telephone,
+      tax_id: retailerProfile.tax_id,
+      profile: retailerProfile.profile as IRetailerProfile | null,
+      store_directions: retailerProfile.directions[0] ?? null,
+    };
+  }
+}

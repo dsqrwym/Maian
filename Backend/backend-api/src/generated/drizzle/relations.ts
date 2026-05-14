@@ -17,17 +17,18 @@ import {
   deliveries,
   directions,
   delivery_timeline,
-  orders,
-  order_details,
   chat_panels,
   notifications,
   user_sessions,
   verification_tokens,
   carts,
   cart_details,
+  orders,
+  order_details,
   user_uploads,
   chat_participants,
   product_categories,
+  document_sequences,
   category_translations,
   product_translations,
 } from './schema.js';
@@ -123,12 +124,6 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   notifications: many(notifications),
   user_sessions: many(user_sessions),
   verification_tokens: many(verification_tokens),
-  orders_retailer_id: many(orders, {
-    relationName: 'orders_retailer_id_users_id',
-  }),
-  orders_wholesaler_id: many(orders, {
-    relationName: 'orders_wholesaler_id_users_id',
-  }),
   file: one(files, {
     fields: [users.profile_image_file_id],
     references: [files.id],
@@ -139,8 +134,21 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   carts_wholesaler_id: many(carts, {
     relationName: 'carts_wholesaler_id_users_id',
   }),
+  orders_accepted_by: many(orders, {
+    relationName: 'orders_accepted_by_users_id',
+  }),
+  orders_rejected_by: many(orders, {
+    relationName: 'orders_rejected_by_users_id',
+  }),
+  orders_retailer_id: many(orders, {
+    relationName: 'orders_retailer_id_users_id',
+  }),
+  orders_wholesaler_id: many(orders, {
+    relationName: 'orders_wholesaler_id_users_id',
+  }),
   user_uploads: many(user_uploads),
   chat_participants: many(chat_participants),
+  document_sequences: many(document_sequences),
   category_translations: many(category_translations),
   product_translations: many(product_translations),
 }));
@@ -162,8 +170,8 @@ export const variant_productsRelations = relations(
       references: [users.id],
       relationName: 'variant_products_updated_by_users_id',
     }),
-    order_details: many(order_details),
     cart_details: many(cart_details),
+    order_details: many(order_details),
   }),
 );
 
@@ -185,6 +193,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     references: [users.id],
     relationName: 'products_user_id_users_id',
   }),
+  order_details: many(order_details),
   product_categories: many(product_categories),
   product_translations: many(product_translations),
 }));
@@ -260,7 +269,7 @@ export const deliveriesRelations = relations(deliveries, ({ one, many }) => ({
   delivery_timelines: many(delivery_timeline),
 }));
 
-export const directionsRelations = relations(directions, ({ one, many }) => ({
+export const directionsRelations = relations(directions, ({ one }) => ({
   city: one(cities, {
     fields: [directions.city_id],
     references: [cities.id],
@@ -277,7 +286,6 @@ export const directionsRelations = relations(directions, ({ one, many }) => ({
     fields: [directions.user_id],
     references: [users.id],
   }),
-  orders: many(orders),
 }));
 
 export const delivery_timelineRelations = relations(
@@ -289,35 +297,6 @@ export const delivery_timelineRelations = relations(
     }),
   }),
 );
-
-export const order_detailsRelations = relations(order_details, ({ one }) => ({
-  order: one(orders, {
-    fields: [order_details.order_id],
-    references: [orders.id],
-  }),
-  variant_product: one(variant_products, {
-    fields: [order_details.variant_product_id],
-    references: [variant_products.id],
-  }),
-}));
-
-export const ordersRelations = relations(orders, ({ one, many }) => ({
-  order_details: many(order_details),
-  user_retailer_id: one(users, {
-    fields: [orders.retailer_id],
-    references: [users.id],
-    relationName: 'orders_retailer_id_users_id',
-  }),
-  direction: one(directions, {
-    fields: [orders.shipping_address],
-    references: [directions.id],
-  }),
-  user_wholesaler_id: one(users, {
-    fields: [orders.wholesaler_id],
-    references: [users.id],
-    relationName: 'orders_wholesaler_id_users_id',
-  }),
-}));
 
 export const chat_panelsRelations = relations(chat_panels, ({ many }) => ({
   messages: many(messages),
@@ -373,6 +352,45 @@ export const cart_detailsRelations = relations(cart_details, ({ one }) => ({
   }),
 }));
 
+export const order_detailsRelations = relations(order_details, ({ one }) => ({
+  order: one(orders, {
+    fields: [order_details.order_id],
+    references: [orders.id],
+  }),
+  product: one(products, {
+    fields: [order_details.product_id],
+    references: [products.id],
+  }),
+  variant_product: one(variant_products, {
+    fields: [order_details.variant_product_id],
+    references: [variant_products.id],
+  }),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  order_details: many(order_details),
+  user_accepted_by: one(users, {
+    fields: [orders.accepted_by],
+    references: [users.id],
+    relationName: 'orders_accepted_by_users_id',
+  }),
+  user_rejected_by: one(users, {
+    fields: [orders.rejected_by],
+    references: [users.id],
+    relationName: 'orders_rejected_by_users_id',
+  }),
+  user_retailer_id: one(users, {
+    fields: [orders.retailer_id],
+    references: [users.id],
+    relationName: 'orders_retailer_id_users_id',
+  }),
+  user_wholesaler_id: one(users, {
+    fields: [orders.wholesaler_id],
+    references: [users.id],
+    relationName: 'orders_wholesaler_id_users_id',
+  }),
+}));
+
 export const user_uploadsRelations = relations(user_uploads, ({ one }) => ({
   file: one(files, {
     fields: [user_uploads.file_id],
@@ -408,6 +426,16 @@ export const product_categoriesRelations = relations(
     product: one(products, {
       fields: [product_categories.product_id],
       references: [products.id],
+    }),
+  }),
+);
+
+export const document_sequencesRelations = relations(
+  document_sequences,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [document_sequences.owner_id],
+      references: [users.id],
     }),
   }),
 );

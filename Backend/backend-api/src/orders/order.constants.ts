@@ -1,0 +1,29 @@
+import { alias } from 'drizzle-orm/pg-core';
+import { users } from '#/generated/drizzle/schema.js';
+
+export const ORDER_ERRORS = {
+  WHOLESALER_NOT_FOUND_OR_INVALID: 'WHOLESALER_NOT_FOUND_OR_INVALID',
+  RETAILER_NOT_FOUND_OR_INVALID: 'RETAILER_NOT_FOUND_OR_INVALID',
+  SHIPPING_ADDRESS_NOT_FOUND: 'SHIPPING_ADDRESS_NOT_FOUND',
+  CART_EMPTY: 'CART_EMPTY',
+  PRODUCT_NOT_AVAILABLE: 'PRODUCT_NOT_AVAILABLE',
+  VARIANT_NOT_AVAILABLE: 'VARIANT_NOT_AVAILABLE',
+  QUANTITY_BELOW_MIN_ORDER: 'QUANTITY_BELOW_MIN_ORDER',
+  NOT_ENOUGH_STOCK: 'NOT_ENOUGH_STOCK',
+  ORDER_SEQUENCE_FAILED: 'ORDER_SEQUENCE_FAILED',
+  ORDER_CREATE_FAILED: 'ORDER_CREATE_FAILED',
+} as const;
+
+/**
+ * Order 文档类型，项目目前只会用 PED.
+ */
+export const ORDER_DOCUMENT_TYPE = 'PED';
+/**
+ * Order 货币，项目目前只会用 EURO.
+ */
+export const ORDER_CURRENCY = 'EUR';
+
+export const RETAILER_TABLE = alias(users, 'retailer');
+export const RETAILER_PROFILE = RETAILER_TABLE.profile;
+export const WHOLESALER_TABLE = alias(users, 'wholesaler');
+export const WHOLESALER_PROFILE = WHOLESALER_TABLE.profile;

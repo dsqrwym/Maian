@@ -1,5 +1,13 @@
-import type { BaseProfile } from './profile.type.js';
+import type { SpanishCompanyType } from '#/auth/dto/register-wholesaler.dto.js';
+import type {
+  TagsCompanyName,
+  TagsRetailerContactName,
+  TagsRetailerDisplayName,
+} from '#/utils/typia/validators/user.validator.js';
 
-export interface RetailerProfileType extends BaseProfile {
-  store_name: string;
+export interface IRetailerProfile {
+  company_name?: TagsCompanyName | null;
+  display_name?: TagsRetailerDisplayName | null;
+  company_type?: SpanishCompanyType | null;
+  contact_name?: TagsRetailerContactName | null;
 }

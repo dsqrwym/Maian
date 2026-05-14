@@ -1,13 +1,10 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { ICreateCartItemDto } from '#/carts/dto/create-cart-item.dto.js';
-import { AppAbility } from '#/casl/casl-types.js';
-import { Action } from '#/casl/actions.js';
 import {
   cart_details,
   carts,
@@ -35,19 +32,8 @@ export class WriteCartsService {
    * 加入到购物篮属于购物意图，不需要原子性
    * @param dto
    * @param retailer_id
-   * @param ability
    */
-  async addCartItem(
-    dto: ICreateCartItemDto,
-    retailer_id: string,
-    ability: AppAbility,
-  ) {
-    if (!ability.can(Action.Create, 'carts')) {
-      throw new ForbiddenException(
-        'You do not have permission to add a cart item',
-      );
-    }
-
+  async addCartItem(dto: ICreateCartItemDto, retailer_id: string) {
     const { variant_id, quantity } = dto;
     const variantId = BigInt(variant_id);
 
@@ -152,14 +138,7 @@ export class WriteCartsService {
     dto: IUpdateCartItem,
     cartDetailId: string,
     retailer_id: string,
-    ability: AppAbility,
   ) {
-    if (!ability.can(Action.Update, 'carts')) {
-      throw new ForbiddenException(
-        'You do not have permission to update a cart item',
-      );
-    }
-
     const quantity = dto.quantity;
     const cartDetailIdBigInt = BigInt(cartDetailId);
 
@@ -239,17 +218,7 @@ export class WriteCartsService {
     });
   }
 
-  async deleteCartItem(
-    cartDetailId: string,
-    retailer_id: string,
-    ability: AppAbility,
-  ) {
-    if (!ability.can(Action.Delete, 'carts')) {
-      throw new ForbiddenException(
-        'You do not have permission to delete a cart item',
-      );
-    }
-
+  async deleteCartItem(cartDetailId: string, retailer_id: string) {
     const [deleted] = await this.drizzle.db
       .delete(cart_details)
       .where(
@@ -277,17 +246,7 @@ export class WriteCartsService {
     }
   }
 
-  async deleteCart(
-    wholesalerId: string,
-    retailerId: string,
-    ability: AppAbility,
-  ) {
-    if (!ability.can(Action.Delete, 'carts')) {
-      throw new ForbiddenException(
-        'You do not have permission to delete a cart',
-      );
-    }
-
+  async deleteCart(wholesalerId: string, retailerId: string) {
     const [deleted] = await this.drizzle.db
       .delete(carts)
       .where(

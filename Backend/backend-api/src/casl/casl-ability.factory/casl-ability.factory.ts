@@ -36,6 +36,8 @@ export class CaslAbilityFactory {
         break;
       case UserRole.RETAILER:
         can(Action.Access, 'Standard');
+        can(Action.Update, 'users', { id: user.userId });
+        can(Action.Read, 'users', { id: user.userId });
         can(Action.Read, 'users', { role: UserRole.WHOLESALER });
         can(Action.Manage, 'carts', { retailer_id: user.userId });
         cannot(Action.Read, 'users', { status: UserStatus.INACTIVE });
@@ -57,6 +59,13 @@ export class CaslAbilityFactory {
         can(Action.Manage, 'products_files', { user_id: user.userId });
         can(Action.Update, 'users', { id: user.userId });
         can(Action.Read, 'users', { id: user.userId });
+        can(Action.Read, 'users', { role: UserRole.RETAILER });
+        cannot(Action.Read, 'users', { status: UserStatus.INACTIVE });
+        cannot(Action.Read, 'users', { status: UserStatus.BANNED });
+        cannot(Action.Read, 'users', {
+          status: UserStatus.PENDING_VERIFICATION,
+        });
+        cannot(Action.Read, 'users', { status: UserStatus.PENDING_REVIEW });
         break;
       case UserRole.DELIVERY:
         can(Action.Access, 'Enterprise');

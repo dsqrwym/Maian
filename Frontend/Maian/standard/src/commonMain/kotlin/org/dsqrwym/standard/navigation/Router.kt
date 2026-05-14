@@ -42,5 +42,9 @@ data class WholesalerProfileRoute(
 ) : NavKey
 
 @Serializable
+@SerialName("retailer_profile_edit")
+object RetailerProfileEdit : NavKey
+
+@Serializable
 @SerialName("product_detail")
 data class ProductDetailScreen(val productId: String) : NavKey

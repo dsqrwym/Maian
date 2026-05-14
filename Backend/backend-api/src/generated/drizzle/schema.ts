@@ -54,12 +54,17 @@ export const UserStatus = pgEnum('UserStatus', [
   'APPROVED',
   'BANNED',
 ]);
+export const order_status = pgEnum('order_status', [
+  'PENDING',
+  'ACCEPTED',
+  'REJECTED',
+  'CANCELLED',
+]);
 
 export const seq_deliveryman_id = pgSequence('seq_deliveryman_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -67,7 +72,6 @@ export const seq_retailer_id = pgSequence('seq_retailer_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -75,7 +79,6 @@ export const seq_support_id = pgSequence('seq_support_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -83,7 +86,6 @@ export const seq_warehouse_id = pgSequence('seq_warehouse_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -91,7 +93,6 @@ export const seq_wholesaler_id = pgSequence('seq_wholesaler_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -99,7 +100,6 @@ export const seq_admin_id = pgSequence('seq_admin_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -107,7 +107,6 @@ export const seq_superadmin_id = pgSequence('seq_superadmin_id', {
   startWith: '1',
   increment: '1',
   minValue: '1',
-  maxValue: '9223372036854775807',
   cache: '1',
   cycle: false,
 });
@@ -768,47 +767,6 @@ export const delivery_timeline = pgTable(
   ],
 );
 
-export const order_details = pgTable(
-  'order_details',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'order_details_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    order_id: bigint({ mode: 'bigint' }).notNull(),
-    product_code: varchar({ length: 50 }).notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    variant_product_id: bigint({ mode: 'bigint' }).notNull(),
-    quantity: integer().notNull(),
-    unit_price: numeric({ precision: 10, scale: 2 }).notNull(),
-    unit_price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
-    subtotal: numeric({ precision: 12, scale: 2 }).notNull(),
-    iva: numeric({ precision: 10, scale: 2 }).notNull(),
-    discount_applied: numeric({ precision: 10, scale: 2 }).notNull(),
-    attributes: jsonb().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.order_id],
-      foreignColumns: [orders.id],
-      name: 'order_details_order_id_fkey',
-    }).onDelete('cascade'),
-    foreignKey({
-      columns: [table.variant_product_id],
-      foreignColumns: [variant_products.id],
-      name: 'order_details_variant_product_id_fkey',
-    }).onDelete('cascade'),
-  ],
-);
-
 export const messages = pgTable(
   'messages',
   {
@@ -948,60 +906,6 @@ export const verification_tokens = pgTable(
       foreignColumns: [users.id],
       name: 'password_reset_tokens_user_id_fkey',
     }).onDelete('cascade'),
-  ],
-);
-
-export const orders = pgTable(
-  'orders',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'orders_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    retailer_id: uuid(),
-    wholesaler_id: uuid(),
-    status: smallint()
-      .default(sql`'1'`)
-      .notNull(),
-    payment_method: smallint().notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    shipping_address: bigint({ mode: 'bigint' }),
-    notes: varchar({ length: 500 }),
-    discount_total: numeric({ precision: 12, scale: 2 }).notNull(),
-    subtotal: numeric({ precision: 12, scale: 2 }).notNull(),
-    total: numeric({ precision: 12, scale: 2 }).notNull(),
-    iva_total: numeric({ precision: 12, scale: 2 }).notNull(),
-    discount_log: jsonb().notNull(),
-    estimated_date: timestamp({ mode: 'string' }),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.retailer_id],
-      foreignColumns: [users.id],
-      name: 'orders_retailer_id_fkey',
-    }).onDelete('set null'),
-    foreignKey({
-      columns: [table.shipping_address],
-      foreignColumns: [directions.id],
-      name: 'orders_shipping_address_fkey',
-    })
-      .onUpdate('restrict')
-      .onDelete('restrict'),
-    foreignKey({
-      columns: [table.wholesaler_id],
-      foreignColumns: [users.id],
-      name: 'orders_wholesaler_id_fkey',
-    }).onDelete('set null'),
   ],
 );
 
@@ -1145,6 +1049,180 @@ export const cart_details = pgTable(
   ],
 );
 
+export const order_details = pgTable(
+  'order_details',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity({
+      name: 'order_details_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    order_id: bigint({ mode: 'bigint' }).notNull(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    product_id: bigint({ mode: 'bigint' }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    variant_product_id: bigint({ mode: 'bigint' }),
+    product_name: varchar({ length: 100 }).notNull(),
+    product_title: varchar({ length: 150 }),
+    product_code: varchar({ length: 50 }).notNull(),
+    variant_product_code: varchar({ length: 50 }).notNull(),
+    attributes_snapshot: jsonb().notNull(),
+    quantity: integer().notNull(),
+    unit_price: numeric({ precision: 10, scale: 2 }).notNull(),
+    unit_price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
+    iva: numeric({ precision: 5, scale: 2 }).notNull(),
+    subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
+    iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
+    total: numeric({ precision: 20, scale: 2 }).notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+  },
+  (table) => [
+    index('idx_order_details_order_id').using(
+      'btree',
+      table.order_id.asc().nullsLast().op('int8_ops'),
+    ),
+    foreignKey({
+      columns: [table.order_id],
+      foreignColumns: [orders.id],
+      name: 'order_details_order_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.product_id],
+      foreignColumns: [products.id],
+      name: 'order_details_product_id_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.variant_product_id],
+      foreignColumns: [variant_products.id],
+      name: 'order_details_variant_product_id_fkey',
+    }).onDelete('set null'),
+    check(
+      'order_details_amounts_check',
+      sql`(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)`,
+    ),
+    check('order_details_quantity_check', sql`quantity >= 1`),
+  ],
+);
+
+export const orders = pgTable(
+  'orders',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity({
+      name: 'orders_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    order_series: varchar({ length: 10 }).default('PED').notNull(),
+    order_year: smallint().notNull(),
+    order_sequence: integer().notNull(),
+    order_number: varchar({ length: 40 }).notNull(),
+    retailer_id: uuid(),
+    wholesaler_id: uuid(),
+    status: order_status().default('PENDING').notNull(),
+    currency: char({ length: 3 }).default('EUR').notNull(),
+    subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
+    discount_total: numeric({ precision: 20, scale: 2 }).default('0').notNull(),
+    iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
+    total: numeric({ precision: 20, scale: 2 }).notNull(),
+    item_count: integer().notNull(),
+    shipping_address_snapshot: jsonb().notNull(),
+    retailer_snapshot: jsonb().notNull(),
+    wholesaler_snapshot: jsonb().notNull(),
+    accepted_at: timestamp({ mode: 'string' }),
+    accepted_by: uuid(),
+    rejected_at: timestamp({ mode: 'string' }),
+    rejected_by: uuid(),
+    rejected_reason: varchar({ length: 500 }),
+    cancelled_at: timestamp({ mode: 'string' }),
+    estimated_delivery_date: timestamp({ mode: 'string' }),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+    updated_at: timestamp({ mode: 'string' }).default(
+      sql`(now() AT TIME ZONE 'utc'::text)`,
+    ),
+  },
+  (table) => [
+    index('idx_orders_order_number').using(
+      'btree',
+      table.order_number.asc().nullsLast().op('text_ops'),
+    ),
+    index('idx_orders_retailer_created_at').using(
+      'btree',
+      table.retailer_id.asc().nullsLast().op('timestamp_ops'),
+      table.created_at.desc().nullsFirst().op('uuid_ops'),
+    ),
+    index('idx_orders_wholesaler_created_at').using(
+      'btree',
+      table.wholesaler_id.asc().nullsLast().op('timestamp_ops'),
+      table.created_at.desc().nullsFirst().op('timestamp_ops'),
+    ),
+    index('idx_orders_wholesaler_status_created_at').using(
+      'btree',
+      table.wholesaler_id.asc().nullsLast().op('enum_ops'),
+      table.status.asc().nullsLast().op('uuid_ops'),
+      table.created_at.desc().nullsFirst().op('enum_ops'),
+    ),
+    foreignKey({
+      columns: [table.accepted_by],
+      foreignColumns: [users.id],
+      name: 'orders_accepted_by_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.rejected_by],
+      foreignColumns: [users.id],
+      name: 'orders_rejected_by_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.retailer_id],
+      foreignColumns: [users.id],
+      name: 'orders_retailer_id_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.wholesaler_id],
+      foreignColumns: [users.id],
+      name: 'orders_wholesaler_id_fkey',
+    }).onDelete('set null'),
+    unique('orders_wholesaler_series_year_sequence_unique').on(
+      table.order_series,
+      table.order_year,
+      table.order_sequence,
+      table.wholesaler_id,
+    ),
+    unique('orders_wholesaler_order_number_unique').on(
+      table.order_number,
+      table.wholesaler_id,
+    ),
+    check(
+      'orders_amounts_check',
+      sql`(subtotal >= (0)::numeric) AND (discount_total >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)`,
+    ),
+    check('orders_item_count_check', sql`item_count >= 1`),
+    check(
+      'orders_rejected_reason_check',
+      sql`(status <> 'REJECTED'::order_status) OR (rejected_reason IS NOT NULL)`,
+    ),
+    check(
+      'orders_retailer_wholesaler_different',
+      sql`(retailer_id IS NULL) OR (wholesaler_id IS NULL) OR (retailer_id <> wholesaler_id)`,
+    ),
+    check('orders_sequence_check', sql`order_sequence >= 1`),
+    check(
+      'orders_year_check',
+      sql`(order_year >= 2000) AND (order_year <= 9999)`,
+    ),
+  ],
+);
+
 export const user_uploads = pgTable(
   'user_uploads',
   {
@@ -1238,6 +1316,32 @@ export const product_categories = pgTable(
       columns: [table.product_id, table.category_id],
       name: 'product_categories_pkey',
     }),
+  ],
+);
+
+export const document_sequences = pgTable(
+  'document_sequences',
+  {
+    owner_id: uuid().notNull(),
+    document_type: varchar({ length: 10 }).notNull(),
+    year: smallint().notNull(),
+    current_value: integer().default(0).notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.owner_id],
+      foreignColumns: [users.id],
+      name: 'document_sequences_owner_id_fkey',
+    }).onDelete('restrict'),
+    primaryKey({
+      columns: [table.owner_id, table.document_type, table.year],
+      name: 'document_sequences_pkey',
+    }),
+    check('document_sequences_current_value_check', sql`current_value >= 0`),
+    check(
+      'document_sequences_year_check',
+      sql`(year >= 2000) AND (year <= 9999)`,
+    ),
   ],
 );
 

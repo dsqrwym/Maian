@@ -20,6 +20,7 @@ import { WholesalerSortField } from '#/user/user.enums.js';
 import { OrderByEnum } from '#/common/enums/sort.enum.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
 import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
+import { buildWholesalerProfileExpr } from '#/utils/db/user.db.utils.js';
 
 @Injectable()
 export class ReadWholesalerService {
@@ -71,27 +72,16 @@ export class ReadWholesalerService {
     } = query;
     const offset = (page - 1) * limit;
 
-    const profile = users.profile;
-    const companyTypeExpr = sql<string>`${profile}->>'company_type'`;
-    const companyNameExpr = sql<string>`${profile}->>'company_name'`;
-    const displayNameExpr = sql<
-      string | null | undefined
-    >`${profile}->>'display_name'`;
-    const descriptionExpr = sql<
-      string | null | undefined
-    >`${profile}->>'description'`;
-    const deliveryAreaDescriptionExpr = sql<
-      string | null | undefined
-    >`${profile}->>'delivery_area_description'`;
-    const minimumOrderAmountExpr = sql<
-      string | null | undefined
-    >`${profile}->>'minimum_order_amount'`;
-    const deliveryAvailableExpr = sql<
-      boolean | null | undefined
-    >`(${profile}->>'delivery_available')::boolean`;
-    const pickupAvailableExpr = sql<
-      boolean | null | undefined
-    >`(${profile}->>'pickup_available')::boolean`;
+    const {
+      companyNameExpr,
+      companyTypeExpr,
+      displayNameExpr,
+      descriptionExpr,
+      deliveryAreaDescriptionExpr,
+      minimumOrderAmountExpr,
+      deliveryAvailableExpr,
+      pickupAvailableExpr,
+    } = buildWholesalerProfileExpr(users.profile);
 
     const abilityConditions = caslToDrizzle(
       ability,

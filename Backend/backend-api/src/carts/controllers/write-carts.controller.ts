@@ -16,10 +16,14 @@ import {
 } from '#/carts/dto/update-cart-item.dto.js';
 import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
+import { RolesGuard } from '#/common/guards/roles.guard.js';
+import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 
 @ApiTags('Carts')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@RolesAllowed(UserRole.RETAILER)
 @Controller()
 export class WriteCartsController {
   constructor(private readonly writeCartsService: WriteCartsService) {}
@@ -32,11 +36,7 @@ export class WriteCartsController {
     @TypedBody(validateICreateCartItem) dto: ICreateCartItemDto,
     @Req() req: FastifyRequest,
   ) {
-    return this.writeCartsService.addCartItem(
-      dto,
-      req.user.userId,
-      req.ability,
-    );
+    return this.writeCartsService.addCartItem(dto, req.user.userId);
   }
 
   @TypedRoute.Patch('items/:id')
@@ -52,7 +52,6 @@ export class WriteCartsController {
       dto,
       cartDetailId,
       req.user.userId,
-      req.ability,
     );
   }
 
@@ -64,11 +63,7 @@ export class WriteCartsController {
     @TypedParam('id') cartDetailId: TagsIntegerString,
     @Req() req: FastifyRequest,
   ) {
-    return this.writeCartsService.deleteCartItem(
-      cartDetailId,
-      req.user.userId,
-      req.ability,
-    );
+    return this.writeCartsService.deleteCartItem(cartDetailId, req.user.userId);
   }
 
   @TypedRoute.Delete('wholesalers/:id')
@@ -79,10 +74,6 @@ export class WriteCartsController {
     @TypedParam('id') wholesalerId: TagsUuid,
     @Req() req: FastifyRequest,
   ) {
-    return this.writeCartsService.deleteCart(
-      wholesalerId,
-      req.user.userId,
-      req.ability,
-    );
+    return this.writeCartsService.deleteCart(wholesalerId, req.user.userId);
   }
 }

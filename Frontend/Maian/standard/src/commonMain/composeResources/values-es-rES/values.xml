@@ -55,4 +55,11 @@
     <string name="cart_fix_remove_inactive_variant">Esta variante ya no está disponible. Elimínala por ahora y elige otra variante más adelante.</string>
     <string name="cart_fix_wholesaler_unavailable">Este mayorista no está disponible temporalmente. El pedido está bloqueado, pero puedes eliminar el producto.</string>
     <string name="cart_fix_unknown_status">Este producto debe revisarse antes de poder pedirlo.</string>
+    <string name="retailer_profile">Perfil de minorista</string>
+    <string name="contact_name">Nombre de contacto</string>
+    <string name="contact_name_placeholder">Introduce el nombre de la persona de contacto</string>
+    <string name="company_type_placeholder">Selecciona tipo de empresa</string>
+    <string name="upload_progress">Subiendo: %1$d%</string>
+    <string name="upload_failed_retry">Error al subir\nToca para reintentar</string>
+    <string name="media_file_too_large_mb">El archivo "%1$s" es demasiado grande (%2$d MB).</string>
 </resources>

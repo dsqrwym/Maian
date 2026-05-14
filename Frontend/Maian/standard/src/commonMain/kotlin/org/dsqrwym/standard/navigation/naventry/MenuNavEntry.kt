@@ -1,15 +1,8 @@
 package org.dsqrwym.standard.navigation.naventry
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.navigation.SharedProfileScreen
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
@@ -21,17 +14,19 @@ import org.dsqrwym.standard.navigation.CategoriesScreen
 import org.dsqrwym.standard.navigation.CategoryBrowseRoute
 import org.dsqrwym.standard.navigation.ProductDetailScreen
 import org.dsqrwym.standard.navigation.ProductsScreen
+import org.dsqrwym.standard.navigation.RetailerProfileEdit
 import org.dsqrwym.standard.navigation.WholesalerProfileRoute
 import org.dsqrwym.standard.navigation.WholesalersScreen
 import org.dsqrwym.standard.ui.screens.browse.CategoryBrowseScreen
 import org.dsqrwym.standard.ui.screens.browse.product.ProductBrowseScreen
 import org.dsqrwym.standard.ui.screens.cart.StandardCartScreen
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
-import org.koin.compose.currentKoinScope
 import org.dsqrwym.standard.domain.browse.toRetailWholesaler
 import org.dsqrwym.standard.ui.screens.browse.product.ProductDetailScreen as ProductDetailContent
 import org.dsqrwym.standard.ui.screens.browse.wholesaler.WholesalerProfileScreen as WholesalerProfileContent
 import org.dsqrwym.standard.ui.screens.browse.wholesaler.WholesalersScreen as WholesalersContent
+import org.dsqrwym.standard.ui.screens.profile.RetailerProfileEditScreen as RetailerProfileEditContent
+import org.dsqrwym.standard.ui.screens.profile.RetailerProfileScreen as RetailerProfileContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun EntryProviderScope<NavKey>.menuNavEntry(
@@ -148,12 +143,19 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
     }
 
     entry<SharedProfileScreen> {
-        val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            ElevatedButton(onClick = { authSessionViewModel.logout() }) {
-                Text("Logout")
-            }
-        }
+        RetailerProfileContent(
+            onNavigateToEdit = {
+                navigationState.navigate(RetailerProfileEdit)
+            },
+        )
+    }
+
+    entry<RetailerProfileEdit> {
+        RetailerProfileEditContent(
+            onNavigateBack = {
+                navigationState.pop()
+            },
+        )
     }
 }
 

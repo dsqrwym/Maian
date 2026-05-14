@@ -55,4 +55,11 @@
     <string name="cart_fix_remove_inactive_variant">该规格已不可用，请先删除，后续可重新选择规格。</string>
     <string name="cart_fix_wholesaler_unavailable">该批发商暂不可下单，但可以删除该商品。</string>
     <string name="cart_fix_unknown_status">该商品需要先处理后才能下单。</string>
+    <string name="retailer_profile">零售商主页</string>
+    <string name="contact_name">联系人姓名</string>
+    <string name="contact_name_placeholder">输入联系人姓名</string>
+    <string name="company_type_placeholder">选择公司类型</string>
+    <string name="upload_progress">上传中：%1$d%</string>
+    <string name="upload_failed_retry">上传失败\n点击重试</string>
+    <string name="media_file_too_large_mb">文件 "%1$s" 过大（%2$d MB）。</string>
 </resources>

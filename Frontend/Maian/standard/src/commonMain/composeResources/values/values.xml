@@ -55,4 +55,11 @@
     <string name="cart_fix_remove_inactive_variant">This variant is no longer available. Remove it for now and choose another variant later.</string>
     <string name="cart_fix_wholesaler_unavailable">This wholesaler is temporarily unavailable. Ordering is blocked, but you can remove the item.</string>
     <string name="cart_fix_unknown_status">This item needs review before it can be ordered.</string>
+    <string name="retailer_profile">Retailer profile</string>
+    <string name="contact_name">Contact name</string>
+    <string name="contact_name_placeholder">Enter contact person name</string>
+    <string name="company_type_placeholder">Select company type</string>
+    <string name="upload_progress">Uploading: %1$d%</string>
+    <string name="upload_failed_retry">Upload failed\nTap to retry</string>
+    <string name="media_file_too_large_mb">File "%1$s" is too large (%2$d MB).</string>
 </resources>

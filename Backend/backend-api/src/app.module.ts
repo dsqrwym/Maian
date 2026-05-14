@@ -34,6 +34,7 @@ import { ProductsModule } from './products/products.module.js';
 import { FilesModule } from './files/files.module.js';
 import { DrizzleModule } from './drizzle/drizzle.module.js';
 import { CartsModule } from '#/carts/carts.module.js';
+import { OrderModule } from '#/orders/order.module.js';
 
 @Module({
   imports: [
@@ -114,6 +115,7 @@ import { CartsModule } from '#/carts/carts.module.js';
     CategoryModule,
     ProductsModule,
     CartsModule,
+    OrderModule,
 
     // 注册模块前的 prefix
     RouterModule.register([
@@ -126,6 +128,7 @@ import { CartsModule } from '#/carts/carts.module.js';
       { path: 'category', module: CategoryModule },
       { path: 'product', module: ProductsModule },
       { path: 'carts', module: CartsModule },
+      { path: 'orders', module: OrderModule },
     ]),
   ],
   controllers: [AppController], // 控制器也是一个提供者，负责处理传入的请求和返回响应

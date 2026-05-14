@@ -9,10 +9,14 @@ import {
 } from '#/carts/dto/carts-query.dto.js';
 import { ReadCartsService } from '#/carts/services/read-carts.service.js';
 import { ICartResponse } from '../dto/carts-response.dto.js';
+import { RolesGuard } from '#/common/guards/roles.guard.js';
+import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
+import { UserRole } from '#/generated/drizzle/enums.js';
 
 @ApiTags('Carts')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@RolesAllowed(UserRole.RETAILER)
 @Controller()
 export class ReadCartsController {
   constructor(private readonly readCartsService: ReadCartsService) {}
@@ -22,6 +26,6 @@ export class ReadCartsController {
     @TypedQuery(validateICartsQueryDto) query: ICartsQueryDto,
     @Req() req: FastifyRequest,
   ): Promise<ICartResponse> {
-    return this.readCartsService.getMyCartInfo(query, req.user, req.ability);
+    return this.readCartsService.getMyCartInfo(query, req.user);
   }
 }

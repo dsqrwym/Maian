@@ -45,6 +45,18 @@ export type TagsCompanyName = TagsNotBlank & tags.MaxLength<100>;
 export type TagsWholesalerDisplayName = TagsNotBlank & tags.MaxLength<60>;
 
 /**
+ * Retailer public display name.
+ * 零售商对外展示名称。
+ */
+export type TagsRetailerDisplayName = TagsWholesalerDisplayName;
+
+/**
+ * Retailer contact person name.
+ * 零售商联系人姓名。
+ */
+export type TagsRetailerContactName = TagsNotBlank & tags.MaxLength<80>;
+
+/**
  * Public short description.
  * 商家简介。用于告诉零售商这个批发商主要卖什么、有什么特点。
  *

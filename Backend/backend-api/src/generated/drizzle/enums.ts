@@ -5,6 +5,7 @@ import type {
   SaleVariant,
   UserRole as DrizzleUserRole,
   UserStatus as DrizzleUserStatus,
+  order_status as DrizzleOrderStatus,
 } from './schema.js';
 
 export type UserRole = (typeof DrizzleUserRole.enumValues)[number];
@@ -42,3 +43,11 @@ export const ProductStatus = {
   INACTIVE: 'INACTIVE',
 } as const;
 export type SaleVariant = (typeof SaleVariant.enumValues)[number];
+
+export type OrderStatus = (typeof DrizzleOrderStatus.enumValues)[number];
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+} as const;

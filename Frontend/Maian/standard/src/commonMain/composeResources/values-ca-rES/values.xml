@@ -55,4 +55,11 @@
     <string name="cart_fix_remove_inactive_variant">Esta variant ja no està disponible. Elimina-la de moment i tria una altra variant més avant.</string>
     <string name="cart_fix_wholesaler_unavailable">Este majorista no està disponible temporalment. La comanda està bloquejada, però pots eliminar el producte.</string>
     <string name="cart_fix_unknown_status">Este producte s’ha de revisar abans de poder demanar-lo.</string>
+    <string name="retailer_profile">Perfil de detallista</string>
+    <string name="contact_name">Nom de contacte</string>
+    <string name="contact_name_placeholder">Introdueix el nom de la persona de contacte</string>
+    <string name="company_type_placeholder">Selecciona el tipus d'empresa</string>
+    <string name="upload_progress">Pujant: %1$d%</string>
+    <string name="upload_failed_retry">Error en pujar\nToca per reintentar</string>
+    <string name="media_file_too_large_mb">El fitxer "%1$s" és massa gran (%2$d MB).</string>
 </resources>

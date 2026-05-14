@@ -157,7 +157,7 @@ fun WholesalerProfileEditScreen(
                         value = companyName,
                         placeholderText = stringResource(EnterpriseRes.string.field_company_type_placeholder),
                         onValueChange = viewModel::updateCompanyName,
-                        labelText = stringResource(SharedRes.string.company_name),
+                        labelText = "${stringResource(SharedRes.string.company_name)} (${stringResource(SharedRes.string.field_cannot_be_empty)})",
                         error = viewModel.companyNameError.asString(),
                         leadingIcon = Icons.Outlined.Business,
                         imeAction = ImeAction.Next,
@@ -173,7 +173,7 @@ fun WholesalerProfileEditScreen(
                         onItemSelected = { it?.let { type -> viewModel.selectCompanyType(type) } },
                         config = SelectorConfig(
                             modifier = Modifier.placeholderWithShimmer(isLoading),
-                            label = stringResource(SharedRes.string.company_type),
+                            label = "${stringResource(SharedRes.string.company_type)} (${stringResource(SharedRes.string.field_cannot_be_empty)})",
                             leadingIcon = Icons.Outlined.Category,
                         ),
                     )
@@ -247,7 +247,7 @@ fun WholesalerProfileEditScreen(
                         enabled = enabled,
                         value = viewModel.username,
                         onValueChange = viewModel::updateUsername,
-                        labelText = stringResource(SharedRes.string.field_username_label),
+                        labelText = "${stringResource(SharedRes.string.field_username_label)} (${stringResource(SharedRes.string.field_cannot_be_empty)})",
                         placeholderText = stringResource(SharedRes.string.field_username_placeholder),
                         leadingIcon = Icons.Rounded.Person,
                         leadingIconContentDescription = stringResource(SharedRes.string.icon_content_description_person),

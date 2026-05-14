@@ -29,5 +29,5 @@ export interface WholesalerProfileResponseDto {
       name: string;
       name_local: string;
     };
-  };
+  } | null;
 }

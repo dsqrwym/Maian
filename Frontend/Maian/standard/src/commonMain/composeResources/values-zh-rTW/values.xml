@@ -55,4 +55,11 @@
     <string name="cart_fix_remove_inactive_variant">此規格已不可用，請先刪除，稍後可重新選擇規格。</string>
     <string name="cart_fix_wholesaler_unavailable">此批發商暫不可下單，但可以刪除此商品。</string>
     <string name="cart_fix_unknown_status">此商品需要先處理後才能下單。</string>
+    <string name="retailer_profile">零售商主頁</string>
+    <string name="contact_name">聯絡人姓名</string>
+    <string name="contact_name_placeholder">輸入聯絡人姓名</string>
+    <string name="company_type_placeholder">選擇公司類型</string>
+    <string name="upload_progress">上傳中：%1$d%</string>
+    <string name="upload_failed_retry">上傳失敗\n點擊重試</string>
+    <string name="media_file_too_large_mb">檔案 "%1$s" 過大（%2$d MB）。</string>
 </resources>
