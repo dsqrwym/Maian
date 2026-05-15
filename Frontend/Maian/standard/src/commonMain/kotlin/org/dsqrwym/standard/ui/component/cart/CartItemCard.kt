@@ -2,38 +2,10 @@ package org.dsqrwym.standard.ui.component.cart
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedIconButton
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -144,31 +116,14 @@ internal fun CartItemRow(
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        CartSelectableText(
-                            text = stringResource(SharedRes.string.product_price_with_vat),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        CartSelectableText(
-                            modifier = Modifier.placeholderWithShimmer(isLoading),
-                            text = cartAmount(item.priceIva),
-                            style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        CartSelectableText(
-                            text = stringResource(StandardRes.string.cart_total),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        CartSelectableText(
-                            modifier = Modifier.placeholderWithShimmer(isLoading),
-                            text = cartAmount(item.lineTotal),
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
+                        CartItemLineTotal(item = item, isLoading = isLoading)
                     }
                 }
+
+                CartItemPriceBreakdown(
+                    item = item,
+                    isLoading = isLoading,
+                )
 
                 if (hasProblem) {
                     CartItemFixCard(
@@ -193,6 +148,132 @@ internal fun CartItemRow(
             }
         }
     }
+}
+
+@Composable
+private fun CartItemPriceBreakdown(
+    item: CartItem,
+    isLoading: Boolean,
+) {
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        itemVerticalAlignment = Alignment.CenterVertically,
+    ) {
+        CartItemPriceValue(
+            label = stringResource(SharedRes.string.product_price_without_vat),
+            value = cartAmount(item.price),
+            isLoading = isLoading,
+        )
+        CartItemPriceValue(
+            label = stringResource(SharedRes.string.product_price_with_vat),
+            value = cartAmount(item.priceIva),
+            isLoading = isLoading,
+        )
+        CartItemPriceValue(
+            label = stringResource(SharedRes.string.tax_rate),
+            value = cartTaxRate(item.iva),
+            isLoading = isLoading,
+        )
+    }
+}
+
+@Composable
+private fun CartItemPriceValue(
+    label: String,
+    value: String,
+    isLoading: Boolean,
+) {
+    Row(
+        modifier = Modifier.placeholderWithShimmer(isLoading),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CartSelectableText(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        CartSelectableText(
+            text = value,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+private fun CartItemLineTotal(
+    item: CartItem,
+    isLoading: Boolean,
+) {
+    Column(
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        CartItemLineAmount(
+            label = stringResource(StandardRes.string.cart_subtotal),
+            value = cartAmount(item.lineSubtotal),
+            isLoading = isLoading,
+        )
+        CartItemLineAmount(
+            label = stringResource(StandardRes.string.cart_iva),
+            value = cartAmount(item.lineIva),
+            isLoading = isLoading,
+        )
+        CartItemLineAmount(
+            label = stringResource(StandardRes.string.cart_total),
+            value = cartAmount(item.lineTotal),
+            isLoading = isLoading,
+            emphasize = true,
+        )
+    }
+}
+
+@Composable
+private fun CartItemLineAmount(
+    label: String,
+    value: String,
+    isLoading: Boolean,
+    emphasize: Boolean = false,
+) {
+    Column(
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(1.dp),
+    ) {
+        CartSelectableText(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        CartSelectableText(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
+            text = value,
+            style = if (emphasize) MaterialTheme.typography.titleSmall else MaterialTheme.typography.labelMedium,
+            fontWeight = if (emphasize) FontWeight.Bold else FontWeight.SemiBold,
+            color = if (emphasize) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+private fun cartTaxRate(value: String): String {
+    val trimmed = value.trim()
+    if (trimmed.isEmpty() || trimmed.contains("%")) return trimmed
+
+    val normalized = trimmed
+        .trimEnd('0')
+        .trimEnd('.')
+        .ifBlank { "0" }
+    return "$normalized%"
 }
 
 @Composable
