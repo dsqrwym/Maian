@@ -45,6 +45,7 @@ internal fun cartGroupBorderColor(status: CartGroupStatus) =
 internal fun CartGroupActionRow(
     group: CartGroup,
     isClearingWholesaler: Boolean,
+    isCreatingOrder: Boolean,
     isGroupMutating: Boolean,
     onClearWholesalerCart: (CartGroup) -> Unit,
     onCreateOrder: (CartGroup) -> Unit,
@@ -79,7 +80,14 @@ internal fun CartGroupActionRow(
             enabled = group.status == CartGroupStatus.AVAILABLE && !isGroupMutating,
             onClick = { onCreateOrder(group) },
         ) {
-            Icon(Icons.AutoMirrored.Outlined.ReceiptLong, contentDescription = null)
+            if (isCreatingOrder) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                )
+            } else {
+                Icon(Icons.AutoMirrored.Outlined.ReceiptLong, contentDescription = null)
+            }
             Spacer(Modifier.width(8.dp))
             Text(stringResource(StandardRes.string.create_order))
         }

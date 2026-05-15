@@ -2,9 +2,10 @@ import type {
   CartGroupStatus,
   CartItemStatus,
 } from '#/carts/cart.constants.js';
+import type { Decimal } from 'decimal.js';
 
 export interface ICartResponse {
-  groups: ICartGroup[];
+  groups: ICartGroupWithoutDecimal[];
   summary: ICartSummary;
 }
 
@@ -12,11 +13,20 @@ export interface ICartGroup {
   wholesaler: ICartWholesaler;
   item_count: number;
   total_quantity: number;
+  subtotal: Decimal;
+  iva_total: Decimal;
+  total: Decimal;
+  status: CartGroupStatus;
+  items: ICartItem[];
+}
+
+export interface ICartGroupWithoutDecimal extends Omit<
+  ICartGroup,
+  'subtotal' | 'total' | 'iva_total'
+> {
   subtotal: string;
   iva_total: string;
   total: string;
-  status: CartGroupStatus;
-  items: ICartItem[];
 }
 
 export interface ICartWholesaler {

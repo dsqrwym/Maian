@@ -2,7 +2,18 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { AppAbility } from '#/casl/casl-types.js';
 import { AddressType, UserRole } from '#/generated/drizzle/enums.js';
 import { Action } from '#/casl/actions.js';
-import { and, asc, count, desc, eq, ilike, or, SQL, sql } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  ilike,
+  inArray,
+  or,
+  SQL,
+  sql,
+} from 'drizzle-orm';
 import {
   cities,
   directions,
@@ -21,6 +32,7 @@ import { OrderByEnum } from '#/common/enums/sort.enum.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
 import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
 import { buildWholesalerProfileExpr } from '#/utils/db/user.db.utils.js';
+import { MARKETPLACE_VISIBLE_STATUSES } from '#/user/user-status.constants.js';
 
 @Injectable()
 export class ReadWholesalerService {
@@ -134,6 +146,7 @@ export class ReadWholesalerService {
     const whereConditions: (SQL | undefined)[] = [
       abilityConditions,
       eq(users.role, UserRole.WHOLESALER),
+      inArray(users.status, MARKETPLACE_VISIBLE_STATUSES),
     ];
 
     if (search) {
@@ -142,7 +155,7 @@ export class ReadWholesalerService {
         .filter((s) => s.length > 0)
         .slice(0, this.MAX_SEARCH_TERMS);
 
-      searchTerms.forEach((term) => {
+      for (const term of searchTerms) {
         const pattern = `%${term}%`;
         whereConditions.push(
           or(
@@ -169,7 +182,7 @@ export class ReadWholesalerService {
             ),
           ),
         );
-      });
+      }
     }
 
     if (delivery_available !== undefined) {

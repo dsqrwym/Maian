@@ -12,12 +12,13 @@ import {
   users,
   variant_products,
 } from '#/generated/drizzle/schema.js';
-import { and, eq, exists, notInArray, sql } from 'drizzle-orm';
-import { ProductStatus, UserStatus } from '#/generated/drizzle/enums.js';
+import { and, eq, exists, inArray, sql } from 'drizzle-orm';
+import { ProductStatus } from '#/generated/drizzle/enums.js';
 import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
 import { PinoLogger } from 'nestjs-pino';
 import { CART_ERRORS } from '#/carts/cart.constants.js';
 import { IUpdateCartItem } from '#/carts/dto/update-cart-item.dto.js';
+import { MARKETPLACE_VISIBLE_STATUSES } from '#/user/user-status.constants.js';
 
 @Injectable()
 export class WriteCartsService {
@@ -53,12 +54,7 @@ export class WriteCartsService {
             eq(variant_products.id, variantId),
             eq(variant_products.status, ProductStatus.ACTIVE),
             eq(products.status, ProductStatus.ACTIVE),
-            notInArray(users.status, [
-              UserStatus.BANNED,
-              UserStatus.INACTIVE,
-              UserStatus.PENDING_REVIEW,
-              UserStatus.PENDING_VERIFICATION,
-            ]),
+            inArray(users.status, MARKETPLACE_VISIBLE_STATUSES),
           ),
         );
 
@@ -163,12 +159,7 @@ export class WriteCartsService {
             eq(carts.retailer_id, retailer_id),
             eq(variant_products.status, ProductStatus.ACTIVE),
             eq(products.status, ProductStatus.ACTIVE),
-            notInArray(users.status, [
-              UserStatus.BANNED,
-              UserStatus.INACTIVE,
-              UserStatus.PENDING_REVIEW,
-              UserStatus.PENDING_VERIFICATION,
-            ]),
+            inArray(users.status, MARKETPLACE_VISIBLE_STATUSES),
           ),
         )
         .limit(1);

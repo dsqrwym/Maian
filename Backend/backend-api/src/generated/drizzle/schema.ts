@@ -35,6 +35,12 @@ export const DeliveryStatus = pgEnum('DeliveryStatus', [
   'IN_PROGRESS',
   'COMPLETED',
 ]);
+export const OrderStatus = pgEnum('OrderStatus', [
+  'PENDING',
+  'ACCEPTED',
+  'REJECTED',
+  'CANCELLED',
+]);
 export const ProductStatus = pgEnum('ProductStatus', ['ACTIVE', 'INACTIVE']);
 export const SaleVariant = pgEnum('SaleVariant', ['UNIT', 'BOX', 'PACK']);
 export const UserRole = pgEnum('UserRole', [
@@ -53,12 +59,6 @@ export const UserStatus = pgEnum('UserStatus', [
   'PENDING_REVIEW',
   'APPROVED',
   'BANNED',
-]);
-export const order_status = pgEnum('order_status', [
-  'PENDING',
-  'ACCEPTED',
-  'REJECTED',
-  'CANCELLED',
 ]);
 
 export const seq_deliveryman_id = pgSequence('seq_deliveryman_id', {
@@ -1049,67 +1049,6 @@ export const cart_details = pgTable(
   ],
 );
 
-export const order_details = pgTable(
-  'order_details',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity({
-      name: 'order_details_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    order_id: bigint({ mode: 'bigint' }).notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    product_id: bigint({ mode: 'bigint' }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    variant_product_id: bigint({ mode: 'bigint' }),
-    product_name: varchar({ length: 100 }).notNull(),
-    product_title: varchar({ length: 150 }),
-    product_code: varchar({ length: 50 }).notNull(),
-    variant_product_code: varchar({ length: 50 }).notNull(),
-    attributes_snapshot: jsonb().notNull(),
-    quantity: integer().notNull(),
-    unit_price: numeric({ precision: 10, scale: 2 }).notNull(),
-    unit_price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
-    iva: numeric({ precision: 5, scale: 2 }).notNull(),
-    subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
-    iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
-    total: numeric({ precision: 20, scale: 2 }).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-  },
-  (table) => [
-    index('idx_order_details_order_id').using(
-      'btree',
-      table.order_id.asc().nullsLast().op('int8_ops'),
-    ),
-    foreignKey({
-      columns: [table.order_id],
-      foreignColumns: [orders.id],
-      name: 'order_details_order_id_fkey',
-    }).onDelete('cascade'),
-    foreignKey({
-      columns: [table.product_id],
-      foreignColumns: [products.id],
-      name: 'order_details_product_id_fkey',
-    }).onDelete('set null'),
-    foreignKey({
-      columns: [table.variant_product_id],
-      foreignColumns: [variant_products.id],
-      name: 'order_details_variant_product_id_fkey',
-    }).onDelete('set null'),
-    check(
-      'order_details_amounts_check',
-      sql`(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)`,
-    ),
-    check('order_details_quantity_check', sql`quantity >= 1`),
-  ],
-);
-
 export const orders = pgTable(
   'orders',
   {
@@ -1127,7 +1066,7 @@ export const orders = pgTable(
     order_number: varchar({ length: 40 }).notNull(),
     retailer_id: uuid(),
     wholesaler_id: uuid(),
-    status: order_status().default('PENDING').notNull(),
+    status: OrderStatus().default('PENDING').notNull(),
     currency: char({ length: 3 }).default('EUR').notNull(),
     subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
     discount_total: numeric({ precision: 20, scale: 2 }).default('0').notNull(),
@@ -1209,7 +1148,7 @@ export const orders = pgTable(
     check('orders_item_count_check', sql`item_count >= 1`),
     check(
       'orders_rejected_reason_check',
-      sql`(status <> 'REJECTED'::order_status) OR (rejected_reason IS NOT NULL)`,
+      sql`(status <> 'REJECTED'::"OrderStatus") OR (rejected_reason IS NOT NULL)`,
     ),
     check(
       'orders_retailer_wholesaler_different',
@@ -1220,6 +1159,67 @@ export const orders = pgTable(
       'orders_year_check',
       sql`(order_year >= 2000) AND (order_year <= 9999)`,
     ),
+  ],
+);
+
+export const order_details = pgTable(
+  'order_details',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity({
+      name: 'order_details_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    order_id: bigint({ mode: 'bigint' }).notNull(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    product_id: bigint({ mode: 'bigint' }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    variant_product_id: bigint({ mode: 'bigint' }),
+    product_name: varchar({ length: 100 }).notNull(),
+    product_title: varchar({ length: 150 }),
+    product_code: varchar({ length: 50 }).notNull(),
+    variant_product_code: varchar({ length: 50 }).notNull(),
+    product_translations_snapshot: jsonb().default([]).notNull(),
+    variant_attributes_snapshot: jsonb().default({}).notNull(),
+    type_sale: SaleVariant().notNull(),
+    sale_unit_qty: integer().notNull(),
+    quantity: integer().notNull(),
+    unit_price: numeric({ precision: 10, scale: 2 }).notNull(),
+    unit_price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
+    iva: numeric({ precision: 5, scale: 2 }).notNull(),
+    subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
+    iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
+    total: numeric({ precision: 20, scale: 2 }).notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.order_id],
+      foreignColumns: [orders.id],
+      name: 'order_details_order_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.product_id],
+      foreignColumns: [products.id],
+      name: 'order_details_product_id_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.variant_product_id],
+      foreignColumns: [variant_products.id],
+      name: 'order_details_variant_product_id_fkey',
+    }).onDelete('set null'),
+    check(
+      'order_details_amounts_check',
+      sql`(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)`,
+    ),
+    check('order_details_min_order_qty_check', sql`min_order_qty >= 1`),
+    check('order_details_quantity_check', sql`quantity >= 1`),
   ],
 );
 

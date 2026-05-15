@@ -20,6 +20,15 @@
     <string name="product_information_changed_retry">Les informations du produit ont changé. Veuillez réessayer.</string>
     <string name="cart_empty">Votre panier est vide</string>
     <string name="create_order">Créer une commande</string>
+    <string name="create_order_success">Commande créée avec succès</string>
+    <string name="create_order_failed">Impossible de créer la commande. Le panier a été actualisé.</string>
+    <string name="create_order_error_cart_empty">Votre panier est vide. Actualisez-le puis réessayez.</string>
+    <string name="create_order_error_wholesaler_invalid">Ce grossiste n'est plus disponible. Le panier a été actualisé.</string>
+    <string name="create_order_error_shipping_address_missing">L'adresse de livraison est manquante. Complétez l'adresse de votre boutique avant de commander.</string>
+    <string name="create_order_error_product_unavailable">Certains produits ne sont plus disponibles. Le panier a été actualisé.</string>
+    <string name="create_order_error_variant_unavailable">Certaines variantes ne sont plus disponibles. Le panier a été actualisé.</string>
+    <string name="create_order_error_quantity_below_min_order">Certaines quantités sont inférieures au minimum de commande. Le panier a été actualisé.</string>
+    <string name="create_order_error_not_enough_stock">Le stock est insuffisant. Le panier a été actualisé.</string>
     <string name="cart_subtotal">Sous-total</string>
     <string name="cart_iva">TVA</string>
     <string name="cart_total">Total</string>

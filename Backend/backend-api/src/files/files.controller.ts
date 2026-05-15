@@ -37,6 +37,7 @@ import { PassThrough } from 'node:stream';
 import { FILE_ERROR } from './constants/files.constants.js';
 import { PinoLogger } from 'nestjs-pino';
 import { ProductFilesService } from './services/product-files.service.js';
+import { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 
 /**
  * Controller for file upload and retrieval
@@ -180,7 +181,7 @@ export class FilesController {
   @Get('user/:user_id/image')
   @SkipResponseInterceptor()
   async getUserImageByUserId(
-    @TypedParam('user_id') userId: string,
+    @TypedParam('user_id') userId: TagsUuid,
   ): Promise<StreamableFile> {
     const { stream, mime_type, filename } =
       await this.filesService.getImageByUserId(userId);

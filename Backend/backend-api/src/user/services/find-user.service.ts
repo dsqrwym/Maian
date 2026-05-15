@@ -5,10 +5,20 @@ import { UserRole } from '#/generated/drizzle/enums.js';
 import { Action } from '#/casl/actions.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
 import { UserPayload } from '#/auth/auth.types.js';
-import { and, count, eq, ilike, notInArray, or, sql } from 'drizzle-orm';
+import {
+  and,
+  count,
+  eq,
+  ilike,
+  inArray,
+  notInArray,
+  or,
+  sql,
+} from 'drizzle-orm';
 import { users } from '#/generated/drizzle/schema.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { FindUserResponse } from '../dto/user-response.js';
+import { MARKETPLACE_VISIBLE_STATUSES } from '#/user/user-status.constants.js';
 
 @Injectable()
 export class FindUserService {
@@ -116,12 +126,7 @@ export class FindUserService {
       case UserRole.RETAILER:
         return and(
           eq(users.role, UserRole.WHOLESALER),
-          notInArray(users.status, [
-            'INACTIVE',
-            'BANNED',
-            'PENDING_VERIFICATION',
-            'PENDING_REVIEW',
-          ]),
+          inArray(users.status, MARKETPLACE_VISIBLE_STATUSES),
         );
       default:
         return undefined;

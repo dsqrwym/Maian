@@ -20,6 +20,15 @@
     <string name="product_information_changed_retry">La informació del producte ha canviat. Torna-ho a intentar.</string>
     <string name="cart_empty">El teu carret està buit</string>
     <string name="create_order">Crear comanda</string>
+    <string name="create_order_success">Comanda creada correctament</string>
+    <string name="create_order_failed">No s'ha pogut crear la comanda. S'ha actualitzat el carret.</string>
+    <string name="create_order_error_cart_empty">El carret està buit. Actualitza'l i torna-ho a intentar.</string>
+    <string name="create_order_error_wholesaler_invalid">Este majorista ja no està disponible. S'ha actualitzat el carret.</string>
+    <string name="create_order_error_shipping_address_missing">Falta l'adreça d'entrega. Completa l'adreça de la teua botiga abans de demanar.</string>
+    <string name="create_order_error_product_unavailable">Alguns productes ja no estan disponibles. S'ha actualitzat el carret.</string>
+    <string name="create_order_error_variant_unavailable">Algunes variants ja no estan disponibles. S'ha actualitzat el carret.</string>
+    <string name="create_order_error_quantity_below_min_order">Algunes quantitats estan per davall del mínim de comanda. S'ha actualitzat el carret.</string>
+    <string name="create_order_error_not_enough_stock">No hi ha prou estoc. S'ha actualitzat el carret.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">Total</string>

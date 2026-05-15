@@ -9,6 +9,7 @@ export type ModelSubjects = {
   users: { role?: string; status?: UserStatus; id?: string };
   products_files: { user_id: string };
   carts: { retailer_id: string };
+  orders: { retailer_id: string; wholesaler_id: string };
 };
 
 type SubjectName = keyof ModelSubjects;

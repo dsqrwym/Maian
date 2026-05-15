@@ -34,18 +34,20 @@ export function computePrice(
     // 检查传入的 price 是否超过上限
     if (priceDecimal.gt(MAX_PRICE)) {
       throw new BadRequestException(
-        `Price exceeds maximum allowed price ${MAX_PRICE.toFixed(2)}`,
+        `Price exceeds maximum allowed price ${MAX_PRICE.toFixed(6)}`,
       );
     }
-    const priceIvaDecimal = priceDecimal.times(ivaFactor);
+    const priceIvaDecimal = priceDecimal
+      .times(ivaFactor)
+      .toDecimalPlaces(6, Decimal.ROUND_HALF_UP);
     if (priceIvaDecimal.gt(MAX_PRICE_IVA)) {
       throw new BadRequestException(
-        `Price + IVA exceeds maximum allowed price_iva ${MAX_PRICE_IVA.toFixed(2)}`,
+        `Price + IVA exceeds maximum allowed price_iva ${MAX_PRICE_IVA.toFixed(6)}`,
       );
     }
     return {
-      price: priceDecimal.toFixed(2),
-      price_iva: priceIvaDecimal.toFixed(2),
+      price: priceDecimal.toFixed(6),
+      price_iva: priceIvaDecimal.toFixed(6),
     };
   }
 
@@ -54,18 +56,20 @@ export function computePrice(
     // 检查传入的 priceIva 是否超过上限
     if (priceIvaDecimal.gt(MAX_PRICE_IVA)) {
       throw new BadRequestException(
-        `Price with IVA exceeds maximum allowed price_iva ${MAX_PRICE_IVA.toFixed(2)}`,
+        `Price with IVA exceeds maximum allowed price_iva ${MAX_PRICE_IVA.toFixed(6)}`,
       );
     }
-    const priceDecimal = priceIvaDecimal.dividedBy(ivaFactor);
+    const priceDecimal = priceIvaDecimal
+      .dividedBy(ivaFactor)
+      .toDecimalPlaces(6, Decimal.ROUND_HALF_UP);
     if (priceDecimal.gt(MAX_PRICE)) {
       throw new BadRequestException(
-        `Price derived from price_iva exceeds maximum allowed price ${MAX_PRICE.toFixed(2)}`,
+        `Price derived from price_iva exceeds maximum allowed price ${MAX_PRICE.toFixed(6)}`,
       );
     }
     return {
-      price: priceDecimal.toFixed(2),
-      price_iva: priceIvaDecimal.toFixed(2),
+      price: priceDecimal.toFixed(6),
+      price_iva: priceIvaDecimal.toFixed(6),
     };
   }
 

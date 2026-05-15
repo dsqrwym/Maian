@@ -25,19 +25,15 @@ import {
   count,
   eq,
   exists,
+  inArray,
   ilike,
   like,
-  notInArray,
   or,
   SQL,
   sql,
 } from 'drizzle-orm';
 import { Action } from '#/casl/actions.js';
-import {
-  ProductStatus,
-  UserRole,
-  UserStatus,
-} from '#/generated/drizzle/enums.js';
+import { ProductStatus, UserRole } from '#/generated/drizzle/enums.js';
 import { ProductListSelectField, ProductSortField } from '../product.enums.js';
 import { IProductListQueryDto } from '../dto/product-list-query.dto.js';
 import { IProductResponse } from '../dto/product-response.js';
@@ -47,6 +43,8 @@ import { subject } from '@casl/ability';
 import { caslHasField, caslToDrizzle } from '#/casl/casl-to-drizzle.js';
 import { users } from '../../../drizzle/schema.js';
 import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
+import { MARKETPLACE_VISIBLE_STATUSES } from '#/user/user-status.constants.js';
+import { Decimal } from 'decimal.js';
 
 @Injectable()
 export class ReadProductsService {
@@ -71,12 +69,7 @@ export class ReadProductsService {
           and(
             eq(users.id, products.user_id),
             eq(users.role, UserRole.WHOLESALER),
-            notInArray(users.status, [
-              UserStatus.INACTIVE,
-              UserStatus.BANNED,
-              UserStatus.PENDING_VERIFICATION,
-              UserStatus.PENDING_REVIEW,
-            ]),
+            inArray(users.status, MARKETPLACE_VISIBLE_STATUSES),
           ),
         ),
     );
@@ -324,7 +317,7 @@ export class ReadProductsService {
         .split(/\s+/)
         .filter((s) => s.length > 0)
         .slice(0, this.MAX_SEARCH_TERMS);
-      searchTerms.forEach((keyWord) => {
+      for (const keyWord of searchTerms) {
         const likeSearch = `%${keyWord}%`;
         whereConditions.push(
           or(
@@ -377,7 +370,7 @@ export class ReadProductsService {
             ),
           ),
         );
-      });
+      }
     }
 
     if (category_id && category_id !== 0n) {
@@ -431,7 +424,24 @@ export class ReadProductsService {
     ]);
     const total: number = countResult?.count ?? 0;
     return {
-      items,
+      items: items.map((p) => ({
+        product_translations: p.product_translations,
+        user_id: p.user_id,
+        status: p.status,
+        iva: p.iva,
+        main_category: p.main_category,
+        id: p.id,
+        name: p.name,
+        title: p.title,
+        product_code: p.product_code,
+        min_price: p.min_price ? new Decimal(p.min_price).toFixed(2) : '0.00',
+        min_price_iva: p.min_price_iva
+          ? new Decimal(p.min_price_iva).toFixed(2)
+          : '0.00',
+        total_stock: p.total_stock,
+        min_order_qty: p.min_order_qty,
+        main_image: p.main_image,
+      })),
       pagination: { total, page, limit },
     };
   }
@@ -539,7 +549,19 @@ export class ReadProductsService {
         is_primary: category.is_primary,
       })),
       product_translations: product.product_translations ?? [],
-      variant_products: product.variant_products,
+      variant_products: product.variant_products.map((v) => ({
+        id: v.id,
+        status: v.status,
+        type_sale: v.type_sale,
+        price: new Decimal(v.price).toFixed(2),
+        price_iva: new Decimal(v.price_iva).toFixed(2),
+        available_stock: v.available_stock,
+        sort: v.sort,
+        product_code: v.product_code,
+        low_stock_threshold: v.low_stock_threshold,
+        sale_unit_qty: v.sale_unit_qty,
+        min_order_qty: v.min_order_qty,
+      })),
     };
   }
 
@@ -567,9 +589,16 @@ export class ReadProductsService {
       variant_products,
     );
     const isRetailer = user.userRole === UserRole.RETAILER;
+    const visibleWholesalerCondition = isRetailer
+      ? this.buildVisibleWholesalerOwnerCondition()
+      : undefined;
 
     const product = await this.drizzle.db.query.products.findFirst({
-      where: and(eq(products.id, BigInt(id)), productAbilityCondition),
+      where: and(
+        eq(products.id, BigInt(id)),
+        productAbilityCondition,
+        visibleWholesalerCondition,
+      ),
       columns: {
         id: true,
         user_id: true,
@@ -709,9 +738,9 @@ export class ReadProductsService {
         return {
           id: variant.id,
           sort: variant.sort,
-          price: variant.price,
+          price: new Decimal(variant.price).toFixed(2),
+          price_iva: new Decimal(variant.price_iva).toFixed(2),
           type_sale: variant.type_sale,
-          price_iva: variant.price_iva,
           product_code: variant.product_code,
           sale_unit_qty: variant.sale_unit_qty,
           min_order_qty: variant.min_order_qty,

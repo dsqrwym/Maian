@@ -20,6 +20,15 @@
     <string name="product_information_changed_retry">La información del producto ha cambiado. Inténtalo de nuevo.</string>
     <string name="cart_empty">Tu carrito está vacío</string>
     <string name="create_order">Crear pedido</string>
+    <string name="create_order_success">Pedido creado correctamente</string>
+    <string name="create_order_failed">No se pudo crear el pedido. Se ha actualizado el carrito.</string>
+    <string name="create_order_error_cart_empty">El carrito está vacío. Actualízalo e inténtalo de nuevo.</string>
+    <string name="create_order_error_wholesaler_invalid">Este mayorista ya no está disponible. Se ha actualizado el carrito.</string>
+    <string name="create_order_error_shipping_address_missing">Falta la dirección de entrega. Completa la dirección de tu tienda antes de pedir.</string>
+    <string name="create_order_error_product_unavailable">Algunos productos ya no están disponibles. Se ha actualizado el carrito.</string>
+    <string name="create_order_error_variant_unavailable">Algunas variantes ya no están disponibles. Se ha actualizado el carrito.</string>
+    <string name="create_order_error_quantity_below_min_order">Algunas cantidades están por debajo del mínimo de pedido. Se ha actualizado el carrito.</string>
+    <string name="create_order_error_not_enough_stock">No hay stock suficiente. Se ha actualizado el carrito.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">Total</string>

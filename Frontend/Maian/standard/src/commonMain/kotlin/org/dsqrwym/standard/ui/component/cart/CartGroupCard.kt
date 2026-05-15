@@ -21,6 +21,7 @@ internal fun CartGroupCard(
     updatingCartDetailId: String?,
     deletingCartDetailId: String?,
     deletingWholesalerId: String?,
+    creatingOrderWholesalerId: String?,
     selectingWholesalerId: String?,
     isLoading: Boolean,
     isWholesalerScoped: Boolean,
@@ -35,11 +36,12 @@ internal fun CartGroupCard(
     modifier: Modifier = Modifier,
 ) {
     val isClearingWholesaler = deletingWholesalerId == group.wholesaler.id
+    val isCreatingOrder = creatingOrderWholesalerId == group.wholesaler.id
     val isSelectingScope = selectingWholesalerId == group.wholesaler.id
     val isGroupItemMutating = group.items.any {
         updatingCartDetailId == it.cartDetailId || deletingCartDetailId == it.cartDetailId
     }
-    val isGroupMutating = isClearingWholesaler || isSelectingScope || isGroupItemMutating
+    val isGroupMutating = isClearingWholesaler || isCreatingOrder || isSelectingScope || isGroupItemMutating
     val borderColor = cartGroupBorderColor(group.status)
 
     OutlinedCard(
@@ -85,6 +87,7 @@ internal fun CartGroupCard(
                 modifier = Modifier.align(Alignment.End),
                 group = group,
                 isClearingWholesaler = isClearingWholesaler,
+                isCreatingOrder = isCreatingOrder,
                 isGroupMutating = isGroupMutating,
                 onClearWholesalerCart = onClearWholesalerCart,
                 onCreateOrder = onCreateOrder,
@@ -161,6 +164,7 @@ internal fun CartSingleWholesalerFooterCard(
     updatingCartDetailId: String?,
     deletingCartDetailId: String?,
     deletingWholesalerId: String?,
+    creatingOrderWholesalerId: String?,
     selectingWholesalerId: String?,
     isLoading: Boolean,
     onClearWholesalerCart: (CartGroup) -> Unit,
@@ -168,11 +172,12 @@ internal fun CartSingleWholesalerFooterCard(
     modifier: Modifier = Modifier,
 ) {
     val isClearingWholesaler = deletingWholesalerId == group.wholesaler.id
+    val isCreatingOrder = creatingOrderWholesalerId == group.wholesaler.id
     val isSelectingScope = selectingWholesalerId == group.wholesaler.id
     val isGroupItemMutating = group.items.any {
         updatingCartDetailId == it.cartDetailId || deletingCartDetailId == it.cartDetailId
     }
-    val isGroupMutating = isClearingWholesaler || isSelectingScope || isGroupItemMutating
+    val isGroupMutating = isClearingWholesaler || isCreatingOrder || isSelectingScope || isGroupItemMutating
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
@@ -187,6 +192,7 @@ internal fun CartSingleWholesalerFooterCard(
                 modifier = Modifier.align(Alignment.End),
                 group = group,
                 isClearingWholesaler = isClearingWholesaler,
+                isCreatingOrder = isCreatingOrder,
                 isGroupMutating = isGroupMutating,
                 onClearWholesalerCart = onClearWholesalerCart,
                 onCreateOrder = onCreateOrder,

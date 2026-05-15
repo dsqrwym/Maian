@@ -5,7 +5,7 @@ import type {
   SaleVariant,
   UserRole as DrizzleUserRole,
   UserStatus as DrizzleUserStatus,
-  order_status as DrizzleOrderStatus,
+  OrderStatus as DrizzleOrderStatus,
 } from './schema.js';
 
 export type UserRole = (typeof DrizzleUserRole.enumValues)[number];

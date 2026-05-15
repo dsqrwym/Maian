@@ -1,6 +1,7 @@
 // Standardized auth error codes for frontend differentiation
 
-import { UserStatus } from '#/generated/drizzle/enums.js';
+import type { UserStatus } from '#/generated/drizzle/enums.js';
+import { LOGIN_BLOCKED_STATUSES } from '#/user/user-status.constants.js';
 
 export const VERIFY_EMAIL_PATH: string = 'email-verification';
 export const AUTH_VERIFY_EMAIL_PATH: string = `https://api.dsqrwym.es/maian/auth/${VERIFY_EMAIL_PATH}`;
@@ -69,11 +70,9 @@ export const AUTH_ERROR = {
   VERIFICATION_TOKEN_INVALID: 'VERIFICATION_TOKEN_INVALID',
 } as const;
 
-export const INACTIVE_STATUSES: Set<UserStatus> = new Set([
-  UserStatus.INACTIVE,
-  UserStatus.PENDING_VERIFICATION,
-  UserStatus.BANNED,
-]);
+export const INACTIVE_STATUSES: Set<UserStatus> = new Set(
+  LOGIN_BLOCKED_STATUSES,
+);
 
 /**
  * 验证邮件类型

@@ -20,6 +20,15 @@
     <string name="product_information_changed_retry">Product information has changed. Please try again.</string>
     <string name="cart_empty">Your cart is empty</string>
     <string name="create_order">Create order</string>
+    <string name="create_order_success">Order created successfully</string>
+    <string name="create_order_failed">Could not create the order. The cart has been refreshed.</string>
+    <string name="create_order_error_cart_empty">Your cart is empty. Please refresh and try again.</string>
+    <string name="create_order_error_wholesaler_invalid">This wholesaler is no longer available. The cart has been refreshed.</string>
+    <string name="create_order_error_shipping_address_missing">Shipping address is missing. Please complete your store address before ordering.</string>
+    <string name="create_order_error_product_unavailable">Some products are no longer available. The cart has been refreshed.</string>
+    <string name="create_order_error_variant_unavailable">Some variants are no longer available. The cart has been refreshed.</string>
+    <string name="create_order_error_quantity_below_min_order">Some quantities are below the minimum order quantity. The cart has been refreshed.</string>
+    <string name="create_order_error_not_enough_stock">There is not enough stock. The cart has been refreshed.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">VAT</string>
     <string name="cart_total">Total</string>

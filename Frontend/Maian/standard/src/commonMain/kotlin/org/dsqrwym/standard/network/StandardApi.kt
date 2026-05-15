@@ -19,4 +19,9 @@ object StandardApi {
         fun cartWholesaler(wholesalerId: String): String =
             "${CARTS}/wholesalers/$wholesalerId"
     }
+
+    object OrderPath {
+        private const val ORDERS = "${ApiConfig.BASE_URL}/orders"
+        const val FROM_CART = "${ORDERS}/from-cart"
+    }
 }

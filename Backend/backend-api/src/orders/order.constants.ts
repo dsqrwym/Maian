@@ -1,5 +1,9 @@
 import { alias } from 'drizzle-orm/pg-core';
 import { users } from '#/generated/drizzle/schema.js';
+import {
+  buildRetailerProfileExpr,
+  buildWholesalerProfileExpr,
+} from '#/utils/db/user.db.utils.js';
 
 export const ORDER_ERRORS = {
   WHOLESALER_NOT_FOUND_OR_INVALID: 'WHOLESALER_NOT_FOUND_OR_INVALID',
@@ -24,6 +28,10 @@ export const ORDER_DOCUMENT_TYPE = 'PED';
 export const ORDER_CURRENCY = 'EUR';
 
 export const RETAILER_TABLE = alias(users, 'retailer');
-export const RETAILER_PROFILE = RETAILER_TABLE.profile;
+export const RETAILER_PROFILE = buildRetailerProfileExpr(
+  RETAILER_TABLE.profile,
+);
 export const WHOLESALER_TABLE = alias(users, 'wholesaler');
-export const WHOLESALER_PROFILE = WHOLESALER_TABLE.profile;
+export const WHOLESALER_PROFILE = buildWholesalerProfileExpr(
+  WHOLESALER_TABLE.profile,
+);

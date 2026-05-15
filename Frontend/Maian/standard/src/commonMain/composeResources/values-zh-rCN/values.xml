@@ -20,6 +20,15 @@
     <string name="product_information_changed_retry">商品信息已更新，请重试</string>
     <string name="cart_empty">购物车为空</string>
     <string name="create_order">创建订单</string>
+    <string name="create_order_success">订单创建成功</string>
+    <string name="create_order_failed">订单创建失败，购物车已刷新。</string>
+    <string name="create_order_error_cart_empty">购物车为空，请刷新后重试。</string>
+    <string name="create_order_error_wholesaler_invalid">该批发商暂不可用，购物车已刷新。</string>
+    <string name="create_order_error_shipping_address_missing">缺少送货地址，请先完善门店地址。</string>
+    <string name="create_order_error_product_unavailable">部分商品已不可用，购物车已刷新。</string>
+    <string name="create_order_error_variant_unavailable">部分规格已不可用，购物车已刷新。</string>
+    <string name="create_order_error_quantity_below_min_order">部分商品数量低于最小起订量，购物车已刷新。</string>
+    <string name="create_order_error_not_enough_stock">库存不足，购物车已刷新。</string>
     <string name="cart_subtotal">小计</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">总计</string>

@@ -1,9 +1,6 @@
 import { Controller, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '#/auth/guard/auth.guard.js';
-import { RolesGuard } from '#/common/guards/roles.guard.js';
-import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.js';
-import { UserRole } from '#/generated/drizzle/enums.js';
 import { WriteOrderService } from '#/orders/services/write-order.service.js';
 import { TypedBody } from '#/utils/typia/typed-body.typia.js';
 import {
@@ -15,8 +12,7 @@ import { TypedRoute } from '@nestia/core';
 
 @ApiTags('Orders')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
-@RolesAllowed(UserRole.RETAILER)
+@UseGuards(JwtAuthGuard)
 @Controller()
 export class WriteOrderController {
   constructor(private readonly writeOrderService: WriteOrderService) {}
@@ -29,6 +25,10 @@ export class WriteOrderController {
     @TypedBody(validateCreateOrder) dto: ICreateOrderDto,
     @Req() req: FastifyRequest,
   ) {
-    return this.writeOrderService.createFromCart(req.user.userId, dto);
+    return this.writeOrderService.createFromCart(
+      req.user.userId,
+      dto,
+      req.ability,
+    );
   }
 }

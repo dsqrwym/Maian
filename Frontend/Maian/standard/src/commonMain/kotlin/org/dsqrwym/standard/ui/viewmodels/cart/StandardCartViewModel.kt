@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.*
+import maian.standard.generated.resources.*
 import org.dsqrwym.shared.data.profile.SharedWholesalerProfileRepository
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
@@ -16,7 +17,10 @@ import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.standard.data.cart.StandardCartRepository
+import org.dsqrwym.standard.data.order.StandardOrderRepository
 import org.dsqrwym.standard.domain.cart.Cart
+import org.dsqrwym.standard.domain.cart.CartGroup
+import org.dsqrwym.standard.domain.cart.CartGroupStatus
 import org.dsqrwym.standard.domain.cart.CartItem
 import org.dsqrwym.standard.domain.cart.CartWholesaler
 import org.dsqrwym.standard.domain.browse.toRetailWholesaler
@@ -31,6 +35,7 @@ data class StandardCartUiState(
     val updatingCartDetailId: String? = null,
     val deletingCartDetailId: String? = null,
     val deletingWholesalerId: String? = null,
+    val creatingOrderWholesalerId: String? = null,
     val selectingWholesalerId: String? = null,
     val activeWholesalerId: String? = null,
     val activeWholesalerName: String? = null,
@@ -56,6 +61,7 @@ data class StandardCartUiState(
 
 class StandardCartViewModel(
     private val repository: StandardCartRepository,
+    private val orderRepository: StandardOrderRepository,
     private val wholesalerProfileRepository: SharedWholesalerProfileRepository,
     private val mySnackbarViewModel: MySnackbarViewModel,
 ) : ViewModel() {
@@ -204,6 +210,39 @@ class StandardCartViewModel(
         }
     }
 
+    fun createOrderFromCart(group: CartGroup) {
+        val wholesalerId = group.wholesaler.id.trim()
+        if (wholesalerId.isBlank()) return
+        if (group.status != CartGroupStatus.AVAILABLE) return
+        if (uiState.isContentRefreshing || uiState.creatingOrderWholesalerId != null) return
+        if (uiState.isDeletingWholesaler(wholesalerId) || uiState.selectingWholesalerId == wholesalerId) return
+        if (group.items.any { uiState.isMutating(it.cartDetailId) }) return
+
+        viewModelScope.launch {
+            uiState = uiState.copy(creatingOrderWholesalerId = wholesalerId)
+            when (val result = orderRepository.createOrderFromCart(wholesalerId)) {
+                is SharedResponseResult.Success -> {
+                    mySnackbarViewModel.showSuccess(getString(StandardRes.string.create_order_success))
+                    loadCartInternal(
+                        refreshing = false,
+                        backgroundRefreshing = uiState.cart != null,
+                        showLoadError = false,
+                    )
+                }
+
+                is SharedResponseResult.Error -> {
+                    loadCartInternal(
+                        refreshing = false,
+                        backgroundRefreshing = uiState.cart != null,
+                        showLoadError = false,
+                    )
+                    mySnackbarViewModel.showError(createOrderErrorMessage(result))
+                }
+            }
+            uiState = uiState.copy(creatingOrderWholesalerId = null)
+        }
+    }
+
     fun enterWholesalerScope(wholesaler: CartWholesaler) {
         val wholesalerId = wholesaler.id.trim()
         if (wholesalerId.isBlank() || uiState.selectingWholesalerId == wholesalerId) return
@@ -230,6 +269,7 @@ class StandardCartViewModel(
     private suspend fun loadCartInternal(
         refreshing: Boolean,
         backgroundRefreshing: Boolean = false,
+        showLoadError: Boolean = true,
     ) {
         uiState = uiState.copy(
             loadState = if ((refreshing || backgroundRefreshing) && uiState.cart != null) {
@@ -256,7 +296,9 @@ class StandardCartViewModel(
 
             is SharedResponseResult.Error -> {
                 val message = result.message ?: getString(SharedRes.string.load_failed)
-                mySnackbarViewModel.showError(message)
+                if (showLoadError) {
+                    mySnackbarViewModel.showError(message)
+                }
                 uiState = uiState.copy(
                     loadState = if (uiState.cart == null) UiState.Error else uiState.loadState,
                     isRefreshing = false,
@@ -265,6 +307,23 @@ class StandardCartViewModel(
                 lastLoadedLanguageCode = null
                 lastLoadedWholesalerId = null
             }
+        }
+    }
+
+    private suspend fun createOrderErrorMessage(result: SharedResponseResult.Error): String {
+        if (SharedResponseResult.shouldShowToUser(result.type)) {
+            return result.message ?: getString(StandardRes.string.create_order_failed)
+        }
+
+        return when (result.message?.trim()) {
+            "CART_EMPTY" -> getString(StandardRes.string.create_order_error_cart_empty)
+            "WHOLESALER_NOT_FOUND_OR_INVALID" -> getString(StandardRes.string.create_order_error_wholesaler_invalid)
+            "SHIPPING_ADDRESS_NOT_FOUND" -> getString(StandardRes.string.create_order_error_shipping_address_missing)
+            "PRODUCT_NOT_AVAILABLE" -> getString(StandardRes.string.create_order_error_product_unavailable)
+            "VARIANT_NOT_AVAILABLE" -> getString(StandardRes.string.create_order_error_variant_unavailable)
+            "QUANTITY_BELOW_MIN_ORDER" -> getString(StandardRes.string.create_order_error_quantity_below_min_order)
+            "NOT_ENOUGH_STOCK" -> getString(StandardRes.string.create_order_error_not_enough_stock)
+            else -> getString(StandardRes.string.create_order_failed)
         }
     }
 }

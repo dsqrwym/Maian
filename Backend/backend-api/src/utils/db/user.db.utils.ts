@@ -5,6 +5,7 @@ import { BadRequestException } from '@nestjs/common';
 import { IMAGE_MIME_TYPES } from '#/config/fastify-multipart.config.js';
 import type { UserRole } from '#/generated/drizzle/enums.js';
 import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
+import type { AnyPgColumn } from 'drizzle-orm/pg-core';
 
 /**
  * 验证并检查文件是否为正确类型以及属于当前用户
@@ -70,7 +71,7 @@ export async function checkUserTaxId(
  * 构建 wholesaler profile 的字段获取
  * @param profile
  */
-export function buildWholesalerProfileExpr(profile: typeof users.profile) {
+export function buildWholesalerProfileExpr(profile: AnyPgColumn) {
   return {
     companyTypeExpr: sql<string>`${profile}->>'company_type'`,
     companyNameExpr: sql<string>`${profile}->>'company_name'`,
@@ -93,4 +94,19 @@ export function buildWholesalerProfileExpr(profile: typeof users.profile) {
   } as const;
 }
 
-export function buildRetailerProfileExpr(profile: typeof users.profile) {}
+/**
+ * 零售商的 profile 字段获取
+ * @param profile
+ */
+export function buildRetailerProfileExpr(profile: AnyPgColumn) {
+  return {
+    companyTypeExpr: sql<string>`${profile}->>'company_type'`,
+    companyNameExpr: sql<string>`${profile}->>'company_name'`,
+    displayNameExpr: sql<
+      string | null | undefined
+    >`${profile}->>'display_name'`,
+    contactNameExpr: sql<
+      string | null | undefined
+    >`${profile}->>'contact_name'`,
+  } as const;
+}

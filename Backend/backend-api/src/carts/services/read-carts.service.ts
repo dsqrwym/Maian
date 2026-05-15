@@ -6,23 +6,28 @@ import { ICartsQueryDto } from '#/carts/dto/carts-query.dto.js';
 import {
   cart_details,
   carts,
-  files,
   product_translations,
   products,
-  products_files,
   users,
   variant_products,
 } from '#/generated/drizzle/schema.js';
-import { and, asc, desc, eq, like, SQL, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, SQL, sql } from 'drizzle-orm';
 import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
-import { ProductStatus, UserStatus } from '#/generated/drizzle/enums.js';
+import { ProductStatus } from '#/generated/drizzle/enums.js';
 import { Decimal } from 'decimal.js';
-import { ICartGroup, ICartResponse } from '#/carts/dto/carts-response.dto.js';
+import {
+  ICartGroup,
+  ICartGroupWithoutDecimal,
+  ICartResponse,
+} from '#/carts/dto/carts-response.dto.js';
 import {
   CART_GROUP_STATUS,
   CART_ITEM_STATUS,
   CartItemStatus,
 } from '#/carts/cart.constants.js';
+import { MARKETPLACE_VISIBLE_STATUS_SET } from '#/user/user-status.constants.js';
+import { buildWholesalerProfileExpr } from '#/utils/db/user.db.utils.js';
+import { buildMainImgLateral } from '#/utils/db/product.db.utils.js';
 
 @Injectable()
 export class ReadCartsService {
@@ -39,14 +44,8 @@ export class ReadCartsService {
   ): Promise<ICartResponse> {
     const { langCode, wholesaler_id } = query;
 
-    const profile = users.profile;
-    const companyNameExpr = sql<string>`${profile}->>'company_name'`;
-    const displayNameExpr = sql<
-      string | null | undefined
-    >`${profile}->>'display_name'`;
-    const minimumOrderAmountExpr = sql<
-      string | null | undefined
-    >`${profile}->>'minimum_order_amount'`;
+    const { companyNameExpr, displayNameExpr, minimumOrderAmountExpr } =
+      buildWholesalerProfileExpr(users.profile);
 
     const translationsLateral = this.drizzle.db
       .select({
@@ -74,26 +73,7 @@ export class ReadCartsService {
       )
       .as('productTranslationsLateral');
 
-    const mainImgLateral = this.drizzle.db
-      .select({
-        main_image: sql<{ id: string; mime_type: string } | null>`
-      jsonb_build_object(
-        'id', ${files.id},
-        'mime_type', ${files.mime_type}
-      )
-    `.as('main_image'),
-      })
-      .from(products_files)
-      .innerJoin(files, eq(files.id, products_files.file_id))
-      .where(
-        and(
-          eq(products_files.product_id, products.id),
-          like(files.mime_type, 'image/%'),
-        ),
-      )
-      .orderBy(asc(products_files.sort))
-      .limit(1)
-      .as('mainImgLateral');
+    const mainImgLateral = buildMainImgLateral(this.drizzle.db);
 
     let cartsInfoQuery = this.drizzle.db
       .select({
@@ -166,7 +146,7 @@ export class ReadCartsService {
     let summaryIvaTotal = new Decimal(0);
     let summaryTotal = new Decimal(0);
 
-    cartsInfo.forEach((row) => {
+    for (const row of cartsInfo) {
       const wholesalerId = row.wholesaler_id;
       let group = groupMap.get(wholesalerId);
       if (!group) {
@@ -184,9 +164,9 @@ export class ReadCartsService {
           item_count: 0,
           total_quantity: 0,
 
-          subtotal: new Decimal(0).toFixed(2),
-          iva_total: new Decimal(0).toFixed(2),
-          total: new Decimal(0).toFixed(2),
+          subtotal: new Decimal(0),
+          iva_total: new Decimal(0),
+          total: new Decimal(0),
 
           items: [],
         };
@@ -196,12 +176,7 @@ export class ReadCartsService {
 
       // line
       let status: CartItemStatus = CART_ITEM_STATUS.AVAILABLE;
-      if (
-        row.wholesaler_status === UserStatus.BANNED ||
-        row.wholesaler_status === UserStatus.PENDING_VERIFICATION ||
-        row.wholesaler_status === UserStatus.INACTIVE ||
-        row.wholesaler_status === UserStatus.PENDING_REVIEW
-      ) {
+      if (!MARKETPLACE_VISIBLE_STATUS_SET.has(row.wholesaler_status)) {
         status = CART_ITEM_STATUS.WHOLESALER_UNAVAILABLE;
       } else if (row.product_status !== ProductStatus.ACTIVE) {
         status = CART_ITEM_STATUS.PRODUCT_INACTIVE;
@@ -216,12 +191,19 @@ export class ReadCartsService {
         row.available_stock / row.sale_unit_qty,
       );
       const quantity = new Decimal(row.quantity);
+      const ivaRate = new Decimal(row.product_iva).div(100);
+      // 数据库是 14,6 的
       const unitPrice = new Decimal(row.price);
       const unitPriceIva = new Decimal(row.price_iva);
-
-      const lineSubtotal = quantity.mul(unitPrice);
-      const lineTotal = quantity.mul(unitPriceIva);
-      const lineIva = lineTotal.minus(lineSubtotal);
+      // 财务原则：不含税单价 * 数量 = 行小计 Round 2
+      const lineSubtotal = quantity
+        .mul(unitPrice)
+        .toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
+      // 财务原则：行小计 * 税率 = 行税额 Round 2
+      const lineIva = lineSubtotal
+        .mul(ivaRate)
+        .toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
+      const lineTotal = lineSubtotal.plus(lineIva);
 
       let productName = row.product_name;
       let productTitle = row.product_title;
@@ -254,8 +236,8 @@ export class ReadCartsService {
         min_order_qty: row.min_order_qty,
         max_order_quantity,
 
-        price: row.price,
-        price_iva: row.price_iva,
+        price: unitPrice.toFixed(2),
+        price_iva: unitPriceIva.toFixed(2),
         iva: row.product_iva,
 
         line_subtotal: lineSubtotal.toFixed(2),
@@ -270,20 +252,29 @@ export class ReadCartsService {
       group.item_count += 1;
       group.total_quantity += row.quantity;
 
-      group.subtotal = new Decimal(group.subtotal)
-        .plus(lineSubtotal)
-        .toFixed(2);
-      group.iva_total = new Decimal(group.iva_total).plus(lineIva).toFixed(2);
-      group.total = new Decimal(group.total).plus(lineTotal).toFixed(2);
+      group.subtotal = group.subtotal.plus(lineSubtotal);
+      group.iva_total = group.iva_total.plus(lineIva);
+      group.total = group.total.plus(lineTotal);
 
       summaryItemCount += 1;
       summaryTotalQuantity += row.quantity;
       summarySubtotal = summarySubtotal.plus(lineSubtotal);
       summaryIvaTotal = summaryIvaTotal.plus(lineIva);
       summaryTotal = summaryTotal.plus(lineTotal);
-    });
+    }
 
-    const groups = Array.from(groupMap.values());
+    const groups: ICartGroupWithoutDecimal[] = Array.from(
+      groupMap.values(),
+    ).map((g) => ({
+      wholesaler: g.wholesaler,
+      item_count: g.item_count,
+      total_quantity: g.total_quantity,
+      subtotal: g.subtotal.toFixed(2),
+      iva_total: g.iva_total.toFixed(2),
+      total: g.total.toFixed(2),
+      status: g.status,
+      items: g.items,
+    }));
 
     for (const group of groups) {
       const minimumOrderAmount = group.wholesaler.minimum_order_amount;
