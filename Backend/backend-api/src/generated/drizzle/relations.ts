@@ -137,6 +137,9 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   orders_accepted_by: many(orders, {
     relationName: 'orders_accepted_by_users_id',
   }),
+  orders_cancelled_by: many(orders, {
+    relationName: 'orders_cancelled_by_users_id',
+  }),
   orders_rejected_by: many(orders, {
     relationName: 'orders_rejected_by_users_id',
   }),
@@ -373,6 +376,11 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     fields: [orders.accepted_by],
     references: [users.id],
     relationName: 'orders_accepted_by_users_id',
+  }),
+  user_cancelled_by: one(users, {
+    fields: [orders.cancelled_by],
+    references: [users.id],
+    relationName: 'orders_cancelled_by_users_id',
   }),
   user_rejected_by: one(users, {
     fields: [orders.rejected_by],

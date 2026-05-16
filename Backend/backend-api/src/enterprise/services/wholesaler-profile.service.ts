@@ -92,8 +92,20 @@ export class WholesalerProfileService {
   }
 
   async getWholesalerProfile(id: string, ability: AppAbility) {
+    // 检查权限：零售商可以访问任何批发商信息，批发商只能访问自己的信息
+    // 首先尝试基于ID的权限检查（适用于批发商访问自己的情况）
     if (!ability.can(Action.Read, subject('users', { id }))) {
-      throw new ForbiddenException('You are not allowed to read this profile');
+      // 如果基于ID的检查失败，尝试基于角色的权限检查（适用于零售商访问批发商的情况）
+      if (
+        !ability.can(
+          Action.Read,
+          subject('users', { role: UserRole.WHOLESALER }),
+        )
+      ) {
+        throw new ForbiddenException(
+          'You are not allowed to read this profile',
+        );
+      }
     }
 
     const wholesalerProfile = await this.drizzle.db.query.users.findFirst({

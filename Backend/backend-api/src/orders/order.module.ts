@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DrizzleModule } from '#/drizzle/drizzle.module.js';
-import { WriteOrderController } from '#/orders/controllers/write-cart.controller.js';
+import { WriteOrderController } from '#/orders/controllers/write-order.controller.js';
 import { WriteOrderService } from '#/orders/services/write-order.service.js';
 
 @Module({

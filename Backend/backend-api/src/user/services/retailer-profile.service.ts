@@ -30,10 +30,16 @@ export class RetailerProfileService {
     dto: IUpdateRetailerProfileDto,
     ability: AppAbility,
   ) {
-    if (!ability.can(Action.Update, subject('users', { id }))) {
-      throw new ForbiddenException(
-        'You are not allowed to update this profile',
-      );
+    // 检查权限：批发商可以访问任何零售商信息，零售商只能访问自己的信息
+    if (!ability.can(Action.Read, subject('users', { id }))) {
+      // 如果基于ID的检查失败，尝试基于角色的权限检查
+      if (
+        !ability.can(Action.Read, subject('users', { role: UserRole.RETAILER }))
+      ) {
+        throw new ForbiddenException(
+          'You are not allowed to read this profile',
+        );
+      }
     }
 
     const {

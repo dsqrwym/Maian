@@ -357,8 +357,8 @@ export const variant_products = pgTable(
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     product_id: bigint({ mode: 'bigint' }).notNull(),
     type_sale: SaleVariant().notNull(),
-    price: numeric({ precision: 10, scale: 2 }).notNull(),
-    price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
+    price: numeric({ precision: 14, scale: 6 }).notNull(),
+    price_iva: numeric({ precision: 14, scale: 6 }).notNull(),
     available_stock: integer().notNull(),
     sort: smallint().notNull(),
     attributes: jsonb(),
@@ -1049,6 +1049,67 @@ export const cart_details = pgTable(
   ],
 );
 
+export const order_details = pgTable(
+  'order_details',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity({
+      name: 'order_details_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    order_id: bigint({ mode: 'bigint' }).notNull(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    product_id: bigint({ mode: 'bigint' }),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    variant_product_id: bigint({ mode: 'bigint' }),
+    product_name: varchar({ length: 100 }).notNull(),
+    product_title: varchar({ length: 150 }),
+    product_code: varchar({ length: 50 }).notNull(),
+    variant_product_code: varchar({ length: 50 }).notNull(),
+    product_translations_snapshot: jsonb().default([]).notNull(),
+    variant_attributes_snapshot: jsonb().default({}).notNull(),
+    type_sale: SaleVariant().notNull(),
+    sale_unit_qty: integer().notNull(),
+    quantity: integer().notNull(),
+    unit_price: numeric({ precision: 14, scale: 6 }).notNull(),
+    unit_price_iva: numeric({ precision: 14, scale: 6 }).notNull(),
+    iva: numeric({ precision: 5, scale: 2 }).notNull(),
+    subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
+    iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
+    total: numeric({ precision: 20, scale: 2 }).notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.order_id],
+      foreignColumns: [orders.id],
+      name: 'order_details_order_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.product_id],
+      foreignColumns: [products.id],
+      name: 'order_details_product_id_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.variant_product_id],
+      foreignColumns: [variant_products.id],
+      name: 'order_details_variant_product_id_fkey',
+    }).onDelete('set null'),
+    check(
+      'order_details_amounts_check',
+      sql`(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)`,
+    ),
+    check('order_details_quantity_check', sql`quantity >= 1`),
+    check('order_details_sale_unit_qty_check', sql`sale_unit_qty >= 1`),
+  ],
+);
+
 export const orders = pgTable(
   'orders',
   {
@@ -1089,6 +1150,8 @@ export const orders = pgTable(
     updated_at: timestamp({ mode: 'string' }).default(
       sql`(now() AT TIME ZONE 'utc'::text)`,
     ),
+    cancelled_by: uuid(),
+    cancelled_reason: varchar({ length: 500 }),
   },
   (table) => [
     index('idx_orders_order_number').using(
@@ -1115,6 +1178,11 @@ export const orders = pgTable(
       columns: [table.accepted_by],
       foreignColumns: [users.id],
       name: 'orders_accepted_by_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.cancelled_by],
+      foreignColumns: [users.id],
+      name: 'orders_cancelled_by_fkey',
     }).onDelete('set null'),
     foreignKey({
       columns: [table.rejected_by],
@@ -1159,67 +1227,6 @@ export const orders = pgTable(
       'orders_year_check',
       sql`(order_year >= 2000) AND (order_year <= 9999)`,
     ),
-  ],
-);
-
-export const order_details = pgTable(
-  'order_details',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity({
-      name: 'order_details_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    order_id: bigint({ mode: 'bigint' }).notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    product_id: bigint({ mode: 'bigint' }),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    variant_product_id: bigint({ mode: 'bigint' }),
-    product_name: varchar({ length: 100 }).notNull(),
-    product_title: varchar({ length: 150 }),
-    product_code: varchar({ length: 50 }).notNull(),
-    variant_product_code: varchar({ length: 50 }).notNull(),
-    product_translations_snapshot: jsonb().default([]).notNull(),
-    variant_attributes_snapshot: jsonb().default({}).notNull(),
-    type_sale: SaleVariant().notNull(),
-    sale_unit_qty: integer().notNull(),
-    quantity: integer().notNull(),
-    unit_price: numeric({ precision: 10, scale: 2 }).notNull(),
-    unit_price_iva: numeric({ precision: 10, scale: 2 }).notNull(),
-    iva: numeric({ precision: 5, scale: 2 }).notNull(),
-    subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
-    iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
-    total: numeric({ precision: 20, scale: 2 }).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.order_id],
-      foreignColumns: [orders.id],
-      name: 'order_details_order_id_fkey',
-    }).onDelete('cascade'),
-    foreignKey({
-      columns: [table.product_id],
-      foreignColumns: [products.id],
-      name: 'order_details_product_id_fkey',
-    }).onDelete('set null'),
-    foreignKey({
-      columns: [table.variant_product_id],
-      foreignColumns: [variant_products.id],
-      name: 'order_details_variant_product_id_fkey',
-    }).onDelete('set null'),
-    check(
-      'order_details_amounts_check',
-      sql`(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)`,
-    ),
-    check('order_details_min_order_qty_check', sql`min_order_qty >= 1`),
-    check('order_details_quantity_check', sql`quantity >= 1`),
   ],
 );
 

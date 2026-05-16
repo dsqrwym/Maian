@@ -54,7 +54,7 @@ export class CaslAbilityFactory {
         can(Action.Read, 'products_files');
         // 只能创建，更新订单状态，查看订单
         can(Action.Create, 'orders');
-        can(Action.Update, 'orders', { wholesaler_id: user.userId });
+        can(Action.Update, 'orders', { retailer_id: user.userId });
         can(Action.Read, 'orders', { retailer_id: user.userId });
 
         break;

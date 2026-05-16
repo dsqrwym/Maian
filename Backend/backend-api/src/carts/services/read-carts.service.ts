@@ -136,7 +136,12 @@ export class ReadCartsService {
 
     const cartsInfo = await cartsInfoQuery
       .where(and(...whereConditions))
-      .orderBy(desc(carts.updated_at), asc(cart_details.created_at));
+      .orderBy(
+        desc(carts.updated_at),
+        desc(cart_details.updated_at),
+        asc(products.product_code),
+        asc(variant_products.product_code),
+      );
 
     const groupMap = new Map<string, ICartGroup>();
 
