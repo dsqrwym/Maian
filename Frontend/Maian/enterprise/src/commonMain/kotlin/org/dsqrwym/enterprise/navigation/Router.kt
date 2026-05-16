@@ -13,6 +13,8 @@ val EnterpriseSerializersModule = SerializersModule {
         subclass(Products::class, Products.serializer())
         subclass(ProductCreate::class, ProductCreate.serializer())
         subclass(ProductEdit::class, ProductEdit.serializer())
+        subclass(OrderHistory::class, OrderHistory.serializer())
+        subclass(OrderDetail::class, OrderDetail.serializer())
         subclass(WholesalerProfileEdit::class, WholesalerProfileEdit.serializer())
     }
     include(BusinessNavSerializersModule)
@@ -33,6 +35,14 @@ object ProductCreate : NavKey
 @Serializable
 @SerialName("Product-Edit")
 data class ProductEdit(val id: String) : NavKey
+
+@Serializable
+@SerialName("Order-History")
+object OrderHistory : NavKey
+
+@Serializable
+@SerialName("Order-Detail")
+data class OrderDetail(val orderId: String) : NavKey
 
 @Serializable
 @SerialName("WholesalerProfileEdit")

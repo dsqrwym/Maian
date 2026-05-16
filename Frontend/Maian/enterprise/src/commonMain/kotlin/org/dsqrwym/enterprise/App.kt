@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.dsqrwym.enterprise.navigation.EnterpriseSerializersModule
+import org.dsqrwym.enterprise.navigation.OrderDetail
+import org.dsqrwym.enterprise.navigation.OrderHistory
 import org.dsqrwym.enterprise.navigation.ProductCreate
 import org.dsqrwym.enterprise.navigation.ProductEdit
 import org.dsqrwym.enterprise.navigation.naventry.authNavEntry
@@ -27,8 +29,10 @@ import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
+import org.dsqrwym.shared.ui.components.order.OrderDetailPlaceholderScreen
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
+import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderHistoryScreen
 import org.koin.compose.currentKoinScope
 
 /**
@@ -109,6 +113,22 @@ fun App() {
                                     onNavigateBack = {
                                         navigationState.pop()
                                     }
+                                )
+                            }
+
+                            entry<OrderHistory> {
+                                EnterpriseOrderHistoryScreen(
+                                    userRole = user.userRole,
+                                    onOrderClick = { orderId ->
+                                        navigationState.navigate(OrderDetail(orderId))
+                                    },
+                                )
+                            }
+
+                            entry<OrderDetail> { route ->
+                                OrderDetailPlaceholderScreen(
+                                    orderId = route.orderId,
+                                    onNavigateBack = { navigationState.pop() },
                                 )
                             }
 

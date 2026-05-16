@@ -1,6 +1,7 @@
 package org.dsqrwym.standard
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.ShoppingCart
@@ -14,6 +15,7 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.categories
+import maian.shared.generated.resources.orders
 import maian.shared.generated.resources.products
 import maian.shared.generated.resources.wholesalers
 import maian.standard.generated.resources.*
@@ -53,6 +55,8 @@ fun App() {
                 subclass(RegisterScreen::class)
                 subclass(ProductsScreen::class)
                 subclass(CategoriesScreen::class)
+                subclass(OrderHistoryScreen::class)
+                subclass(OrderDetailScreen::class)
                 subclass(CategoryBrowseRoute::class)
                 subclass(WholesalersScreen::class)
                 subclass(CartScreen::class)
@@ -122,6 +126,15 @@ fun App() {
                             icon = Icons.Outlined.ShoppingCart,
                             iconContentDescription = StandardRes.string.shopping_cart,
                             isPrimary = true,
+                        )
+                    ),
+                    SharedMenuItemState(
+                        SharedMenuItem(
+                            route = OrderHistoryScreen,
+                            label = SharedRes.string.orders,
+                            icon = Icons.AutoMirrored.Outlined.ReceiptLong,
+                            iconContentDescription = SharedRes.string.orders,
+                            isPrimary = false,
                         )
                     ),
                     SharedMenuItemState(SharedMenuItem.Profile),

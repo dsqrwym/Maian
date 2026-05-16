@@ -1,4 +1,4 @@
-package org.dsqrwym.standard.data.order
+package org.dsqrwym.enterprise.data.order
 
 import org.dsqrwym.shared.data.SharedObservableRepository
 import org.dsqrwym.shared.data.orders.OrderHistoryRepository
@@ -9,34 +9,37 @@ import org.dsqrwym.shared.network.model.ApiResponseList
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
-import org.dsqrwym.standard.data.order.dto.CreateOrderFromCartRequest
 
-class StandardOrderRepository(
-    private val orderApi: StandardOrderApi,
-    private val sharedOrderApi: SharedOrderApi,
+class EnterpriseOrderRepository(
+    private val orderApi: SharedOrderApi,
 ) : SharedObservableRepository(), OrderHistoryRepository {
     override suspend fun getOrders(query: SharedFindOrderDto): SharedResponseResult<ApiResponseList<SharedOrderSummary>> =
         withAuthOrError {
             safeApiCall {
-                sharedOrderApi.getRetailerOrders(query)
+                orderApi.getWholesalerOrders(query)
             }
         }
 
-    suspend fun createOrderFromCart(wholesalerId: String): SharedResponseResult<Unit> =
+    suspend fun acceptOrder(id: String): SharedResponseResult<Unit> =
         withAuthOrError {
             safeApiCall {
-                orderApi.createOrderFromCart(
-                    CreateOrderFromCartRequest(wholesalerId = wholesalerId.trim())
-                )
+                orderApi.acceptOrder(id.trim())
             }.notifyUpdated()
         }
 
-    suspend fun cancelOrder(id: String, reason: String?): SharedResponseResult<Unit> =
+    suspend fun rejectOrder(id: String, reason: String): SharedResponseResult<Unit> =
         withAuthOrError {
             safeApiCall {
-                sharedOrderApi.cancelOrder(
+                orderApi.rejectOrder(id.trim(), reason.trim())
+            }.notifyUpdated()
+        }
+
+    suspend fun updateEstimatedDeliveryDate(id: String, estimatedDeliveryDate: String?): SharedResponseResult<Unit> =
+        withAuthOrError {
+            safeApiCall {
+                orderApi.updateEstimatedDeliveryDate(
                     id = id.trim(),
-                    reason = reason?.trim()?.takeIf { it.isNotEmpty() },
+                    estimatedDeliveryDate = estimatedDeliveryDate,
                 )
             }.notifyUpdated()
         }

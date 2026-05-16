@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.di
 
+import org.dsqrwym.shared.data.orders.SharedOrderApi
 import org.dsqrwym.shared.network.HttpClientProvider
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.koin.dsl.module
@@ -19,4 +20,5 @@ val sharedModule = module {
         // 负责跨平台 Snackbar 消息的 ViewModel
         MySnackbarViewModel()
     }
+    single { SharedOrderApi(get()) }
 }

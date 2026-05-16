@@ -33,15 +33,6 @@ import org.dsqrwym.standard.domain.cart.CartGroupStatus
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun cartGroupBorderColor(status: CartGroupStatus) =
-    when (status) {
-        CartGroupStatus.AVAILABLE -> MaterialTheme.colorScheme.outlineVariant
-        CartGroupStatus.HAS_INVALID_ITEMS -> MaterialTheme.colorScheme.tertiary
-        CartGroupStatus.BELOW_MINIMUM_ORDER_AMOUNT,
-        CartGroupStatus.UNKNOWN -> MaterialTheme.colorScheme.error
-    }
-
-@Composable
 internal fun CartGroupActionRow(
     group: CartGroup,
     isClearingWholesaler: Boolean,

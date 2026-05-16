@@ -34,17 +34,15 @@ internal fun CartItemRow(
     val hasProblem = item.status != CartItemStatus.AVAILABLE
     val tone = item.statusTone()
 
-    Surface(
+    OutlinedCard(
         modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.small,
-        color = if (hasProblem) {
-            tone.containerColor().copy(alpha = 0.28f)
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
-        },
-        border = BorderStroke(
-            0.5.dp,
-            if (hasProblem) tone.contentColor().copy(alpha = 0.30f) else MaterialTheme.colorScheme.outlineVariant,
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = if (hasProblem) {
+                tone.containerColor().copy(alpha = 0.28f)
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+            },
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
     ) {
         Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {

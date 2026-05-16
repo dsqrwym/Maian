@@ -4,6 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import org.dsqrwym.shared.navigation.SharedProfileScreen
+import org.dsqrwym.shared.ui.components.order.OrderDetailPlaceholderScreen
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 import org.dsqrwym.standard.domain.browse.BrowseScope
@@ -12,6 +13,8 @@ import org.dsqrwym.standard.domain.browse.toCardData
 import org.dsqrwym.standard.navigation.CartScreen
 import org.dsqrwym.standard.navigation.CategoriesScreen
 import org.dsqrwym.standard.navigation.CategoryBrowseRoute
+import org.dsqrwym.standard.navigation.OrderDetailScreen
+import org.dsqrwym.standard.navigation.OrderHistoryScreen
 import org.dsqrwym.standard.navigation.ProductDetailScreen
 import org.dsqrwym.standard.navigation.ProductsScreen
 import org.dsqrwym.standard.navigation.RetailerProfileEdit
@@ -20,6 +23,7 @@ import org.dsqrwym.standard.navigation.WholesalersScreen
 import org.dsqrwym.standard.ui.screens.browse.CategoryBrowseScreen
 import org.dsqrwym.standard.ui.screens.browse.product.ProductBrowseScreen
 import org.dsqrwym.standard.ui.screens.cart.StandardCartScreen
+import org.dsqrwym.standard.ui.screens.order.StandardOrderHistoryScreen
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
 import org.dsqrwym.standard.domain.browse.toRetailWholesaler
 import org.dsqrwym.standard.ui.screens.browse.product.ProductDetailScreen as ProductDetailContent
@@ -114,6 +118,21 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
                 navigationState.navigate(ProductDetailScreen(productId))
             },
             onExitWholesalerScope = BrowseScopeStore::clearWholesaler,
+        )
+    }
+
+    entry<OrderHistoryScreen> {
+        StandardOrderHistoryScreen(
+            onOrderClick = { orderId ->
+                navigationState.navigate(OrderDetailScreen(orderId))
+            },
+        )
+    }
+
+    entry<OrderDetailScreen> { route ->
+        OrderDetailPlaceholderScreen(
+            orderId = route.orderId,
+            onNavigateBack = { navigationState.pop() },
         )
     }
 

@@ -25,6 +25,14 @@ object WholesalersScreen : NavKey
 object CartScreen : NavKey
 
 @Serializable
+@SerialName("order_history")
+object OrderHistoryScreen : NavKey
+
+@Serializable
+@SerialName("order_detail")
+data class OrderDetailScreen(val orderId: String) : NavKey
+
+@Serializable
 @SerialName("category_browse")
 data class CategoryBrowseRoute(
     val id: String,

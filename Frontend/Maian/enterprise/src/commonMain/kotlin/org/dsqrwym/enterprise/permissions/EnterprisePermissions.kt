@@ -10,3 +10,6 @@ fun UserRole.canManageEnterpriseCategories(): Boolean =
 
 fun UserRole.canEditEnterpriseProfile(): Boolean =
     this == UserRole.WHOLESALER
+
+fun UserRole.canUpdateEnterpriseOrders(): Boolean =
+    this == UserRole.WHOLESALER || this == UserRole.SUPPORT || this == UserRole.WAREHOUSE

@@ -81,4 +81,16 @@ object ApiConfig {
         const val PRODUCT = "${BASE_URL}/product"
         fun product(id: String) = "${PRODUCT}/$id"
     }
+
+    object OrderPath {
+        const val ORDERS = "${BASE_URL}/orders"
+        const val RETAILER = "${ORDERS}/retailer"
+        const val WHOLESALER = "${ORDERS}/wholesaler"
+        const val FROM_CART = "${ORDERS}/from-cart"
+
+        fun cancel(id: String) = "${ORDERS}/$id/cancel"
+        fun reject(id: String) = "${ORDERS}/$id/reject"
+        fun accept(id: String) = "${ORDERS}/$id/accept"
+        fun estimatedDeliveryDate(id: String) = "${ORDERS}/$id/estimated-delivery-date"
+    }
 }

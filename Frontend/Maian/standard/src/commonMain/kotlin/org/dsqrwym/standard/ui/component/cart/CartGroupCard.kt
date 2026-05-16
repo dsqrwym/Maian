@@ -1,6 +1,5 @@
 package org.dsqrwym.standard.ui.component.cart
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,14 +41,9 @@ internal fun CartGroupCard(
         updatingCartDetailId == it.cartDetailId || deletingCartDetailId == it.cartDetailId
     }
     val isGroupMutating = isClearingWholesaler || isCreatingOrder || isSelectingScope || isGroupItemMutating
-    val borderColor = cartGroupBorderColor(group.status)
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
-        border = BorderStroke(
-            width = if (group.status == CartGroupStatus.AVAILABLE) 0.5.dp else 1.dp,
-            color = borderColor.copy(alpha = 0.70f),
-        ),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -108,10 +102,6 @@ internal fun CartSingleWholesalerHeaderCard(
 ) {
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
-        border = BorderStroke(
-            width = if (group.status == CartGroupStatus.AVAILABLE) 0.5.dp else 1.dp,
-            color = cartGroupBorderColor(group.status).copy(alpha = 0.70f),
-        ),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -181,7 +171,6 @@ internal fun CartSingleWholesalerFooterCard(
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
-        border = BorderStroke(0.5.dp, cartGroupBorderColor(group.status).copy(alpha = 0.70f)),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
