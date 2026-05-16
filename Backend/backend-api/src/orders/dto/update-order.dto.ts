@@ -1,8 +1,9 @@
 import typia from 'typia';
 import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
+import type { TagsDate } from '#/utils/typia/validators/date.validator.js';
 
 export interface IUpdateOrderDto {
-  estimatedDeliveryDate: (string & typia.tags.Format<'date'>) | null;
+  estimatedDeliveryDate: TagsDate | null;
 }
 
 export const validateIUpdateOrderFunction =

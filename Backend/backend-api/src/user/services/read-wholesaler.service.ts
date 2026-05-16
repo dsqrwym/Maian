@@ -30,7 +30,10 @@ import { PinoLogger } from 'nestjs-pino';
 import { WholesalerSortField } from '#/user/user.enums.js';
 import { OrderByEnum } from '#/common/enums/sort.enum.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
-import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
+import {
+  SQL_IMMUTABLE_UNACCENT,
+  SQL_TRUE,
+} from '#/drizzle/drizzle.constants.js';
 import { buildWholesalerProfileExpr } from '#/utils/db/user.db.utils.js';
 import { MARKETPLACE_VISIBLE_STATUSES } from '#/user/user-status.constants.js';
 
@@ -160,24 +163,21 @@ export class ReadWholesalerService {
         whereConditions.push(
           or(
             ilike(users.user_id, pattern),
-            ilike(sql`immutable_unaccent(${displayNameExpr})`, pattern),
-            ilike(sql`immutable_unaccent(${companyNameExpr})`, pattern),
-            ilike(sql`immutable_unaccent(${descriptionExpr})`, pattern),
-            ilike(sql`immutable_unaccent(${minimumOrderAmountExpr})`, pattern),
+            ilike(SQL_IMMUTABLE_UNACCENT(displayNameExpr), pattern),
+            ilike(SQL_IMMUTABLE_UNACCENT(companyNameExpr), pattern),
+            ilike(SQL_IMMUTABLE_UNACCENT(descriptionExpr), pattern),
+            ilike(SQL_IMMUTABLE_UNACCENT(minimumOrderAmountExpr), pattern),
+            ilike(SQL_IMMUTABLE_UNACCENT(directionLateral.city_name), pattern),
             ilike(
-              sql`immutable_unaccent(${directionLateral.city_name})`,
+              SQL_IMMUTABLE_UNACCENT(directionLateral.city_name_local),
               pattern,
             ),
             ilike(
-              sql`immutable_unaccent(${directionLateral.city_name_local})`,
+              SQL_IMMUTABLE_UNACCENT(directionLateral.province_name),
               pattern,
             ),
             ilike(
-              sql`immutable_unaccent(${directionLateral.province_name})`,
-              pattern,
-            ),
-            ilike(
-              sql`immutable_unaccent(${directionLateral.province_name_local})`,
+              SQL_IMMUTABLE_UNACCENT(directionLateral.province_name_local),
               pattern,
             ),
           ),

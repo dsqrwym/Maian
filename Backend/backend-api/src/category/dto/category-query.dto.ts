@@ -6,8 +6,9 @@ import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
-import type { OrderByEnum } from '#/common/enums/sort.enum.js';
 import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
+
+import type { TagsSortOrder } from '#/utils/typia/validators/sort.validator.js';
 
 export interface ICategoryQueryDto extends IPaginationQueryDto {
   search?: string & tags.Example<'Keywords for name search'>; // 用于 name 和 lang 模糊搜索
@@ -38,7 +39,7 @@ export interface ICategoryQueryDto extends IPaginationQueryDto {
 
   sort_by?: 'level';
 
-  sort_order?: OrderByEnum & tags.Example<'asc'>;
+  sort_order?: TagsSortOrder;
 }
 export const validateCategoryQueryFunction =
   typia.http.createAssertQuery<ICategoryQueryDto>();

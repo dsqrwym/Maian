@@ -1,9 +1,10 @@
 import { alias } from 'drizzle-orm/pg-core';
-import { users } from '#/generated/drizzle/schema.js';
+import { orders, users } from '#/generated/drizzle/schema.js';
 import {
   buildRetailerProfileExpr,
   buildWholesalerProfileExpr,
 } from '#/utils/db/user.db.utils.js';
+import { sql } from 'drizzle-orm';
 
 export const ORDER_ERRORS = {
   WHOLESALER_NOT_FOUND_OR_INVALID: 'WHOLESALER_NOT_FOUND_OR_INVALID',
@@ -37,4 +38,51 @@ export const RETAILER_PROFILE = buildRetailerProfileExpr(
 export const WHOLESALER_TABLE = alias(users, 'wholesaler');
 export const WHOLESALER_PROFILE = buildWholesalerProfileExpr(
   WHOLESALER_TABLE.profile,
+);
+export const ORDER_RETAILER_SNAPSHOT = orders.retailer_snapshot;
+export const ORDER_WHOLESALER_SNAPSHOT = orders.wholesaler_snapshot;
+export const SHOPPING_ADDRESS_SNAPSHOT = orders.shipping_address_snapshot;
+export const ORDER_RETAILER_SNAPSHOT_INFO = {
+  retailerUserId: sql<string>`${ORDER_RETAILER_SNAPSHOT}->>'user_id'`,
+  companyNameExpr: sql<
+    string | null | undefined
+  >`${ORDER_RETAILER_SNAPSHOT}->>'company_name'`,
+  displayNameExpr: sql<
+    string | null | undefined
+  >`${ORDER_RETAILER_SNAPSHOT}->>'display_name'`,
+  contactNameExpr: sql<
+    string | null | undefined
+  >`${ORDER_RETAILER_SNAPSHOT}->>'contact_name'`,
+  taxIdExpr: sql<
+    string | null | undefined
+  >`${ORDER_RETAILER_SNAPSHOT}->>'tax_id'`,
+};
+export const ORDER_RETAILER_SNAPSHOT_COLUMNS = Object.values(
+  ORDER_RETAILER_SNAPSHOT_INFO,
+);
+export const ORDER_WHOLESALER_SNAPSHOT_INFO = {
+  wholesalerUserId: sql<string>`${ORDER_WHOLESALER_SNAPSHOT}->>'user_id'`,
+  companyNameExpr: sql<string>`${ORDER_WHOLESALER_SNAPSHOT}->>'company_name'`,
+  displayNameExpr: sql<
+    string | null | undefined
+  >`${ORDER_WHOLESALER_SNAPSHOT}->>'display_name'`,
+  taxIdExpr: sql<
+    string | null | undefined
+  >`${ORDER_WHOLESALER_SNAPSHOT}->>'tax_id'`,
+};
+export const ORDER_WHOLESALER_SNAPSHOT_COLUMNS = Object.values(
+  ORDER_WHOLESALER_SNAPSHOT_INFO,
+);
+export const ORDER_SHOPPING_ADDRESS_SNAPSHOT_INFO = {
+  cityNameExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'city_name'`,
+  cityNameLocalExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'city_name_local'`,
+  provinceName: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'province_name'`,
+  provinceNameLocalExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'province_name_local'`,
+  countryNameExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'country_name'`,
+  countryNameLocalExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'country_name_local'`,
+  zipCodeExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'zip_code'`,
+  streetExpr: sql<string>`${SHOPPING_ADDRESS_SNAPSHOT}->>'street'`,
+};
+export const ORDER_SHOPPING_ADDRESS_SNAPSHOT_COLUMNS = Object.values(
+  ORDER_SHOPPING_ADDRESS_SNAPSHOT_INFO,
 );

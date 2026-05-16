@@ -1,10 +1,10 @@
 import type { IPaginationQueryDto } from '#/utils/dto/pagination.dto.js';
-import type { OrderByEnum } from '#/common/enums/sort.enum.js';
-import type { tags } from 'typia';
 import typia from 'typia';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { UserRole, UserStatus } from '#/generated/drizzle/enums.js';
+
+import type { TagsSortOrder } from '#/utils/typia/validators/sort.validator.js';
 
 export interface IFindUserQueryDto extends IPaginationQueryDto {
   search?: string;
@@ -43,7 +43,7 @@ export interface IFindUserQueryDto extends IPaginationQueryDto {
     | 'telephone'
     | 'cif';
 
-  orderDir?: OrderByEnum & tags.Example<'asc'>;
+  orderDir?: TagsSortOrder;
 }
 
 export const validateFindUserQueryFunction =

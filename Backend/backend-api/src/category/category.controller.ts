@@ -51,13 +51,7 @@ export class CategoryController {
    * @returns {Promise<void>}
    */
   @TypedRoute.Post()
-  @RolesAllowed(
-    UserRole.WHOLESALER,
-    UserRole.DELIVERY,
-    UserRole.SUPPORT,
-    UserRole.WAREHOUSE,
-    ...ADMIN_ROLES,
-  )
+  @RolesAllowed(UserRole.WHOLESALER, UserRole.WAREHOUSE, ...ADMIN_ROLES)
   async create(
     @Req() req: FastifyRequest,
     @TypedBody(validateCreateCategory) createCategoryDto: ICreateCategoryDto,

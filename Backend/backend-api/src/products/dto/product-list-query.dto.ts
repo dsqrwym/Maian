@@ -7,11 +7,11 @@ import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 import type { tags } from 'typia';
 import typia from 'typia';
-import type { OrderByEnum } from '#/common/enums/sort.enum.js';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { ProductStatus } from '#/generated/drizzle/enums.js';
 import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
+import type { TagsSortOrder } from '#/utils/typia/validators/sort.validator.js';
 
 export interface IProductListQueryDto extends IPaginationQueryDto {
   search?: string; // 搜索关键字 (用于 name, title, product_code)
@@ -27,7 +27,7 @@ export interface IProductListQueryDto extends IPaginationQueryDto {
       ['name', 'product_code', 'available_stock', 'price_iva', 'price']
     >;
 
-  sort_order: OrderByEnum & tags.Example<'asc'>;
+  sort_order?: TagsSortOrder;
 
   status?: ProductStatus & tags.Example<'ACTIVE'>;
 

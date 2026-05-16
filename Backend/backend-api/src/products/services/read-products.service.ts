@@ -409,7 +409,7 @@ export class ReadProductsService {
 
     if (sortField) {
       productQuery = productQuery.orderBy(
-        sql`${sortField} ${sql.raw(sort_order)}`,
+        sql`${sortField} ${sql.raw(sort_order ?? 'asc')}`,
       );
     }
 

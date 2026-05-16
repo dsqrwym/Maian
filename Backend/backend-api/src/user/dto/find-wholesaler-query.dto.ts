@@ -1,11 +1,12 @@
 import type { IPaginationQueryDto } from '#/utils/dto/pagination.dto.js';
-import type { OrderByEnum } from '#/common/enums/sort.enum.js';
 import type { tags } from 'typia';
 import typia from 'typia';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { WholesalerSortField } from '../user.enums.js';
 import type { SpanishCompanyType } from '#/auth/dto/register-wholesaler.dto.js';
+
+import type { TagsSortOrder } from '#/utils/typia/validators/sort.validator.js';
 
 export interface IFindWholesalerQueryDto extends IPaginationQueryDto {
   search?: string;
@@ -18,7 +19,7 @@ export interface IFindWholesalerQueryDto extends IPaginationQueryDto {
 
   orderBy?: WholesalerSortField & tags.Example<WholesalerSortField>;
 
-  orderDir?: OrderByEnum & tags.Example<'asc'>;
+  orderDir?: TagsSortOrder;
 }
 
 export const validateWholesalerQueryFunction =
