@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.file_saved_with_name
+import maian.shared.generated.resources.operation_failed
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
 import org.dsqrwym.shared.data.OrderDir
@@ -30,6 +32,7 @@ import org.dsqrwym.shared.data.orders.SharedOrderStatus
 import org.dsqrwym.shared.data.orders.toAmountFilterBounds
 import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfActionResult
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -40,6 +43,7 @@ import org.jetbrains.compose.resources.getString
 
 data class OrderHistoryQueryState(
     val search: String,
+    val wholesalerId: String? = null,
     val status: SharedOrderStatus?,
     val startDate: String?,
     val endDate: String?,
@@ -55,6 +59,11 @@ data class OrderHistoryQueryState(
     val maxItemCount: Int?,
 )
 
+enum class OrderHistoryPdfAction {
+    PREVIEW,
+    DOWNLOAD,
+}
+
 abstract class OrderHistoryViewModel(
     private val repository: OrderHistoryRepository,
     private val mySnackbarHostState: MySnackbarViewModel,
@@ -66,6 +75,8 @@ abstract class OrderHistoryViewModel(
     val pageSize = 20
 
     var searchQuery by mutableStateOf("")
+        private set
+    var wholesalerId by mutableStateOf<String?>(null)
         private set
     var filterStatus by mutableStateOf<SharedOrderStatus?>(null)
         private set
@@ -104,6 +115,8 @@ abstract class OrderHistoryViewModel(
         private set
     var mutatingOrderId by mutableStateOf<String?>(null)
         private set
+    var pdfActionOrderId by mutableStateOf<String?>(null)
+        private set
 
     @OptIn(FlowPreview::class)
     private val orderQuery = combine(
@@ -113,6 +126,7 @@ abstract class OrderHistoryViewModel(
         snapshotFlow {
             OrderHistoryQueryState(
                 search = "",
+                wholesalerId = wholesalerId,
                 status = filterStatus,
                 startDate = startDate,
                 endDate = endDate,
@@ -166,6 +180,10 @@ abstract class OrderHistoryViewModel(
 
     fun updateSearchQuery(query: String) {
         searchQuery = query
+    }
+
+    fun updateWholesalerId(id: String?) {
+        wholesalerId = id
     }
 
     fun updateFilterStatus(status: SharedOrderStatus?) {
@@ -242,12 +260,61 @@ abstract class OrderHistoryViewModel(
         }
     }
 
+    fun viewPdf(order: SharedOrderSummary) {
+        runPdfAction(
+            order = order,
+            action = OrderHistoryPdfAction.PREVIEW,
+            block = { orderId -> repository.previewOrderPdf(orderId) },
+        )
+    }
+
+    fun downloadPdf(order: SharedOrderSummary) {
+        runPdfAction(
+            order = order,
+            action = OrderHistoryPdfAction.DOWNLOAD,
+            block = { orderId -> repository.downloadOrderPdf(orderId) },
+        )
+    }
+
     fun loadFilterMetadata() {
         viewModelScope.launch {
             amountFilterBounds = when (val result = repository.getOrderFilterMetadata()) {
                 is SharedResponseResult.Success -> result.data.toAmountFilterBounds()
                 is SharedResponseResult.Error -> SharedOrderAmountFilterBounds()
             }
+        }
+    }
+
+    private fun runPdfAction(
+        order: SharedOrderSummary,
+        action: OrderHistoryPdfAction,
+        block: suspend (String) -> SharedResponseResult<SharedOrderPdfActionResult>,
+    ) {
+        if (pdfActionOrderId != null) return
+        val orderId = order.id.trim()
+        if (orderId.isEmpty()) return
+        viewModelScope.launch {
+            pdfActionOrderId = orderId
+            when (val result = block(orderId)) {
+                is SharedResponseResult.Success -> {
+                    val actionResult = result.data
+                    if (action == OrderHistoryPdfAction.DOWNLOAD &&
+                        actionResult is SharedOrderPdfActionResult.Completed
+                    ) {
+                        mySnackbarHostState.showSuccess(
+                            getString(
+                                SharedRes.string.file_saved_with_name,
+                                actionResult.fileName.removeSuffix(".pdf"),
+                            )
+                        )
+                    }
+                }
+
+                is SharedResponseResult.Error -> {
+                    showOrderError(result, SharedRes.string.operation_failed)
+                }
+            }
+            pdfActionOrderId = null
         }
     }
 
@@ -279,11 +346,24 @@ abstract class OrderHistoryViewModel(
             mutatingOrderId = null
         }
     }
+
+    private suspend fun showOrderError(
+        result: SharedResponseResult.Error,
+        fallbackMessage: StringResource,
+    ) {
+        if (SharedResponseResult.shouldShowToUser(result.type)) {
+            result.message?.let { mySnackbarHostState.showError(it) }
+                ?: mySnackbarHostState.showError(getString(fallbackMessage))
+        } else {
+            mySnackbarHostState.showError(getString(fallbackMessage))
+        }
+    }
 }
 
 private fun toFindOrderDto(queryState: OrderHistoryQueryState, page: Int, limit: Int): SharedFindOrderDto =
     SharedFindOrderDto(
         search = queryState.search.trim().takeIf { it.isNotEmpty() },
+        wholesalerId = queryState.wholesalerId,
         status = queryState.status,
         startDate = queryState.startDate,
         endDate = queryState.endDate,

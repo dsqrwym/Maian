@@ -63,6 +63,7 @@ object ApiConfig {
         const val UPLOAD_FILE_RAW = "${FILES}/upload-raw"
         const val VIDEO_PLAY_TOKEN = "${FILES}/video/play-token"
         const val VIDEO_STREAM = "${FILES}/video/stream"
+        private const val ORDER_FILE = "${FILES}/order-file"
 
         const val PRODUCT_FILE = "${FILES}/product-file"
         fun productFile(productId: String, fileId: String): String =
@@ -71,6 +72,10 @@ object ApiConfig {
         fun file(fileId: String): String = "${FILES}/$fileId"
 
         fun userImage(userId: String, fileId: String) = "${FILES}/user/$userId/image?file_id=$fileId"
+
+        fun orderFilePreview(orderId: String): String = "${ORDER_FILE}/$orderId/preview"
+
+        fun orderFileDownload(orderId: String): String = "${ORDER_FILE}/$orderId/download"
     }
 
     object CategoryPath {

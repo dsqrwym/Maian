@@ -7,7 +7,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val ordersModule = module {
-    single { EnterpriseOrderRepository(get()) }
+    single { EnterpriseOrderRepository(get(), get()) }
     viewModel<EnterpriseOrderHistoryViewModel> { EnterpriseOrderHistoryViewModel(get(), get()) }
     viewModel<EnterpriseOrderDetailViewModel> { EnterpriseOrderDetailViewModel(get(), get()) }
 }

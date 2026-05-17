@@ -68,7 +68,9 @@ fun OrderHistoryContent(
     rejectDialogOrder: SharedOrderSummary? = null,
     deliveryDateDialogOrder: SharedOrderSummary? = null,
     mutatingOrderId: String? = null,
+    pdfActionOrderId: String? = null,
     canUpdateEnterpriseOrders: Boolean = false,
+    wholesalerBannerContent: @Composable (() -> Unit)? = null,
     onSearchChange: (String) -> Unit,
     onSearch: () -> Unit,
     onStatusChange: (SharedOrderStatus?) -> Unit,
@@ -194,6 +196,7 @@ fun OrderHistoryContent(
         },
         title = {
             Column {
+                wholesalerBannerContent?.invoke()
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -256,6 +259,7 @@ fun OrderHistoryContent(
             padding = padding,
             scrollBehavior = topBarScrollBehavior,
             mutatingOrderId = mutatingOrderId,
+            pdfActionOrderId = pdfActionOrderId,
             canUpdateEnterpriseOrders = canUpdateEnterpriseOrders,
             onOrderClick = onOrderClick,
             onPdfClick = onPdfClick,
@@ -275,6 +279,7 @@ private fun OrderHistoryGrid(
     padding: PaddingValues,
     scrollBehavior: TopAppBarScrollBehavior,
     mutatingOrderId: String?,
+    pdfActionOrderId: String?,
     canUpdateEnterpriseOrders: Boolean,
     onOrderClick: (SharedOrderSummary) -> Unit,
     onPdfClick: (SharedOrderSummary) -> Unit,
@@ -323,7 +328,7 @@ private fun OrderHistoryGrid(
                 } else {
                     items(
                         count = pagingItems.itemCount,
-                        key = pagingItems.itemKey { it.id },
+                        key = pagingItems.itemKey { "${it.id}-${it.orderNumber}" },
                     ) { index ->
                         pagingItems[index]?.let { order ->
                             OrderCard(
@@ -332,6 +337,7 @@ private fun OrderHistoryGrid(
                                 mode = mode,
                                 isLoading = isRefreshing,
                                 isMutating = mutatingOrderId == order.id,
+                                isPdfLoading = pdfActionOrderId == order.id,
                                 canUpdateEnterpriseOrders = canUpdateEnterpriseOrders,
                                 onClick = { onOrderClick(order) },
                                 onPdfClick = { onPdfClick(order) },

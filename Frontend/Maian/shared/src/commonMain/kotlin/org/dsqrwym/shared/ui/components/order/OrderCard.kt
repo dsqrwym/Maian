@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -71,6 +72,7 @@ fun OrderCard(
     mode: OrderHistoryMode,
     isLoading: Boolean,
     isMutating: Boolean,
+    isPdfLoading: Boolean,
     canUpdateEnterpriseOrders: Boolean,
     onClick: () -> Unit,
     onPdfClick: () -> Unit,
@@ -126,12 +128,23 @@ fun OrderCard(
 
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         OrderTooltip(text = stringResource(SharedRes.string.order_pdf)) {
-                            OutlinedIconButton(onClick = onPdfClick, modifier = Modifier.size(36.dp)) {
-                                Icon(
-                                    Icons.AutoMirrored.Outlined.ReceiptLong,
-                                    contentDescription = stringResource(SharedRes.string.order_pdf),
-                                    modifier = Modifier.size(18.dp),
-                                )
+                            OutlinedIconButton(
+                                enabled = !isLoading && !isPdfLoading,
+                                onClick = onPdfClick,
+                                modifier = Modifier.size(36.dp),
+                            ) {
+                                if (isPdfLoading) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        strokeWidth = 2.dp,
+                                    )
+                                } else {
+                                    Icon(
+                                        Icons.AutoMirrored.Outlined.ReceiptLong,
+                                        contentDescription = stringResource(SharedRes.string.order_pdf),
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                }
                             }
                         }
                         OrderTooltip(text = stringResource(SharedRes.string.order_more_information)) {

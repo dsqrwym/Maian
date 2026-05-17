@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import org.dsqrwym.shared.data.orders.dto.SharedOrderDetail
 import org.dsqrwym.shared.network.model.SharedResponseResult
 
-interface OrderDetailRepository {
+interface OrderDetailRepository : OrderPdfActionsRepository {
     val updateEvents: SharedFlow<Unit>
 
     suspend fun getOrderDetail(id: String): SharedResponseResult<SharedOrderDetail>

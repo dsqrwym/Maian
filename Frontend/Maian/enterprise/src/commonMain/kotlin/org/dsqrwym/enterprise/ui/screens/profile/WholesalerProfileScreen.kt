@@ -31,6 +31,7 @@ import org.dsqrwym.shared.ui.components.wholesaler.sharedWholesalerProfileDetail
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.currentKoinScope
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +45,7 @@ fun WholesalerProfileScreen(
 
     val profile = viewModel.profile
     val isLoading = viewModel.isLoading
-    val authSessionViewModel = koinViewModel<AuthSessionViewModel>()
+    val authSessionViewModel = currentKoinScope().get<AuthSessionViewModel>()
     val canEditProfile = userRole?.canEditEnterpriseProfile() == true
 
     LaunchedEffect(Unit) {

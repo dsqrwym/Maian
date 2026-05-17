@@ -1,20 +1,10 @@
 package org.dsqrwym.shared.data.orders
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.client.request.patch
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
-import org.dsqrwym.shared.data.orders.dto.SharedOrderActionReasonDto
-import org.dsqrwym.shared.data.orders.dto.SharedOrderDetail
-import org.dsqrwym.shared.data.orders.dto.SharedOrderEstimatedDeliveryDateDto
-import org.dsqrwym.shared.data.orders.dto.SharedOrderFilterMetadataDto
-import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import org.dsqrwym.shared.data.orders.dto.*
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.model.ApiResponseList
@@ -68,8 +58,9 @@ class SharedOrderApi(private val client: HttpClient) {
         }.body()
 }
 
-private fun io.ktor.client.request.HttpRequestBuilder.applyOrderQuery(query: SharedFindOrderDto) {
+private fun HttpRequestBuilder.applyOrderQuery(query: SharedFindOrderDto) {
     query.search?.trim()?.takeIf { it.isNotEmpty() }?.let { parameter("search", it) }
+    query.wholesalerId?.let { parameter("wholesalerId", it) }
     query.status?.let { parameter("status", it.name) }
     query.startDate?.let { parameter("startDate", it) }
     query.endDate?.let { parameter("endDate", it) }

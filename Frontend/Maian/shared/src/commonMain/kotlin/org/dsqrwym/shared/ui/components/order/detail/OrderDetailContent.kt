@@ -3,11 +3,17 @@ package org.dsqrwym.shared.ui.components.order.detail
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.FileDownload
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedIconButton
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -63,30 +69,32 @@ fun OrderDetailContent(
             )
         },
         actions = {
-            OrderTooltip(text = stringResource(SharedRes.string.view_pdf)) {
-                OutlinedIconButton(
-                    enabled = order != null && state.mutatingAction == null,
-                    onClick = onViewPdf,
-                    modifier = Modifier.size(36.dp),
-                ) {
-                    Icon(
-                        Icons.Outlined.Visibility,
-                        contentDescription = stringResource(SharedRes.string.view_pdf),
-                        modifier = Modifier.size(18.dp),
-                    )
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                OrderTooltip(text = stringResource(SharedRes.string.view_pdf)) {
+                    OutlinedIconButton(
+                        enabled = order != null && state.mutatingAction == null && state.pdfAction == null,
+                        onClick = onViewPdf,
+                        modifier = Modifier.size(36.dp),
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Outlined.ReceiptLong,
+                            contentDescription = stringResource(SharedRes.string.view_pdf),
+                            modifier = Modifier.size(18.dp),
+                        )
+                    }
                 }
-            }
-            OrderTooltip(text = stringResource(SharedRes.string.download_pdf)) {
-                OutlinedIconButton(
-                    enabled = order != null && state.mutatingAction == null,
-                    onClick = onDownloadPdf,
-                    modifier = Modifier.size(36.dp),
-                ) {
-                    Icon(
-                        Icons.Outlined.FileDownload,
-                        contentDescription = stringResource(SharedRes.string.download_pdf),
-                        modifier = Modifier.size(18.dp),
-                    )
+                OrderTooltip(text = stringResource(SharedRes.string.download_pdf)) {
+                    OutlinedIconButton(
+                        enabled = order != null && state.mutatingAction == null && state.pdfAction == null,
+                        onClick = onDownloadPdf,
+                        modifier = Modifier.size(36.dp),
+                    ) {
+                        Icon(
+                            Icons.Outlined.FileDownload,
+                            contentDescription = stringResource(SharedRes.string.download_pdf),
+                            modifier = Modifier.size(18.dp),
+                        )
+                    }
                 }
             }
         },

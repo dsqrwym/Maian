@@ -9,6 +9,8 @@ import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderDetail
 import org.dsqrwym.shared.data.orders.dto.SharedOrderFilterMetadataDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfActionResult
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfRepository
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.network.model.ApiResponseList
 import org.dsqrwym.shared.network.model.SharedResponseResult
@@ -17,6 +19,7 @@ import org.dsqrwym.shared.network.withAuthOrError
 
 class EnterpriseOrderRepository(
     private val orderApi: SharedOrderApi,
+    private val orderPdfRepository: SharedOrderPdfRepository,
 ) : SharedObservableRepository(), OrderHistoryRepository, OrderDetailRepository {
     override suspend fun getOrders(query: SharedFindOrderDto): SharedResponseResult<ApiResponseList<SharedOrderSummary>> =
         withAuthOrError {
@@ -66,6 +69,16 @@ class EnterpriseOrderRepository(
                     estimatedDeliveryDate = estimatedDeliveryDate,
                 )
             }.notifyUpdated()
+        }
+
+    override suspend fun previewOrderPdf(id: String): SharedResponseResult<SharedOrderPdfActionResult> =
+        withAuthOrError {
+            orderPdfRepository.previewOrderPdf(id)
+        }
+
+    override suspend fun downloadOrderPdf(id: String): SharedResponseResult<SharedOrderPdfActionResult> =
+        withAuthOrError {
+            orderPdfRepository.downloadOrderPdf(id)
         }
 }
 

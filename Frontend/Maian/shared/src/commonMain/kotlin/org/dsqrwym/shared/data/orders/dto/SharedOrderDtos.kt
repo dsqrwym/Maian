@@ -1,7 +1,7 @@
 package org.dsqrwym.shared.data.orders.dto
 
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -22,6 +22,7 @@ import org.dsqrwym.shared.paging.data.PaginationQuery
 @Serializable
 data class SharedFindOrderDto(
     val search: String? = null,
+    val wholesalerId: String? = null,
     val status: SharedOrderStatus? = null,
     val startDate: String? = null,
     val endDate: String? = null,

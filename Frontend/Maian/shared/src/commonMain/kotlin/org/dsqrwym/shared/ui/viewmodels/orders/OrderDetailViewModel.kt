@@ -9,12 +9,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.file_saved_with_name
 import maian.shared.generated.resources.load_failed
 import maian.shared.generated.resources.operation_failed
 import maian.shared.generated.resources.operation_success
 import maian.shared.generated.resources.rejection_reason_required
 import org.dsqrwym.shared.data.orders.OrderDetailRepository
 import org.dsqrwym.shared.data.orders.dto.SharedOrderDetail
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfActionResult
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
 import org.dsqrwym.shared.network.model.SharedResponseResult
@@ -30,12 +32,18 @@ enum class OrderDetailMutation {
     DELIVERY_DATE,
 }
 
+enum class OrderDetailPdfAction {
+    PREVIEW,
+    DOWNLOAD,
+}
+
 data class OrderDetailUiState(
     val orderId: String = "",
     val languageCode: String = LanguageManager.getCurrent().code,
     val loadState: UiState = UiState.Idle,
     val order: SharedOrderDetail? = null,
     val mutatingAction: OrderDetailMutation? = null,
+    val pdfAction: OrderDetailPdfAction? = null,
 )
 
 abstract class OrderDetailViewModel(
@@ -134,9 +142,17 @@ abstract class OrderDetailViewModel(
         }
     }
 
-    fun viewPdf() = Unit
+    fun viewPdf() {
+        runPdfAction(OrderDetailPdfAction.PREVIEW) { orderId ->
+            repository.previewOrderPdf(orderId)
+        }
+    }
 
-    fun downloadPdf() = Unit
+    fun downloadPdf() {
+        runPdfAction(OrderDetailPdfAction.DOWNLOAD) { orderId ->
+            repository.downloadOrderPdf(orderId)
+        }
+    }
 
     private fun runMutation(
         mutation: OrderDetailMutation,
@@ -156,6 +172,42 @@ abstract class OrderDetailViewModel(
                 }
             }
             uiState = uiState.copy(mutatingAction = null)
+        }
+    }
+
+    private fun runPdfAction(
+        action: OrderDetailPdfAction,
+        block: suspend (String) -> SharedResponseResult<SharedOrderPdfActionResult>,
+    ) {
+        if (uiState.pdfAction != null) return
+        val orderId = (uiState.order?.id ?: uiState.orderId).trim()
+        if (orderId.isEmpty()) return
+        viewModelScope.launch {
+            uiState = uiState.copy(pdfAction = action)
+            when (val result = block(orderId)) {
+                is SharedResponseResult.Success -> {
+                    when (val actionResult = result.data) {
+                        is SharedOrderPdfActionResult.Completed -> {
+                            if (action == OrderDetailPdfAction.DOWNLOAD) {
+                                snackbarViewModel.showSuccess(
+                                    getString(
+                                        SharedRes.string.file_saved_with_name,
+                                        actionResult.fileName.removeSuffix(".pdf"),
+                                    )
+                                )
+                            }
+                        }
+
+                        SharedOrderPdfActionResult.Canceled,
+                        null -> Unit
+                    }
+                }
+
+                is SharedResponseResult.Error -> {
+                    showError(result, SharedRes.string.operation_failed)
+                }
+            }
+            uiState = uiState.copy(pdfAction = null)
         }
     }
 

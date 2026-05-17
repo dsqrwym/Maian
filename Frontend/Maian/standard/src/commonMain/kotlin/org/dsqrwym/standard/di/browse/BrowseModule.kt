@@ -17,7 +17,7 @@ val standardBrowseModule = module {
     single { StandardCartApi(get()) }
     single { StandardCartRepository(get()) }
     single { StandardOrderApi(get()) }
-    single { StandardOrderRepository(get(), get()) }
+    single { StandardOrderRepository(get(), get(), get()) }
     viewModel<ProductBrowseViewModel> { ProductBrowseViewModel(get(), get()) }
     viewModel<ProductDetailViewModel> { ProductDetailViewModel(get(), get(), get()) }
     viewModel<CategoryBrowseViewModel> { CategoryBrowseViewModel(get(), get()) }

@@ -1,6 +1,10 @@
 package org.dsqrwym.shared.di
 
 import org.dsqrwym.shared.data.orders.SharedOrderApi
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfApi
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfPlatformService
+import org.dsqrwym.shared.data.orders.pdf.SharedOrderPdfRepository
+import org.dsqrwym.shared.data.orders.pdf.createSharedOrderPdfPlatformService
 import org.dsqrwym.shared.network.HttpClientProvider
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.koin.dsl.module
@@ -21,4 +25,7 @@ val sharedModule = module {
         MySnackbarViewModel()
     }
     single { SharedOrderApi(get()) }
+    single { SharedOrderPdfApi(get()) }
+    single<SharedOrderPdfPlatformService> { createSharedOrderPdfPlatformService() }
+    single { SharedOrderPdfRepository(get(), get()) }
 }

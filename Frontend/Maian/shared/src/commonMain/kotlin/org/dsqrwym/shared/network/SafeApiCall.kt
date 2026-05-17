@@ -6,6 +6,7 @@ import io.ktor.client.plugins.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.mapper.toSharedResponseResult
 import org.dsqrwym.shared.network.model.ApiResponse
@@ -21,82 +22,129 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> ApiResponse<T>): SharedRespon
         val apiResponse = apiCall()
         apiResponse.toSharedResponseResult()
     } catch (e: CancellationException) {
-        throw e // 必须继续抛出，避免协程被吞
-    } catch (e: ResponseException) {
-        val response = e.response
-
-        val status = response.status
-        val url = response.request.url
-        val method = response.request.method
-        val contentType = response.headers[HttpHeaders.ContentType]
-
-        val bodyText = runCatching {
-            response.bodyAsText()
-        }.getOrNull()
-
-        SharedLog.log(
-            message = buildString {
-                appendLine("HTTP ${method.value} $url")
-                appendLine("Status: $status")
-                appendLine("Content-Type: $contentType")
-                appendLine("Body: ${bodyText?.take(2_000)}")
-            },
-            level = SharedLogLevel.ERROR,
-            tag = TAG
-        )
-
-        SharedResponseResult.Error(
-            status,
-            ErrorMessageMapper.toUserMessage(e)
-        )
-    } catch (e: NoTransformationFoundException) {
-        SharedLog.log(
-            message = """
-                NoTransformationFoundException: ${e.message}
-                Cause: ${e.cause}
-            """.trimIndent(),
-            level = SharedLogLevel.ERROR,
-            tag = TAG
-        )
-
-        SharedResponseResult.Error(
-            HttpStatusCode.UnsupportedMediaType,
-            ErrorMessageMapper.toUserMessage(e)
-        )
-    } catch (e: SerializationException) {
-        SharedLog.log(
-            message = """
-                SerializationException: ${e.message}
-                Cause: ${e.cause}
-            """.trimIndent(),
-            level = SharedLogLevel.ERROR,
-            tag = TAG
-        )
-
-        SharedResponseResult.Error(
-            HttpStatusCode.BadGateway,
-            ErrorMessageMapper.toUserMessage(e)
-        )
+        throw e
     } catch (e: Exception) {
-        val userMessage = ErrorMessageMapper.toUserMessage(e)
+        toSharedNetworkError(e)
+    }
+}
 
-        SharedLog.log(
-            message = """
-                "${e::class.simpleName}: ${e.message}"
-                 Cause: ${e.cause}
-            """.trimIndent(),
-            level = SharedLogLevel.ERROR,
-            tag = TAG
-        )
+suspend fun <T> safeRawApiCall(
+    apiCall: suspend () -> HttpResponse,
+    responseBody: suspend (HttpResponse) -> T,
+): SharedResponseResult<T> {
+    return try {
+        val response = apiCall()
+        if (response.status.value in 200..299) {
+            SharedResponseResult.Success(responseBody(response))
+        } else {
+            val bodyText = runCatching { response.bodyAsText() }.getOrNull()
+            logHttpFailure(response, bodyText)
+            toSharedHttpStatusError(response.status, bodyText)
+        }
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        toSharedNetworkError(e)
+    }
+}
 
-        // 映射为统一错误结果（用户可见）
-        when (e) {
-            is ConnectTimeoutException,
-            is SocketTimeoutException ->
-                SharedResponseResult.Error(HttpStatusCode.RequestTimeout, userMessage)
+private suspend fun toSharedNetworkError(e: Exception): SharedResponseResult.Error {
+    return when (e) {
+        is ResponseException -> {
+            val response = e.response
+            val bodyText = runCatching { response.bodyAsText() }.getOrNull()
+            logHttpFailure(response, bodyText)
+            toSharedHttpStatusError(response.status, bodyText)
+        }
 
-            else ->
-                SharedResponseResult.Error(HttpStatusCode.ServiceUnavailable, userMessage)
+        is NoTransformationFoundException -> {
+            SharedLog.log(
+                message = """
+                    NoTransformationFoundException: ${e.message}
+                    Cause: ${e.cause}
+                """.trimIndent(),
+                level = SharedLogLevel.ERROR,
+                tag = TAG
+            )
+
+            SharedResponseResult.Error(
+                HttpStatusCode.UnsupportedMediaType,
+                ErrorMessageMapper.toUserMessage(e)
+            )
+        }
+
+        is SerializationException -> {
+            SharedLog.log(
+                message = """
+                    SerializationException: ${e.message}
+                    Cause: ${e.cause}
+                """.trimIndent(),
+                level = SharedLogLevel.ERROR,
+                tag = TAG
+            )
+
+            SharedResponseResult.Error(
+                HttpStatusCode.BadGateway,
+                ErrorMessageMapper.toUserMessage(e)
+            )
+        }
+
+        else -> {
+            val userMessage = ErrorMessageMapper.toUserMessage(e)
+
+            SharedLog.log(
+                message = """
+                    "${e::class.simpleName}: ${e.message}"
+                     Cause: ${e.cause}
+                """.trimIndent(),
+                level = SharedLogLevel.ERROR,
+                tag = TAG
+            )
+
+            when (e) {
+                is ConnectTimeoutException,
+                is SocketTimeoutException ->
+                    SharedResponseResult.Error(HttpStatusCode.RequestTimeout, userMessage)
+
+                else ->
+                    SharedResponseResult.Error(HttpStatusCode.ServiceUnavailable, userMessage)
+            }
         }
     }
+}
+
+private fun logHttpFailure(response: HttpResponse, bodyText: String?) {
+    SharedLog.log(
+        message = buildString {
+            appendLine("HTTP ${response.request.method.value} ${response.request.url}")
+            appendLine("Status: ${response.status}")
+            appendLine("Content-Type: ${response.headers[HttpHeaders.ContentType]}")
+            appendLine("Body: ${bodyText?.take(2_000)}")
+        },
+        level = SharedLogLevel.ERROR,
+        tag = TAG
+    )
+}
+
+private suspend fun toSharedHttpStatusError(
+    status: HttpStatusCode,
+    bodyText: String?,
+): SharedResponseResult.Error {
+    val message = extractApiErrorMessage(bodyText)
+    val mapped = ApiResponse<Unit>(
+        statusCode = status.value,
+        message = message,
+    ).toSharedResponseResult()
+
+    return when (mapped) {
+        is SharedResponseResult.Error -> mapped
+        is SharedResponseResult.Success -> SharedResponseResult.Error(status, message)
+    }
+}
+
+private fun extractApiErrorMessage(bodyText: String?): String? {
+    val normalized = bodyText?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+    return runCatching {
+        Json.decodeFromString<ApiResponse<Unit>>(normalized).message
+    }.getOrNull() ?: normalized.take(300)
 }
