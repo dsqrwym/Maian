@@ -402,6 +402,7 @@
     <string name="order_status_cancelled">Cancel·lada</string>
     <string name="created">Creada</string>
     <string name="estimated_delivery">Entrega estimada</string>
+    <string name="delivery_address">Adreça d'entrega</string>
     <string name="items">Articles</string>
     <string name="total">Total</string>
     <string name="subtotal">Subtotal</string>
@@ -413,6 +414,9 @@
     <string name="reason">Motiu</string>
     <string name="optional_reason">Motiu opcional</string>
     <string name="rejection_reason_required">El motiu de rebuig és obligatori</string>
+    <string name="rejection_reason">Motiu de rebuig</string>
+    <string name="rejection_reason_placeholder">Ho sentim, l'adreça està fora de la nostra zona d'entrega o els preus no s'han actualitzat a temps.</string>
+    <string name="cancellation_reason">Motiu de cancel·lació</string>
     <string name="search_orders">Buscar número de comanda, client/proveïdor, NIF/CIF, ciutat</string>
     <string name="no_orders_found">No s'han trobat comandes</string>
     <string name="update_delivery_date">Actualitzar data d'entrega</string>
@@ -440,6 +444,8 @@
     <string name="order_more_information">Més informació</string>
     <string name="order_id">ID de la comanda</string>
     <string name="order_item_count_value">%1$d articles</string>
+    <string name="order_total_amount_range">Rang d'import total</string>
+    <string name="order_amount_no_limit">Sense límit</string>
     <string name="partner_id">ID del soci</string>
     <string name="user_id">ID d'usuari</string>
     <string name="contact_name">Contacte</string>

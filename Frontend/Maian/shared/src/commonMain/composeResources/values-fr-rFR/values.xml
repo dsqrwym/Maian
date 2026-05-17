@@ -391,6 +391,7 @@
     <string name="order_status_cancelled">Annulée</string>
     <string name="created">Créée</string>
     <string name="estimated_delivery">Livraison estimée</string>
+    <string name="delivery_address">Adresse de livraison</string>
     <string name="items">Articles</string>
     <string name="total">Total</string>
     <string name="subtotal">Sous-total</string>
@@ -402,6 +403,9 @@
     <string name="reason">Motif</string>
     <string name="optional_reason">Motif facultatif</string>
     <string name="rejection_reason_required">Le motif de rejet est obligatoire</string>
+    <string name="rejection_reason">Motif de rejet</string>
+    <string name="rejection_reason_placeholder">Désolé, cette adresse est hors de notre zone de livraison ou les prix n'ont pas été mis à jour à temps.</string>
+    <string name="cancellation_reason">Motif d'annulation</string>
     <string name="search_orders">Rechercher numéro de commande, client/fournisseur, identifiant fiscal, ville</string>
     <string name="no_orders_found">Aucune commande trouvée</string>
     <string name="update_delivery_date">Mettre à jour la date de livraison</string>
@@ -429,6 +433,8 @@
     <string name="order_more_information">Plus d'informations</string>
     <string name="order_id">ID commande</string>
     <string name="order_item_count_value">%1$d articles</string>
+    <string name="order_total_amount_range">Plage de montant total</string>
+    <string name="order_amount_no_limit">Sans limite</string>
     <string name="partner_id">ID partenaire</string>
     <string name="user_id">ID utilisateur</string>
     <string name="contact_name">Contact</string>

@@ -4,6 +4,7 @@ import org.dsqrwym.shared.data.SharedObservableRepository
 import org.dsqrwym.shared.data.orders.OrderHistoryRepository
 import org.dsqrwym.shared.data.orders.SharedOrderApi
 import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
+import org.dsqrwym.shared.data.orders.dto.SharedOrderFilterMetadataDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
 import org.dsqrwym.shared.network.model.ApiResponseList
 import org.dsqrwym.shared.network.model.SharedResponseResult
@@ -17,6 +18,13 @@ class EnterpriseOrderRepository(
         withAuthOrError {
             safeApiCall {
                 orderApi.getWholesalerOrders(query)
+            }
+        }
+
+    override suspend fun getOrderFilterMetadata(): SharedResponseResult<SharedOrderFilterMetadataDto> =
+        withAuthOrError {
+            safeApiCall {
+                orderApi.getWholesalerOrderFilterMetadata()
             }
         }
 

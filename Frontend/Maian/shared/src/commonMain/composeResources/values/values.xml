@@ -363,6 +363,7 @@
     <string name="order_status_cancelled">Cancelled</string>
     <string name="created">Created</string>
     <string name="estimated_delivery">Estimated delivery</string>
+    <string name="delivery_address">Delivery address</string>
     <string name="items">Items</string>
     <string name="total">Total</string>
     <string name="subtotal">Subtotal</string>
@@ -374,6 +375,9 @@
     <string name="reason">Reason</string>
     <string name="optional_reason">Optional reason</string>
     <string name="rejection_reason_required">Rejection reason required</string>
+    <string name="rejection_reason">Rejection reason</string>
+    <string name="rejection_reason_placeholder">Sorry, this address is outside our delivery area, or prices were not updated in time.</string>
+    <string name="cancellation_reason">Cancellation reason</string>
     <string name="search_orders">Search order number, customer/supplier, tax ID, city</string>
     <string name="no_orders_found">No orders found</string>
     <string name="update_delivery_date">Update delivery date</string>
@@ -401,6 +405,8 @@
     <string name="order_more_information">More information</string>
     <string name="order_id">Order ID</string>
     <string name="order_item_count_value">%1$d items</string>
+    <string name="order_total_amount_range">Total amount range</string>
+    <string name="order_amount_no_limit">No limit</string>
     <string name="partner_id">Partner ID</string>
     <string name="user_id">User ID</string>
     <string name="contact_name">Contact</string>

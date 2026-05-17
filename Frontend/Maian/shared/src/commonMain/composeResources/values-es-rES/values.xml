@@ -392,6 +392,7 @@
     <string name="order_status_cancelled">Cancelado</string>
     <string name="created">Creado</string>
     <string name="estimated_delivery">Entrega estimada</string>
+    <string name="delivery_address">Dirección de entrega</string>
     <string name="items">Artículos</string>
     <string name="total">Total</string>
     <string name="subtotal">Subtotal</string>
@@ -403,6 +404,9 @@
     <string name="reason">Motivo</string>
     <string name="optional_reason">Motivo opcional</string>
     <string name="rejection_reason_required">El motivo de rechazo es obligatorio</string>
+    <string name="rejection_reason">Motivo de rechazo</string>
+    <string name="rejection_reason_placeholder">Lo sentimos, la dirección está fuera de nuestra zona de reparto o los precios no se actualizaron a tiempo.</string>
+    <string name="cancellation_reason">Motivo de cancelación</string>
     <string name="search_orders">Buscar número de pedido, cliente/proveedor, NIF/CIF, ciudad</string>
     <string name="no_orders_found">No se encontraron pedidos</string>
     <string name="update_delivery_date">Actualizar fecha de entrega</string>
@@ -430,6 +434,8 @@
     <string name="order_more_information">Más información</string>
     <string name="order_id">ID del pedido</string>
     <string name="order_item_count_value">%1$d artículos</string>
+    <string name="order_total_amount_range">Rango de importe total</string>
+    <string name="order_amount_no_limit">Sin límite</string>
     <string name="partner_id">ID del socio</string>
     <string name="user_id">ID de usuario</string>
     <string name="contact_name">Contacto</string>

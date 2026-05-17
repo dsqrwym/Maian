@@ -1,3 +1,4 @@
+import type { AnyColumn, SQL } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 
 /**
@@ -15,4 +16,45 @@ export const SQL_TRUE = sql`TRUE`;
 /**
  * 用于 drizzle 查询进行去重音
  */
-export const SQL_IMMUTABLE_UNACCENT = (v) => sql`immutable_unaccent(${v})`;
+export const SQL_IMMUTABLE_UNACCENT = (v: any) => sql`immutable_unaccent(${v})`;
+
+type JsonObjectShape = Record<string, AnyColumn | SQL | SQL.Aliased>;
+
+export const jsonbBuildObject = <T>(shape: JsonObjectShape): SQL<T> => {
+  const chunks: SQL[] = [];
+
+  for (const [key, value] of Object.entries(shape)) {
+    chunks.push(sql`${sql.raw(`'${key}'`)}, ${value}`);
+  }
+
+  return sql<T>`jsonb_build_object(${sql.join(chunks, sql.raw(', '))})`;
+};
+
+export const jsonbAgg = <T>(
+  expression: SQL<T>,
+  options?: {
+    orderBy?: SQL;
+    filter?: SQL;
+  },
+): SQL<T[]> => {
+  return sql<T[]>`
+    coalesce(
+      jsonb_agg(
+        ${expression}
+        ${options?.orderBy ? sql`order by ${options.orderBy}` : sql``}
+      )
+      ${options?.filter ? sql`filter (where ${options.filter})` : sql``},
+      '[]'::jsonb
+    )
+  `;
+};
+
+export const jsonbAggBuildObject = <T>(
+  shape: JsonObjectShape,
+  options?: {
+    orderBy?: SQL;
+    filter?: SQL;
+  },
+): SQL<T[]> => {
+  return jsonbAgg<T>(jsonbBuildObject<T>(shape), options);
+};

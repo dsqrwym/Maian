@@ -19,27 +19,24 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.minus
-import kotlinx.datetime.toLocalDateTime
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
 import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.shared.data.orders.SharedOrderAmountFilterBounds
 import org.dsqrwym.shared.data.orders.OrderHistoryRepository
 import org.dsqrwym.shared.data.orders.SharedOrderSortBy
 import org.dsqrwym.shared.data.orders.SharedOrderStatus
+import org.dsqrwym.shared.data.orders.toAmountFilterBounds
 import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.formatter.defaultOrderHistoryDateRange
 import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 data class OrderHistoryQueryState(
     val search: String,
@@ -98,6 +95,9 @@ abstract class OrderHistoryViewModel(
     var maxItemCount by mutableStateOf<Int?>(null)
         private set
 
+    var amountFilterBounds by mutableStateOf(SharedOrderAmountFilterBounds())
+        private set
+
     var showFilterDialog by mutableStateOf(false)
         private set
     var showSortDialog by mutableStateOf(false)
@@ -145,7 +145,7 @@ abstract class OrderHistoryViewModel(
             ) { page, pageSize, _ ->
                 when (
                     val result = repository.getOrders(
-                        queryState.toDto(page = page, limit = pageSize)
+                        toFindOrderDto(queryState = queryState, page = page, limit = pageSize)
                     )
                 ) {
                     is SharedResponseResult.Success -> result.data?.items ?: emptyList()
@@ -159,6 +159,10 @@ abstract class OrderHistoryViewModel(
             }.flow
         }
         .cachedIn(viewModelScope)
+
+    init {
+        loadFilterMetadata()
+    }
 
     fun updateSearchQuery(query: String) {
         searchQuery = query
@@ -238,6 +242,15 @@ abstract class OrderHistoryViewModel(
         }
     }
 
+    fun loadFilterMetadata() {
+        viewModelScope.launch {
+            amountFilterBounds = when (val result = repository.getOrderFilterMetadata()) {
+                is SharedResponseResult.Success -> result.data.toAmountFilterBounds()
+                is SharedResponseResult.Error -> SharedOrderAmountFilterBounds()
+            }
+        }
+    }
+
     protected fun runOrderAction(
         orderId: String,
         successMessage: StringResource = SharedRes.string.update_success,
@@ -268,28 +281,22 @@ abstract class OrderHistoryViewModel(
     }
 }
 
-private fun OrderHistoryQueryState.toDto(page: Int, limit: Int): SharedFindOrderDto =
+private fun toFindOrderDto(queryState: OrderHistoryQueryState, page: Int, limit: Int): SharedFindOrderDto =
     SharedFindOrderDto(
-        search = search.trim().takeIf { it.isNotEmpty() },
-        status = status,
-        startDate = startDate,
-        endDate = endDate,
-        sortBy = sortBy,
-        orderBy = orderBy,
-        minTotalPrice = minTotalPrice,
-        maxTotalPrice = maxTotalPrice,
-        minSubtotal = minSubtotal,
-        maxSubtotal = maxSubtotal,
-        minTotalIva = minTotalIva,
-        maxTotalIva = maxTotalIva,
-        minItemCount = minItemCount,
-        maxItemCount = maxItemCount,
+        search = queryState.search.trim().takeIf { it.isNotEmpty() },
+        status = queryState.status,
+        startDate = queryState.startDate,
+        endDate = queryState.endDate,
+        sortBy = queryState.sortBy,
+        orderBy = queryState.orderBy,
+        minTotalPrice = queryState.minTotalPrice,
+        maxTotalPrice = queryState.maxTotalPrice,
+        minSubtotal = queryState.minSubtotal,
+        maxSubtotal = queryState.maxSubtotal,
+        minTotalIva = queryState.minTotalIva,
+        maxTotalIva = queryState.maxTotalIva,
+        minItemCount = queryState.minItemCount,
+        maxItemCount = queryState.maxItemCount,
         page = page,
         limit = limit,
     )
-
-@OptIn(ExperimentalTime::class)
-private fun defaultOrderHistoryDateRange(): Pair<String, String> {
-    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-    return today.minus(DatePeriod(days = 30)).toString() to today.toString()
-}

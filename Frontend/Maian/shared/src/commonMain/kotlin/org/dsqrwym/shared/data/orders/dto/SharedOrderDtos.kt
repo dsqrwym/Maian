@@ -38,6 +38,26 @@ data class SharedFindOrderDto(
 ) : PaginationQuery
 
 @Serializable
+data class SharedOrderFilterMetadataDto(
+    @SerialName("max_total")
+    val maxTotal: String? = null,
+    @SerialName("min_total")
+    val minTotal: String? = null,
+    @SerialName("max_subtotal")
+    val maxSubtotal: String? = null,
+    @SerialName("min_subtotal")
+    val minSubtotal: String? = null,
+    @SerialName("max_iva_total")
+    val maxIvaTotal: String? = null,
+    @SerialName("min_iva_total")
+    val minIvaTotal: String? = null,
+    @SerialName("max_item_count")
+    val maxItemCount: Int? = null,
+    @SerialName("min_item_count")
+    val minItemCount: Int? = null,
+)
+
+@Serializable
 data class SharedOrderSummary(
     @Serializable(with = FlexibleStringSerializer::class)
     val id: String,
@@ -58,14 +78,20 @@ data class SharedOrderSummary(
     val acceptedAt: String? = null,
     @SerialName("rejected_at")
     val rejectedAt: String? = null,
+    @SerialName("rejected_reason")
+    val rejectedReason: String? = null,
     @SerialName("cancelled_at")
     val cancelledAt: String? = null,
+    @SerialName("cancelled_reason")
+    val cancelledReason: String? = null,
     @SerialName("estimated_delivery_date")
     val estimatedDeliveryDate: String? = null,
     @SerialName("wholesaler_snapshot")
     val wholesalerSnapshot: SharedOrderPartnerSnapshot? = null,
     @SerialName("retailer_snapshot")
     val retailerSnapshot: SharedOrderPartnerSnapshot? = null,
+    @SerialName("shipping_address_snapshot")
+    val shippingAddressSnapshot: SharedOrderShippingAddressSnapshot? = null,
 )
 
 @Serializable
@@ -87,6 +113,39 @@ data class SharedOrderPartnerSnapshot(
     val taxId: String? = null,
     val email: String? = null,
     val telephone: String? = null,
+)
+
+@Serializable
+data class SharedOrderShippingAddressSnapshot(
+    @Serializable(with = FlexibleNullableStringSerializer::class)
+    val id: String? = null,
+    val street: String? = null,
+    @SerialName("zip_code")
+    val zipCode: String? = null,
+    @SerialName("city_id")
+    val cityId: Int? = null,
+    @SerialName("city_name")
+    val cityName: String? = null,
+    @SerialName("city_name_local")
+    val cityNameLocal: String? = null,
+    @SerialName("province_id")
+    val provinceId: Int? = null,
+    @SerialName("province_name")
+    val provinceName: String? = null,
+    @SerialName("province_name_local")
+    val provinceNameLocal: String? = null,
+    @SerialName("country_iso")
+    val countryIso: Int? = null,
+    @SerialName("country_alpha2")
+    val countryAlpha2: String? = null,
+    @SerialName("country_alpha3")
+    val countryAlpha3: String? = null,
+    @SerialName("country_name")
+    val countryName: String? = null,
+    @SerialName("country_name_local")
+    val countryNameLocal: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 )
 
 @Serializable

@@ -27,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.*
 import maian.standard.generated.resources.*
+import org.dsqrwym.shared.ui.components.containers.StateContent
+import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.dsqrwym.standard.domain.cart.CartGroup
 import org.dsqrwym.standard.domain.cart.CartGroupStatus
@@ -71,16 +73,17 @@ internal fun CartGroupActionRow(
             enabled = group.status == CartGroupStatus.AVAILABLE && !isGroupMutating,
             onClick = { onCreateOrder(group) },
         ) {
-            if (isCreatingOrder) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(18.dp),
-                    strokeWidth = 2.dp,
-                )
-            } else {
-                Icon(Icons.AutoMirrored.Outlined.ReceiptLong, contentDescription = null)
+            StateContent(
+                state = if (isCreatingOrder) UiState.Loading else UiState.Idle,
+                size = 18.dp,
+                progressStrokeWith = 2.dp,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.AutoMirrored.Outlined.ReceiptLong, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(StandardRes.string.create_order))
+                }
             }
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(StandardRes.string.create_order))
         }
     }
 }

@@ -84,8 +84,10 @@ object ApiConfig {
 
     object OrderPath {
         const val ORDERS = "${BASE_URL}/orders"
-        const val RETAILER = "${ORDERS}/retailer"
-        const val WHOLESALER = "${ORDERS}/wholesaler"
+        const val RETAILER = "${ORDERS}/standard"
+        const val WHOLESALER = "${ORDERS}/enterprise"
+        const val RETAILER_FILTER_METADATA = "${ORDERS}/filter-metadata/standard"
+        const val WHOLESALER_FILTER_METADATA = "${ORDERS}/filter-metadata/enterprise"
         const val FROM_CART = "${ORDERS}/from-cart"
 
         fun cancel(id: String) = "${ORDERS}/$id/cancel"

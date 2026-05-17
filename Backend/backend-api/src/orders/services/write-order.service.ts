@@ -477,7 +477,7 @@ export class WriteOrderService {
           order_year: orderYear,
           order_sequence: sequence.value,
           currency: ORDER_CURRENCY,
-          order_number: `${ORDER_DOCUMENT_TYPE}-${orderYear}-${String(sequence.value).padStart(6, '0')}`,
+          order_number: `${wholesalerSnapshot.user_id}-${ORDER_DOCUMENT_TYPE}-${orderYear}-${String(sequence.value).padStart(6, '0')}`,
           retailer_id: retailerId,
           wholesaler_id: wholesalerId,
           subtotal: totalSubtotal.toFixed(2),

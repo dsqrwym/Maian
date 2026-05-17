@@ -1,26 +1,43 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { AppAbility } from '#/casl/casl-types.js';
-import { IOrderQuery } from '#/orders/dto/order-query.dto.js';
+import {
+  IOrderDetailQuery,
+  IOrderQuery,
+} from '#/orders/dto/order-query.dto.js';
 import { Action } from '#/casl/actions.js';
-import { orders } from '#/generated/drizzle/schema.js';
-import { and, count, eq, gte, ilike, lte, or, sql, SQL } from 'drizzle-orm';
+import { order_details, orders } from '#/generated/drizzle/schema.js';
+import { and, count, eq, gte, ilike, lt, lte, or, sql, SQL } from 'drizzle-orm';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '#/config/constants.config.js';
 import { escapeLike, toUnaccent } from '#/utils/string.util.js';
 import {
+  ORDER_ERRORS,
   ORDER_RETAILER_SNAPSHOT_COLUMNS,
   ORDER_SHOPPING_ADDRESS_SNAPSHOT_COLUMNS,
   ORDER_WHOLESALER_SNAPSHOT_COLUMNS,
 } from '#/orders/order.constants.js';
-import { SQL_IMMUTABLE_UNACCENT } from '#/drizzle/drizzle.constants.js';
 import {
+  jsonbAggBuildObject,
+  SQL_IMMUTABLE_UNACCENT,
+} from '#/drizzle/drizzle.constants.js';
+import {
+  IOrderDetailItem,
   IRetailerSnapshot,
+  IShippingAddressSnapshot,
   IWholesalerSnapshot,
 } from '#/orders/order.types.js';
 import { OrderSortByEnums } from '#/orders/order.enums.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
-import { IOrderResponse } from '#/orders/dto/order-response.dto.js';
+import {
+  IOrderDetailResponse,
+  IOrderResponse,
+} from '#/orders/dto/order-response.dto.js';
+import { subject } from '@casl/ability';
 
 @Injectable()
 export class ReadOrderService {
@@ -30,6 +47,120 @@ export class ReadOrderService {
     private readonly config: ConfigService,
   ) {
     this.MAX_SEARCH_TERMS = Number(this.config.get(ENV.MAX_SEARCH_TERMS, 10));
+  }
+
+  async getOrderDetail(
+    orderId: string,
+    query: IOrderDetailQuery,
+    ability: AppAbility,
+    retailerId?: string,
+    wholesalerId?: string,
+  ) {
+    if (!ability.can(Action.Read, 'orders')) {
+      throw new ForbiddenException('You are not allowed to read orders');
+    }
+    if (!retailerId && !wholesalerId) {
+      // 如果都没有说明用户的登录状态有问题
+      throw new ForbiddenException('You are not allowed to read orders');
+    }
+    const id = BigInt(orderId);
+
+    const { langCode } = query;
+
+    const [orderDetail] = await this.drizzle.db
+      .select({
+        id: orders.id,
+        order_number: orders.order_number,
+
+        wholesaler_id: orders.wholesaler_id,
+        retailer_id: orders.retailer_id,
+
+        ...(wholesalerId && {
+          retailer_snapshot: orders.retailer_snapshot,
+        }),
+        ...(retailerId && {
+          wholesaler_snapshot: orders.wholesaler_snapshot,
+        }),
+
+        shipping_address_snapshot: orders.shipping_address_snapshot,
+
+        item_count: orders.item_count,
+        total_subtotal: orders.subtotal,
+        total_iva: orders.iva_total,
+        total_amount: orders.total,
+        currency: orders.currency,
+
+        status: orders.status,
+        created_at: orders.created_at,
+        accepted_at: orders.accepted_at,
+        rejected_at: orders.rejected_at,
+        rejected_reason: orders.rejected_reason,
+        cancelled_at: orders.cancelled_at,
+        cancelled_reason: orders.cancelled_reason,
+        estimated_delivery_date: orders.estimated_delivery_date,
+
+        items: jsonbAggBuildObject<IOrderDetailItem>(
+          {
+            id: order_details.id,
+            product_id: order_details.product_id,
+            variant_product_id: order_details.variant_product_id,
+
+            product_name: order_details.product_name,
+            product_title: order_details.product_title,
+            product_code: order_details.product_code,
+            variant_product_code: order_details.variant_product_code,
+
+            product_translations_snapshot: sql`(
+            select t 
+            from jsonb_array_elements(
+            ${order_details.product_translations_snapshot}
+            ) as t 
+            where t->>'lang_code' = ${langCode}
+            limit 1
+            )
+            `,
+            variant_attributes_snapshot:
+              order_details.variant_attributes_snapshot,
+
+            type_sale: order_details.type_sale,
+            sale_unit_qty: order_details.sale_unit_qty,
+            quantity: order_details.quantity,
+
+            unit_price: order_details.unit_price,
+            unit_price_iva: order_details.unit_price_iva,
+            iva: order_details.iva,
+            subtotal: order_details.subtotal,
+            iva_total: order_details.iva_total,
+            total: order_details.total,
+          },
+          {
+            orderBy: sql`${order_details.id}`,
+            filter: sql`${order_details.id} is not null`,
+          },
+        ).as('items'),
+      })
+      .from(orders)
+      .leftJoin(order_details, eq(order_details.order_id, orders.id))
+      .where(eq(orders.id, id))
+      .groupBy(orders.id);
+
+    if (
+      !ability.can(
+        Action.Read,
+        subject('orders', {
+          wholesaler_id: orderDetail.wholesaler_id,
+          retailer_id: orderDetail.retailer_id,
+        }),
+      )
+    ) {
+      throw new ForbiddenException('You are not allowed to read orders');
+    }
+
+    if (!orderDetail) {
+      throw new NotFoundException(ORDER_ERRORS.ORDER_NOT_FOUND);
+    }
+
+    return orderDetail as IOrderDetailResponse;
   }
 
   getSortField(sortBy?: OrderSortByEnums) {
@@ -86,6 +217,7 @@ export class ReadOrderService {
         order_number: orders.order_number,
         ...(wholesalerId && {
           retailer_snapshot: orders.retailer_snapshot,
+          shipping_address_snapshot: orders.shipping_address_snapshot,
         }),
         ...(retailerId && {
           wholesaler_snapshot: orders.wholesaler_snapshot,
@@ -99,7 +231,9 @@ export class ReadOrderService {
         created_at: orders.created_at,
         accepted_at: orders.accepted_at,
         rejected_at: orders.rejected_at,
+        rejected_reason: orders.rejected_reason,
         cancelled_at: orders.cancelled_at,
+        cancelled_reason: orders.cancelled_reason,
         estimated_delivery_date: orders.estimated_delivery_date,
       })
       .from(orders)
@@ -152,7 +286,9 @@ export class ReadOrderService {
       whereCondition.push(gte(orders.created_at, startDate));
     }
     if (endDate) {
-      whereCondition.push(lte(orders.created_at, endDate));
+      const endExclusive = new Date(endDate);
+      endExclusive.setUTCDate(endExclusive.getUTCDate() + 1);
+      whereCondition.push(lt(orders.created_at, endExclusive.toISOString()));
     }
     if (retailerId) {
       whereCondition.push(eq(orders.retailer_id, retailerId));
@@ -210,10 +346,19 @@ export class ReadOrderService {
         created_at: item.created_at,
         accepted_at: item.accepted_at,
         rejected_at: item.rejected_at,
+        rejected_reason: item.rejected_reason,
         cancelled_at: item.cancelled_at,
+        cancelled_reason: item.cancelled_reason,
         estimated_delivery_date: item.estimated_delivery_date,
-        wholesaler_snapshot: item.wholesaler_snapshot as IWholesalerSnapshot,
-        retailer_snapshot: item.retailer_snapshot as IRetailerSnapshot,
+        wholesaler_snapshot: item.wholesaler_snapshot as
+          | IWholesalerSnapshot
+          | undefined,
+        retailer_snapshot: item.retailer_snapshot as
+          | IRetailerSnapshot
+          | undefined,
+        shipping_address_snapshot: item.shipping_address_snapshot as
+          | IShippingAddressSnapshot
+          | undefined,
         id: item.id,
         order_number: item.order_number,
       })),

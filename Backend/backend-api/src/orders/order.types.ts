@@ -107,3 +107,35 @@ export interface IOrderLine {
   ivaTotal: Decimal;
   total: Decimal;
 }
+
+export interface IOrderDetailItem {
+  id: string;
+  product_id: string | null;
+  variant_product_id: string | null;
+
+  product_name: string;
+  product_title: string | null;
+  product_code: string;
+  variant_product_code: string;
+
+  product_translations_snapshot:
+    | {
+        lang_code: string;
+        name: string | null;
+        title: string | null;
+      }[]
+    | null;
+
+  variant_attributes_snapshot: unknown;
+
+  type_sale: SaleVariant;
+  sale_unit_qty: number;
+  quantity: number;
+
+  unit_price: string;
+  unit_price_iva: string;
+  iva: string;
+  subtotal: string;
+  iva_total: string;
+  total: string;
+}

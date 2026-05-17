@@ -8,6 +8,7 @@ import typia from 'typia';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import { BadRequestException } from '@nestjs/common';
+import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
 
 export interface IOrderQuery extends IPaginationQueryDto {
   search?: string;
@@ -71,3 +72,16 @@ export const validateOrderQuery: IRequestQueryValidator.IAssert<IOrderQuery> = {
     return body;
   },
 };
+
+export interface IOrderDetailQuery {
+  langCode: TagsLanguage;
+}
+export const validateOrderDetailQueryFunction =
+  typia.http.createAssertQuery<IOrderDetailQuery>();
+export const validateOrderDetailQuery: IRequestQueryValidator.IAssert<IOrderDetailQuery> =
+  {
+    type: 'assert',
+    assert: (input): IOrderDetailQuery => {
+      return validateOrderDetailQueryFunction(input);
+    },
+  };

@@ -364,6 +364,7 @@
     <string name="order_status_cancelled">已取消</string>
     <string name="created">建立時間</string>
     <string name="estimated_delivery">預計配送</string>
+    <string name="delivery_address">配送地址</string>
     <string name="items">商品數</string>
     <string name="total">總計</string>
     <string name="subtotal">小計</string>
@@ -375,6 +376,9 @@
     <string name="reason">原因</string>
     <string name="optional_reason">原因（可選）</string>
     <string name="rejection_reason_required">必須填寫拒絕原因</string>
+    <string name="rejection_reason">拒絕原因</string>
+    <string name="rejection_reason_placeholder">非常抱歉不在送貨範圍，價格未及時更新。</string>
+    <string name="cancellation_reason">取消原因</string>
     <string name="search_orders">搜尋訂單號、客戶/供應商、稅號、城市</string>
     <string name="no_orders_found">找不到訂單</string>
     <string name="update_delivery_date">更新配送日期</string>
@@ -402,6 +406,8 @@
     <string name="order_more_information">更多資訊</string>
     <string name="order_id">訂單 ID</string>
     <string name="order_item_count_value">%1$d 件商品</string>
+    <string name="order_total_amount_range">總金額範圍</string>
+    <string name="order_amount_no_limit">無上限</string>
     <string name="partner_id">合作方 ID</string>
     <string name="user_id">使用者 ID</string>
     <string name="contact_name">聯絡人</string>
