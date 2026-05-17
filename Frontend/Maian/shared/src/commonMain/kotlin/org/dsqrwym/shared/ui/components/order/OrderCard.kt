@@ -62,6 +62,7 @@ import org.dsqrwym.shared.util.formatter.asEuroAmount
 import org.dsqrwym.shared.util.formatter.toDisplayDate
 import org.dsqrwym.shared.util.formatter.toDisplayDateTime
 import org.dsqrwym.shared.util.formatter.toSpanishAddressFormat
+import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -105,18 +106,20 @@ fun OrderCard(
                                 itemVerticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
+                                    modifier = Modifier.placeholderWithShimmer(isLoading),
                                     text = order.orderNumber,
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                 )
-                                OrderStatusChip(order.status)
+                                OrderStatusChip(order.status, modifier = Modifier.placeholderWithShimmer(isLoading))
                             }
                             OrderPartnerSummary(
                                 partner = partner,
                                 createdAt = order.createdAt,
                                 itemCount = order.itemCount,
+                                isLoading = isLoading,
                             )
                         }
                     }
@@ -155,11 +158,11 @@ fun OrderCard(
                     }
                 }
 
-                OrderAmountSummary(order)
+                OrderAmountSummary(order, isLoading = isLoading)
             }
 
             Column {
-                OrderDateSummary(order)
+                OrderDateSummary(order, isLoading = isLoading)
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
@@ -170,7 +173,7 @@ fun OrderCard(
                         modifier = Modifier.weight(1f).padding(end = 8.dp),
                         contentAlignment = Alignment.CenterStart,
                     ) {
-                        PartnerPills(partner = partner)
+                        PartnerPills(partner = partner, isLoading = isLoading)
                     }
                     Box(
                         modifier = Modifier.widthIn(min = 40.dp),
@@ -192,6 +195,7 @@ fun OrderCard(
                     OrderDetailDrawer(
                         order = order,
                         partner = partner,
+                        isLoading = isLoading,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -240,6 +244,7 @@ fun OrderPartnerSummary(
     partner: SharedOrderPartnerSnapshot?,
     createdAt: String,
     itemCount: Int,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
     FlowRow(
@@ -253,24 +258,31 @@ fun OrderPartnerSummary(
             text = partner.displayNameOrFallback(),
             textStyle = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
+            isLoading = isLoading,
         )
         OrderInlineInfo(
             icon = Icons.Outlined.CalendarToday,
             text = createdAt.toDisplayDateTime(),
             textStyle = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            isLoading = isLoading,
         )
         OrderInlineInfo(
             icon = Icons.Outlined.Inventory2,
             text = stringResource(SharedRes.string.order_item_count_value, itemCount),
             textStyle = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            isLoading = isLoading,
         )
     }
 }
 
 @Composable
-fun OrderAmountSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
+fun OrderAmountSummary(
+    order: SharedOrderSummary,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+) {
     SelectionContainer {
         Row(
             modifier = modifier
@@ -281,24 +293,31 @@ fun OrderAmountSummary(order: SharedOrderSummary, modifier: Modifier = Modifier)
                 label = stringResource(SharedRes.string.subtotal),
                 value = order.totalSubtotal.asEuroAmount(),
                 modifier = Modifier.weight(1f),
+                isLoading = isLoading,
             )
             AmountCell(
                 label = stringResource(SharedRes.string.total_iva),
                 value = order.totalIva.asEuroAmount(),
                 modifier = Modifier.weight(1f),
+                isLoading = isLoading,
             )
             AmountCell(
                 label = stringResource(SharedRes.string.total),
                 value = order.totalAmount.asEuroAmount(),
                 emphasize = true,
                 modifier = Modifier.weight(1f),
+                isLoading = isLoading,
             )
         }
     }
 }
 
 @Composable
-fun OrderDateSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
+fun OrderDateSummary(
+    order: SharedOrderSummary,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+) {
     SelectionContainer {
         FlowRow(
             modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
@@ -317,6 +336,7 @@ fun OrderDateSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
                             deliveryAddress,
                         ),
                         maxLines = 2,
+                        isLoading = isLoading,
                     )
                 }
             OrderReadonlyInfoChip(
@@ -326,6 +346,7 @@ fun OrderDateSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
                     stringResource(SharedRes.string.estimated_delivery),
                     order.estimatedDeliveryDate?.toDisplayDate() ?: stringResource(SharedRes.string.not_set),
                 ),
+                isLoading = isLoading,
             )
             order.acceptedAt?.let {
                 OrderReadonlyInfoChip(
@@ -335,6 +356,7 @@ fun OrderDateSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
                         stringResource(SharedRes.string.order_status_accepted),
                         it.toDisplayDateTime(),
                     ),
+                    isLoading = isLoading,
                 )
             }
             order.rejectedAt?.let {
@@ -345,6 +367,7 @@ fun OrderDateSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
                         stringResource(SharedRes.string.order_status_rejected),
                         it.toDisplayDateTime(),
                     ),
+                    isLoading = isLoading,
                 )
             }
             order.cancelledAt?.let {
@@ -355,6 +378,7 @@ fun OrderDateSummary(order: SharedOrderSummary, modifier: Modifier = Modifier) {
                         stringResource(SharedRes.string.order_status_cancelled),
                         it.toDisplayDateTime(),
                     ),
+                    isLoading = isLoading,
                 )
             }
         }
@@ -367,11 +391,13 @@ private fun OrderReadonlyInfoChip(
     text: String,
     modifier: Modifier = Modifier,
     maxLines: Int = 1,
+    isLoading: Boolean = false,
 ) {
     Surface(
         modifier = modifier
             .widthIn(max = 360.dp)
-            .heightIn(min = 34.dp),
+            .heightIn(min = 34.dp)
+            .placeholderWithShimmer(isLoading),
         shape = MaterialTheme.shapes.small,
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.64f),
         border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant),
@@ -465,6 +491,7 @@ fun OrderActionButtons(
 private fun OrderDetailDrawer(
     order: SharedOrderSummary,
     partner: SharedOrderPartnerSnapshot?,
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -475,16 +502,18 @@ private fun OrderDetailDrawer(
                 horizontalArrangement = Arrangement.spacedBy(28.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                OrderDetailField(Icons.Outlined.Numbers, stringResource(SharedRes.string.order_number), order.orderNumber)
+                OrderDetailField(Icons.Outlined.Numbers, stringResource(SharedRes.string.order_number), order.orderNumber, isLoading = isLoading)
                 OrderDetailField(
                     Icons.Outlined.CalendarToday,
                     stringResource(SharedRes.string.created),
                     order.createdAt.toDisplayDateTime(),
+                    isLoading = isLoading,
                 )
                 OrderDetailField(
                     Icons.Outlined.LocalShipping,
                     stringResource(SharedRes.string.estimated_delivery),
                     order.estimatedDeliveryDate?.toDisplayDate() ?: stringResource(SharedRes.string.not_set),
+                    isLoading = isLoading,
                 )
                 order.shippingAddressSnapshot
                     ?.toSpanishAddressFormat()
@@ -496,30 +525,31 @@ private fun OrderDetailDrawer(
                             deliveryAddress,
                             maxWidth = 420.dp,
                             maxLines = 3,
+                            isLoading = isLoading,
                         )
                     }
-                OrderDetailField(Icons.Outlined.Person, stringResource(SharedRes.string.contact_name), partner?.contactName)
-                OrderDetailField(Icons.Outlined.Business, stringResource(SharedRes.string.display_name), partner?.displayName)
-                OrderDetailField(Icons.Outlined.Business, stringResource(SharedRes.string.company_name), partner?.companyName)
-                OrderDetailField(Icons.Outlined.Tag, stringResource(SharedRes.string.company_type), partner?.companyType)
-                OrderDetailField(Icons.Outlined.Badge, stringResource(SharedRes.string.tax_id), partner?.taxId)
-                OrderDetailField(Icons.Outlined.Email, stringResource(SharedRes.string.email), partner?.email)
-                OrderDetailField(Icons.Outlined.Phone, stringResource(SharedRes.string.telephone), partner?.telephone)
-                OrderDetailField(Icons.Outlined.Numbers, stringResource(SharedRes.string.partner_id), partner?.userId)
+                OrderDetailField(Icons.Outlined.Person, stringResource(SharedRes.string.contact_name), partner?.contactName, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Business, stringResource(SharedRes.string.display_name), partner?.displayName, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Business, stringResource(SharedRes.string.company_name), partner?.companyName, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Tag, stringResource(SharedRes.string.company_type), partner?.companyType, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Badge, stringResource(SharedRes.string.tax_id), partner?.taxId, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Email, stringResource(SharedRes.string.email), partner?.email, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Phone, stringResource(SharedRes.string.telephone), partner?.telephone, isLoading = isLoading)
+                OrderDetailField(Icons.Outlined.Numbers, stringResource(SharedRes.string.partner_id), partner?.userId, isLoading = isLoading)
                 order.acceptedAt?.let {
-                    OrderDetailField(Icons.Outlined.CheckCircle, stringResource(SharedRes.string.accepted_at), it.toDisplayDateTime())
+                    OrderDetailField(Icons.Outlined.CheckCircle, stringResource(SharedRes.string.accepted_at), it.toDisplayDateTime(), isLoading = isLoading)
                 }
                 order.rejectedAt?.let {
-                    OrderDetailField(Icons.Outlined.ErrorOutline, stringResource(SharedRes.string.rejected_at), it.toDisplayDateTime())
+                    OrderDetailField(Icons.Outlined.ErrorOutline, stringResource(SharedRes.string.rejected_at), it.toDisplayDateTime(), isLoading = isLoading)
                 }
                 order.rejectedReason?.takeIf { it.isNotBlank() }?.let {
-                    OrderDetailField(Icons.Outlined.Info, stringResource(SharedRes.string.rejection_reason), it)
+                    OrderDetailField(Icons.Outlined.Info, stringResource(SharedRes.string.rejection_reason), it, isLoading = isLoading)
                 }
                 order.cancelledAt?.let {
-                    OrderDetailField(Icons.Outlined.Close, stringResource(SharedRes.string.cancelled_at), it.toDisplayDateTime())
+                    OrderDetailField(Icons.Outlined.Close, stringResource(SharedRes.string.cancelled_at), it.toDisplayDateTime(), isLoading = isLoading)
                 }
                 order.cancelledReason?.takeIf { it.isNotBlank() }?.let {
-                    OrderDetailField(Icons.Outlined.Info, stringResource(SharedRes.string.cancellation_reason), it)
+                    OrderDetailField(Icons.Outlined.Info, stringResource(SharedRes.string.cancellation_reason), it, isLoading = isLoading)
                 }
             }
         }
@@ -534,6 +564,7 @@ private fun OrderDetailField(
     modifier: Modifier = Modifier,
     maxWidth: Dp = 260.dp,
     maxLines: Int = 2,
+    isLoading: Boolean = false,
 ) {
     Column(
         modifier = modifier.widthIn(min = 164.dp, max = maxWidth),
@@ -558,6 +589,7 @@ private fun OrderDetailField(
             )
         }
         Text(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             text = value?.takeIf { it.isNotBlank() } ?: stringResource(SharedRes.string.not_set),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.SemiBold,
@@ -568,7 +600,11 @@ private fun OrderDetailField(
 }
 
 @Composable
-private fun PartnerPills(partner: SharedOrderPartnerSnapshot?, modifier: Modifier = Modifier) {
+private fun PartnerPills(
+    partner: SharedOrderPartnerSnapshot?,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+) {
     SelectionContainer {
         FlowRow(
             modifier = modifier,
@@ -576,21 +612,26 @@ private fun PartnerPills(partner: SharedOrderPartnerSnapshot?, modifier: Modifie
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             partner?.taxId?.takeIf { it.isNotBlank() }?.let {
-                OrderPill(icon = Icons.Outlined.Badge, text = it)
+                OrderPill(icon = Icons.Outlined.Badge, text = it, isLoading = isLoading)
             }
             partner?.email?.takeIf { it.isNotBlank() }?.let {
-                OrderPill(icon = Icons.Outlined.Email, text = it)
+                OrderPill(icon = Icons.Outlined.Email, text = it, isLoading = isLoading)
             }
             partner?.telephone?.takeIf { it.isNotBlank() }?.let {
-                OrderPill(icon = Icons.Outlined.Phone, text = it)
+                OrderPill(icon = Icons.Outlined.Phone, text = it, isLoading = isLoading)
             }
         }
     }
 }
 
 @Composable
-private fun OrderPill(icon: ImageVector, text: String) {
+private fun OrderPill(
+    icon: ImageVector,
+    text: String,
+    isLoading: Boolean,
+) {
     Surface(
+        modifier = Modifier.placeholderWithShimmer(isLoading),
         shape = MaterialTheme.shapes.small,
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
         border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outlineVariant),
@@ -625,6 +666,7 @@ private fun AmountCell(
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(3.dp),
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     emphasize: Boolean = false,
+    isLoading: Boolean = false,
 ) {
     Column(
         modifier = modifier
@@ -641,6 +683,7 @@ private fun AmountCell(
             overflow = TextOverflow.Ellipsis,
         )
         Text(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             text = value,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = if (emphasize) FontWeight.Bold else FontWeight.Medium,
@@ -659,6 +702,7 @@ private fun OrderInlineInfo(
     textStyle: TextStyle = MaterialTheme.typography.labelSmall,
     color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     fontWeight: FontWeight? = null,
+    isLoading: Boolean = false,
 ) {
     Row(
         modifier = modifier,
@@ -672,6 +716,7 @@ private fun OrderInlineInfo(
             tint = color,
         )
         Text(
+            modifier = Modifier.placeholderWithShimmer(isLoading),
             text = text,
             style = textStyle,
             color = color,

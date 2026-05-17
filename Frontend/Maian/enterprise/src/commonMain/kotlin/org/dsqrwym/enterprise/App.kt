@@ -29,9 +29,9 @@ import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
-import org.dsqrwym.shared.ui.components.order.OrderDetailPlaceholderScreen
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
+import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderDetailScreen
 import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderHistoryScreen
 import org.koin.compose.currentKoinScope
 
@@ -125,12 +125,13 @@ fun App() {
                                 )
                             }
 
-                            entry<OrderDetail> { route ->
-                                OrderDetailPlaceholderScreen(
-                                    orderId = route.orderId,
-                                    onNavigateBack = { navigationState.pop() },
-                                )
-                            }
+                          entry<OrderDetail> { route ->
+                              EnterpriseOrderDetailScreen(
+                                  orderId = route.orderId,
+                                  userRole = user.userRole,
+                                  onNavigateBack = { navigationState.pop() },
+                              )
+                          }
 
                             profileNavEntry(navigationState, user.userRole)
                         }

@@ -53,6 +53,7 @@ import org.dsqrwym.shared.ui.components.dialog.SharedMediaViewDialog
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.ui.media.SharedVideoPlayer
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
+import org.dsqrwym.shared.util.formatter.asTaxRatePercent
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTopAndButton
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
@@ -428,7 +429,7 @@ private fun SharedProductInfoSection(
                     onClick = {},
                     label = {
                         Text(
-                            text = "${stringResource(SharedRes.string.tax_rate)}: $taxRate %",
+                            text = "${stringResource(SharedRes.string.tax_rate)}: ${taxRate.asTaxRatePercent()}",
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }

@@ -10,11 +10,13 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.orders.SharedOrderSortBy
 import org.dsqrwym.shared.data.orders.SharedOrderStatus
+import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.paging.data.PaginationQuery
 
 @Serializable
@@ -92,6 +94,93 @@ data class SharedOrderSummary(
     val retailerSnapshot: SharedOrderPartnerSnapshot? = null,
     @SerialName("shipping_address_snapshot")
     val shippingAddressSnapshot: SharedOrderShippingAddressSnapshot? = null,
+)
+
+@Serializable
+data class SharedOrderDetail(
+    @Serializable(with = FlexibleStringSerializer::class)
+    val id: String,
+    @SerialName("order_number")
+    val orderNumber: String,
+    @SerialName("wholesaler_id")
+    @Serializable(with = FlexibleNullableStringSerializer::class)
+    val wholesalerId: String? = null,
+    @SerialName("retailer_id")
+    @Serializable(with = FlexibleNullableStringSerializer::class)
+    val retailerId: String? = null,
+    val currency: String = "EUR",
+    @SerialName("item_count")
+    val itemCount: Int,
+    @SerialName("total_subtotal")
+    val totalSubtotal: String,
+    @SerialName("discount_total")
+    val discountTotal: String? = null,
+    @SerialName("total_iva")
+    val totalIva: String,
+    @SerialName("total_amount")
+    val totalAmount: String,
+    val status: SharedOrderStatus,
+    @SerialName("created_at")
+    val createdAt: String,
+    @SerialName("accepted_at")
+    val acceptedAt: String? = null,
+    @SerialName("rejected_at")
+    val rejectedAt: String? = null,
+    @SerialName("rejected_reason")
+    val rejectedReason: String? = null,
+    @SerialName("cancelled_at")
+    val cancelledAt: String? = null,
+    @SerialName("cancelled_reason")
+    val cancelledReason: String? = null,
+    @SerialName("estimated_delivery_date")
+    val estimatedDeliveryDate: String? = null,
+    @SerialName("wholesaler_snapshot")
+    val wholesalerSnapshot: SharedOrderPartnerSnapshot? = null,
+    @SerialName("retailer_snapshot")
+    val retailerSnapshot: SharedOrderPartnerSnapshot? = null,
+    @SerialName("shipping_address_snapshot")
+    val shippingAddressSnapshot: SharedOrderShippingAddressSnapshot? = null,
+    val items: List<SharedOrderDetailItem> = emptyList(),
+)
+
+@Serializable
+data class SharedOrderDetailItem(
+    @Serializable(with = FlexibleStringSerializer::class)
+    val id: String,
+    @SerialName("product_id")
+    @Serializable(with = FlexibleNullableStringSerializer::class)
+    val productId: String? = null,
+    @SerialName("variant_product_id")
+    @Serializable(with = FlexibleNullableStringSerializer::class)
+    val variantProductId: String? = null,
+    @SerialName("product_name")
+    val productName: String,
+    @SerialName("product_title")
+    val productTitle: String? = null,
+    @SerialName("product_code")
+    val productCode: String,
+    @SerialName("variant_product_code")
+    val variantProductCode: String,
+    @SerialName("product_translations_snapshot")
+    val productTranslationsSnapshot: JsonElement? = null,
+    @SerialName("variant_attributes_snapshot")
+    val variantAttributesSnapshot: JsonElement? = null,
+    @SerialName("type_sale")
+    val typeSale: SharedProductSaleVariant,
+    @SerialName("sale_unit_qty")
+    val saleUnitQty: Int,
+    @SerialName("min_order_qty")
+    val minOrderQty: Int? = null,
+    val quantity: Int,
+    @SerialName("unit_price")
+    val unitPrice: String,
+    @SerialName("unit_price_iva")
+    val unitPriceIva: String,
+    val iva: String,
+    val subtotal: String,
+    @SerialName("iva_total")
+    val ivaTotal: String,
+    val total: String,
 )
 
 @Serializable

@@ -7,6 +7,7 @@ import org.dsqrwym.standard.data.order.StandardOrderApi
 import org.dsqrwym.standard.data.order.StandardOrderRepository
 import org.dsqrwym.standard.ui.viewmodels.cart.StandardCartViewModel
 import org.dsqrwym.standard.ui.viewmodels.browse.*
+import org.dsqrwym.standard.ui.viewmodels.order.StandardOrderDetailViewModel
 import org.dsqrwym.standard.ui.viewmodels.order.StandardOrderHistoryViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -25,4 +26,5 @@ val standardBrowseModule = module {
     viewModel<WholesalerProfileViewModel> { WholesalerProfileViewModel(get(), get()) }
     viewModel<StandardCartViewModel> { StandardCartViewModel(get(), get(), get(), get()) }
     viewModel<StandardOrderHistoryViewModel> { StandardOrderHistoryViewModel(get(), get()) }
+    viewModel<StandardOrderDetailViewModel> { StandardOrderDetailViewModel(get(), get()) }
 }

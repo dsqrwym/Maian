@@ -90,6 +90,8 @@ object ApiConfig {
         const val WHOLESALER_FILTER_METADATA = "${ORDERS}/filter-metadata/enterprise"
         const val FROM_CART = "${ORDERS}/from-cart"
 
+        fun retailerDetail(id: String) = "${RETAILER}/$id"
+        fun wholesalerDetail(id: String) = "${WHOLESALER}/$id"
         fun cancel(id: String) = "${ORDERS}/$id/cancel"
         fun reject(id: String) = "${ORDERS}/$id/reject"
         fun accept(id: String) = "${ORDERS}/$id/accept"

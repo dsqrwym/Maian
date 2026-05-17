@@ -11,6 +11,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderActionReasonDto
+import org.dsqrwym.shared.data.orders.dto.SharedOrderDetail
 import org.dsqrwym.shared.data.orders.dto.SharedOrderEstimatedDeliveryDateDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderFilterMetadataDto
 import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
@@ -35,6 +36,16 @@ class SharedOrderApi(private val client: HttpClient) {
     suspend fun getWholesalerOrderFilterMetadata(): ApiResponse<SharedOrderFilterMetadataDto> =
         client.get(ApiConfig.OrderPath.WHOLESALER_FILTER_METADATA).body()
 
+    suspend fun getRetailerOrderDetail(id: String, langCode: String): ApiResponse<SharedOrderDetail> =
+        client.get(ApiConfig.OrderPath.retailerDetail(id)) {
+            parameter("langCode", langCode)
+        }.body()
+
+    suspend fun getWholesalerOrderDetail(id: String, langCode: String): ApiResponse<SharedOrderDetail> =
+        client.get(ApiConfig.OrderPath.wholesalerDetail(id)) {
+            parameter("langCode", langCode)
+        }.body()
+
     suspend fun cancelOrder(id: String, reason: String?): ApiResponse<Unit> =
         client.post(ApiConfig.OrderPath.cancel(id)) {
             contentType(ContentType.Application.Json)
@@ -48,9 +59,7 @@ class SharedOrderApi(private val client: HttpClient) {
         }.body()
 
     suspend fun acceptOrder(id: String): ApiResponse<Unit> =
-        client.post(ApiConfig.OrderPath.accept(id)) {
-            contentType(ContentType.Application.Json)
-        }.body()
+        client.post(ApiConfig.OrderPath.accept(id)).body()
 
     suspend fun updateEstimatedDeliveryDate(id: String, estimatedDeliveryDate: String?): ApiResponse<Unit> =
         client.patch(ApiConfig.OrderPath.estimatedDeliveryDate(id)) {

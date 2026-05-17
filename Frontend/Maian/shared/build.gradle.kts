@@ -149,6 +149,8 @@ kotlin {
             api(libs.ktor.client.logging)
             api(libs.ktor.client.auth)
             api(libs.ktor.serialization.kotlinx.json)
+            api(libs.table.core)
+            api(libs.kotlinx.collections.immutable)
 
             // 平台原生通知
             api(libs.alert.kmp)

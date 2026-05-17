@@ -4,7 +4,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import org.dsqrwym.shared.navigation.SharedProfileScreen
-import org.dsqrwym.shared.ui.components.order.OrderDetailPlaceholderScreen
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 import org.dsqrwym.standard.domain.browse.BrowseScope
@@ -23,6 +22,7 @@ import org.dsqrwym.standard.navigation.WholesalersScreen
 import org.dsqrwym.standard.ui.screens.browse.CategoryBrowseScreen
 import org.dsqrwym.standard.ui.screens.browse.product.ProductBrowseScreen
 import org.dsqrwym.standard.ui.screens.cart.StandardCartScreen
+import org.dsqrwym.standard.ui.screens.order.StandardOrderDetailScreen
 import org.dsqrwym.standard.ui.screens.order.StandardOrderHistoryScreen
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
 import org.dsqrwym.standard.domain.browse.toRetailWholesaler
@@ -130,7 +130,7 @@ fun EntryProviderScope<NavKey>.menuNavEntry(
     }
 
     entry<OrderDetailScreen> { route ->
-        OrderDetailPlaceholderScreen(
+        StandardOrderDetailScreen(
             orderId = route.orderId,
             onNavigateBack = { navigationState.pop() },
         )

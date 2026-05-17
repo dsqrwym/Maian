@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.*
 import maian.standard.generated.resources.*
+import org.dsqrwym.shared.util.formatter.asTaxRatePercent
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.dsqrwym.standard.domain.cart.CartItem
 import org.dsqrwym.standard.domain.cart.CartItemStatus
@@ -171,7 +172,7 @@ private fun CartItemPriceBreakdown(
         )
         CartItemPriceValue(
             label = stringResource(SharedRes.string.tax_rate),
-            value = cartTaxRate(item.iva),
+            value = item.iva.asTaxRatePercent(),
             isLoading = isLoading,
         )
     }
@@ -261,17 +262,6 @@ private fun CartItemLineAmount(
             overflow = TextOverflow.Ellipsis,
         )
     }
-}
-
-private fun cartTaxRate(value: String): String {
-    val trimmed = value.trim()
-    if (trimmed.isEmpty() || trimmed.contains("%")) return trimmed
-
-    val normalized = trimmed
-        .trimEnd('0')
-        .trimEnd('.')
-        .ifBlank { "0" }
-    return "$normalized%"
 }
 
 @Composable

@@ -38,7 +38,7 @@ fun <T : Any> SharedProductWaterfall(
     applyPaddingWithoutTop: Boolean = false,
     includeMenuTopPadding: Boolean = false,
     minSize: Dp = 200.dp,
-    key: (index: Int) -> Any = { index -> index },
+    key: (index: Int) -> Any = { index -> "$index-product" },
     itemContent: @Composable LazyStaggeredGridItemScope.(T) -> Unit,
 ) {
     val state = rememberLazyStaggeredGridState()
