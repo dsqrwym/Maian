@@ -15,6 +15,11 @@
         "include": "src/mail/templates/**/*",
         "watchAssets": true,
         "output": "src/mail/templates"
+      },
+      {
+        "include": "../assert/font/**/*",
+        "watchAssets": true,
+        "output": "assert/font"
       }
     ]
   }

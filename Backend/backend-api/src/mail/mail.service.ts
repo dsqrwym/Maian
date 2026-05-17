@@ -11,6 +11,7 @@ import {
   ActiveAdminWithPasswordEmailJob,
   ActiveEmployeeWithPasswordEmailJob,
   BaseEmailJobWithLink,
+  OrderPdfNotificationEmailJob,
   RegisterEmailJob,
   ResetPasswordJob,
   VerifyEmployeeEmailJob,
@@ -125,6 +126,26 @@ export class MailService {
     );
     await this.mailQueue.add(
       'sendActiveAdminWithTempPassword',
+      dto,
+      this.mailJobsOption,
+    );
+    return { queued: true };
+  }
+
+  async sendOrderPdfNotification(dto: OrderPdfNotificationEmailJob) {
+    const lang = dto.lang || 'en';
+    const subject = this.i18nService.translate(
+      `order-pdf.mail.${dto.type}.subject`,
+      {
+        lang,
+        args: { orderNumber: dto.orderNumber },
+      },
+    );
+    this.logger.info(
+      `Queue job to send order PDF email to ${maskEmail(dto.to)} with subject: ${subject}`,
+    );
+    await this.mailQueue.add(
+      'sendOrderPdfNotification',
       dto,
       this.mailJobsOption,
     );

@@ -13,12 +13,15 @@ import { VerifyEmployeeMailProcessorService } from './verification-processor/ver
 import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service.js';
 import { Logger } from 'nestjs-pino';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
+import { FilesModule } from '#/files/files.module.js';
+import { OrderPdfNotificationProcessorService } from '#/mail/verification-processor/order-pdf-notification-processor.service.js';
 
 @Global()
 @Module({
   imports: [
     ConfigModule,
     MyI18nModule,
+    FilesModule,
     BullModule.registerQueueAsync({
       name: 'mail',
       useFactory: (configService: ConfigService, logger: Logger) => ({
@@ -76,6 +79,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.ad
     VerifyRegistrationProcessorService,
     VerifyEmployeeMailProcessorService,
     VerifyAdminMailProcessorService,
+    OrderPdfNotificationProcessorService,
   ],
   exports: [MailService],
 })

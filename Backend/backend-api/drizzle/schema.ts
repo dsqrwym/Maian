@@ -153,7 +153,7 @@ export const variant_products = pgTable("variant_products", {
 	sale_unit_qty: integer().default(1).notNull(),
 	min_order_qty: integer().default(1).notNull(),
 	updated_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`),
-	created_by: uuid().notNull(),
+	created_by: uuid(),
 	updated_by: uuid(),
 }, (table) => [
 	index("idx_variant_products_product_id_price_iva").using("btree", table.product_id.asc().nullsLast().op("int8_ops"), table.price_iva.asc().nullsLast().op("int8_ops")),
@@ -161,7 +161,7 @@ export const variant_products = pgTable("variant_products", {
 			columns: [table.created_by],
 			foreignColumns: [users.id],
 			name: "variant_products_created_by_fkey"
-		}),
+		}).onDelete("set null"),
 	foreignKey({
 			columns: [table.product_id],
 			foreignColumns: [products.id],
@@ -171,7 +171,7 @@ export const variant_products = pgTable("variant_products", {
 			columns: [table.updated_by],
 			foreignColumns: [users.id],
 			name: "variant_products_updated_by_fkey"
-		}),
+		}).onDelete("set null"),
 	check("variant_available_stock_check", sql`available_stock >= 0`),
 	check("variant_low_stock_threshold_check", sql`low_stock_threshold >= 0`),
 	check("variant_min_order_qty_check", sql`(min_order_qty >= 1) AND (min_order_qty <= 1000000)`),
@@ -345,7 +345,7 @@ export const products = pgTable("products", {
 	created_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`).notNull(),
 	product_code: varchar({ length: 50 }).notNull(),
 	updated_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`),
-	created_by: uuid().notNull(),
+	created_by: uuid(),
 	updated_by: uuid(),
 	name_unaccent: text().generatedAlwaysAs(sql`immutable_unaccent((name)::text)`),
 	title_unaccent: text().generatedAlwaysAs(sql`immutable_unaccent((title)::text)`),
@@ -362,12 +362,12 @@ export const products = pgTable("products", {
 			columns: [table.created_by],
 			foreignColumns: [users.id],
 			name: "products_created_by_fkey"
-		}),
+		}).onDelete("set null"),
 	foreignKey({
 			columns: [table.updated_by],
 			foreignColumns: [users.id],
 			name: "products_updated_by_fkey"
-		}),
+		}).onDelete("set null"),
 	foreignKey({
 			columns: [table.user_id],
 			foreignColumns: [users.id],
@@ -586,6 +586,7 @@ export const order_details = pgTable("order_details", {
 	total: numeric({ precision: 20, scale:  2 }).notNull(),
 	created_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`).notNull(),
 }, (table) => [
+	index("idx_order_details_order_id").using("btree", table.order_id.asc().nullsLast().op("int8_ops")),
 	foreignKey({
 			columns: [table.order_id],
 			foreignColumns: [orders.id],
@@ -753,6 +754,30 @@ export const document_sequences = pgTable("document_sequences", {
 	check("document_sequences_year_check", sql`(year >= 2000) AND (year <= 9999)`),
 ]);
 
+export const order_pdf_files = pgTable("order_pdf_files", {
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	order_id: bigint({ mode: "number" }).notNull(),
+	lang_code: varchar({ length: 10 }).notNull(),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	file_id: bigint({ mode: "number" }).notNull(),
+	created_at: timestamp({ mode: 'string' }).default(sql`(now() AT TIME ZONE 'utc'::text)`).notNull(),
+}, (table) => [
+	index("idx_order_pdf_files_file_id").using("btree", table.file_id.asc().nullsLast().op("int8_ops")),
+	index("idx_order_pdf_files_order_id").using("btree", table.order_id.asc().nullsLast().op("int8_ops")),
+	foreignKey({
+			columns: [table.file_id],
+			foreignColumns: [files.id],
+			name: "order_pdf_files_file_id_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.order_id],
+			foreignColumns: [orders.id],
+			name: "order_pdf_files_order_id_fkey"
+		}).onDelete("cascade"),
+	primaryKey({ columns: [table.order_id, table.file_id], name: "order_pdf_files_pkey"}),
+	unique("order_pdf_files_order_lang_unique").on(table.order_id, table.lang_code),
+]);
+
 export const category_translations = pgTable("category_translations", {
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
 	category_id: bigint({ mode: "number" }).notNull(),
@@ -771,7 +796,7 @@ export const category_translations = pgTable("category_translations", {
 			columns: [table.updated_by],
 			foreignColumns: [users.id],
 			name: "category_translations_updated_by_fkey"
-		}),
+		}).onDelete("set null"),
 	foreignKey({
 			columns: [table.category_id],
 			foreignColumns: [categories.id],
@@ -804,6 +829,6 @@ export const product_translations = pgTable("product_translations", {
 			columns: [table.updated_by],
 			foreignColumns: [users.id],
 			name: "product_translations_updated_by_fkey"
-		}),
+		}).onDelete("set null"),
 	primaryKey({ columns: [table.product_id, table.lang_code], name: "pk_product_translations"}),
 ]);

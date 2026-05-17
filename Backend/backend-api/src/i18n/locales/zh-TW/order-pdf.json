@@ -1,0 +1,61 @@
+{
+  "documentTitle": "訂單",
+  "order": "訂單",
+  "page": "頁",
+  "series": "系列",
+  "year": "年份",
+  "sequence": "序號",
+  "date": "日期",
+  "seller": "賣方 / 批發商",
+  "buyer": "買方 / 零售商",
+  "companyType": "公司類型",
+  "taxId": "稅號",
+  "contact": "聯絡人",
+  "email": "電子郵件",
+  "phone": "電話",
+  "shippingAddress": "配送地址",
+  "country": "國家",
+  "documentSummary": "文件摘要",
+  "number": "編號",
+  "currency": "貨幣",
+  "lineCount": "行數",
+  "itemsTitle": "訂單明細",
+  "product": "產品",
+  "code": "編碼",
+  "saleUnit": "單位",
+  "quantity": "數量",
+  "price": "價格",
+  "ivaPercent": "稅率 %",
+  "subtotal": "稅前",
+  "iva": "稅額",
+  "total": "總計",
+  "variant": "規格",
+  "taxableBase": "計稅基礎",
+  "discount": "折扣",
+  "grandTotal": "總計",
+  "mail": {
+    "noReason": "未提供原因。",
+    "ignore": "這封郵件由 MaiAn 自動產生。",
+    "support": "如果需要協助，請聯絡 MaiAn 支援。",
+    "NEW_ORDER": {
+      "subject": "新訂單 {orderNumber}",
+      "title": "收到新訂單",
+      "content": "{counterpartyName} 建立了訂單 {orderNumber}。訂單 PDF 已隨郵件附上。"
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "訂單 {orderNumber} 已接受",
+      "title": "訂單已接受",
+      "content": "{counterpartyName} 已接受訂單 {orderNumber}。訂單 PDF 已隨郵件附上。"
+    },
+    "ORDER_REJECTED": {
+      "subject": "訂單 {orderNumber} 已拒絕",
+      "title": "訂單已拒絕",
+      "content": "{counterpartyName} 已拒絕訂單 {orderNumber}。原因：{reason}。訂單 PDF 已隨郵件附上。"
+    },
+    "ORDER_CANCELLED": {
+      "subject": "訂單 {orderNumber} 已取消",
+      "title": "訂單已取消",
+      "content": "{counterpartyName} 已取消訂單 {orderNumber}。原因：{reason}。訂單 PDF 已隨郵件附上。"
+    }
+  }
+}

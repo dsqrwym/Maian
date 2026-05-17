@@ -1,0 +1,61 @@
+{
+  "documentTitle": "订单",
+  "order": "订单",
+  "page": "页",
+  "series": "系列",
+  "year": "年份",
+  "sequence": "序号",
+  "date": "日期",
+  "seller": "卖方 / 批发商",
+  "buyer": "买方 / 零售商",
+  "companyType": "公司类型",
+  "taxId": "税号",
+  "contact": "联系人",
+  "email": "邮箱",
+  "phone": "电话",
+  "shippingAddress": "配送地址",
+  "country": "国家",
+  "documentSummary": "单据摘要",
+  "number": "编号",
+  "currency": "货币",
+  "lineCount": "行数",
+  "itemsTitle": "订单明细",
+  "product": "产品",
+  "code": "编码",
+  "saleUnit": "单位",
+  "quantity": "数量",
+  "price": "价格",
+  "ivaPercent": "税率 %",
+  "subtotal": "税前",
+  "iva": "税额",
+  "total": "总计",
+  "variant": "规格",
+  "taxableBase": "计税基础",
+  "discount": "折扣",
+  "grandTotal": "总计",
+  "mail": {
+    "noReason": "未提供原因。",
+    "ignore": "这封邮件由 MaiAn 自动生成。",
+    "support": "如果需要帮助，请联系 MaiAn 支持。",
+    "NEW_ORDER": {
+      "subject": "新订单 {orderNumber}",
+      "title": "收到新订单",
+      "content": "{counterpartyName} 创建了订单 {orderNumber}。订单 PDF 已随邮件附上。"
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "订单 {orderNumber} 已接受",
+      "title": "订单已接受",
+      "content": "{counterpartyName} 已接受订单 {orderNumber}。订单 PDF 已随邮件附上。"
+    },
+    "ORDER_REJECTED": {
+      "subject": "订单 {orderNumber} 已拒绝",
+      "title": "订单已拒绝",
+      "content": "{counterpartyName} 已拒绝订单 {orderNumber}。原因：{reason}。订单 PDF 已随邮件附上。"
+    },
+    "ORDER_CANCELLED": {
+      "subject": "订单 {orderNumber} 已取消",
+      "title": "订单已取消",
+      "content": "{counterpartyName} 已取消订单 {orderNumber}。原因：{reason}。订单 PDF 已随邮件附上。"
+    }
+  }
+}

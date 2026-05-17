@@ -1,0 +1,61 @@
+{
+  "documentTitle": "COMANDA",
+  "order": "Comanda",
+  "page": "Pagina",
+  "series": "Serie",
+  "year": "Any",
+  "sequence": "Sequencia",
+  "date": "Data",
+  "seller": "Venedor / Majorista",
+  "buyer": "Comprador / Detallista",
+  "companyType": "Tipus d'empresa",
+  "taxId": "NIF/CIF",
+  "contact": "Contacte",
+  "email": "Email",
+  "phone": "Telefon",
+  "shippingAddress": "Adreca de lliurament",
+  "country": "Pais",
+  "documentSummary": "Resum del document",
+  "number": "Numero",
+  "currency": "Moneda",
+  "lineCount": "Linies",
+  "itemsTitle": "Linies de la comanda",
+  "product": "Producte",
+  "code": "Codi",
+  "saleUnit": "Ud.",
+  "quantity": "Quant.",
+  "price": "Preu",
+  "ivaPercent": "IVA %",
+  "subtotal": "Base",
+  "iva": "IVA",
+  "total": "Total",
+  "variant": "Variant",
+  "taxableBase": "Base imposable",
+  "discount": "Descompte",
+  "grandTotal": "TOTAL",
+  "mail": {
+    "noReason": "No s'ha indicat cap motiu.",
+    "ignore": "Aquest correu s'ha generat automaticament des de MaiAn.",
+    "support": "Si necessites ajuda, contacta amb el suport de MaiAn.",
+    "NEW_ORDER": {
+      "subject": "Nova comanda {orderNumber}",
+      "title": "Nova comanda rebuda",
+      "content": "{counterpartyName} ha creat la comanda {orderNumber}. S'adjunta el PDF de la comanda."
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "Comanda {orderNumber} acceptada",
+      "title": "Comanda acceptada",
+      "content": "{counterpartyName} ha acceptat la comanda {orderNumber}. S'adjunta el PDF de la comanda."
+    },
+    "ORDER_REJECTED": {
+      "subject": "Comanda {orderNumber} rebutjada",
+      "title": "Comanda rebutjada",
+      "content": "{counterpartyName} ha rebutjat la comanda {orderNumber}. Motiu: {reason}. S'adjunta el PDF de la comanda."
+    },
+    "ORDER_CANCELLED": {
+      "subject": "Comanda {orderNumber} cancelada",
+      "title": "Comanda cancelada",
+      "content": "{counterpartyName} ha cancelat la comanda {orderNumber}. Motiu: {reason}. S'adjunta el PDF de la comanda."
+    }
+  }
+}

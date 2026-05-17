@@ -1,0 +1,61 @@
+{
+  "documentTitle": "PEDIDO",
+  "order": "Pedido",
+  "page": "Pagina",
+  "series": "Serie",
+  "year": "Ano",
+  "sequence": "Secuencia",
+  "date": "Fecha",
+  "seller": "Vendedor / Mayorista",
+  "buyer": "Comprador / Retailer",
+  "companyType": "Tipo de empresa",
+  "taxId": "NIF/CIF",
+  "contact": "Contacto",
+  "email": "Email",
+  "phone": "Telefono",
+  "shippingAddress": "Direccion de entrega",
+  "country": "Pais",
+  "documentSummary": "Resumen del documento",
+  "number": "Numero",
+  "currency": "Moneda",
+  "lineCount": "Lineas",
+  "itemsTitle": "Lineas del pedido",
+  "product": "Producto",
+  "code": "Codigo",
+  "saleUnit": "Ud.",
+  "quantity": "Cant.",
+  "price": "Precio",
+  "ivaPercent": "IVA %",
+  "subtotal": "Base",
+  "iva": "IVA",
+  "total": "Total",
+  "variant": "Variante",
+  "taxableBase": "Base imponible",
+  "discount": "Descuento",
+  "grandTotal": "TOTAL",
+  "mail": {
+    "noReason": "No se ha indicado ningun motivo.",
+    "ignore": "Este correo se ha generado automaticamente desde MaiAn.",
+    "support": "Si necesitas ayuda, contacta con el soporte de MaiAn.",
+    "NEW_ORDER": {
+      "subject": "Nuevo pedido {orderNumber}",
+      "title": "Nuevo pedido recibido",
+      "content": "{counterpartyName} ha creado el pedido {orderNumber}. Adjuntamos el PDF del pedido."
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "Pedido {orderNumber} aceptado",
+      "title": "Pedido aceptado",
+      "content": "{counterpartyName} ha aceptado el pedido {orderNumber}. Adjuntamos el PDF del pedido."
+    },
+    "ORDER_REJECTED": {
+      "subject": "Pedido {orderNumber} rechazado",
+      "title": "Pedido rechazado",
+      "content": "{counterpartyName} ha rechazado el pedido {orderNumber}. Motivo: {reason}. Adjuntamos el PDF del pedido."
+    },
+    "ORDER_CANCELLED": {
+      "subject": "Pedido {orderNumber} cancelado",
+      "title": "Pedido cancelado",
+      "content": "{counterpartyName} ha cancelado el pedido {orderNumber}. Motivo: {reason}. Adjuntamos el PDF del pedido."
+    }
+  }
+}

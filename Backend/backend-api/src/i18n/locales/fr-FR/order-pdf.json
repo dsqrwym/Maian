@@ -1,0 +1,61 @@
+{
+  "documentTitle": "COMMANDE",
+  "order": "Commande",
+  "page": "Page",
+  "series": "Serie",
+  "year": "Annee",
+  "sequence": "Sequence",
+  "date": "Date",
+  "seller": "Vendeur / Grossiste",
+  "buyer": "Acheteur / Detailant",
+  "companyType": "Type d'entreprise",
+  "taxId": "Identifiant fiscal",
+  "contact": "Contact",
+  "email": "Email",
+  "phone": "Telephone",
+  "shippingAddress": "Adresse de livraison",
+  "country": "Pays",
+  "documentSummary": "Resume du document",
+  "number": "Numero",
+  "currency": "Devise",
+  "lineCount": "Lignes",
+  "itemsTitle": "Lignes de commande",
+  "product": "Produit",
+  "code": "Code",
+  "saleUnit": "Unite",
+  "quantity": "Qte",
+  "price": "Prix",
+  "ivaPercent": "TVA %",
+  "subtotal": "Base",
+  "iva": "TVA",
+  "total": "Total",
+  "variant": "Variante",
+  "taxableBase": "Base imposable",
+  "discount": "Remise",
+  "grandTotal": "TOTAL",
+  "mail": {
+    "noReason": "Aucun motif n'a ete indique.",
+    "ignore": "Cet email a ete genere automatiquement par MaiAn.",
+    "support": "Si vous avez besoin d'aide, contactez le support MaiAn.",
+    "NEW_ORDER": {
+      "subject": "Nouvelle commande {orderNumber}",
+      "title": "Nouvelle commande recue",
+      "content": "{counterpartyName} a cree la commande {orderNumber}. Le PDF de la commande est joint."
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "Commande {orderNumber} acceptee",
+      "title": "Commande acceptee",
+      "content": "{counterpartyName} a accepte la commande {orderNumber}. Le PDF de la commande est joint."
+    },
+    "ORDER_REJECTED": {
+      "subject": "Commande {orderNumber} refusee",
+      "title": "Commande refusee",
+      "content": "{counterpartyName} a refuse la commande {orderNumber}. Motif : {reason}. Le PDF de la commande est joint."
+    },
+    "ORDER_CANCELLED": {
+      "subject": "Commande {orderNumber} annulee",
+      "title": "Commande annulee",
+      "content": "{counterpartyName} a annule la commande {orderNumber}. Motif : {reason}. Le PDF de la commande est joint."
+    }
+  }
+}

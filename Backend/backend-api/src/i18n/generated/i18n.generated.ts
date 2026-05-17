@@ -19,6 +19,67 @@ export type I18nTranslations = {
         "ignore": string;
         "support": string;
     };
+    "order-pdf": {
+        "documentTitle": string;
+        "order": string;
+        "page": string;
+        "series": string;
+        "year": string;
+        "sequence": string;
+        "date": string;
+        "seller": string;
+        "buyer": string;
+        "companyType": string;
+        "taxId": string;
+        "contact": string;
+        "email": string;
+        "phone": string;
+        "shippingAddress": string;
+        "country": string;
+        "documentSummary": string;
+        "number": string;
+        "currency": string;
+        "lineCount": string;
+        "itemsTitle": string;
+        "product": string;
+        "code": string;
+        "saleUnit": string;
+        "quantity": string;
+        "price": string;
+        "ivaPercent": string;
+        "subtotal": string;
+        "iva": string;
+        "total": string;
+        "variant": string;
+        "taxableBase": string;
+        "discount": string;
+        "grandTotal": string;
+        "mail": {
+            "noReason": string;
+            "ignore": string;
+            "support": string;
+            "NEW_ORDER": {
+                "subject": string;
+                "title": string;
+                "content": string;
+            };
+            "ORDER_ACCEPTED": {
+                "subject": string;
+                "title": string;
+                "content": string;
+            };
+            "ORDER_REJECTED": {
+                "subject": string;
+                "title": string;
+                "content": string;
+            };
+            "ORDER_CANCELLED": {
+                "subject": string;
+                "title": string;
+                "content": string;
+            };
+        };
+    };
     "register-verification-email": {
         "subject": string;
         "title": string;

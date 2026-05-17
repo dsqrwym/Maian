@@ -9,9 +9,11 @@ import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import { BadRequestException } from '@nestjs/common';
 import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
+import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 
 export interface IOrderQuery extends IPaginationQueryDto {
   search?: string;
+  wholesalerId?: TagsUuid;
   status?: OrderStatus;
   startDate?: TagsDate;
   endDate?: TagsDate;

@@ -9,6 +9,7 @@ export function useCors(app: NestFastifyApplication) {
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
+    exposedHeaders: ['Content-Disposition'],
     preflightContinue: false,
     optionsSuccessStatus: 204,
   });

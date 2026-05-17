@@ -6,6 +6,7 @@ import {
   ActiveAdminWithPasswordEmailJob,
   ActiveEmployeeWithPasswordEmailJob,
   BaseEmailJobWithLink,
+  OrderPdfNotificationEmailJob,
   RegisterEmailJob,
   ResetPasswordJob,
   VerifyEmployeeEmailJob,
@@ -14,6 +15,7 @@ import { VerifyRegistrationProcessorService } from './verification-processor/ver
 import { VerifyResetPasswordProcessorService } from './verification-processor/verify-reset-password.processor.service.js';
 import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service.js';
 import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service.js';
+import { OrderPdfNotificationProcessorService } from './verification-processor/order-pdf-notification-processor.service.js';
 
 @Processor('mail')
 @Injectable()
@@ -26,6 +28,7 @@ export class MailQueueProcessorService
     private readonly verificationMailProcessorService: VerifyRegistrationProcessorService,
     private readonly verifyAdminMailProcessorService: VerifyAdminMailProcessorService,
     private readonly resetPasswordProcessorService: VerifyResetPasswordProcessorService,
+    private readonly orderPdfNotificationProcessorService: OrderPdfNotificationProcessorService,
     private readonly logger: PinoLogger,
   ) {
     super();
@@ -77,6 +80,11 @@ export class MailQueueProcessorService
           job.data as ActiveAdminWithPasswordEmailJob,
         );
       }
+      case 'sendOrderPdfNotification': {
+        return this.sendOrderPdfNotification(
+          job.data as OrderPdfNotificationEmailJob,
+        );
+      }
       default: {
         this.logger.warn(`Unknown mail job: ${job.name}`);
         return;
@@ -112,6 +120,12 @@ export class MailQueueProcessorService
 
   async sendActiveAdminWithTempPassword(data: ActiveAdminWithPasswordEmailJob) {
     return this.verifyAdminMailProcessorService.sendActiveAdminWithPasswordEmail(
+      data,
+    );
+  }
+
+  async sendOrderPdfNotification(data: OrderPdfNotificationEmailJob) {
+    return this.orderPdfNotificationProcessorService.sendOrderPdfNotification(
       data,
     );
   }

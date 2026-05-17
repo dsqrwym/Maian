@@ -1,0 +1,61 @@
+{
+  "documentTitle": "ENCOMENDA",
+  "order": "Encomenda",
+  "page": "Pagina",
+  "series": "Serie",
+  "year": "Ano",
+  "sequence": "Sequencia",
+  "date": "Data",
+  "seller": "Vendedor / Grossista",
+  "buyer": "Comprador / Retalhista",
+  "companyType": "Tipo de empresa",
+  "taxId": "NIF",
+  "contact": "Contacto",
+  "email": "Email",
+  "phone": "Telefone",
+  "shippingAddress": "Endereco de entrega",
+  "country": "Pais",
+  "documentSummary": "Resumo do documento",
+  "number": "Numero",
+  "currency": "Moeda",
+  "lineCount": "Linhas",
+  "itemsTitle": "Linhas da encomenda",
+  "product": "Produto",
+  "code": "Codigo",
+  "saleUnit": "Unid.",
+  "quantity": "Qtd.",
+  "price": "Preco",
+  "ivaPercent": "IVA %",
+  "subtotal": "Base",
+  "iva": "IVA",
+  "total": "Total",
+  "variant": "Variante",
+  "taxableBase": "Base tributavel",
+  "discount": "Desconto",
+  "grandTotal": "TOTAL",
+  "mail": {
+    "noReason": "Nao foi indicado nenhum motivo.",
+    "ignore": "Este email foi gerado automaticamente pela MaiAn.",
+    "support": "Se precisar de ajuda, contacte o suporte da MaiAn.",
+    "NEW_ORDER": {
+      "subject": "Nova encomenda {orderNumber}",
+      "title": "Nova encomenda recebida",
+      "content": "{counterpartyName} criou a encomenda {orderNumber}. O PDF da encomenda esta em anexo."
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "Encomenda {orderNumber} aceite",
+      "title": "Encomenda aceite",
+      "content": "{counterpartyName} aceitou a encomenda {orderNumber}. O PDF da encomenda esta em anexo."
+    },
+    "ORDER_REJECTED": {
+      "subject": "Encomenda {orderNumber} rejeitada",
+      "title": "Encomenda rejeitada",
+      "content": "{counterpartyName} rejeitou a encomenda {orderNumber}. Motivo: {reason}. O PDF da encomenda esta em anexo."
+    },
+    "ORDER_CANCELLED": {
+      "subject": "Encomenda {orderNumber} cancelada",
+      "title": "Encomenda cancelada",
+      "content": "{counterpartyName} cancelou a encomenda {orderNumber}. Motivo: {reason}. O PDF da encomenda esta em anexo."
+    }
+  }
+}

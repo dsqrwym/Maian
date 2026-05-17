@@ -75,12 +75,8 @@ export class ReadOrderService {
         wholesaler_id: orders.wholesaler_id,
         retailer_id: orders.retailer_id,
 
-        ...(wholesalerId && {
-          retailer_snapshot: orders.retailer_snapshot,
-        }),
-        ...(retailerId && {
-          wholesaler_snapshot: orders.wholesaler_snapshot,
-        }),
+        retailer_snapshot: orders.retailer_snapshot,
+        wholesaler_snapshot: orders.wholesaler_snapshot,
 
         shipping_address_snapshot: orders.shipping_address_snapshot,
 
@@ -110,15 +106,16 @@ export class ReadOrderService {
             product_code: order_details.product_code,
             variant_product_code: order_details.variant_product_code,
 
-            product_translations_snapshot: sql`(
-            select t 
-            from jsonb_array_elements(
-            ${order_details.product_translations_snapshot}
-            ) as t 
-            where t->>'lang_code' = ${langCode}
-            limit 1
-            )
-            `,
+            product_translations_snapshot: sql`
+            coalesce(
+              (
+                select jsonb_agg(t)
+                from jsonb_array_elements(
+                ${order_details.product_translations_snapshot}
+              ) as t
+              where t->>'lang_code' = ${langCode}
+              ),'[]'::jsonb
+            )`,
             variant_attributes_snapshot:
               order_details.variant_attributes_snapshot,
 
@@ -292,6 +289,10 @@ export class ReadOrderService {
     }
     if (retailerId) {
       whereCondition.push(eq(orders.retailer_id, retailerId));
+      // 只有零售商需要根据批发商ID进行过滤
+      if (query.wholesalerId) {
+        whereCondition.push(eq(orders.wholesaler_id, query.wholesalerId));
+      }
     }
     if (wholesalerId) {
       whereCondition.push(eq(orders.wholesaler_id, wholesalerId));

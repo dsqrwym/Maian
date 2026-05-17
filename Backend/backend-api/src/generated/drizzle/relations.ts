@@ -29,6 +29,7 @@ import {
   chat_participants,
   product_categories,
   document_sequences,
+  order_pdf_files,
   category_translations,
   product_translations,
 } from './schema.js';
@@ -224,6 +225,7 @@ export const filesRelations = relations(files, ({ many }) => ({
   products_files: many(products_files),
   users: many(users),
   user_uploads: many(user_uploads),
+  order_pdf_files: many(order_pdf_files),
 }));
 
 export const messagesRelations = relations(messages, ({ one, many }) => ({
@@ -397,6 +399,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     references: [users.id],
     relationName: 'orders_wholesaler_id_users_id',
   }),
+  order_pdf_files: many(order_pdf_files),
 }));
 
 export const user_uploadsRelations = relations(user_uploads, ({ one }) => ({
@@ -444,6 +447,20 @@ export const document_sequencesRelations = relations(
     user: one(users, {
       fields: [document_sequences.owner_id],
       references: [users.id],
+    }),
+  }),
+);
+
+export const order_pdf_filesRelations = relations(
+  order_pdf_files,
+  ({ one }) => ({
+    file: one(files, {
+      fields: [order_pdf_files.file_id],
+      references: [files.id],
+    }),
+    order: one(orders, {
+      fields: [order_pdf_files.order_id],
+      references: [orders.id],
     }),
   }),
 );

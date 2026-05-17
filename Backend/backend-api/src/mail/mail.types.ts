@@ -33,3 +33,19 @@ export interface ActiveEmployeeWithPasswordEmailJob extends BaseEmailJovWithTemp
 export interface ActiveAdminWithPasswordEmailJob extends BaseEmailJovWithTemporaryPassword {
   adminName: string;
 }
+
+export enum OrderPdfEmailType {
+  NEW_ORDER = 'NEW_ORDER',
+  ORDER_ACCEPTED = 'ORDER_ACCEPTED',
+  ORDER_REJECTED = 'ORDER_REJECTED',
+  ORDER_CANCELLED = 'ORDER_CANCELLED',
+}
+
+export interface OrderPdfNotificationEmailJob extends BaseEmailJob {
+  type: OrderPdfEmailType;
+  orderNumber: string;
+  fileId: string;
+  recipientName?: string | null;
+  counterpartyName?: string | null;
+  actionReason?: string | null;
+}

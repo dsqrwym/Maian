@@ -56,12 +56,14 @@ import {
 } from '#/orders/dto/change-order-status.dto.js';
 import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import { IUpdateOrderDto } from '../dto/update-order.dto.js';
+import { OrderPdfNotificationService } from '#/orders/services/order-pdf-notification.service.js';
 
 @Injectable()
 export class WriteOrderService {
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
+    private readonly orderPdfNotificationService: OrderPdfNotificationService,
   ) {
     this.logger.setContext(WriteOrderService.name);
   }
@@ -135,7 +137,7 @@ export class WriteOrderService {
 
     const { actionReason } = dto;
     const order_id = BigInt(id);
-    return this.drizzle.db.transaction(async (tx) => {
+    await this.drizzle.db.transaction(async (tx) => {
       const order = await this.getOrderInfoForStatusChange(
         order_id,
         tx,
@@ -197,6 +199,10 @@ export class WriteOrderService {
         throw new ConflictException(ORDER_ERRORS.ORDER_STATUS_INVALID);
       }
     });
+
+    this.dispatchOrderPdfTask(id, 'notifyOrderRejected', () =>
+      this.orderPdfNotificationService.notifyOrderRejected(id),
+    );
   }
 
   async acceptOrderByWholesaler(
@@ -216,7 +222,7 @@ export class WriteOrderService {
       );
     }
     const order_id = BigInt(id);
-    return this.drizzle.db.transaction(async (tx) => {
+    await this.drizzle.db.transaction(async (tx) => {
       const order = await this.getOrderInfoForStatusChange(
         order_id,
         tx,
@@ -276,6 +282,10 @@ export class WriteOrderService {
         throw new ConflictException(ORDER_ERRORS.ORDER_STATUS_INVALID);
       }
     });
+
+    this.dispatchOrderPdfTask(id, 'notifyOrderAccepted', () =>
+      this.orderPdfNotificationService.notifyOrderAccepted(id),
+    );
   }
 
   async cancelOrderByRetailer(
@@ -297,7 +307,7 @@ export class WriteOrderService {
     const { actionReason } = dto;
     const order_id = BigInt(orderId);
 
-    return this.drizzle.db.transaction(async (tx) => {
+    await this.drizzle.db.transaction(async (tx) => {
       const order = await this.getOrderInfoForStatusChange(
         order_id,
         tx,
@@ -358,6 +368,10 @@ export class WriteOrderService {
         throw new ConflictException(ORDER_ERRORS.ORDER_STATUS_INVALID);
       }
     });
+
+    this.dispatchOrderPdfTask(orderId, 'notifyOrderCancelled', () =>
+      this.orderPdfNotificationService.notifyOrderCancelled(orderId),
+    );
   }
 
   private async getOrderInfoForStatusChange(
@@ -401,7 +415,7 @@ export class WriteOrderService {
         'You do not have permission to create order',
       );
     }
-    return this.drizzle.db.transaction(async (tx) => {
+    const createdOrderResult = await this.drizzle.db.transaction(async (tx) => {
       // 先锁 cart 防止重复提交一样的订单
       const [cart] = await tx
         .select({ id: carts.id })
@@ -489,7 +503,7 @@ export class WriteOrderService {
           retailer_snapshot: retailerSnapshot,
           wholesaler_snapshot: wholesalerSnapshot,
         })
-        .returning({ id: orders.id });
+        .returning({ id: orders.id, order_number: orders.order_number });
 
       await tx.insert(order_details).values(
         orderLines.map((line) => ({
@@ -530,6 +544,30 @@ export class WriteOrderService {
         .update(carts)
         .set({ updated_at: SQL_NOW })
         .where(eq(carts.id, orderLines[0].cartId));
+
+      return {
+        id: createdOrder.id.toString(),
+        order_number: createdOrder.order_number,
+      };
+    });
+
+    this.dispatchOrderPdfTask(createdOrderResult.id, 'notifyNewOrder', () =>
+      this.orderPdfNotificationService.notifyNewOrder(createdOrderResult.id),
+    );
+
+    return createdOrderResult;
+  }
+
+  private dispatchOrderPdfTask(
+    orderId: string,
+    taskName: string,
+    task: () => Promise<unknown>,
+  ) {
+    void task().catch((err: unknown) => {
+      this.logger.error(
+        { err, orderId, taskName },
+        'Order PDF background task failed',
+      );
     });
   }
 

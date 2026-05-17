@@ -1,0 +1,61 @@
+{
+  "documentTitle": "ORDER",
+  "order": "Order",
+  "page": "Page",
+  "series": "Series",
+  "year": "Year",
+  "sequence": "Sequence",
+  "date": "Date",
+  "seller": "Seller / Wholesaler",
+  "buyer": "Buyer / Retailer",
+  "companyType": "Company type",
+  "taxId": "Tax ID",
+  "contact": "Contact",
+  "email": "Email",
+  "phone": "Phone",
+  "shippingAddress": "Shipping address",
+  "country": "Country",
+  "documentSummary": "Document summary",
+  "number": "Number",
+  "currency": "Currency",
+  "lineCount": "Lines",
+  "itemsTitle": "Order lines",
+  "product": "Product",
+  "code": "Code",
+  "saleUnit": "Unit",
+  "quantity": "Qty.",
+  "price": "Price",
+  "ivaPercent": "VAT %",
+  "subtotal": "Base",
+  "iva": "VAT",
+  "total": "Total",
+  "variant": "Variant",
+  "taxableBase": "Taxable base",
+  "discount": "Discount",
+  "grandTotal": "TOTAL",
+  "mail": {
+    "noReason": "No reason was provided.",
+    "ignore": "This email was generated automatically by MaiAn.",
+    "support": "If you need help, contact MaiAn support.",
+    "NEW_ORDER": {
+      "subject": "New order {orderNumber}",
+      "title": "New order received",
+      "content": "{counterpartyName} has created order {orderNumber}. The order PDF is attached."
+    },
+    "ORDER_ACCEPTED": {
+      "subject": "Order {orderNumber} accepted",
+      "title": "Order accepted",
+      "content": "{counterpartyName} has accepted order {orderNumber}. The order PDF is attached."
+    },
+    "ORDER_REJECTED": {
+      "subject": "Order {orderNumber} rejected",
+      "title": "Order rejected",
+      "content": "{counterpartyName} has rejected order {orderNumber}. Reason: {reason}. The order PDF is attached."
+    },
+    "ORDER_CANCELLED": {
+      "subject": "Order {orderNumber} cancelled",
+      "title": "Order cancelled",
+      "content": "{counterpartyName} has cancelled order {orderNumber}. Reason: {reason}. The order PDF is attached."
+    }
+  }
+}

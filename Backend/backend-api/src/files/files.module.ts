@@ -13,14 +13,18 @@ import { CommonModule } from '#/common/common.module.js';
 import { PinoLogger } from 'nestjs-pino';
 import { JwtModule } from '@nestjs/jwt';
 import { ProductFilesService } from './services/product-files.service.js';
+import { OrderFilesService } from '#/files/services/order-files.service.js';
+import { OrderFilesController } from '#/files/controllers/order-files.controller.js';
+import { PDFModule } from '#/pdf/pdf.module.js';
 
 @Global()
 @Module({
-  controllers: [FilesController],
-  imports: [DrizzleModule, CommonModule, JwtModule],
+  controllers: [FilesController, OrderFilesController],
+  imports: [DrizzleModule, CommonModule, JwtModule, PDFModule],
   providers: [
     FilesService,
     ProductFilesService,
+    OrderFilesService,
     FileVideoPlayTokenService,
     LocalStorageDriver,
     CloudflareStorageDriver,
@@ -70,6 +74,7 @@ import { ProductFilesService } from './services/product-files.service.js';
   exports: [
     FilesService,
     FileVideoPlayTokenService,
+    OrderFilesService,
     STORAGE_DRIVER,
     LocalStorageDriver,
     CloudflareStorageDriver,
