@@ -25,6 +25,7 @@ import {
   cart_details,
   orders,
   order_details,
+  wholesaler_staffs,
   user_uploads,
   chat_participants,
   product_categories,
@@ -149,6 +150,18 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   }),
   orders_wholesaler_id: many(orders, {
     relationName: 'orders_wholesaler_id_users_id',
+  }),
+  wholesaler_staffs_created_by: many(wholesaler_staffs, {
+    relationName: 'wholesaler_staffs_created_by_users_id',
+  }),
+  wholesaler_staffs_staff_user_id: many(wholesaler_staffs, {
+    relationName: 'wholesaler_staffs_staff_user_id_users_id',
+  }),
+  wholesaler_staffs_updated_by: many(wholesaler_staffs, {
+    relationName: 'wholesaler_staffs_updated_by_users_id',
+  }),
+  wholesaler_staffs_wholesaler_id: many(wholesaler_staffs, {
+    relationName: 'wholesaler_staffs_wholesaler_id_users_id',
   }),
   user_uploads: many(user_uploads),
   chat_participants: many(chat_participants),
@@ -401,6 +414,32 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
   }),
   order_pdf_files: many(order_pdf_files),
 }));
+
+export const wholesaler_staffsRelations = relations(
+  wholesaler_staffs,
+  ({ one }) => ({
+    user_created_by: one(users, {
+      fields: [wholesaler_staffs.created_by],
+      references: [users.id],
+      relationName: 'wholesaler_staffs_created_by_users_id',
+    }),
+    user_staff_user_id: one(users, {
+      fields: [wholesaler_staffs.staff_user_id],
+      references: [users.id],
+      relationName: 'wholesaler_staffs_staff_user_id_users_id',
+    }),
+    user_updated_by: one(users, {
+      fields: [wholesaler_staffs.updated_by],
+      references: [users.id],
+      relationName: 'wholesaler_staffs_updated_by_users_id',
+    }),
+    user_wholesaler_id: one(users, {
+      fields: [wholesaler_staffs.wholesaler_id],
+      references: [users.id],
+      relationName: 'wholesaler_staffs_wholesaler_id_users_id',
+    }),
+  }),
+);
 
 export const user_uploadsRelations = relations(user_uploads, ({ one }) => ({
   file: one(files, {

@@ -98,4 +98,38 @@
 
     <string name="product_form_sku_subtitle">Chaque produit nécessite au moins une variante de vente (SKU).\nVous pouvez créer des variantes pour différents emballages, spécifications ou prix. \nJusqu'à 50 variantes sont prises en charge.</string>
 
+    <string name="employee_management">Employés</string>
+    <string name="employee_management_description">Gérez le personnel de support, de livraison et d'entrepôt de votre compte grossiste.</string>
+    <string name="employee">Employé</string>
+    <string name="employees">Employés</string>
+    <string name="add_employee">Ajouter un employé</string>
+    <string name="employee_create_title">Créer un employé</string>
+    <string name="employee_edit_title">Modifier l'employé</string>
+    <string name="employee_account">Compte</string>
+    <string name="employee_role">Rôle</string>
+    <string name="employee_status">Statut</string>
+    <string name="employee_user_id">ID employé</string>
+    <string name="field_employee_email_placeholder">Saisissez l'email de l'employé</string>
+    <string name="select_employee_role">Sélectionnez le rôle de l'employé</string>
+    <string name="employee_search_placeholder">Rechercher des employés</string>
+    <string name="no_employees_found">Aucun employé trouvé</string>
+    <string name="employee_delete_message">%1$s\n%2$s\n\nCette action est irréversible.</string>
+    <string name="employee_create_success_pending_verification">Employé créé. Il recevra un email de vérification et restera en attente de vérification jusqu'à l'activation du compte.</string>
+    <string name="employee_role_support">Support</string>
+    <string name="employee_role_delivery">Livraison</string>
+    <string name="employee_role_warehouse">Entrepôt</string>
+    <string name="employee_status_pending_verification">En attente de vérification</string>
+    <string name="employee_status_active">Actif</string>
+    <string name="employee_status_inactive">Inactif</string>
+    <string name="employee_status_banned">Banni</string>
+    <string name="employee_status_pending_review">En attente de révision</string>
+    <string name="employee_status_approved">Approuvé</string>
+    <string name="employee_sort_user_id">ID employé</string>
+    <string name="employee_sort_first_name">Prénom</string>
+    <string name="employee_sort_last_name">Nom</string>
+    <string name="employee_sort_email">Email</string>
+    <string name="employee_sort_username">Nom d'utilisateur</string>
+    <string name="employee_sort_telephone">Téléphone</string>
+    <string name="employee_sort_tax_id">Identifiant fiscal</string>
+
 </resources>

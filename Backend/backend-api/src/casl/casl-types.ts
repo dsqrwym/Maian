@@ -6,7 +6,12 @@ export type ModelSubjects = {
   products: { user_id: string | undefined; status: ProductStatus };
   variant_products: { status: ProductStatus };
   categories: { user_id: string | undefined | null };
-  users: { role?: string; status?: UserStatus; id?: string };
+  users: {
+    role?: string;
+    status?: UserStatus;
+    id?: string;
+    wholesaler_id?: string;
+  };
   products_files: { user_id: string };
   carts: { retailer_id: string };
   orders: { retailer_id?: string | null; wholesaler_id?: string | null };

@@ -70,6 +70,39 @@
     <string name="product_form_attributes_subtitle">Set basic product attributes, including category, tax rate, and status.</string>
     <string name="product_form_sku_title">SKU list</string>
     <string name="product_form_sku_subtitle">Each product needs at least one sales variant (SKU). You can create variants for different packaging, specifications, or prices. Up to 50 variants are supported.</string>
+    <string name="employee_management">Employees</string>
+    <string name="employee_management_description">Manage support, delivery, and warehouse staff for your wholesaler account.</string>
+    <string name="employee">Employee</string>
+    <string name="employees">Employees</string>
+    <string name="add_employee">Add employee</string>
+    <string name="employee_create_title">Create employee</string>
+    <string name="employee_edit_title">Edit employee</string>
+    <string name="employee_account">Account</string>
+    <string name="employee_role">Role</string>
+    <string name="employee_status">Status</string>
+    <string name="employee_user_id">Employee ID</string>
+    <string name="field_employee_email_placeholder">Enter employee email</string>
+    <string name="select_employee_role">Select employee role</string>
+    <string name="employee_search_placeholder">Search employees</string>
+    <string name="no_employees_found">No employees found</string>
+    <string name="employee_delete_message">%1$s\n%2$s\n\nThis action cannot be undone.</string>
+    <string name="employee_create_success_pending_verification">Employee created. They will receive a verification email and remain pending verification until they activate the account.</string>
+    <string name="employee_role_support">Support</string>
+    <string name="employee_role_delivery">Delivery</string>
+    <string name="employee_role_warehouse">Warehouse</string>
+    <string name="employee_status_pending_verification">Pending verification</string>
+    <string name="employee_status_active">Active</string>
+    <string name="employee_status_inactive">Inactive</string>
+    <string name="employee_status_banned">Banned</string>
+    <string name="employee_status_pending_review">Pending review</string>
+    <string name="employee_status_approved">Approved</string>
+    <string name="employee_sort_user_id">Employee ID</string>
+    <string name="employee_sort_first_name">First name</string>
+    <string name="employee_sort_last_name">Last name</string>
+    <string name="employee_sort_email">Email</string>
+    <string name="employee_sort_username">Username</string>
+    <string name="employee_sort_telephone">Phone</string>
+    <string name="employee_sort_tax_id">Tax ID</string>
 </resources>
 
 

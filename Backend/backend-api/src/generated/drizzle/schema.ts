@@ -934,6 +934,7 @@ export const users = pgTable(
     role: UserRole().notNull(),
     tax_id: varchar({ length: 20 }),
     updated_by: uuid(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     profile_image_file_id: bigint({ mode: 'bigint' }),
   },
   (table) => [
@@ -1230,6 +1231,72 @@ export const orders = pgTable(
     check(
       'orders_year_check',
       sql`(order_year >= 2000) AND (order_year <= 9999)`,
+    ),
+  ],
+);
+
+export const wholesaler_staffs = pgTable(
+  'wholesaler_staffs',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
+      name: 'wholesaler_staffs_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    wholesaler_id: uuid().notNull(),
+    staff_user_id: uuid().notNull(),
+    role: UserRole().notNull(),
+    created_at: timestamp({ mode: 'string' })
+      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+      .notNull(),
+    updated_at: timestamp({ mode: 'string' }).default(
+      sql`(now() AT TIME ZONE 'utc'::text)`,
+    ),
+    created_by: uuid(),
+    updated_by: uuid(),
+  },
+  (table) => [
+    index('idx_wholesaler_staffs_staff_user_id').using(
+      'btree',
+      table.staff_user_id.asc().nullsLast().op('uuid_ops'),
+    ),
+    index('idx_wholesaler_staffs_wholesaler_id').using(
+      'btree',
+      table.wholesaler_id.asc().nullsLast().op('uuid_ops'),
+    ),
+    index('idx_wholesaler_staffs_wholesaler_role').using(
+      'btree',
+      table.wholesaler_id.asc().nullsLast().op('enum_ops'),
+      table.role.asc().nullsLast().op('enum_ops'),
+    ),
+    foreignKey({
+      columns: [table.created_by],
+      foreignColumns: [users.id],
+      name: 'wholesaler_staffs_created_by_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.staff_user_id],
+      foreignColumns: [users.id],
+      name: 'wholesaler_staffs_staff_user_id_fkey',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [table.updated_by],
+      foreignColumns: [users.id],
+      name: 'wholesaler_staffs_updated_by_fkey',
+    }).onDelete('set null'),
+    foreignKey({
+      columns: [table.wholesaler_id],
+      foreignColumns: [users.id],
+      name: 'wholesaler_staffs_wholesaler_id_fkey',
+    }).onDelete('cascade'),
+    unique('uq_wholesaler_staff').on(table.wholesaler_id, table.staff_user_id),
+    check('chk_wholesaler_staff_not_self', sql`wholesaler_id <> staff_user_id`),
+    check(
+      'chk_wholesaler_staff_role',
+      sql`role = ANY (ARRAY['SUPPORT'::"UserRole", 'DELIVERY'::"UserRole", 'WAREHOUSE'::"UserRole"])`,
     ),
   ],
 );

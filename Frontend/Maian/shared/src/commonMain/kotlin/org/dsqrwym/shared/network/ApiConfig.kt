@@ -49,7 +49,8 @@ object ApiConfig {
     }
 
     object EnterprisePath {
-        const val WHOLESALER_PROFILE = "${BASE_URL}/enterprise/wholesaler-profile"
+        const val ENTERPRISE_BASE = "${BASE_URL}/enterprise"
+        const val WHOLESALER_PROFILE = "${ENTERPRISE_BASE}/wholesaler-profile"
     }
 
     object LocationsPath {

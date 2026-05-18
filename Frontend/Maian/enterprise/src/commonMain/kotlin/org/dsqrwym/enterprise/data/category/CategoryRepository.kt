@@ -4,6 +4,7 @@ import org.dsqrwym.business.data.category.BusinessCategoryApi
 import org.dsqrwym.business.data.category.BusinessCategoryRepository
 import org.dsqrwym.business.data.category.dto.BusinessCreateCategoryDto
 import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
+import org.dsqrwym.enterprise.data.enterpriseOwnerUserId
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
 import org.dsqrwym.enterprise.domain.category.toDomain
 import org.dsqrwym.shared.data.category.SharedCategoryApi
@@ -32,12 +33,13 @@ class CategoryRepository(
         parentId: String? = null,
         page: Int = 1,
         limit: Int = 100
-    ): SharedResponseResult<ApiResponseList<CategoryNode>> = withAuthOrError { userId ->
+    ): SharedResponseResult<ApiResponseList<CategoryNode>> = withAuthOrError { user ->
+        val ownerUserId = user.enterpriseOwnerUserId()
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             type = type,
             langCode = langCode,
-            userId = userId.userId,
+            userId = ownerUserId,
             parentId = parentId,
             fields = listOf(
                 SharedCategorySelectField.TRANSLATIONS,
@@ -103,8 +105,9 @@ class CategoryRepository(
         parentId: String? = null,
         translations: List<SharedCategoryTranslation>? = null,
     ): SharedResponseResult<Unit> = withAuthOrError { user ->
+        val ownerUserId = user.enterpriseOwnerUserId()
         val dto = BusinessCreateCategoryDto(
-            userId = user.userId,
+            userId = ownerUserId,
             name = name.trim(),
             iva = iva,
             parentId = parentId,
@@ -114,14 +117,14 @@ class CategoryRepository(
     }
 
     suspend fun checkCategoryName(name: String): SharedResponseResult<Boolean> = withAuthOrError { user ->
-        safeApiCall { api.checkCategoryName(name.trim(), user.userId) }
+        safeApiCall { api.checkCategoryName(name.trim(), user.enterpriseOwnerUserId()) }
     }
 
     suspend fun checkUpdateCategoryName(
         name: String,
         id: String,
     ): SharedResponseResult<Boolean> = withAuthOrError { user ->
-        safeApiCall { api.checkUpdateCategoryName(name.trim(), id, user.userId) }
+        safeApiCall { api.checkUpdateCategoryName(name.trim(), id, user.enterpriseOwnerUserId()) }
     }
 
     suspend fun updateCategory(id: String, dto: BusinessUpdateCategoryDto): SharedResponseResult<Unit> {

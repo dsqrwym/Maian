@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.dsqrwym.business.navigation.BusinessNavSerializersModule
+import org.dsqrwym.enterprise.data.employee.EmployeeRole
+import org.dsqrwym.enterprise.data.employee.EmployeeStatus
 
 val EnterpriseSerializersModule = SerializersModule {
     polymorphic(NavKey::class) {
@@ -13,6 +15,9 @@ val EnterpriseSerializersModule = SerializersModule {
         subclass(Products::class, Products.serializer())
         subclass(ProductCreate::class, ProductCreate.serializer())
         subclass(ProductEdit::class, ProductEdit.serializer())
+        subclass(Employees::class, Employees.serializer())
+        subclass(EmployeeCreate::class, EmployeeCreate.serializer())
+        subclass(EmployeeEdit::class, EmployeeEdit.serializer())
         subclass(OrderHistory::class, OrderHistory.serializer())
         subclass(OrderDetail::class, OrderDetail.serializer())
         subclass(WholesalerProfileEdit::class, WholesalerProfileEdit.serializer())
@@ -35,6 +40,23 @@ object ProductCreate : NavKey
 @Serializable
 @SerialName("Product-Edit")
 data class ProductEdit(val id: String) : NavKey
+
+@Serializable
+@SerialName("Employees")
+object Employees : NavKey
+
+@Serializable
+@SerialName("Employee-Create")
+object EmployeeCreate : NavKey
+
+@Serializable
+@SerialName("Employee-Edit")
+data class EmployeeEdit(
+    val id: String,
+    val email: String? = null,
+    val role: EmployeeRole? = null,
+    val status: EmployeeStatus? = null,
+) : NavKey
 
 @Serializable
 @SerialName("Order-History")

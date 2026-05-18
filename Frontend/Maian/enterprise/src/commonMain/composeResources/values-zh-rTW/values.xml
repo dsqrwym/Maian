@@ -68,5 +68,39 @@
     <string name="product_form_attributes_subtitle">設定產品的基本屬性，包括分類、稅率和狀態資訊。</string>
     <string name="product_form_sku_title">SKU 列表</string>
     <string name="product_form_sku_subtitle">每個產品至少需要一個銷售變體（SKU）。你可以為不同包裝、規格或價格建立多個變體。最多支援 50 個變體。</string>
+    <string name="employee_management">員工管理</string>
+    <string name="employee_management_description">管理目前批發商帳號下的客服、配送和倉庫員工。</string>
+    <string name="employee">員工</string>
+    <string name="employees">員工</string>
+    <string name="add_employee">新增員工</string>
+    <string name="employee_create_title">建立員工</string>
+    <string name="employee_edit_title">編輯員工</string>
+    <string name="employee_account">帳號</string>
+    <string name="employee_role">角色</string>
+    <string name="employee_status">狀態</string>
+    <string name="employee_user_id">員工ID</string>
+    <string name="field_employee_email_placeholder">請輸入員工電郵</string>
+    <string name="select_employee_role">選擇員工角色</string>
+    <string name="employee_search_placeholder">搜尋員工</string>
+    <string name="no_employees_found">找不到員工</string>
+    <string name="employee_delete_message">%1$s\n%2$s\n\n此操作無法復原。</string>
+    <string name="employee_create_success_pending_verification">員工已建立。對方會收到驗證郵件，在啟用帳號前狀態為等待驗證。</string>
+    <string name="employee_role_support">客服</string>
+    <string name="employee_role_delivery">配送</string>
+    <string name="employee_role_warehouse">倉庫</string>
+    <string name="employee_status_pending_verification">等待驗證</string>
+    <string name="employee_status_active">已啟用</string>
+    <string name="employee_status_inactive">未啟用</string>
+    <string name="employee_status_banned">已封鎖</string>
+    <string name="employee_status_pending_review">等待審核</string>
+    <string name="employee_status_approved">已通過</string>
+    <string name="employee_sort_user_id">員工ID</string>
+    <string name="employee_sort_first_name">名</string>
+    <string name="employee_sort_last_name">姓</string>
+    <string name="employee_sort_email">電郵</string>
+    <string name="employee_sort_username">使用者名稱</string>
+    <string name="employee_sort_telephone">電話</string>
+    <string name="employee_sort_tax_id">稅號</string>
+
 </resources>
 

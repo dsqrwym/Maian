@@ -58,7 +58,7 @@ class SharedResetPasswordViewModel(
         this.password = password
         passwordError = validatePassword(password)
         if (this.repeatPassword.isNotBlank()) {
-            repeatPasswordError = validateRepeatPassword(this@SharedResetPasswordViewModel.password, password)
+            repeatPasswordError = validateRepeatPassword(password, this.repeatPassword)
         }
     }
 

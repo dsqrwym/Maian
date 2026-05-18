@@ -1,5 +1,5 @@
 import { Controller, Req, UseGuards } from '@nestjs/common';
-import { CreateEmployeeService } from '../services/create-employee.service.js';
+import { WriteEmployeeService } from '../services/write-employee.service.js';
 import {
   ICreateEmployeeDto,
   validateICreateEmployee,
@@ -11,7 +11,12 @@ import { RolesAllowed } from '#/common/guards/decorator/roles-allowed.decorator.
 import { UserRole } from '#/generated/drizzle/enums.js';
 import { minutes, Throttle } from '@nestjs/throttler';
 import { TypedBody } from '#/utils/typia/typed-body.typia.js';
-import { TypedRoute } from '@nestia/core';
+import { TypedParam, TypedRoute } from '@nestia/core';
+import {
+  IUpdateEmployeeDto,
+  validateIUpdateEmployee,
+} from '#/enterprise/dto/update-employee.dto.js';
+import { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 
 /**
  * Controller for creating different types of employee accounts
@@ -25,9 +30,9 @@ import { TypedRoute } from '@nestia/core';
 @UseGuards(JwtAuthGuard)
 @RolesAllowed(UserRole.WHOLESALER)
 @Throttle({ default: { limit: 5, ttl: minutes(1) } })
-@Controller('create-employee')
-export class CreateEmployeeController {
-  constructor(private readonly wholesalerService: CreateEmployeeService) {}
+@Controller('employees')
+export class WriteEmployeeController {
+  constructor(private readonly wholesalerService: WriteEmployeeService) {}
 
   /**
    * Create a new support employee
@@ -90,5 +95,56 @@ export class CreateEmployeeController {
   ): Promise<void> {
     const wholesalerId = req.user.userId;
     return this.wholesalerService.createWarehouseEmployee(wholesalerId, dto);
+  }
+
+  /**
+   * Update an existing employee account
+   *
+   * Allows a wholesaler to update basic employee profile information.
+   *
+   * Only employees belonging to the authenticated wholesaler can be updated.
+   * Email address cannot be changed through this endpoint.
+   *
+   * Updatable fields:
+   * - first_name
+   * - last_name
+   * - username
+   * - telephone
+   * - tax_id
+   *
+   * @param req - Contains the authenticated wholesaler information
+   * @param id - Employee user ID
+   * @param dto - Partial employee update data
+   * @returns Empty response with 200 status code on success
+   */
+  @TypedRoute.Patch(':id')
+  async updateEmployee(
+    @Req() req: FastifyRequest,
+    @TypedParam('id') id: TagsUuid,
+    @TypedBody(validateIUpdateEmployee)
+    dto: IUpdateEmployeeDto,
+  ) {
+    const wholesalerId = req.user.userId;
+    return this.wholesalerService.updateEmployee(id, wholesalerId, dto);
+  }
+
+  /**
+   * Delete an existing employee account
+   *
+   * Allows a wholesaler to delete an employee account.
+   *
+   * Only employees belonging to the authenticated wholesaler can be deleted.
+   *
+   * @param req - Contains the authenticated wholesaler information
+   * @param id - Employee user ID
+   * @returns Empty response with 200 status code on success
+   */
+  @TypedRoute.Delete(':id')
+  async deleteEmployee(
+    @Req() req: FastifyRequest,
+    @TypedParam('id') id: TagsUuid,
+  ) {
+    const wholesalerId = req.user.userId;
+    return this.wholesalerService.deleteEmployee(id, wholesalerId);
   }
 }

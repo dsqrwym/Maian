@@ -68,6 +68,7 @@ export class LoginService {
       userId: user.userId,
       userRole: user.userRole,
       userStatus: user.userStatus,
+      wholesalerId: user.wholesalerId,
       deviceFinger: deviceHash,
       sessionId: newSessionId,
     };

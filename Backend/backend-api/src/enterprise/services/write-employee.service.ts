@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { ICreateEmployeeDto } from '../dto/create-employee.dto.js';
 import { AUTH_ERROR, AUTH_VERIFY_EMAIL_PATH } from '#/auth/auth.constants.js';
@@ -9,103 +14,90 @@ import { IWholesalerProfile } from '#/enterprise/types/IWholesalerProfile.js';
 import { RoleI18nService } from '#/common/i18n/role.i18n.js';
 import { UserRole } from '#/generated/drizzle/enums.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
-import { eq } from 'drizzle-orm';
+import { and, eq, exists, sql } from 'drizzle-orm';
 import {
   configurations,
   users,
   verification_tokens,
+  wholesaler_staffs,
 } from '#/generated/drizzle/schema.js';
+import { IUpdateEmployeeDto } from '#/enterprise/dto/update-employee.dto.js';
+import { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
 
 @Injectable()
-export class CreateEmployeeService {
+export class WriteEmployeeService {
   constructor(
-    //private readonly prismaService: PrismaService,
     private readonly drizzleService: DrizzleService,
     private readonly hashService: HashService,
     private readonly mailService: MailService,
     private readonly roleI18nService: RoleI18nService,
   ) {}
 
-  /*
-  async createEmployee(
+  async deleteEmployee(id: TagsUuid, wholesalerId: string) {
+    const [employee] = await this.drizzleService.db
+      .delete(users)
+      .where(
+        and(
+          eq(users.id, id),
+          exists(
+            this.drizzleService.db
+              .select({ one: sql`1` })
+              .from(wholesaler_staffs)
+              .where(
+                and(
+                  eq(wholesaler_staffs.staff_user_id, id),
+                  eq(wholesaler_staffs.wholesaler_id, wholesalerId),
+                ),
+              ),
+          ),
+        ),
+      )
+      .returning({ id: users.id });
+
+    if (!employee) {
+      throw new NotFoundException('Employee not found');
+    }
+  }
+
+  async updateEmployee(
+    employeeId: string,
     wholesalerId: string,
-    dto: ICreateEmployeeDto,
-    userRole: UserRole,
+    dto: IUpdateEmployeeDto,
   ) {
-    const result = await this.prismaService.$transaction(async (tx) => {
-      const wholesaler = await tx.users.findUnique({
-        where: { id: wholesalerId },
-        select: {
-          user_id: true,
-          profile: true,
-          configurations: { select: { language: true } },
-        },
-      });
+    const { first_name, last_name, username, telephone, tax_id } = dto;
 
-      if (!wholesaler) {
-        throw new ForbiddenException(AUTH_ERROR.ACCESS_DENIED);
+    await this.drizzleService.db.transaction(async (tx) => {
+      const [employee] = await tx
+        .update(users)
+        .set({
+          first_name,
+          last_name,
+          username,
+          telephone,
+          tax_id,
+        })
+        .where(
+          and(
+            eq(users.id, employeeId),
+            exists(
+              tx
+                .select({ one: sql`1` })
+                .from(wholesaler_staffs)
+                .where(
+                  and(
+                    eq(wholesaler_staffs.staff_user_id, employeeId),
+                    eq(wholesaler_staffs.wholesaler_id, wholesalerId),
+                  ),
+                ),
+            ),
+          ),
+        )
+        .returning({ id: users.id });
+      if (!employee) {
+        throw new NotFoundException('Employee not found');
       }
-
-      const employeeUsername = `${wholesaler.user_id}@${dto.username ?? randomUUID()}`;
-
-      const employee = await tx.users.upsert({
-        where: {
-          email: dto.email,
-          username: employeeUsername,
-          status: UserStatus.PENDING_VERIFICATION,
-        },
-        create: {
-          email: dto.email,
-          role: userRole,
-          username: employeeUsername,
-          password: '',
-          telephone: dto.telephone,
-          cif: dto.cif,
-          first_name: dto.first_name,
-          last_name: dto.last_name,
-        },
-        update: {},
-        select: { id: true },
-      });
-
-      const token = `${wholesaler.user_id}@${randomUUID()}`;
-      const hashedToken = await this.hashService.hashWithCrypto(token);
-
-      await tx.verification_tokens.create({
-        data: {
-          user_id: employee.id,
-          token: hashedToken,
-          expires_at: addDays(new Date(), 7),
-        },
-      });
-
-      await tx.configurations.create({
-        data: {
-          user_id: employee.id,
-          language: wholesaler.configurations?.language,
-        },
-      });
-
-      return {
-        employeeId: employee.id,
-        token,
-        lang: wholesaler.configurations?.language,
-        profile: wholesaler.profile,
-      };
     });
-
-    const link = `${AUTH_VERIFY_EMAIL_PATH}?token=${result.token}&userId=${result.employeeId}&lang=${result.lang}`;
-    const wholesalerData = result.profile as unknown as IWholesalerProfile;
-    const position = this.roleI18nService.translateRole(userRole, result.lang);
-
-    await this.mailService.sendEmployeeVerifyEmail({
-      to: dto.email,
-      lang: result.lang,
-      link: link,
-      companyName: wholesalerData.company_name,
-      position: position,
-    });
-  }*/
+  }
 
   async createEmployee(
     wholesalerId: string,
@@ -138,16 +130,28 @@ export class CreateEmployeeService {
           username: employeeUsername,
           password: '',
           telephone: dto.telephone,
-          tax_id: dto.cif,
+          tax_id: dto.tax_id,
           first_name: dto.first_name,
           last_name: dto.last_name,
         })
         .onConflictDoUpdate({
-          target: [users.email, users.username],
+          target: [users.email],
           setWhere: eq(users.status, 'PENDING_VERIFICATION'),
           set: { status: 'PENDING_VERIFICATION' },
         })
-        .returning({ id: users.id });
+        .returning({ id: users.id })
+        .catch(() => {
+          throw new ConflictException('Username already used');
+        });
+
+      await tx
+        .insert(wholesaler_staffs)
+        .values({
+          wholesaler_id: wholesalerId,
+          staff_user_id: employee.id,
+          role: userRole,
+        })
+        .onConflictDoNothing();
 
       const token = `${wholesaler.user_id}@${randomUUID()}`;
       const hashedToken = await this.hashService.hashWithCrypto(token);
@@ -158,19 +162,23 @@ export class CreateEmployeeService {
         expires_at: addDays(new Date(), 7).toISOString(),
       });
 
-      await tx.insert(configurations).values({
-        user_id: employee.id,
-        language: wholesaler.configurations[0]?.language,
-      });
+      const language = wholesaler.configurations[0]?.language ?? 'en';
+
+      await tx
+        .insert(configurations)
+        .values({
+          user_id: employee.id,
+          language: language,
+        })
+        .onConflictDoNothing();
 
       return {
         employeeId: employee.id,
         token,
-        lang: wholesaler.configurations[0]?.language,
+        lang: language,
         profile: wholesaler.profile,
       };
     });
-
     const link = `${AUTH_VERIFY_EMAIL_PATH}?token=${result.token}&userId=${result.employeeId}&lang=${result.lang}`;
     const wholesalerData = result.profile as IWholesalerProfile;
     const position = this.roleI18nService.translateRole(userRole, result.lang);

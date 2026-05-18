@@ -40,7 +40,7 @@ export class WholesalerProfileController {
     @Req() req: FastifyRequest,
   ): Promise<WholesalerProfileResponseDto> {
     return this.wholesalerProfileService.getWholesalerProfile(
-      req.user.userId,
+      req.user.wholesalerId ?? req.user.userId,
       req.ability,
     );
   }

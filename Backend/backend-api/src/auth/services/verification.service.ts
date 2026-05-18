@@ -471,14 +471,16 @@ export class VerificationService {
 
         const wholesalerProfile = profile?.profile as IWholesalerProfile;
 
-        const companyName = wholesalerProfile.company_name || 'unknow';
+        const companyName = wholesalerProfile.company_name ?? 'unknow';
 
         return {
           email: updatedUser.email,
           role: updatedUser.role,
           configurations: updatedUser.configurations,
           employeeName:
-            updatedUser.first_name || updatedUser.username || updatedUser.email,
+            updatedUser.first_name ??
+            updatedUser.username?.split('@')[1] ??
+            updatedUser.email,
           companyName,
         };
       }
@@ -487,7 +489,7 @@ export class VerificationService {
     if (result.role === UserRole.ADMIN) {
       await this.mailService.sendActiveAdminWithTempPasswordEmail({
         to: result.email,
-        adminName: result.username?.split('@')[1] || 'unknow',
+        adminName: result.username ?? 'unknow',
         lang: result.configurations?.language,
         temporaryPassword: password,
       });
@@ -495,8 +497,8 @@ export class VerificationService {
       await this.mailService.sendActiveEmployeeWithTempPasswordEmail({
         to: result.email,
         lang: result.configurations?.language,
-        employeeName: result.employeeName?.split('@')[1] || 'unknow',
-        companyName: result.companyName || 'unknow',
+        employeeName: result.employeeName ?? 'unknow',
+        companyName: result.companyName ?? 'unknow',
         temporaryPassword: password,
       });
     }

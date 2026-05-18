@@ -96,5 +96,38 @@
     <string name="product_form_sku_title">Lista de SKU</string>
 
     <string name="product_form_sku_subtitle">Cada producto necesita al menos una variante de venta (SKU).\nPuedes crear variantes para distintos embalajes, especificaciones o precios.\nSe admiten hasta 50 variantes.</string>
+    <string name="employee_management">Empleados</string>
+    <string name="employee_management_description">Gestiona el personal de soporte, reparto y almacén de tu cuenta mayorista.</string>
+    <string name="employee">Empleado</string>
+    <string name="employees">Empleados</string>
+    <string name="add_employee">Añadir empleado</string>
+    <string name="employee_create_title">Crear empleado</string>
+    <string name="employee_edit_title">Editar empleado</string>
+    <string name="employee_account">Cuenta</string>
+    <string name="employee_role">Rol</string>
+    <string name="employee_status">Estado</string>
+    <string name="employee_user_id">ID de empleado</string>
+    <string name="field_employee_email_placeholder">Introduce el email del empleado</string>
+    <string name="select_employee_role">Selecciona el rol del empleado</string>
+    <string name="employee_search_placeholder">Buscar empleados</string>
+    <string name="no_employees_found">No se encontraron empleados</string>
+    <string name="employee_delete_message">%1$s\n%2$s\n\nEsta acción no se puede deshacer.</string>
+    <string name="employee_create_success_pending_verification">Empleado creado. Recibirá un correo de verificación y quedará pendiente de verificación hasta activar la cuenta.</string>
+    <string name="employee_role_support">Soporte</string>
+    <string name="employee_role_delivery">Reparto</string>
+    <string name="employee_role_warehouse">Almacén</string>
+    <string name="employee_status_pending_verification">Pendiente de verificación</string>
+    <string name="employee_status_active">Activo</string>
+    <string name="employee_status_inactive">Inactivo</string>
+    <string name="employee_status_banned">Bloqueado</string>
+    <string name="employee_status_pending_review">Pendiente de revisión</string>
+    <string name="employee_status_approved">Aprobado</string>
+    <string name="employee_sort_user_id">ID de empleado</string>
+    <string name="employee_sort_first_name">Nombre</string>
+    <string name="employee_sort_last_name">Apellidos</string>
+    <string name="employee_sort_email">Email</string>
+    <string name="employee_sort_username">Usuario</string>
+    <string name="employee_sort_telephone">Teléfono</string>
+    <string name="employee_sort_tax_id">NIF/CIF</string>
 
 </resources>

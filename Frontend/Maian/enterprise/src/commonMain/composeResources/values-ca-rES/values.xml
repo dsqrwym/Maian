@@ -83,5 +83,38 @@
     <string name="product_form_sku_title">Llista d'SKU</string>
 
     <string name="product_form_sku_subtitle">Cada producte necessita almenys una variant de venda (SKU). \nPots crear variants per a diferents embalatges, formats o preus. \nS'admeten fins a 50 variants.</string>
+    <string name="employee_management">Empleats</string>
+    <string name="employee_management_description">Gestiona el personal de suport, repartiment i magatzem del teu compte majorista.</string>
+    <string name="employee">Empleat</string>
+    <string name="employees">Empleats</string>
+    <string name="add_employee">Afegir empleat</string>
+    <string name="employee_create_title">Crear empleat</string>
+    <string name="employee_edit_title">Editar empleat</string>
+    <string name="employee_account">Compte</string>
+    <string name="employee_role">Rol</string>
+    <string name="employee_status">Estat</string>
+    <string name="employee_user_id">ID d'empleat</string>
+    <string name="field_employee_email_placeholder">Introdueix l'email de l'empleat</string>
+    <string name="select_employee_role">Selecciona el rol de l'empleat</string>
+    <string name="employee_search_placeholder">Cerca empleats</string>
+    <string name="no_employees_found">No s'han trobat empleats</string>
+    <string name="employee_delete_message">%1$s\n%2$s\n\nAquesta acció no es pot desfer.</string>
+    <string name="employee_create_success_pending_verification">Empleat creat. Rebrà un correu de verificació i quedarà pendent de verificació fins que activi el compte.</string>
+    <string name="employee_role_support">Suport</string>
+    <string name="employee_role_delivery">Repartiment</string>
+    <string name="employee_role_warehouse">Magatzem</string>
+    <string name="employee_status_pending_verification">Pendent de verificació</string>
+    <string name="employee_status_active">Actiu</string>
+    <string name="employee_status_inactive">Inactiu</string>
+    <string name="employee_status_banned">Bloquejat</string>
+    <string name="employee_status_pending_review">Pendent de revisió</string>
+    <string name="employee_status_approved">Aprovat</string>
+    <string name="employee_sort_user_id">ID d'empleat</string>
+    <string name="employee_sort_first_name">Nom</string>
+    <string name="employee_sort_last_name">Cognoms</string>
+    <string name="employee_sort_email">Email</string>
+    <string name="employee_sort_username">Usuari</string>
+    <string name="employee_sort_telephone">Telèfon</string>
+    <string name="employee_sort_tax_id">NIF/CIF</string>
 
 </resources>

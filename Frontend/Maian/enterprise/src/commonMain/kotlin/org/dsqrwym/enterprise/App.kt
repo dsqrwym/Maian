@@ -15,6 +15,7 @@ import org.dsqrwym.enterprise.navigation.ProductCreate
 import org.dsqrwym.enterprise.navigation.ProductEdit
 import org.dsqrwym.enterprise.navigation.naventry.authNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.categoryNavEntry
+import org.dsqrwym.enterprise.navigation.naventry.employeeNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.profileNavEntry
 import org.dsqrwym.enterprise.ui.screens.products.ProductCreateScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductEditScreen
@@ -92,6 +93,7 @@ fun App() {
                     ) {
                         SharedNavigationRoot(navigationState) {
                             categoryNavEntry(navigationState, user.userRole)
+                            employeeNavEntry(navigationState, user.userRole)
                             entry<SharedDashboardScreen> {
                                 ProductsListScreen(
                                     userRole = user.userRole,

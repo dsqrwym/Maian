@@ -1,83 +1,21 @@
-import type {
-  TagsEmail,
-  TagsUsername,
-} from '#/utils/typia/validators/auth.validator.js';
 import typia from 'typia';
-import type { TagsBasicTelephone } from '#/utils/typia/validators/telephone.validator.js';
 import { isObject } from '#/utils/is.utils.js';
 import { cleanString } from '#/utils/string.util.js';
 import parsePhoneNumberFromString from 'libphonenumber-js';
 import { BadRequestException } from '@nestjs/common';
 import type { IRequestBodyValidator } from '#/utils/typia/typia-type.js';
-import type {
-  TagsFirstName,
-  TagsLastName,
-  TagsTaxId,
-} from '#/utils/typia/validators/user.validator.js';
 import { isValidSpanishTaxId } from '#/utils/is-spain-tax-id.js';
+import type { ICreateEmployeeDto } from '#/enterprise/dto/create-employee.dto.js';
 
-/**
- * 批发商系统创建新员工的数据传输对象
- * 包含注册员工账户所需的所有必要信息
- *
- * @interface ICreateEmployeeDto
- */
-export interface ICreateEmployeeDto {
-  /**
-   * 员工账户的唯一电子邮箱地址
-   * 必须是有效格式且不在黑名单域名中
-   *
-   * @example 'employee.manager@company.com'
-   */
-  email: TagsEmail;
-
-  /**
-   * 员工的名字
-   *
-   * @example 'María'
-   */
-  first_name?: TagsFirstName;
-
-  /**
-   * 员工的姓氏
-   *
-   * @example 'García López'
-   */
-  last_name?: TagsLastName;
-
-  /**
-   * 联系电话
-   *
-   * @example '+34 600 123 456'
-   */
-  telephone?: TagsBasicTelephone;
-
-  /**
-   * 西班牙税务识别号 (CIF/NIF/NIE)
-   *
-   * @example 'B12345678'
-   */
-  tax_id?: TagsTaxId;
-
-  /**
-   * 系统登录用的唯一用户名
-   * 长度必须为3-30个字符，且不能包含'@'符号
-   *
-   * @example 'mgarciam'
-   */
-  username?: TagsUsername;
-}
-export const validateCreateEmployeeFunction =
-  typia.createAssertEquals<ICreateEmployeeDto>();
-export const validateICreateEmployee: IRequestBodyValidator.IAssert<ICreateEmployeeDto> =
+export type IUpdateEmployeeDto = Partial<Omit<ICreateEmployeeDto, 'email'>>;
+export const validateUpdateEmployeeFunction =
+  typia.createAssertEquals<IUpdateEmployeeDto>();
+export const validateIUpdateEmployee: IRequestBodyValidator.IAssert<IUpdateEmployeeDto> =
   {
     type: 'assert',
     assert: (input: unknown) => {
       if (isObject(input)) {
         const obj = input;
-        if (typeof obj.email === 'string') {
-          obj.email = cleanString(obj.email);
-        }
         if (typeof obj.username === 'string') {
           obj.username = cleanString(obj.username);
         }
@@ -99,7 +37,7 @@ export const validateICreateEmployee: IRequestBodyValidator.IAssert<ICreateEmplo
           obj.cif = cleanString(obj.cif);
         }
       }
-      const typedBody = validateCreateEmployeeFunction(input);
+      const typedBody = validateUpdateEmployeeFunction(input);
       if (typedBody.tax_id) {
         if (isValidSpanishTaxId(typedBody.tax_id) === null)
           throw new BadRequestException('Invalid Spain DNI/NIE/NIF format');

@@ -2,6 +2,7 @@ package org.dsqrwym.enterprise.data.product
 
 import org.dsqrwym.enterprise.data.product.dto.*
 import org.dsqrwym.enterprise.data.product.mapper.toDomain
+import org.dsqrwym.enterprise.data.enterpriseOwnerUserId
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.SharedObservableRepository
@@ -37,7 +38,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                 SharedProductListSelectField.CATEGORY,
             )
             val query = SharedFindProductDto(
-                wholesalerId = user.userId,
+                wholesalerId = user.enterpriseOwnerUserId(),
                 search = search?.trim(),
                 langCode = langCode,
                 categoryId = categoryId,
@@ -78,7 +79,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
             safeApiCall {
                 productApi.createProduct(
                     ProductCreateDto(
-                        userId = user.userId,
+                        userId = user.enterpriseOwnerUserId(),
                         name = name.trim(),
                         title = title?.trim(),
                         description = description?.trim(),

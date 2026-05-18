@@ -64,6 +64,7 @@ export class CaslAbilityFactory {
         can(Action.Manage, 'products', { user_id: user.userId });
         can(Action.Manage, 'products_files', { user_id: user.userId });
         can(Action.Update, 'users', { id: user.userId });
+        can(Action.Update, 'users', { wholesaler_id: user.userId });
         can(Action.Read, 'users', { id: user.userId });
         can(Action.Read, 'users', { role: UserRole.RETAILER });
         this.cannotReadHiddenMarketplaceUsers(cannot);

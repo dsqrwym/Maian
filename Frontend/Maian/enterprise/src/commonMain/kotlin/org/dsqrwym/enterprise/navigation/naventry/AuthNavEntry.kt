@@ -144,8 +144,10 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationState)
     ) { route ->
         val resetPasswordViewModel = SharedAuthScope.scope.get<SharedResetPasswordViewModel>()
         val email = route.email
-        email?.let {
-            resetPasswordViewModel.updateEmail(it)
+        LaunchedEffect(email) {
+            email?.let {
+                resetPasswordViewModel.updateEmail(it)
+            }
         }
         ResetPasswordScreen(
             onNavigate = { navViewModel.navigate(it) },

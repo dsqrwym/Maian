@@ -121,6 +121,11 @@ fun ResetPasswordScreen(
                         }
                     }
                     val otpRequester = remember { FocusRequester() }
+                    LaunchedEffect(currentStep, enabled) {
+                        if (currentStep == 2 && enabled) {
+                            otpRequester.requestFocus()
+                        }
+                    }
                     MyOtpInputField(
                         modifier = Modifier.fillMaxWidth(),
                         focusRequester = otpRequester,
@@ -145,7 +150,6 @@ fun ResetPasswordScreen(
                             focusManager.clearFocus()
                         }
                     }
-                    otpRequester.requestFocus()
                 }
             }
 

@@ -20,7 +20,7 @@ import { UserRole } from '#/generated/drizzle/enums.js';
 import { makeUsername } from '#/utils/user.utils.js';
 import { maskEmail } from '#/utils/email.utils.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
-import { users } from '#/generated/drizzle/schema.js';
+import { users, wholesaler_staffs } from '#/generated/drizzle/schema.js';
 import { and, eq, sql, SQL } from 'drizzle-orm';
 
 /**
@@ -223,12 +223,17 @@ export class LoginValidationStrategy {
 
     let wholesalerId: string | undefined;
     const enterprise: UserRole[] = [
-      UserRole.WHOLESALER,
+      UserRole.WAREHOUSE,
       UserRole.DELIVERY,
       UserRole.SUPPORT,
     ];
     if (enterprise.includes(user.role)) {
-      wholesalerId = username?.split('@')[0];
+      wholesalerId = (
+        await this.drizzleService.db
+          .select({ wholesaler_id: wholesaler_staffs.wholesaler_id })
+          .from(wholesaler_staffs)
+          .where(eq(wholesaler_staffs.staff_user_id, user.id))
+      )[0]?.wholesaler_id;
     }
     // Return authenticated user object that will be attached to request.user by Passport
     // 返回认证成功的用户对象，Passport 会将其附加到 request.user 上
