@@ -12,6 +12,7 @@ import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import {
   files,
   message_files,
+  order_pdf_files,
   products_files,
   users,
 } from '#/generated/drizzle/schema.js';
@@ -91,6 +92,12 @@ export class CleanupFilesService {
                   .select({ one: sql<number>`1` })
                   .from(users)
                   .where(eq(users.profile_image_file_id, files.id)),
+              ),
+              notExists(
+                this.drizzleService.db
+                  .select({ one: sql<number>`1` })
+                  .from(order_pdf_files)
+                  .where(eq(order_pdf_files.file_id, files.id)),
               ),
             ),
           );

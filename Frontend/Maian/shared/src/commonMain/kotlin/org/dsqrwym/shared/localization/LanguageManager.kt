@@ -54,6 +54,10 @@ object LanguageManager {
         customAppLocale = locale
     }
 
+    fun getSystemLanguage(): String {
+        return normalizeLanguageCode(getLocaleLanguage())
+    }
+
     fun followSystemLanguage() {
         customAppLocale = null
     }

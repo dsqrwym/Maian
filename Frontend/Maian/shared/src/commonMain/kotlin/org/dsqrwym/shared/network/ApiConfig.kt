@@ -41,6 +41,8 @@ object ApiConfig {
         const val USER = "${BASE_URL}/user"
         const val WHOLESALERS = "${BASE_URL}/user/wholesalers"
         const val RETAILER_PROFILE = "${USER}/retailer-profile"
+        const val SETTINGS = "${USER}/settings"
+        const val SETTINGS_LANGUAGE = "${SETTINGS}/language"
         const val CHECK_MAIL = "${USER}/check/mail"
         const val CHECK_USERNAME = "${USER}/check/username"
         const val CHECK_TAX_ID = "${USER}/check/tax_id"

@@ -2,28 +2,28 @@
   "documentTitle": "COMMANDE",
   "order": "Commande",
   "page": "Page",
-  "series": "Serie",
-  "year": "Annee",
-  "sequence": "Sequence",
+  "series": "Série",
+  "year": "Année",
+  "sequence": "Séquence",
   "date": "Date",
   "seller": "Vendeur / Grossiste",
-  "buyer": "Acheteur / Detailant",
+  "buyer": "Acheteur / Détaillant",
   "companyType": "Type d'entreprise",
   "taxId": "Identifiant fiscal",
   "contact": "Contact",
-  "email": "Email",
-  "phone": "Telephone",
+  "email": "E-mail",
+  "phone": "Téléphone",
   "shippingAddress": "Adresse de livraison",
   "country": "Pays",
-  "documentSummary": "Resume du document",
-  "number": "Numero",
+  "documentSummary": "Résumé du document",
+  "number": "Numéro",
   "currency": "Devise",
   "lineCount": "Lignes",
   "itemsTitle": "Lignes de commande",
   "product": "Produit",
   "code": "Code",
-  "saleUnit": "Unite",
-  "quantity": "Qte",
+  "saleUnit": "Unité",
+  "quantity": "Qté",
   "price": "Prix",
   "ivaPercent": "TVA %",
   "subtotal": "Base",
@@ -34,28 +34,28 @@
   "discount": "Remise",
   "grandTotal": "TOTAL",
   "mail": {
-    "noReason": "Aucun motif n'a ete indique.",
-    "ignore": "Cet email a ete genere automatiquement par MaiAn.",
+    "noReason": "Aucun motif n'a été indiqué.",
+    "ignore": "Cet e-mail a été généré automatiquement par MaiAn.",
     "support": "Si vous avez besoin d'aide, contactez le support MaiAn.",
     "NEW_ORDER": {
       "subject": "Nouvelle commande {orderNumber}",
-      "title": "Nouvelle commande recue",
-      "content": "{counterpartyName} a cree la commande {orderNumber}. Le PDF de la commande est joint."
+      "title": "Nouvelle commande reçue",
+      "content": "{counterpartyName} a créé la commande {orderNumber}. Le PDF de la commande est joint."
     },
     "ORDER_ACCEPTED": {
-      "subject": "Commande {orderNumber} acceptee",
-      "title": "Commande acceptee",
-      "content": "{counterpartyName} a accepte la commande {orderNumber}. Le PDF de la commande est joint."
+      "subject": "Commande {orderNumber} acceptée",
+      "title": "Commande acceptée",
+      "content": "{counterpartyName} a accepté la commande {orderNumber}. Le PDF de la commande est joint."
     },
     "ORDER_REJECTED": {
-      "subject": "Commande {orderNumber} refusee",
-      "title": "Commande refusee",
-      "content": "{counterpartyName} a refuse la commande {orderNumber}. Motif : {reason}. Le PDF de la commande est joint."
+      "subject": "Commande {orderNumber} refusée",
+      "title": "Commande refusée",
+      "content": "{counterpartyName} a refusé la commande {orderNumber}. Motif : {reason}. Le PDF de la commande est joint."
     },
     "ORDER_CANCELLED": {
-      "subject": "Commande {orderNumber} annulee",
-      "title": "Commande annulee",
-      "content": "{counterpartyName} a annule la commande {orderNumber}. Motif : {reason}. Le PDF de la commande est joint."
+      "subject": "Commande {orderNumber} annulée",
+      "title": "Commande annulée",
+      "content": "{counterpartyName} a annulé la commande {orderNumber}. Motif : {reason}. Le PDF de la commande est joint."
     }
   }
 }

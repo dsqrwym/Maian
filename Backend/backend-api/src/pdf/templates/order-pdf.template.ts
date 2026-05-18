@@ -12,6 +12,24 @@ import {
 
 const LOGO_BOX_WIDTH = 110;
 const LOGO_BOX_HEIGHT = 62;
+/**
+ * pdfmake 使用 pt
+ * 1 pt = 1/72 inch
+ * A4 = 210mm × 297mm
+ * ≈ 595.28pt × 841.89pt
+ */
+const A4_WIDTH = 595.28;
+const PAGE_MARGIN_LEFT = 28; // 9.88mm
+const PAGE_MARGIN_TOP = 32; // 11.29mm
+const PAGE_MARGIN_RIGHT = 28; // 9.88mm
+const PAGE_MARGIN_BOTTOM = 40; // 14.11mm
+const PAGE_MARGINS: [number, number, number, number] = [
+  PAGE_MARGIN_LEFT,
+  PAGE_MARGIN_TOP,
+  PAGE_MARGIN_RIGHT,
+  PAGE_MARGIN_BOTTOM,
+];
+const A4_CONTENT_WIDTH = A4_WIDTH - PAGE_MARGIN_LEFT - PAGE_MARGIN_RIGHT;
 
 const buildLogoBox = (logoData?: string | null): Content => {
   return {
@@ -227,6 +245,7 @@ const buildTotalsTable = (
                 style: 'totalValue',
               },
             ],
+            /* 还没有做折扣
             [
               { text: labels.discount, style: 'totalLabel' },
               {
@@ -238,6 +257,7 @@ const buildTotalsTable = (
                 style: 'totalValue',
               },
             ],
+             */
             [
               { text: labels.iva, style: 'totalLabel' },
               {
@@ -282,7 +302,7 @@ export function buildOrderPdfTemplate(
 
   return {
     pageSize: 'A4',
-    pageMargins: [36, 42, 36, 56],
+    pageMargins: PAGE_MARGINS,
 
     defaultStyle: {
       font: data.pdf_font ?? 'NotoSans',
@@ -335,14 +355,14 @@ export function buildOrderPdfTemplate(
         {
           text: `${labels.order} ${data.order_number}`,
           alignment: 'left',
-          margin: [36, 18, 0, 0],
+          margin: [PAGE_MARGIN_LEFT, 18, 0, 0],
           fontSize: 7,
           color: '#777777',
         },
         {
           text: `${labels.page} ${currentPage} / ${pageCount}`,
           alignment: 'right',
-          margin: [0, 18, 36, 0],
+          margin: [0, 18, PAGE_MARGIN_RIGHT, 0],
           fontSize: 7,
           color: '#777777',
         },
@@ -352,11 +372,13 @@ export function buildOrderPdfTemplate(
     content: [
       {
         columns: [
+          // 左 LOGO
           {
             width: LOGO_BOX_WIDTH,
             stack: [buildLogoBox(data.wholesaler_logo_data_url)],
           },
           {
+            // 右 文本
             width: '*',
             stack: [
               {
@@ -388,15 +410,16 @@ export function buildOrderPdfTemplate(
         columnGap: 16,
       },
 
+      // 分割线
       {
         canvas: [
           {
             type: 'line',
             x1: 0,
             y1: 10,
-            x2: 523,
+            x2: A4_CONTENT_WIDTH,
             y2: 10,
-            lineWidth: 0.8,
+            lineWidth: 1,
             lineColor: '#dddddd',
           },
         ],
@@ -408,10 +431,12 @@ export function buildOrderPdfTemplate(
           {
             width: '*',
             stack: [
+              // 零售商
               buildPartyBlock(labels.seller, labels, data.wholesaler_snapshot),
             ],
           },
           {
+            // 批发商
             width: '*',
             stack: [
               buildPartyBlock(labels.buyer, labels, data.retailer_snapshot),
@@ -427,6 +452,7 @@ export function buildOrderPdfTemplate(
           {
             width: '*',
             stack: [
+              // 收货地址
               buildShippingAddressBlock(
                 data.shipping_address_snapshot,
                 labels,
@@ -437,6 +463,7 @@ export function buildOrderPdfTemplate(
           {
             width: '*',
             stack: [
+              // 摘要
               { text: labels.documentSummary, style: 'sectionTitle' },
               {
                 table: {
@@ -456,8 +483,9 @@ export function buildOrderPdfTemplate(
         columnGap: 28,
       },
 
+      // 商品明细
       buildItemsTable(data, labels),
-
+      // 商品总计
       buildTotalsTable(data, labels),
     ],
   };

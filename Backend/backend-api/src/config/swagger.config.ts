@@ -29,7 +29,7 @@ export async function useSwagger(
     writeFileSync(swaggerPath, JSON.stringify(nestiaDocument, null, 2), 'utf8');
   } else {
     app.useStaticAssets({
-      root: join(process.cwd(), 'public/swagger'),
+      root: join(process.cwd(), 'public', 'swagger'),
       prefix: '/maian/api-docs',
       decorateReply: true,
       index: ['index.html'],

@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val standardAuthModule = module {
     // Bind login repository for Standard variant
     single<AuthApi> { AuthApi(get()) }
-    single<AuthRepository> { AuthRepository(get(), get()) }
+    single<AuthRepository> { AuthRepository(get(), get(), get()) }
 
     scope<SharedAuthScope> {
         scoped {

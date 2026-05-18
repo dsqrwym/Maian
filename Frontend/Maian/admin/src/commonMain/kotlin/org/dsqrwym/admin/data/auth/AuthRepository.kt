@@ -4,6 +4,7 @@ import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
 import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
 import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
+import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.serialization.OptionalField
@@ -14,7 +15,8 @@ import org.dsqrwym.shared.util.platform.getPlatformDeviceInfo
 import org.dsqrwym.shared.util.validation.validateEmail
 
 class AuthRepository(
-    private val sharedAuthApi: SharedAuthApi
+    private val sharedAuthApi: SharedAuthApi,
+    private val userSettingsRepository: SharedUserSettingsRepository
 ) {
 
     suspend fun login(
@@ -46,6 +48,7 @@ class AuthRepository(
                 } else {
                     SharedTokenStorage.save(data.accessToken, data.refreshToken)
                 }
+                userSettingsRepository.applyRemoteLanguageOrFallback()
                 return SharedResponseResult.Success(data)
             }
         }

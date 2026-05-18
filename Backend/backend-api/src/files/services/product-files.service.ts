@@ -8,14 +8,9 @@ import {
 import type { AppAbility } from '#/casl/casl-types.js';
 import { Action } from '#/casl/actions.js';
 import { subject } from '@casl/ability';
-import { DrizzleDb, DrizzleService } from '#/drizzle/drizzle.service.js';
-import {
-  files,
-  products,
-  products_files,
-  user_uploads,
-} from '#/generated/drizzle/schema.js';
-import { and, eq, sql } from 'drizzle-orm';
+import { DrizzleService } from '#/drizzle/drizzle.service.js';
+import { files, products, products_files } from '#/generated/drizzle/schema.js';
+import { and, eq } from 'drizzle-orm';
 import { STORAGE_DRIVER } from '#/files/storage/storage-key.js';
 import { StorageDriver } from '#/files/storage/storage.driver.js';
 import { IProductFilesQueryDto } from '#/files/dto/product-files-query.dto.js';

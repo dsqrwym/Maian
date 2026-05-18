@@ -1,15 +1,33 @@
 package org.dsqrwym.shared.data.user
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import org.dsqrwym.shared.data.user.dto.FindUserQueryDto
 import org.dsqrwym.shared.data.user.dto.FindWholesalerQueryDto
+import org.dsqrwym.shared.data.user.dto.SharedUpdateUserLanguageRequest
+import org.dsqrwym.shared.data.user.dto.SharedUserSettingsResponse
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.model.ApiResponseList
 
 class SharedUserApi(val client: HttpClient) {
+    suspend fun getSettings(): ApiResponse<SharedUserSettingsResponse> {
+        return client.get(ApiConfig.UserPath.SETTINGS).body()
+    }
+
+    suspend fun updateLanguage(req: SharedUpdateUserLanguageRequest): ApiResponse<Unit> {
+        return client.patch(ApiConfig.UserPath.SETTINGS_LANGUAGE) {
+            contentType(ContentType.Application.Json)
+            setBody(req)
+        }.body()
+    }
+
     suspend inline fun <reified T> getUsers(query: FindUserQueryDto): ApiResponse<ApiResponseList<T>> {
         return client.get(ApiConfig.UserPath.USER) {
             query.search?.let { parameter("search", it) }

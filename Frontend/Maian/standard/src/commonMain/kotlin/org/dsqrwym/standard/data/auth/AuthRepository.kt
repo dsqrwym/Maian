@@ -4,6 +4,7 @@ import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
 import org.dsqrwym.shared.data.auth.dto.SharedLoginRequest
 import org.dsqrwym.shared.data.auth.dto.SharedLoginResponse
+import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.TimezoneManager
 import org.dsqrwym.shared.network.model.SharedResponseResult
@@ -25,7 +26,8 @@ import org.dsqrwym.standard.data.auth.dto.StartRegisterRequest
  */
 class AuthRepository(
     private val sharedAuthApi: SharedAuthApi,
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val userSettingsRepository: SharedUserSettingsRepository
 ) {
     suspend fun login(identifier: String, password: String): SharedResponseResult<SharedLoginResponse> {
         val platform = getPlatform().type
@@ -52,6 +54,7 @@ class AuthRepository(
                 } else {
                     SharedTokenStorage.save(data.accessToken, data.refreshToken)
                 }
+                userSettingsRepository.applyRemoteLanguageOrFallback()
                 return SharedResponseResult.Success(data)
             }
         }

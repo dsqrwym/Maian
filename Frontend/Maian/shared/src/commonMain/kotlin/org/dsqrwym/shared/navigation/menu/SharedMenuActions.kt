@@ -10,10 +10,13 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.runtime.*
 import maian.shared.generated.resources.*
+import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.local.SharedUserPreferences
+import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.LanguageMenuItem
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 /**
  * 定义通用的可组合菜单行为按钮
@@ -25,6 +28,8 @@ open class SharedMenuActions(
     object LanguageSwitcherIconButton : SharedMenuActions(
         content = { toolTipAnchorPosition ->
             var expanded by remember { mutableStateOf(false) }
+            val coroutineScope = rememberCoroutineScope()
+            val userSettingsRepository = koinInject<SharedUserSettingsRepository>()
             val supportedLanguages by remember { mutableStateOf(LanguageManager.SupportedLanguages.entries) }
             TooltipBox(
                 positionProvider = rememberTooltipPositionProvider(toolTipAnchorPosition),
@@ -56,9 +61,10 @@ open class SharedMenuActions(
                     for (item in supportedLanguages) {
                         if (item.code != LanguageManager.getCurrent().code) {
                             LanguageMenuItem(item, onClick = {
-                                LanguageManager.setLocaleLanguage(item.code)
-                                SharedUserPreferences.setUserLanguage(item.code)
                                 expanded = false
+                                coroutineScope.launch {
+                                    userSettingsRepository.updateLanguage(item.code)
+                                }
                             })
                         }
                     }

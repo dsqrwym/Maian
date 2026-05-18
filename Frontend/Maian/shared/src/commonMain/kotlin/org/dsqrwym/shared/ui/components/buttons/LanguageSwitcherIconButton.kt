@@ -15,9 +15,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.icon_content_description_language
-import org.dsqrwym.shared.data.local.SharedUserPreferences
+import kotlinx.coroutines.launch
+import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.localization.LanguageManager
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 /**
  * A button component that allows users to switch between supported languages.
@@ -31,6 +33,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp) {
     var expanded by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val userSettingsRepository = koinInject<SharedUserSettingsRepository>()
     val supportedLanguages = remember { LanguageManager.SupportedLanguages.entries }
 
     Row(
@@ -70,9 +74,10 @@ fun LanguageSwitcherIconButton(modifier: Modifier = Modifier, padding: Dp = 6.dp
             for (item in supportedLanguages) {
                 if (item.code != LanguageManager.getCurrent().code) {
                     LanguageMenuItem(item, onClick = {
-                        LanguageManager.setLocaleLanguage(item.code)
-                        SharedUserPreferences.setUserLanguage(item.code)
                         expanded = false
+                        coroutineScope.launch {
+                            userSettingsRepository.updateLanguage(item.code)
+                        }
                     })
                 }
             }

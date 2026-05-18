@@ -43,8 +43,12 @@ object SharedUserPreferences {
         settings.putString(LANGUAGE_KEY, language)
     }
 
+    fun getStoredUserLanguage(): String? {
+        return settings.getStringOrNull(LANGUAGE_KEY)
+    }
+
     fun getUserLanguage(): String {
-        return settings.getString(LANGUAGE_KEY, LanguageManager.getCurrent().code)
+        return getStoredUserLanguage()?.takeIf { it.isNotBlank() } ?: LanguageManager.getSystemLanguage()
     }
 
     fun setIsDarkTheme(value: Boolean?) {

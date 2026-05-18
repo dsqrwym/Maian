@@ -7,7 +7,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val adminAuthModule = module {
-    single<AuthRepository> { AuthRepository(get()) }
+    single<AuthRepository> { AuthRepository(get(), get()) }
 
     scope<SharedAuthScope> {
         viewModel<LoginViewModel> {

@@ -1,25 +1,25 @@
 {
   "documentTitle": "COMANDA",
   "order": "Comanda",
-  "page": "Pagina",
-  "series": "Serie",
+  "page": "Pàgina",
+  "series": "Sèrie",
   "year": "Any",
-  "sequence": "Sequencia",
+  "sequence": "Seqüència",
   "date": "Data",
   "seller": "Venedor / Majorista",
   "buyer": "Comprador / Detallista",
   "companyType": "Tipus d'empresa",
   "taxId": "NIF/CIF",
   "contact": "Contacte",
-  "email": "Email",
-  "phone": "Telefon",
-  "shippingAddress": "Adreca de lliurament",
-  "country": "Pais",
+  "email": "Correu electrònic",
+  "phone": "Telèfon",
+  "shippingAddress": "Adreça de lliurament",
+  "country": "País",
   "documentSummary": "Resum del document",
-  "number": "Numero",
+  "number": "Número",
   "currency": "Moneda",
-  "lineCount": "Linies",
-  "itemsTitle": "Linies de la comanda",
+  "lineCount": "Línies",
+  "itemsTitle": "Línies de la comanda",
   "product": "Producte",
   "code": "Codi",
   "saleUnit": "Ud.",
@@ -35,7 +35,7 @@
   "grandTotal": "TOTAL",
   "mail": {
     "noReason": "No s'ha indicat cap motiu.",
-    "ignore": "Aquest correu s'ha generat automaticament des de MaiAn.",
+    "ignore": "Aquest correu s'ha generat automàticament des de MaiAn.",
     "support": "Si necessites ajuda, contacta amb el suport de MaiAn.",
     "NEW_ORDER": {
       "subject": "Nova comanda {orderNumber}",
@@ -53,9 +53,9 @@
       "content": "{counterpartyName} ha rebutjat la comanda {orderNumber}. Motiu: {reason}. S'adjunta el PDF de la comanda."
     },
     "ORDER_CANCELLED": {
-      "subject": "Comanda {orderNumber} cancelada",
-      "title": "Comanda cancelada",
-      "content": "{counterpartyName} ha cancelat la comanda {orderNumber}. Motiu: {reason}. S'adjunta el PDF de la comanda."
+      "subject": "Comanda {orderNumber} cancel·lada",
+      "title": "Comanda cancel·lada",
+      "content": "{counterpartyName} ha cancel·lat la comanda {orderNumber}. Motiu: {reason}. S'adjunta el PDF de la comanda."
     }
   }
 }
