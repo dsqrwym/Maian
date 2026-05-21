@@ -12,6 +12,6 @@ val profileModule = module {
     single { WholesalerProfileRepository(get()) }
     viewModel<WholesalerProfileViewModel> { WholesalerProfileViewModel(get(), get()) }
     viewModel<WholesalerProfileEditViewModel> {
-        WholesalerProfileEditViewModel(get(), get(), get(), get(), get())
+        WholesalerProfileEditViewModel(get(), get(), get(), get(), get(), get())
     }
 }

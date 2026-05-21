@@ -6,6 +6,12 @@ allowBuilds:
   esbuild: true
   msgpackr-extract: true
   unrs-resolver: true
+overrides:
+  "html-minifier": "npm:html-minifier-terser@^6.1.0"
+  "hono": "^4.11.4"
+  "diff": "^8.0.3"
+  "picomatch": "^4.0.4"
+  "typescript": "$typescript"
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@prisma/client'

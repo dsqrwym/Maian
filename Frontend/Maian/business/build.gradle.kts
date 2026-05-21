@@ -1,3 +1,5 @@
+
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -103,7 +105,7 @@ kotlin {
 // ---------------------------
 // Android专属配置
 // ---------------------------
-android {
+extensions.configure<LibraryExtension>("android") {
     namespace = "org.dsqrwym.business"    // 包名唯一标识
     compileSdk = libs.versions.android.compileSdk.get().toInt() // 编译SDK版本
 

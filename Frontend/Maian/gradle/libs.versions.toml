@@ -14,7 +14,6 @@ composemediaplayer = "0.10.0" #0.9.0
 compose-multiplatform-adaptive = "1.3.0-alpha07" #1.3.0-alpha06
 compose-multiplatform-lifecycle = "2.10.0"
 composeMultiplatform = "1.11.0" #1.10.2
-composeMultiplatformMediaPlayer = "1.0.53" #1.0.52
 composePipette = "2.0.0"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
@@ -34,9 +33,8 @@ kscan = "0.9.1"
 ktor = "3.5.0" #3.4.2
 libphonenumber = "0.1.9" #0.1.8
 materialIconsCore = "1.7.3"
-mediaplayerKmp = "2.1.0"
 multiplatformSettings = "1.3.0"
-navigation3Runtime = "1.1.1" #1.1.0
+navigation3Runtime = "1.1.2" #1.1.1
 multiplatform-nav3-ui = "1.1.1" #1.0.0-alpha06
 navigationCompose = "2.9.2" #2.9.1
 pagingRuntime = "3.5.0" #3.4.0-rc01
@@ -64,7 +62,6 @@ androidx-security-crypto = { module = "androidx.security:security-crypto", versi
 bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
-compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "composeMultiplatformMediaPlayer" }
 compose-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "composePlaceholderMaterial3" }
 compose-webview-multiplatform = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "composeWebviewMultiplatform" }
 composePipette = { module = "dev.zt64.compose.pipette:compose-pipette", version.ref = "composePipette" }
@@ -96,7 +93,6 @@ jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:naviga
 jetbrains-material3-adaptiveNavigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "compose-multiplatform-adaptive" }
 jetbrains-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "compose-multiplatform-lifecycle" }
 journeyapps-zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref= "zxingAndroid"}
-mediaplayer-kmp = { module = "io.github.khubaibkhan4:mediaplayer-kmp", version.ref = "mediaplayerKmp" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
@@ -127,7 +123,6 @@ zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-#android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

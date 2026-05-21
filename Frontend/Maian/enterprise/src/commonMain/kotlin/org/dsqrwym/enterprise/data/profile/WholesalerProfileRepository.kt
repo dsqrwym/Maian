@@ -36,6 +36,12 @@ class WholesalerProfileRepository(
                     minimumOrderAmount = dto.minimumOrderAmount.map {
                         it?.trim()?.takeIf { minimumOrderAmount -> minimumOrderAmount.isNotBlank() }
                     },
+                    address = dto.address.map {
+                        it.copy(
+                            street = it.street?.trim(),
+                            zipCode = it.zipCode?.trim(),
+                        )
+                    },
                 )
             )
         }.notifyUpdated()

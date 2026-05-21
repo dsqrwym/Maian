@@ -3,6 +3,7 @@ package org.dsqrwym.standard.data.profile.dto
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.dsqrwym.shared.data.location.dto.DirectionPatchRequest
 import org.dsqrwym.shared.data.user.SpanishCompanyType
 import org.dsqrwym.shared.serialization.OptionalField
 import org.dsqrwym.shared.serialization.OptionalFieldSerializer
@@ -56,4 +57,8 @@ data class UpdateRetailerProfileDto(
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)
     val logoFileId: OptionalField<String?> = OptionalField.Undefined,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val address: OptionalField<DirectionPatchRequest> = OptionalField.Undefined,
 )

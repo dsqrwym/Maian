@@ -15,6 +15,8 @@ import type {
   TagsLastName,
   TagsTaxId,
 } from '#/utils/typia/validators/user.validator.js';
+import type { IUpdateDirectionDto } from '#/auth/dto/register.direction.dto.js';
+import { validateUpdateDirection } from '#/auth/dto/register.direction.dto.js';
 
 export interface IUpdateRetailerProfileDto extends Partial<IRetailerProfile> {
   first_name?: TagsFirstName | null;
@@ -48,6 +50,8 @@ export interface IUpdateRetailerProfileDto extends Partial<IRetailerProfile> {
   username?: TagsUsername | null;
 
   telephone?: TagsBasicTelephone | null;
+
+  address?: IUpdateDirectionDto;
 }
 
 export const validateUpdateRetailerProfileDtoFunction =
@@ -80,6 +84,9 @@ export const validateUpdateRetailerProfile: IRequestBodyValidator.IAssert<IUpdat
         }
         if (typeof input.telephone === 'string') {
           input.telephone = cleanString(input.telephone);
+        }
+        if (typeof input.address === 'object') {
+          input.address = validateUpdateDirection(input.address);
         }
       }
       const typedBody = validateUpdateRetailerProfileDtoFunction(input);

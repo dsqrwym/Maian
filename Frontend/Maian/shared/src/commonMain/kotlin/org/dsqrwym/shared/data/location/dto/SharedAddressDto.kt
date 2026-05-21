@@ -1,5 +1,6 @@
 package org.dsqrwym.shared.data.location.dto
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 
 /**
@@ -65,4 +66,28 @@ data class DirectionRequest(
      * 经度坐标（可选）
      */
     val longitude: Double? = null
+)
+
+@Serializable
+data class DirectionPatchRequest(
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val street: String? = null,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val city: Int? = null,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val province: Int? = null,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val country: Int? = null,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val zipCode: String? = null,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val latitude: Double? = null,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val longitude: Double? = null,
 )

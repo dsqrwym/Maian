@@ -20,18 +20,25 @@ import {
   checkUserTaxId,
   validateAndCheckUserFiles,
 } from '#/utils/db/user.db.utils.js';
+import { PinoLogger } from 'nestjs-pino';
+import { checkAddressIsValidForPatch } from '#/utils/db/address.db.utils.js';
 
 @Injectable()
 export class RetailerProfileService {
-  constructor(private readonly drizzle: DrizzleService) {}
+  constructor(
+    private readonly drizzle: DrizzleService,
+    private readonly logger: PinoLogger,
+  ) {
+    this.logger.setContext(RetailerProfileService.name);
+  }
 
   async updateRetailerProfile(
-    id: string,
+    userId: string,
     dto: IUpdateRetailerProfileDto,
     ability: AppAbility,
   ) {
     // 检查权限：批发商可以访问任何零售商信息，零售商只能访问自己的信息
-    if (!ability.can(Action.Read, subject('users', { id }))) {
+    if (!ability.can(Action.Read, subject('users', { id: userId }))) {
       // 如果基于ID的检查失败，尝试基于角色的权限检查
       if (
         !ability.can(Action.Read, subject('users', { role: UserRole.RETAILER }))
@@ -49,6 +56,7 @@ export class RetailerProfileService {
       first_name,
       last_name,
       profile_image_file_id,
+      address,
       ...newProfile
     } = dto;
     const imageFileId =
@@ -65,7 +73,7 @@ export class RetailerProfileService {
           status: users.status,
         })
         .from(users)
-        .where(and(eq(users.id, id), eq(users.role, UserRole.RETAILER)))
+        .where(and(eq(users.id, userId), eq(users.role, UserRole.RETAILER)))
         .for('update');
 
       if (!retailer) {
@@ -73,17 +81,17 @@ export class RetailerProfileService {
       }
 
       if (profile_image_file_id) {
-        await validateAndCheckUserFiles(profile_image_file_id, id, tx);
+        await validateAndCheckUserFiles(profile_image_file_id, userId, tx);
       }
 
       if (tax_id !== null && tax_id !== undefined) {
-        await checkUserTaxId(id, tax_id, UserRole.RETAILER, tx);
+        await checkUserTaxId(userId, tax_id, UserRole.RETAILER, tx);
       }
 
       const retailerProfile = (retailer.profile ?? {}) as IRetailerProfile;
       const mergedProfile = buildMergedUpdate(retailerProfile, newProfile);
 
-      await tx
+      const [updatedUser] = await tx
         .update(users)
         .set({
           profile: mergedProfile,
@@ -93,10 +101,48 @@ export class RetailerProfileService {
           username,
           first_name,
           last_name,
-          updated_by: id,
+          updated_by: userId,
           updated_at: SQL_NOW,
         })
-        .where(eq(users.id, id));
+        .where(eq(users.id, userId))
+        .returning({
+          id: users.id,
+        });
+      if (!updatedUser) {
+        throw new NotFoundException('User not found');
+      }
+      if (address) {
+        const { cityId, provinceId, countryIso, addressId } =
+          await checkAddressIsValidForPatch(
+            updatedUser.id,
+            tx,
+            address.city,
+            address.province,
+            address.country,
+          );
+
+        const [updatedAddress] = await tx
+          .update(directions)
+          .set({
+            country_iso: countryIso,
+            province_id: provinceId,
+            city_id: cityId,
+            street: dto.address?.street,
+            zip_code: dto.address?.zipCode,
+            latitude: dto.address?.latitude,
+            longitude: dto.address?.longitude,
+            updated_at: SQL_NOW,
+          })
+          .where(eq(directions.id, addressId))
+          .returning({
+            user_id: directions.user_id,
+          });
+
+        if (!updatedAddress) {
+          this.logger.error('user address not found', { userId });
+          throw new NotFoundException('User address not found');
+        }
+      }
     });
   }
 

@@ -19,6 +19,7 @@ import org.dsqrwym.enterprise.data.profile.dto.UpdateWholesalerProfileDto
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository
+import org.dsqrwym.shared.data.location.SharedLocationRepository
 import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.data.user.SpanishCompanyType
@@ -28,6 +29,7 @@ import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.ui.viewmodels.address.SharedAddressFormState
 import org.dsqrwym.shared.ui.viewmodels.phone.SharedPhoneNumberViewModel
 import org.dsqrwym.shared.util.patch.changedField
 import org.dsqrwym.shared.util.patch.changedFieldNotNull
@@ -44,6 +46,7 @@ class WholesalerProfileEditViewModel(
     private val uploadRepository: SharedUploadRepository,
     val phoneNumberViewModel: SharedPhoneNumberViewModel,
     val authRepository: SharedAuthRepository,
+    locationRepository: SharedLocationRepository,
     private val mySnackbarViewModel: MySnackbarViewModel,
 ) : ViewModel(), SharedNavigable by SharedNavigableDelegate() {
     companion object {
@@ -71,6 +74,7 @@ class WholesalerProfileEditViewModel(
                 && isValidCompanyName()
                 // 校验 phoneNumber
                 && isValidPhoneNumber()
+                && addressFormState.isValidForSave(initialProfile?.storeDirections)
                 && hasPendingChanges()
     }
 
@@ -93,6 +97,10 @@ class WholesalerProfileEditViewModel(
         if (phoneNumberViewModel.phoneNumber.isBlank()) return true
         if (phoneNumberViewModel.isValidating) return false
         return phoneNumberViewModel.isValid
+    }
+
+    fun isAddressValidForSave(): Boolean {
+        return addressFormState.isValidForSave(initialProfile?.storeDirections)
     }
 
     var firstName by mutableStateOf("")
@@ -154,6 +162,8 @@ class WholesalerProfileEditViewModel(
     var isCheckingUsername by mutableStateOf(false)
         private set
 
+    val addressFormState = SharedAddressFormState(locationRepository, viewModelScope)
+
     private var initialProfile: WholesalerProfileResponseDto? = null
 
     init {
@@ -194,6 +204,7 @@ class WholesalerProfileEditViewModel(
                         pickupAvailable = it.profile?.pickupAvailable ?: false
 
                         phoneNumberViewModel.updatePhoneNumber(it.telephone ?: "")
+                        addressFormState.populate(it.storeDirections)
                     }
                 }
 
@@ -341,6 +352,7 @@ class WholesalerProfileEditViewModel(
     }
 
     fun saveProfile() {
+        if (!addressFormState.validateForSave(initialProfile?.storeDirections)) return
         if (!(isValidUserName() && isValidTaxId() && isValidCompanyName() && isValidPhoneNumber())) return
         if (!saveButtonEnabled) return
         if (saveUiState != UiState.Idle) return
@@ -351,6 +363,7 @@ class WholesalerProfileEditViewModel(
                 firstName = changedField(initialProfile?.firstName, firstName),
                 lastName = changedField(initialProfile?.lastName, lastName),
                 username = changedField(initialProfile?.username, username),
+                telephone = changedField(initialProfile?.telephone, phoneNumberViewModel.phoneNumber),
                 taxId = changedField(initialProfile?.taxId, taxId),
                 companyType = changedFieldNotNull(
                     initialProfile?.profile?.companyType ?: SpanishCompanyType.SL,
@@ -366,7 +379,8 @@ class WholesalerProfileEditViewModel(
                 minimumOrderAmount = changedField(initialProfile?.profile?.minimumOrderAmount, minimumOrderAmount),
                 deliveryAvailable = changedField(initialProfile?.profile?.deliveryAvailable, deliveryAvailable),
                 pickupAvailable = changedField(initialProfile?.profile?.pickupAvailable, pickupAvailable),
-                logoFileId = changedField(initialProfile?.logoFileId, logoFileId)
+                logoFileId = changedField(initialProfile?.logoFileId, logoFileId),
+                address = addressFormState.changedDirectionField(initialProfile?.storeDirections),
             )
 
             when (val result = repository.updateMyProfile(updatedDto)) {
@@ -449,6 +463,7 @@ class WholesalerProfileEditViewModel(
                 (profile?.deliveryAvailable ?: false) != deliveryAvailable ||
                 (profile?.pickupAvailable ?: false) != pickupAvailable ||
                 initial.logoFileId != logoFileId ||
+                addressFormState.hasChanged(initial.storeDirections) ||
                 pendingLogoFile != null
     }
 }

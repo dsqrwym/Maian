@@ -73,6 +73,7 @@ import maian.shared.generated.resources.last_name_placeholder
 import maian.shared.generated.resources.save
 import maian.shared.generated.resources.select_logo
 import maian.shared.generated.resources.status_error_content_description
+import maian.shared.generated.resources.store_address
 import maian.shared.generated.resources.tax_id
 import maian.shared.generated.resources.tax_id_placeholder
 import maian.standard.generated.resources.StandardRes
@@ -91,6 +92,7 @@ import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.input.outlinedfields.OutlinedPhoneNumberField
 import org.dsqrwym.shared.ui.components.input.selector.Selector
 import org.dsqrwym.shared.ui.components.input.selector.SelectorConfig
+import org.dsqrwym.shared.ui.components.location.SharedAddressInputSection
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
@@ -331,6 +333,26 @@ fun RetailerProfileEditScreen(
                         error = viewModel.taxIdError?.asString(),
                         imeAction = ImeAction.Done,
                         onImeAction = {
+                            focusManager.clearFocus()
+                            viewModel.saveProfile()
+                        },
+                    )
+                }
+            }
+
+            item {
+                FormCard(
+                    modifier = Modifier.animateItem(),
+                    title = stringResource(SharedRes.string.store_address),
+                    uiState = if (viewModel.isAddressValidForSave()) UiState.Idle else UiState.Error,
+                    verticalArrangement = SharedColumnLayout.arrangement,
+                ) { enabled ->
+                    SharedAddressInputSection(
+                        addressFormState = viewModel.addressFormState,
+                        enabled = enabled,
+                        focusManager = focusManager,
+                        fieldModifier = Modifier.placeholderWithShimmer(isLoading),
+                        onDone = {
                             focusManager.clearFocus()
                             viewModel.saveProfile()
                         },

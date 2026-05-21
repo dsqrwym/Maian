@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -75,7 +76,7 @@ kotlin {
     }
 }
 
-android {
+extensions.configure<ApplicationExtension>("android") {
     namespace = "org.dsqrwym.enterprise"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 

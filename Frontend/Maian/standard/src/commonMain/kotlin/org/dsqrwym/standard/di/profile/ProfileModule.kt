@@ -12,6 +12,6 @@ val standardProfileModule = module {
     single { RetailerProfileRepository(get()) }
     viewModel<RetailerProfileViewModel> { RetailerProfileViewModel(get(), get()) }
     viewModel<RetailerProfileEditViewModel> {
-        RetailerProfileEditViewModel(get(), get(), get(), get(), get())
+        RetailerProfileEditViewModel(get(), get(), get(), get(), get(), get())
     }
 }

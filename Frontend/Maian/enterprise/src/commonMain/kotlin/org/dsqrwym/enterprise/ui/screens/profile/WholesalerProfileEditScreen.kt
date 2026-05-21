@@ -47,6 +47,7 @@ import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.input.outlinedfields.OutlinedPhoneNumberField
 import org.dsqrwym.shared.ui.components.input.selector.Selector
 import org.dsqrwym.shared.ui.components.input.selector.SelectorConfig
+import org.dsqrwym.shared.ui.components.location.SharedAddressInputSection
 import org.dsqrwym.shared.ui.components.progressindicators.CheckingTrailingIcon
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
@@ -285,6 +286,26 @@ fun WholesalerProfileEditScreen(
                         error = viewModel.taxIdError?.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
+                    )
+                }
+            }
+
+            item {
+                FormCard(
+                    modifier = Modifier.animateItem(),
+                    title = stringResource(SharedRes.string.store_address),
+                    uiState = if (viewModel.isAddressValidForSave()) UiState.Idle else UiState.Error,
+                    verticalArrangement = SharedColumnLayout.arrangement,
+                ) { enabled ->
+                    SharedAddressInputSection(
+                        addressFormState = viewModel.addressFormState,
+                        enabled = enabled,
+                        focusManager = focusManager,
+                        fieldModifier = Modifier.placeholderWithShimmer(isLoading),
+                        onDone = {
+                            focusManager.clearFocus()
+                            viewModel.saveProfile()
+                        },
                     )
                 }
             }

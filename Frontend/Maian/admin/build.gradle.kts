@@ -1,4 +1,4 @@
-
+import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -38,7 +38,7 @@ kotlin {
     wasmJs {
         outputModuleName = "adminComposeApp"
         browser {
-             commonWebpackConfig {
+            commonWebpackConfig {
                 outputFileName = "adminComposeApp.js"
             }
         }
@@ -66,7 +66,7 @@ kotlin {
     }
 }
 
-android {
+extensions.configure<ApplicationExtension>("android") {
     namespace = "org.dsqrwym.admin"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 

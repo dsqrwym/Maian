@@ -24,6 +24,7 @@ import {
   UserRole,
   UserStatus,
 } from '#/generated/drizzle/enums.js';
+import { checkAddressIsValid } from '#/utils/db/address.db.utils.js';
 
 @Injectable()
 export class RegistrationService {
@@ -98,6 +99,13 @@ export class RegistrationService {
 
   async completeRetailerRegistration(dto: IRegisterRetailerDto) {
     return this.drizzleService.db.transaction(async (tx) => {
+      await checkAddressIsValid(
+        dto.address.city,
+        dto.address.province,
+        dto.address.country,
+        tx,
+      );
+
       await this.verificationService.verifyAndConsumeToken(
         tx,
         dto.verification_id,
@@ -153,6 +161,13 @@ export class RegistrationService {
 
   async completeWholesalerRegistration(dto: IRegisterWholesalerDto) {
     await this.drizzleService.db.transaction(async (tx) => {
+      await checkAddressIsValid(
+        dto.address.city,
+        dto.address.province,
+        dto.address.country,
+        tx,
+      );
+
       await this.verificationService.verifyAndConsumeToken(
         tx,
         dto.verification_id,

@@ -14,6 +14,8 @@ import { isObject } from '#/utils/is.utils.js';
 import { cleanString } from '#/utils/string.util.js';
 import { isValidSpanishTaxId } from '#/utils/is-spain-tax-id.js';
 import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
+import type { IUpdateDirectionDto } from '#/auth/dto/register.direction.dto.js';
+import { validateUpdateDirection } from '#/auth/dto/register.direction.dto.js';
 
 export interface IUpdateWholesalerProfileDto extends Partial<IWholesalerProfile> {
   first_name?: TagsFirstName | null;
@@ -55,6 +57,8 @@ export interface IUpdateWholesalerProfileDto extends Partial<IWholesalerProfile>
    * 联系电话
    */
   telephone?: TagsBasicTelephone | null;
+
+  address?: IUpdateDirectionDto;
 }
 
 export const validateUpdateWholesalerProfileDtoFunction =
@@ -93,6 +97,9 @@ export const validateUpdateWholesalerProfile: IRequestBodyValidator.IAssert<IUpd
         }
         if (typeof obj.telephone === 'string') {
           obj.telephone = cleanString(obj.telephone);
+        }
+        if (typeof input.address === 'object') {
+          input.address = validateUpdateDirection(input.address);
         }
       }
       const typedBody = validateUpdateWholesalerProfileDtoFunction(input);

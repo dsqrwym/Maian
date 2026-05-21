@@ -20,6 +20,7 @@ import maian.standard.generated.resources.media_file_too_large_mb
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository
+import org.dsqrwym.shared.data.location.SharedLocationRepository
 import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.profile.RetailerProfileResponseDto
 import org.dsqrwym.shared.data.user.SpanishCompanyType
@@ -29,6 +30,7 @@ import org.dsqrwym.shared.navigation.core.SharedNavigableDelegate
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.ui.viewmodels.address.SharedAddressFormState
 import org.dsqrwym.shared.ui.viewmodels.phone.SharedPhoneNumberViewModel
 import org.dsqrwym.shared.util.patch.changedField
 import org.dsqrwym.shared.util.timing.SharedUiTiming
@@ -46,6 +48,7 @@ class RetailerProfileEditViewModel(
     private val uploadRepository: SharedUploadRepository,
     val phoneNumberViewModel: SharedPhoneNumberViewModel,
     private val authRepository: SharedAuthRepository,
+    locationRepository: SharedLocationRepository,
     private val mySnackbarViewModel: MySnackbarViewModel,
 ) : ViewModel(), SharedNavigable by SharedNavigableDelegate() {
     companion object {
@@ -68,6 +71,7 @@ class RetailerProfileEditViewModel(
                 isValidUserName() &&
                 isValidTaxId() &&
                 isValidPhoneNumber() &&
+                addressFormState.isValidForSave(initialProfile?.storeDirections) &&
                 hasPendingChanges()
     }
 
@@ -110,6 +114,8 @@ class RetailerProfileEditViewModel(
     var pendingLogoFile by mutableStateOf<PlatformFile?>(null)
         private set
 
+    val addressFormState = SharedAddressFormState(locationRepository, viewModelScope)
+
     private var initialProfile: RetailerProfileResponseDto? = null
 
     init {
@@ -137,6 +143,7 @@ class RetailerProfileEditViewModel(
                         contactName = it.profile?.contactName ?: ""
                         logoFileId = it.logoFileId
                         phoneNumberViewModel.updatePhoneNumber(it.telephone ?: "")
+                        addressFormState.populate(it.storeDirections)
                     }
                 }
 
@@ -280,7 +287,12 @@ class RetailerProfileEditViewModel(
         return phoneNumberViewModel.isValid
     }
 
+    fun isAddressValidForSave(): Boolean {
+        return addressFormState.isValidForSave(initialProfile?.storeDirections)
+    }
+
     fun saveProfile() {
+        if (!addressFormState.validateForSave(initialProfile?.storeDirections)) return
         if (!saveButtonEnabled) return
         if (saveUiState != UiState.Idle) return
         saveUiState = UiState.Loading
@@ -315,6 +327,7 @@ class RetailerProfileEditViewModel(
                     normalizedOptional(contactName)
                 ),
                 logoFileId = changedField(initialProfile?.logoFileId, logoFileId),
+                address = addressFormState.changedDirectionField(initialProfile?.storeDirections),
             )
 
             when (val result = repository.updateMyProfile(updatedDto)) {
@@ -392,6 +405,7 @@ class RetailerProfileEditViewModel(
                 profile?.companyType != selectedCompanyType ||
                 normalizedOptional(profile?.contactName) != normalizedOptional(contactName) ||
                 initial.logoFileId != logoFileId ||
+                addressFormState.hasChanged(initial.storeDirections) ||
                 pendingLogoFile != null
     }
 }

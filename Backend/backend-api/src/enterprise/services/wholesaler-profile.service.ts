@@ -18,10 +18,17 @@ import {
   validateAndCheckUserFiles,
 } from '#/utils/db/user.db.utils.js';
 import { subject } from '@casl/ability';
+import { PinoLogger } from 'nestjs-pino';
+import { checkAddressIsValidForPatch } from '#/utils/db/address.db.utils.js';
 
 @Injectable()
 export class WholesalerProfileService {
-  constructor(private readonly drizzle: DrizzleService) {}
+  constructor(
+    private readonly drizzle: DrizzleService,
+    private readonly logger: PinoLogger,
+  ) {
+    this.logger.setContext(WholesalerProfileService.name);
+  }
 
   async updateWholesalerProfile(
     id: string,
@@ -41,6 +48,7 @@ export class WholesalerProfileService {
       first_name,
       last_name,
       profile_image_file_id,
+      address,
       ...newProfile
     } = dto;
     const imageFileId =
@@ -74,7 +82,7 @@ export class WholesalerProfileService {
       const wholesalerProfile = profile?.profile as IWholesalerProfile;
       const mergedProfile = buildMergedUpdate(wholesalerProfile, newProfile);
 
-      await tx
+      const [updatedUser] = await tx
         .update(users)
         .set({
           profile: mergedProfile,
@@ -87,7 +95,46 @@ export class WholesalerProfileService {
           updated_by: id,
           updated_at: SQL_NOW,
         })
-        .where(eq(users.id, id));
+        .where(eq(users.id, id))
+        .returning({
+          id: users.id,
+        });
+
+      if (!updatedUser) {
+        throw new NotFoundException('User not found');
+      }
+
+      if (address) {
+        const { cityId, provinceId, countryIso, addressId } =
+          await checkAddressIsValidForPatch(
+            updatedUser.id,
+            tx,
+            address.city,
+            address.province,
+            address.country,
+          );
+
+        const [updatedAddress] = await tx
+          .update(directions)
+          .set({
+            street: address.street,
+            zip_code: address.zipCode,
+            country_iso: countryIso,
+            province_id: provinceId,
+            city_id: cityId,
+            updated_at: SQL_NOW,
+            latitude: address.latitude,
+            longitude: address.longitude,
+          })
+          .where(eq(directions.id, addressId))
+          .returning({
+            user_id: directions.user_id,
+          });
+        if (!updatedAddress) {
+          this.logger.error('user address not found', { userId: id });
+          throw new NotFoundException('User address not found');
+        }
+      }
     });
   }
 

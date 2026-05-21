@@ -49,6 +49,9 @@ export interface IDirectionDto {
    */
   longitude?: TagsLongitude | null;
 }
+
+export type IUpdateDirectionDto = Partial<IDirectionDto>;
+
 export const validateDirectionFunction =
   typia.createAssertEquals<IDirectionDto>();
 export const validateDirection = (input: unknown) => {
@@ -57,8 +60,30 @@ export const validateDirection = (input: unknown) => {
     if (typeof obj.street === 'string') {
       obj.street = cleanString(obj.street);
     }
+    if (typeof obj.zipCode === 'string') {
+      obj.zipCode = cleanString(obj.zipCode);
+    }
   }
   const typedInput = validateDirectionFunction(input);
   typedInput.type = typedInput.type ?? AddressType.STORE;
   return typedInput;
+};
+
+export const validateUpdateDirectionFunction =
+  typia.createAssertEquals<IUpdateDirectionDto>();
+export const validateUpdateDirection = (input: unknown) => {
+  if (isObject(input)) {
+    const obj = input;
+    if (typeof obj.street === 'string') {
+      obj.street = cleanString(obj.street);
+    }
+    if (typeof obj.zipCode === 'string') {
+      obj.zipCode = cleanString(obj.zipCode);
+    }
+  }
+  const typedBody = validateUpdateDirectionFunction(input);
+  if (typedBody.type === null) {
+    typedBody.type = undefined;
+  }
+  return typedBody;
 };

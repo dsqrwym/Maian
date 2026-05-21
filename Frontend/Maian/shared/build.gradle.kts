@@ -1,3 +1,5 @@
+
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -217,16 +219,13 @@ kotlin {
 // ---------------------------
 // Android专属配置
 // ---------------------------
-android {
+extensions.configure<LibraryExtension>("android") {
     namespace = "org.dsqrwym.shared"    // 包名唯一标识
     compileSdk = libs.versions.android.compileSdk.get().toInt() // 编译SDK版本
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()     // 最低支持版本
         testOptions.targetSdk = libs.versions.android.targetSdk.get().toInt()   // 测试目标版本
-        defaultConfig {
-            consumerProguardFiles("consumer-rules.pro")
-        }
     }
 
     // 资源打包配置

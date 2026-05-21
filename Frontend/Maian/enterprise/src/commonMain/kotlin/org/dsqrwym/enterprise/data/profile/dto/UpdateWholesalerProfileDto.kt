@@ -3,6 +3,7 @@ package org.dsqrwym.enterprise.data.profile.dto
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.dsqrwym.shared.data.location.dto.DirectionPatchRequest
 import org.dsqrwym.shared.data.user.SpanishCompanyType
 import org.dsqrwym.shared.serialization.OptionalField
 import org.dsqrwym.shared.serialization.OptionalFieldSerializer
@@ -75,4 +76,8 @@ data class UpdateWholesalerProfileDto(
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)
     val pickupAvailable: OptionalField<Boolean?> = OptionalField.Undefined,
+
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val address: OptionalField<DirectionPatchRequest> = OptionalField.Undefined,
 )

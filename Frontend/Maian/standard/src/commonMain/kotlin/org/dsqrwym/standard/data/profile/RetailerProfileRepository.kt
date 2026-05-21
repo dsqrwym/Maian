@@ -30,6 +30,12 @@ class RetailerProfileRepository(
                         companyName = dto.companyName.map { it?.trim()?.takeIf { companyName -> companyName.isNotBlank() } },
                         displayName = dto.displayName.map { it?.trim()?.takeIf { displayName -> displayName.isNotBlank() } },
                         contactName = dto.contactName.map { it?.trim()?.takeIf { contactName -> contactName.isNotBlank() } },
+                        address = dto.address.map {
+                            it.copy(
+                                street = it.street?.trim(),
+                                zipCode = it.zipCode?.trim(),
+                            )
+                        },
                     )
                 )
             }.notifyUpdated()
