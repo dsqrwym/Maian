@@ -1,12 +1,32 @@
 package org.dsqrwym.shared.ui.components.order
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SwapVert
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -15,10 +35,24 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.accept_order
+import maian.shared.generated.resources.cancel_order
+import maian.shared.generated.resources.filter
+import maian.shared.generated.resources.no_orders_found
+import maian.shared.generated.resources.optional_reason
+import maian.shared.generated.resources.order_confirm_accept_message
+import maian.shared.generated.resources.order_confirm_cancel_message
+import maian.shared.generated.resources.order_confirm_reject_message
+import maian.shared.generated.resources.reason
+import maian.shared.generated.resources.reject_order
+import maian.shared.generated.resources.rejection_reason_placeholder
+import maian.shared.generated.resources.search_orders
+import maian.shared.generated.resources.sort
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.orders.SharedOrderAmountFilterBounds
 import org.dsqrwym.shared.data.orders.SharedOrderSortBy
@@ -145,7 +179,10 @@ fun OrderHistoryContent(
             cancelDialogOrder?.let { order ->
                 OrderReasonDialog(
                     title = stringResource(SharedRes.string.cancel_order),
-                    message = stringResource(SharedRes.string.order_confirm_cancel_message, order.orderNumber),
+                    message = stringResource(
+                        SharedRes.string.order_confirm_cancel_message,
+                        order.orderNumber
+                    ),
                     label = stringResource(SharedRes.string.optional_reason),
                     confirmText = stringResource(SharedRes.string.cancel_order),
                     icon = Icons.Outlined.Delete,
@@ -159,7 +196,10 @@ fun OrderHistoryContent(
             acceptDialogOrder?.let { order ->
                 OrderConfirmActionDialog(
                     title = stringResource(SharedRes.string.accept_order),
-                    message = stringResource(SharedRes.string.order_confirm_accept_message, order.orderNumber),
+                    message = stringResource(
+                        SharedRes.string.order_confirm_accept_message,
+                        order.orderNumber
+                    ),
                     confirmText = stringResource(SharedRes.string.accept_order),
                     icon = Icons.Outlined.CheckCircle,
                     isLoading = mutatingOrderId == order.id,
@@ -170,7 +210,10 @@ fun OrderHistoryContent(
             rejectDialogOrder?.let { order ->
                 OrderReasonDialog(
                     title = stringResource(SharedRes.string.reject_order),
-                    message = stringResource(SharedRes.string.order_confirm_reject_message, order.orderNumber),
+                    message = stringResource(
+                        SharedRes.string.order_confirm_reject_message,
+                        order.orderNumber
+                    ),
                     label = stringResource(SharedRes.string.reason),
                     placeholder = stringResource(SharedRes.string.rejection_reason_placeholder),
                     confirmText = stringResource(SharedRes.string.reject_order),
@@ -209,9 +252,18 @@ fun OrderHistoryContent(
                         onSearch = { onSearch() },
                         expanded = false,
                         onExpandedChange = {},
-                        placeholder = { Text(stringResource(SharedRes.string.search_orders)) },
+                        placeholder = {
+                            Text(
+                                stringResource(SharedRes.string.search_orders),
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1
+                            )
+                        },
                         leadingIcon = {
-                            Icon(Icons.Outlined.Search, stringResource(SharedRes.string.search_orders))
+                            Icon(
+                                Icons.Outlined.Search,
+                                stringResource(SharedRes.string.search_orders)
+                            )
                         },
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) {
@@ -300,7 +352,8 @@ private fun OrderHistoryGrid(
         onRefresh = { pagingItems.refresh() },
         indicator = {
             PullToRefreshDefaults.Indicator(
-                modifier = Modifier.padding(top = padding.calculateTopPadding()).align(Alignment.TopCenter),
+                modifier = Modifier.padding(top = padding.calculateTopPadding())
+                    .align(Alignment.TopCenter),
                 isRefreshing = isRefreshing,
                 state = pullRefreshState,
             )

@@ -1,0 +1,696 @@
+Enum "AddressType" {
+  "DELIVERY"
+  "INVOICE"
+  "STORE"
+}
+
+Enum "DeliveryStatus" {
+  "PENDING"
+  "IN_PROGRESS"
+  "COMPLETED"
+}
+
+Enum "OrderStatus" {
+  "PENDING"
+  "ACCEPTED"
+  "REJECTED"
+  "CANCELLED"
+}
+
+Enum "ProductStatus" {
+  "ACTIVE"
+  "INACTIVE"
+}
+
+Enum "SaleVariant" {
+  "UNIT"
+  "BOX"
+  "PACK"
+}
+
+Enum "UserRole" {
+  "WHOLESALER"
+  "RETAILER"
+  "SUPPORT"
+  "DELIVERY"
+  "WAREHOUSE"
+  "ADMIN"
+  "SUPERADMIN"
+}
+
+Enum "UserStatus" {
+  "PENDING_VERIFICATION"
+  "INACTIVE"
+  "ACTIVE"
+  "PENDING_REVIEW"
+  "APPROVED"
+  "BANNED"
+}
+
+Table "categories" {
+  "id" int8 [pk, not null, increment]
+  "user_id" uuid [note: '如果未空则代表为公共']
+  "name" varchar(50) [unique, not null, note: '名字']
+  "iva" numeric(5,2) [check: `(iva >= (0)::numeric) AND (iva <= (100)::numeric)`]
+  "parent_id" int8
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "level" int2 [not null, check: `(level >= 1) AND (level <= 3)`, note: '嵌套层级，最多三层即1->2->3']
+  "name_unaccent" text
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_by" uuid
+  "updated_by" uuid
+  "version" int8 [not null, default: 1]
+  "deleted_at" timestamp
+
+  Indexes {
+    (user_id, name) [type: btree, unique, name: "categories_user_name_unique_private"]
+    (level, id) [type: btree, name: "idx_categories_level_id"]
+    name_unaccent [type: gin, name: "idx_categories_name_unaccent_trgm"]
+    parent_id [type: btree, name: "idx_categories_parent_id"]
+    (parent_id, id) [type: btree, name: "idx_categories_parent_id_id"]
+    (user_id, level, name) [type: btree, name: "idx_categories_private_user_level_name"]
+    (user_id, parent_id, name) [type: btree, name: "idx_categories_private_user_parent_name"]
+    (level, name) [type: btree, name: "idx_categories_public_level_name"]
+    (parent_id, level, name) [type: btree, name: "idx_categories_public_parent_level_name_all"]
+    (parent_id, name) [type: btree, name: "idx_categories_public_parent_name"]
+    (user_id, parent_id, level, name) [type: btree, name: "idx_categories_user_parent_level_name"]
+  }
+  Note: '类别分为公共和私人 / categorías son públicos o privados'
+}
+
+Table "chat_panels" {
+  "id" int8 [pk, not null, increment]
+  "name" varchar(50) [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  Note: '聊天界面或会话 / Sesión de Chat'
+}
+
+Table "chat_participants" {
+  "user_id" uuid [not null]
+  "chat_panel_id" int8 [not null]
+  "created_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Indexes {
+    (chat_panel_id, user_id) [pk, type: btree, name: "chat_participants_pkey"]
+  }
+  Note: '连接用户和聊天会话 / Conectar usuarios y charlas'
+}
+
+Table "configurations" {
+  "user_id" uuid [pk, not null]
+  "language" varchar(10) [not null, default: 'en', note: 'BCP-47 Code']
+  "timezone" varchar(32) [not null, default: 'UTC', note: 'IANA时区名字']
+}
+
+Table "deliveries" {
+  "id" int8 [pk, not null, increment]
+  "order_id" int8 [not null]
+  "delivery_person" uuid
+  "status" DeliveryStatus [not null, default: 'PENDING', note: '0=等待配送， 1=正在配送， 2=配送完成']
+  "start_time" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`, note: '开始时间']
+  "end_time" timestamp [note: '结束时间']
+  "notes" text [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp
+  "latitude" float8 [not null]
+  "longitude" float8 [not null]
+  Note: '送货表'
+}
+
+Table "delivery_timeline" {
+  "id" int8 [pk, not null, increment]
+  "delivery_id" int8
+  "status" DeliveryStatus [not null, note: '0=等待配送， 1=正在配送， 2=配送完成']
+  "notes" text
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "latitude" float8 [not null]
+  "longitude" float8 [not null]
+  Note: '配送时间线'
+}
+
+Table "discounts" {
+  "id" int8 [pk, not null, increment]
+  "user_id" uuid [not null]
+  "name" varchar [not null]
+  "type_value" jsonb [not null, note: '先做：减百分比，满金额减少固定金额，满金额减少百分比']
+  "applies_to_all" bool [not null, default: false, note: '是否给其名下所有的产品']
+  "start_date" date [not null]
+  "end_date" date [not null]
+  "status" int2 [not null, default: '1']
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  Note: '折扣'
+}
+
+Table "files" {
+  "id" int8 [pk, not null, increment]
+  "file_name" varchar [not null, check: `(file_name)::text ~* '^[^\\/:\*\?"<>\|]{1,255}\.[a-z0-9]+$'::text`]
+  "file_hash" varchar(64) [unique, not null]
+  "mime_type" varchar(128) [not null]
+  "file_size" int8 [not null]
+  "storage_key" text [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "to_delete" bool [not null, default: false]
+  "cloud_synced" bool [not null, default: true]
+
+  Indexes {
+    created_at [type: btree, name: "idx_files_created_at"]
+  }
+  Note: '保存文件url (储存在云端) / guardar url de los archivos'
+}
+
+Table "message_files" {
+  "id" int8 [pk, not null, increment]
+  "message_id" int8 [not null]
+  "file_id" int8 [not null]
+  "sort" int2 [not null]
+
+  Indexes {
+    file_id [type: btree, name: "idx_message_files_file_id"]
+  }
+  Note: '消息文件，音频，视频，视频 / los archivos de los mensajes'
+}
+
+Table "messages" {
+  "id" int8 [pk, not null, increment]
+  "chat_panel_id" int8 [not null]
+  "sender_id" uuid [default: '00000000-0000-0000-0000-000000000000', note: '0代表发送者被删除都是还有人看消息所以保留消息']
+  "reply_to" int8 [default: '-1', note: '-1代表引用的消息被删除']
+  "content" text
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "is_read" bool [not null, default: false]
+  Note: '聊天信息 / mensajes de chat'
+}
+
+Table "notifications" {
+  "id" int8 [pk, not null, increment]
+  "user_id" uuid [not null]
+  "title" varchar(100) [not null]
+  "message" text [not null]
+  "type" int2 [not null, note: '还不确定，应该有多种比如消息通知，减价，库存。。。']
+  "is_read" bool [not null, default: false]
+  "click_action" varchar(255) [not null, note: '导航到位置']
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+}
+
+Table "products" {
+  "id" int8 [pk, not null, increment]
+  "user_id" uuid [not null]
+  "name" varchar(50) [not null]
+  "title" varchar(100)
+  "description" text
+  "iva" numeric(5,2) [not null, check: `(iva >= (0)::numeric) AND (iva <= (100)::numeric)`]
+  "status" ProductStatus [not null, default: 'ACTIVE', note: '1=activo, 0=desactivo']
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "product_code" varchar(50) [not null]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_by" uuid
+  "updated_by" uuid
+  "name_unaccent" text
+  "title_unaccent" text
+  "version" int8 [not null, default: 1]
+  "deleted_at" timestamp
+
+  Indexes {
+    (status, id) [type: btree, name: "idx_products_status_id"]
+    (user_id, id) [type: btree, name: "idx_products_user_id_id"]
+    (user_id, status, id) [type: btree, name: "idx_products_user_status_id"]
+  }
+  Note: '产品基础表 / valor basica de productos'
+}
+
+Table "products_files" {
+  "id" int8 [pk, not null, increment]
+  "product_id" int8 [not null]
+  "file_id" int8 [not null]
+  "sort" int2 [not null]
+
+  Indexes {
+    file_id [type: btree, name: "idx_products_files_file_id"]
+    product_id [type: btree, name: "idx_products_files_product_id"]
+  }
+  Note: '产品的宣传图什么的'
+}
+
+Table "user_sessions" {
+  "session_id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "user_id" uuid [not null]
+  "device_name" varchar(150) [not null]
+  "device_finger" varchar(255) [not null]
+  "user_agent" text [not null]
+  "revoked" bool [not null, default: false]
+  "last_ip" varchar(50) [not null]
+  "refresh_token" text
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "last_active" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Indexes {
+    (user_id, device_finger) [type: btree, unique, name: "unique_device_finger_user"]
+  }
+}
+
+Table "users" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "user_id" text [unique]
+  "first_name" varchar(50)
+  "last_name" varchar(60)
+  "username" varchar(50) [unique]
+  "password" text [not null]
+  "email" varchar(255) [unique, not null]
+  "telephone" varchar(25)
+  "status" UserStatus [not null, default: 'PENDING_VERIFICATION']
+  "profile" jsonb
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "role" UserRole [not null, note: '0 → wholesaler  批发商即本平台的商店，1 → retailer  零售商 2 → support  客服  3 → 送货员  5 → 货物管理员']
+  "tax_id" varchar(20) [note: '税号']
+  "updated_by" uuid
+  "profile_image_file_id" int8
+
+  Indexes {
+    id [type: btree, name: "idx_users_wholesaler_active_id"]
+  }
+  Note: '用户表'
+}
+
+Table "variant_products" {
+  "id" int8 [pk, not null, increment]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "product_id" int8 [not null]
+  "type_sale" SaleVariant [not null, note: '销售变体类型，分别为散卖，按包，按箱。']
+  "price" numeric(14,6) [not null, check: `(price >= (0)::numeric) AND (price <= 10000000.00)`]
+  "price_iva" numeric(14,6) [not null, check: `(price_iva >= (0)::numeric) AND (price_iva <= 20000000.00)`]
+  "available_stock" int4 [not null, check: `available_stock >= 0`, note: '实际可供销售和发货的可用库存数量。']
+  "sort" int2 [not null, check: `sort >= 0`]
+  "attributes" jsonb
+  "status" ProductStatus [not null, default: 'ACTIVE']
+  "product_code" varchar(50) [not null]
+  "reserved_stock" int4 [not null, check: `reserved_stock >= 0`, default: 0, note: '已下单但尚未发货的预留库存数量，避免超卖。']
+  "low_stock_threshold" int4 [not null, check: `low_stock_threshold >= 0`, default: 0, note: '触发低库存预警的阈值。当可用库存低于此值时，向分销商发送通知。']
+  "sale_unit_qty" int4 [not null, check: `(sale_unit_qty >= 1) AND (sale_unit_qty <= 1000000)`, default: 1, note: '一个销售单位（如：一箱、一包）所包含的最小库存单位数量。']
+  "min_order_qty" int4 [not null, check: `(min_order_qty >= 1) AND (min_order_qty <= 1000000)`, default: 1, note: '最小订购数量（以销售单位计）。']
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_by" uuid
+  "updated_by" uuid
+
+  Indexes {
+    (product_id, price_iva) [type: btree, name: "idx_variant_products_product_id_price_iva"]
+  }
+  Note: '变体销售配置'
+}
+
+Table "verification_tokens" {
+  "id" uuid [pk, not null, default: `uuid_generate_v4()`]
+  "user_id" uuid [not null]
+  "token" varchar(255) [not null]
+  "expires_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "is_used" bool [not null, default: false]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "attempts" int2 [not null, default: 0]
+
+  Indexes {
+    token [type: btree, name: "password_reset_tokens_token_idx"]
+    user_id [type: btree, name: "password_reset_tokens_user_id_idx"]
+    (user_id, token) [type: btree, name: "verification_tokens_user_id_token_idx"]
+  }
+}
+
+Table "countries" {
+  "iso_alpha2" bpchar(2) [unique, not null, note: 'ISO 3166-1 alpha-2 国家代码，两位字符']
+  "iso_alpha3" bpchar(3) [unique, not null, note: 'ISO 3166-1 alpha-3 国家代码，三位字符']
+  "iso_numeric" int2 [pk, not null, note: 'ISO 3166-1 数字代码']
+  "name" varchar(100) [not null, note: '国家英文官方名称']
+  "name_local" varchar(100) [not null, note: '国家本地语言名称']
+  "currency_id" int2 [note: '使用的货币']
+}
+
+Table "provinces" {
+  "id" int4 [pk, not null, increment]
+  "country_iso" int2 [not null, note: '所属国家 iso numeric，外键关联 countries 表']
+  "name" varchar(100) [not null, note: '省份/州的英文名称']
+  "name_local" varchar(100) [not null, note: '省份/州的本地名称']
+}
+
+Table "cities" {
+  "id" int4 [pk, not null, increment]
+  "province_id" int4 [not null, note: '所属省份 ID，外键关联 provinces 表']
+  "name" varchar(100) [not null, note: '城市英文名称']
+  "name_local" varchar(100) [not null, note: '城市本地名称']
+}
+
+Table "directions" {
+  "id" int8 [pk, not null, increment]
+  "user_id" uuid [not null]
+  "type" AddressType [not null, default: 'STORE', note: '地址类型']
+  "country_iso" int2 [not null]
+  "province_id" int4 [not null]
+  "city_id" int4 [not null]
+  "street" varchar(200) [not null]
+  "zip_code" varchar(10) [not null]
+  "latitude" float8
+  "longitude" float8
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp
+}
+
+Table "currencies" {
+  "iso_numeric" int2 [pk, not null]
+  "iso_alpha3" bpchar(3) [unique, not null]
+  "symbol" varchar(5) [not null]
+  "decimal_digits" int2 [not null]
+}
+
+Table "product_categories" {
+  "product_id" int8 [not null]
+  "category_id" int8 [not null]
+  "is_primary" bool [not null, default: false, note: '标记该关联是否为产品的主分类。']
+
+  Indexes {
+    (product_id, category_id) [pk, type: btree, name: "product_categories_pkey"]
+    category_id [type: btree, name: "idx_product_categories_category_id"]
+    (category_id, product_id) [type: btree, name: "idx_product_categories_category_product"]
+    product_id [type: btree, name: "idx_product_categories_product_id"]
+  }
+  Note: '产品与分类的关联表，支持多对多关系。'
+}
+
+Table "category_translations" {
+  "category_id" int8 [not null]
+  "lang_code" varchar(10) [not null]
+  "name" varchar(50) [not null]
+  "name_unaccent" text
+  "created_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_by" uuid
+
+  Indexes {
+    (category_id, lang_code) [pk, type: btree, name: "pk_category_translations"]
+    (category_id, lang_code) [type: btree, name: "idx_category_translations_category_lang"]
+    lang_code [type: btree, name: "idx_category_translations_lang_code"]
+    name_unaccent [type: gin, name: "idx_category_translations_name_unaccent_trgm"]
+  }
+}
+
+Table "product_translations" {
+  "product_id" int8 [not null]
+  "lang_code" varchar(10) [not null]
+  "name" varchar(50) [not null]
+  "title" varchar(100)
+  "description" text
+  "name_unaccent" text
+  "title_unaccent" text
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_by" uuid
+
+  Indexes {
+    (product_id, lang_code) [pk, type: btree, name: "pk_product_translations"]
+  }
+}
+
+Table "user_uploads" {
+  "user_id" uuid [not null]
+  "file_id" int8 [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Indexes {
+    (user_id, file_id) [pk, type: btree, name: "user_uploads_pkey"]
+  }
+}
+
+Table "carts" {
+  "id" int8 [pk, not null, increment]
+  "retailer_id" uuid [not null]
+  "wholesaler_id" uuid [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Checks {
+    `retailer_id <> wholesaler_id` [name: 'carts_user_wholesaler_different']
+  }
+
+  Indexes {
+    (retailer_id, wholesaler_id) [type: btree, unique, name: "carts_user_wholesaler_unique"]
+    wholesaler_id [type: btree, name: "idx_carts_wholesaler_id"]
+  }
+}
+
+Table "cart_details" {
+  "id" int8 [pk, not null, increment]
+  "cart_id" int8 [not null]
+  "variant_products_id" int8 [not null]
+  "quantity" int4 [not null, check: `(quantity >= 1) AND (quantity <= 1000000)`]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Indexes {
+    (cart_id, variant_products_id) [type: btree, unique, name: "cart_details_cart_variant_unique"]
+    cart_id [type: btree, name: "idx_cart_details_cart_id"]
+    variant_products_id [type: btree, name: "idx_cart_details_variant_products_id"]
+  }
+}
+
+Table "document_sequences" {
+  "owner_id" uuid [not null]
+  "document_type" varchar(10) [not null]
+  "year" int2 [not null, check: `(year >= 2000) AND (year <= 9999)`]
+  "current_value" int4 [not null, check: `current_value >= 0`, default: 0]
+
+  Indexes {
+    (owner_id, document_type, year) [pk, type: btree, name: "document_sequences_pkey"]
+  }
+}
+
+Table "orders" {
+  "id" int8 [pk, not null, increment]
+  "order_series" varchar(10) [not null, default: 'PED']
+  "order_year" int2 [not null, check: `(order_year >= 2000) AND (order_year <= 9999)`]
+  "order_sequence" int4 [not null, check: `order_sequence >= 1`]
+  "order_number" varchar(40) [not null]
+  "retailer_id" uuid
+  "wholesaler_id" uuid
+  "status" OrderStatus [not null, default: 'PENDING']
+  "currency" bpchar(3) [not null, default: 'EUR']
+  "subtotal" numeric(20,2) [not null]
+  "discount_total" numeric(20,2) [not null, default: 0]
+  "iva_total" numeric(20,2) [not null]
+  "total" numeric(20,2) [not null]
+  "item_count" int4 [not null, check: `item_count >= 1`]
+  "shipping_address_snapshot" jsonb [not null]
+  "retailer_snapshot" jsonb [not null]
+  "wholesaler_snapshot" jsonb [not null]
+  "accepted_at" timestamp
+  "accepted_by" uuid
+  "rejected_at" timestamp
+  "rejected_by" uuid
+  "rejected_reason" varchar(500)
+  "cancelled_at" timestamp
+  "estimated_delivery_date" timestamp
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "cancelled_by" uuid
+  "cancelled_reason" varchar(500)
+
+  Checks {
+    `(retailer_id IS NULL) OR (wholesaler_id IS NULL) OR (retailer_id <> wholesaler_id)` [name: 'orders_retailer_wholesaler_different']
+    `(status <> 'REJECTED'::"OrderStatus") OR (rejected_reason IS NOT NULL)` [name: 'orders_rejected_reason_check']
+    `(subtotal >= (0)::numeric) AND (discount_total >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)` [name: 'orders_amounts_check']
+  }
+
+  Indexes {
+    (wholesaler_id, order_number) [type: btree, unique, name: "orders_wholesaler_order_number_unique"]
+    (wholesaler_id, order_series, order_year, order_sequence) [type: btree, unique, name: "orders_wholesaler_series_year_sequence_unique"]
+    order_number [type: btree, name: "idx_orders_order_number"]
+    (retailer_id, created_at) [type: btree, name: "idx_orders_retailer_created_at"]
+    (wholesaler_id, created_at) [type: btree, name: "idx_orders_wholesaler_created_at"]
+    (wholesaler_id, status, created_at) [type: btree, name: "idx_orders_wholesaler_status_created_at"]
+  }
+}
+
+Table "order_details" {
+  "id" int8 [pk, not null, increment]
+  "order_id" int8 [not null]
+  "product_id" int8
+  "variant_product_id" int8
+  "product_name" varchar(100) [not null]
+  "product_title" varchar(150)
+  "product_code" varchar(50) [not null]
+  "variant_product_code" varchar(50) [not null]
+  "product_translations_snapshot" jsonb [not null, default: `[]`]
+  "variant_attributes_snapshot" jsonb [not null, default: `{}`]
+  "type_sale" SaleVariant [not null]
+  "sale_unit_qty" int4 [not null, check: `sale_unit_qty >= 1`]
+  "quantity" int4 [not null, check: `quantity >= 1`]
+  "unit_price" numeric(14,6) [not null]
+  "unit_price_iva" numeric(14,6) [not null]
+  "iva" numeric(5,2) [not null]
+  "subtotal" numeric(20,2) [not null]
+  "iva_total" numeric(20,2) [not null]
+  "total" numeric(20,2) [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Checks {
+    `(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)` [name: 'order_details_amounts_check']
+  }
+
+  Indexes {
+    order_id [type: btree, name: "idx_order_details_order_id"]
+  }
+}
+
+Table "order_pdf_files" {
+  "order_id" int8 [not null]
+  "lang_code" varchar(10) [not null]
+  "file_id" int8 [not null]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+
+  Indexes {
+    (order_id, file_id) [pk, type: btree, name: "order_pdf_files_pkey"]
+    (order_id, lang_code) [type: btree, unique, name: "order_pdf_files_order_lang_unique"]
+    file_id [type: btree, name: "idx_order_pdf_files_file_id"]
+    order_id [type: btree, name: "idx_order_pdf_files_order_id"]
+  }
+}
+
+Table "wholesaler_staffs" {
+  "id" int8 [pk, not null, increment]
+  "wholesaler_id" uuid [not null]
+  "staff_user_id" uuid [not null]
+  "role" UserRole [not null, check: `role = ANY (ARRAY['SUPPORT'::"UserRole", 'DELIVERY'::"UserRole", 'WAREHOUSE'::"UserRole"])`]
+  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_by" uuid
+  "updated_by" uuid
+
+  Checks {
+    `wholesaler_id <> staff_user_id` [name: 'chk_wholesaler_staff_not_self']
+  }
+
+  Indexes {
+    (wholesaler_id, staff_user_id) [type: btree, unique, name: "uq_wholesaler_staff"]
+    staff_user_id [type: btree, name: "idx_wholesaler_staffs_staff_user_id"]
+    wholesaler_id [type: btree, name: "idx_wholesaler_staffs_wholesaler_id"]
+    (wholesaler_id, role) [type: btree, name: "idx_wholesaler_staffs_wholesaler_role"]
+  }
+}
+
+Ref "cart_details_cart_id_fkey":"carts"."id" < "cart_details"."cart_id" [delete: cascade]
+
+Ref "cart_details_variant_products_id_fkey":"variant_products"."id" < "cart_details"."variant_products_id" [delete: cascade]
+
+Ref "carts_retailer_id_fkey":"users"."id" < "carts"."retailer_id" [delete: cascade]
+
+Ref "carts_wholesaler_id_fkey":"users"."id" < "carts"."wholesaler_id" [delete: cascade]
+
+Ref "categories_created_by_fkey":"users"."id" < "categories"."created_by" [delete: set null]
+
+Ref "categories_parent_id_fkey":"categories"."id" < "categories"."parent_id" [delete: cascade]
+
+Ref "categories_updated_by_fkey":"users"."id" < "categories"."updated_by" [delete: set null]
+
+Ref "categories_user_id_fkey":"users"."id" < "categories"."user_id" [delete: cascade]
+
+Ref "category_translations_updated_by_fkey":"users"."id" < "category_translations"."updated_by" [delete: set null]
+
+Ref "fk_category_translations_category_id":"categories"."id" < "category_translations"."category_id" [delete: cascade]
+
+Ref "chat_participants_chat_panel_id_fkey":"chat_panels"."id" < "chat_participants"."chat_panel_id" [delete: cascade]
+
+Ref "chat_participants_user_id_fkey":"users"."id" < "chat_participants"."user_id" [delete: cascade]
+
+Ref "cities_province_id_fkey":"provinces"."id" < "cities"."province_id" [delete: cascade]
+
+Ref "configurations_user_id_fkey":"users"."id" < "configurations"."user_id" [delete: cascade]
+
+Ref "countries_currency_id_fkey":"currencies"."iso_numeric" < "countries"."currency_id" [update: cascade, delete: restrict]
+
+Ref "deliveries_delivery_person_fkey":"users"."id" < "deliveries"."delivery_person" [delete: set null]
+
+Ref "delivery_timeline_delivery_id_fkey":"deliveries"."id" < "delivery_timeline"."delivery_id" [delete: cascade]
+
+Ref "directions_city_id_fkey":"cities"."id" < "directions"."city_id" [delete: restrict]
+
+Ref "directions_country_iso_fkey":"countries"."iso_numeric" < "directions"."country_iso" [update: cascade, delete: restrict]
+
+Ref "directions_province_id_fkey":"provinces"."id" < "directions"."province_id" [delete: restrict]
+
+Ref "directions_user_id_fkey":"users"."id" < "directions"."user_id" [delete: cascade]
+
+Ref "discounts_user_id_fkey":"users"."id" < "discounts"."user_id" [delete: cascade]
+
+Ref "document_sequences_owner_id_fkey":"users"."id" < "document_sequences"."owner_id" [delete: restrict]
+
+Ref "message_files_file_id_fkey":"files"."id" < "message_files"."file_id" [delete: cascade]
+
+Ref "message_files_message_id_fkey":"messages"."id" < "message_files"."message_id" [delete: cascade]
+
+Ref "messages_chat_panel_id_fkey":"chat_panels"."id" < "messages"."chat_panel_id" [delete: cascade]
+
+Ref "messages_reply_to_fkey":"messages"."id" < "messages"."reply_to" [delete: set default]
+
+Ref "messages_sender_id_fkey":"users"."id" < "messages"."sender_id" [delete: set default]
+
+Ref "notifications_user_id_fkey":"users"."id" < "notifications"."user_id" [delete: cascade]
+
+Ref "order_details_order_id_fkey":"orders"."id" < "order_details"."order_id" [delete: cascade]
+
+Ref "order_details_product_id_fkey":"products"."id" < "order_details"."product_id" [delete: set null]
+
+Ref "order_details_variant_product_id_fkey":"variant_products"."id" < "order_details"."variant_product_id" [delete: set null]
+
+Ref "order_pdf_files_file_id_fkey":"files"."id" < "order_pdf_files"."file_id" [delete: cascade]
+
+Ref "order_pdf_files_order_id_fkey":"orders"."id" < "order_pdf_files"."order_id" [delete: cascade]
+
+Ref "orders_accepted_by_fkey":"users"."id" < "orders"."accepted_by" [delete: set null]
+
+Ref "orders_cancelled_by_fkey":"users"."id" < "orders"."cancelled_by" [delete: set null]
+
+Ref "orders_rejected_by_fkey":"users"."id" < "orders"."rejected_by" [delete: set null]
+
+Ref "orders_retailer_id_fkey":"users"."id" < "orders"."retailer_id" [delete: set null]
+
+Ref "orders_wholesaler_id_fkey":"users"."id" < "orders"."wholesaler_id" [delete: set null]
+
+Ref "product_categories_category_id_fkey":"categories"."id" < "product_categories"."category_id" [delete: cascade]
+
+Ref "product_categories_product_id_fkey":"products"."id" < "product_categories"."product_id" [delete: cascade]
+
+Ref "fk_product_translations_product_id":"products"."id" < "product_translations"."product_id" [delete: cascade]
+
+Ref "product_translations_updated_by_fkey":"users"."id" < "product_translations"."updated_by" [delete: set null]
+
+Ref "products_created_by_fkey":"users"."id" < "products"."created_by" [delete: set null]
+
+Ref "products_updated_by_fkey":"users"."id" < "products"."updated_by" [delete: set null]
+
+Ref "products_user_id_fkey":"users"."id" < "products"."user_id" [delete: cascade]
+
+Ref "products_files_file_id_fkey":"files"."id" < "products_files"."file_id" [delete: cascade]
+
+Ref "products_files_product_id_fkey":"products"."id" < "products_files"."product_id" [delete: cascade]
+
+Ref "provinces_country_iso_fkey":"countries"."iso_numeric" < "provinces"."country_iso" [update: cascade, delete: cascade]
+
+Ref "fk_user_sessions_user_id":"users"."id" < "user_sessions"."user_id" [delete: cascade]
+
+Ref "user_uploads_file_id_fkey":"files"."id" < "user_uploads"."file_id" [delete: cascade]
+
+Ref "user_uploads_user_id_fkey":"users"."id" < "user_uploads"."user_id" [delete: cascade]
+
+Ref "users_profile_image_file_id_fkey":"files"."id" < "users"."profile_image_file_id" [delete: set null]
+
+Ref "variant_products_created_by_fkey":"users"."id" < "variant_products"."created_by" [delete: set null]
+
+Ref "variant_products_product_id_fkey":"products"."id" < "variant_products"."product_id" [delete: cascade]
+
+Ref "variant_products_updated_by_fkey":"users"."id" < "variant_products"."updated_by" [delete: set null]
+
+Ref "password_reset_tokens_user_id_fkey":"users"."id" < "verification_tokens"."user_id" [delete: cascade]
+
+Ref "wholesaler_staffs_created_by_fkey":"users"."id" < "wholesaler_staffs"."created_by" [delete: set null]
+
+Ref "wholesaler_staffs_staff_user_id_fkey":"users"."id" < "wholesaler_staffs"."staff_user_id" [delete: cascade]
+
+Ref "wholesaler_staffs_updated_by_fkey":"users"."id" < "wholesaler_staffs"."updated_by" [delete: set null]
+
+Ref "wholesaler_staffs_wholesaler_id_fkey":"users"."id" < "wholesaler_staffs"."wholesaler_id" [delete: cascade]

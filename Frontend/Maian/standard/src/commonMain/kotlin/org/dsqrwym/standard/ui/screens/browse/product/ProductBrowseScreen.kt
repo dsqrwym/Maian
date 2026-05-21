@@ -6,12 +6,30 @@ package org.dsqrwym.standard.ui.screens.browse.product
  * 支持瀑布流布局展示和图片预览
  */
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SwapVert
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryScrollableTabRow
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -25,7 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.all
+import maian.shared.generated.resources.more
+import maian.shared.generated.resources.search_products
+import maian.shared.generated.resources.sort
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.sharedRetailProductSortFields
 import org.dsqrwym.shared.domain.profile.WholesalerCardData
@@ -61,7 +83,7 @@ fun ProductBrowseScreen(
     viewModel: ProductBrowseViewModel = koinViewModel(),
 ) {
     LaunchedEffect(scope, wholesalerId, categoryId) {
-        // 我进来先把路由上的范围喂给 VM，后面搜索和分页都按这个范围走
+        // 先把路由上的范围喂给 VM，后面搜索和分页都按这个范围走
         viewModel.configure(scope, wholesalerId, categoryId)
     }
     val languageCode = viewModel.languageCode
@@ -92,7 +114,7 @@ fun ProductBrowseScreen(
         },
         title = {
             Column {
-                // 我在产品和分类页才显示店铺条，批发商详情页别再塞这个
+                // 在产品和分类页才显示店铺条，批发商详情页别再塞这个
                 // 批发商范围横幅
                 WholesalerStoreBanner(
                     data = wholesalerData,
@@ -289,6 +311,7 @@ private fun PaginatedProductGrid(
         paginatedProducts = paginatedProducts,
         scrollBehavior = scrollBehavior,
         padding = padding,
+        minSize = 180.dp,
         includeMenuTopPadding = true,
         key = paginatedProducts.itemKey { it.id },
     ) {

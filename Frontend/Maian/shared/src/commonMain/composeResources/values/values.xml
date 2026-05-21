@@ -262,7 +262,7 @@
     <string name="product_price_without_vat">Price without VAT</string>
     <string name="product_price_with_vat_value">With VAT: %1$s€</string>
     <string name="product_price_without_vat_value">Net: %1$s€</string>
-    <string name="product_min_order_qty">Minimum order quantity</string>
+    <string name="product_min_order_qty">Min. Qty</string>
     <string name="product_moq_value">Minimum order quant.: %1$d</string>
     <string name="product_preview">Preview</string>
     <string name="product_actions">Actions</string>
@@ -278,7 +278,7 @@
     <string name="product_sort_stock">Stock</string>
     <string name="product_sort_price">Price</string>
     <string name="product_sort_price_without_vat">Price without VAT</string>
-    <string name="product_sort_min_order_qty">MOQ</string>
+    <string name="product_sort_min_order_qty">Minimum order quantity</string>
     <string name="product_detail">Product detail</string>
     <string name="media">Media</string>
     <string name="variants">Variants</string>

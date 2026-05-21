@@ -38,7 +38,9 @@ class LoginViewModel(
     private val mySnackbarViewModel: MySnackbarViewModel,
     private val authSessionViewModel: AuthSessionViewModel
 ) : ViewModel() {
-    var selectedLoginType by mutableStateOf(UserPreference.getUserSelectRole() ?: LoginType.WHOLESALER)
+    private val initialLoginType = UserPreference.getUserSelectRole() ?: LoginType.WHOLESALER
+
+    var selectedLoginType by mutableStateOf(initialLoginType)
 
     var email by mutableStateOf(SharedUserPreferences.getUserLoginPreferences() ?: "")
     var emailError by mutableStateOf<StringResource?>(null)
@@ -48,7 +50,9 @@ class LoginViewModel(
     var password by mutableStateOf("")
     var passwordError by mutableStateOf<StringResource?>(null)
 
-    var wholesalerId by mutableStateOf<String?>(null)
+    var wholesalerId by mutableStateOf<String?>(
+        if (initialLoginType == LoginType.EMPLOYEE) UserPreference.getEmployeeWholesalerId() else null
+    )
     var wholesalerIdError by mutableStateOf<StringResource?>(null)
 
     val loginEnabled = derivedStateOf {
@@ -92,6 +96,8 @@ class LoginViewModel(
         if (loginType == LoginType.WHOLESALER) {
             wholesalerId = null
             wholesalerIdError = null
+        } else if (wholesalerId == null) {
+            wholesalerId = UserPreference.getEmployeeWholesalerId()
         }
         UserPreference.setUserSelectRole(loginType)
     }
@@ -110,13 +116,19 @@ class LoginViewModel(
         if (loginEnabled.value) {
             viewModelScope.launch {
                 loginUiState = UiState.Loading
-                when (val result = repository.login(email, password, wholesalerId)) {
+                val employeeWholesalerId = if (selectedLoginType == LoginType.EMPLOYEE) {
+                    wholesalerId
+                } else {
+                    null
+                }
+                when (val result = repository.login(email, password, employeeWholesalerId)) {
                     is SharedResponseResult.Success -> {
                         loginUiState = UiState.Success
                         mySnackbarViewModel.showSuccess(getString(SharedRes.string.login_success))
                         delay(delayMillis)
                         loginUiState = UiState.Idle
 
+                        employeeWholesalerId?.let { UserPreference.setEmployeeWholesalerId(it) }
                         result.data?.user?.let { authSessionViewModel.onLoggedIn(it, email) }
                     }
 
