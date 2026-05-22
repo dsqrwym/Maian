@@ -6,9 +6,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
@@ -19,6 +25,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun BusinessOutlinedDeleteButton(
     modifier: Modifier = Modifier,
+    iconSize: Dp = 18.dp,
     enabled: Boolean = true,
     onDelete: () -> Unit,
 ) {
@@ -33,10 +40,14 @@ fun BusinessOutlinedDeleteButton(
         Icon(
             Icons.Default.Delete,
             stringResource(SharedRes.string.delete),
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(iconSize)
         )
         Spacer(Modifier.width(4.dp))
-        Text(stringResource(SharedRes.string.delete), maxLines = 1)
+        Text(
+            text = stringResource(SharedRes.string.delete),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
     }
 }
 

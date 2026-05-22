@@ -81,7 +81,7 @@
     <string name="employee_user_id">員工ID</string>
     <string name="field_employee_email_placeholder">請輸入員工電郵</string>
     <string name="select_employee_role">選擇員工角色</string>
-    <string name="employee_search_placeholder">搜尋員工</string>
+    <string name="employee_search_placeholder">搜尋姓名、使用者名稱、電郵、電話、稅號或員工 ID</string>
     <string name="no_employees_found">找不到員工</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\n此操作無法復原。</string>
     <string name="employee_create_success_pending_verification">員工已建立。對方會收到驗證郵件，在啟用帳號前狀態為等待驗證。</string>

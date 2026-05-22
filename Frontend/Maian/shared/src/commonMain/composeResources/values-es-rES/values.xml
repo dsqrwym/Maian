@@ -155,8 +155,11 @@
     <string name="categories">Categorías</string>
     <string name="more">Más</string>
 
-    <string name="search_products">Buscar productos</string>
-    <string name="search_categories">Buscar categorías</string>
+    <string name="search_products">Buscar nombre, título, código, SKU o categoría</string>
+    <string name="search_categories">Buscar categoría o subcategoría</string>
+    <string name="search_category_name">Buscar por nombre de categoría</string>
+    <string name="search_parent_category_name">Buscar por nombre de categoría padre</string>
+    <string name="search_main_category_name">Buscar por nombre de categoría principal</string>
 
     <string name="no_products">No se han encontrado productos</string>
     <string name="no_categories">No se han encontrado categorías</string>
@@ -407,7 +410,9 @@
     <string name="rejection_reason">Motivo de rechazo</string>
     <string name="rejection_reason_placeholder">Lo sentimos, la dirección está fuera de nuestra zona de reparto o los precios no se actualizaron a tiempo.</string>
     <string name="cancellation_reason">Motivo de cancelación</string>
-    <string name="search_orders">Buscar número de pedido, cliente/proveedor, NIF/CIF, ciudad</string>
+    <string name="search_orders">Buscar número de pedido, cliente/proveedor, NIF/CIF o dirección</string>
+    <string name="search_retailer_orders">Buscar nº de pedido, mayorista, NIF/CIF o dirección de entrega</string>
+    <string name="search_enterprise_orders">Buscar nº de pedido, minorista, contacto, NIF/CIF o dirección de entrega</string>
     <string name="no_orders_found">No se encontraron pedidos</string>
     <string name="update_delivery_date">Actualizar fecha de entrega</string>
     <string name="clear_delivery_date">Borrar fecha de entrega</string>

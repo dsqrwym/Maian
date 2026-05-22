@@ -83,7 +83,7 @@
     <string name="employee_user_id">Employee ID</string>
     <string name="field_employee_email_placeholder">Enter employee email</string>
     <string name="select_employee_role">Select employee role</string>
-    <string name="employee_search_placeholder">Search employees</string>
+    <string name="employee_search_placeholder">Search name, username, email, phone, tax ID, or employee ID</string>
     <string name="no_employees_found">No employees found</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nThis action cannot be undone.</string>
     <string name="employee_create_success_pending_verification">Employee created. They will receive a verification email and remain pending verification until they activate the account.</string>

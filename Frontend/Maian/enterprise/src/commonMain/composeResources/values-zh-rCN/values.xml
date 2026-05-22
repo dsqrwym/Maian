@@ -81,7 +81,7 @@
     <string name="employee_user_id">员工ID</string>
     <string name="field_employee_email_placeholder">请输入员工邮箱</string>
     <string name="select_employee_role">选择员工角色</string>
-    <string name="employee_search_placeholder">搜索员工</string>
+    <string name="employee_search_placeholder">搜索姓名、用户名、邮箱、电话、税号或员工 ID</string>
     <string name="no_employees_found">未找到员工</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\n此操作不可撤销。</string>
     <string name="employee_create_success_pending_verification">员工已创建。对方会收到验证邮件，在激活账号前状态为等待验证。</string>

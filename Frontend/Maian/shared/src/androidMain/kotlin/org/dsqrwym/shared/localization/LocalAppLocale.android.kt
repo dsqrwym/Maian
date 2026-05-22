@@ -3,6 +3,7 @@ package org.dsqrwym.shared.localization
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.ui.platform.LocalConfiguration
+import android.content.res.Configuration
 import java.util.*
 
 actual object LocalAppLocale {
@@ -26,8 +27,10 @@ actual object LocalAppLocale {
             else -> Locale.forLanguageTag(value)
         }
         Locale.setDefault(new)
-        configuration.setLocale(new)
+        val localizedConfiguration = Configuration(configuration).apply {
+            setLocale(new)
+        }
          // 把新的 configuration 以 CompositionLocal 的形式“提供”出去
-        return LocalConfiguration.provides(configuration)
+        return LocalConfiguration.provides(localizedConfiguration)
     }
 }

@@ -111,7 +111,7 @@
     <string name="employee_user_id">ID employé</string>
     <string name="field_employee_email_placeholder">Saisissez l'email de l'employé</string>
     <string name="select_employee_role">Sélectionnez le rôle de l'employé</string>
-    <string name="employee_search_placeholder">Rechercher des employés</string>
+    <string name="employee_search_placeholder">Rechercher nom, identifiant, e-mail, téléphone, nº fiscal ou ID employé</string>
     <string name="no_employees_found">Aucun employé trouvé</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nCette action est irréversible.</string>
     <string name="employee_create_success_pending_verification">Employé créé. Il recevra un email de vérification et restera en attente de vérification jusqu'à l'activation du compte.</string>

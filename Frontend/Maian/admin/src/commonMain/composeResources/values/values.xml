@@ -1,5 +1,6 @@
 <resources>
     <string name="select_wholesaler">Select wholesaler</string>
+    <string name="search_wholesaler_user">Search wholesaler ID, username, name, email, phone, or tax ID</string>
     <string name="platform_category">Platform category</string>
 
     <string name="category_type">Category type</string>

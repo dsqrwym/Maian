@@ -6,7 +6,7 @@
     <string name="wholesaler_scope_label">Mayorista: %1$s</string>
     <string name="back_to_all">Volver a todo</string>
     <string name="current_wholesaler">Actual</string>
-    <string name="search_wholesalers">Buscar mayoristas</string>
+    <string name="search_wholesalers">Buscar tienda, empresa, ID, ciudad, provincia o pedido mínimo</string>
     <string name="no_wholesalers">No se encontraron mayoristas</string>
     <string name="wholesaler_sort_display_name">Nombre</string>
     <string name="wholesaler_sort_company_name">Nombre de empresa</string>

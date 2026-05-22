@@ -109,7 +109,7 @@
     <string name="employee_user_id">ID de empleado</string>
     <string name="field_employee_email_placeholder">Introduce el email del empleado</string>
     <string name="select_employee_role">Selecciona el rol del empleado</string>
-    <string name="employee_search_placeholder">Buscar empleados</string>
+    <string name="employee_search_placeholder">Buscar nombre, usuario, email, teléfono, NIF/CIF o ID de empleado</string>
     <string name="no_employees_found">No se encontraron empleados</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nEsta acción no se puede deshacer.</string>
     <string name="employee_create_success_pending_verification">Empleado creado. Recibirá un correo de verificación y quedará pendiente de verificación hasta activar la cuenta.</string>

@@ -33,6 +33,7 @@ import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
@@ -159,8 +160,10 @@ internal fun AddLanguageDialog(
     onDismiss: () -> Unit,
     onAdd: (String, String) -> Unit
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismiss)
+
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = resizeSafeDismiss,
         properties = transparentDialogProperties(),
         icon = { Icon(Icons.Outlined.Language, contentDescription = "Language") },
         title = { Text(stringResource(BusinessRes.string.add_language_translation)) },

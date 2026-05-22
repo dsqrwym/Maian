@@ -13,6 +13,7 @@ import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
+import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.network.InitCoil
@@ -24,6 +25,7 @@ import org.dsqrwym.shared.util.navigation.WindowSizeClass
 import org.dsqrwym.shared.util.navigation.calculateWindowSizeClass
 import org.dsqrwym.shared.util.settings.initSharedSettingsProvider
 import org.jetbrains.compose.resources.getString
+import org.koin.compose.currentKoinScope
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
@@ -63,6 +65,7 @@ fun AppRoot(
 
     val mySnackbarViewModel: MySnackbarViewModel = koinViewModel()
     val authSessionViewModel: AuthSessionViewModel = koinViewModel()
+    val userSettingsRepository: SharedUserSettingsRepository = currentKoinScope().get()
 
     // 通过 UserPreferences 的 SharedFlow 监听主题变化
     val init = remember { SharedUserPreferences.getIsDarkTheme() }
@@ -79,8 +82,12 @@ fun AppRoot(
     val windowSizeClass by rememberUpdatedState(calculateWindowSizeClass())
 
     LaunchedEffect(Unit) {
-        if (state is AuthState.Unauthenticated) {
-            LanguageManager.setLocaleLanguage(SharedUserPreferences.getUserLanguage())
+        LanguageManager.setLocaleLanguage(SharedUserPreferences.getUserLanguage())
+    }
+
+    LaunchedEffect(state) {
+        if (state is AuthState.Authenticated) {
+            userSettingsRepository.applyRemoteLanguageOrFallback()
         }
     }
 

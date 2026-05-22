@@ -6,7 +6,7 @@
     <string name="wholesaler_scope_label">Grossiste : %1$s</string>
     <string name="back_to_all">Retour à tout</string>
     <string name="current_wholesaler">Actuel</string>
-    <string name="search_wholesalers">Rechercher des grossistes</string>
+    <string name="search_wholesalers">Rechercher boutique, entreprise, ID, ville, province ou minimum de commande</string>
     <string name="no_wholesalers">Aucun grossiste trouvé</string>
     <string name="wholesaler_sort_display_name">Nom</string>
     <string name="wholesaler_sort_company_name">Nom de l'entreprise</string>

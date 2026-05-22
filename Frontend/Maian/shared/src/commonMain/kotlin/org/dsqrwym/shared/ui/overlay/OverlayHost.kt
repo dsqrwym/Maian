@@ -56,9 +56,7 @@ fun OverlayHost(content: @Composable () -> Unit) {
                         }.clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
-                        ) {
-                            overlayState.hide()
-                        }
+                        ) {}
                 )
             }
         }

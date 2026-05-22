@@ -16,7 +16,7 @@
     <string name="delete_warning_with_children">注意：這將同時刪除 %1$s 個子類別且無法復原。</string>
     <string name="select_parent_category">選擇父類別</string>
     <string name="private_category">私有類別</string>
-    <string name="search_category">搜尋類別...</string>
+    <string name="search_category">搜尋分類名稱</string>
     <string name="platform_category">平台類別</string>
 
     <string name="select_parent_category_to_create">選擇父類別以建立子類別</string>

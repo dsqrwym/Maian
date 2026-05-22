@@ -69,11 +69,13 @@ import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.SharedConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
 import org.dsqrwym.shared.ui.components.product.SharedProductSortDirectionLabel
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendErrorRetry
@@ -129,7 +131,11 @@ fun EmployeesListScreen(
                         onSearch = { viewModel.refresh() },
                         expanded = false,
                         onExpandedChange = {},
-                        placeholder = { Text(stringResource(EnterpriseRes.string.employee_search_placeholder)) },
+                        placeholder = {
+                            SharedSingleLinePlaceholderText(
+                                stringResource(EnterpriseRes.string.employee_search_placeholder)
+                            )
+                        },
                         leadingIcon = {
                             Icon(
                                 Icons.Outlined.Search,
@@ -232,9 +238,13 @@ fun EmployeesListScreen(
 private fun EmployeeFilterDialog(
     viewModel: EmployeesListViewModel,
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(
+        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+    )
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -277,9 +287,13 @@ private fun EmployeeFilterDialog(
 private fun EmployeeSortDialog(
     viewModel: EmployeesListViewModel,
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(
+        onDismissRequest = { viewModel.updateShowSortDialog(false) },
+    )
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = { viewModel.updateShowSortDialog(false) },
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

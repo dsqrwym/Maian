@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDownward
 import androidx.compose.material.icons.outlined.ArrowUpward
@@ -31,7 +32,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.clear
+import maian.shared.generated.resources.confirm
+import maian.shared.generated.resources.filter
+import maian.shared.generated.resources.order_amount_no_limit
+import maian.shared.generated.resources.order_date_range
+import maian.shared.generated.resources.order_end_date
+import maian.shared.generated.resources.order_label_value
+import maian.shared.generated.resources.order_range_value
+import maian.shared.generated.resources.order_sort_value
+import maian.shared.generated.resources.order_start_date
+import maian.shared.generated.resources.order_status_all
+import maian.shared.generated.resources.sort
+import maian.shared.generated.resources.status
+import maian.shared.generated.resources.subtotal
+import maian.shared.generated.resources.total
+import maian.shared.generated.resources.total_iva
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.displayName
 import org.dsqrwym.shared.data.orders.SharedOrderAmountFilterBounds
@@ -41,6 +57,7 @@ import org.dsqrwym.shared.data.orders.displayName
 import org.dsqrwym.shared.data.orders.sharedOrderSortFields
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.formatter.DefaultOrderTotalRangeMax
 import org.dsqrwym.shared.util.formatter.asEuroAmount
@@ -99,8 +116,10 @@ internal fun OrderFilterChipsRow(
                         stringResource(
                             SharedRes.string.order_range_value,
                             stringResource(SharedRes.string.order_date_range),
-                            startDate?.toDisplayDate() ?: stringResource(SharedRes.string.order_start_date),
-                            endDate?.toDisplayDate() ?: stringResource(SharedRes.string.order_end_date),
+                            startDate?.toDisplayDate()
+                                ?: stringResource(SharedRes.string.order_start_date),
+                            endDate?.toDisplayDate()
+                                ?: stringResource(SharedRes.string.order_end_date),
                         )
                     )
                 },
@@ -167,7 +186,8 @@ private fun AmountRangeFilterChip(
                         SharedRes.string.order_range_value,
                         label,
                         (min ?: fallbackMin).asEuroAmount(),
-                        (max ?: fallbackMax)?.asEuroAmount() ?: stringResource(SharedRes.string.order_amount_no_limit),
+                        (max ?: fallbackMax)?.asEuroAmount()
+                            ?: stringResource(SharedRes.string.order_amount_no_limit),
                     )
                 )
             },
@@ -198,77 +218,105 @@ internal fun OrderFilterDialog(
     onDismiss: () -> Unit,
 ) {
     var pickingDate by remember { mutableStateOf<OrderDatePickerTarget?>(null) }
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismiss)
 
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = onDismiss,
+        onDismissRequest = resizeSafeDismiss,
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(stringResource(SharedRes.string.filter), style = MaterialTheme.typography.titleMedium)
-
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(SharedRes.string.status), style = MaterialTheme.typography.labelLarge)
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        ElevatedFilterChip(
-                            selected = selectedStatus == null,
-                            onClick = { onStatusChange(null) },
-                            label = { Text(stringResource(SharedRes.string.order_status_all)) },
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                item {
+                    Text(
+                        stringResource(SharedRes.string.filter),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(SharedRes.string.status),
+                            style = MaterialTheme.typography.labelLarge
                         )
-                        SharedOrderStatus.entries.forEach { status ->
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
                             ElevatedFilterChip(
-                                selected = selectedStatus == status,
-                                onClick = { onStatusChange(status) },
-                                label = { Text(status.displayName()) },
+                                selected = selectedStatus == null,
+                                onClick = { onStatusChange(null) },
+                                label = { Text(stringResource(SharedRes.string.order_status_all)) },
                             )
+                            SharedOrderStatus.entries.forEach { status ->
+                                ElevatedFilterChip(
+                                    selected = selectedStatus == status,
+                                    onClick = { onStatusChange(status) },
+                                    label = { Text(status.displayName()) },
+                                )
+                            }
                         }
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(SharedRes.string.order_date_range), style = MaterialTheme.typography.labelLarge)
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        OutlinedButton(onClick = { pickingDate = OrderDatePickerTarget.Start }) {
-                            Text(startDate?.toDisplayDate() ?: stringResource(SharedRes.string.order_start_date))
-                        }
-                        OutlinedButton(onClick = { pickingDate = OrderDatePickerTarget.End }) {
-                            Text(endDate?.toDisplayDate() ?: stringResource(SharedRes.string.order_end_date))
-                        }
-                        TextButton(onClick = onClearDateRange) {
-                            Text(stringResource(SharedRes.string.clear))
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(SharedRes.string.order_date_range),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            OutlinedButton(onClick = {
+                                pickingDate = OrderDatePickerTarget.Start
+                            }) {
+                                Text(
+                                    startDate?.toDisplayDate()
+                                        ?: stringResource(SharedRes.string.order_start_date)
+                                )
+                            }
+                            OutlinedButton(onClick = { pickingDate = OrderDatePickerTarget.End }) {
+                                Text(
+                                    endDate?.toDisplayDate()
+                                        ?: stringResource(SharedRes.string.order_end_date)
+                                )
+                            }
+                            TextButton(onClick = onClearDateRange) {
+                                Text(stringResource(SharedRes.string.clear))
+                            }
                         }
                     }
                 }
-
-                OrderAmountRangeSlider(
-                    label = stringResource(SharedRes.string.total),
-                    minValue = minTotalPrice,
-                    maxValue = maxTotalPrice,
-                    boundsMin = amountFilterBounds.minTotalPrice,
-                    boundsMax = amountFilterBounds.maxTotalPrice,
-                    onRangeChange = onTotalPriceRangeChange,
-                )
-                OrderAmountRangeSlider(
-                    label = stringResource(SharedRes.string.subtotal),
-                    minValue = minSubtotal,
-                    maxValue = maxSubtotal,
-                    boundsMin = amountFilterBounds.minSubtotal,
-                    boundsMax = amountFilterBounds.maxSubtotal,
-                    onRangeChange = onSubtotalRangeChange,
-                )
-                OrderAmountRangeSlider(
-                    label = stringResource(SharedRes.string.total_iva),
-                    minValue = minTotalIva,
-                    maxValue = maxTotalIva,
-                    boundsMin = amountFilterBounds.minTotalIva,
-                    boundsMax = amountFilterBounds.maxTotalIva,
-                    onRangeChange = onTotalIvaRangeChange,
-                )
+                item {
+                    OrderAmountRangeSlider(
+                        label = stringResource(SharedRes.string.total),
+                        minValue = minTotalPrice,
+                        maxValue = maxTotalPrice,
+                        boundsMin = amountFilterBounds.minTotalPrice,
+                        boundsMax = amountFilterBounds.maxTotalPrice,
+                        onRangeChange = onTotalPriceRangeChange,
+                    )
+                }
+                item {
+                    OrderAmountRangeSlider(
+                        label = stringResource(SharedRes.string.subtotal),
+                        minValue = minSubtotal,
+                        maxValue = maxSubtotal,
+                        boundsMin = amountFilterBounds.minSubtotal,
+                        boundsMax = amountFilterBounds.maxSubtotal,
+                        onRangeChange = onSubtotalRangeChange,
+                    )
+                }
+                item {
+                    OrderAmountRangeSlider(
+                        label = stringResource(SharedRes.string.total_iva),
+                        minValue = minTotalIva,
+                        maxValue = maxTotalIva,
+                        boundsMin = amountFilterBounds.minTotalIva,
+                        boundsMax = amountFilterBounds.maxTotalIva,
+                        onRangeChange = onTotalIvaRangeChange,
+                    )
+                }
             }
         },
         confirmButton = {
@@ -318,7 +366,12 @@ private fun OrderAmountRangeSlider(
     val sliderMin = boundsMin.toFloat().coerceAtLeast(0f)
     var amountRange by remember(minValue, maxValue, boundsMin, boundsMax) {
         mutableStateOf(
-            orderTotalSliderValue(minValue, sliderMin, sliderMax, minValue = sliderMin)..orderTotalSliderValue(
+            orderTotalSliderValue(
+                minValue,
+                sliderMin,
+                sliderMax,
+                minValue = sliderMin
+            )..orderTotalSliderValue(
                 maxValue,
                 sliderMax,
                 sliderMax,
@@ -337,7 +390,11 @@ private fun OrderAmountRangeSlider(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Outlined.Euro, contentDescription = null, modifier = Modifier.size(18.dp))
+                Icon(
+                    Icons.Outlined.Euro,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
                 Text(label, style = MaterialTheme.typography.labelLarge)
             }
             TextButton(
@@ -366,7 +423,10 @@ private fun OrderAmountRangeSlider(
         RangeSlider(
             value = amountRange,
             onValueChange = {
-                amountRange = it.start.coerceIn(sliderMin, sliderMax)..it.endInclusive.coerceIn(sliderMin, sliderMax)
+                amountRange = it.start.coerceIn(sliderMin, sliderMax)..it.endInclusive.coerceIn(
+                    sliderMin,
+                    sliderMax
+                )
             },
             onValueChangeFinished = {
                 onRangeChange(
@@ -389,15 +449,20 @@ internal fun OrderSortDialog(
     onToggleSort: (SharedOrderSortBy) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismiss)
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = onDismiss,
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Outlined.SwapVert, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(SharedRes.string.sort), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        stringResource(SharedRes.string.sort),
+                        style = MaterialTheme.typography.titleMedium
+                    )
                 }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -6,7 +6,7 @@
     <string name="wholesaler_scope_label">Wholesaler: %1$s</string>
     <string name="back_to_all">Back to all</string>
     <string name="current_wholesaler">Current</string>
-    <string name="search_wholesalers">Search wholesalers</string>
+    <string name="search_wholesalers">Search store, company, ID, city, province, or minimum order</string>
     <string name="no_wholesalers">No wholesalers found</string>
     <string name="wholesaler_sort_display_name">Name</string>
     <string name="wholesaler_sort_company_name">Company name</string>

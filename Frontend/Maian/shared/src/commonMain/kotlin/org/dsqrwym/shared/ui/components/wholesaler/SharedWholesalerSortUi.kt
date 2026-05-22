@@ -14,6 +14,7 @@ import maian.shared.generated.resources.*
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.displayName
 import org.dsqrwym.shared.data.user.dto.WholesalerSortField
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -38,9 +39,11 @@ fun SharedWholesalerSortDialog(
     onToggleSort: (WholesalerSortField) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismissRequest)
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

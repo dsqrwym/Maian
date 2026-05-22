@@ -2,12 +2,36 @@ package org.dsqrwym.shared.ui.components.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
-import androidx.compose.runtime.*
+import androidx.compose.material3.rememberTooltipState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -17,7 +41,13 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.out_of_stock
+import maian.shared.generated.resources.product_image_with_name
+import maian.shared.generated.resources.product_moq_value
+import maian.shared.generated.resources.product_price_with_vat_value
+import maian.shared.generated.resources.product_price_without_vat_value
+import maian.shared.generated.resources.product_stock_count
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.ui.components.containers.SharedOverlayContentBox
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
@@ -289,7 +319,7 @@ fun SharedReadOnlyProductCard(
             if (!isLoading && showActions) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(SharedColumnLayout.padding),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.End,
                     content = actions,
                 )
             }

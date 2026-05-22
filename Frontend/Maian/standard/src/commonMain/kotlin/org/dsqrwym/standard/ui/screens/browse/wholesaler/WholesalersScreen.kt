@@ -24,11 +24,13 @@ import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.input.selector.Selector
 import org.dsqrwym.shared.ui.components.input.selector.SelectorConfig
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.wholesaler.*
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.standard.domain.browse.RetailWholesaler
 import org.dsqrwym.standard.domain.browse.toCardData
@@ -97,7 +99,9 @@ fun WholesalersScreen(
                         onSearch = { viewModel.submitSearch() },
                         expanded = false,
                         onExpandedChange = {},
-                        placeholder = { Text(stringResource(StandardRes.string.search_wholesalers)) },
+                        placeholder = {
+                            SharedSingleLinePlaceholderText(stringResource(StandardRes.string.search_wholesalers))
+                        },
                         leadingIcon = {
                             Icon(
                                 Icons.Outlined.Search,
@@ -157,9 +161,13 @@ private fun WholesalerListItem(
 
 @Composable
 private fun WholesalerFilterDialog(viewModel: WholesalersViewModel) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(
+        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+    )
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(

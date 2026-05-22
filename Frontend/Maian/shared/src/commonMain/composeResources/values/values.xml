@@ -155,8 +155,11 @@
     <string name="products">Products</string>
     <string name="categories">Categories</string>
     <string name="more">More</string>
-    <string name="search_products">Search products</string>
-    <string name="search_categories">Search categories</string>
+    <string name="search_products">Search name, title, code, SKU, or category</string>
+    <string name="search_categories">Search category or subcategory</string>
+    <string name="search_category_name">Search by category name</string>
+    <string name="search_parent_category_name">Search by parent category name</string>
+    <string name="search_main_category_name">Search by main category name</string>
     <string name="no_products">No products found</string>
     <string name="no_categories">No categories found</string>
 
@@ -378,7 +381,9 @@
     <string name="rejection_reason">Rejection reason</string>
     <string name="rejection_reason_placeholder">Sorry, this address is outside our delivery area, or prices were not updated in time.</string>
     <string name="cancellation_reason">Cancellation reason</string>
-    <string name="search_orders">Search order number, customer/supplier, tax ID, city</string>
+    <string name="search_orders">Search order number, customer/supplier, tax ID, or address</string>
+    <string name="search_retailer_orders">Search order number, wholesaler, tax ID, or delivery address</string>
+    <string name="search_enterprise_orders">Search order number, retailer, contact, tax ID, or delivery address</string>
     <string name="no_orders_found">No orders found</string>
     <string name="update_delivery_date">Update delivery date</string>
     <string name="clear_delivery_date">Clear delivery date</string>

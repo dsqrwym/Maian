@@ -1,14 +1,33 @@
 ﻿package org.dsqrwym.enterprise.ui.screens.products
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SwapVert
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,7 +38,19 @@ import maian.business.generated.resources.parent_category_with_name
 import maian.business.generated.resources.select_parent_category
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.add_product
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.all
+import maian.shared.generated.resources.close
+import maian.shared.generated.resources.confirm_delete_message
+import maian.shared.generated.resources.delete
+import maian.shared.generated.resources.error_no_permission
+import maian.shared.generated.resources.filter
+import maian.shared.generated.resources.product_code
+import maian.shared.generated.resources.product_name
+import maian.shared.generated.resources.search_category_name
+import maian.shared.generated.resources.search_products
+import maian.shared.generated.resources.sort
+import maian.shared.generated.resources.status
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.permissions.canManageEnterpriseProducts
 import org.dsqrwym.enterprise.ui.components.product.ProductTableView
@@ -39,6 +70,7 @@ import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.dialog.SharedConfirmDeleteDialog
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
@@ -47,6 +79,7 @@ import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 import org.jetbrains.compose.resources.stringResource
@@ -122,7 +155,9 @@ fun ProductsListScreen(
                         onSearch = { viewModel.refresh() },
                         expanded = false,
                         onExpandedChange = {},
-                        placeholder = { Text(stringResource(SharedRes.string.search_products)) },
+                        placeholder = {
+                            SharedSingleLinePlaceholderText(stringResource(SharedRes.string.search_products))
+                        },
                         leadingIcon = {
                             Icon(
                                 Icons.Outlined.Search,
@@ -184,8 +219,6 @@ fun ProductsListScreen(
                 padding,
                 isRefreshing,
             )
-
-
         } else {
             ProductWaterfallView(
                 paginatedProducts,
@@ -211,6 +244,7 @@ private fun ProductPreviewDialog(
 ) {
     val languageCode = remember { LanguageManager.getCurrent().code }
     var showImagePreview by remember(product.id) { mutableStateOf(false) }
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismiss)
     if (showImagePreview) {
         product.mainImage?.url(product.id)?.let { imageUrl ->
             SharedImageViewDialog(
@@ -221,7 +255,7 @@ private fun ProductPreviewDialog(
         }
     }
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = resizeSafeDismiss,
         properties = transparentDialogProperties(),
     ) {
         SharedReadOnlyProductCard(
@@ -270,9 +304,13 @@ private fun ProductConfirmDeleteDialog(
 private fun ProductFilterDialog(
     viewModel: ProductsListViewModel,
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(
+        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+    )
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
@@ -284,6 +322,7 @@ private fun ProductFilterDialog(
                         label = stringResource(BusinessRes.string.select_parent_category),
                         error = null,
                         leadingIcon = Icons.Outlined.Category,
+                        placeholder = stringResource(SharedRes.string.search_category_name),
                         selectedItem = viewModel.filterCategory,
                         onSelectedItemChange = viewModel::updateFilterCategory,
                         pageSize = 100,

@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import org.dsqrwym.shared.LocalWindowSizeClass
@@ -38,6 +41,12 @@ fun SharedAdaptiveNavigation(
 ) {
     val windowSizeClass = LocalWindowSizeClass.current
     val menuViewModel: SharedMenuViewModel = koinViewModel()
+    val currentContent by rememberUpdatedState(content)
+    val movableContent = remember {
+        movableContentOf {
+            currentContent()
+        }
+    }
 
     LaunchedEffect(Unit) {
         menuViewModel.initMenu(menuConfig)
@@ -54,7 +63,7 @@ fun SharedAdaptiveNavigation(
                 currentRoute = currentRoute,
                 onNavigate = onNavigate,
                 modifier = modifier,
-                content = content
+                content = movableContent
             )
         }
 
@@ -64,7 +73,7 @@ fun SharedAdaptiveNavigation(
                 menuConfig = newMenuConfig,
                 currentRoute = currentRoute,
                 onNavigate = onNavigate,
-                content = content
+                content = movableContent
             )
         }
 
@@ -76,7 +85,7 @@ fun SharedAdaptiveNavigation(
                 onNavigate = onNavigate,
                 modifier = modifier,
                 // appTitle = drawerTitle,
-                content = content
+                content = movableContent
             )
         }
     }

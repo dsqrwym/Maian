@@ -24,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import maian.admin.generated.resources.AdminRes
 import maian.admin.generated.resources.platform_category
+import maian.admin.generated.resources.search_wholesaler_user
 import maian.admin.generated.resources.select_wholesaler
 import maian.business.generated.resources.*
 import maian.shared.generated.resources.*
@@ -44,12 +45,14 @@ import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
@@ -108,7 +111,9 @@ fun CategoriesListScreen(
                         onSearch = { viewModel.refresh() },
                         expanded = false,
                         onExpandedChange = {},
-                        placeholder = { Text(stringResource(BusinessRes.string.search_category)) },
+                        placeholder = {
+                            SharedSingleLinePlaceholderText(stringResource(SharedRes.string.search_category_name))
+                        },
                         leadingIcon = { Icon(Icons.Outlined.Search, null) },
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) {
@@ -334,9 +339,13 @@ fun FilterDialog(
     viewModel: CategoriesListViewModel = koinViewModel()
 ) {
     val categoryType = viewModel.filterCategoryType
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(
+        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+    )
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = { viewModel.updateShowFilterDialog(false) },
+        onDismissRequest = resizeSafeDismiss,
         text = {
             SelectionContainer {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -382,6 +391,7 @@ fun FilterDialog(
                             label = stringResource(BusinessRes.string.select_parent_category),
                             error = null,
                             leadingIcon = Icons.Outlined.Category,
+                            placeholder = stringResource(SharedRes.string.search_parent_category_name),
                             selectedItem = viewModel.filterParentCategory,
                             onSelectedItemChange = {
                                 viewModel.updateFilterParentCategory(it)
@@ -403,6 +413,7 @@ fun FilterDialog(
                                 label = stringResource(AdminRes.string.select_wholesaler),
                                 error = null,
                                 leadingIcon = Icons.Outlined.PersonOutline,
+                                placeholder = stringResource(AdminRes.string.search_wholesaler_user),
                                 selectedItem = viewModel.filterUser,
                                 onSelectedItemChange = {
                                     viewModel.updateFilterUser(it)

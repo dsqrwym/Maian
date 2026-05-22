@@ -20,7 +20,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.search_categories
-import maian.shared.generated.resources.search_products
 import org.dsqrwym.shared.domain.profile.WholesalerCardData
 import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
@@ -28,6 +27,7 @@ import org.dsqrwym.shared.ui.components.category.SharedCategoryPathRow
 import org.dsqrwym.shared.ui.components.category.SharedCategoryRail
 import org.dsqrwym.shared.ui.components.category.SharedChildCategoryGrid
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.product.SharedProductWaterfall
 import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
@@ -94,11 +94,13 @@ fun CategoryBrowseScreen(
                     onSearch = { viewModel.refreshCategorySearch() },
                     expanded = false,
                     onExpandedChange = {},
-                    placeholder = { Text(stringResource(SharedRes.string.search_categories)) },
+                    placeholder = {
+                        SharedSingleLinePlaceholderText(stringResource(SharedRes.string.search_categories))
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.Search,
-                            stringResource(SharedRes.string.search_products)
+                            stringResource(SharedRes.string.search_categories)
                         )
                     },
                     trailingIcon = {

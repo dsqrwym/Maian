@@ -96,7 +96,7 @@
     <string name="employee_user_id">ID d'empleat</string>
     <string name="field_employee_email_placeholder">Introdueix l'email de l'empleat</string>
     <string name="select_employee_role">Selecciona el rol de l'empleat</string>
-    <string name="employee_search_placeholder">Cerca empleats</string>
+    <string name="employee_search_placeholder">Busca nom, usuari, correu, telèfon, NIF/CIF o ID d'empleat</string>
     <string name="no_employees_found">No s'han trobat empleats</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nAquesta acció no es pot desfer.</string>
     <string name="employee_create_success_pending_verification">Empleat creat. Rebrà un correu de verificació i quedarà pendent de verificació fins que activi el compte.</string>

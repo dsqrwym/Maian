@@ -6,7 +6,7 @@
     <string name="wholesaler_scope_label">批发商：%1$s</string>
     <string name="back_to_all">返回全部</string>
     <string name="current_wholesaler">当前</string>
-    <string name="search_wholesalers">搜索批发商</string>
+    <string name="search_wholesalers">搜索店铺、公司、ID、城市、省份或起订金额</string>
     <string name="no_wholesalers">未找到批发商</string>
     <string name="wholesaler_sort_display_name">名称</string>
     <string name="wholesaler_sort_company_name">公司名</string>

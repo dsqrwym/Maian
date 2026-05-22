@@ -55,6 +55,7 @@ import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
 import org.dsqrwym.shared.ui.components.product.SharedProductSortDialog
 import org.dsqrwym.shared.ui.components.product.SharedProductWaterfall
@@ -132,7 +133,9 @@ fun ProductBrowseScreen(
                         onSearch = { viewModel.submitSearch() },
                         expanded = false,
                         onExpandedChange = {},
-                        placeholder = { Text(stringResource(SharedRes.string.search_products)) },
+                        placeholder = {
+                            SharedSingleLinePlaceholderText(stringResource(SharedRes.string.search_products))
+                        },
                         leadingIcon = {
                             Icon(
                                 Icons.Outlined.Search,
@@ -311,7 +314,6 @@ private fun PaginatedProductGrid(
         paginatedProducts = paginatedProducts,
         scrollBehavior = scrollBehavior,
         padding = padding,
-        minSize = 180.dp,
         includeMenuTopPadding = true,
         key = paginatedProducts.itemKey { it.id },
     ) {

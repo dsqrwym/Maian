@@ -16,7 +16,7 @@
     <string name="delete_warning_with_children">Atención: Esto también eliminará %1$s subcategorías y no se podrá recuperar.</string>
     <string name="select_parent_category">Seleccionar categoría padre</string>
     <string name="private_category">Categoría privada</string>
-    <string name="search_category">Buscar categoría...</string>
+    <string name="search_category">Buscar por nombre de categoría</string>
     <string name="platform_category">Categoría de plataforma</string>
 
     <string name="select_parent_category_to_create">Selecciona una categoría padre para crear una subcategoría</string>

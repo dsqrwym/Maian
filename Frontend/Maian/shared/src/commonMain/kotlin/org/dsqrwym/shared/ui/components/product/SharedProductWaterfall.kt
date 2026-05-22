@@ -1,7 +1,15 @@
 package org.dsqrwym.shared.ui.components.product
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -16,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.no_products
+import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.paging.hasLoadError
 import org.dsqrwym.shared.paging.isAppendingOrPrepending
 import org.dsqrwym.shared.paging.isEmptyResult
@@ -26,6 +35,7 @@ import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendErrorRetry
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout.appendLoadingIndicator
 import org.dsqrwym.shared.util.modifier.paddingTopForMenu
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
+import org.dsqrwym.shared.util.navigation.WindowWidthSizeClass
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +47,7 @@ fun <T : Any> SharedProductWaterfall(
     modifier: Modifier = Modifier,
     applyPaddingWithoutTop: Boolean = false,
     includeMenuTopPadding: Boolean = false,
-    minSize: Dp = 200.dp,
+    minSize: Dp = if (LocalWindowSizeClass.current.widthSizeClass == WindowWidthSizeClass.Compact) 170.dp else 200.dp,
     key: (index: Int) -> Any = { index -> "$index-product" },
     itemContent: @Composable LazyStaggeredGridItemScope.(T) -> Unit,
 ) {

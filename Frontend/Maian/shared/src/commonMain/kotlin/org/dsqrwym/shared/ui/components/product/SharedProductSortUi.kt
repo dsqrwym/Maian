@@ -17,6 +17,7 @@ import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.displayName
 import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.jetbrains.compose.resources.stringResource
 
@@ -28,9 +29,11 @@ fun SharedProductSortDialog(
     onToggleSort: (SharedProductSortField) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismissRequest)
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = resizeSafeDismiss,
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

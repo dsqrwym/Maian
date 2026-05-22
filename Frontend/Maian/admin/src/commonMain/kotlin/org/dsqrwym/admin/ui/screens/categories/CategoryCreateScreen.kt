@@ -40,6 +40,7 @@ import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorC
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.dsqrwym.shared.util.modifier.paddingWithoutTop
 import org.jetbrains.compose.resources.stringResource
@@ -182,9 +183,11 @@ internal fun AddLanguageDialog(
     onDismiss: () -> Unit,
     onAdd: (String, String) -> Unit
 ) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(onDismiss)
+
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = onDismiss,
+        onDismissRequest = resizeSafeDismiss,
         icon = { Icon(Icons.Outlined.Language, contentDescription = "Language") },
         title = { Text(stringResource(BusinessRes.string.add_language_translation)) },
         text = {
@@ -310,6 +313,7 @@ private fun CategoryTypeCard(
                                 label = stringResource(AdminRes.string.select_wholesaler),
                                 error = null,
                                 leadingIcon = Icons.Outlined.PersonOutline,
+                                placeholder = stringResource(AdminRes.string.search_wholesaler_user),
                                 selectedItem = selectedWholesaler,
                                 onSelectedItemChange = onWholesalerChange,
                                 pageSize = 100,

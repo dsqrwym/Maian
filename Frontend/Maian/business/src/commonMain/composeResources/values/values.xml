@@ -16,7 +16,7 @@
     <string name="delete_warning_with_children">Warning: This will also delete %1$s subcategories and cannot be undone.</string>
     <string name="select_parent_category">Select Parent Category</string>
     <string name="private_category">Private Category</string>
-    <string name="search_category">Search category...</string>
+    <string name="search_category">Search by category name</string>
     <string name="platform_category">Platform Category</string>
 
     <string name="select_parent_category_to_create">Select a parent category to create a subcategory</string>

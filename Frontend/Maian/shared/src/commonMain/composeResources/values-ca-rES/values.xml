@@ -156,8 +156,11 @@
     <string name="categories">Categories</string>
     <string name="more">Més</string>
 
-    <string name="search_products">Busca productes</string>
-    <string name="search_categories">Busca categories</string>
+    <string name="search_products">Busca nom, títol, codi, SKU o categoria</string>
+    <string name="search_categories">Busca categoria o subcategoria</string>
+    <string name="search_category_name">Busca per nom de categoria</string>
+    <string name="search_parent_category_name">Busca per nom de categoria pare</string>
+    <string name="search_main_category_name">Busca per nom de categoria principal</string>
 
     <string name="no_products">No s'han trobat productes</string>
     <string name="no_categories">No s'han trobat categories</string>
@@ -417,7 +420,9 @@
     <string name="rejection_reason">Motiu de rebuig</string>
     <string name="rejection_reason_placeholder">Ho sentim, l'adreça està fora de la nostra zona d'entrega o els preus no s'han actualitzat a temps.</string>
     <string name="cancellation_reason">Motiu de cancel·lació</string>
-    <string name="search_orders">Buscar número de comanda, client/proveïdor, NIF/CIF, ciutat</string>
+    <string name="search_orders">Busca número de comanda, client/proveïdor, NIF/CIF o adreça</string>
+    <string name="search_retailer_orders">Busca núm. de comanda, majorista, NIF/CIF o adreça de lliurament</string>
+    <string name="search_enterprise_orders">Busca núm. de comanda, detallista, contacte, NIF/CIF o adreça de lliurament</string>
     <string name="no_orders_found">No s'han trobat comandes</string>
     <string name="update_delivery_date">Actualitzar data d'entrega</string>
     <string name="clear_delivery_date">Esborrar data d'entrega</string>

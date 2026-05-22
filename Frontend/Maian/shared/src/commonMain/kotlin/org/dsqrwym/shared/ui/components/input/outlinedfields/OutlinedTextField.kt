@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.icon_content_description_lock
 import maian.shared.generated.resources.icon_content_description_password_toggle_visibility
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -123,7 +124,15 @@ fun MyOutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = labelText?.let { { Text(it) } },
-        placeholder = placeholderText?.let { { Text(it) } },
+        placeholder = placeholderText?.let {
+            {
+                if (singleLine) {
+                    SharedSingleLinePlaceholderText(it)
+                } else {
+                    Text(it)
+                }
+            }
+        },
         leadingIcon =
             leadingIcon?.let {
                 {

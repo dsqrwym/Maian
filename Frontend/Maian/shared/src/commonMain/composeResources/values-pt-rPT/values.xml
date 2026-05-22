@@ -156,8 +156,11 @@
     <string name="categories">Categorias</string>
     <string name="more">Mais</string>
 
-    <string name="search_products">Pesquisar produtos</string>
-    <string name="search_categories">Pesquisar categorias</string>
+    <string name="search_products">Pesquisar por nome, título, código, SKU ou categoria</string>
+    <string name="search_categories">Pesquisar categoria ou subcategoria</string>
+    <string name="search_category_name">Pesquisar por nome da categoria</string>
+    <string name="search_parent_category_name">Pesquisar por nome da categoria superior</string>
+    <string name="search_main_category_name">Pesquisar por nome da categoria principal</string>
 
     <string name="no_products">Nenhum produto encontrado</string>
     <string name="no_categories">Nenhuma categoria encontrada</string>
@@ -408,7 +411,9 @@
     <string name="rejection_reason">Motivo de rejeição</string>
     <string name="rejection_reason_placeholder">Lamentamos, a morada está fora da nossa zona de entrega ou os preços não foram atualizados a tempo.</string>
     <string name="cancellation_reason">Motivo de cancelamento</string>
-    <string name="search_orders">Pesquisar número da encomenda, cliente/fornecedor, NIF, cidade</string>
+    <string name="search_orders">Pesquisar número da encomenda, cliente/fornecedor, NIF ou morada</string>
+    <string name="search_retailer_orders">Pesquisar nº da encomenda, grossista, NIF ou morada de entrega</string>
+    <string name="search_enterprise_orders">Pesquisar nº da encomenda, retalhista, contacto, NIF ou morada de entrega</string>
     <string name="no_orders_found">Nenhuma encomenda encontrada</string>
     <string name="update_delivery_date">Atualizar data de entrega</string>
     <string name="clear_delivery_date">Limpar data de entrega</string>

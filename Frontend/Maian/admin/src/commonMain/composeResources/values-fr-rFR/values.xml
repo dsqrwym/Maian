@@ -1,5 +1,6 @@
 <resources>
     <string name="select_wholesaler">Sélectionner un grossiste</string>
+    <string name="search_wholesaler_user">Rechercher ID, identifiant, nom, e-mail, téléphone ou nº fiscal du grossiste</string>
     <string name="platform_category">Catégorie de la plateforme</string>
 
     <string name="category_type">Type de catégorie</string>

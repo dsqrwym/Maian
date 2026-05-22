@@ -155,8 +155,11 @@
     <string name="categories">Catégories</string>
     <string name="more">Plus</string>
 
-    <string name="search_products">Rechercher des produits</string>
-    <string name="search_categories">Rechercher des catégories</string>
+    <string name="search_products">Rechercher par nom, titre, code, SKU ou catégorie</string>
+    <string name="search_categories">Rechercher une catégorie ou sous-catégorie</string>
+    <string name="search_category_name">Rechercher par nom de catégorie</string>
+    <string name="search_parent_category_name">Rechercher par nom de catégorie parente</string>
+    <string name="search_main_category_name">Rechercher par nom de catégorie principale</string>
 
     <string name="no_products">Aucun produit trouvé</string>
     <string name="no_categories">Aucune catégorie trouvée</string>
@@ -406,7 +409,9 @@
     <string name="rejection_reason">Motif de rejet</string>
     <string name="rejection_reason_placeholder">Désolé, cette adresse est hors de notre zone de livraison ou les prix n'ont pas été mis à jour à temps.</string>
     <string name="cancellation_reason">Motif d'annulation</string>
-    <string name="search_orders">Rechercher numéro de commande, client/fournisseur, identifiant fiscal, ville</string>
+    <string name="search_orders">Rechercher numéro de commande, client/fournisseur, identifiant fiscal ou adresse</string>
+    <string name="search_retailer_orders">Rechercher nº de commande, grossiste, identifiant fiscal ou adresse de livraison</string>
+    <string name="search_enterprise_orders">Rechercher nº de commande, détaillant, contact, identifiant fiscal ou adresse de livraison</string>
     <string name="no_orders_found">Aucune commande trouvée</string>
     <string name="update_delivery_date">Mettre à jour la date de livraison</string>
     <string name="clear_delivery_date">Effacer la date de livraison</string>

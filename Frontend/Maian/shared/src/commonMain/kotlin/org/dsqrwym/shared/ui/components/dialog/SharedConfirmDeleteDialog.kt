@@ -13,6 +13,7 @@ import maian.shared.generated.resources.confirm
 import maian.shared.generated.resources.confirm_delete_message
 import maian.shared.generated.resources.confirm_delete_title
 import maian.shared.generated.resources.delete
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.jetbrains.compose.resources.stringResource
 
@@ -26,10 +27,11 @@ fun SharedConfirmDeleteDialog(
 ) {
     val dialogTitle = title ?: stringResource(SharedRes.string.confirm_delete_title)
     val dialogText = text ?: stringResource(SharedRes.string.confirm_delete_message)
+    val resizeSafeDismissRequest = rememberResizeSafeDismissRequest(onDismissRequest)
 
     AlertDialog(
         properties = transparentDialogProperties(),
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = resizeSafeDismissRequest,
         modifier = modifier,
         title = {
             Row(

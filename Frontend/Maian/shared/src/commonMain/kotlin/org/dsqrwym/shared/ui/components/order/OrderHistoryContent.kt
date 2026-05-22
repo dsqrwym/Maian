@@ -24,7 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -35,7 +34,6 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
@@ -51,7 +49,8 @@ import maian.shared.generated.resources.order_confirm_reject_message
 import maian.shared.generated.resources.reason
 import maian.shared.generated.resources.reject_order
 import maian.shared.generated.resources.rejection_reason_placeholder
-import maian.shared.generated.resources.search_orders
+import maian.shared.generated.resources.search_enterprise_orders
+import maian.shared.generated.resources.search_retailer_orders
 import maian.shared.generated.resources.sort
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.orders.SharedOrderAmountFilterBounds
@@ -63,6 +62,7 @@ import org.dsqrwym.shared.paging.isAppendingOrPrepending
 import org.dsqrwym.shared.paging.isEmptyResult
 import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
+import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.util.formatter.toIsoDate
@@ -135,6 +135,10 @@ fun OrderHistoryContent(
     onNavigateBack: (() -> Unit)? = null,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val searchPlaceholder = when (mode) {
+        OrderHistoryMode.STANDARD -> stringResource(SharedRes.string.search_retailer_orders)
+        OrderHistoryMode.ENTERPRISE -> stringResource(SharedRes.string.search_enterprise_orders)
+    }
 
     SharedTransparentScaffold(
         onNavigateBack = onNavigateBack,
@@ -253,16 +257,12 @@ fun OrderHistoryContent(
                         expanded = false,
                         onExpandedChange = {},
                         placeholder = {
-                            Text(
-                                stringResource(SharedRes.string.search_orders),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
+                            SharedSingleLinePlaceholderText(searchPlaceholder)
                         },
                         leadingIcon = {
                             Icon(
                                 Icons.Outlined.Search,
-                                stringResource(SharedRes.string.search_orders)
+                                searchPlaceholder
                             )
                         },
                         trailingIcon = {

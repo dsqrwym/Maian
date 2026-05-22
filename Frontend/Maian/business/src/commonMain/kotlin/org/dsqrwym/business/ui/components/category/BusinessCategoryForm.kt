@@ -377,6 +377,7 @@ fun BusinessParentCategoryCard(
                     label = stringResource(BusinessRes.string.select_parent_category),
                     error = null,
                     leadingIcon = Icons.Outlined.Category,
+                    placeholder = stringResource(SharedRes.string.search_parent_category_name),
                     selectedItem = selectedParentCategory,
                     onSelectedItemChange = onParentCategoryChange,
                     pageSize = 100,

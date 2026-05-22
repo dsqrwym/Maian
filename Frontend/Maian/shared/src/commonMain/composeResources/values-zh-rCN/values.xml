@@ -158,8 +158,11 @@
     <string name="products">产品</string>
     <string name="categories">类别</string>
     <string name="more">更多</string>
-    <string name="search_products">搜索产品</string>
-    <string name="search_categories">搜索类别</string>
+    <string name="search_products">搜索名称、标题、编码、SKU 或分类</string>
+    <string name="search_categories">搜索分类或子分类</string>
+    <string name="search_category_name">搜索分类名称</string>
+    <string name="search_parent_category_name">搜索父分类名称</string>
+    <string name="search_main_category_name">搜索主分类名称</string>
     <string name="no_products">未找到产品</string>
     <string name="no_categories">未找到类别</string>
 
@@ -383,7 +386,9 @@
     <string name="rejection_reason">拒绝原因</string>
     <string name="rejection_reason_placeholder">非常抱歉不在送货范围，价格未及时更新。</string>
     <string name="cancellation_reason">取消原因</string>
-    <string name="search_orders">搜索订单号、客户/供应商、税号、城市</string>
+    <string name="search_orders">搜索订单号、客户/供应商、税号或地址</string>
+    <string name="search_retailer_orders">搜索订单号、批发商、税号或收货地址</string>
+    <string name="search_enterprise_orders">搜索订单号、零售商、联系人、税号或收货地址</string>
     <string name="no_orders_found">未找到订单</string>
     <string name="update_delivery_date">更新配送日期</string>
     <string name="clear_delivery_date">清空配送日期</string>

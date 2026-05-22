@@ -1,5 +1,6 @@
 <resources>
     <string name="select_wholesaler">选择批发商</string>
+    <string name="search_wholesaler_user">搜索批发商 ID、用户名、姓名、邮箱、电话或税号</string>
     <string name="platform_category">平台类别</string>
 
     <string name="category_type">类别类型</string>

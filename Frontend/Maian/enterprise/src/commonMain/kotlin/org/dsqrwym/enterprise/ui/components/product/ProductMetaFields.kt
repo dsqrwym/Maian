@@ -71,6 +71,7 @@ fun ProductMetaFields(
                 label = "${stringResource(EnterpriseRes.string.select_main_product_category)} (${stringResource(SharedRes.string.field_required)})",
                 error = categoryError.asString(),
                 leadingIcon = Icons.Outlined.Category,
+                placeholder = stringResource(SharedRes.string.search_main_category_name),
                 selectedItem = selectedCategory,
                 onSelectedItemChange = onSelectedCategoryChange,
                 pageSize = 100,

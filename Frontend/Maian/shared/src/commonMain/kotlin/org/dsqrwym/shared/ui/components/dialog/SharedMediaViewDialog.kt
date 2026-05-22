@@ -18,6 +18,7 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.image_content_description
 import org.dsqrwym.shared.ui.components.icon.SharedCloseIcon
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
+import org.dsqrwym.shared.ui.overlay.rememberResizeSafeDismissRequest
 import org.dsqrwym.shared.ui.overlay.transparentDialogProperties
 import org.jetbrains.compose.resources.stringResource
 
@@ -44,8 +45,10 @@ fun SharedMediaViewDialog(
     onDismissRequest: () -> Unit,
     content: @Composable BoxScope.() -> Unit
 ) {
+    val resizeSafeDismissRequest = rememberResizeSafeDismissRequest(onDismissRequest)
+
     Dialog(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = resizeSafeDismissRequest,
         properties = transparentDialogProperties()
     ) {
         Box(
