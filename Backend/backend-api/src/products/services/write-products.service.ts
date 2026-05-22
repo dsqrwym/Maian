@@ -37,6 +37,7 @@ import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 @Injectable()
 export class WriteProductsService {
   private readonly MAX_VARIANTS_PRODUCT: number;
+  private readonly MAX_SUB_CATEGORIES_PRODUCT: number;
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
@@ -44,6 +45,9 @@ export class WriteProductsService {
   ) {
     this.MAX_VARIANTS_PRODUCT = Number(
       this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
+    );
+    this.MAX_SUB_CATEGORIES_PRODUCT = Number(
+      this.configService.get<number>(ENV.PRODUCT_MAX_SUB_CATEGORIES, 10),
     );
     this.logger.setContext(WriteProductsService.name);
   }
@@ -56,6 +60,7 @@ export class WriteProductsService {
     const {
       user_id,
       primary_category_id,
+      sub_category_ids,
       product_code,
       description,
       iva,
@@ -79,6 +84,15 @@ export class WriteProductsService {
       );
     }
 
+    if (
+      sub_category_ids &&
+      sub_category_ids.length > this.MAX_SUB_CATEGORIES_PRODUCT
+    ) {
+      throw new BadRequestException(
+        `You can only create up to ${this.MAX_SUB_CATEGORIES_PRODUCT} sub categories for a product`,
+      );
+    }
+
     await this.validateAndCheckFiles(files, user, user_id);
 
     await this.drizzle.db.transaction(async (tx) => {
@@ -96,11 +110,26 @@ export class WriteProductsService {
         })
         .returning({ id: products.id });
 
-      await tx.insert(product_categories).values({
+      // dto 验证保证不会重复
+      const categoryValues = new Array<{
+        product_id: bigint;
+        category_id: bigint;
+        is_primary: boolean;
+      }>(1 + (sub_category_ids?.length ?? 0));
+      categoryValues[0] = {
         product_id: createdProduct.id,
         category_id: BigInt(primary_category_id),
         is_primary: true,
-      });
+      };
+      for (let i = 0; i < (sub_category_ids?.length ?? 0); i++) {
+        categoryValues[i + 1] = {
+          product_id: createdProduct.id,
+          category_id: BigInt(sub_category_ids![i]),
+          is_primary: false,
+        };
+      }
+
+      await tx.insert(product_categories).values(categoryValues);
 
       // dto 验证已经保证了 price 和 price_iva 的有效性
       await tx.insert(variant_products).values(
@@ -160,6 +189,7 @@ export class WriteProductsService {
       translationsToDelete,
       files,
       primary_category_id,
+      sub_category_ids,
       ...mainProductData
     } = updateProductDto;
 
@@ -237,8 +267,19 @@ export class WriteProductsService {
         })
         .where(eq(products.id, productId));
 
+      let primaryCategoryId: bigint | undefined = undefined;
+
       if (primary_category_id) {
         await tx
+          .delete(product_categories)
+          .where(
+            and(
+              eq(product_categories.product_id, productId),
+              eq(product_categories.category_id, BigInt(primary_category_id)),
+              eq(product_categories.is_primary, false),
+            ),
+          );
+        const [result] = await tx
           .update(product_categories)
           .set({ category_id: BigInt(primary_category_id) })
           .where(
@@ -246,7 +287,65 @@ export class WriteProductsService {
               eq(product_categories.product_id, productId),
               eq(product_categories.is_primary, true),
             ),
+          )
+          .returning({ category_id: product_categories.category_id });
+        primaryCategoryId = result?.category_id;
+      }
+
+      const needUpdateSubCategory =
+        sub_category_ids !== undefined && sub_category_ids !== null;
+      // 全量更新不需要获取当前数量
+      if (
+        needUpdateSubCategory &&
+        sub_category_ids.length > this.MAX_SUB_CATEGORIES_PRODUCT
+      ) {
+        throw new BadRequestException(
+          `A product can have at most ${this.MAX_SUB_CATEGORIES_PRODUCT} sub categories`,
+        );
+      }
+
+      if (!primaryCategoryId && needUpdateSubCategory) {
+        const [currentCategoryId] = await tx
+          .select({ category_id: product_categories.category_id })
+          .from(product_categories)
+          .where(
+            and(
+              eq(product_categories.product_id, productId),
+              eq(product_categories.is_primary, true),
+            ),
           );
+        if (!currentCategoryId?.category_id) {
+          this.logger.error('Primary category not found', { productId });
+          throw new BadRequestException('Product must have a primary category');
+        }
+        primaryCategoryId = currentCategoryId.category_id;
+      }
+
+      if (needUpdateSubCategory) {
+        const subCategories = sub_category_ids.map((id) => BigInt(id));
+        if (subCategories.includes(primaryCategoryId ?? 0n)) {
+          throw new BadRequestException(
+            'Primary category cannot be a sub category',
+          );
+        }
+        // 全量替换
+        await tx
+          .delete(product_categories)
+          .where(
+            and(
+              eq(product_categories.product_id, productId),
+              eq(product_categories.is_primary, false),
+            ),
+          );
+        if (subCategories.length > 0) {
+          await tx.insert(product_categories).values(
+            subCategories.map((category_id) => ({
+              product_id: productId,
+              category_id,
+              is_primary: false,
+            })),
+          );
+        }
       }
 
       // 创建变体
