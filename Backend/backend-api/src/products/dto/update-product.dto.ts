@@ -64,7 +64,9 @@ export const validateIUpdateProduct: IRequestBodyValidator.IAssert<IUpdateProduc
       }
 
       if (body.primary_category_id !== undefined && body.sub_category_ids) {
-        if (body.sub_category_ids.includes(body.primary_category_id)) {
+        if (
+          body.sub_category_ids.includes(body.primary_category_id as string)
+        ) {
           throw new BadRequestException(
             'Primary category cannot be a sub category',
           );

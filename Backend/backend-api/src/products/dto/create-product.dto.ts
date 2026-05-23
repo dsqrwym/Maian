@@ -44,7 +44,7 @@ export interface ICreateProductDto {
 
   primary_category_id: TagsIntegerString; // 必须选择一个主分类 (对应 product_categories.is_primary = TRUE)
   // (后续添加非主分类)
-  sub_category_ids: (TagsIntegerString & tags.UniqueItems)[] | null;
+  sub_category_ids: (TagsIntegerString[] & tags.UniqueItems) | null;
 
   // --- 核心业务逻辑字段 (变体) ---
   variants: ICreateVariantDto[] & tags.MinItems<1>;
@@ -96,7 +96,7 @@ export const validateICreateProduct: IRequestBodyValidator.IAssert<ICreateProduc
         );
       }
 
-      if (body.sub_category_ids?.includes(body.primary_category_id as string)) {
+      if (body.sub_category_ids?.includes(body.primary_category_id)) {
         throw new BadRequestException(
           'Primary category cannot be a sub category',
         );
