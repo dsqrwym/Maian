@@ -46,6 +46,7 @@ slf4jSimple = "2.0.18"
 sonner = "0.3.9"
 tableCore = "1.9.0" #1.8.1
 uiTooling = "1.11.0" #1.10.2
+vico = "3.1.0"
 webcam = "0.3.12"
 windowCore = "1.5.1"
 zoomable = "2.11.1" #2.9.0
@@ -98,6 +99,8 @@ richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose"
 russhwolf-multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 jetbrains-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate", version.ref = "savedstate" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 webcam-capture = { module = "com.github.sarxos:webcam-capture", version.ref = "webcam" }
 window-core = { module = "org.jetbrains.androidx.window:window-core", version.ref = "windowCore" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }

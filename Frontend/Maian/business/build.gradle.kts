@@ -81,6 +81,9 @@ kotlin {
             api(libs.table.core)
             // kotlin 高性能持久化不可变集合库， table依赖需要
             api(libs.kotlinx.collections.immutable)
+            // vico charts
+            api(libs.vico.compose)
+            api(libs.vico.compose.m3)
             implementation(project(":shared"))
         }
 

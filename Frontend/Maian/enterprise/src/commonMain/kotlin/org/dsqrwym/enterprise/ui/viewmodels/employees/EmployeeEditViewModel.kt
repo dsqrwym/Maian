@@ -87,7 +87,7 @@ class EmployeeEditViewModel(
                     email = data.email ?: routeEmail.orEmpty()
                     firstName = data.firstName.orEmpty()
                     lastName = data.lastName.orEmpty()
-                    username = employeeUsernameForForm(data.username)
+                    username = data.username ?: ""
                     initialUsername = username
                     usernameAvailabilityExemptValue = username
                     phoneNumberViewModel.resetPhoneNumberViewModel()
@@ -191,4 +191,6 @@ class EmployeeEditViewModel(
 }
 
 private fun String.isUuidLike(): Boolean =
-    Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$").matches(this)
+    Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$").matches(
+        this
+    )

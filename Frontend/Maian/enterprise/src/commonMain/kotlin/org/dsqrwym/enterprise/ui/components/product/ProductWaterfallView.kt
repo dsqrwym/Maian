@@ -1,5 +1,6 @@
 package org.dsqrwym.enterprise.ui.components.product
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.edit
 import maian.shared.generated.resources.product_preview
+import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.enterprise.domain.product.Product
@@ -47,7 +49,7 @@ fun ProductWaterfallView(
         padding = padding,
         applyPaddingWithoutTop = true,
         includeMenuTopPadding = true,
-        key =  paginatedProducts.itemKey { it.id } ,
+        key = paginatedProducts.itemKey { it.id },
     ) { product ->
         ProductGridItem(
             modifier = Modifier.animateItem(),
@@ -115,11 +117,21 @@ fun ProductGridItem(
             }
         }
         PermissionTooltip(canDelete, noPermissionText) {
-            BusinessOutlinedDeleteButton(
-                enabled = canDelete,
-                onDelete = onDelete,
-                iconSize = 20.dp
-            )
+            BoxWithConstraints {
+                if (maxWidth > 180.dp) {
+                    BusinessOutlinedDeleteButton(
+                        enabled = canDelete,
+                        onDelete = onDelete,
+                        iconSize = 20.dp
+                    )
+                } else {
+                    BusinessDeleteIconButton(
+                        iconSize = 20.dp,
+                        enabled = canDelete,
+                        onDelete = onDelete
+                    )
+                }
+            }
         }
     }
 }

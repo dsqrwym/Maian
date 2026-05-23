@@ -176,9 +176,6 @@ abstract class BaseEmployeeFormViewModel(
     protected fun optionalTelephone(): String? =
         optional(phoneNumberViewModel.formattedPhoneNumber).orElseOptional(phoneNumberViewModel.phoneNumber)
 
-    protected fun employeeUsernameForForm(value: String?): String =
-        value?.substringAfter("@")?.takeIf { it.isNotBlank() } ?: ""
-
     private fun validateEmployeeEmail(value: String): StringResource? =
         when {
             value.isBlank() -> SharedRes.string.field_cannot_be_empty
