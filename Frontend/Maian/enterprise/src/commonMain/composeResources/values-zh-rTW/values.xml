@@ -47,6 +47,9 @@
     <string name="low_stock_threshold">低庫存提醒</string>
     <string name="enter_low_stock_threshold">請輸入低庫存提醒數量</string>
     <string name="select_main_product_category">選擇產品主類別</string>
+    <string name="product_auxiliary_categories">輔助類別</string>
+    <string name="select_auxiliary_product_category">新增輔助類別</string>
+    <string name="product_auxiliary_categories_count">已選擇 %1$d/%2$d 個</string>
     <string name="product_title_placeholder">請輸入簡短產品標題</string>
     <string name="main_language">主語言</string>
     <string name="stock_count">庫存：%1$d</string>
@@ -65,7 +68,7 @@
     <string name="product_form_translations_title">產品資訊（多語言）</string>
     <string name="product_form_translations_subtitle">新增不同語言的名稱和描述。主要語言為預設顯示語言，其他語言用於多語言顯示。至少需要填寫一種語言。</string>
     <string name="product_form_attributes_title">產品屬性</string>
-    <string name="product_form_attributes_subtitle">設定產品的基本屬性，包括分類、稅率和狀態資訊。</string>
+    <string name="product_form_attributes_subtitle">設定產品的主類別、輔助類別、稅率和狀態資訊。</string>
     <string name="product_form_sku_title">SKU 列表</string>
     <string name="product_form_sku_subtitle">每個產品至少需要一個銷售變體（SKU）。你可以為不同包裝、規格或價格建立多個變體。最多支援 50 個變體。</string>
     <string name="employee_management">員工管理</string>

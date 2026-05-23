@@ -54,6 +54,9 @@
     <string name="enter_low_stock_threshold">Introduïx la quantitat per a l'avís d'estoc baix</string>
 
     <string name="select_main_product_category">Selecciona la categoria principal del producte</string>
+    <string name="product_auxiliary_categories">Categories auxiliars</string>
+    <string name="select_auxiliary_product_category">Afig categoria auxiliar</string>
+    <string name="product_auxiliary_categories_count">%1$d/%2$d seleccionades</string>
     <string name="product_title_placeholder">Introduïx un títol breu del producte</string>
 
     <string name="main_language">Idioma principal</string>
@@ -78,7 +81,7 @@
 
     <string name="product_form_attributes_title">Atributs del producte</string>
 
-    <string name="product_form_attributes_subtitle">Configura els atributs bàsics del producte, incloent la categoria, el tipus impositiu i l'estat.</string>
+    <string name="product_form_attributes_subtitle">Configura la categoria principal i les auxiliars, el tipus impositiu i l'estat del producte.</string>
 
     <string name="product_form_sku_title">Llista d'SKU</string>
 

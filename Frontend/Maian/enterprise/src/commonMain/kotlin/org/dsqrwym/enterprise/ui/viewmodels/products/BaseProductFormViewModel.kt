@@ -45,12 +45,18 @@ abstract class BaseProductFormViewModel(
     categoryRepository,
     snackbarViewModel
 ), SharedNavigable by SharedNavigableDelegate() {
+    companion object {
+        const val MAX_PRODUCT_SUBCATEGORIES = 10
+    }
+
     // 产品媒体
     val mediaPicker = MediaPickerViewModel(
         uploadRepository = uploadRepository,
         coroutineScope = viewModelScope,
         snackbarViewModel = snackbarViewModel
     )
+
+    val maxProductSubcategories: Int = MAX_PRODUCT_SUBCATEGORIES
 
     var productTranslationUiState: UiState by mutableStateOf(UiState.Idle)
         protected set
@@ -96,6 +102,9 @@ abstract class BaseProductFormViewModel(
     var productStatus by mutableStateOf(SharedProductStatus.ACTIVE)
         protected set
 
+    var productSubcategories = mutableStateListOf<CategorySummary>()
+        protected set
+
     var productVariants = mutableStateListOf<ProductVariantDto>()
         protected set
 
@@ -113,6 +122,10 @@ abstract class BaseProductFormViewModel(
     val canAddSku by derivedStateOf {
         productVariants.size < 50 &&
                 productVariantsProductCodesErrors.values.none { it != null }
+    }
+
+    val canAddSubcategory by derivedStateOf {
+        productSubcategories.size < MAX_PRODUCT_SUBCATEGORIES
     }
 
     protected fun checkProductMeta() {
@@ -285,6 +298,17 @@ abstract class BaseProductFormViewModel(
         productStatus = state
     }
 
+    fun addProductSubcategory(category: CategorySummary) {
+        if (category.id == filterCategory?.id) return
+        if (productSubcategories.any { it.id == category.id }) return
+        if (productSubcategories.size >= MAX_PRODUCT_SUBCATEGORIES) return
+        productSubcategories.add(category)
+    }
+
+    fun removeProductSubcategory(categoryId: String) {
+        productSubcategories.removeAll { it.id == categoryId }
+    }
+
     fun upsertProductVariant(
         id: String?,
         typeSale: SharedProductSaleVariant,
@@ -434,8 +458,18 @@ abstract class BaseProductFormViewModel(
         return emptyList()
     }
 
+    suspend fun findProductSubcategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+        val primaryCategoryId = filterCategory?.id
+        val selectedCategoryIds = productSubcategories.map { it.id }.toSet()
+        return findCategories(query, page, limit)
+            .filter { it.id != primaryCategoryId && it.id !in selectedCategoryIds }
+    }
+
     override fun updateFilterCategory(category: CategorySummary?) {
         super.updateFilterCategory(category)
+        category?.id?.let { primaryCategoryId ->
+            productSubcategories.removeAll { it.id == primaryCategoryId }
+        }
         productCategoryError = if (category == null) {
             SharedRes.string.field_cannot_be_empty
         } else {
@@ -475,6 +509,7 @@ abstract class BaseProductFormViewModel(
         return productTranslationUiState == UiState.Loading &&
                 productMetaDataUiState == UiState.Loading &&
                 productVariantUiState == UiState.Loading &&
+                productSubcategories.size <= MAX_PRODUCT_SUBCATEGORIES &&
                 (
                         mediaPicker.mediaPickerUiState == UiState.Success ||
                                 mediaPicker.mediaPickerUiState == UiState.Idle
@@ -487,6 +522,7 @@ abstract class BaseProductFormViewModel(
         productIva = "21.00"
         productCategoryError = null
         productStatus = SharedProductStatus.ACTIVE
+        productSubcategories.clear()
         productMetaDataUiState = UiState.Idle
         selectedTranslationIndex = 0
         selectedTranslationNameError = null

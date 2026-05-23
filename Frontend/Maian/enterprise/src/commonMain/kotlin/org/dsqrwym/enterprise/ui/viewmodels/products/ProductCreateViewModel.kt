@@ -95,6 +95,7 @@ class ProductCreateViewModel(
                 iva = productIva,
                 productCode = productCode,
                 primaryCategoryId = primaryCategory.id,
+                subCategoryIds = productSubcategories.map { it.id }.ifEmpty { null },
                 variants = productVariants,
                 files = files
             )) {

@@ -49,6 +49,9 @@
     <string name="low_stock_threshold">Low stock alert</string>
     <string name="enter_low_stock_threshold">Enter the low stock alert quantity</string>
     <string name="select_main_product_category">Select main product category</string>
+    <string name="product_auxiliary_categories">Auxiliary categories</string>
+    <string name="select_auxiliary_product_category">Add auxiliary category</string>
+    <string name="product_auxiliary_categories_count">%1$d/%2$d selected</string>
     <string name="product_title_placeholder">Enter a short product title</string>
     <string name="main_language">Main language</string>
     <string name="stock_count">Stock: %1$d</string>
@@ -67,7 +70,7 @@
     <string name="product_form_translations_title">Product information (multilingual)</string>
     <string name="product_form_translations_subtitle">Add names and descriptions in different languages. The main language is shown by default; other languages are used for multilingual display. At least one language is required.</string>
     <string name="product_form_attributes_title">Product attributes</string>
-    <string name="product_form_attributes_subtitle">Set basic product attributes, including category, tax rate, and status.</string>
+    <string name="product_form_attributes_subtitle">Set product attributes, including main and auxiliary categories, tax rate, and status.</string>
     <string name="product_form_sku_title">SKU list</string>
     <string name="product_form_sku_subtitle">Each product needs at least one sales variant (SKU). You can create variants for different packaging, specifications, or prices. Up to 50 variants are supported.</string>
     <string name="employee_management">Employees</string>

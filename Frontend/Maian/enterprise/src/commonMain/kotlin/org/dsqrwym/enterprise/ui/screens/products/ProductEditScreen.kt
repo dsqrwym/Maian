@@ -27,6 +27,7 @@ import org.dsqrwym.business.ui.workspace.rememberBusinessAuxiliaryWorkspaceState
 import org.dsqrwym.enterprise.data.product.mapper.toDomain
 import org.dsqrwym.enterprise.ui.components.product.ProductMediaUploader
 import org.dsqrwym.enterprise.ui.components.product.ProductMetaFields
+import org.dsqrwym.enterprise.ui.components.product.ProductSubcategorySelector
 import org.dsqrwym.enterprise.ui.components.product.ProductTranslationTabs
 import org.dsqrwym.enterprise.ui.components.product.ProductVariantsFields
 import org.dsqrwym.enterprise.ui.screens.categories.AddLanguageDialog
@@ -109,6 +110,7 @@ private fun ProductEditScreenContent(
     val productStatus = viewModel.productStatus
     val selectedCategory = viewModel.filterCategory
     val categoryError = viewModel.productCategoryError
+    val subcategories = viewModel.productSubcategories
 
     val skuTabs = viewModel.productVariants
     val canAddSku = viewModel.canAddSku
@@ -222,6 +224,15 @@ private fun ProductEditScreenContent(
                         onIvaChange = viewModel::updateProductIva,
                         productStatus = productStatus,
                         onProductStatusChange = viewModel::updateProductStatus,
+                    )
+                    ProductSubcategorySelector(
+                        isLoading = isLoading,
+                        selectedCategories = subcategories,
+                        canAddCategory = viewModel.canAddSubcategory,
+                        maxCategories = viewModel.maxProductSubcategories,
+                        onAddCategory = viewModel::addProductSubcategory,
+                        onRemoveCategory = viewModel::removeProductSubcategory,
+                        onSearchCategory = viewModel::findProductSubcategories,
                     )
                 }
             }

@@ -71,6 +71,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
         iva: String,
         productCode: String,
         primaryCategoryId: String,
+        subCategoryIds: List<String>? = null,
         variants: List<ProductVariantDto>,
         translations: List<SharedProductTranslation>? = null,
         files: List<ProductFileDto>? = null,
@@ -86,6 +87,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                         iva = iva,
                         productCode = productCode.trim(),
                         primaryCategoryId = primaryCategoryId,
+                        subCategoryIds = subCategoryIds?.map { it.trim() }?.distinct()?.ifEmpty { null },
                         variants = variants.map {
                             it.copy(
                                 productCode = it.productCode.map { code -> code.trim() },
@@ -116,6 +118,7 @@ class ProductRepository(private val sharedProductApi: SharedProductApi, private 
                     iva = dto.iva,
                     productCode = dto.productCode.map { it.trim() },
                     primaryCategoryId = dto.primaryCategoryId,
+                    subCategoryIds = dto.subCategoryIds.map { ids -> ids.map { it.trim() }.distinct() },
                     variantsToDelete = dto.variantsToDelete,
                     createVariants = dto.createVariants.map { variants ->
                         variants.map {

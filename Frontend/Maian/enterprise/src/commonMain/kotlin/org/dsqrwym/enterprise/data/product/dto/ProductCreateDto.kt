@@ -22,6 +22,8 @@ data class ProductCreateDto(
     val status: SharedProductStatus = SharedProductStatus.ACTIVE,
     @SerialName("primary_category_id")
     val primaryCategoryId: String,
+    @SerialName("sub_category_ids")
+    val subCategoryIds: List<String>? = null,
     val variants: List<ProductVariantDto>,
     val translations: List<SharedProductTranslation>? = null,
     val files: List<ProductFileDto>? = null,

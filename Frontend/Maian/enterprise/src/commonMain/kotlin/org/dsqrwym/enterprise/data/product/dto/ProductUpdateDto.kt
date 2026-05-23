@@ -33,6 +33,10 @@ data class ProductUpdateDto(
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)
     val primaryCategoryId: OptionalField<String> = OptionalField.Undefined,
+    @SerialName("sub_category_ids")
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val subCategoryIds: OptionalField<List<String>> = OptionalField.Undefined,
 
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)

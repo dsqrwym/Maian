@@ -63,6 +63,9 @@
     <string name="enter_low_stock_threshold">Introduza a quantidade para o alerta de stock baixo</string>
 
     <string name="select_main_product_category">Selecione a categoria principal do produto</string>
+    <string name="product_auxiliary_categories">Categorias auxiliares</string>
+    <string name="select_auxiliary_product_category">Adicionar categoria auxiliar</string>
+    <string name="product_auxiliary_categories_count">%1$d/%2$d selecionadas</string>
 
     <string name="product_title_placeholder">Introduza um título curto do produto</string>
 
@@ -94,7 +97,7 @@
 
     <string name="product_form_attributes_title">Atributos do produto</string>
 
-    <string name="product_form_attributes_subtitle">Configure os atributos básicos do produto, incluindo categoria, taxa de imposto e estado.</string>
+    <string name="product_form_attributes_subtitle">Configure a categoria principal, as categorias auxiliares, a taxa de imposto e o estado do produto.</string>
 
     <string name="product_form_sku_title">Lista de SKU</string>
 

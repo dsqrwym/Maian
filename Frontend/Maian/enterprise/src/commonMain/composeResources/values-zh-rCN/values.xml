@@ -47,6 +47,9 @@
     <string name="low_stock_threshold">低库存提醒</string>
     <string name="enter_low_stock_threshold">请输入低库存提醒数量</string>
     <string name="select_main_product_category">选择产品主类别</string>
+    <string name="product_auxiliary_categories">辅助类别</string>
+    <string name="select_auxiliary_product_category">添加辅助类别</string>
+    <string name="product_auxiliary_categories_count">已选择 %1$d/%2$d 个</string>
     <string name="product_title_placeholder">请输入简短产品标题</string>
     <string name="main_language">主语言</string>
     <string name="stock_count">库存：%1$d</string>
@@ -65,7 +68,7 @@
     <string name="product_form_translations_title">产品信息（多语言）</string>
     <string name="product_form_translations_subtitle">添加不同语言的名称和描述。主语言为默认展示语言，其他语言用于多语言展示。至少需要填写一种语言。</string>
     <string name="product_form_attributes_title">产品属性</string>
-    <string name="product_form_attributes_subtitle">设置产品的基础属性，包括分类、税率和状态信息。</string>
+    <string name="product_form_attributes_subtitle">设置产品的主类别、辅助类别、税率和状态信息。</string>
     <string name="product_form_sku_title">SKU 列表</string>
     <string name="product_form_sku_subtitle">每个产品至少需要一个销售变体（SKU）。你可以为不同包装、规格或价格创建多个变体。最多支持 50 个变体。</string>
     <string name="employee_management">员工管理</string>

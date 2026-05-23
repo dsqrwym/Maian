@@ -15,6 +15,7 @@ import maian.shared.generated.resources.update_success
 import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.business.ui.media.model.UploadedProductFile
 import org.dsqrwym.enterprise.data.category.CategoryRepository
+import org.dsqrwym.enterprise.data.product.dto.ProductCategoryResponse
 import org.dsqrwym.enterprise.data.product.ProductRepository
 import org.dsqrwym.enterprise.data.product.dto.ProductResponseForUpdate
 import org.dsqrwym.enterprise.data.product.dto.ProductUpdateDto
@@ -68,6 +69,17 @@ class ProductEditViewModel(
         get() {
             val initialPrimary = initialProduct?.categories?.find { it.isPrimary }
             return filterCategory?.id != initialPrimary?.id
+        }
+
+    private val isSubcategoriesChanged: Boolean
+        get() {
+            val initialIds = initialProduct?.categories
+                ?.filter { !it.isPrimary }
+                ?.map { it.id }
+                ?.toSet()
+                .orEmpty()
+            val currentIds = productSubcategories.map { it.id }.toSet()
+            return currentIds != initialIds
         }
 
     // 产品根字段 (name/title/description) 是否改变
@@ -188,14 +200,12 @@ class ProductEditViewModel(
                         translationTabs.addAll(products.translations.map {
                             Pair(it, RichTextState().setHtml(it.description ?: ""))
                         })
-                        filterCategory = products.categories.find { it.isPrimary }?.let { categories ->
-                            CategorySummary(
-                                id = categories.id,
-                                name = categories.name,
-                                iva = categories.iva,
-                                translations = categories.translation.map { it.toDomain() }
-                            )
-                        }
+                        filterCategory = products.categories.find { it.isPrimary }?.toCategorySummary()
+                        productSubcategories.addAll(
+                            products.categories
+                                .filter { !it.isPrimary }
+                                .map { it.toCategorySummary() }
+                        )
                         productVariants.addAll(products.variant)
                         mediaPicker.addUploadedProductFiles(
                             products.files.map { file ->
@@ -253,6 +263,8 @@ class ProductEditViewModel(
                 else OptionalField.Undefined,
                 primaryCategoryId = if (isPrimaryCategoryChanged) OptionalField.Value(filterCategory?.id ?: "")
                 else OptionalField.Undefined,
+                subCategoryIds = if (isSubcategoriesChanged) OptionalField.Value(productSubcategories.map { it.id })
+                else OptionalField.Undefined,
                 // 变体
                 createVariants = buildCreateVariants().takeIf { it.isNotEmpty() }?.let { OptionalField.Value(it) }
                     ?: OptionalField.Undefined,
@@ -298,3 +310,11 @@ class ProductEditViewModel(
         }
     }
 }
+
+private fun ProductCategoryResponse.toCategorySummary(): CategorySummary =
+    CategorySummary(
+        id = id,
+        name = name,
+        iva = iva,
+        translations = translation.map { it.toDomain() }
+    )

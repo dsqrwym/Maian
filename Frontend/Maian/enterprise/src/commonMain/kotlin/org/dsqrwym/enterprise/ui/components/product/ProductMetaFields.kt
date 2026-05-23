@@ -3,9 +3,17 @@
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Percent
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +25,7 @@ import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.parent_category_selected
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.enter_product_code
+import maian.enterprise.generated.resources.main_language
 import maian.enterprise.generated.resources.select_main_product_category
 import maian.shared.generated.resources.*
 import org.dsqrwym.business.drawable.sharedicons.Barcode
@@ -26,6 +35,7 @@ import org.dsqrwym.shared.data.products.toStringResource
 import org.dsqrwym.shared.domain.category.CategorySummary
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.drawable.sharedicons.InProgress
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.buttons.SharedCloseButton
 import org.dsqrwym.shared.ui.components.buttons.SharedScannerButton
 import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedDoubleField
@@ -34,14 +44,16 @@ import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorC
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.input.selector.Selector
 import org.dsqrwym.shared.ui.components.input.selector.SelectorConfig
+import org.dsqrwym.shared.util.clipboard.SharedClipboardData
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.formatter.asString
+import org.dsqrwym.shared.util.modifier.copyOnInteraction
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.dsqrwym.shared.util.row.SharedRowLayout
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductMetaFields(
     isLoading: Boolean = false,
@@ -60,6 +72,11 @@ fun ProductMetaFields(
 ) {
     val focusManager = LocalFocusManager.current
     val productStatusLabels = SharedProductStatus.entries.associateWith { stringResource(it.toStringResource()) }
+    val languageCode = LanguageManager.getCurrent().code
+    val mainLanguageLabel = stringResource(EnterpriseRes.string.main_language)
+    val selectedCategoryDescription = selectedCategory?.productCategoryDisplayName(languageCode).orEmpty()
+    val selectedCategoryTooltipText = selectedCategory?.productCategoryTooltipText(mainLanguageLabel).orEmpty()
+    val positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -82,14 +99,42 @@ fun ProductMetaFields(
             )
         )
 
-        BusinessSelectedInfoCard(
-            modifier = Modifier.placeholderWithShimmer(isLoading),
-            visible = selectedCategory != null,
-            title = stringResource(BusinessRes.string.parent_category_selected),
-            description = selectedCategory?.name ?: "",
-            onClear = onRemoveCategory,
-            enabled = true
-        )
+        if (selectedCategory == null) {
+            BusinessSelectedInfoCard(
+                modifier = Modifier.placeholderWithShimmer(isLoading),
+                visible = false,
+                title = stringResource(BusinessRes.string.parent_category_selected),
+                description = "",
+                onClear = onRemoveCategory,
+                enabled = true
+            )
+        } else {
+            TooltipBox(
+                state = rememberTooltipState(),
+                positionProvider = positionProvider,
+                tooltip = {
+                    PlainTooltip {
+                        SelectionContainer {
+                            Text(
+                                selectedCategoryTooltipText,
+                                modifier = Modifier.copyOnInteraction(
+                                    SharedClipboardData.Text(selectedCategoryTooltipText)
+                                )
+                            )
+                        }
+                    }
+                }
+            ) {
+                BusinessSelectedInfoCard(
+                    modifier = Modifier.placeholderWithShimmer(isLoading),
+                    visible = true,
+                    title = stringResource(BusinessRes.string.parent_category_selected),
+                    description = selectedCategoryDescription,
+                    onClear = onRemoveCategory,
+                    enabled = true
+                )
+            }
+        }
 
 
         MyOutlinedTextField(
