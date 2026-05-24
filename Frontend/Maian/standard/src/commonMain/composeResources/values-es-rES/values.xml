@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">Algunas variantes ya no están disponibles. Se ha actualizado el carrito.</string>
     <string name="create_order_error_quantity_below_min_order">Algunas cantidades están por debajo del mínimo de pedido. Se ha actualizado el carrito.</string>
     <string name="create_order_error_not_enough_stock">No hay stock suficiente. Se ha actualizado el carrito.</string>
+    <string name="create_order_error_order_line_limit_exceeded">Este pedido tiene demasiados productos. Elimina algunos productos e inténtalo de nuevo.</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">Puedes mantener carritos de hasta 20 mayoristas. Elimina un carrito antes de añadir otro mayorista.</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">Este carrito ya tiene el número máximo de productos.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">Total</string>

@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.add_cart_error_cart_line_limit_exceeded
+import maian.standard.generated.resources.add_cart_error_cart_wholesaler_limit_exceeded
 import maian.standard.generated.resources.cart_item_added
 import maian.standard.generated.resources.product_information_changed_retry
 import org.dsqrwym.shared.localization.LanguageManager
@@ -188,6 +190,11 @@ class ProductDetailViewModel(
     }
 
     private suspend fun handleAddToCartError(result: SharedResponseResult.Error) {
+        addCartLimitErrorMessage(result)?.let { message ->
+            mySnackbarViewModel.showError(message)
+            return
+        }
+
         if (result.isProductDataChangedError()) {
             mySnackbarViewModel.showError(getString(StandardRes.string.product_information_changed_retry))
             productId?.let { loadProductDetail(it) }
@@ -201,6 +208,15 @@ class ProductDetailViewModel(
 
     private fun SharedResponseResult.Error.isProductDataChangedError(): Boolean =
         message in cartProductDataChangedMessages
+
+    private suspend fun addCartLimitErrorMessage(result: SharedResponseResult.Error): String? =
+        when (result.message?.trim()) {
+            "CART_WHOLESALER_LIMIT_EXCEEDED" ->
+                getString(StandardRes.string.add_cart_error_cart_wholesaler_limit_exceeded)
+            "CART_LINE_LIMIT_EXCEEDED" ->
+                getString(StandardRes.string.add_cart_error_cart_line_limit_exceeded)
+            else -> null
+        }
 
     private fun updateSelectedVariantAfterReload(
         product: RetailProductDetail?,

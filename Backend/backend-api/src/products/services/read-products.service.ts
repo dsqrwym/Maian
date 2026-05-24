@@ -290,8 +290,9 @@ export class ReadProductsService {
       ? this.drizzle.db
           .select({
             product_id: order_details.product_id,
-            sold_quantity:
-              sql<number>`SUM(${order_details.quantity})`.as('sold_quantity'),
+            sold_quantity: sql<number>`SUM(${order_details.quantity})`.as(
+              'sold_quantity',
+            ),
           })
           .from(order_details)
           .innerJoin(orders, eq(order_details.order_id, orders.id))

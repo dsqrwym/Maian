@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">Algumas variantes já não estão disponíveis. O carrinho foi atualizado.</string>
     <string name="create_order_error_quantity_below_min_order">Algumas quantidades estão abaixo do mínimo de encomenda. O carrinho foi atualizado.</string>
     <string name="create_order_error_not_enough_stock">Não há stock suficiente. O carrinho foi atualizado.</string>
+    <string name="create_order_error_order_line_limit_exceeded">Esta encomenda tem demasiados produtos. Remova alguns produtos e tente novamente.</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">Pode manter carrinhos de até 20 grossistas. Remova um carrinho antes de adicionar outro grossista.</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">Este carrinho já tem o número máximo de produtos.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">Total</string>

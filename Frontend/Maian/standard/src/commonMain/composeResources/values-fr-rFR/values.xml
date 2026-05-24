@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">Certaines variantes ne sont plus disponibles. Le panier a été actualisé.</string>
     <string name="create_order_error_quantity_below_min_order">Certaines quantités sont inférieures au minimum de commande. Le panier a été actualisé.</string>
     <string name="create_order_error_not_enough_stock">Le stock est insuffisant. Le panier a été actualisé.</string>
+    <string name="create_order_error_order_line_limit_exceeded">Cette commande contient trop d'articles. Supprimez quelques articles puis réessayez.</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">Vous pouvez conserver des paniers pour 20 grossistes au maximum. Supprimez un panier avant d'ajouter un autre grossiste.</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">Ce panier contient déjà le nombre maximal d'articles.</string>
     <string name="cart_subtotal">Sous-total</string>
     <string name="cart_iva">TVA</string>
     <string name="cart_total">Total</string>

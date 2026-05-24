@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">部分规格已不可用，购物车已刷新。</string>
     <string name="create_order_error_quantity_below_min_order">部分商品数量低于最小起订量，购物车已刷新。</string>
     <string name="create_order_error_not_enough_stock">库存不足，购物车已刷新。</string>
+    <string name="create_order_error_order_line_limit_exceeded">该订单商品行数过多，请移除部分商品后重试。</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">最多只能保留 20 个批发商购物篮，请先删除一个购物篮。</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">该购物篮已达到最大商品行数。</string>
     <string name="cart_subtotal">小计</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">总计</string>

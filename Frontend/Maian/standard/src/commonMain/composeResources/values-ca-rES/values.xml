@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">Algunes variants ja no estan disponibles. S'ha actualitzat el carret.</string>
     <string name="create_order_error_quantity_below_min_order">Algunes quantitats estan per davall del mínim de comanda. S'ha actualitzat el carret.</string>
     <string name="create_order_error_not_enough_stock">No hi ha prou estoc. S'ha actualitzat el carret.</string>
+    <string name="create_order_error_order_line_limit_exceeded">Esta comanda té massa productes. Elimina alguns productes i torna-ho a provar.</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">Pots mantindre carrets de fins a 20 majoristes. Elimina un carret abans d'afegir un altre majorista.</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">Este carret ja té el nombre màxim de productes.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">Total</string>

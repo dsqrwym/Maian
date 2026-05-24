@@ -323,6 +323,7 @@ class StandardCartViewModel(
             "VARIANT_NOT_AVAILABLE" -> getString(StandardRes.string.create_order_error_variant_unavailable)
             "QUANTITY_BELOW_MIN_ORDER" -> getString(StandardRes.string.create_order_error_quantity_below_min_order)
             "NOT_ENOUGH_STOCK" -> getString(StandardRes.string.create_order_error_not_enough_stock)
+            "ORDER_LINE_LIMIT_EXCEEDED" -> getString(StandardRes.string.create_order_error_order_line_limit_exceeded)
             else -> getString(StandardRes.string.create_order_failed)
         }
     }

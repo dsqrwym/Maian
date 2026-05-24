@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">Some variants are no longer available. The cart has been refreshed.</string>
     <string name="create_order_error_quantity_below_min_order">Some quantities are below the minimum order quantity. The cart has been refreshed.</string>
     <string name="create_order_error_not_enough_stock">There is not enough stock. The cart has been refreshed.</string>
+    <string name="create_order_error_order_line_limit_exceeded">This order has too many items. Remove some items and try again.</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">You can keep carts from up to 20 wholesalers. Remove one cart before adding another wholesaler.</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">This cart already has the maximum number of items.</string>
     <string name="cart_subtotal">Subtotal</string>
     <string name="cart_iva">VAT</string>
     <string name="cart_total">Total</string>

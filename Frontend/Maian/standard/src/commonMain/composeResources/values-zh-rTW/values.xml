@@ -29,6 +29,9 @@
     <string name="create_order_error_variant_unavailable">部分規格已不可用，購物車已重新整理。</string>
     <string name="create_order_error_quantity_below_min_order">部分商品數量低於最小起訂量，購物車已重新整理。</string>
     <string name="create_order_error_not_enough_stock">庫存不足，購物車已重新整理。</string>
+    <string name="create_order_error_order_line_limit_exceeded">此訂單商品行數過多，請移除部分商品後再試。</string>
+    <string name="add_cart_error_cart_wholesaler_limit_exceeded">最多只能保留 20 個批發商購物籃，請先刪除一個購物籃。</string>
+    <string name="add_cart_error_cart_line_limit_exceeded">此購物籃已達到最大商品行數。</string>
     <string name="cart_subtotal">小計</string>
     <string name="cart_iva">IVA</string>
     <string name="cart_total">總計</string>

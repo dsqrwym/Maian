@@ -16,7 +16,7 @@ import {
   WHOLESALER_PROFILE,
   WHOLESALER_TABLE,
 } from '../order.constants.js';
-import { and, eq, exists, gte, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, exists, gte, inArray, sql } from 'drizzle-orm';
 import {
   AddressType,
   OrderStatus,
@@ -58,14 +58,22 @@ import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import { IUpdateOrderDto } from '../dto/update-order.dto.js';
 import { OrderPdfNotificationService } from '#/orders/services/order-pdf-notification.service.js';
 import { IProductTranslationDto } from '#/products/dto/product-translation.dto.js';
+import { ConfigService } from '@nestjs/config';
+import { ENV } from '#/config/constants.config.js';
 
 @Injectable()
 export class WriteOrderService {
+  private readonly MAX_ORDER_LINES: number;
+
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly orderPdfNotificationService: OrderPdfNotificationService,
+    private readonly configService: ConfigService,
   ) {
+    this.MAX_ORDER_LINES = Number(
+      this.configService.get<number>(ENV.ORDER_MAX_LINES, 250),
+    );
     this.logger.setContext(WriteOrderService.name);
   }
 
@@ -397,6 +405,7 @@ export class WriteOrderService {
           wholesalerId ? eq(orders.wholesaler_id, wholesalerId) : undefined,
         ),
       )
+      .orderBy(asc(order_details.variant_product_id))
       .for('update', { of: orders });
 
     if (order?.length == 0) {
@@ -446,11 +455,12 @@ export class WriteOrderService {
       const { orderLines, itemCount, totalSubtotal, totalIva, totalAmount } =
         await this.getCartItemInfo(retailerId, wholesalerId, tx);
 
-      const orderYear = new Date().getFullYear();
-      const [sequence] = await this.getSequences(wholesalerId, orderYear, tx);
+      if (orderLines.length > this.MAX_ORDER_LINES) {
+        throw new BadRequestException(ORDER_ERRORS.ORDER_LINE_LIMIT_EXCEEDED);
+      }
 
       // 更新库存
-      for (const line of orderLines) {
+      for (const line of this.sortOrderLinesForStockUpdate(orderLines)) {
         const reservedQuantity = line.quantity * line.saleUnitQty;
         const [updatedStock] = await tx
           .update(variant_products)
@@ -484,6 +494,9 @@ export class WriteOrderService {
           throw new BadRequestException(ORDER_ERRORS.NOT_ENOUGH_STOCK);
         }
       }
+
+      const orderYear = new Date().getFullYear();
+      const [sequence] = await this.getSequences(wholesalerId, orderYear, tx);
 
       const [createdOrder] = await tx
         .insert(orders)
@@ -569,6 +582,13 @@ export class WriteOrderService {
         { err, orderId, taskName },
         'Order PDF background task failed',
       );
+    });
+  }
+
+  private sortOrderLinesForStockUpdate(orderLines: IOrderLine[]) {
+    return [...orderLines].sort((a, b) => {
+      if (a.variantProductId === b.variantProductId) return 0;
+      return a.variantProductId < b.variantProductId ? -1 : 1;
     });
   }
 
