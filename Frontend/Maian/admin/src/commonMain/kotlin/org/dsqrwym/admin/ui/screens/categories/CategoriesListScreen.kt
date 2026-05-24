@@ -123,7 +123,10 @@ fun CategoriesListScreen(
                             }
                         }
                     )
-                    IconButton(onClick = { viewModel.updateShowFilterDialog(true) }, modifier = Modifier.size(48.dp)) {
+                    IconButton(
+                        onClick = { viewModel.updateShowFilterDialog(true) },
+                        modifier = Modifier.size(48.dp)
+                    ) {
                         Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
                     }
                 }
@@ -154,7 +157,8 @@ fun CategoriesListScreen(
             },
             indicator = {
                 PullToRefreshDefaults.Indicator(
-                    modifier = Modifier.padding(top = padding.calculateTopPadding()).align(Alignment.TopCenter),
+                    modifier = Modifier.padding(top = padding.calculateTopPadding())
+                        .align(Alignment.TopCenter),
                     isRefreshing = isRefreshing,
                     state = pullRefreshState,
                 )
@@ -182,7 +186,9 @@ fun CategoriesListScreen(
                         val isCategoryLoading =
                             viewModel.isLoading || lazyPagingItems.isRefreshing
 
-                        items(lazyPagingItems.itemCount, key =  lazyPagingItems.itemKey { it.id }) { index ->
+                        items(
+                            lazyPagingItems.itemCount,
+                            key = lazyPagingItems.itemKey { it.id }) { index ->
                             lazyPagingItems[index]?.let {
                                 CategoryListItem(
                                     modifier = Modifier.animateItem(),
@@ -201,7 +207,7 @@ fun CategoriesListScreen(
                         appendLoadingIndicator()
                     }
 
-                    item {
+                    item(span = StaggeredGridItemSpan.FullLine) {
                         Spacer(Modifier.height(28.dp))
                     }
                 }
@@ -287,7 +293,10 @@ fun CategoryListItem(
                             val childrenCount = category.childrenCount
                             if (childrenCount > 0) {
                                 Text(
-                                    text = stringResource(BusinessRes.string.subcategories_count, childrenCount),
+                                    text = stringResource(
+                                        BusinessRes.string.subcategories_count,
+                                        childrenCount
+                                    ),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.primary
                                 )
@@ -311,7 +320,9 @@ fun CategoryListItem(
                     }
                 }
                 TooltipBox(
-                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+                        TooltipAnchorPosition.Above
+                    ),
                     tooltip = {
                         if (!canDeleteCategory) {
                             PlainTooltip {
@@ -398,7 +409,9 @@ fun FilterDialog(
                             },
                             pageSize = 100,
                             itemToString = {
-                                "${it.name}${it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()}"
+                                "${it.name}${
+                                    it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()
+                                }"
                             },
                             onSearch = { query, page, limit ->
                                 viewModel.findParentCategories(query, page, limit)
@@ -476,7 +489,14 @@ private fun FilterChipsRow(
             ElevatedFilterChip(
                 selected = true,
                 onClick = { viewModel.removeParentIdFilter() },
-                label = { Text(stringResource(BusinessRes.string.parent_category_with_name, it.name)) },
+                label = {
+                    Text(
+                        stringResource(
+                            BusinessRes.string.parent_category_with_name,
+                            it.name
+                        )
+                    )
+                },
                 trailingIcon = { SharedCloseIcon() }
             )
         }

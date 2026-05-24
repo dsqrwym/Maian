@@ -144,6 +144,10 @@ export class ReadEmployeeService {
 
     const total = countResult.count ?? 0;
 
+    items.forEach((item) => {
+      item.username = item.username?.split('@')[1] ?? '';
+    });
+
     return {
       items,
       pagination: { total, page, limit },
@@ -171,7 +175,7 @@ export class ReadEmployeeService {
     if (!employee) {
       throw new NotFoundException('Employee not found');
     }
-
+    employee.username = employee.username?.split('@')[1] ?? '';
     return employee;
   }
 }

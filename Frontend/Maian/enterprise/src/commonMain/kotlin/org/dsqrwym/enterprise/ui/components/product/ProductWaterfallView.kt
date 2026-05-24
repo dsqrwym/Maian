@@ -23,7 +23,10 @@ import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.enterprise.domain.product.Product
+import org.dsqrwym.enterprise.domain.product.localizedName
+import org.dsqrwym.enterprise.domain.product.localizedTitle
 import org.dsqrwym.shared.data.products.displayName
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.ui.components.product.SharedProductWaterfall
 import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.jetbrains.compose.resources.stringResource
@@ -79,10 +82,11 @@ fun ProductGridItem(
     canDelete: Boolean = true,
     noPermissionText: String = "",
 ) {
+    val languageCode = LanguageManager.getCurrent().code
     SharedReadOnlyProductCard(
         modifier = modifier,
-        name = product.name,
-        title = product.title,
+        name = product.localizedName(languageCode),
+        title = product.localizedTitle(languageCode),
         code = product.code,
         imageUrl = product.mainImage?.url(product.id),
         minPrice = product.minPrice,

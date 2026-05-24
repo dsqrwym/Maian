@@ -1,5 +1,6 @@
 import type { Decimal } from 'decimal.js';
 import type { SaleVariant } from '#/generated/drizzle/enums.js';
+import type { IProductTranslationDto } from '#/products/dto/product-translation.dto.js';
 
 /**
  * 零售商快照
@@ -72,13 +73,7 @@ export interface IOrderLine {
   productCode: string;
   variantProductCode: string;
 
-  productTranslationsSnapshot:
-    | {
-        lang_code: string;
-        name: string | null;
-        title: string | null;
-      }[]
-    | null;
+  productTranslationsSnapshot: IProductTranslationDto[] | null;
 
   variantAttributesSnapshot?: unknown;
 

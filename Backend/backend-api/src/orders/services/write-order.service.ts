@@ -57,6 +57,7 @@ import {
 import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import { IUpdateOrderDto } from '../dto/update-order.dto.js';
 import { OrderPdfNotificationService } from '#/orders/services/order-pdf-notification.service.js';
+import { IProductTranslationDto } from '#/products/dto/product-translation.dto.js';
 
 @Injectable()
 export class WriteOrderService {
@@ -732,10 +733,7 @@ export class WriteOrderService {
   ) {
     const productTranslationsLateral = tx
       .select({
-        product_translations: sql<
-          | { lang_code: string; name: string | null; title: string | null }[]
-          | null
-        >`
+        product_translations: sql<IProductTranslationDto[] | null>`
           COALESCE(
             jsonb_agg(
               jsonb_build_object(

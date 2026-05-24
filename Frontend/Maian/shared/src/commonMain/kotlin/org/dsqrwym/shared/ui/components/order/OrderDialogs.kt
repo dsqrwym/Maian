@@ -163,7 +163,7 @@ internal fun OrderDeliveryDateDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun OrderSingleDatePickerDialog(
+fun OrderSingleDatePickerDialog(
     title: String,
     initialDate: String?,
     minDate: String? = null,

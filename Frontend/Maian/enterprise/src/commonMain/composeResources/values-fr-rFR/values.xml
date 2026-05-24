@@ -135,4 +135,22 @@
     <string name="employee_sort_telephone">Téléphone</string>
     <string name="employee_sort_tax_id">Identifiant fiscal</string>
 
+    <string name="product_management_description">Page de gestion des produits permettant a l&apos;entreprise d&apos;observer en temps reel les cartes visibles par les detaillants et de previsualiser la page de detail cote detaillant pendant l&apos;edition.</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_start_date">Date de debut</string>
+    <string name="dashboard_end_date">Date de fin</string>
+    <string name="dashboard_top_limit">Limite Top</string>
+    <string name="dashboard_apply_filters">Appliquer</string>
+    <string name="dashboard_refresh">Actualiser le dashboard</string>
+    <string name="dashboard_empty">Aucune donnee pour cette periode.</string>
+    <string name="dashboard_total_orders">Commandes totales</string>
+    <string name="dashboard_pending_orders">Commandes en attente</string>
+    <string name="dashboard_accepted_orders">Commandes acceptees</string>
+    <string name="dashboard_total_revenue">Chiffre d&apos;affaires total</string>
+    <string name="dashboard_average_order_value">Panier moyen</string>
+    <string name="dashboard_order_status">Statut des commandes</string>
+    <string name="dashboard_revenue_trend">Tendance des revenus</string>
+    <string name="dashboard_daily_orders">Commandes quotidiennes</string>
+    <string name="dashboard_top_selling_products">Meilleures ventes</string>
+    <string name="product_revenue_and_orders">%1$s - %2$d commandes</string>
 </resources>

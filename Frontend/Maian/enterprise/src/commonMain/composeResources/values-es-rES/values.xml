@@ -133,4 +133,22 @@
     <string name="employee_sort_telephone">Teléfono</string>
     <string name="employee_sort_tax_id">NIF/CIF</string>
 
+    <string name="product_management_description">Pagina de gestion de productos para que la empresa observe en tiempo real las tarjetas que ven los minoristas y previsualice la pagina de detalle que vera el minorista mientras edita.</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_start_date">Fecha inicial</string>
+    <string name="dashboard_end_date">Fecha final</string>
+    <string name="dashboard_top_limit">Limite Top</string>
+    <string name="dashboard_apply_filters">Aplicar</string>
+    <string name="dashboard_refresh">Actualizar dashboard</string>
+    <string name="dashboard_empty">No hay datos para este periodo.</string>
+    <string name="dashboard_total_orders">Pedidos totales</string>
+    <string name="dashboard_pending_orders">Pedidos pendientes</string>
+    <string name="dashboard_accepted_orders">Pedidos aceptados</string>
+    <string name="dashboard_total_revenue">Ingresos totales</string>
+    <string name="dashboard_average_order_value">Valor medio del pedido</string>
+    <string name="dashboard_order_status">Estado de pedidos</string>
+    <string name="dashboard_revenue_trend">Tendencia de ingresos</string>
+    <string name="dashboard_daily_orders">Pedidos diarios</string>
+    <string name="dashboard_top_selling_products">Productos mas vendidos</string>
+    <string name="product_revenue_and_orders">%1$s - %2$d pedidos</string>
 </resources>

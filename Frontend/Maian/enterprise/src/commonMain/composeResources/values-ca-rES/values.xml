@@ -120,4 +120,22 @@
     <string name="employee_sort_telephone">Telèfon</string>
     <string name="employee_sort_tax_id">NIF/CIF</string>
 
+    <string name="product_management_description">Pagina de gestio de productes perque l&apos;empresa observe en temps real les targetes que veuen els minoristes i previsualitze la pagina de detall que vera el minorista mentre edita.</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_start_date">Data inicial</string>
+    <string name="dashboard_end_date">Data final</string>
+    <string name="dashboard_top_limit">Limit Top</string>
+    <string name="dashboard_apply_filters">Aplicar</string>
+    <string name="dashboard_refresh">Actualitzar dashboard</string>
+    <string name="dashboard_empty">No hi ha dades per a este periode.</string>
+    <string name="dashboard_total_orders">Comandes totals</string>
+    <string name="dashboard_pending_orders">Comandes pendents</string>
+    <string name="dashboard_accepted_orders">Comandes acceptades</string>
+    <string name="dashboard_total_revenue">Ingressos totals</string>
+    <string name="dashboard_average_order_value">Valor mitja de comanda</string>
+    <string name="dashboard_order_status">Estat de comandes</string>
+    <string name="dashboard_revenue_trend">Tendencia d&apos;ingressos</string>
+    <string name="dashboard_daily_orders">Comandes diaries</string>
+    <string name="dashboard_top_selling_products">Productes mes venuts</string>
+    <string name="product_revenue_and_orders">%1$s - %2$d comandes</string>
 </resources>

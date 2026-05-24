@@ -21,4 +21,8 @@ object EnterpriseApi {
         fun employee(id: String) = "${EMPLOYEES}/$id"
         fun create(rolePath: String) = "${EMPLOYEES}/$rolePath"
     }
+
+    object DashboardPath {
+        const val DASHBOARD = "${ApiConfig.EnterprisePath.ENTERPRISE_BASE}/dashboard"
+    }
 }

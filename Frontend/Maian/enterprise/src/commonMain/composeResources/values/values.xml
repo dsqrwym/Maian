@@ -106,6 +106,24 @@
     <string name="employee_sort_username">Username</string>
     <string name="employee_sort_telephone">Phone</string>
     <string name="employee_sort_tax_id">Tax ID</string>
+    <string name="product_management_description">Product management page for enterprise users to observe the product cards retailers see in real time, and to preview the retailer-facing product detail page while editing.</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_start_date">Start date</string>
+    <string name="dashboard_end_date">End date</string>
+    <string name="dashboard_top_limit">Top limit</string>
+    <string name="dashboard_apply_filters">Apply</string>
+    <string name="dashboard_refresh">Refresh dashboard</string>
+    <string name="dashboard_empty">No dashboard data found for this period.</string>
+    <string name="dashboard_total_orders">Total orders</string>
+    <string name="dashboard_pending_orders">Pending orders</string>
+    <string name="dashboard_accepted_orders">Accepted orders</string>
+    <string name="dashboard_total_revenue">Total revenue</string>
+    <string name="dashboard_average_order_value">Average order value</string>
+    <string name="dashboard_order_status">Order status</string>
+    <string name="dashboard_revenue_trend">Revenue trend</string>
+    <string name="dashboard_daily_orders">Daily orders</string>
+    <string name="dashboard_top_selling_products">Top selling products</string>
+    <string name="product_revenue_and_orders">%1$s - %2$d orders</string>
 </resources>
 
 

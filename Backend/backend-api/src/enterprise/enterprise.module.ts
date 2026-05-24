@@ -6,6 +6,8 @@ import { WholesalerProfileService } from '#/enterprise/services/wholesaler-profi
 import { DrizzleModule } from '#/drizzle/drizzle.module.js';
 import { ReadEmployeeService } from '#/enterprise/services/read-employee.service.js';
 import { ReadEmployeeController } from '#/enterprise/controllers/read-employee.controller.js';
+import { DashboardController } from '#/enterprise/controllers/dashbord.controller.js';
+import { DashboardService } from '#/enterprise/services/dashbord.service.js';
 
 @Module({
   imports: [DrizzleModule],
@@ -13,11 +15,13 @@ import { ReadEmployeeController } from '#/enterprise/controllers/read-employee.c
     WriteEmployeeController,
     WholesalerProfileController,
     ReadEmployeeController,
+    DashboardController,
   ],
   providers: [
     WriteEmployeeService,
     WholesalerProfileService,
     ReadEmployeeService,
+    DashboardService,
   ],
 })
 export class EnterpriseModule {}

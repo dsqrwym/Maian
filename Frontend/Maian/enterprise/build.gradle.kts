@@ -53,8 +53,6 @@ kotlin {
 
         val commonMain by getting
         commonMain.dependencies {
-            implementation(libs.datatable.material3)
-
             // 拖拽
             implementation(libs.reorderable)
             implementation(project(":shared"))

@@ -1,13 +1,38 @@
 package org.dsqrwym.enterprise.ui.screens.categories
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -18,8 +43,21 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import maian.business.generated.resources.*
-import maian.shared.generated.resources.*
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.base_category
+import maian.business.generated.resources.parent_category_with_name
+import maian.business.generated.resources.select_parent_category
+import maian.business.generated.resources.subcategories_count
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.close
+import maian.shared.generated.resources.create
+import maian.shared.generated.resources.edit
+import maian.shared.generated.resources.error_no_permission
+import maian.shared.generated.resources.filter
+import maian.shared.generated.resources.not_set
+import maian.shared.generated.resources.search_category_name
+import maian.shared.generated.resources.search_parent_category_name
+import maian.shared.generated.resources.tax_rate
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
 import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
@@ -194,7 +232,7 @@ fun CategoriesListScreen(
                         appendLoadingIndicator()
                     }
 
-                    item {
+                    item (span = StaggeredGridItemSpan.FullLine){
                         Spacer(Modifier.height(28.dp))
                     }
                 }

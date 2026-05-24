@@ -52,6 +52,8 @@ import maian.shared.generated.resources.search_products
 import maian.shared.generated.resources.sort
 import maian.shared.generated.resources.status
 import org.dsqrwym.enterprise.domain.product.Product
+import org.dsqrwym.enterprise.domain.product.localizedName
+import org.dsqrwym.enterprise.domain.product.localizedTitle
 import org.dsqrwym.enterprise.permissions.canManageEnterpriseProducts
 import org.dsqrwym.enterprise.ui.components.product.ProductTableView
 import org.dsqrwym.enterprise.ui.components.product.ProductWaterfallView
@@ -268,16 +270,12 @@ private fun ProductPreviewDialog(
             minPriceIva = product.minPriceIva,
             totalStock = product.totalStock,
             minOrderQty = product.minOrderQty,
+            nameTranslation = product.nameTranslationsText,
+            titleTranslation = product.titleTranslationsText,
             onImageClick = { showImagePreview = true },
         )
     }
 }
-
-private fun Product.localizedName(languageCode: String): String =
-    translations.firstOrNull { it.langCode == languageCode }?.name ?: name
-
-private fun Product.localizedTitle(languageCode: String): String =
-    translations.firstOrNull { it.langCode == languageCode }?.title ?: title
 
 @Composable
 private fun ProductConfirmDeleteDialog(

@@ -105,5 +105,23 @@
     <string name="employee_sort_telephone">電話</string>
     <string name="employee_sort_tax_id">稅號</string>
 
+    <string name="product_management_description">產品管理頁面，用於讓企業用戶即時觀察零售商可以看到的產品卡片，並在編輯產品時即時預覽零售商可以看到的產品詳情頁面。</string>
+    <string name="dashboard_title">儀表板</string>
+    <string name="dashboard_start_date">開始日期</string>
+    <string name="dashboard_end_date">結束日期</string>
+    <string name="dashboard_top_limit">Top 數量</string>
+    <string name="dashboard_apply_filters">套用</string>
+    <string name="dashboard_refresh">重新整理儀表板</string>
+    <string name="dashboard_empty">此時間範圍內暫無儀表板資料。</string>
+    <string name="dashboard_total_orders">訂單總數</string>
+    <string name="dashboard_pending_orders">待處理訂單</string>
+    <string name="dashboard_accepted_orders">已接受訂單</string>
+    <string name="dashboard_total_revenue">總收入</string>
+    <string name="dashboard_average_order_value">平均訂單金額</string>
+    <string name="dashboard_order_status">訂單狀態</string>
+    <string name="dashboard_revenue_trend">收入趨勢</string>
+    <string name="dashboard_daily_orders">每日訂單</string>
+    <string name="dashboard_top_selling_products">熱銷產品</string>
+    <string name="product_revenue_and_orders">%1$s - %2$d 筆訂單</string>
 </resources>
 

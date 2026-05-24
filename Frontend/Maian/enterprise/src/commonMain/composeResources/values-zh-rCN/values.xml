@@ -105,5 +105,23 @@
     <string name="employee_sort_telephone">电话</string>
     <string name="employee_sort_tax_id">税号</string>
 
+    <string name="product_management_description">产品管理页面，用于让企业用户实时观察零售商可以看到的产品卡片，并在编辑产品时实时预览零售商可以看到的产品详情页面。</string>
+    <string name="dashboard_title">仪表盘</string>
+    <string name="dashboard_start_date">开始日期</string>
+    <string name="dashboard_end_date">结束日期</string>
+    <string name="dashboard_top_limit">Top 数量</string>
+    <string name="dashboard_apply_filters">应用</string>
+    <string name="dashboard_refresh">刷新仪表盘</string>
+    <string name="dashboard_empty">该时间范围内暂无仪表盘数据。</string>
+    <string name="dashboard_total_orders">订单总数</string>
+    <string name="dashboard_pending_orders">待处理订单</string>
+    <string name="dashboard_accepted_orders">已接受订单</string>
+    <string name="dashboard_total_revenue">总收入</string>
+    <string name="dashboard_average_order_value">平均订单金额</string>
+    <string name="dashboard_order_status">订单状态</string>
+    <string name="dashboard_revenue_trend">收入趋势</string>
+    <string name="dashboard_daily_orders">每日订单</string>
+    <string name="dashboard_top_selling_products">热销产品</string>
+    <string name="product_revenue_and_orders">%1$s - %2$d 个订单</string>
 </resources>
 
