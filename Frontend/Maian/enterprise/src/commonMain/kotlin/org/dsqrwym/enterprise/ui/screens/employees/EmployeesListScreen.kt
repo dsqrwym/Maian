@@ -218,7 +218,14 @@ fun EmployeesListScreen(
                                     isLoading = isRefreshing,
                                     canManage = canManageEmployees,
                                     noPermissionText = noPermissionText,
+                                    isResendingActivationEmail =
+                                        viewModel.resendingActivationEmailEmployeeId == employee.id,
+                                    activationEmailResendCooldownSeconds =
+                                        viewModel.getActivationEmailResendCooldown(employee.id),
                                     onEdit = { onNavigateToEdit(employee) },
+                                    onResendActivationEmail = {
+                                        viewModel.resendActivationEmail(employee)
+                                    },
                                     onDelete = { viewModel.updateDeleteEmployee(employee) },
                                 )
                             }

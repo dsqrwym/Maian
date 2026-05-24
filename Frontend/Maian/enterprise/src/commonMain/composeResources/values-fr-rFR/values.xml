@@ -119,6 +119,9 @@
     <string name="no_employees_found">Aucun employé trouvé</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nCette action est irréversible.</string>
     <string name="employee_create_success_pending_verification">Employé créé. Il recevra un email de vérification et restera en attente de vérification jusqu'à l'activation du compte.</string>
+    <string name="resend_employee_activation_email_tooltip">Renvoyer l'e-mail d'activation de l'employé</string>
+    <string name="employee_activation_email_resent">E-mail d'activation de l'employé renvoyé.</string>
+    <string name="employee_activation_email_resend_failed">Impossible de renvoyer l'e-mail d'activation.</string>
     <string name="employee_role_support">Support</string>
     <string name="employee_role_delivery">Livraison</string>
     <string name="employee_role_warehouse">Entrepôt</string>

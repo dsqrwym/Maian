@@ -89,6 +89,9 @@
     <string name="no_employees_found">找不到員工</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\n此操作無法復原。</string>
     <string name="employee_create_success_pending_verification">員工已建立。對方會收到驗證郵件，在啟用帳號前狀態為等待驗證。</string>
+    <string name="resend_employee_activation_email_tooltip">重發員工啟用郵件</string>
+    <string name="employee_activation_email_resent">員工啟用郵件已重新發送。</string>
+    <string name="employee_activation_email_resend_failed">無法重新發送員工啟用郵件。</string>
     <string name="employee_role_support">客服</string>
     <string name="employee_role_delivery">配送</string>
     <string name="employee_role_warehouse">倉庫</string>

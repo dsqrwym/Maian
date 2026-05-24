@@ -52,6 +52,9 @@ class EmployeeApi(private val client: HttpClient) {
             setBody(dto)
         }.body()
 
+    suspend fun resendActivationEmail(id: String): ApiResponse<Unit> =
+        client.post(EnterpriseApi.EmployeePath.resendActivationEmail(id)).body()
+
     suspend fun deleteEmployee(id: String): ApiResponse<Unit> =
         client.delete(EnterpriseApi.EmployeePath.employee(id)).body()
 }

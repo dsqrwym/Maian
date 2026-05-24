@@ -20,6 +20,7 @@ import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.dsqrwym.shared.util.validation.validateEmail
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
@@ -27,10 +28,16 @@ import kotlin.time.ExperimentalTime
  * A small base ViewModel to encapsulate common OTP/code related state and logic
  * used by Register and Reset Password flows.
  */
+@OptIn(ExperimentalTime::class)
 open class VerifyOtpCodeViewModelBase(
     protected open val sharedAuthRepository: SharedAuthRepository,
     protected open val mySnackbarViewModel: MySnackbarViewModel
 ) : ViewModel() {
+    companion object {
+        private const val CODE_RESEND_COOLDOWN_SECONDS = 60
+        private val codeResendCooldownEndsAtSeconds = mutableMapOf<String, Long>()
+    }
+
     var email by mutableStateOf("")
     var emailError by mutableStateOf<StringResource?>(null)
 
@@ -43,9 +50,10 @@ open class VerifyOtpCodeViewModelBase(
     var codeError by mutableStateOf<StringResource?>(null)
     protected var codeIsComplete by mutableStateOf(false)
 
-    protected val codeResentInitLeftTime = 60
+    protected val codeResentInitLeftTime = CODE_RESEND_COOLDOWN_SECONDS
     var codeSend by mutableStateOf(false)
     protected var resendCodeCountDownJob: Job? = null
+    private var resendCodeCountDownJobKey: String? = null
     var codeResentLeftTime by mutableStateOf(codeResentInitLeftTime)
     protected var verifyCodeResult: SharedVerifyCodeResponse? = null
 
@@ -108,22 +116,63 @@ open class VerifyOtpCodeViewModelBase(
     }
 
     fun startResentCodeCountDown() {
-        resendCodeCountDownJob?.cancel()
-        codeSend = true
-        if (codeResentLeftTime <= 0) {
+        val cooldownKey = codeResendCooldownKey()
+        if (cooldownKey == null) {
             codeResentLeftTime = codeResentInitLeftTime
+            codeSend = false
+            return
         }
+
+        codeSend = true
+        if (currentCodeResendLeftTime(cooldownKey) <= 0) {
+            codeResendCooldownEndsAtSeconds[cooldownKey] =
+                Clock.System.now().epochSeconds + CODE_RESEND_COOLDOWN_SECONDS
+        }
+
+        codeResentLeftTime = currentCodeResendLeftTime(cooldownKey)
+        ensureResendCodeCountDownJob(cooldownKey)
+    }
+
+    private fun ensureResendCodeCountDownJob(cooldownKey: String) {
+        if (
+            resendCodeCountDownJob?.isActive == true &&
+            resendCodeCountDownJobKey == cooldownKey
+        ) return
+
+        resendCodeCountDownJob?.cancel()
+        resendCodeCountDownJobKey = cooldownKey
         resendCodeCountDownJob = viewModelScope.launch {
-            while (codeResentLeftTime > 0) {
+            while (true) {
+                codeResentLeftTime = currentCodeResendLeftTime(cooldownKey)
+                if (codeResentLeftTime <= 0) {
+                    resendCodeCountDownJob = null
+                    resendCodeCountDownJobKey = null
+                    break
+                }
                 delay(1000.milliseconds)
-                codeResentLeftTime--
             }
         }
+    }
+
+    private fun currentCodeResendLeftTime(cooldownKey: String): Int {
+        val endsAtSeconds = codeResendCooldownEndsAtSeconds[cooldownKey] ?: return 0
+        val remainingSeconds = (endsAtSeconds - Clock.System.now().epochSeconds).coerceAtLeast(0)
+        if (remainingSeconds <= 0) {
+            codeResendCooldownEndsAtSeconds.remove(cooldownKey)
+        }
+        return remainingSeconds.toInt()
+    }
+
+    private fun codeResendCooldownKey(): String? {
+        val normalizedEmail = email.trim().lowercase()
+        if (normalizedEmail.isBlank()) return null
+        return "otp-code:$normalizedEmail"
     }
 
     protected fun cancelResendCodeCountDown() {
         resendCodeCountDownJob?.cancel()
         resendCodeCountDownJob = null
+        resendCodeCountDownJobKey = null
     }
 
     protected fun resetEmail(){
@@ -140,6 +189,15 @@ open class VerifyOtpCodeViewModelBase(
         cancelResendCodeCountDown()
         codeResentLeftTime = codeResentInitLeftTime
         codeSend = false
+    }
+
+    protected suspend fun showTooManyRequestsInfo(result: SharedResponseResult.Error) {
+        val message = if (SharedResponseResult.shouldShowToUser(result.type)) {
+            result.message
+        } else {
+            null
+        } ?: getString(SharedRes.string.request_too_frequent)
+        mySnackbarViewModel.showInfo(message)
     }
 
     @OptIn(ExperimentalTime::class)
@@ -160,7 +218,7 @@ open class VerifyOtpCodeViewModelBase(
 
             is SharedResponseResult.Error -> {
                 if (result.type == HttpStatusCode.TooManyRequests) {
-                    mySnackbarViewModel.showInfo(getString(SharedRes.string.request_too_frequent))
+                    showTooManyRequestsInfo(result)
                 } else {
                     mySnackbarViewModel.showError(getString(SharedRes.string.otp_code_invalid_or_expired))
                     codeError = SharedRes.string.otp_code_invalid_or_expired

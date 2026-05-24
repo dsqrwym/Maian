@@ -89,6 +89,9 @@
     <string name="no_employees_found">未找到员工</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\n此操作不可撤销。</string>
     <string name="employee_create_success_pending_verification">员工已创建。对方会收到验证邮件，在激活账号前状态为等待验证。</string>
+    <string name="resend_employee_activation_email_tooltip">重发员工激活邮件</string>
+    <string name="employee_activation_email_resent">员工激活邮件已重新发送。</string>
+    <string name="employee_activation_email_resend_failed">无法重新发送员工激活邮件。</string>
     <string name="employee_role_support">客服</string>
     <string name="employee_role_delivery">配送</string>
     <string name="employee_role_warehouse">仓库</string>

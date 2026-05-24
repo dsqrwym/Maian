@@ -117,6 +117,9 @@
     <string name="no_employees_found">No se encontraron empleados</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nEsta acción no se puede deshacer.</string>
     <string name="employee_create_success_pending_verification">Empleado creado. Recibirá un correo de verificación y quedará pendiente de verificación hasta activar la cuenta.</string>
+    <string name="resend_employee_activation_email_tooltip">Reenviar correo de activación del empleado</string>
+    <string name="employee_activation_email_resent">Correo de activación del empleado reenviado.</string>
+    <string name="employee_activation_email_resend_failed">No se pudo reenviar el correo de activación.</string>
     <string name="employee_role_support">Soporte</string>
     <string name="employee_role_delivery">Reparto</string>
     <string name="employee_role_warehouse">Almacén</string>

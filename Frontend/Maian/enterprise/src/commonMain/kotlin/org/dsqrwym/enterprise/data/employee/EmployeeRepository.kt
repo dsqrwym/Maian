@@ -60,6 +60,9 @@ class EmployeeRepository(private val api: EmployeeApi) : SharedObservableReposit
     ): SharedResponseResult<Unit> =
         safeApiCall { api.updateEmployee(id, dto.normalized()) }.notifyUpdated()
 
+    suspend fun resendActivationEmail(id: String): SharedResponseResult<Unit> =
+        safeApiCall { api.resendActivationEmail(id) }
+
     suspend fun deleteEmployee(id: String): SharedResponseResult<Unit> =
         safeApiCall { api.deleteEmployee(id) }.notifyUpdated()
 }

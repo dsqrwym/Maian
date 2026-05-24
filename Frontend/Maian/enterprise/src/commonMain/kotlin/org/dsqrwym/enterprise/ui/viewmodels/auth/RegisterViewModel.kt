@@ -337,7 +337,7 @@ class RegisterViewModel(
             is SharedResponseResult.Error -> {
                 nextButtonUiState = UiState.Error
                 if (result.type == HttpStatusCode.TooManyRequests) {
-                    mySnackbarViewModel.showInfo(getString(SharedRes.string.request_too_frequent))
+                    showTooManyRequestsInfo(result)
                 } else {
                     mySnackbarViewModel.showError(getString(SharedRes.string.register_email_already_registered))
                     emailError = SharedRes.string.register_email_already_registered
@@ -399,7 +399,7 @@ class RegisterViewModel(
 
                     is SharedResponseResult.Error -> {
                         if (result.type == HttpStatusCode.TooManyRequests) {
-                            mySnackbarViewModel.showInfo(getString(SharedRes.string.request_too_frequent))
+                            showTooManyRequestsInfo(result)
                         } else if (result.type == HttpStatusCode.Unauthorized) {
                             mySnackbarViewModel.showError(getString(SharedRes.string.token_invalid_or_expired))
                             resetRegister()

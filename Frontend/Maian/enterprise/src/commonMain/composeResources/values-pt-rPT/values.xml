@@ -121,6 +121,9 @@
     <string name="no_employees_found">Nenhum funcionário encontrado</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nEsta ação não pode ser anulada.</string>
     <string name="employee_create_success_pending_verification">Funcionário criado. Receberá um email de verificação e ficará pendente de verificação até ativar a conta.</string>
+    <string name="resend_employee_activation_email_tooltip">Reenviar email de ativação do funcionário</string>
+    <string name="employee_activation_email_resent">Email de ativação do funcionário reenviado.</string>
+    <string name="employee_activation_email_resend_failed">Não foi possível reenviar o email de ativação.</string>
     <string name="employee_role_support">Suporte</string>
     <string name="employee_role_delivery">Entrega</string>
     <string name="employee_role_warehouse">Armazém</string>

@@ -22,10 +22,17 @@ import androidx.compose.material.icons.outlined.Work
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.employee_user_id
+import maian.enterprise.generated.resources.resend_employee_activation_email_tooltip
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.edit
 import maian.shared.generated.resources.email
@@ -57,7 +65,10 @@ fun EmployeeCard(
     isLoading: Boolean,
     canManage: Boolean,
     noPermissionText: String,
+    isResendingActivationEmail: Boolean,
+    activationEmailResendCooldownSeconds: Int,
     onEdit: () -> Unit,
+    onResendActivationEmail: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -106,6 +117,64 @@ fun EmployeeCard(
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (employee.status == EmployeeStatus.PENDING_VERIFICATION) {
+                        val resendActivationEmailBaseText = stringResource(
+                            EnterpriseRes.string.resend_employee_activation_email_tooltip
+                        )
+                        val resendActivationEmailText =
+                            if (activationEmailResendCooldownSeconds > 0) {
+                                "$resendActivationEmailBaseText (${activationEmailResendCooldownSeconds}s)"
+                            } else {
+                                resendActivationEmailBaseText
+                            }
+                        if (canManage) {
+                            EmployeeActionTooltip(
+                                text = resendActivationEmailText,
+                            ) {
+                                if (activationEmailResendCooldownSeconds > 0) {
+                                    TextButton(
+                                        onClick = onResendActivationEmail,
+                                        enabled = false,
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(18.dp),
+                                            imageVector = Icons.Outlined.Email,
+                                            contentDescription = resendActivationEmailText,
+                                        )
+                                        Text(
+                                            modifier = Modifier.padding(start = 4.dp),
+                                            text = "${activationEmailResendCooldownSeconds}s",
+                                            maxLines = 1,
+                                        )
+                                    }
+                                } else {
+                                    IconButton(
+                                        onClick = onResendActivationEmail,
+                                        enabled = !isResendingActivationEmail,
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Outlined.Email,
+                                            contentDescription = resendActivationEmailText,
+                                            tint = MaterialTheme.colorScheme.secondary,
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            PermissionTooltip(false, noPermissionText) {
+                                IconButton(
+                                    onClick = onResendActivationEmail,
+                                    enabled = false,
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Email,
+                                        contentDescription = resendActivationEmailText,
+                                        tint = MaterialTheme.colorScheme.secondary,
+                                    )
+                                }
+                            }
+                        }
+                    }
                     PermissionTooltip(canManage, noPermissionText) {
                         IconButton(onClick = onEdit, enabled = canManage) {
                             Icon(
@@ -176,6 +245,29 @@ fun EmployeeCard(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EmployeeActionTooltip(
+    text: String,
+    content: @Composable () -> Unit,
+) {
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+            TooltipAnchorPosition.Above,
+        ),
+        tooltip = {
+            PlainTooltip {
+                SelectionContainer {
+                    Text(text)
+                }
+            }
+        },
+        state = rememberTooltipState(),
+    ) {
+        content()
     }
 }
 

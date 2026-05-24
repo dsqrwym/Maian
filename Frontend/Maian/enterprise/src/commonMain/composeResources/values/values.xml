@@ -91,6 +91,9 @@
     <string name="no_employees_found">No employees found</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nThis action cannot be undone.</string>
     <string name="employee_create_success_pending_verification">Employee created. They will receive a verification email and remain pending verification until they activate the account.</string>
+    <string name="resend_employee_activation_email_tooltip">Resend employee activation email</string>
+    <string name="employee_activation_email_resent">Employee activation email resent.</string>
+    <string name="employee_activation_email_resend_failed">Could not resend the activation email.</string>
     <string name="employee_role_support">Support</string>
     <string name="employee_role_delivery">Delivery</string>
     <string name="employee_role_warehouse">Warehouse</string>

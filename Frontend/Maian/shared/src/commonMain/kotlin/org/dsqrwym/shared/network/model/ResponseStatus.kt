@@ -32,6 +32,7 @@ sealed class SharedResponseResult<out T> {
             return when (statusCode) {
                 HttpStatusCode.Forbidden,
                 HttpStatusCode.Conflict,
+                HttpStatusCode.TooManyRequests,
                 HttpStatusCode.InternalServerError,
                 HttpStatusCode.ServiceUnavailable,
                 HttpStatusCode.RequestTimeout -> true

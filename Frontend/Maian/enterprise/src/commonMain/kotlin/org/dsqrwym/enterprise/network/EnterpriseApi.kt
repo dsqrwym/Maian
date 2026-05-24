@@ -20,6 +20,7 @@ object EnterpriseApi {
         const val EMPLOYEES = "${ApiConfig.EnterprisePath.ENTERPRISE_BASE}/employees"
         fun employee(id: String) = "${EMPLOYEES}/$id"
         fun create(rolePath: String) = "${EMPLOYEES}/$rolePath"
+        fun resendActivationEmail(id: String) = "${employee(id)}/resend-activation-email"
     }
 
     object DashboardPath {

@@ -104,6 +104,9 @@
     <string name="no_employees_found">No s'han trobat empleats</string>
     <string name="employee_delete_message">%1$s\n%2$s\n\nAquesta acció no es pot desfer.</string>
     <string name="employee_create_success_pending_verification">Empleat creat. Rebrà un correu de verificació i quedarà pendent de verificació fins que activi el compte.</string>
+    <string name="resend_employee_activation_email_tooltip">Reenviar correu d'activació de l'empleat</string>
+    <string name="employee_activation_email_resent">Correu d'activació de l'empleat reenviat.</string>
+    <string name="employee_activation_email_resend_failed">No s'ha pogut reenviar el correu d'activació.</string>
     <string name="employee_role_support">Suport</string>
     <string name="employee_role_delivery">Repartiment</string>
     <string name="employee_role_warehouse">Magatzem</string>
