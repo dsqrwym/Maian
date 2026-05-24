@@ -18,7 +18,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import maian.enterprise.generated.resources.*
 import maian.shared.generated.resources.SharedRes
-import maian.shared.generated.resources.category
 import maian.shared.generated.resources.update
 import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
 import org.dsqrwym.business.ui.workspace.BusinessAuxiliaryHost
@@ -137,7 +136,7 @@ private fun ProductEditScreenContent(
                 BusinessTitleIconRow(
                     if (translationTabs.isNotEmpty()) translationTabs[0].first.name else "",
                     Icons.Outlined.Inventory2,
-                    stringResource(SharedRes.string.category),
+                    stringResource(EnterpriseRes.string.product),
                     isLoading
                 )
 

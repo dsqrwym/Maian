@@ -31,5 +31,7 @@
     <string name="translations_count">%1$s idiomas añadidos</string>
     <string name="media_file_too_large_mb">El archivo "%1$s" es demasiado grande: %2$d MB</string>
     <string name="delete_category_conflict">No se puede eliminar esta categoría porque es la categoría principal de uno o más productos. Cambia la categoría principal de los productos antes de eliminarla.</string>
+    <string name="business_auxiliary_editor_title">Editor ampliado</string>
+    <string name="business_auxiliary_preview_title">Vista previa del producto</string>
 </resources>
 

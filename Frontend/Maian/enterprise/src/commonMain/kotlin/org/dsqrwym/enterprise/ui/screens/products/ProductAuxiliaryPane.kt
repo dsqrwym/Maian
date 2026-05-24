@@ -19,6 +19,7 @@ import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.product
 import maian.enterprise.generated.resources.product_description
 import maian.enterprise.generated.resources.product_description_placeholder
+import maian.enterprise.generated.resources.product_preview
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
 import org.dsqrwym.business.ui.components.richtext.BusinessRichTextEditor
 import org.dsqrwym.business.ui.components.row.BusinessTitleIconRow
@@ -137,7 +138,10 @@ fun ProductAuxiliaryPane(
                     BusinessAuxiliarySurface.Preview -> {
                         SharedProductDetailPreviewPanel(
                             modifier = Modifier.fillMaxSize(),
-                            product = viewModel.toSharedProductDetailPreview(LanguageManager.getCurrent().code),
+                            product = viewModel.toSharedProductDetailPreview(
+                                languageCode = LanguageManager.getCurrent().code,
+                                fallbackName = stringResource(EnterpriseRes.string.product_preview),
+                            ),
                         )
                     }
                 }

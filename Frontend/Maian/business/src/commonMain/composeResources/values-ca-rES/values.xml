@@ -31,5 +31,7 @@
     <string name="translations_count">%1$s idiomes afegits</string>
     <string name="media_file_too_large_mb">El fitxer "%1$s" és massa gran: %2$d MB</string>
     <string name="delete_category_conflict">No es pot eliminar esta categoria perquè és la categoria principal d\'un o més productes. Canvia la categoria principal dels productes abans d\'eliminar-la.</string>
+    <string name="business_auxiliary_editor_title">Editor ampliat</string>
+    <string name="business_auxiliary_preview_title">Vista prèvia del producte</string>
 </resources>
 

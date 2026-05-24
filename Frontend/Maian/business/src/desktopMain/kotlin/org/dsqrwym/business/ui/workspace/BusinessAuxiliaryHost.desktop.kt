@@ -1,14 +1,17 @@
 package org.dsqrwym.business.ui.workspace
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.rememberWindowState
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.business_auxiliary_editor_title
+import maian.business.generated.resources.business_auxiliary_preview_title
 import org.dsqrwym.shared.LocalIsDarkTheme
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.theme.AppExtraColors
 import org.dsqrwym.shared.ui.window.SharedWindowTheme
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 actual fun BusinessAuxiliaryHost(
@@ -23,11 +26,9 @@ actual fun BusinessAuxiliaryHost(
     val appColors = AppExtraColors.current
     val windowSizeClass = LocalWindowSizeClass.current
     val windowState = rememberWindowState(width = 780.dp, height = 660.dp)
-    val title = remember(currentSurface) {
-        when (currentSurface) {
-            BusinessAuxiliarySurface.Editor -> "扩展编辑器"
-            BusinessAuxiliarySurface.Preview -> "产品预览"
-        }
+    val title = when (currentSurface) {
+        BusinessAuxiliarySurface.Editor -> stringResource(BusinessRes.string.business_auxiliary_editor_title)
+        BusinessAuxiliarySurface.Preview -> stringResource(BusinessRes.string.business_auxiliary_preview_title)
     }
 
     Window(

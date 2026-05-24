@@ -4,11 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Inventory2
-import maian.business.generated.resources.BusinessRes
-import maian.business.generated.resources.category_management
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.category_management_description
+import maian.enterprise.generated.resources.dashboard_title
 import maian.enterprise.generated.resources.employee_management
 import maian.enterprise.generated.resources.employee_management_description
 import maian.enterprise.generated.resources.product_management_description
@@ -22,33 +22,20 @@ import org.dsqrwym.enterprise.navigation.Employees
 import org.dsqrwym.enterprise.navigation.OrderHistory
 import org.dsqrwym.enterprise.navigation.Products
 import org.dsqrwym.shared.data.user.UserRole
+import org.dsqrwym.shared.navigation.SharedDashboardScreen
 import org.dsqrwym.shared.navigation.menu.SharedMenuActions
 import org.dsqrwym.shared.navigation.menu.SharedMenuItem
 import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 
 object MenuConfig {
     val menuList = listOf(
-        SharedMenuItemState(SharedMenuItem.Dashboard),
-        SharedMenuItemState(SharedMenuItem.Profile),
         SharedMenuItemState(
             SharedMenuItem(
-                Products,
-                SharedRes.string.products,
-                EnterpriseRes.string.product_management_description,
-                Icons.Outlined.Inventory2,
-                SharedRes.string.products,
-                setOf(UserRole.WHOLESALER, UserRole.WAREHOUSE),
-                isPrimary = false,
-            ),
-        ),
-        SharedMenuItemState(
-            SharedMenuItem(
-                Categories,
-                BusinessRes.string.category_management,
-                EnterpriseRes.string.category_management_description,
-                Icons.Outlined.Category,
-                SharedRes.string.category,
-                setOf(UserRole.WHOLESALER, UserRole.WAREHOUSE),
+                SharedDashboardScreen,
+                EnterpriseRes.string.dashboard_title,
+                icon = Icons.Outlined.Home,
+                iconContentDescription = EnterpriseRes.string.dashboard_title,
+                isPrimary = true,
             ),
         ),
         SharedMenuItemState(
@@ -59,6 +46,29 @@ object MenuConfig {
                 Icons.AutoMirrored.Outlined.ReceiptLong,
                 SharedRes.string.orders,
                 setOf(UserRole.WHOLESALER, UserRole.WAREHOUSE, UserRole.DELIVERY, UserRole.SUPPORT),
+                isPrimary = true,
+            ),
+        ),
+        SharedMenuItemState(
+            SharedMenuItem(
+                Products,
+                SharedRes.string.products,
+                EnterpriseRes.string.product_management_description,
+                Icons.Outlined.Inventory2,
+                SharedRes.string.products,
+                setOf(UserRole.WHOLESALER, UserRole.WAREHOUSE),
+                isPrimary = true,
+            ),
+        ),
+        SharedMenuItemState(SharedMenuItem.Profile),
+        SharedMenuItemState(
+            SharedMenuItem(
+                Categories,
+                SharedRes.string.category,
+                EnterpriseRes.string.category_management_description,
+                Icons.Outlined.Category,
+                SharedRes.string.category,
+                setOf(UserRole.WHOLESALER, UserRole.WAREHOUSE),
                 isPrimary = false,
             ),
         ),

@@ -31,5 +31,7 @@
     <string name="translations_count">%1$s langues ajoutées</string>
     <string name="media_file_too_large_mb">Le fichier "%1$s" est trop volumineux : %2$d Mo</string>
     <string name="delete_category_conflict">Impossible de supprimer cette catégorie car elle est la catégorie principale d\'un ou plusieurs produits. Veuillez modifier la catégorie principale des produits avant de la supprimer.</string>
+    <string name="business_auxiliary_editor_title">Éditeur étendu</string>
+    <string name="business_auxiliary_preview_title">Aperçu du produit</string>
 </resources>
 

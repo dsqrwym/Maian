@@ -31,5 +31,7 @@
     <string name="translations_count">已新增 %1$s 種語言</string>
     <string name="media_file_too_large_mb">檔案「%1$s」太大：%2$d MB</string>
     <string name="delete_category_conflict">無法刪除此類別，因為它是至少一個產品的主分類。請先更改相關產品的主分類後再刪除。</string>
+    <string name="business_auxiliary_editor_title">擴充編輯器</string>
+    <string name="business_auxiliary_preview_title">產品預覽</string>
 </resources>
 

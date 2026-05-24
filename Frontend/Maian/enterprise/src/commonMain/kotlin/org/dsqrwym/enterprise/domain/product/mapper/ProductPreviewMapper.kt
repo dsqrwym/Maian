@@ -14,7 +14,10 @@ import org.dsqrwym.shared.domain.product.SharedProductDetailUiModel
 import org.dsqrwym.shared.domain.product.SharedProductDetailVariant
 import org.dsqrwym.shared.serialization.getOrElse
 
-fun BaseProductFormViewModel.toSharedProductDetailPreview(languageCode: String): SharedProductDetailUiModel {
+fun BaseProductFormViewModel.toSharedProductDetailPreview(
+    languageCode: String,
+    fallbackName: String,
+): SharedProductDetailUiModel {
     val primaryTranslation = translationTabs.firstOrNull()?.first
     val localizedTranslation = translationTabs
         .firstOrNull { it.first.langCode == languageCode }
@@ -26,7 +29,7 @@ fun BaseProductFormViewModel.toSharedProductDetailPreview(languageCode: String):
         id = "preview",
         name = localizedText?.name?.ifBlank { null }
             ?: primaryTranslation?.name?.ifBlank { null }
-            ?: productCode.ifBlank { "Preview" },
+            ?: productCode.ifBlank { fallbackName },
         title = localizedText?.title?.ifBlank { null } ?: primaryTranslation?.title?.ifBlank { null },
         description = localizedDescription
             ?: primaryTranslation?.description?.ifBlank { null },

@@ -132,7 +132,7 @@ internal fun DashboardSummaryCards(
 }
 
 @Composable
-private fun DashboardSummaryCard(
+internal fun DashboardSummaryCard(
     label: String,
     value: String,
     isRefreshing: Boolean,
@@ -161,7 +161,7 @@ private fun DashboardSummaryCard(
 }
 
 @Composable
-private fun DashboardChartCard(
+internal fun DashboardChartCard(
     title: String,
     modifier: Modifier = Modifier,
     isRefreshing: Boolean,

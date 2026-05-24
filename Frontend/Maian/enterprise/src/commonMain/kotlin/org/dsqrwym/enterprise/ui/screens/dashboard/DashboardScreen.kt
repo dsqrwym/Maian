@@ -1,6 +1,7 @@
 package org.dsqrwym.enterprise.ui.screens.dashboard
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.dashboard_refresh
 import org.dsqrwym.enterprise.ui.viewmodels.dashboard.DashboardViewModel
@@ -78,7 +80,7 @@ fun DashboardScreen(
                 isRefreshing = state.refreshing
             )
         } else {
-            Box(contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 when {
                     state.initialLoading -> SharedLoadingDotsIndicator()
                     state.error -> SharedRetryButton(viewModel::refresh)
