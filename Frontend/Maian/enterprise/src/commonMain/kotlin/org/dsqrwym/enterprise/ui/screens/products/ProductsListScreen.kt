@@ -60,6 +60,7 @@ import org.dsqrwym.enterprise.ui.components.product.ProductWaterfallView
 import org.dsqrwym.enterprise.ui.viewmodels.products.ProductsListViewModel
 import org.dsqrwym.shared.LocalWindowSizeClass
 import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.shared.data.products.SharedProductSortField
 import org.dsqrwym.shared.data.products.SharedProductStatus
 import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.data.products.sharedEnterpriseProductSortFields
@@ -77,6 +78,7 @@ import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorC
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.product.SharedProductSortChip
 import org.dsqrwym.shared.ui.components.product.SharedProductSortDialog
+import org.dsqrwym.shared.ui.components.product.SharedProductSortDirectionLabel
 import org.dsqrwym.shared.ui.components.product.SharedReadOnlyProductCard
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
@@ -177,7 +179,9 @@ fun ProductsListScreen(
                     IconButton(onClick = { viewModel.updateShowFilterDialog(true) }) {
                         Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
                     }
-                    if (!isTableMode) {
+                    if (isTableMode) {
+                        ProductBestSellingSortChip(viewModel = viewModel)
+                    } else {
                         IconButton(onClick = { viewModel.updateShowSortDialog(true) }) {
                             Icon(Icons.Outlined.SwapVert, stringResource(SharedRes.string.sort))
                         }
@@ -237,6 +241,25 @@ fun ProductsListScreen(
             )
         }
     }
+}
+
+@Composable
+private fun ProductBestSellingSortChip(
+    viewModel: ProductsListViewModel,
+) {
+    val field = SharedProductSortField.BEST_SELLING
+    val selected = viewModel.sortBy == field
+    ElevatedFilterChip(
+        selected = selected,
+        onClick = { viewModel.toggleSort(field) },
+        label = {
+            if (selected) {
+                SharedProductSortDirectionLabel(label = field.displayName(), sortDir = viewModel.sortDir)
+            } else {
+                Text(field.displayName())
+            }
+        },
+    )
 }
 
 @Composable

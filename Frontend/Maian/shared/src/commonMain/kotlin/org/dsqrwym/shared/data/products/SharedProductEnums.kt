@@ -3,6 +3,7 @@ package org.dsqrwym.shared.data.products
 import androidx.compose.runtime.Composable
 import kotlinx.serialization.Serializable
 import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.product_sort_best_selling
 import maian.shared.generated.resources.product_sort_category
 import maian.shared.generated.resources.product_sort_code
 import maian.shared.generated.resources.product_sort_min_order_qty
@@ -40,7 +41,15 @@ enum class SharedProductListSelectField {
 }
 
 enum class SharedProductSortField {
-    NAME, TITLE, CATEGORY, PRODUCT_CODE, MIN_ORDER_QTY, AVAILABLE_STOCK, PRICE_IVA, PRICE
+    NAME,
+    TITLE,
+    CATEGORY,
+    PRODUCT_CODE,
+    MIN_ORDER_QTY,
+    AVAILABLE_STOCK,
+    PRICE_IVA,
+    PRICE,
+    BEST_SELLING
 }
 
 val sharedEnterpriseProductSortFields = listOf(
@@ -52,6 +61,7 @@ val sharedEnterpriseProductSortFields = listOf(
     SharedProductSortField.PRICE,
     SharedProductSortField.PRICE_IVA,
     SharedProductSortField.MIN_ORDER_QTY,
+    SharedProductSortField.BEST_SELLING,
 )
 
 val sharedRetailProductSortFields = sharedEnterpriseProductSortFields
@@ -67,6 +77,7 @@ fun SharedProductSortField.toStringResource(): StringResource =
         SharedProductSortField.AVAILABLE_STOCK -> SharedRes.string.product_sort_stock
         SharedProductSortField.PRICE_IVA -> SharedRes.string.product_sort_price_without_vat
         SharedProductSortField.PRICE -> SharedRes.string.product_sort_price
+        SharedProductSortField.BEST_SELLING -> SharedRes.string.product_sort_best_selling
     }
 
 @Composable

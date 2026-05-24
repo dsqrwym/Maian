@@ -462,4 +462,5 @@
     <string name="clear_date">Clear date</string>
     <string name="operation_success">Operation completed</string>
     <string name="operation_failed">Operation failed</string>
+    <string name="product_sort_best_selling">Best selling</string>
 </resources>

@@ -478,6 +478,7 @@ private fun SharedProductSortField.toProductColumn(): ProductColumn? =
         PRICE -> ProductColumn.Price
         PRICE_IVA -> ProductColumn.PriceIva
         MIN_ORDER_QTY -> ProductColumn.MinOrderQty
+        BEST_SELLING -> null
     }
 
 

@@ -463,6 +463,7 @@
     <string name="clear_date">清除日期</string>
     <string name="operation_success">操作成功</string>
     <string name="operation_failed">操作失敗</string>
+    <string name="product_sort_best_selling">銷量最高</string>
 </resources>
 
 

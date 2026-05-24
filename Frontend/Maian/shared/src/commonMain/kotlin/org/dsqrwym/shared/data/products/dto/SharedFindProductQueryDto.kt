@@ -13,7 +13,7 @@ data class SharedFindProductDto(
     val langCode: String? = null,                // 指定返回语言字段 (e.g., "en", "es")
     val categoryId: String? = null, // 分类过滤（主分类或关联分类）
     val wholesalerId: String? = null,            // 批发商 ID 过滤 (UUID)
-    val sortBy: SharedProductSortField? = SharedProductSortField.NAME, // 排序字段: name/product_code/available_stock/price_iva/price
+    val sortBy: SharedProductSortField? = SharedProductSortField.NAME, // 排序字段: name/product_code/available_stock/price_iva/price/best_selling
     val sortOrder: OrderDir = OrderDir.ASC,              // asc / desc
     val status: SharedProductStatus? = null,     // 产品状态过滤
     val fields: List<SharedProductListSelectField>? = null, // 选择返回字段

@@ -148,7 +148,7 @@ class ProductsListViewModel(
             sortDir = if (sortDir == OrderDir.ASC) OrderDir.DESC else OrderDir.ASC
         } else {
             sortBy = field
-            sortDir = OrderDir.ASC
+            sortDir = if (field == SharedProductSortField.BEST_SELLING) OrderDir.DESC else OrderDir.ASC
         }
     }
 

@@ -491,4 +491,5 @@
     <string name="clear_date">Borrar fecha</string>
     <string name="operation_success">Operación completada</string>
     <string name="operation_failed">La operación falló</string>
+    <string name="product_sort_best_selling">Más vendidos</string>
 </resources>

@@ -492,4 +492,5 @@
     <string name="clear_date">Limpar data</string>
     <string name="operation_success">Operação concluída</string>
     <string name="operation_failed">A operação falhou</string>
+    <string name="product_sort_best_selling">Mais vendidos</string>
 </resources>
