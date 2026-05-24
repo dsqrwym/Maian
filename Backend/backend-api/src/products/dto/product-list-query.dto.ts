@@ -24,7 +24,14 @@ export interface IProductListQueryDto extends IPaginationQueryDto {
 
   sort_by?: ProductSortField &
     tags.Example<
-      ['name', 'product_code', 'available_stock', 'price_iva', 'price']
+      [
+        'name',
+        'product_code',
+        'available_stock',
+        'price_iva',
+        'price',
+        'best_selling',
+      ]
     >;
 
   sort_order?: TagsSortOrder;

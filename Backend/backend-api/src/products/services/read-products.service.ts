@@ -13,6 +13,8 @@ import {
   categories,
   category_translations,
   files,
+  order_details,
+  orders,
   product_categories,
   product_translations,
   products,
@@ -27,13 +29,18 @@ import {
   exists,
   inArray,
   ilike,
+  isNotNull,
   like,
   or,
   SQL,
   sql,
 } from 'drizzle-orm';
 import { Action } from '#/casl/actions.js';
-import { ProductStatus, UserRole } from '#/generated/drizzle/enums.js';
+import {
+  OrderStatus,
+  ProductStatus,
+  UserRole,
+} from '#/generated/drizzle/enums.js';
 import { ProductListSelectField, ProductSortField } from '../product.enums.js';
 import { IProductListQueryDto } from '../dto/product-list-query.dto.js';
 import { IProductResponse } from '../dto/product-response.js';
@@ -98,6 +105,8 @@ export class ReadProductsService {
         return sql.raw(`"variantAggregates"."min_price_iva"::numeric`);
       case ProductSortField.PRICE:
         return sql.raw(`"variantAggregates"."min_price"::numeric`);
+      case ProductSortField.BEST_SELLING:
+        return sql.raw(`COALESCE("acceptedSales"."sold_quantity", 0)`);
       default:
         return undefined;
     }
@@ -152,6 +161,7 @@ export class ReadProductsService {
     const { page, limit, sort_by, sort_order } = query;
     const offset = (page - 1) * limit;
     const sortField = this.getSortFieldDrizzle(sort_by, langCode);
+    const sortByBestSelling = sort_by === ProductSortField.BEST_SELLING;
 
     // LEFT JOIN LATERAL 关联主查询，查询 variants
     const variantAggregates = this.drizzle.db
@@ -276,6 +286,25 @@ export class ReadProductsService {
       )
       .as('productTranslationsLateral');
 
+    const acceptedSales = sortByBestSelling
+      ? this.drizzle.db
+          .select({
+            product_id: order_details.product_id,
+            sold_quantity:
+              sql<number>`SUM(${order_details.quantity})`.as('sold_quantity'),
+          })
+          .from(order_details)
+          .innerJoin(orders, eq(order_details.order_id, orders.id))
+          .where(
+            and(
+              eq(orders.status, OrderStatus.ACCEPTED),
+              isNotNull(order_details.product_id),
+            ),
+          )
+          .groupBy(order_details.product_id)
+          .as('acceptedSales')
+      : undefined;
+
     let productQuery = this.drizzle.db
       .select({
         id: products.id,
@@ -301,6 +330,13 @@ export class ReadProductsService {
 
     if (category) {
       productQuery.leftJoinLateral(mainCategoryLateral, SQL_TRUE);
+    }
+
+    if (acceptedSales) {
+      productQuery.leftJoin(
+        acceptedSales,
+        eq(acceptedSales.product_id, products.id),
+      );
     }
 
     // 构建 WHERE 条件
@@ -408,9 +444,13 @@ export class ReadProductsService {
       .offset(offset);
 
     if (sortField) {
-      productQuery = productQuery.orderBy(
-        sql`${sortField} ${sql.raw(sort_order ?? 'asc')}`,
-      );
+      const sortDirection = sort_order ?? (sortByBestSelling ? 'desc' : 'asc');
+      productQuery = sortByBestSelling
+        ? productQuery.orderBy(
+            sql`${sortField} ${sql.raw(sortDirection)}`,
+            asc(products.id),
+          )
+        : productQuery.orderBy(sql`${sortField} ${sql.raw(sortDirection)}`);
     }
 
     const countQuery = this.drizzle.db

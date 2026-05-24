@@ -56,10 +56,10 @@ importers:
         version: 11.2.1
       '@nestjs-modules/mailer':
         specifier: ^2.3.6
-        version: 2.3.6(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.0)(chokidar@4.0.3)(nodemailer@8.0.7)(svgo@4.0.1)(terser@5.48.0)(typescript@6.0.3)
+        version: 2.3.6(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.1)(chokidar@4.0.3)(nodemailer@8.0.7)(svgo@4.0.1)(terser@5.48.0)(typescript@6.0.3)
       '@nestjs/bullmq':
         specifier: ^11.0.4
-        version: 11.0.4(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.0)
+        version: 11.0.4(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.1)
       '@nestjs/cache-manager':
         specifier: ^3.1.2
         version: 3.1.2(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(cache-manager@7.2.8)(keyv@5.6.0)(rxjs@7.8.2)
@@ -109,8 +109,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       bullmq:
-        specifier: ^5.77.0
-        version: 5.77.0
+        specifier: ^5.77.1
+        version: 5.77.1
       cache-manager:
         specifier: ^7.2.8
         version: 7.2.8
@@ -178,8 +178,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       pdfmake:
-        specifier: ^0.3.8
-        version: 0.3.8
+        specifier: ^0.3.9
+        version: 0.3.9
       pg:
         specifier: ^8.21.0
         version: 8.21.0
@@ -3096,8 +3096,8 @@ packages:
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
-  bullmq@5.77.0:
-    resolution: {integrity: sha512-J8CBvBgov4hqj/5CipTLtgfINvNRDeTl9p2Et/Dah/KBY2ERcnMT1m3ZxW4R1QC68ZX6yQk5nONtslpbbTs2gw==}
+  bullmq@5.77.1:
+    resolution: {integrity: sha512-n25H1jW3PI0vfVQ0ge6f8mP9hHPwDM2Ivqm0rAOfFFy4t6d3mE7JtX1gyWNuZKIVmlS41w7DDzv3giGgM6qo+w==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       redis: '>=5.0.0'
@@ -5412,8 +5412,8 @@ packages:
   pdfkit@0.18.0:
     resolution: {integrity: sha512-NvUwSDZ0eYEzqAiWwVQkRkjYUkZ48kcsHuCO31ykqPPIVkwoSDjDGiwIgHHNtsiwls3z3P/zy4q00hl2chg2Ug==}
 
-  pdfmake@0.3.8:
-    resolution: {integrity: sha512-ywj3MESfqOW7sOjXZiBKaWk7XLncZ9caMflM3WSbc0Do8Wpwn9DBV8ceKZqkz1M/avl8i+ccS2f8THZRyFaCGQ==}
+  pdfmake@0.3.9:
+    resolution: {integrity: sha512-V8VIcjMG/yk7oJYhYjtvyLXvop3w3zcIB0bHdG3z1vuW8nVeemzRWu7YrOG7QA9KYaf858MZnCUG6hQ1Bei0vA==}
     engines: {node: '>=20'}
 
   peberminta@0.9.0:
@@ -8279,7 +8279,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@nestjs-modules/mailer@2.3.6(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.0)(chokidar@4.0.3)(nodemailer@8.0.7)(svgo@4.0.1)(terser@5.48.0)(typescript@6.0.3)':
+  '@nestjs-modules/mailer@2.3.6(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.1)(chokidar@4.0.3)(nodemailer@8.0.7)(svgo@4.0.1)(terser@5.48.0)(typescript@6.0.3)':
     dependencies:
       '@css-inline/css-inline': 0.20.0
       '@nestjs/common': 11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -8291,7 +8291,7 @@ snapshots:
       '@types/ejs': 3.1.5
       '@types/mjml': 4.7.4
       '@types/pug': 2.0.10
-      bullmq: 5.77.0
+      bullmq: 5.77.1
       ejs: 5.0.2
       handlebars: 4.7.9
       liquidjs: 10.27.0
@@ -8315,12 +8315,12 @@ snapshots:
       '@nestjs/core': 11.1.23(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.23)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       tslib: 2.8.1
 
-  '@nestjs/bullmq@11.0.4(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.0)':
+  '@nestjs/bullmq@11.0.4(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(bullmq@5.77.1)':
     dependencies:
       '@nestjs/bull-shared': 11.0.4(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)
       '@nestjs/common': 11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.23(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.23)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      bullmq: 5.77.0
+      bullmq: 5.77.1
       tslib: 2.8.1
 
   '@nestjs/cache-manager@3.1.2(@nestjs/common@11.1.23(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.23)(cache-manager@7.2.8)(keyv@5.6.0)(rxjs@7.8.2)':
@@ -9722,7 +9722,7 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bullmq@5.77.0:
+  bullmq@5.77.1:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.10.1
@@ -12740,7 +12740,7 @@ snapshots:
       linebreak: 1.1.0
       png-js: 1.1.0
 
-  pdfmake@0.3.8:
+  pdfmake@0.3.9:
     dependencies:
       linebreak: 1.1.0
       pdfkit: 0.18.0

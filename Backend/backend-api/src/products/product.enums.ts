@@ -25,4 +25,5 @@ export enum ProductSortField {
   AVAILABLE_STOCK = 'available_stock',
   PRICE_IVA = 'price_iva',
   PRICE = 'price',
+  BEST_SELLING = 'best_selling',
 }
