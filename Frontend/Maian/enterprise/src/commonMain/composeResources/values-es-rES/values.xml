@@ -100,7 +100,8 @@
 
     <string name="product_form_sku_subtitle">Cada producto necesita al menos una variante de venta (SKU).\nPuedes crear variantes para distintos embalajes, especificaciones o precios.\nSe admiten hasta 50 variantes.</string>
     <string name="employee_management">Empleados</string>
-    <string name="employee_management_description">Gestiona el personal de soporte, reparto y almacén de tu cuenta mayorista.</string>
+    <string name="employee_management_description">Crea, edita y elimina cuentas de empleados del mayorista.</string>
+    <string name="order_history_route_description">Ver pedidos, filtrar por estado, abrir PDF y ejecutar acciones de estado disponibles.</string>
     <string name="employee">Empleado</string>
     <string name="employees">Empleados</string>
     <string name="add_employee">Añadir empleado</string>

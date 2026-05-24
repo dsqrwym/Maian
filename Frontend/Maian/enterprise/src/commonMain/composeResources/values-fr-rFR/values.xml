@@ -102,7 +102,8 @@
     <string name="product_form_sku_subtitle">Chaque produit nécessite au moins une variante de vente (SKU).\nVous pouvez créer des variantes pour différents emballages, spécifications ou prix. \nJusqu'à 50 variantes sont prises en charge.</string>
 
     <string name="employee_management">Employés</string>
-    <string name="employee_management_description">Gérez le personnel de support, de livraison et d'entrepôt de votre compte grossiste.</string>
+    <string name="employee_management_description">Créez, modifiez et supprimez les comptes employés du grossiste.</string>
+    <string name="order_history_route_description">Consultez les commandes, filtrez par statut, ouvrez les PDF et exécutez les actions de statut disponibles.</string>
     <string name="employee">Employé</string>
     <string name="employees">Employés</string>
     <string name="add_employee">Ajouter un employé</string>

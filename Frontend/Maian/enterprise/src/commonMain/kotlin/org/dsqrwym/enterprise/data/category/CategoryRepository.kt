@@ -6,10 +6,12 @@ import org.dsqrwym.business.data.category.dto.BusinessCreateCategoryDto
 import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
 import org.dsqrwym.enterprise.data.enterpriseOwnerUserId
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
+import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.enterprise.domain.category.toDomain
 import org.dsqrwym.shared.data.category.SharedCategoryApi
 import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
+import org.dsqrwym.shared.data.category.SharedCategorySortField
 import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.dto.ReducedCategoryResponse
 import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
@@ -31,6 +33,8 @@ class CategoryRepository(
         type: SharedCategoryType? = null,
         langCode: String? = null,
         parentId: String? = null,
+        sortBy: SharedCategorySortField? = SharedCategorySortField.NAME,
+        sortOrder: OrderDir = OrderDir.ASC,
         page: Int = 1,
         limit: Int = 100
     ): SharedResponseResult<ApiResponseList<CategoryNode>> = withAuthOrError { user ->
@@ -41,6 +45,8 @@ class CategoryRepository(
             langCode = langCode,
             userId = ownerUserId,
             parentId = parentId,
+            sortBy = sortBy,
+            sortOrder = sortOrder,
             fields = listOf(
                 SharedCategorySelectField.TRANSLATIONS,
                 SharedCategorySelectField.RELATIONS,

@@ -72,7 +72,8 @@
     <string name="product_form_sku_title">SKU 列表</string>
     <string name="product_form_sku_subtitle">每個產品至少需要一個銷售變體（SKU）。你可以為不同包裝、規格或價格建立多個變體。最多支援 50 個變體。</string>
     <string name="employee_management">員工管理</string>
-    <string name="employee_management_description">管理目前批發商帳號下的客服、配送和倉庫員工。</string>
+    <string name="employee_management_description">建立、編輯和刪除目前批發商的員工帳號。</string>
+    <string name="order_history_route_description">查看訂單、依狀態篩選、開啟 PDF，並執行可用的狀態操作。</string>
     <string name="employee">員工</string>
     <string name="employees">員工</string>
     <string name="add_employee">新增員工</string>

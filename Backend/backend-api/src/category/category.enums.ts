@@ -10,3 +10,9 @@ export enum CategorySelectField {
   RELATIONS = 'relations',
   TRANSLATIONS = 'translations',
 }
+
+export enum CategorySortField {
+  NAME = 'name',
+  LEVEL = 'level',
+  IVA = 'iva',
+}

@@ -16,6 +16,11 @@
     <string name="product_detail_coming_soon">Le détail du produit n'est pas encore disponible.</string>
     <string name="chat">Messages</string>
     <string name="shopping_cart">Panier</string>
+    <string name="products_route_description">Parcourez les produits, recherchez et triez les articles, puis ouvrez les détails avant de commander.</string>
+    <string name="categories_route_description">Parcourez les groupes de catégories et filtrez les produits par catégorie.</string>
+    <string name="wholesalers_route_description">Trouvez des grossistes, filtrez les boutiques et ouvrez les profils grossistes.</string>
+    <string name="cart_route_description">Vérifiez les paniers par grossiste, ajustez les quantités et créez des commandes.</string>
+    <string name="order_history_route_description">Consultez et filtrez les commandes par statut, ouvrez les PDF et exécutez les actions de statut disponibles.</string>
     <string name="cart_item_added">Ajouté au panier</string>
     <string name="product_information_changed_retry">Les informations du produit ont changé. Veuillez réessayer.</string>
     <string name="cart_empty">Votre panier est vide</string>

@@ -16,6 +16,11 @@
     <string name="product_detail_coming_soon">產品詳情暫不可用。</string>
     <string name="chat">訊息</string>
     <string name="shopping_cart">購物車</string>
+    <string name="products_route_description">瀏覽產品、搜尋和排序商品，並在下單前開啟詳情。</string>
+    <string name="categories_route_description">瀏覽類別分組，並依類別篩選產品。</string>
+    <string name="wholesalers_route_description">尋找批發商、篩選店鋪，並開啟批發商資料。</string>
+    <string name="cart_route_description">依批發商查看購物車、調整數量並建立訂單。</string>
+    <string name="order_history_route_description">查看並依狀態篩選訂單、開啟 PDF，並執行可用的狀態操作。</string>
     <string name="cart_item_added">已加入購物車</string>
     <string name="product_information_changed_retry">商品資訊已更新，請重試</string>
     <string name="cart_empty">購物車是空的</string>

@@ -87,7 +87,8 @@
 
     <string name="product_form_sku_subtitle">Cada producte necessita almenys una variant de venda (SKU). \nPots crear variants per a diferents embalatges, formats o preus. \nS'admeten fins a 50 variants.</string>
     <string name="employee_management">Empleats</string>
-    <string name="employee_management_description">Gestiona el personal de suport, repartiment i magatzem del teu compte majorista.</string>
+    <string name="employee_management_description">Crea, edita i elimina comptes d'empleat del majorista.</string>
+    <string name="order_history_route_description">Consulta comandes, filtra per estat, obri PDF i executa accions d'estat disponibles.</string>
     <string name="employee">Empleat</string>
     <string name="employees">Empleats</string>
     <string name="add_employee">Afegir empleat</string>

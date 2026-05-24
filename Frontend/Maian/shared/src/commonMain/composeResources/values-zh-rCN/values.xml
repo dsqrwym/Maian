@@ -154,7 +154,9 @@
     <string name="menu_close_content_description">关闭菜单</string>
     <string name="menu_open_content_description">打开菜单</string>
     <string name="dashboard">首页</string>
+    <string name="dashboard_route_description">查看账号的关键指标和近期活动。</string>
     <string name="profile">我的</string>
+    <string name="profile_route_description">查看并更新账号与公司资料。</string>
     <string name="products">产品</string>
     <string name="categories">类别</string>
     <string name="more">更多</string>
@@ -287,6 +289,9 @@
     <string name="product_sort_price">价格</string>
     <string name="product_sort_price_without_vat">未税价格</string>
     <string name="product_sort_min_order_qty">起订量</string>
+    <string name="category_sort_name">名称</string>
+    <string name="category_sort_level">等级</string>
+    <string name="category_sort_iva">IVA</string>
     <string name="product_detail">产品详情</string>
     <string name="media">媒体</string>
     <string name="variants">规格</string>

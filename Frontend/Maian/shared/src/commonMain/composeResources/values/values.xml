@@ -151,7 +151,9 @@
     <string name="menu_close_content_description">Close menu</string>
     <string name="menu_open_content_description">Open menu</string>
     <string name="dashboard">Home</string>
+    <string name="dashboard_route_description">View key metrics and recent activity for your account.</string>
     <string name="profile">My Account</string>
+    <string name="profile_route_description">View and update your account and company profile information.</string>
     <string name="products">Products</string>
     <string name="categories">Categories</string>
     <string name="more">More</string>
@@ -282,6 +284,9 @@
     <string name="product_sort_price">Price</string>
     <string name="product_sort_price_without_vat">Price without VAT</string>
     <string name="product_sort_min_order_qty">Minimum order quantity</string>
+    <string name="category_sort_name">Name</string>
+    <string name="category_sort_level">Level</string>
+    <string name="category_sort_iva">VAT</string>
     <string name="product_detail">Product detail</string>
     <string name="media">Media</string>
     <string name="variants">Variants</string>

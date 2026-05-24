@@ -1,5 +1,9 @@
 import type { IPaginationQueryDto } from '#/utils/dto/pagination.dto.js';
-import type { CategorySelectField, CategoryType } from '../category.enums.js';
+import type {
+  CategorySelectField,
+  CategorySortField,
+  CategoryType,
+} from '../category.enums.js';
 import type { tags } from 'typia';
 import typia from 'typia';
 import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
@@ -37,7 +41,7 @@ export interface ICategoryQueryDto extends IPaginationQueryDto {
 
   fields?: CategorySelectField[];
 
-  sort_by?: 'level';
+  sort_by?: CategorySortField & tags.Example<['name', 'level', 'iva']>;
 
   sort_order?: TagsSortOrder;
 }

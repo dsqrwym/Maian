@@ -16,6 +16,11 @@
     <string name="product_detail_coming_soon">Product detail is not available yet.</string>
     <string name="chat">Messages</string>
     <string name="shopping_cart">Cart</string>
+    <string name="products_route_description">Browse products, search and sort items, and open details before ordering.</string>
+    <string name="categories_route_description">Browse category groups and filter products by category.</string>
+    <string name="wholesalers_route_description">Find wholesalers, filter stores, and open wholesaler profiles.</string>
+    <string name="cart_route_description">Review carts by wholesaler, adjust quantities, and create orders.</string>
+    <string name="order_history_route_description">View and filter orders by status, open PDFs, and perform available status actions.</string>
     <string name="cart_item_added">Added to cart</string>
     <string name="product_information_changed_retry">Product information has changed. Please try again.</string>
     <string name="cart_empty">Your cart is empty</string>

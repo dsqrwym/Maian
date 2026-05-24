@@ -151,7 +151,9 @@
     <string name="menu_open_content_description">Obrir menú</string>
 
     <string name="dashboard">Inici</string>
+    <string name="dashboard_route_description">Consulta indicadors clau i activitat recent del teu compte.</string>
     <string name="profile">El meu perfil</string>
+    <string name="profile_route_description">Consulta i actualitza la informació del teu compte i empresa.</string>
     <string name="products">Productes</string>
     <string name="categories">Categories</string>
     <string name="more">Més</string>
@@ -309,6 +311,9 @@
     <string name="product_sort_price">Preu</string>
     <string name="product_sort_price_without_vat">Preu sense IVA</string>
     <string name="product_sort_min_order_qty">Comanda mínima</string>
+    <string name="category_sort_name">Nom</string>
+    <string name="category_sort_level">Nivell</string>
+    <string name="category_sort_iva">IVA</string>
 
     <string name="product_detail">Detall del producte</string>
 

@@ -10,7 +10,11 @@ import { subject } from '@casl/ability';
 import { ICategoryQueryDto } from '../dto/category-query.dto.js';
 import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface.js';
 import { UserPayload } from '#/auth/auth.types.js';
-import { CategorySelectField, CategoryType } from '../category.enums.js';
+import {
+  CategorySelectField,
+  CategorySortField,
+  CategoryType,
+} from '../category.enums.js';
 import {
   ICategoryResponse,
   ICategoryResponseRelation,
@@ -73,6 +77,20 @@ export class ReadCategoryService {
           ),
       ),
     );
+  }
+
+  private getSortFieldDrizzle(sortBy?: CategorySortField, langCode?: string) {
+    switch (sortBy) {
+      case CategorySortField.LEVEL:
+        return categories.level;
+      case CategorySortField.IVA:
+        return categories.iva;
+      case CategorySortField.NAME:
+      default:
+        return langCode
+          ? sql`COALESCE("transLateral"."sort_name", ${categories.name})`
+          : categories.name;
+    }
   }
 
   /**
@@ -510,21 +528,26 @@ export class ReadCategoryService {
      */
     const visibilitySort = sql`CASE WHEN ${categories.user_id} IS NULL THEN 0 ELSE 1 END`;
 
-    const localizedNameSort: SQL = langCode
-      ? sql`COALESCE("transLateral"."sort_name", ${categories.name})`
-      : sql`${categories.name}`;
+    const sortBy = query.sort_by ?? CategorySortField.NAME;
+    const sortField = this.getSortFieldDrizzle(sortBy, langCode);
+    const localizedNameSort = this.getSortFieldDrizzle(
+      CategorySortField.NAME,
+      langCode,
+    );
+    // 按 level 排序时，同一级别内会继续按当前语言名字排
+    const sortTieBreaker =
+      sortBy === CategorySortField.NAME
+        ? sql`${categories.id} ASC`
+        : sql`${localizedNameSort} ASC, ${categories.id} ASC`;
+    // IVA 可能为NULL 排最后
+    const nullsLast =
+      sortBy === CategorySortField.IVA ? sql`NULLS LAST` : sql``;
 
-    const orderByExpr =
-      query.sort_by === 'level'
-        ? sql`
-        ${visibilitySort} ASC,
-        ${categories.level} ${sql.raw(sortOrder)},
-        ${localizedNameSort} ASC
-      `
-        : sql`
-        ${visibilitySort} ASC,
-        ${localizedNameSort} ${sql.raw(sortOrder)}
-      `;
+    const orderByExpr = sql`
+      ${visibilitySort} ASC,
+      ${sortField} ${sql.raw(sortOrder)} ${nullsLast},
+      ${sortTieBreaker}
+    `;
 
     let countQuery = dbForMainQuery
       .select({ total: count() })

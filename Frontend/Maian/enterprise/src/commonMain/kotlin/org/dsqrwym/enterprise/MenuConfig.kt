@@ -11,10 +11,11 @@ import maian.enterprise.generated.resources.category_management_description
 import maian.enterprise.generated.resources.dashboard_title
 import maian.enterprise.generated.resources.employee_management
 import maian.enterprise.generated.resources.employee_management_description
+import maian.enterprise.generated.resources.order_history_route_description
 import maian.enterprise.generated.resources.product_management_description
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.category
-import maian.shared.generated.resources.order_history
+import maian.shared.generated.resources.dashboard_route_description
 import maian.shared.generated.resources.orders
 import maian.shared.generated.resources.products
 import org.dsqrwym.business.navigation.Categories
@@ -33,6 +34,7 @@ object MenuConfig {
             SharedMenuItem(
                 SharedDashboardScreen,
                 EnterpriseRes.string.dashboard_title,
+                description = SharedRes.string.dashboard_route_description,
                 icon = Icons.Outlined.Home,
                 iconContentDescription = EnterpriseRes.string.dashboard_title,
                 isPrimary = true,
@@ -42,7 +44,7 @@ object MenuConfig {
             SharedMenuItem(
                 OrderHistory,
                 SharedRes.string.orders,
-                SharedRes.string.order_history,
+                EnterpriseRes.string.order_history_route_description,
                 Icons.AutoMirrored.Outlined.ReceiptLong,
                 SharedRes.string.orders,
                 setOf(UserRole.WHOLESALER, UserRole.WAREHOUSE, UserRole.DELIVERY, UserRole.SUPPORT),

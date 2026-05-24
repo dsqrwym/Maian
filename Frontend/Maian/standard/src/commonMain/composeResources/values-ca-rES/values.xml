@@ -16,6 +16,11 @@
     <string name="product_detail_coming_soon">El detall del producte encara no està disponible.</string>
     <string name="chat">Missatges</string>
     <string name="shopping_cart">Carret</string>
+    <string name="products_route_description">Consulta productes, busca i ordena articles, i obri detalls abans de demanar.</string>
+    <string name="categories_route_description">Consulta grups de categories i filtra productes per categoria.</string>
+    <string name="wholesalers_route_description">Troba majoristes, filtra botigues i obri perfils de majorista.</string>
+    <string name="cart_route_description">Revisa carrets per majorista, ajusta quantitats i crea comandes.</string>
+    <string name="order_history_route_description">Consulta i filtra comandes per estat, obri PDF i executa accions d'estat disponibles.</string>
     <string name="cart_item_added">Afegit al carret</string>
     <string name="product_information_changed_retry">La informació del producte ha canviat. Torna-ho a intentar.</string>
     <string name="cart_empty">El teu carret està buit</string>

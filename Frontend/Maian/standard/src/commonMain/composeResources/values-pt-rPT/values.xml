@@ -16,6 +16,11 @@
     <string name="product_detail_coming_soon">O detalhe do produto ainda não está disponível.</string>
     <string name="chat">Mensagens</string>
     <string name="shopping_cart">Carrinho</string>
+    <string name="products_route_description">Explore produtos, pesquise e ordene artigos, e abra detalhes antes de encomendar.</string>
+    <string name="categories_route_description">Explore grupos de categorias e filtre produtos por categoria.</string>
+    <string name="wholesalers_route_description">Encontre grossistas, filtre lojas e abra perfis de grossista.</string>
+    <string name="cart_route_description">Reveja carrinhos por grossista, ajuste quantidades e crie encomendas.</string>
+    <string name="order_history_route_description">Veja e filtre encomendas por estado, abra PDFs e execute ações de estado disponíveis.</string>
     <string name="cart_item_added">Adicionado ao carrinho</string>
     <string name="product_information_changed_retry">A informação do produto foi alterada. Tente novamente.</string>
     <string name="cart_empty">O carrinho está vazio</string>

@@ -151,7 +151,9 @@
     <string name="menu_close_content_description">關閉功能表</string>
     <string name="menu_open_content_description">打開功能表</string>
     <string name="dashboard">首頁</string>
+    <string name="dashboard_route_description">查看帳號的關鍵指標與近期活動。</string>
     <string name="profile">我的</string>
+    <string name="profile_route_description">查看並更新帳號與公司資料。</string>
     <string name="products">產品</string>
     <string name="categories">類別</string>
     <string name="more">更多</string>
@@ -283,6 +285,9 @@
     <string name="product_sort_price">價格</string>
     <string name="product_sort_price_without_vat">未稅價格</string>
     <string name="product_sort_min_order_qty">起訂量</string>
+    <string name="category_sort_name">名稱</string>
+    <string name="category_sort_level">等級</string>
+    <string name="category_sort_iva">IVA</string>
     <string name="product_detail">產品詳情</string>
     <string name="media">媒體</string>
     <string name="variants">規格</string>

@@ -150,7 +150,9 @@
     <string name="menu_open_content_description">Abrir menú</string>
 
     <string name="dashboard">Inicio</string>
+    <string name="dashboard_route_description">Consulta métricas clave y actividad reciente de tu cuenta.</string>
     <string name="profile">Mi cuenta</string>
+    <string name="profile_route_description">Consulta y actualiza la información de tu cuenta y empresa.</string>
     <string name="products">Productos</string>
     <string name="categories">Categorías</string>
     <string name="more">Más</string>
@@ -300,6 +302,9 @@
     <string name="product_sort_price">Precio</string>
     <string name="product_sort_price_without_vat">Precio sin IVA</string>
     <string name="product_sort_min_order_qty">Pedido mínimo</string>
+    <string name="category_sort_name">Nombre</string>
+    <string name="category_sort_level">Nivel</string>
+    <string name="category_sort_iva">IVA</string>
 
     <string name="product_detail">Detalle del producto</string>
 

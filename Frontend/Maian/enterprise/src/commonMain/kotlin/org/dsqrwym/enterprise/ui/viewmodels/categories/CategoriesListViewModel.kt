@@ -18,14 +18,25 @@ import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.delete_failed
 import maian.shared.generated.resources.delete_success
 import org.dsqrwym.enterprise.data.category.CategoryRepository
+import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.shared.data.category.SharedCategorySortField
 import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.domain.category.CategorySummary
+import org.dsqrwym.shared.localization.LanguageManager
+import org.dsqrwym.shared.localization.customAppLocale
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.paging.data.createPager
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.getString
 
+private data class CategoryListQuery(
+    val search: String,
+    val parentId: String?,
+    val sortBy: SharedCategorySortField?,
+    val sortDir: OrderDir,
+    val languageCode: String,
+)
 
 class CategoriesListViewModel(
     categoryRepository: CategoryRepository,
@@ -37,14 +48,21 @@ class CategoriesListViewModel(
     var isLoading by mutableStateOf(false)
         private set
 
-    // 搜索条件和过滤类型
     var searchQuery by mutableStateOf("")
         private set
+    var sortBy by mutableStateOf<SharedCategorySortField?>(SharedCategorySortField.NAME)
+    var sortDir by mutableStateOf(OrderDir.ASC)
+    var languageCode by mutableStateOf(LanguageManager.getCurrent().code)
+        private set
+
     private val pagingTrigger = combine(
         snapshotFlow { searchQuery },
-        snapshotFlow { filterCategory },
-    ) { query, parent ->
-        Pair(query, parent?.id)
+        snapshotFlow { filterCategory?.id },
+        snapshotFlow { sortBy },
+        snapshotFlow { sortDir },
+        snapshotFlow { languageCode },
+    ) { query, parentId, sortBy, sortDir, languageCode ->
+        CategoryListQuery(query, parentId, sortBy, sortDir, languageCode)
     }
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -52,17 +70,20 @@ class CategoriesListViewModel(
         pagingTrigger.debounce(SharedUiTiming.searchDebounce)
             .distinctUntilChanged(),
         categoryRepository.updateEvents.onStart { emit(Unit) }
-    ) { (query, parent), _ ->
-        Pair(query, parent)
+    ) { query, _ ->
+        query
     }
-        .flatMapLatest { (query, parentId) ->
+        .flatMapLatest { queryDto ->
             createPager(
-                query = query,
+                query = queryDto.search,
                 pageSize = 20
             ) { page, size, q ->
                 when (val result = categoryRepository.getCategories(
                     search = q,
-                    parentId = parentId,
+                    parentId = queryDto.parentId,
+                    langCode = queryDto.languageCode,
+                    sortBy = queryDto.sortBy,
+                    sortOrder = queryDto.sortDir,
                     page = page,
                     limit = size
                 )) {
@@ -81,20 +102,51 @@ class CategoriesListViewModel(
         }
         .cachedIn(viewModelScope)
 
-    // 弹窗状态
     var showFilterDialog by mutableStateOf(false)
+        private set
+    var showSortDialog by mutableStateOf(false)
         private set
     var deleteCategory by mutableStateOf<CategoryNode?>(null)
         private set
 
-    // 更新搜索
+    init {
+        viewModelScope.launch {
+            snapshotFlow { customAppLocale }.collectLatest {
+                val currentCode = LanguageManager.getCurrent().code
+                if (languageCode != currentCode) {
+                    languageCode = currentCode
+                }
+            }
+        }
+    }
+
     fun updateSearchQuery(query: String) {
         searchQuery = query
     }
 
-    // 更新弹窗显示状态
     fun updateShowFilterDialog(show: Boolean) {
         showFilterDialog = show
+    }
+
+    fun updateShowSortDialog(show: Boolean) {
+        showSortDialog = show
+    }
+
+    fun updateSortBy(sortBy: SharedCategorySortField?) {
+        this.sortBy = sortBy
+    }
+
+    fun updateSortDir(dir: OrderDir) {
+        sortDir = dir
+    }
+
+    fun toggleSort(field: SharedCategorySortField) {
+        if (sortBy == field) {
+            sortDir = if (sortDir == OrderDir.ASC) OrderDir.DESC else OrderDir.ASC
+        } else {
+            sortBy = field
+            sortDir = OrderDir.ASC
+        }
     }
 
     fun updateShowDeleteDialog(category: CategoryNode?) {
@@ -107,7 +159,6 @@ class CategoriesListViewModel(
         }
     }
 
-    // 删除类别
     fun deleteCategory(category: CategoryNode) {
         viewModelScope.launch {
             isLoading = true
@@ -135,8 +186,6 @@ class CategoriesListViewModel(
     }
 
     override suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
-        // maxLevel 2 保证都是父元素
-        // onlyWithOwnedChildren = true 保证父类别必须有用户的子类别
         when (val result =
             categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 2, onlyWithOwnedChildren = true)) {
             is SharedResponseResult.Success -> {

@@ -72,7 +72,8 @@
     <string name="product_form_sku_title">SKU 列表</string>
     <string name="product_form_sku_subtitle">每个产品至少需要一个销售变体（SKU）。你可以为不同包装、规格或价格创建多个变体。最多支持 50 个变体。</string>
     <string name="employee_management">员工管理</string>
-    <string name="employee_management_description">管理当前批发商账号下的客服、配送和仓库员工。</string>
+    <string name="employee_management_description">创建、编辑和删除当前批发商的员工账号。</string>
+    <string name="order_history_route_description">查看订单，按状态筛选，打开 PDF，并执行可用的状态操作。</string>
     <string name="employee">员工</string>
     <string name="employees">员工</string>
     <string name="add_employee">添加员工</string>

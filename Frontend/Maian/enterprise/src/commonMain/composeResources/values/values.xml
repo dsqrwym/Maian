@@ -74,7 +74,8 @@
     <string name="product_form_sku_title">SKU list</string>
     <string name="product_form_sku_subtitle">Each product needs at least one sales variant (SKU). You can create variants for different packaging, specifications, or prices. Up to 50 variants are supported.</string>
     <string name="employee_management">Employees</string>
-    <string name="employee_management_description">Manage support, delivery, and warehouse staff for your wholesaler account.</string>
+    <string name="employee_management_description">Create, edit, and delete employee accounts for the wholesaler.</string>
+    <string name="order_history_route_description">View orders, filter by status, open PDFs, and perform available status actions.</string>
     <string name="employee">Employee</string>
     <string name="employees">Employees</string>
     <string name="add_employee">Add employee</string>

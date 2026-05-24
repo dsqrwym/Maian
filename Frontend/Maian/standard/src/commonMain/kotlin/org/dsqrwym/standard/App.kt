@@ -96,6 +96,7 @@ fun App() {
                         SharedMenuItem(
                             route = ProductsScreen,
                             label = SharedRes.string.products,
+                            description = StandardRes.string.products_route_description,
                             icon = Icons.Outlined.Inventory2,
                             iconContentDescription = SharedRes.string.products,
                             isPrimary = true,
@@ -105,6 +106,7 @@ fun App() {
                         SharedMenuItem(
                             route = CategoriesScreen,
                             label = SharedRes.string.categories,
+                            description = StandardRes.string.categories_route_description,
                             icon = Icons.Outlined.Category,
                             iconContentDescription = SharedRes.string.categories,
                             isPrimary = true,
@@ -114,6 +116,7 @@ fun App() {
                         SharedMenuItem(
                             route = WholesalersScreen,
                             label = SharedRes.string.wholesalers,
+                            description = StandardRes.string.wholesalers_route_description,
                             icon = Icons.Outlined.Storefront,
                             iconContentDescription = SharedRes.string.wholesalers,
                             isPrimary = true,
@@ -123,6 +126,7 @@ fun App() {
                         SharedMenuItem(
                             route = CartScreen,
                             label = StandardRes.string.shopping_cart,
+                            description = StandardRes.string.cart_route_description,
                             icon = Icons.Outlined.ShoppingCart,
                             iconContentDescription = StandardRes.string.shopping_cart,
                             isPrimary = true,
@@ -132,6 +136,7 @@ fun App() {
                         SharedMenuItem(
                             route = OrderHistoryScreen,
                             label = SharedRes.string.orders,
+                            description = StandardRes.string.order_history_route_description,
                             icon = Icons.AutoMirrored.Outlined.ReceiptLong,
                             iconContentDescription = SharedRes.string.orders,
                             isPrimary = false,

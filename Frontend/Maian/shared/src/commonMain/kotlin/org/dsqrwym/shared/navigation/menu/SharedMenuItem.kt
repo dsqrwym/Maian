@@ -7,7 +7,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.dashboard
+import maian.shared.generated.resources.dashboard_route_description
 import maian.shared.generated.resources.profile
+import maian.shared.generated.resources.profile_route_description
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.navigation.SharedDashboardScreen
 import org.dsqrwym.shared.navigation.SharedProfileScreen
@@ -31,6 +33,7 @@ open class SharedMenuItem(
     object Dashboard : SharedMenuItem(
         route = SharedDashboardScreen,
         label = SharedRes.string.dashboard,
+        description = SharedRes.string.dashboard_route_description,
         icon = Icons.Outlined.Home,
         iconContentDescription = SharedRes.string.dashboard,
         isPrimary = true
@@ -39,6 +42,7 @@ open class SharedMenuItem(
     object Profile : SharedMenuItem(
         route = SharedProfileScreen,
         label = SharedRes.string.profile,
+        description = SharedRes.string.profile_route_description,
         icon = Icons.Outlined.Person,
         iconContentDescription = SharedRes.string.profile,
         isPrimary = true

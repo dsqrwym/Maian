@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +58,7 @@ import maian.shared.generated.resources.filter
 import maian.shared.generated.resources.not_set
 import maian.shared.generated.resources.search_category_name
 import maian.shared.generated.resources.search_parent_category_name
+import maian.shared.generated.resources.sort
 import maian.shared.generated.resources.tax_rate
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
 import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
@@ -65,7 +67,10 @@ import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategori
 import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.enterprise.permissions.canManageEnterpriseCategories
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
+import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.shared.data.category.displayName
 import org.dsqrwym.shared.data.category.mapper.toDto
+import org.dsqrwym.shared.data.category.sharedEnterpriseCategorySortFields
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.paging.hasLoadError
@@ -79,6 +84,7 @@ import org.dsqrwym.shared.ui.components.input.SharedSingleLinePlaceholderText
 import org.dsqrwym.shared.ui.components.input.selector.RemoteSearchableSelectorConfig
 import org.dsqrwym.shared.ui.components.input.selector.SearchableSelectorRemote
 import org.dsqrwym.shared.ui.components.placeholder.SharedNotFoundPlaceholder
+import org.dsqrwym.shared.ui.components.product.SharedProductSortDirectionLabel
 import org.dsqrwym.shared.ui.components.row.SharedFilterChipsRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffoldFabButtonState
@@ -108,13 +114,14 @@ fun CategoriesListScreen(
 
     val searchQuery = viewModel.searchQuery
     val showFilterDialog = viewModel.showFilterDialog
+    val showSortDialog = viewModel.showSortDialog
     val deleteCategory = viewModel.deleteCategory
     val canManageCategories = userRole?.canManageEnterpriseCategories() == true
     val noPermissionText = stringResource(SharedRes.string.error_no_permission)
 
     SharedTransparentScaffold(
         topBarScrollBehavior = scrollBehavior,
-        showOverlayDialog = showFilterDialog || deleteCategory != null,
+        showOverlayDialog = showFilterDialog || showSortDialog || deleteCategory != null,
         overlayContent = {
             deleteCategory?.let { category ->
                 BusinessConfirmDeleteCategories(
@@ -126,6 +133,9 @@ fun CategoriesListScreen(
             }
             if (showFilterDialog) {
                 FilterDialog(viewModel)
+            }
+            if (showSortDialog) {
+                CategorySortDialog(viewModel)
             }
         },
         title = {
@@ -154,6 +164,9 @@ fun CategoriesListScreen(
                     )
                     IconButton(onClick = { viewModel.updateShowFilterDialog(true) }, modifier = Modifier.size(48.dp)) {
                         Icon(Icons.Outlined.FilterList, stringResource(SharedRes.string.filter))
+                    }
+                    IconButton(onClick = { viewModel.updateShowSortDialog(true) }, modifier = Modifier.size(48.dp)) {
+                        Icon(Icons.Outlined.SwapVert, stringResource(SharedRes.string.sort))
                     }
                 }
                 // 过滤标签
@@ -343,6 +356,54 @@ fun CategoryListItem(
 }
 
 @Composable
+private fun CategorySortDialog(
+    viewModel: CategoriesListViewModel
+) {
+    val resizeSafeDismiss = rememberResizeSafeDismissRequest(
+        onDismissRequest = { viewModel.updateShowSortDialog(false) },
+    )
+
+    AlertDialog(
+        properties = transparentDialogProperties(),
+        onDismissRequest = resizeSafeDismiss,
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.SwapVert, contentDescription = null)
+                    Spacer(Modifier.size(8.dp))
+                    Text(stringResource(SharedRes.string.sort), style = MaterialTheme.typography.titleMedium)
+                }
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    sharedEnterpriseCategorySortFields.forEach { field ->
+                        val selected = viewModel.sortBy == field
+                        val label = field.displayName()
+                        ElevatedFilterChip(
+                            selected = selected,
+                            onClick = { viewModel.toggleSort(field) },
+                            label = {
+                                if (selected) {
+                                    SharedProductSortDirectionLabel(label = label, sortDir = viewModel.sortDir)
+                                } else {
+                                    Text(label)
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { viewModel.updateShowSortDialog(false) }) {
+                Text(stringResource(SharedRes.string.close))
+            }
+        }
+    )
+}
+
+@Composable
 fun FilterDialog(
     viewModel: CategoriesListViewModel = koinViewModel()
 ) {
@@ -398,6 +459,22 @@ private fun FilterChipsRow(
                 onClick = { viewModel.removeFilterCategory() },
                 label = { Text(stringResource(BusinessRes.string.parent_category_with_name, it.name)) },
                 trailingIcon = { SharedCloseIcon() }
+            )
+        }
+        viewModel.sortBy?.let { sortBy ->
+            ElevatedFilterChip(
+                selected = true,
+                onClick = {
+                    viewModel.updateSortDir(
+                        if (viewModel.sortDir == OrderDir.ASC) OrderDir.DESC else OrderDir.ASC
+                    )
+                },
+                label = {
+                    SharedProductSortDirectionLabel(
+                        label = "${stringResource(SharedRes.string.sort)}: ${sortBy.displayName()}",
+                        sortDir = viewModel.sortDir
+                    )
+                },
             )
         }
     }
