@@ -3,6 +3,8 @@ string|add_language_translation|5re75Yqg6K+t6KiA57+76K+R
 string|add_multilingual_translation|5re75Yqg5aSa6K+t6KiA57+76K+R
 string|all_languages_added|5bey5re75Yqg5omA5pyJ5pSv5oyB55qE6K+t6KiA
 string|base_category|5Z+656GA57G75Yir
+string|business_auxiliary_editor_title|5omp5bGV57yW6L6R5Zmo
+string|business_auxiliary_preview_title|5Lqn5ZOB6aKE6KeI
 string|category_management|57G75Yir566h55CG
 string|category_name_exists|57G75Yir5ZCN56ew5bey5a2Y5Zyo
 string|category_name_tax_setting|57G75Yir55qE5ZCN56ew5ZKM56iO546H6K6+572u
@@ -21,7 +23,7 @@ string|parent_category|54i257G75Yir
 string|platform_category|5bmz5Y+w57G75Yir
 string|please_input_category_name|6K+36L6T5YWl57G75Yir5ZCN56ew
 string|private_category|56eB5pyJ57G75Yir
-string|search_category|5pCc57Si57G75YirLi4u
+string|search_category|5pCc57Si5YiG57G75ZCN56ew
 string|select_parent_category_to_create|6YCJ5oup54i257G75Yir5Lul5Yib5bu65a2Q57G75Yir
 string|select_parent_category|6YCJ5oup54i257G75Yir
 string|subcategories_count|JTEkc+S4quWtkOexu+WIqw==
