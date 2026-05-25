@@ -259,7 +259,11 @@ class RegisterViewModel(
     }
 
     override fun sendCode() {
-        viewModelScope.launch { sendVerificationCode() }
+        viewModelScope.launch {
+            nextButtonUiState = UiState.Loading
+            sendVerificationCode()
+            nextButtonUiState = UiState.Idle
+        }
     }
 
     fun validateRegisterStep1(): Boolean {

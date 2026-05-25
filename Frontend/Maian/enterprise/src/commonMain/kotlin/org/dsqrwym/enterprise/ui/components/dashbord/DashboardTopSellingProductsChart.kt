@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.screens.dashboard
+package org.dsqrwym.enterprise.ui.components.dashbord
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background

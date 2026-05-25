@@ -3,12 +3,50 @@ package org.dsqrwym.enterprise.ui.components.product
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AttachMoney
+import androidx.compose.material.icons.outlined.EuroSymbol
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.LooksOne
+import androidx.compose.material.icons.outlined.NotificationImportant
+import androidx.compose.material.icons.outlined.PriceCheck
+import androidx.compose.material.icons.outlined.Scale
+import androidx.compose.material.icons.outlined.SwapHorizontalCircle
+import androidx.compose.material.icons.outlined._1xMobiledata
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -19,8 +57,29 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import maian.enterprise.generated.resources.*
-import maian.shared.generated.resources.*
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.add_product_variant
+import maian.enterprise.generated.resources.available_stock
+import maian.enterprise.generated.resources.enter_available_stock
+import maian.enterprise.generated.resources.enter_low_stock_threshold
+import maian.enterprise.generated.resources.enter_product_code
+import maian.enterprise.generated.resources.inventory_information
+import maian.enterprise.generated.resources.low_stock_threshold
+import maian.enterprise.generated.resources.price_information
+import maian.enterprise.generated.resources.products_added_variants_count
+import maian.enterprise.generated.resources.sale_unit
+import maian.enterprise.generated.resources.sale_unit_conversion
+import maian.enterprise.generated.resources.sales_information
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.add
+import maian.shared.generated.resources.field_optional
+import maian.shared.generated.resources.field_required
+import maian.shared.generated.resources.product_code
+import maian.shared.generated.resources.product_min_order_qty
+import maian.shared.generated.resources.product_price
+import maian.shared.generated.resources.product_price_with_vat
+import maian.shared.generated.resources.product_price_without_vat
+import maian.shared.generated.resources.status
 import org.dsqrwym.business.drawable.sharedicons.Barcode
 import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.business.ui.components.category.BusinessSelectedInfoCard
@@ -121,7 +180,7 @@ fun ProductVariantsFields(
             ReorderableItem(
                 modifier = Modifier.animateItem(),
                 state = reorderableState,
-                key = item.id ?: "",
+                key = item.id ?: Uuid.generateV4(),
             ) { isSelfDragging ->
                 VariantCard(
                     isLoading = isLoading,

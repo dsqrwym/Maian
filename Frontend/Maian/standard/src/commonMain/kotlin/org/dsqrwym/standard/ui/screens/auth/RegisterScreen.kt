@@ -183,7 +183,7 @@ fun RegisterScreen(
                         error = registerViewModel.usernameError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewUsername
@@ -206,7 +206,7 @@ fun RegisterScreen(
                         },
                         error = registerViewModel.passwordError.asString(),
                         imeAction = ImeAction.Next, onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword
@@ -224,7 +224,7 @@ fun RegisterScreen(
                         error = registerViewModel.repeatPasswordError.asString(),
                         imeAction = ImeAction.Next,
                         onImeAction = {
-                            focusManager.moveFocus(FocusDirection.Next)
+                            focusManager.moveFocus(FocusDirection.Down)
                         },
                         semanticsPropertyReceiver = {
                             contentType = ContentType.NewPassword
@@ -290,7 +290,7 @@ private fun AddressInputSection(
             },
             imeAction = ImeAction.Next,
             onImeAction = {
-                focusManager.moveFocus(FocusDirection.Next)
+                focusManager.moveFocus(FocusDirection.Down)
             },
         ),
     )
@@ -318,7 +318,7 @@ private fun AddressInputSection(
             },
             imeAction = ImeAction.Next,
             onImeAction = {
-                focusManager.moveFocus(FocusDirection.Next)
+                focusManager.moveFocus(FocusDirection.Down)
             },
         ),
     )
@@ -346,7 +346,7 @@ private fun AddressInputSection(
             },
             imeAction = ImeAction.Next,
             onImeAction = {
-                focusManager.moveFocus(FocusDirection.Next)
+                focusManager.moveFocus(FocusDirection.Down)
             },
         ),
     )
@@ -364,7 +364,7 @@ private fun AddressInputSection(
         },
         imeAction = ImeAction.Next,
         onImeAction = {
-            focusManager.moveFocus(FocusDirection.Next)
+            focusManager.moveFocus(FocusDirection.Down)
         },
         semanticsPropertyReceiver = {
             contentType = ContentType.AddressStreet

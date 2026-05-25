@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.screens.dashboard
+package org.dsqrwym.enterprise.ui.components.dashbord
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -39,6 +39,7 @@ import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.Insets
 import com.patrykandpatrick.vico.compose.common.component.ShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
+import com.patrykandpatrick.vico.compose.pie.PieChart
 import com.patrykandpatrick.vico.compose.pie.PieChartHost
 import com.patrykandpatrick.vico.compose.pie.PieSize
 import com.patrykandpatrick.vico.compose.pie.data.PieChartModelProducer
@@ -91,7 +92,7 @@ internal fun OrderStatusChart(data: DashboardResponse) {
         strokeFill = Fill(colors.outlineVariant.copy(alpha = 0.55f)),
         strokeThickness = 1.dp,
     )
-    val selectedLabel = com.patrykandpatrick.vico.compose.pie.PieChart.SliceLabel.Outside(
+    val selectedLabel = PieChart.SliceLabel.Outside(
         textComponent = rememberTextComponent(
             style = MaterialTheme.typography.labelSmall.copy(color = colors.onSurface),
             lineCount = 2,
@@ -105,9 +106,9 @@ internal fun OrderStatusChart(data: DashboardResponse) {
         maxWidthToBoundsRatio = 0.44f,
     )
     val sliceProvider = remember(entries, selectedIndex, selectedOffset, selectedStrokeThickness, colors.surface, selectedLabel) {
-        com.patrykandpatrick.vico.compose.pie.PieChart.SliceProvider.series(
+        PieChart.SliceProvider.series(
             entries.mapIndexed { index, entry ->
-                com.patrykandpatrick.vico.compose.pie.PieChart.Slice(
+                PieChart.Slice(
                     fill = Fill(entry.color.copy(alpha = if (selectedIndex == null || selectedIndex == index) 0.94f else 0.44f)),
                     strokeFill = Fill(
                         if (selectedIndex == index) entry.color.copy(alpha = 0.26f) else colors.surface.copy(alpha = 0.92f),

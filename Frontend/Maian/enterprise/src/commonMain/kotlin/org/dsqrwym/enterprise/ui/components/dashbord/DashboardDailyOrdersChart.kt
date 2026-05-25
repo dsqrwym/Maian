@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.screens.dashboard
+package org.dsqrwym.enterprise.ui.components.dashbord
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +18,7 @@ import com.patrykandpatrick.vico.compose.cartesian.layer.rememberColumnCartesian
 import com.patrykandpatrick.vico.compose.cartesian.marker.DefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.Insets
+import com.patrykandpatrick.vico.compose.common.Legend
 import com.patrykandpatrick.vico.compose.common.LegendItem
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
@@ -126,7 +127,7 @@ internal fun rememberDashboardOrdersLegend(
     acceptedOrdersLabel: String,
     totalOrdersColor: Color,
     acceptedOrdersColor: Color,
-): com.patrykandpatrick.vico.compose.common.Legend<CartesianMeasuringContext, CartesianDrawingContext> {
+): Legend<CartesianMeasuringContext, CartesianDrawingContext> {
     val colors = MaterialTheme.colorScheme
     val labelComponent = rememberTextComponent(
         style = MaterialTheme.typography.labelSmall.copy(color = colors.onSurfaceVariant),

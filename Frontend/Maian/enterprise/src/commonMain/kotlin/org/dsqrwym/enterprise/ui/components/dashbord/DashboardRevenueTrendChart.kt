@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.screens.dashboard
+package org.dsqrwym.enterprise.ui.components.dashbord
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme

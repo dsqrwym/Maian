@@ -35,6 +35,10 @@ import maian.enterprise.generated.resources.dashboard_top_selling_products
 import maian.enterprise.generated.resources.dashboard_total_orders
 import maian.enterprise.generated.resources.dashboard_total_revenue
 import org.dsqrwym.enterprise.data.dashboard.dto.DashboardResponse
+import org.dsqrwym.enterprise.ui.components.dashbord.DailyOrdersChart
+import org.dsqrwym.enterprise.ui.components.dashbord.OrderStatusChart
+import org.dsqrwym.enterprise.ui.components.dashbord.RevenueTrendChart
+import org.dsqrwym.enterprise.ui.components.dashbord.TopSellingProductsChart
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.formatter.asEuroAmount
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout

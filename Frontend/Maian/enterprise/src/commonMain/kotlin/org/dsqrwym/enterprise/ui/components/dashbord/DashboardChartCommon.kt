@@ -1,4 +1,4 @@
-package org.dsqrwym.enterprise.ui.screens.dashboard
+package org.dsqrwym.enterprise.ui.components.dashbord
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +37,7 @@ import com.patrykandpatrick.vico.compose.cartesian.rememberVicoScrollState
 import com.patrykandpatrick.vico.compose.cartesian.rememberVicoZoomState
 import com.patrykandpatrick.vico.compose.common.Fill
 import com.patrykandpatrick.vico.compose.common.Insets
+import com.patrykandpatrick.vico.compose.common.Legend
 import com.patrykandpatrick.vico.compose.common.ProvideVicoTheme
 import com.patrykandpatrick.vico.compose.common.component.ShapeComponent
 import com.patrykandpatrick.vico.compose.common.component.rememberLineComponent
@@ -64,7 +65,7 @@ internal fun DashboardCartesianChart(
     yValueFormatter: CartesianValueFormatter,
     markerValueFormatter: DefaultCartesianMarker.ValueFormatter,
     xLabelSpacing: Int,
-    legend: com.patrykandpatrick.vico.compose.common.Legend<CartesianMeasuringContext, CartesianDrawingContext>? = null,
+    legend: Legend<CartesianMeasuringContext, CartesianDrawingContext>? = null,
 ) {
     val marker = rememberDashboardCartesianMarker(markerValueFormatter)
     val colors = MaterialTheme.colorScheme

@@ -70,20 +70,36 @@ fun OrderItemsPanel(
     val pinning = orderItemsTablePinning(widthSizeClass)
 
     val columns = tableColumns<SharedOrderDetailItem, OrderItemColumn, OrderItemsTableData> {
-        column(OrderItemColumn.ProductName, valueOf = { it.orderDetailLocalizedProductName(languageCode) }) {
+        column(
+            OrderItemColumn.ProductName,
+            valueOf = { it.orderDetailLocalizedProductName(languageCode) }) {
             header(productNameText)
             sortable()
             autoWidth()
             footer {
-                OrderItemFooterCell(totalText, fontWeight = FontWeight.SemiBold, isLoading = isLoading)
+                OrderItemFooterCell(
+                    totalText,
+                    fontWeight = FontWeight.SemiBold,
+                    isLoading = isLoading
+                )
             }
-            orderItemTextCell(isLoading = isLoading) { it.orderDetailLocalizedProductName(languageCode) }
+            orderItemTextCell(isLoading = isLoading) {
+                it.orderDetailLocalizedProductName(
+                    languageCode
+                )
+            }
         }
-        column(OrderItemColumn.ProductTitle, valueOf = { it.orderDetailLocalizedProductTitle(languageCode).orEmpty() }) {
+        column(
+            OrderItemColumn.ProductTitle,
+            valueOf = { it.orderDetailLocalizedProductTitle(languageCode).orEmpty() }) {
             header(productTitleText)
             sortable()
             autoWidth()
-            orderItemTextCell(isLoading = isLoading) { it.orderDetailLocalizedProductTitle(languageCode).orEmpty() }
+            orderItemTextCell(isLoading = isLoading) {
+                it.orderDetailLocalizedProductTitle(
+                    languageCode
+                ).orEmpty()
+            }
         }
         column(OrderItemColumn.ProductCode, valueOf = { it.productCode }) {
             header(productCodeText)
@@ -107,31 +123,48 @@ fun OrderItemsPanel(
             header(saleUnitQtyText)
             sortable()
             autoWidth()
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.saleUnitQty.toString() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.saleUnitQty.toString() }
         }
         column(OrderItemColumn.Quantity, valueOf = { it.quantity }) {
             header(quantityText)
             sortable()
             autoWidth()
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.quantity.toString() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.quantity.toString() }
         }
         column(OrderItemColumn.UnitPrice, valueOf = { it.unitPrice.orderDetailAmountSortValue() }) {
             header(unitPriceText)
             sortable()
             autoWidth()
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.unitPrice.asEuroAmount() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.unitPrice.asEuroAmount() }
         }
-        column(OrderItemColumn.UnitPriceIva, valueOf = { it.unitPriceIva.orderDetailAmountSortValue() }) {
+        column(
+            OrderItemColumn.UnitPriceIva,
+            valueOf = { it.unitPriceIva.orderDetailAmountSortValue() }) {
             header(unitPriceIvaText)
             sortable()
             autoWidth()
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.unitPriceIva.asEuroAmount() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.unitPriceIva.asEuroAmount() }
         }
         column(OrderItemColumn.Iva, valueOf = { it.iva.orderDetailAmountSortValue() }) {
             header(ivaText)
             sortable()
             autoWidth()
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.iva.asTaxRatePercent() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.iva.asTaxRatePercent() }
         }
         column(OrderItemColumn.Subtotal, valueOf = { it.subtotal.orderDetailAmountSortValue() }) {
             header(subtotalText)
@@ -154,7 +187,10 @@ fun OrderItemsPanel(
                     isLoading = isLoading,
                 )
             }
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.subtotal.asEuroAmount() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.subtotal.asEuroAmount() }
         }
         column(OrderItemColumn.IvaTotal, valueOf = { it.ivaTotal.orderDetailAmountSortValue() }) {
             header(ivaTotalText)
@@ -168,7 +204,10 @@ fun OrderItemsPanel(
                     isLoading = isLoading,
                 )
             }
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.ivaTotal.asEuroAmount() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.ivaTotal.asEuroAmount() }
         }
         column(OrderItemColumn.Total, valueOf = { it.total.orderDetailAmountSortValue() }) {
             header(totalText)
@@ -183,7 +222,10 @@ fun OrderItemsPanel(
                     isLoading = isLoading,
                 )
             }
-            orderItemTextCell(isLoading = isLoading, alignment = Alignment.CenterEnd) { it.total.asEuroAmount() }
+            orderItemTextCell(
+                isLoading = isLoading,
+                alignment = Alignment.CenterEnd
+            ) { it.total.asEuroAmount() }
         }
     }
 
@@ -215,7 +257,7 @@ fun OrderItemsPanel(
         itemAt = { index -> sortedItems.getOrNull(index) },
         columns = columns,
         tableData = tableData,
-        rowKey = { item, index -> item?.id ?: "order-item-$index" },
+        rowKey = { item, index -> "order-item-${item?.id ?: index}" },
         state = tableState,
         placeholderRow = {
             SharedLoadingDotsIndicator()
@@ -283,7 +325,8 @@ fun BoxScope.OrderItemFooterCell(
 ) {
     Text(
         text = text,
-        modifier = Modifier.align(alignment).padding(horizontal = 6.dp).placeholderWithShimmer(isLoading),
+        modifier = Modifier.align(alignment).padding(horizontal = 6.dp)
+            .placeholderWithShimmer(isLoading),
         style = MaterialTheme.typography.labelMedium,
         fontWeight = fontWeight,
         color = if (colorEmphasis) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
@@ -301,9 +344,11 @@ fun List<SharedOrderDetailItem>.orderDetailSortedItems(
         OrderItemColumn.ProductName -> compareBy<SharedOrderDetailItem> {
             it.orderDetailLocalizedProductName(languageCode).lowercase()
         }
+
         OrderItemColumn.ProductTitle -> compareBy {
             it.orderDetailLocalizedProductTitle(languageCode).orEmpty().lowercase()
         }
+
         OrderItemColumn.ProductCode -> compareBy { it.productCode.lowercase() }
         OrderItemColumn.VariantProductCode -> compareBy { it.variantProductCode.lowercase() }
         OrderItemColumn.SaleType -> compareBy { it.typeSale.name }

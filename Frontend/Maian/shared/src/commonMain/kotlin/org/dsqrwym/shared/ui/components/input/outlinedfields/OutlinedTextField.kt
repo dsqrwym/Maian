@@ -9,8 +9,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusRequester
@@ -23,6 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.icon_content_description_lock
 import maian.shared.generated.resources.icon_content_description_password_toggle_visibility
@@ -123,7 +132,7 @@ fun MyOutlinedTextField(
             .semantics(properties = semanticsPropertyReceiver),
         value = value,
         onValueChange = onValueChange,
-        label = labelText?.let { { Text(it) } },
+        label = labelText?.let { { Text(text = it, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
         placeholder = placeholderText?.let {
             {
                 if (singleLine) {

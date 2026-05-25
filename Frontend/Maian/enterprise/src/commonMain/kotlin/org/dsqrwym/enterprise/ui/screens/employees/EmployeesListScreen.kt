@@ -209,7 +209,7 @@ fun EmployeesListScreen(
                     } else {
                         items(
                             count = pagingItems.itemCount,
-                            key = pagingItems.itemKey { it.id },
+                            key = pagingItems.itemKey { "employee-key-${it.id}" },
                         ) { index ->
                             pagingItems[index]?.let { employee ->
                                 EmployeeCard(

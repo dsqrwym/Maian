@@ -107,7 +107,11 @@ class SharedResetPasswordViewModel(
     }
 
     override fun sendCode() {
-        viewModelScope.launch { sendVerificationCode() }
+        viewModelScope.launch {
+            resetPasswordUiState = UiState.Loading
+            sendVerificationCode()
+            resetPasswordUiState = UiState.Idle
+        }
     }
 
     private suspend fun sendVerificationCode() {

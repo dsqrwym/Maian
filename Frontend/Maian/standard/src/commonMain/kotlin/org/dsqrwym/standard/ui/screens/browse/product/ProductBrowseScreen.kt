@@ -315,7 +315,7 @@ private fun PaginatedProductGrid(
         scrollBehavior = scrollBehavior,
         padding = padding,
         includeMenuTopPadding = true,
-        key = paginatedProducts.itemKey { it.id },
+        key = paginatedProducts.itemKey { "product-key-${it.id}" },
     ) {
         SharedReadOnlyProductCard(
             isLoading = paginatedProducts.isRefreshing,

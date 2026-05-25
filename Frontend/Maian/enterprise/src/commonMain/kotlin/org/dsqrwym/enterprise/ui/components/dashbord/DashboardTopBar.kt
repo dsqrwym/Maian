@@ -1,11 +1,8 @@
-package org.dsqrwym.enterprise.ui.screens.dashboard
+package org.dsqrwym.enterprise.ui.components.dashbord
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -15,12 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.dashboard_end_date
 import maian.enterprise.generated.resources.dashboard_start_date
-import maian.enterprise.generated.resources.dashboard_title
 import maian.enterprise.generated.resources.dashboard_top_selling_products
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.order_end_date
@@ -43,44 +38,34 @@ internal fun DashboardTopBarFilters(
     onEndDateClick: () -> Unit,
     onTopLimitChange: (Int?) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.spacedBy(8.dp),
+        itemVerticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = stringResource(EnterpriseRes.string.dashboard_title),
-            fontWeight = FontWeight.SemiBold,
+        DashboardDateButton(
+            label = stringResource(EnterpriseRes.string.dashboard_start_date),
+            value = state.startDate,
+            enabled = !state.initialLoading,
+            onClick = onStartDateClick,
         )
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            itemVerticalAlignment = Alignment.CenterVertically,
-        ) {
-            DashboardDateButton(
-                label = stringResource(EnterpriseRes.string.dashboard_start_date),
-                value = state.startDate,
+        DashboardDateButton(
+            label = stringResource(EnterpriseRes.string.dashboard_end_date),
+            value = state.endDate,
+            enabled = !state.initialLoading,
+            onClick = onEndDateClick,
+        )
+        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+            MyOutlinedIntegerField(
+                modifier = Modifier.widthIn(min = 112.dp, max = 232.dp),
+                modifierFillMaxWidth = false,
+                value = state.topLimit.toString(),
+                onValueChange = onTopLimitChange,
+                labelText = stringResource(EnterpriseRes.string.dashboard_top_selling_products),
+                min = 5,
+                max = 20,
                 enabled = !state.initialLoading,
-                onClick = onStartDateClick,
             )
-            DashboardDateButton(
-                label = stringResource(EnterpriseRes.string.dashboard_end_date),
-                value = state.endDate,
-                enabled = !state.initialLoading,
-                onClick = onEndDateClick,
-            )
-            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-                MyOutlinedIntegerField(
-                    modifier = Modifier.widthIn(min = 112.dp, max = 132.dp),
-                    modifierFillMaxWidth = false,
-                    value = state.topLimit.toString(),
-                    onValueChange = onTopLimitChange,
-                    labelText = stringResource(EnterpriseRes.string.dashboard_top_selling_products),
-                    min = 5,
-                    max = 20,
-                    enabled = !state.initialLoading,
-                )
-            }
         }
     }
 }
@@ -96,7 +81,10 @@ internal fun DashboardDateButton(
         enabled = enabled,
         onClick = onClick,
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(label)
             Text(value.toDisplayDate())
         }

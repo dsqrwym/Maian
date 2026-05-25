@@ -188,7 +188,7 @@ fun CategoriesListScreen(
 
                         items(
                             lazyPagingItems.itemCount,
-                            key = lazyPagingItems.itemKey { it.id }) { index ->
+                            key = lazyPagingItems.itemKey { "category-key${it.id}" }) { index ->
                             lazyPagingItems[index]?.let {
                                 CategoryListItem(
                                     modifier = Modifier.animateItem(),

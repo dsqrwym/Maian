@@ -45,6 +45,7 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
     install(HttpTimeout) {
         connectTimeoutMillis = ApiConfig.CONNECT_TIMEOUT_MILLIS
         requestTimeoutMillis = ApiConfig.REQUEST_TIMEOUT_MILLIS
+        socketTimeoutMillis = ApiConfig.SOCKET_TIMEOUT_MILLIS
     }
     if (ApiConfig.ENABLE_LOGGING) {
         install(Logging) { level = LogLevel.ALL }
