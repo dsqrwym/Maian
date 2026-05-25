@@ -2,9 +2,9 @@ import type { AnyColumn, SQL } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 
 /**
- * 用于 设置数据库当前 UTC 时间
+ * 用于 设置数据库当前 时间
  */
-export const SQL_NOW = sql`(NOW() AT TIME ZONE 'UTC')`;
+export const SQL_NOW = sql`NOW()`;
 /**
  * 用于 drizzle select exit 的 from 临时表的占位符
  */

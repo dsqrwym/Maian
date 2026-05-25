@@ -7,9 +7,10 @@ import type { IUploadFileForWholesalerDto } from './dto/upload-file-for-wholesal
 import { UserRole } from '#/generated/drizzle/enums.js';
 import { DrizzleDb, DrizzleService } from '#/drizzle/drizzle.service.js';
 import { files, user_uploads, users } from '#/generated/drizzle/schema.js';
-import { and, eq, isNotNull, sql } from 'drizzle-orm';
+import { and, eq, isNotNull } from 'drizzle-orm';
 import { FILE_ERROR } from './constants/files.constants.js';
 import { streamToBuffer } from '#/utils/order-pdf.utils.js';
+import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()
 export class FilesService {
@@ -23,7 +24,7 @@ export class FilesService {
       .values({ user_id, file_id })
       .onConflictDoUpdate({
         target: [user_uploads.user_id, user_uploads.file_id],
-        set: { created_at: sql`(NOW() AT TIME ZONE 'UTC')` },
+        set: { created_at: SQL_NOW },
       });
 
   async uploadGeneratedFile(buffer: Buffer | Readable, filename: string) {

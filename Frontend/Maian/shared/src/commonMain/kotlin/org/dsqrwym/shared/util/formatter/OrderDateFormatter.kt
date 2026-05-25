@@ -13,10 +13,17 @@ import kotlin.time.Instant
 
 expect fun formatIsoDateForLocale(isoDate: String, localeTag: String): String?
 
+expect fun formatIsoDateFromDateTimeForLocale(value: String, localeTag: String): String?
+
 expect fun formatIsoDateTimeForLocale(value: String, localeTag: String): String?
 
-fun String.toDisplayDate(): String =
-    toIsoDate()?.let { formatIsoDateForLocale(it, LanguageManager.getCurrentLanguage()) ?: it } ?: this
+fun String.toDisplayDate(): String {
+    val localeTag = LanguageManager.getCurrentLanguage()
+    if (hasTimePart()) {
+        formatIsoDateFromDateTimeForLocale(this, localeTag)?.let { return it }
+    }
+    return toIsoDate()?.let { formatIsoDateForLocale(it, localeTag) ?: it } ?: this
+}
 
 fun String.toDisplayDateTime(): String {
     val localeTag = LanguageManager.getCurrentLanguage()
@@ -30,6 +37,18 @@ fun String.toDisplayDateTime(): String {
 
 fun String.toIsoDate(): String? =
     takeIf { it.length >= 10 }?.take(10)
+
+internal fun String.normalizeIsoDateTimeForParsing(): String {
+    var normalized = trim().replace(' ', 'T')
+    normalized = normalized.replace(Regex("""^(\d{4}-\d{2}-\d{2})T(.+)T([+-]\d{2}:?\d{0,2})$"""), "$1T$2$3")
+    normalized = normalized.replace(Regex("""\.(\d{3})\d+"""), ".$1")
+    normalized = normalized.replace(Regex("""([+-]\d{2})$"""), "$1:00")
+    normalized = normalized.replace(Regex("""([+-]\d{2})(\d{2})$"""), "$1:$2")
+    return normalized
+}
+
+private fun String.hasTimePart(): Boolean =
+    length > 10 && (getOrNull(10) == 'T' || getOrNull(10) == ' ')
 
 fun String.toUtcDateMillis(): Long? =
     runCatching { LocalDate.parse(this).atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds() }.getOrNull()

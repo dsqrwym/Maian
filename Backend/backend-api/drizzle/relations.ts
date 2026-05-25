@@ -3,9 +3,9 @@ import {
   countries,
   provinces,
   currencies,
-  cities,
   users,
   categories,
+  cities,
   variant_products,
   products,
   discounts,
@@ -55,14 +55,6 @@ export const countriesRelations = relations(countries, ({ one, many }) => ({
 
 export const currenciesRelations = relations(currencies, ({ many }) => ({
   countries: many(countries),
-}));
-
-export const citiesRelations = relations(cities, ({ one, many }) => ({
-  province: one(provinces, {
-    fields: [cities.province_id],
-    references: [provinces.id],
-  }),
-  directions: many(directions),
 }));
 
 export const categoriesRelations = relations(categories, ({ one, many }) => ({
@@ -168,6 +160,14 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   document_sequences: many(document_sequences),
   category_translations: many(category_translations),
   product_translations: many(product_translations),
+}));
+
+export const citiesRelations = relations(cities, ({ one, many }) => ({
+  province: one(provinces, {
+    fields: [cities.province_id],
+    references: [provinces.id],
+  }),
+  directions: many(directions),
 }));
 
 export const variant_productsRelations = relations(

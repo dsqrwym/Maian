@@ -1,25 +1,25 @@
 import {
   pgTable,
+  index,
   foreignKey,
+  unique,
   serial,
   smallint,
   varchar,
-  unique,
   char,
-  integer,
-  index,
   check,
   bigint,
-  text,
-  timestamp,
-  boolean,
-  uniqueIndex,
   uuid,
   numeric,
+  timestamp,
+  text,
+  integer,
+  boolean,
   jsonb,
   date,
   doublePrecision,
   primaryKey,
+  uniqueIndex,
   pgSequence,
   pgEnum,
 } from 'drizzle-orm/pg-core';
@@ -120,6 +120,11 @@ export const provinces = pgTable(
     name_local: varchar({ length: 100 }).notNull(),
   },
   (table) => [
+    index('idx_provinces_country_iso_name').using(
+      'btree',
+      table.country_iso.asc().nullsLast().op('text_ops'),
+      table.name.asc().nullsLast().op('text_ops'),
+    ),
     foreignKey({
       columns: [table.country_iso],
       foreignColumns: [countries.iso_numeric],
@@ -127,6 +132,7 @@ export const provinces = pgTable(
     })
       .onUpdate('cascade')
       .onDelete('cascade'),
+    unique('provinces_id_country_unique').on(table.id, table.country_iso),
   ],
 );
 
@@ -154,59 +160,6 @@ export const countries = pgTable(
   ],
 );
 
-export const cities = pgTable(
-  'cities',
-  {
-    id: serial().primaryKey().notNull(),
-    province_id: integer().notNull(),
-    name: varchar({ length: 100 }).notNull(),
-    name_local: varchar({ length: 100 }).notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.province_id],
-      foreignColumns: [provinces.id],
-      name: 'cities_province_id_fkey',
-    }).onDelete('cascade'),
-  ],
-);
-
-export const files = pgTable(
-  'files',
-  {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
-      name: 'files_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      cache: 1,
-    }),
-    file_name: varchar().notNull(),
-    file_hash: varchar({ length: 64 }).notNull(),
-    mime_type: varchar({ length: 128 }).notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    file_size: bigint({ mode: 'bigint' }).notNull(),
-    storage_key: text().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
-      .notNull(),
-    to_delete: boolean().default(false).notNull(),
-    cloud_synced: boolean().default(true).notNull(),
-  },
-  (table) => [
-    index('idx_files_created_at').using(
-      'btree',
-      table.created_at.asc().nullsLast().op('timestamp_ops'),
-    ),
-    unique('files_file_hash_key').on(table.file_hash),
-    check(
-      'files_file_name_check',
-      sql`(file_name)::text ~* '^[^\\/:\*\?"<>\|]{1,255}\.[a-z0-9]+$'::text`,
-    ),
-  ],
-);
-
 export const categories = pgTable(
   'categories',
   {
@@ -223,97 +176,49 @@ export const categories = pgTable(
     iva: numeric({ precision: 5, scale: 2 }),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     parent_id: bigint({ mode: 'bigint' }),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     level: smallint().notNull(),
     name_unaccent: text().generatedAlwaysAs(
       sql`immutable_unaccent((name)::text)`,
     ),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     created_by: uuid(),
     updated_by: uuid(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     version: bigint({ mode: 'bigint' }).default(1n).notNull(),
-    deleted_at: timestamp({ mode: 'string' }),
+    deleted_at: timestamp({ withTimezone: true, mode: 'string' }),
   },
   (table) => [
-    uniqueIndex('categories_name_unique_public')
-      .using('btree', table.name.asc().nullsLast().op('text_ops'))
-      .where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
-    uniqueIndex('categories_user_name_unique_private')
-      .using(
-        'btree',
-        table.user_id.asc().nullsLast().op('uuid_ops'),
-        table.name.asc().nullsLast().op('uuid_ops'),
-      )
-      .where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_level_id').using(
       'btree',
-      table.level.asc().nullsLast().op('int8_ops'),
-      table.id.asc().nullsLast().op('int2_ops'),
+      table.level.asc().nullsLast().op('int2_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
     ),
     index('idx_categories_name_unaccent').using(
       'btree',
       sql`lower(name_unaccent)`,
     ),
-    index('idx_categories_name_unaccent_trgm')
-      .using('gin', table.name_unaccent.asc().nullsLast().op('gin_trgm_ops'))
-      .where(sql`(deleted_at IS NULL)`),
-    index('idx_categories_parent_id')
-      .using('btree', table.parent_id.asc().nullsLast().op('int8_ops'))
-      .where(sql`(deleted_at IS NULL)`),
     index('idx_categories_parent_id_id').using(
       'btree',
       table.parent_id.asc().nullsLast().op('int8_ops'),
       table.id.asc().nullsLast().op('int8_ops'),
     ),
-    index('idx_categories_private_user_level_name')
-      .using(
-        'btree',
-        table.user_id.asc().nullsLast().op('text_ops'),
-        table.level.asc().nullsLast().op('uuid_ops'),
-        table.name.asc().nullsLast().op('int2_ops'),
-      )
-      .where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
-    index('idx_categories_private_user_parent_name')
-      .using(
-        'btree',
-        table.user_id.asc().nullsLast().op('uuid_ops'),
-        table.parent_id.asc().nullsLast().op('text_ops'),
-        table.name.asc().nullsLast().op('uuid_ops'),
-      )
-      .where(sql`((user_id IS NOT NULL) AND (deleted_at IS NULL))`),
-    index('idx_categories_public_level_name')
-      .using(
-        'btree',
-        table.level.asc().nullsLast().op('text_ops'),
-        table.name.asc().nullsLast().op('text_ops'),
-      )
-      .where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_public_parent_level_name_all')
       .using(
         'btree',
-        table.parent_id.asc().nullsLast().op('text_ops'),
-        table.level.asc().nullsLast().op('text_ops'),
-        table.name.asc().nullsLast().op('int8_ops'),
+        table.parent_id.asc().nullsLast().op('int8_ops'),
+        table.level.asc().nullsLast().op('int2_ops'),
+        table.name.asc().nullsLast().op('text_ops'),
       )
       .where(sql`(user_id IS NULL)`),
-    index('idx_categories_public_parent_name')
-      .using(
-        'btree',
-        table.parent_id.asc().nullsLast().op('int8_ops'),
-        table.name.asc().nullsLast().op('int8_ops'),
-      )
-      .where(sql`((user_id IS NULL) AND (deleted_at IS NULL))`),
     index('idx_categories_user_parent_level_name').using(
       'btree',
-      table.user_id.asc().nullsLast().op('uuid_ops'),
+      table.user_id.asc().nullsLast().op('int2_ops'),
       table.parent_id.asc().nullsLast().op('text_ops'),
-      table.level.asc().nullsLast().op('text_ops'),
-      table.name.asc().nullsLast().op('uuid_ops'),
+      table.level.asc().nullsLast().op('int2_ops'),
+      table.name.asc().nullsLast().op('text_ops'),
     ),
     foreignKey({
       columns: [table.created_by],
@@ -340,6 +245,77 @@ export const categories = pgTable(
   ],
 );
 
+export const cities = pgTable(
+  'cities',
+  {
+    id: serial().primaryKey().notNull(),
+    province_id: integer().notNull(),
+    name: varchar({ length: 100 }).notNull(),
+    name_local: varchar({ length: 100 }).notNull(),
+  },
+  (table) => [
+    index('idx_cities_province_id_name').using(
+      'btree',
+      table.province_id.asc().nullsLast().op('int4_ops'),
+      table.name.asc().nullsLast().op('int4_ops'),
+    ),
+    foreignKey({
+      columns: [table.province_id],
+      foreignColumns: [provinces.id],
+      name: 'cities_province_id_fkey',
+    }).onDelete('cascade'),
+    unique('cities_id_province_unique').on(table.id, table.province_id),
+  ],
+);
+
+export const files = pgTable(
+  'files',
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedByDefaultAsIdentity({
+      name: 'files_id_seq',
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      cache: 1,
+    }),
+    file_name: varchar().notNull(),
+    file_hash: varchar({ length: 64 }).notNull(),
+    mime_type: varchar({ length: 128 }).notNull(),
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    file_size: bigint({ mode: 'bigint' }).notNull(),
+    storage_key: text().notNull(),
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
+    to_delete: boolean().default(false).notNull(),
+    cloud_synced: boolean().default(true).notNull(),
+  },
+  (table) => [
+    index('idx_files_cleanup_mark').using(
+      'btree',
+      table.to_delete.asc().nullsLast().op('bool_ops'),
+      table.created_at.asc().nullsLast().op('timestamptz_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
+    ),
+    index('idx_files_created_at').using(
+      'btree',
+      table.created_at.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('idx_files_sync_cloud_false')
+      .using('btree', table.id.asc().nullsLast().op('int8_ops'))
+      .where(sql`((cloud_synced = false) AND (to_delete = false))`),
+    index('idx_files_sync_cloud_true')
+      .using('btree', table.id.asc().nullsLast().op('int8_ops'))
+      .where(sql`((cloud_synced = true) AND (to_delete = false))`),
+    unique('files_file_hash_key').on(table.file_hash),
+    check(
+      'files_file_name_check',
+      sql`(file_name)::text ~* '^[^\\/:\*\?"<>\|]{1,255}\.[a-z0-9]+$'::text`,
+    ),
+  ],
+);
+
 export const variant_products = pgTable(
   'variant_products',
   {
@@ -351,8 +327,8 @@ export const variant_products = pgTable(
       minValue: 1,
       cache: 1,
     }),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     product_id: bigint({ mode: 'bigint' }).notNull(),
@@ -368,17 +344,25 @@ export const variant_products = pgTable(
     low_stock_threshold: integer().default(0).notNull(),
     sale_unit_qty: integer().default(1).notNull(),
     min_order_qty: integer().default(1).notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     created_by: uuid(),
     updated_by: uuid(),
   },
   (table) => [
+    index('idx_variant_products_product_code_trgm').using(
+      'gin',
+      table.product_code.asc().nullsLast().op('gin_trgm_ops'),
+    ),
     index('idx_variant_products_product_id_price_iva').using(
       'btree',
-      table.product_id.asc().nullsLast().op('int8_ops'),
+      table.product_id.asc().nullsLast().op('numeric_ops'),
       table.price_iva.asc().nullsLast().op('int8_ops'),
+    ),
+    index('idx_variant_products_product_status').using(
+      'btree',
+      table.product_id.asc().nullsLast().op('int8_ops'),
+      table.status.asc().nullsLast().op('int8_ops'),
+      table.id.asc().nullsLast().op('enum_ops'),
     ),
     foreignKey({
       columns: [table.created_by],
@@ -428,8 +412,8 @@ export const chat_panels = pgTable('chat_panels', {
     cache: 1,
   }),
   name: varchar({ length: 50 }).notNull(),
-  created_at: timestamp({ mode: 'string' })
-    .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+  created_at: timestamp({ withTimezone: true, mode: 'string' })
+    .defaultNow()
     .notNull(),
 });
 
@@ -453,8 +437,8 @@ export const discounts = pgTable(
     status: smallint()
       .default(sql`'1'`)
       .notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
   },
   (table) => [
@@ -523,9 +507,11 @@ export const products_files = pgTable(
       'btree',
       table.file_id.asc().nullsLast().op('int8_ops'),
     ),
-    index('idx_products_files_product_id').using(
+    index('idx_products_files_product_sort_file').using(
       'btree',
       table.product_id.asc().nullsLast().op('int8_ops'),
+      table.sort.asc().nullsLast().op('int8_ops'),
+      table.file_id.asc().nullsLast().op('int2_ops'),
     ),
     foreignKey({
       columns: [table.file_id],
@@ -571,15 +557,15 @@ export const deliveries = pgTable(
     order_id: bigint({ mode: 'bigint' }).notNull(),
     delivery_person: uuid(),
     status: DeliveryStatus().default('PENDING').notNull(),
-    start_time: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    start_time: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    end_time: timestamp({ mode: 'string' }),
+    end_time: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     notes: text().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     latitude: doublePrecision().notNull(),
     longitude: doublePrecision().notNull(),
   },
@@ -623,16 +609,22 @@ export const directions = pgTable(
     zip_code: varchar({ length: 10 }).notNull(),
     latitude: doublePrecision(),
     longitude: doublePrecision(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
   },
   (table) => [
+    index('idx_directions_user_type_id').using(
+      'btree',
+      table.user_id.asc().nullsLast().op('int8_ops'),
+      table.type.asc().nullsLast().op('int8_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
+    ),
     foreignKey({
-      columns: [table.city_id],
-      foreignColumns: [cities.id],
-      name: 'directions_city_id_fkey',
+      columns: [table.city_id, table.province_id],
+      foreignColumns: [cities.id, cities.province_id],
+      name: 'directions_city_province_fkey',
     }).onDelete('restrict'),
     foreignKey({
       columns: [table.country_iso],
@@ -642,9 +634,9 @@ export const directions = pgTable(
       .onUpdate('cascade')
       .onDelete('restrict'),
     foreignKey({
-      columns: [table.province_id],
-      foreignColumns: [provinces.id],
-      name: 'directions_province_id_fkey',
+      columns: [table.province_id, table.country_iso],
+      foreignColumns: [provinces.id, provinces.country_iso],
+      name: 'directions_province_country_fkey',
     }).onDelete('restrict'),
     foreignKey({
       columns: [table.user_id],
@@ -671,13 +663,11 @@ export const products = pgTable(
     description: text(),
     iva: numeric({ precision: 5, scale: 2 }).notNull(),
     status: ProductStatus().default('ACTIVE').notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     product_code: varchar({ length: 50 }).notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     created_by: uuid(),
     updated_by: uuid(),
     name_unaccent: text().generatedAlwaysAs(
@@ -688,26 +678,30 @@ export const products = pgTable(
     ),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     version: bigint({ mode: 'bigint' }).default(1n).notNull(),
-    deleted_at: timestamp({ mode: 'string' }),
+    deleted_at: timestamp({ withTimezone: true, mode: 'string' }),
   },
   (table) => [
-    index('idx_products_name_unaccent').using(
-      'btree',
-      sql`lower(name_unaccent)`,
+    index('idx_products_name_unaccent_trgm_new').using(
+      'gin',
+      table.name_unaccent.asc().nullsLast().op('gin_trgm_ops'),
+    ),
+    index('idx_products_product_code_trgm').using(
+      'gin',
+      table.product_code.asc().nullsLast().op('gin_trgm_ops'),
     ),
     index('idx_products_status_id').using(
       'btree',
-      table.status.asc().nullsLast().op('enum_ops'),
-      table.id.asc().nullsLast().op('int8_ops'),
+      table.status.asc().nullsLast().op('int8_ops'),
+      table.id.asc().nullsLast().op('enum_ops'),
     ),
-    index('idx_products_title_unaccent').using(
-      'btree',
-      sql`lower(title_unaccent)`,
+    index('idx_products_title_unaccent_trgm_new').using(
+      'gin',
+      table.title_unaccent.asc().nullsLast().op('gin_trgm_ops'),
     ),
     index('idx_products_user_id_id').using(
       'btree',
       table.user_id.asc().nullsLast().op('int8_ops'),
-      table.id.asc().nullsLast().op('uuid_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
     ),
     index('idx_products_user_status_id').using(
       'btree',
@@ -752,8 +746,8 @@ export const delivery_timeline = pgTable(
     delivery_id: bigint({ mode: 'bigint' }),
     status: DeliveryStatus().notNull(),
     notes: text(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     latitude: doublePrecision().notNull(),
     longitude: doublePrecision().notNull(),
@@ -784,8 +778,8 @@ export const messages = pgTable(
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     reply_to: bigint({ mode: 'bigint' }).default(sql`'-1'`),
     content: text(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     is_read: boolean().default(false).notNull(),
   },
@@ -825,8 +819,8 @@ export const notifications = pgTable(
     type: smallint().notNull(),
     is_read: boolean().default(false).notNull(),
     click_action: varchar({ length: 255 }).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
   },
   (table) => [
@@ -852,14 +846,26 @@ export const user_sessions = pgTable(
     revoked: boolean().default(false).notNull(),
     last_ip: varchar({ length: 50 }).notNull(),
     refresh_token: text(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    last_active: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    last_active: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
   },
   (table) => [
+    index('idx_user_sessions_active_user')
+      .using('btree', table.user_id.asc().nullsLast().op('uuid_ops'))
+      .where(sql`(revoked = false)`),
+    index('idx_user_sessions_last_active').using(
+      'btree',
+      table.last_active.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('idx_user_sessions_user_last_active').using(
+      'btree',
+      table.user_id.asc().nullsLast().op('timestamptz_ops'),
+      table.last_active.asc().nullsLast().op('timestamptz_ops'),
+    ),
     foreignKey({
       columns: [table.user_id],
       foreignColumns: [users.id],
@@ -878,28 +884,41 @@ export const verification_tokens = pgTable(
       .notNull(),
     user_id: uuid().notNull(),
     token: varchar({ length: 255 }).notNull(),
-    expires_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    expires_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     is_used: boolean().default(false).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
     attempts: smallint().default(0).notNull(),
   },
   (table) => [
-    index('password_reset_tokens_token_idx').using(
-      'btree',
-      table.token.asc().nullsLast().op('text_ops'),
-    ),
-    index('password_reset_tokens_user_id_idx').using(
-      'btree',
-      table.user_id.asc().nullsLast().op('uuid_ops'),
-    ),
+    index('idx_verification_tokens_cleanup_expired')
+      .using('btree', table.expires_at.asc().nullsLast().op('timestamptz_ops'))
+      .where(sql`(is_used = false)`),
+    index('idx_verification_tokens_cleanup_used')
+      .using('btree', table.id.asc().nullsLast().op('uuid_ops'))
+      .where(sql`(is_used = true)`),
+    index('idx_verification_tokens_user_unused_expires_created')
+      .using(
+        'btree',
+        table.user_id.asc().nullsLast().op('uuid_ops'),
+        table.expires_at.desc().nullsFirst().op('timestamptz_ops'),
+        table.created_at.desc().nullsFirst().op('timestamptz_ops'),
+      )
+      .where(sql`(is_used = false)`),
+    index('idx_verification_tokens_user_unused_recent')
+      .using(
+        'btree',
+        table.user_id.asc().nullsLast().op('uuid_ops'),
+        table.created_at.desc().nullsFirst().op('uuid_ops'),
+      )
+      .where(sql`(is_used = false)`),
     index('verification_tokens_user_id_token_idx').using(
       'btree',
-      table.user_id.asc().nullsLast().op('text_ops'),
-      table.token.asc().nullsLast().op('text_ops'),
+      table.user_id.asc().nullsLast().op('uuid_ops'),
+      table.token.asc().nullsLast().op('uuid_ops'),
     ),
     foreignKey({
       columns: [table.user_id],
@@ -925,12 +944,10 @@ export const users = pgTable(
     telephone: varchar({ length: 25 }),
     status: UserStatus().default('PENDING_VERIFICATION').notNull(),
     profile: jsonb(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     role: UserRole().notNull(),
     tax_id: varchar({ length: 20 }),
     updated_by: uuid(),
@@ -938,10 +955,51 @@ export const users = pgTable(
     profile_image_file_id: bigint({ mode: 'bigint' }),
   },
   (table) => [
+    index('idx_users_profile_image_file_id')
+      .using(
+        'btree',
+        table.profile_image_file_id.asc().nullsLast().op('int8_ops'),
+      )
+      .where(sql`(profile_image_file_id IS NOT NULL)`),
+    index('idx_users_role_status_created_at').using(
+      'btree',
+      table.role.asc().nullsLast().op('timestamptz_ops'),
+      table.status.asc().nullsLast().op('timestamptz_ops'),
+      table.created_at.desc().nullsFirst().op('timestamptz_ops'),
+      table.id.asc().nullsLast().op('timestamptz_ops'),
+    ),
+    index('idx_users_role_tax_id')
+      .using(
+        'btree',
+        table.role.asc().nullsLast().op('enum_ops'),
+        table.tax_id.asc().nullsLast().op('text_ops'),
+      )
+      .where(sql`(tax_id IS NOT NULL)`),
     index('idx_users_wholesaler_active_id')
       .using('btree', table.id.asc().nullsLast().op('uuid_ops'))
       .where(
         sql`((role = 'WHOLESALER'::"UserRole") AND (status <> ALL (ARRAY['PENDING_REVIEW'::"UserStatus", 'PENDING_VERIFICATION'::"UserStatus", 'BANNED'::"UserStatus", 'INACTIVE'::"UserStatus"])))`,
+      ),
+    index('idx_users_wholesaler_company_type')
+      .using('btree', sql`((profile ->> 'company_type'::text))`)
+      .where(sql`(role = 'WHOLESALER'::"UserRole")`),
+    index('idx_users_wholesaler_delivery_available')
+      .using(
+        'btree',
+        sql`(((profile ->> 'delivery_available'::text))::boolean)`,
+      )
+      .where(sql`(role = 'WHOLESALER'::"UserRole")`),
+    index('idx_users_wholesaler_pickup_available')
+      .using('btree', sql`(((profile ->> 'pickup_available'::text))::boolean)`)
+      .where(sql`(role = 'WHOLESALER'::"UserRole")`),
+    index('idx_users_wholesaler_visible_sort')
+      .using(
+        'btree',
+        sql`lower(COALESCE((profile ->> 'display_name'::text), (profile ->>`,
+        sql`id`,
+      )
+      .where(
+        sql`((role = 'WHOLESALER'::"UserRole") AND (status = ANY (ARRAY['ACTIVE'::"UserStatus", 'APPROVED'::"UserStatus"])))`,
       ),
     foreignKey({
       columns: [table.profile_image_file_id],
@@ -967,14 +1025,18 @@ export const carts = pgTable(
     }),
     retailer_id: uuid().notNull(),
     wholesaler_id: uuid().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
   },
   (table) => [
+    index('idx_carts_retailer_updated_at').using(
+      'btree',
+      table.retailer_id.asc().nullsLast().op('uuid_ops'),
+      table.updated_at.desc().nullsFirst().op('uuid_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
+    ),
     index('idx_carts_wholesaler_id').using(
       'btree',
       table.wholesaler_id.asc().nullsLast().op('uuid_ops'),
@@ -1013,17 +1075,17 @@ export const cart_details = pgTable(
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     variant_products_id: bigint({ mode: 'bigint' }).notNull(),
     quantity: integer().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
   },
   (table) => [
-    index('idx_cart_details_cart_id').using(
+    index('idx_cart_details_cart_updated_at').using(
       'btree',
       table.cart_id.asc().nullsLast().op('int8_ops'),
+      table.updated_at.desc().nullsFirst().op('int8_ops'),
+      table.id.asc().nullsLast().op('int8_ops'),
     ),
     index('idx_cart_details_variant_products_id').using(
       'btree',
@@ -1082,8 +1144,8 @@ export const order_details = pgTable(
     subtotal: numeric({ precision: 20, scale: 2 }).notNull(),
     iva_total: numeric({ precision: 20, scale: 2 }).notNull(),
     total: numeric({ precision: 20, scale: 2 }).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
   },
   (table) => [
@@ -1091,6 +1153,20 @@ export const order_details = pgTable(
       'btree',
       table.order_id.asc().nullsLast().op('int8_ops'),
     ),
+    index('idx_order_details_order_product_qty_not_null')
+      .using(
+        'btree',
+        table.order_id.asc().nullsLast().op('int8_ops'),
+        table.product_id.asc().nullsLast().op('int8_ops'),
+        table.quantity.asc().nullsLast().op('int8_ops'),
+      )
+      .where(sql`(product_id IS NOT NULL)`),
+    index('idx_order_details_product_id')
+      .using('btree', table.product_id.asc().nullsLast().op('int8_ops'))
+      .where(sql`(product_id IS NOT NULL)`),
+    index('idx_order_details_variant_product_id')
+      .using('btree', table.variant_product_id.asc().nullsLast().op('int8_ops'))
+      .where(sql`(variant_product_id IS NOT NULL)`),
     foreignKey({
       columns: [table.order_id],
       foreignColumns: [orders.id],
@@ -1142,41 +1218,61 @@ export const orders = pgTable(
     shipping_address_snapshot: jsonb().notNull(),
     retailer_snapshot: jsonb().notNull(),
     wholesaler_snapshot: jsonb().notNull(),
-    accepted_at: timestamp({ mode: 'string' }),
+    accepted_at: timestamp({ withTimezone: true, mode: 'string' }),
     accepted_by: uuid(),
-    rejected_at: timestamp({ mode: 'string' }),
+    rejected_at: timestamp({ withTimezone: true, mode: 'string' }),
     rejected_by: uuid(),
     rejected_reason: varchar({ length: 500 }),
-    cancelled_at: timestamp({ mode: 'string' }),
-    estimated_delivery_date: timestamp({ mode: 'string' }),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    cancelled_at: timestamp({ withTimezone: true, mode: 'string' }),
+    estimated_delivery_date: timestamp({ withTimezone: true, mode: 'string' }),
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     cancelled_by: uuid(),
     cancelled_reason: varchar({ length: 500 }),
   },
   (table) => [
-    index('idx_orders_order_number').using(
-      'btree',
-      table.order_number.asc().nullsLast().op('text_ops'),
+    index('idx_orders_accepted_id')
+      .using('btree', table.id.asc().nullsLast().op('int8_ops'))
+      .where(sql`(status = 'ACCEPTED'::"OrderStatus")`),
+    index('idx_orders_order_number_trgm').using(
+      'gin',
+      table.order_number.asc().nullsLast().op('gin_trgm_ops'),
     ),
     index('idx_orders_retailer_created_at').using(
       'btree',
-      table.retailer_id.asc().nullsLast().op('timestamp_ops'),
+      table.retailer_id.asc().nullsLast().op('timestamptz_ops'),
       table.created_at.desc().nullsFirst().op('uuid_ops'),
     ),
+    index('idx_orders_retailer_status_created_at').using(
+      'btree',
+      table.retailer_id.asc().nullsLast().op('enum_ops'),
+      table.status.asc().nullsLast().op('timestamptz_ops'),
+      table.created_at.desc().nullsFirst().op('enum_ops'),
+    ),
+    index('idx_orders_retailer_wholesaler_created_at').using(
+      'btree',
+      table.retailer_id.asc().nullsLast().op('timestamptz_ops'),
+      table.wholesaler_id.asc().nullsLast().op('timestamptz_ops'),
+      table.created_at.desc().nullsFirst().op('timestamptz_ops'),
+    ),
+    index('idx_orders_wholesaler_accepted_created_at')
+      .using(
+        'btree',
+        table.wholesaler_id.asc().nullsLast().op('uuid_ops'),
+        table.created_at.desc().nullsFirst().op('uuid_ops'),
+      )
+      .where(sql`(status = 'ACCEPTED'::"OrderStatus")`),
     index('idx_orders_wholesaler_created_at').using(
       'btree',
-      table.wholesaler_id.asc().nullsLast().op('timestamp_ops'),
-      table.created_at.desc().nullsFirst().op('timestamp_ops'),
+      table.wholesaler_id.asc().nullsLast().op('timestamptz_ops'),
+      table.created_at.desc().nullsFirst().op('timestamptz_ops'),
     ),
     index('idx_orders_wholesaler_status_created_at').using(
       'btree',
       table.wholesaler_id.asc().nullsLast().op('enum_ops'),
-      table.status.asc().nullsLast().op('uuid_ops'),
+      table.status.asc().nullsLast().op('enum_ops'),
       table.created_at.desc().nullsFirst().op('enum_ops'),
     ),
     foreignKey({
@@ -1249,12 +1345,10 @@ export const wholesaler_staffs = pgTable(
     wholesaler_id: uuid().notNull(),
     staff_user_id: uuid().notNull(),
     role: UserRole().notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     created_by: uuid(),
     updated_by: uuid(),
   },
@@ -1307,11 +1401,16 @@ export const user_uploads = pgTable(
     user_id: uuid().notNull(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     file_id: bigint({ mode: 'bigint' }).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
   },
   (table) => [
+    index('idx_user_uploads_file_user').using(
+      'btree',
+      table.file_id.asc().nullsLast().op('int8_ops'),
+      table.user_id.asc().nullsLast().op('uuid_ops'),
+    ),
     foreignKey({
       columns: [table.file_id],
       foreignColumns: [files.id],
@@ -1335,9 +1434,7 @@ export const chat_participants = pgTable(
     user_id: uuid().notNull(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     chat_panel_id: bigint({ mode: 'bigint' }).notNull(),
-    created_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    created_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
   },
   (table) => [
     foreignKey({
@@ -1367,10 +1464,6 @@ export const product_categories = pgTable(
     is_primary: boolean().default(false).notNull(),
   },
   (table) => [
-    index('idx_product_categories_category_id').using(
-      'btree',
-      table.category_id.asc().nullsLast().op('int8_ops'),
-    ),
     index('idx_product_categories_category_product').using(
       'btree',
       table.category_id.asc().nullsLast().op('int8_ops'),
@@ -1380,6 +1473,9 @@ export const product_categories = pgTable(
       'btree',
       table.product_id.asc().nullsLast().op('int8_ops'),
     ),
+    uniqueIndex('product_categories_one_primary_per_product')
+      .using('btree', table.product_id.asc().nullsLast().op('int8_ops'))
+      .where(sql`(is_primary = true)`),
     foreignKey({
       columns: [table.category_id],
       foreignColumns: [categories.id],
@@ -1431,18 +1527,14 @@ export const order_pdf_files = pgTable(
     lang_code: varchar({ length: 10 }).notNull(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     file_id: bigint({ mode: 'bigint' }).notNull(),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
   },
   (table) => [
     index('idx_order_pdf_files_file_id').using(
       'btree',
       table.file_id.asc().nullsLast().op('int8_ops'),
-    ),
-    index('idx_order_pdf_files_order_id').using(
-      'btree',
-      table.order_id.asc().nullsLast().op('int8_ops'),
     ),
     foreignKey({
       columns: [table.file_id],
@@ -1475,20 +1567,11 @@ export const category_translations = pgTable(
     name_unaccent: text().generatedAlwaysAs(
       sql`immutable_unaccent((name)::text)`,
     ),
-    created_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    created_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     updated_by: uuid(),
   },
   (table) => [
-    index('idx_category_translations_category_lang').using(
-      'btree',
-      table.category_id.asc().nullsLast().op('text_ops'),
-      table.lang_code.asc().nullsLast().op('int8_ops'),
-    ),
     index('idx_category_translations_lang_code').using(
       'btree',
       table.lang_code.asc().nullsLast().op('text_ops'),
@@ -1533,22 +1616,20 @@ export const product_translations = pgTable(
     title_unaccent: text().generatedAlwaysAs(
       sql`immutable_unaccent((title)::text)`,
     ),
-    created_at: timestamp({ mode: 'string' })
-      .default(sql`(now() AT TIME ZONE 'utc'::text)`)
+    created_at: timestamp({ withTimezone: true, mode: 'string' })
+      .defaultNow()
       .notNull(),
-    updated_at: timestamp({ mode: 'string' }).default(
-      sql`(now() AT TIME ZONE 'utc'::text)`,
-    ),
+    updated_at: timestamp({ withTimezone: true, mode: 'string' }).defaultNow(),
     updated_by: uuid(),
   },
   (table) => [
-    index('idx_product_translations_name_unaccent').using(
-      'btree',
-      sql`lower(name_unaccent)`,
+    index('idx_product_translations_name_unaccent_trgm').using(
+      'gin',
+      table.name_unaccent.asc().nullsLast().op('gin_trgm_ops'),
     ),
-    index('idx_product_translations_title_unaccent').using(
-      'btree',
-      sql`lower(title_unaccent)`,
+    index('idx_product_translations_title_unaccent_trgm').using(
+      'gin',
+      table.title_unaccent.asc().nullsLast().op('gin_trgm_ops'),
     ),
     foreignKey({
       columns: [table.product_id],
