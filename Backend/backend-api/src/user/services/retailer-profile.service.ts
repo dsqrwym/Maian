@@ -20,6 +20,7 @@ import {
   checkUserTaxId,
   validateAndCheckUserFiles,
 } from '#/utils/db/user.db.utils.js';
+import { restoreFilesFromCleanup } from '#/utils/db/file.db.utils.js';
 import { PinoLogger } from 'nestjs-pino';
 import { checkAddressIsValidForPatch } from '#/utils/db/address.db.utils.js';
 
@@ -80,8 +81,9 @@ export class RetailerProfileService {
         throw new ForbiddenException('User not found');
       }
 
-      if (profile_image_file_id) {
-        await validateAndCheckUserFiles(profile_image_file_id, userId, tx);
+      if (imageFileId) {
+        await validateAndCheckUserFiles(imageFileId.toString(), userId, tx);
+        await restoreFilesFromCleanup([imageFileId], tx);
       }
 
       if (tax_id !== null && tax_id !== undefined) {

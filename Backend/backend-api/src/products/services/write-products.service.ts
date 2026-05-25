@@ -35,6 +35,7 @@ import { and, eq, exists, inArray, sql } from 'drizzle-orm';
 import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
 import { LowStockAlertService } from '#/mail/low-stock-alert.service.js';
 import type { LowStockAlertEmailItem } from '#/mail/mail.types.js';
+import { restoreFilesFromCleanup } from '#/utils/db/file.db.utils.js';
 
 @Injectable()
 export class WriteProductsService {
@@ -96,9 +97,9 @@ export class WriteProductsService {
       );
     }
 
-    await this.validateAndCheckFiles(files, user, user_id);
-
     await this.drizzle.db.transaction(async (tx) => {
+      await this.validateAndCheckFiles(files, user, user_id, tx);
+
       const [createdProduct] = await tx
         .insert(products)
         .values({
@@ -708,6 +709,8 @@ export class WriteProductsService {
     }
 
     // 构建 file_id → mime_type 的映射（用于快速查找）
+    await restoreFilesFromCleanup(uniqueFileIds, finalDb);
+
     const fileMimeMap = new Map<bigint, string>();
     for (const file of validFiles) {
       fileMimeMap.set(file.file_id, file.mime_type);

@@ -17,6 +17,7 @@ import {
   checkUserTaxId,
   validateAndCheckUserFiles,
 } from '#/utils/db/user.db.utils.js';
+import { restoreFilesFromCleanup } from '#/utils/db/file.db.utils.js';
 import { subject } from '@casl/ability';
 import { PinoLogger } from 'nestjs-pino';
 import { checkAddressIsValidForPatch } from '#/utils/db/address.db.utils.js';
@@ -70,8 +71,9 @@ export class WholesalerProfileService {
       }
 
       // 检查 LOGO 是否为图片并属于用户
-      if (profile_image_file_id) {
-        await validateAndCheckUserFiles(profile_image_file_id, id, tx);
+      if (imageFileId) {
+        await validateAndCheckUserFiles(imageFileId.toString(), id, tx);
+        await restoreFilesFromCleanup([imageFileId], tx);
       }
 
       // 更改税号前先检查是否是唯一的 WHOLESALER 税号

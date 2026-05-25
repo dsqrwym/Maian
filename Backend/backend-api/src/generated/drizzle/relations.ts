@@ -289,16 +289,16 @@ export const deliveriesRelations = relations(deliveries, ({ one, many }) => ({
 
 export const directionsRelations = relations(directions, ({ one }) => ({
   city: one(cities, {
-    fields: [directions.city_id],
-    references: [cities.id],
+    fields: [directions.city_id, directions.province_id],
+    references: [cities.id, cities.province_id],
   }),
   country: one(countries, {
     fields: [directions.country_iso],
     references: [countries.iso_numeric],
   }),
   province: one(provinces, {
-    fields: [directions.province_id],
-    references: [provinces.id],
+    fields: [directions.province_id, directions.country_iso],
+    references: [provinces.id, provinces.country_iso],
   }),
   user: one(users, {
     fields: [directions.user_id],
