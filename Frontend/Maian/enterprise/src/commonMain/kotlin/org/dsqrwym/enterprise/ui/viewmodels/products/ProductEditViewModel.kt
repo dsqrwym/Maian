@@ -20,7 +20,6 @@ import org.dsqrwym.enterprise.data.product.ProductRepository
 import org.dsqrwym.enterprise.data.product.dto.ProductResponseForUpdate
 import org.dsqrwym.enterprise.data.product.dto.ProductUpdateDto
 import org.dsqrwym.enterprise.data.product.dto.ProductVariantDto
-import org.dsqrwym.enterprise.navigation.Products
 import org.dsqrwym.shared.data.category.mapper.toDomain
 import org.dsqrwym.shared.data.file.SharedUploadRepository
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
@@ -292,7 +291,7 @@ class ProductEditViewModel(
                     mySnackbarViewModel.showSuccess(
                         message = message
                     )
-                    emitNavigation(NavigationEvent.ToRoute(Products))
+                    loadProduct(id, navigateOnError = false)
                 }
 
                 is SharedResponseResult.Error -> {
@@ -308,6 +307,67 @@ class ProductEditViewModel(
             delay(SharedUiTiming.formStateResetDelay)
             editFormUiState = UiState.Idle
         }
+    }
+
+    private suspend fun loadProduct(productId: String, navigateOnError: Boolean) {
+        isLoading = true
+        when (val result = productRepository.getProductForUpdate(productId)) {
+            is SharedResponseResult.Success -> {
+                result.data?.let { products ->
+                    applyProduct(products)
+                }
+            }
+
+            is SharedResponseResult.Error -> {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    result.message?.let {
+                        mySnackbarViewModel.showError(it)
+                    }
+                }
+                if (navigateOnError) {
+                    emitNavigation(NavigationEvent.ToRoute(Categories))
+                }
+            }
+        }
+        isLoading = false
+    }
+
+    private fun applyProduct(products: ProductResponseForUpdate) {
+        resetForm()
+        initialProduct = products
+        productCode = products.productCode
+        productIva = products.iva
+        productStatus = products.status
+        translationTabs[0] = translationTabs[0].copy(
+            first = SharedProductTranslation(
+                langCode = "",
+                name = products.name,
+                title = products.title,
+                description = products.description,
+            ),
+            second = RichTextState().setHtml(products.description ?: "")
+        )
+        translationTabs.addAll(products.translations.map {
+            Pair(it, RichTextState().setHtml(it.description ?: ""))
+        })
+        filterCategory = products.categories.find { it.isPrimary }?.toCategorySummary()
+        productSubcategories.addAll(
+            products.categories
+                .filter { !it.isPrimary }
+                .map { it.toCategorySummary() }
+        )
+        productVariants.addAll(products.variant)
+        mediaPicker.addUploadedProductFiles(
+            products.files.map { file ->
+                UploadedProductFile(
+                    fileId = file.fileId,
+                    sort = file.sort,
+                    url = ApiConfig.FilePath.productFile(products.id, file.fileId),
+                    mimeType = file.mimeType.getValOrNull()
+                )
+            }
+        )
+        validateForm()
     }
 }
 

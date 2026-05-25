@@ -263,7 +263,7 @@ class CategoriesEditViewModel(
                     updateButtonState = UiState.Success
                     val message = getString(SharedRes.string.update_success)
                     mySnackbarViewModel.showSuccess(message)
-                    emitNavigation(NavigationEvent.ToRoute(Categories))
+                    loadCategory(id, navigateOnError = false)
                 }
 
                 is SharedResponseResult.Error -> {
@@ -295,6 +295,37 @@ class CategoriesEditViewModel(
         translations.clear()
         initialCategory = null
         categoryVersion = 0L
+        updateButtonState = UiState.Idle
+    }
+
+    private suspend fun loadCategory(categoryId: String, navigateOnError: Boolean) {
+        when (val result = categoryRepository.getCategoryForUpdate(categoryId)) {
+            is SharedResponseResult.Success -> {
+                result.data?.let { data ->
+                    initialCategory = data
+                    categoryName = data.name ?: ""
+                    translations.clear()
+                    data.translations?.let {
+                        translations.addAll(it)
+                    }
+                    categoryIva = data.iva
+                    categoryVersion = data.version
+                    categoryNameExist = false
+                    categoryNameError = null
+                }
+            }
+
+            is SharedResponseResult.Error -> {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    result.message?.let {
+                        mySnackbarViewModel.showError(it)
+                    }
+                }
+                if (navigateOnError) {
+                    emitNavigation(NavigationEvent.ToRoute(Categories))
+                }
+            }
+        }
     }
 
     private suspend fun handleConflictAndMerge() {

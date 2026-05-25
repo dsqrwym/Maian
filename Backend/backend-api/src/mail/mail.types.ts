@@ -49,3 +49,17 @@ export interface OrderPdfNotificationEmailJob extends BaseEmailJob {
   counterpartyName?: string | null;
   actionReason?: string | null;
 }
+
+export interface LowStockAlertEmailItem {
+  variantProductId: string;
+  productName: string;
+  productCode: string;
+  variantProductCode: string;
+  availableStock: number;
+  lowStockThreshold: number;
+}
+
+export interface LowStockAlertEmailJob extends BaseEmailJob {
+  companyName: string;
+  items: LowStockAlertEmailItem[];
+}

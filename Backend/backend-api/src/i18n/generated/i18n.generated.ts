@@ -19,6 +19,14 @@ export type I18nTranslations = {
         "ignore": string;
         "support": string;
     };
+    "low-stock-alert": {
+        "subject": string;
+        "title": string;
+        "intro": string;
+        "item": string;
+        "ignore": string;
+        "support": string;
+    };
     "order-pdf": {
         "documentTitle": string;
         "order": string;

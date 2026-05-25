@@ -1,0 +1,8 @@
+{
+  "subject": "Low stock alert - {companyName}",
+  "title": "Low stock alert",
+  "intro": "The following {count} product variant(s) have reached the low stock threshold:",
+  "item": "<strong>{productName}</strong> ({productCode}) - Variant {variantProductCode}: available stock {availableStock}, threshold {lowStockThreshold}.",
+  "ignore": "This email was generated automatically by MaiAn.",
+  "support": "If the stock has already been replenished, no action is required."
+}

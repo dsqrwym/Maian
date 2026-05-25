@@ -60,6 +60,8 @@ import { OrderPdfNotificationService } from '#/orders/services/order-pdf-notific
 import { IProductTranslationDto } from '#/products/dto/product-translation.dto.js';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from '#/config/constants.config.js';
+import { LowStockAlertService } from '#/mail/low-stock-alert.service.js';
+import type { LowStockAlertEmailItem } from '#/mail/mail.types.js';
 
 @Injectable()
 export class WriteOrderService {
@@ -70,6 +72,7 @@ export class WriteOrderService {
     private readonly logger: PinoLogger,
     private readonly orderPdfNotificationService: OrderPdfNotificationService,
     private readonly configService: ConfigService,
+    private readonly lowStockAlertService: LowStockAlertService,
   ) {
     this.MAX_ORDER_LINES = Number(
       this.configService.get<number>(ENV.ORDER_MAX_LINES, 250),
@@ -425,7 +428,8 @@ export class WriteOrderService {
         'You do not have permission to create order',
       );
     }
-    const createdOrderResult = await this.drizzle.db.transaction(async (tx) => {
+    const result = await this.drizzle.db.transaction(async (tx) => {
+      const lowStockAlerts: LowStockAlertEmailItem[] = [];
       // 先锁 cart 防止重复提交一样的订单
       const [cart] = await tx
         .select({ id: carts.id })
@@ -488,10 +492,36 @@ export class WriteOrderService {
               ),
             ),
           )
-          .returning({ id: variant_products.id });
+          .returning({
+            id: variant_products.id,
+            availableStock: variant_products.available_stock,
+            lowStockThreshold: variant_products.low_stock_threshold,
+          });
 
         if (!updatedStock) {
           throw new BadRequestException(ORDER_ERRORS.NOT_ENOUGH_STOCK);
+        }
+
+        const currentAvailableStock = updatedStock.availableStock;
+        const lowStockThreshold = updatedStock.lowStockThreshold;
+        const previousAvailableStock = currentAvailableStock + reservedQuantity;
+
+        if (
+          this.lowStockAlertService.shouldTriggerLowStockAlert({
+            previousAvailableStock,
+            previousLowStockThreshold: lowStockThreshold,
+            currentAvailableStock,
+            currentLowStockThreshold: lowStockThreshold,
+          })
+        ) {
+          lowStockAlerts.push({
+            variantProductId: line.variantProductId.toString(),
+            productName: line.productName,
+            productCode: line.productCode,
+            variantProductCode: line.variantProductCode,
+            availableStock: currentAvailableStock,
+            lowStockThreshold,
+          });
         }
       }
 
@@ -560,16 +590,29 @@ export class WriteOrderService {
         .where(eq(carts.id, orderLines[0].cartId));
 
       return {
-        id: createdOrder.id.toString(),
-        order_number: createdOrder.order_number,
+        createdOrderResult: {
+          id: createdOrder.id.toString(),
+          order_number: createdOrder.order_number,
+        },
+        lowStockAlerts,
       };
     });
 
-    this.dispatchOrderPdfTask(createdOrderResult.id, 'notifyNewOrder', () =>
-      this.orderPdfNotificationService.notifyNewOrder(createdOrderResult.id),
+    this.dispatchOrderPdfTask(
+      result.createdOrderResult.id,
+      'notifyNewOrder',
+      () =>
+        this.orderPdfNotificationService.notifyNewOrder(
+          result.createdOrderResult.id,
+        ),
+    );
+    this.dispatchLowStockAlertTask(
+      wholesalerId,
+      result.lowStockAlerts,
+      result.createdOrderResult.id,
     );
 
-    return createdOrderResult;
+    return result.createdOrderResult;
   }
 
   private dispatchOrderPdfTask(
@@ -583,6 +626,23 @@ export class WriteOrderService {
         'Order PDF background task failed',
       );
     });
+  }
+
+  private dispatchLowStockAlertTask(
+    wholesalerId: string,
+    items: LowStockAlertEmailItem[],
+    orderId: string,
+  ) {
+    if (items.length === 0) return;
+
+    void this.lowStockAlertService
+      .notifyLowStockAlerts(wholesalerId, items)
+      .catch((err: unknown) => {
+        this.logger.error(
+          { err, orderId, wholesalerId, itemCount: items.length },
+          'Low stock alert background task failed',
+        );
+      });
   }
 
   private sortOrderLinesForStockUpdate(orderLines: IOrderLine[]) {

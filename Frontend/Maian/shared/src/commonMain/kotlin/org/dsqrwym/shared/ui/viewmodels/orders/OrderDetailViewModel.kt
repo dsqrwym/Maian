@@ -161,10 +161,14 @@ abstract class OrderDetailViewModel(
         if (uiState.mutatingAction != null) return
         if (uiState.order == null) return
         viewModelScope.launch {
+            val orderId = (uiState.order?.id ?: uiState.orderId).trim()
             uiState = uiState.copy(mutatingAction = mutation)
             when (val result = block()) {
                 is SharedResponseResult.Success -> {
                     snackbarViewModel.showSuccess(getString(SharedRes.string.operation_success))
+                    if (orderId.isNotEmpty()) {
+                        loadOrder(orderId, showLoading = false)
+                    }
                 }
 
                 is SharedResponseResult.Error -> {

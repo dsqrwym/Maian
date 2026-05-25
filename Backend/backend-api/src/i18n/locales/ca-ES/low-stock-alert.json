@@ -1,0 +1,8 @@
+{
+  "subject": "Avis de stock baix - {companyName}",
+  "title": "Avis de stock baix",
+  "intro": "Les seguents {count} variants de producte han arribat al llindar de stock baix:",
+  "item": "<strong>{productName}</strong> ({productCode}) - Variant {variantProductCode}: stock disponible {availableStock}, llindar {lowStockThreshold}.",
+  "ignore": "Aquest correu s'ha generat automaticament per MaiAn.",
+  "support": "Si el stock ja s'ha reposat, no cal fer cap accio."
+}

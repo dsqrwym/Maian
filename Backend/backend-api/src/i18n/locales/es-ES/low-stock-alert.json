@@ -1,0 +1,8 @@
+{
+  "subject": "Aviso de stock bajo - {companyName}",
+  "title": "Aviso de stock bajo",
+  "intro": "Las siguientes {count} variantes de producto han alcanzado el umbral de stock bajo:",
+  "item": "<strong>{productName}</strong> ({productCode}) - Variante {variantProductCode}: stock disponible {availableStock}, umbral {lowStockThreshold}.",
+  "ignore": "Este correo se ha generado automaticamente por MaiAn.",
+  "support": "Si el stock ya se ha repuesto, no es necesario realizar ninguna accion."
+}

@@ -109,7 +109,7 @@
     "mime-types": "^3.0.2",
     "nestjs-i18n": "^10.8.4",
     "nestjs-pino": "^4.6.1",
-    "nodemailer": "^8.0.7",
+    "nodemailer": "^8.0.8",
     "passport": "0.7.0",
     "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.1",

@@ -1,0 +1,8 @@
+{
+  "subject": "Alerta de stock baixo - {companyName}",
+  "title": "Alerta de stock baixo",
+  "intro": "As seguintes {count} variantes de produto atingiram o limite de stock baixo:",
+  "item": "<strong>{productName}</strong> ({productCode}) - Variante {variantProductCode}: stock disponivel {availableStock}, limite {lowStockThreshold}.",
+  "ignore": "Este email foi gerado automaticamente pela MaiAn.",
+  "support": "Se o stock ja tiver sido reposto, nao e necessaria qualquer acao."
+}

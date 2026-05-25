@@ -9,7 +9,18 @@ import {
   users,
   verification_tokens,
 } from '#/generated/drizzle/schema.js';
-import { and, eq, inArray, lt, notInArray, or } from 'drizzle-orm';
+import {
+  and,
+  eq,
+  exists,
+  gt,
+  inArray,
+  lt,
+  not,
+  notInArray,
+  or,
+  sql,
+} from 'drizzle-orm';
 
 const CLEANUP_TASK_LOCK_KEY = 'cron:cleanup:users';
 const CLEANUP_TASK_LOCK_TTL_MS = 10 * 60 * 1000;
@@ -76,6 +87,20 @@ export class CleanupTask {
           eq(users.status, 'PENDING_VERIFICATION'),
           inArray(users.role, ['SUPPORT', 'DELIVERY', 'WAREHOUSE']),
           lt(users.created_at, deleteDate.toISOString()),
+          not(
+            exists(
+              this.drizzleService.db
+                .select({ one: sql`1` })
+                .from(verification_tokens)
+                .where(
+                  and(
+                    eq(verification_tokens.user_id, users.id),
+                    eq(verification_tokens.is_used, false),
+                    gt(verification_tokens.expires_at, now.toISOString()),
+                  ),
+                ),
+            ),
+          ),
         ),
       ),
     );

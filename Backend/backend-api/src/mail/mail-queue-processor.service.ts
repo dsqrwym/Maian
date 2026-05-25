@@ -6,6 +6,7 @@ import {
   ActiveAdminWithPasswordEmailJob,
   ActiveEmployeeWithPasswordEmailJob,
   BaseEmailJobWithLink,
+  LowStockAlertEmailJob,
   OrderPdfNotificationEmailJob,
   RegisterEmailJob,
   ResetPasswordJob,
@@ -16,6 +17,7 @@ import { VerifyResetPasswordProcessorService } from './verification-processor/ve
 import { VerifyEmployeeMailProcessorService } from './verification-processor/verify-employee-mail-processor.service.js';
 import { VerifyAdminMailProcessorService } from './verification-processor/verify-admin-mail-processor.service.js';
 import { OrderPdfNotificationProcessorService } from './verification-processor/order-pdf-notification-processor.service.js';
+import { LowStockAlertProcessorService } from '#/mail/verification-processor/low-stock-alert-processor.service.js';
 
 @Processor('mail')
 @Injectable()
@@ -29,6 +31,7 @@ export class MailQueueProcessorService
     private readonly verifyAdminMailProcessorService: VerifyAdminMailProcessorService,
     private readonly resetPasswordProcessorService: VerifyResetPasswordProcessorService,
     private readonly orderPdfNotificationProcessorService: OrderPdfNotificationProcessorService,
+    private readonly lowStockAlertProcessorService: LowStockAlertProcessorService,
     private readonly logger: PinoLogger,
   ) {
     super();
@@ -85,6 +88,9 @@ export class MailQueueProcessorService
           job.data as OrderPdfNotificationEmailJob,
         );
       }
+      case 'sendLowStockAlert': {
+        return this.sendLowStockAlert(job.data as LowStockAlertEmailJob);
+      }
       default: {
         this.logger.warn(`Unknown mail job: ${job.name}`);
         return;
@@ -128,5 +134,9 @@ export class MailQueueProcessorService
     return this.orderPdfNotificationProcessorService.sendOrderPdfNotification(
       data,
     );
+  }
+
+  async sendLowStockAlert(data: LowStockAlertEmailJob) {
+    return this.lowStockAlertProcessorService.sendLowStockAlert(data);
   }
 }

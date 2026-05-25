@@ -33,6 +33,8 @@ import {
 } from '#/generated/drizzle/schema.js';
 import { and, eq, exists, inArray, sql } from 'drizzle-orm';
 import { SQL_TEMP_TABLE } from '#/drizzle/drizzle.constants.js';
+import { LowStockAlertService } from '#/mail/low-stock-alert.service.js';
+import type { LowStockAlertEmailItem } from '#/mail/mail.types.js';
 
 @Injectable()
 export class WriteProductsService {
@@ -42,6 +44,7 @@ export class WriteProductsService {
     private readonly drizzle: DrizzleService,
     private readonly logger: PinoLogger,
     private readonly configService: ConfigService,
+    private readonly lowStockAlertService: LowStockAlertService,
   ) {
     this.MAX_VARIANTS_PRODUCT = Number(
       this.configService.get<number>(ENV.PRODUCT_MAX_VARIANTS, 50),
@@ -193,7 +196,8 @@ export class WriteProductsService {
       ...mainProductData
     } = updateProductDto;
 
-    await this.drizzle.db.transaction(async (tx) => {
+    const result = await this.drizzle.db.transaction(async (tx) => {
+      const lowStockAlerts: LowStockAlertEmailItem[] = [];
       // 悲观锁：锁定产品行，保证后续 读取变体数量 → 检查 → 插入/删除，这一系列操作对于同一个产品是串行化的，避免并发时突破变体上限。
       await tx
         .select({ id: products.id })
@@ -205,9 +209,20 @@ export class WriteProductsService {
         columns: {
           user_id: true,
           iva: true,
+          name: true,
+          product_code: true,
+          status: true,
         },
         with: {
-          variant_products: { columns: { id: true } },
+          variant_products: {
+            columns: {
+              id: true,
+              product_code: true,
+              available_stock: true,
+              low_stock_threshold: true,
+              status: true,
+            },
+          },
           products_files: {
             with: { file: { columns: { mime_type: true } } },
           },
@@ -384,37 +399,103 @@ export class WriteProductsService {
           );
         }
 
-        await Promise.all(
-          updateVariants.map((variant) => {
-            const variantId = BigInt(variant.id);
-            let priceData: { price: string; price_iva: string } | undefined =
-              undefined;
-            // 重新计算价格逻辑
-            const iva = mainProductData.iva ?? existingProduct.iva;
-            if (variant.price) {
-              priceData = computePrice(variant.price, undefined, iva);
-            } else if (variant.price_iva) {
-              priceData = computePrice(undefined, variant.price_iva, iva);
-            }
-
-            return tx
-              .update(variant_products)
-              .set({
-                type_sale: variant.type_sale,
-                sort: variant.sort,
-                product_code: variant.product_code,
-                available_stock: variant.available_stock,
-                sale_unit_qty: variant.sale_unit_qty,
-                min_order_qty: variant.min_order_qty,
-                low_stock_threshold: variant.low_stock_threshold,
-                ...priceData, // 展开计算后的价格字段
-                status: variant.status,
-                updated_by: user.userId,
-                updated_at: now,
-              })
-              .where(eq(variant_products.id, variantId));
-          }),
+        const currentVariants = await tx
+          .select({
+            id: variant_products.id,
+            product_code: variant_products.product_code,
+            available_stock: variant_products.available_stock,
+            low_stock_threshold: variant_products.low_stock_threshold,
+            status: variant_products.status,
+          })
+          .from(variant_products)
+          .where(
+            and(
+              eq(variant_products.product_id, productId),
+              inArray(variant_products.id, updateIds),
+            ),
+          )
+          .for('update');
+        const currentVariantsById = new Map(
+          currentVariants.map((variant) => [variant.id, variant]),
         );
+        const productName = mainProductData.name ?? existingProduct.name;
+        const productCode =
+          mainProductData.product_code ?? existingProduct.product_code;
+        const currentProductStatus =
+          mainProductData.status ?? existingProduct.status;
+
+        for (const variant of updateVariants) {
+          const variantId = BigInt(variant.id);
+          const currentVariant = currentVariantsById.get(variantId);
+          if (!currentVariant) continue;
+
+          let priceData: { price: string; price_iva: string } | undefined =
+            undefined;
+          // 重新计算价格逻辑
+          const iva = mainProductData.iva ?? existingProduct.iva;
+          if (variant.price) {
+            priceData = computePrice(variant.price, undefined, iva);
+          } else if (variant.price_iva) {
+            priceData = computePrice(undefined, variant.price_iva, iva);
+          }
+
+          const [updatedVariant] = await tx
+            .update(variant_products)
+            .set({
+              type_sale: variant.type_sale,
+              sort: variant.sort,
+              product_code: variant.product_code,
+              available_stock: variant.available_stock,
+              sale_unit_qty: variant.sale_unit_qty,
+              min_order_qty: variant.min_order_qty,
+              low_stock_threshold: variant.low_stock_threshold,
+              ...priceData, // 展开计算后的价格字段
+              status: variant.status,
+              updated_by: user.userId,
+              updated_at: now,
+            })
+            .where(eq(variant_products.id, variantId))
+            .returning({
+              id: variant_products.id,
+              product_code: variant_products.product_code,
+              available_stock: variant_products.available_stock,
+              low_stock_threshold: variant_products.low_stock_threshold,
+              status: variant_products.status,
+            });
+
+          if (!updatedVariant) continue;
+
+          const previousStatus =
+            existingProduct.status === ProductStatus.ACTIVE &&
+            currentVariant.status === ProductStatus.ACTIVE
+              ? ProductStatus.ACTIVE
+              : ProductStatus.INACTIVE;
+          const nextStatus =
+            currentProductStatus === ProductStatus.ACTIVE &&
+            updatedVariant.status === ProductStatus.ACTIVE
+              ? ProductStatus.ACTIVE
+              : ProductStatus.INACTIVE;
+
+          if (
+            this.lowStockAlertService.shouldTriggerLowStockAlert({
+              previousAvailableStock: currentVariant.available_stock,
+              previousLowStockThreshold: currentVariant.low_stock_threshold,
+              currentAvailableStock: updatedVariant.available_stock,
+              currentLowStockThreshold: updatedVariant.low_stock_threshold,
+              previousStatus,
+              currentStatus: nextStatus,
+            })
+          ) {
+            lowStockAlerts.push({
+              variantProductId: updatedVariant.id.toString(),
+              productName,
+              productCode,
+              variantProductCode: updatedVariant.product_code,
+              availableStock: updatedVariant.available_stock,
+              lowStockThreshold: updatedVariant.low_stock_threshold,
+            });
+          }
+        }
       }
 
       // 删除变体
@@ -526,7 +607,18 @@ export class WriteProductsService {
           await tx.insert(products_files).values(data);
         }
       }
+
+      return {
+        wholesalerId: existingProduct.user_id,
+        lowStockAlerts,
+      };
     });
+
+    this.dispatchLowStockAlertTask(
+      result.wholesalerId,
+      result.lowStockAlerts,
+      id,
+    );
   }
 
   async remove(id: string, ability: AppAbility) {
@@ -550,6 +642,23 @@ export class WriteProductsService {
       );
     }
     await this.drizzle.db.delete(products).where(eq(products.id, idBigInt));
+  }
+
+  private dispatchLowStockAlertTask(
+    wholesalerId: string,
+    items: LowStockAlertEmailItem[],
+    productId: string,
+  ) {
+    if (items.length === 0) return;
+
+    void this.lowStockAlertService
+      .notifyLowStockAlerts(wholesalerId, items)
+      .catch((err: unknown) => {
+        this.logger.error(
+          { err, productId, wholesalerId, itemCount: items.length },
+          'Low stock alert background task failed',
+        );
+      });
   }
 
   private async validateAndCheckFiles(

@@ -15,6 +15,8 @@ import { Logger } from 'nestjs-pino';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
 import { FilesModule } from '#/files/files.module.js';
 import { OrderPdfNotificationProcessorService } from '#/mail/verification-processor/order-pdf-notification-processor.service.js';
+import { LowStockAlertProcessorService } from '#/mail/verification-processor/low-stock-alert-processor.service.js';
+import { LowStockAlertService } from '#/mail/low-stock-alert.service.js';
 
 @Global()
 @Module({
@@ -80,7 +82,9 @@ import { OrderPdfNotificationProcessorService } from '#/mail/verification-proces
     VerifyEmployeeMailProcessorService,
     VerifyAdminMailProcessorService,
     OrderPdfNotificationProcessorService,
+    LowStockAlertProcessorService,
+    LowStockAlertService,
   ],
-  exports: [MailService],
+  exports: [MailService, LowStockAlertService],
 })
 export class MailModule {}

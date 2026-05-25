@@ -1,0 +1,8 @@
+{
+  "subject": "低庫存提醒 - {companyName}",
+  "title": "低庫存提醒",
+  "intro": "以下 {count} 個產品變體已達到低庫存閾值：",
+  "item": "<strong>{productName}</strong>（{productCode}）- 變體 {variantProductCode}：目前可用庫存 {availableStock}，提醒閾值 {lowStockThreshold}。",
+  "ignore": "這封郵件由 MaiAn 自動發送。",
+  "support": "如果庫存已經補充，無需繼續處理。"
+}

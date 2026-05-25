@@ -98,6 +98,18 @@ export class WriteEmployeeController {
   }
 
   /**
+   * Resend the activation email for an employee pending verification.
+   */
+  @TypedRoute.Post(':id/resend-activation-email')
+  async resendActivationEmail(
+    @Req() req: FastifyRequest,
+    @TypedParam('id') id: TagsUuid,
+  ): Promise<void> {
+    const wholesalerId = req.user.userId;
+    return this.wholesalerService.resendActivationEmail(id, wholesalerId);
+  }
+
+  /**
    * Update an existing employee account
    *
    * Allows a wholesaler to update basic employee profile information.

@@ -1,0 +1,8 @@
+{
+  "subject": "低库存提醒 - {companyName}",
+  "title": "低库存提醒",
+  "intro": "以下 {count} 个产品变体已达到低库存阈值：",
+  "item": "<strong>{productName}</strong>（{productCode}）- 变体 {variantProductCode}：当前可用库存 {availableStock}，提醒阈值 {lowStockThreshold}。",
+  "ignore": "这封邮件由 MaiAn 自动发送。",
+  "support": "如果库存已经补充，无需继续处理。"
+}

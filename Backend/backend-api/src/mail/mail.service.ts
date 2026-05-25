@@ -11,6 +11,7 @@ import {
   ActiveAdminWithPasswordEmailJob,
   ActiveEmployeeWithPasswordEmailJob,
   BaseEmailJobWithLink,
+  LowStockAlertEmailJob,
   OrderPdfNotificationEmailJob,
   RegisterEmailJob,
   ResetPasswordJob,
@@ -149,6 +150,19 @@ export class MailService {
       dto,
       this.mailJobsOption,
     );
+    return { queued: true };
+  }
+
+  async sendLowStockAlert(dto: LowStockAlertEmailJob) {
+    const lang = dto.lang || 'en';
+    const subject = this.i18nService.translate('low-stock-alert.subject', {
+      lang,
+      args: { companyName: dto.companyName, count: String(dto.items.length) },
+    });
+    this.logger.info(
+      `Queue job to send low stock alert email to ${maskEmail(dto.to)} with subject: ${subject}`,
+    );
+    await this.mailQueue.add('sendLowStockAlert', dto, this.mailJobsOption);
     return { queued: true };
   }
 }

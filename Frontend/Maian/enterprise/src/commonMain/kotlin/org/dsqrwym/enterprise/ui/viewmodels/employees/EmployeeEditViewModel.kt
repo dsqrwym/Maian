@@ -123,7 +123,7 @@ class EmployeeEditViewModel(
                 is SharedResponseResult.Success -> {
                     updateButtonState = UiState.Success
                     mySnackbarViewModel.showSuccess(getString(SharedRes.string.update_success))
-                    emitNavigation(NavigationEvent.ToRoute(Employees))
+                    loadEmployee(id, email, role, status, navigateOnError = false)
                 }
 
                 is SharedResponseResult.Error -> {
@@ -138,6 +138,50 @@ class EmployeeEditViewModel(
             delay(SharedUiTiming.formStateResetDelay)
             updateButtonState = UiState.Idle
         }
+    }
+
+    private suspend fun loadEmployee(
+        id: String,
+        fallbackEmail: String?,
+        fallbackRole: EmployeeRole?,
+        fallbackStatus: EmployeeStatus?,
+        navigateOnError: Boolean,
+    ) {
+        isLoading = true
+        when (val result = repository.getEmployeeForUpdate(id)) {
+            is SharedResponseResult.Success -> {
+                val data = result.data ?: EmployeeForUpdateResponse()
+                initialEmployee = data
+                email = data.email ?: fallbackEmail.orEmpty()
+                firstName = data.firstName.orEmpty()
+                lastName = data.lastName.orEmpty()
+                username = data.username ?: ""
+                initialUsername = username
+                usernameAvailabilityExemptValue = username
+                phoneNumberViewModel.resetPhoneNumberViewModel()
+                initialTelephone = ""
+                data.telephone?.takeIf { it.isNotBlank() }?.let {
+                    phoneNumberViewModel.updatePhoneNumber(it)
+                    initialTelephone = it
+                }
+                taxId = data.taxId.orEmpty()
+                role = data.role ?: fallbackRole
+                status = data.status ?: fallbackStatus
+                usernameError = null
+                usernameExists = false
+                taxIdError = null
+            }
+
+            is SharedResponseResult.Error -> {
+                if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    result.message?.let { mySnackbarViewModel.showError(it) }
+                }
+                if (navigateOnError) {
+                    emitNavigation(NavigationEvent.ToRoute(Employees))
+                }
+            }
+        }
+        isLoading = false
     }
 
     private fun buildUpdateDto(): UpdateEmployeeDto {
