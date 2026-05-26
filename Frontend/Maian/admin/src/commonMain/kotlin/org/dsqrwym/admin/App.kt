@@ -2,6 +2,7 @@ package org.dsqrwym.admin
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -36,6 +37,15 @@ import org.koin.compose.currentKoinScope
 fun App() {
     AppRoot { authState ->
         when (authState) {
+            is AuthState.Checking -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
             is AuthState.Unauthenticated -> {
                 val navigationState = rememberSharedNavigationState(
                     initRoute = if (SharedUserPreferences.isUserAgreed()) {

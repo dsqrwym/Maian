@@ -2,7 +2,12 @@ package org.dsqrwym.shared.data.auth.session
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.data.auth.SharedAuthRepository
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
@@ -10,41 +15,25 @@ import org.dsqrwym.shared.data.local.SharedUserPayloadStorage
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.data.user.SharedUserPayload
 import org.dsqrwym.shared.di.auth.SharedAuthScope
-import org.dsqrwym.shared.network.mapper.ErrorMessageMapper
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.platform.PlatformType
+import org.dsqrwym.shared.util.platform.getPlatform
 
 /**
- * Cross-platform ViewModel-like session holder driven by flows.
- * 跨平台的会话状态管理（类 ViewModel），通过 Flow 向 UI 暴露认证态。
- *
- * Responsibilities 职责：
- * - Expose current auth state (Authenticated/Unauthenticated)
- *   暴露当前认证态（已认证/未认证）
- * - React to AuthEvents and update state and emit one-shot effects for UI messages
- *   响应 AuthEvents 更新状态，同时通过一次性副作用流发出提示给 UI
- * - Provide small helpers for login/logout transitions
- *   提供登录/登出时的状态更新辅助
- *
- * Note: We keep this class simple and platform-agnostic; platform UI
- * should perform actual navigation when the state changes.
- * 说明：该类保持简单与平台无关；实际导航由各平台 UI 在状态变化时执行。
+ * Cross-platform session holder driven by flows.
  */
-class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnackbarViewModel: MySnackbarViewModel) :
-    ViewModel() {
-    /** UI-consumable auth state | UI 可订阅的认证状态 */
+class AuthSessionViewModel(
+    val authRepository: SharedAuthRepository,
+    val mySnackbarViewModel: MySnackbarViewModel,
+) : ViewModel() {
     private val _state = MutableStateFlow(initialState())
     val state: StateFlow<AuthState> = _state.asStateFlow()
 
-    /** One-shot effects for user notifications (e.g., show snackbar/toast/dialog). */
-    /** 一次性副作用流，供 UI 显示提示（如 Snackbar/Toast/Dialog）。*/
     private val _effects = MutableSharedFlow<AuthEvent>(extraBufferCapacity = 1)
     val effects: SharedFlow<AuthEvent> = _effects.asSharedFlow()
 
     init {
-        initialState()
-        // Subscribe to auth events and update state accordingly
-        // 订阅认证事件，并据此更新状态
         viewModelScope.launch {
             AuthEvents.events.collect { event ->
                 when (event) {
@@ -54,23 +43,48 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
                     is AuthEvent.SessionRevoked -> _state.value = AuthState.Unauthenticated
                     is AuthEvent.Unknown -> _state.value = AuthState.Unauthenticated
                 }
-                // Forward event to UI as a one-shot effect for differentiated messages
-                // 将具体原因转发给 UI 作为一次性副作用，便于差异化文案提示
                 _effects.tryEmit(event)
+            }
+        }
+        restoreWebSessionIfNeeded()
+    }
+
+    private fun initialState(): AuthState =
+        when {
+            !SharedTokenStorage.getAccess().isNullOrBlank() &&
+                SharedUserPayloadStorage.get() != null -> AuthState.Authenticated
+
+            getPlatform().type == PlatformType.Web &&
+                !SharedTokenStorage.getCsrf().isNullOrBlank() &&
+                SharedUserPayloadStorage.get() != null -> AuthState.Checking
+
+            else -> AuthState.Unauthenticated
+        }
+
+    private fun restoreWebSessionIfNeeded() {
+        if (_state.value !is AuthState.Checking) return
+        viewModelScope.launch {
+            when (val result = authRepository.refreshWebSession()) {
+                is SharedResponseResult.Success -> {
+                    _state.value =
+                        if (result.data != null && SharedUserPayloadStorage.get() != null) {
+                            AuthState.Authenticated
+                        } else {
+                            SharedTokenStorage.clear()
+                            SharedUserPayloadStorage.clear()
+                            AuthState.Unauthenticated
+                        }
+                }
+
+                is SharedResponseResult.Error -> {
+                    SharedTokenStorage.clear()
+                    SharedUserPayloadStorage.clear()
+                    _state.value = AuthState.Unauthenticated
+                }
             }
         }
     }
 
-    /** Determine the initial state based on access token presence. */
-    /** 根据是否存在 access token 判定初始状态 */
-    private fun initialState(): AuthState =
-        if (SharedTokenStorage.getAccess()
-                .isNullOrBlank() || SharedUserPayloadStorage.get() == null
-        ) AuthState.Unauthenticated
-        else AuthState.Authenticated
-
-    /** Mark state as authenticated, typically after successful login. */
-    /** 在成功登录后将状态标记为已认证 */
     fun onLoggedIn(userPayload: SharedUserPayload, userLoginPreferences: String) {
         _state.value = AuthState.Authenticated
         SharedUserPayloadStorage.save(userPayload)
@@ -78,8 +92,6 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
         SharedAuthScope.closeScope()
     }
 
-    /** Mark state as unauthenticated, typically after logout or session cleared. */
-    /** 在登出或清理会话后将状态标记为未认证 */
     fun onLoggedOut() {
         _state.value = AuthState.Unauthenticated
         SharedUserPayloadStorage.clear()
@@ -111,11 +123,8 @@ class AuthSessionViewModel(val authRepository: SharedAuthRepository, val mySnack
     }
 }
 
-/**
- * Simple auth state for UI routing decisions.
- * 简单认证状态，用于 UI 进行路由判断。
- */
 sealed class AuthState {
+    data object Checking : AuthState()
     data object Authenticated : AuthState()
     data object Unauthenticated : AuthState()
 }

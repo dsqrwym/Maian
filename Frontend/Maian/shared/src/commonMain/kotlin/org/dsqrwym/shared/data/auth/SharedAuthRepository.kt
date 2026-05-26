@@ -1,11 +1,13 @@
 package org.dsqrwym.shared.data.auth
 
 import org.dsqrwym.shared.data.auth.dto.SharedResetPasswordRequest
+import org.dsqrwym.shared.data.auth.dto.SharedRefreshTokenResponse
 import org.dsqrwym.shared.data.auth.dto.SharedSendVerificationCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeRequest
 import org.dsqrwym.shared.data.auth.dto.SharedVerifyCodeResponse
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
+import org.dsqrwym.shared.util.platform.PlatformType
 
 
 /**
@@ -59,6 +61,17 @@ class SharedAuthRepository(private val api: SharedAuthApi) {
 
     suspend fun resetPassword(resetPasswordRequest: SharedResetPasswordRequest): SharedResponseResult<Unit> {
         return safeApiCall { api.resetPassword(resetPasswordRequest) }
+    }
+
+    suspend fun refreshWebSession(): SharedResponseResult<SharedRefreshTokenResponse> {
+        val result = safeApiCall { api.refreshToken(PlatformType.Web) }
+        if (result is SharedResponseResult.Success) {
+            result.data?.let {
+                SharedTokenStorage.saveAccess(it.accessToken)
+                SharedTokenStorage.saveCsrf(it.refreshToken)
+            }
+        }
+        return result
     }
 
     suspend fun logout(): SharedResponseResult<Unit> {
