@@ -121,7 +121,8 @@ fun MyOutlinedTextField(
     }
 
     val visualTransformation =
-        visualTransformation ?: if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
+        visualTransformation
+            ?: if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
 
     OutlinedTextField(
         enabled = enabled,
@@ -132,7 +133,15 @@ fun MyOutlinedTextField(
             .semantics(properties = semanticsPropertyReceiver),
         value = value,
         onValueChange = onValueChange,
-        label = labelText?.let { { Text(text = it, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
+        label = labelText?.let {
+            {
+                Text(
+                    text = it,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        },
         placeholder = placeholderText?.let {
             {
                 if (singleLine) {
@@ -158,12 +167,18 @@ fun MyOutlinedTextField(
         supportingText =
             error?.let {
                 {
-                    Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        it,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             },
         visualTransformation = if (isPassword) visualTransformation else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            keyboardType = keyBordType ?: if (isPassword) KeyboardType.Password else KeyboardType.Email,
+            keyboardType = keyBordType
+                ?: if (isPassword) KeyboardType.Password else KeyboardType.Email,
             imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(

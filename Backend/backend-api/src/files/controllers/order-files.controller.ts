@@ -17,10 +17,21 @@ import { OrderFilesService } from '#/files/services/order-files.service.js';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('order-file')
+/**
+ * Controller for order PDF preview and download endpoints.
+ *
+ * @class OrderFilesController
+ */
 export class OrderFilesController {
   constructor(private readonly orderFilesService: OrderFilesService) {}
 
   /**
+   * Preview an order PDF inline.
+   *
+   * @param {string} orderId - Order ID
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<StreamableFile>} Order PDF stream
+   *
    * @ignore
    */
   @ApiProduces('application/pdf')
@@ -43,6 +54,12 @@ export class OrderFilesController {
   }
 
   /**
+   * Download an order PDF as an attachment.
+   *
+   * @param {string} orderId - Order ID
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<StreamableFile>} Order PDF stream
+   *
    * @ignore
    */
   @ApiProduces('application/pdf')

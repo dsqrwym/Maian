@@ -32,9 +32,20 @@ import { UserSettingsService } from '#/user/services/user-settings.service.js';
 @UseGuards(JwtAuthGuard)
 @Throttle({ default: { limit: 5, ttl: seconds(1) } })
 @Controller('settings')
+/**
+ * Controller for authenticated user settings.
+ *
+ * @class UserSettingsController
+ */
 export class UserSettingsController {
   constructor(private readonly userSettingsService: UserSettingsService) {}
 
+  /**
+   * Get settings for the authenticated user.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated user
+   * @returns {Promise<UserSettingsResponseDto>} Current user settings
+   */
   @ApiOperation({
     summary: 'Get current user settings',
     description: 'Returns the settings for the currently authenticated user',
@@ -49,6 +60,13 @@ export class UserSettingsController {
     return this.userSettingsService.getSettings(req.user.userId);
   }
 
+  /**
+   * Update the language setting for the authenticated user.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated user
+   * @param {IUpdateUserLanguageDto} body - Language update payload
+   * @returns {Promise<void>}
+   */
   @ApiOperation({
     summary: 'Update current user language',
     description:

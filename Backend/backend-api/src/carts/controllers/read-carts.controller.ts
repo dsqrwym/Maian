@@ -18,9 +18,21 @@ import { UserRole } from '#/generated/drizzle/enums.js';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @RolesAllowed(UserRole.RETAILER)
 @Controller()
+/**
+ * Controller for reading the authenticated retailer cart.
+ *
+ * @class ReadCartsController
+ */
 export class ReadCartsController {
   constructor(private readonly readCartsService: ReadCartsService) {}
 
+  /**
+   * Get the current retailer cart.
+   *
+   * @param {ICartsQueryDto} query - Cart projection and filtering query
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns {Promise<ICartResponse>} Current cart details
+   */
   @TypedRoute.Get()
   async getMyCartInfo(
     @TypedQuery(validateICartsQueryDto) query: ICartsQueryDto,

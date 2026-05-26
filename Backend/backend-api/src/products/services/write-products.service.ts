@@ -446,7 +446,10 @@ export class WriteProductsService {
               type_sale: variant.type_sale,
               sort: variant.sort,
               product_code: variant.product_code,
-              available_stock: variant.available_stock,
+              available_stock:
+                variant.available_stock_delta === undefined
+                  ? undefined
+                  : sql`${variant_products.available_stock} + ${variant.available_stock_delta}`,
               sale_unit_qty: variant.sale_unit_qty,
               min_order_qty: variant.min_order_qty,
               low_stock_threshold: variant.low_stock_threshold,
@@ -455,7 +458,14 @@ export class WriteProductsService {
               updated_by: user.userId,
               updated_at: now,
             })
-            .where(eq(variant_products.id, variantId))
+            .where(
+              and(
+                eq(variant_products.id, variantId),
+                variant.available_stock_delta === undefined
+                  ? undefined
+                  : sql`${variant_products.available_stock} + ${variant.available_stock_delta} >= 0`,
+              ),
+            )
             .returning({
               id: variant_products.id,
               product_code: variant_products.product_code,
@@ -464,7 +474,9 @@ export class WriteProductsService {
               status: variant_products.status,
             });
 
-          if (!updatedVariant) continue;
+          if (!updatedVariant) {
+            throw new BadRequestException('STOCK_CANNOT_BE_NEGATIVE');
+          }
 
           const previousStatus =
             existingProduct.status === ProductStatus.ACTIVE &&

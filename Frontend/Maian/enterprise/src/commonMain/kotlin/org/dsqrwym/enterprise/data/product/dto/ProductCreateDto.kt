@@ -63,6 +63,10 @@ data class ProductVariantDto(
     @EncodeDefault(EncodeDefault.Mode.NEVER)
     @Serializable(with = OptionalFieldSerializer::class)
     val availableStock: OptionalField<Int> = OptionalField.Undefined,
+    @SerialName("available_stock_delta")
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @Serializable(with = OptionalFieldSerializer::class)
+    val availableStockDelta: OptionalField<Int> = OptionalField.Undefined,
     // 换算因子 (例如：1 箱 = 24 件)
     @SerialName("sale_unit_qty")
     @EncodeDefault(EncodeDefault.Mode.NEVER)

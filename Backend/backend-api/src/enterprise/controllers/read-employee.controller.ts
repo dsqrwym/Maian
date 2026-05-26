@@ -18,6 +18,11 @@ import { PaginationMetaDto } from '#/utils/dto/pagination.dto.js';
 @UseGuards(JwtAuthGuard)
 @RolesAllowed(UserRole.WHOLESALER)
 @Controller('employees')
+/**
+ * Controller for reading employee data owned by a wholesaler.
+ *
+ * @class ReadEmployeeController
+ */
 export class ReadEmployeeController {
   constructor(private readonly readEmployeeService: ReadEmployeeService) {}
 

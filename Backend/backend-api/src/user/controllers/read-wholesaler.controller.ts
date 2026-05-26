@@ -16,9 +16,21 @@ import {
 @UseGuards(JwtAuthGuard)
 @Throttle({ default: { limit: 10, ttl: seconds(1) } })
 @Controller()
+/**
+ * Controller for searching wholesaler profiles.
+ *
+ * @class ReadWholesalerController
+ */
 export class ReadWholesalerController {
   constructor(private readonly readWholesalerService: ReadWholesalerService) {}
 
+  /**
+   * Search wholesalers visible to the authenticated user.
+   *
+   * @param {IFindWholesalerQueryDto} query - Wholesaler search and pagination query
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns Paginated wholesaler list
+   */
   @TypedRoute.Get('wholesalers')
   async findUser(
     @TypedQuery(validateWholesalerQuery) query: IFindWholesalerQueryDto,

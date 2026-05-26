@@ -13,11 +13,22 @@ import { WHOLESALER_ROLES } from '#/enterprise/enterprise.constants.js';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('filter-metadata')
+/**
+ * Controller for order filter metadata used by order search screens.
+ *
+ * @class FilterOrderMetadataController
+ */
 export class FilterOrderMetadataController {
   constructor(
     private readonly filterOrderMetadataService: FilterOrderMetadataService,
   ) {}
 
+  /**
+   * Get order filter metadata for the authenticated retailer.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Order totals and item count boundaries for retailer filters
+   */
   @TypedRoute.Get('standard')
   @RolesAllowed(UserRole.RETAILER)
   async getFilterOrderMetadataByRetailer(@Req() req: FastifyRequest): Promise<{
@@ -36,6 +47,12 @@ export class FilterOrderMetadataController {
     );
   }
 
+  /**
+   * Get order filter metadata for the authenticated wholesaler.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns Order totals and item count boundaries for wholesaler filters
+   */
   @TypedRoute.Get('enterprise')
   @RolesAllowed(...WHOLESALER_ROLES)
   async getFilterOrderMetadataByWholesaler(

@@ -50,6 +50,12 @@
     <string name="available_stock">Estoc disponible</string>
     <string name="enter_available_stock">Introduïx la quantitat actual d'estoc</string>
 
+    <string name="current_stock">Estoc actual</string>
+    <string name="stock_adjustment">Ajust d'estoc</string>
+    <string name="enter_stock_adjustment">Introduïx el canvi d'estoc, per exemple +100 o -20</string>
+    <string name="adjusted_stock">Estoc ajustat</string>
+    <string name="stock_adjustment_cannot_be_negative">L'estoc no pot quedar per sota de 0 després de l'ajust</string>
+    <string name="stock_changed_refresh_adjustment">L'estoc ha canviat. Torna a ajustar-lo després d'actualitzar.</string>
     <string name="low_stock_threshold">Avís d'estoc baix</string>
     <string name="enter_low_stock_threshold">Introduïx la quantitat per a l'avís d'estoc baix</string>
 

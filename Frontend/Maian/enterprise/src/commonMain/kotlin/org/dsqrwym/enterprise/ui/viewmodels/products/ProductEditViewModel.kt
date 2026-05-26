@@ -9,6 +9,9 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import maian.enterprise.generated.resources.EnterpriseRes
+import maian.enterprise.generated.resources.stock_adjustment_cannot_be_negative
+import maian.enterprise.generated.resources.stock_changed_refresh_adjustment
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.update_failed
 import maian.shared.generated.resources.update_success
@@ -28,6 +31,7 @@ import org.dsqrwym.shared.navigation.core.NavigationEvent
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.serialization.OptionalField
+import org.dsqrwym.shared.serialization.getOrElse
 import org.dsqrwym.shared.serialization.getValOrNull
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -62,6 +66,15 @@ class ProductEditViewModel(
                 && productVariantUiState == UiState.Loading
     }
     private var initialProduct: ProductResponseForUpdate? = null
+
+    val initialVariantStocks: Map<String, Int>
+        get() = initialProduct?.variant
+            ?.mapNotNull { variant ->
+                val id = variant.id.getValOrNull() ?: return@mapNotNull null
+                id to variant.availableStock.getOrElse { 0 }
+            }
+            ?.toMap()
+            .orEmpty()
 
     // 主分类是否改变
     private val isPrimaryCategoryChanged: Boolean
@@ -165,7 +178,13 @@ class ProductEditViewModel(
                     productCode = if (existingVariant.productCode != variant.productCode) variant.productCode else OptionalField.Undefined,
                     price = if (existingVariant.price != variant.price) variant.price else OptionalField.Undefined,
                     priceIva = if (existingVariant.priceIva != variant.priceIva) variant.priceIva else OptionalField.Undefined,
-                    availableStock = if (existingVariant.availableStock != variant.availableStock) variant.availableStock else OptionalField.Undefined,
+                    availableStock = OptionalField.Undefined,
+                    availableStockDelta = run {
+                        val existingStock = existingVariant.availableStock.getOrElse { 0 }
+                        val currentStock = variant.availableStock.getOrElse { existingStock }
+                        val delta = currentStock - existingStock
+                        if (delta != 0) OptionalField.Value(delta) else OptionalField.Undefined
+                    },
                     lowStockThreshold = if (existingVariant.lowStockThreshold != variant.lowStockThreshold) variant.lowStockThreshold else OptionalField.Undefined,
                     saleUnitQty = if (existingVariant.saleUnitQty != variant.saleUnitQty) variant.saleUnitQty else OptionalField.Undefined,
                     minOrderQty = if (existingVariant.minOrderQty != variant.minOrderQty) variant.minOrderQty else OptionalField.Undefined
@@ -239,6 +258,13 @@ class ProductEditViewModel(
         // 重新校验，防止状态过期
         if (!validateForm()) return
 
+        if (productVariants.any { it.availableStock.getOrElse { 0 } < 0 }) {
+            viewModelScope.launch {
+                mySnackbarViewModel.showError(getString(EnterpriseRes.string.stock_adjustment_cannot_be_negative))
+            }
+            return
+        }
+
         viewModelScope.launch {
             editFormUiState = UiState.Loading
             val primaryTranslation = translationTabs.first().first.copy(
@@ -296,7 +322,10 @@ class ProductEditViewModel(
 
                 is SharedResponseResult.Error -> {
                     editFormUiState = UiState.Error
-                    if (SharedResponseResult.shouldShowToUser(result.type)) {
+                    if (result.message?.trim() == "STOCK_CANNOT_BE_NEGATIVE") {
+                        mySnackbarViewModel.showError(getString(EnterpriseRes.string.stock_changed_refresh_adjustment))
+                        loadProduct(id, navigateOnError = false)
+                    } else if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     } else {
                         val message = getString(SharedRes.string.update_failed)

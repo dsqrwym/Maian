@@ -44,6 +44,12 @@
     <string name="inventory_information">庫存資訊</string>
     <string name="available_stock">庫存數量</string>
     <string name="enter_available_stock">請輸入目前庫存數量</string>
+    <string name="current_stock">目前庫存</string>
+    <string name="stock_adjustment">庫存調整</string>
+    <string name="enter_stock_adjustment">請輸入庫存變化，例如 +100 或 -20</string>
+    <string name="adjusted_stock">調整後庫存</string>
+    <string name="stock_adjustment_cannot_be_negative">庫存調整後不能小於 0</string>
+    <string name="stock_changed_refresh_adjustment">庫存已變更，請重新整理後再調整</string>
     <string name="low_stock_threshold">低庫存提醒</string>
     <string name="enter_low_stock_threshold">請輸入低庫存提醒數量</string>
     <string name="select_main_product_category">選擇產品主類別</string>

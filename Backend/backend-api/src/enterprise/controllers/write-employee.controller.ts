@@ -24,6 +24,8 @@ import { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
  *
  * All endpoints create employees with PENDING_VERIFICATION status and send verification emails.
  * The verification links are valid for 7 days.
+ *
+ * @class WriteEmployeeController
  */
 @ApiTags('Employee Management')
 @ApiBearerAuth()

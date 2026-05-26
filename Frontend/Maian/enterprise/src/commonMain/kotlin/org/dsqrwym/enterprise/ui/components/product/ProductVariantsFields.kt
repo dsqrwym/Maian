@@ -59,10 +59,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.add_product_variant
+import maian.enterprise.generated.resources.adjusted_stock
 import maian.enterprise.generated.resources.available_stock
+import maian.enterprise.generated.resources.current_stock
 import maian.enterprise.generated.resources.enter_available_stock
 import maian.enterprise.generated.resources.enter_low_stock_threshold
 import maian.enterprise.generated.resources.enter_product_code
+import maian.enterprise.generated.resources.enter_stock_adjustment
 import maian.enterprise.generated.resources.inventory_information
 import maian.enterprise.generated.resources.low_stock_threshold
 import maian.enterprise.generated.resources.price_information
@@ -70,6 +73,8 @@ import maian.enterprise.generated.resources.products_added_variants_count
 import maian.enterprise.generated.resources.sale_unit
 import maian.enterprise.generated.resources.sale_unit_conversion
 import maian.enterprise.generated.resources.sales_information
+import maian.enterprise.generated.resources.stock_adjustment
+import maian.enterprise.generated.resources.stock_adjustment_cannot_be_negative
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.add
 import maian.shared.generated.resources.field_optional
@@ -122,6 +127,7 @@ fun ProductVariantsFields(
     variants: List<ProductVariant>,
     productVariantsProductCodesErrors: Map<String, StringResource?>,
     isLoading: Boolean = false,
+    currentStockByVariantId: Map<String, Int> = emptyMap(),
     onReorder: (Int, Int) -> Unit,
     onUpdate: (ProductVariant) -> Unit,
     onDelete: (String?) -> Unit,
@@ -145,7 +151,7 @@ fun ProductVariantsFields(
             .fillMaxWidth()
             .heightIn(min = 200.dp, max = 800.dp),
         state = gridState,
-        columns = StaggeredGridCells.Adaptive(minSize = 338.dp),
+        columns = StaggeredGridCells.Adaptive(minSize = 350.dp),
         verticalItemSpacing = SharedLazyGridLayout.verticalItemSpacing,
         horizontalArrangement = SharedLazyGridLayout.arrangement,
     ) {
@@ -156,9 +162,13 @@ fun ProductVariantsFields(
                 itemVerticalAlignment = Alignment.CenterVertically,
             ) {
                 BusinessSelectedInfoCard(
-                    modifier = Modifier.weight(1f, false).widthIn(max = 336.dp).placeholderWithShimmer(isLoading),
+                    modifier = Modifier.weight(1f, false).widthIn(max = 336.dp)
+                        .placeholderWithShimmer(isLoading),
                     visible = variants.isNotEmpty(),
-                    description = stringResource(EnterpriseRes.string.products_added_variants_count, variants.size),
+                    description = stringResource(
+                        EnterpriseRes.string.products_added_variants_count,
+                        variants.size
+                    ),
                     icon = Icons.Outlined.Info,
                     enabled = false,
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -200,6 +210,7 @@ fun ProductVariantsFields(
                     isAnyItemDragging = isisAnyItemDragging,
                     isSelfDragging = isSelfDragging,
                     canDelete = variants.size > 1,
+                    currentAvailableStock = item.id?.let { currentStockByVariantId[it] },
                     onDelete = onDelete,
                     onUpdate = onUpdate,
                     productCodeError = item.id?.let { productVariantsProductCodesErrors[it] }
@@ -218,6 +229,7 @@ fun VariantCard(
     isSelfDragging: Boolean = false,
     canDelete: Boolean = true,
     currentSKUid: String? = null,
+    currentAvailableStock: Int? = null,
     productCodeError: StringResource?,
     onUpdate: (ProductVariant) -> Unit,
     onDelete: (String?) -> Unit,
@@ -335,7 +347,11 @@ fun VariantCard(
                         }, modifier = Modifier.size(32.dp)
                     ) {
                         val icon = Icons.Outlined.ExpandLess
-                        Icon(modifier = Modifier.rotate(degrees), imageVector = icon, contentDescription = icon.name)
+                        Icon(
+                            modifier = Modifier.rotate(degrees),
+                            imageVector = icon,
+                            contentDescription = icon.name
+                        )
                     }
                 }
 
@@ -360,6 +376,7 @@ fun VariantCard(
                             onUpdate(item.copy(price = price, priceIva = priceIva))
                         },
                         availableStock = item.availableStock,
+                        currentAvailableStock = currentAvailableStock,
                         onAvailableStockChange = { stock ->
                             stock?.let { onUpdate(item.copy(availableStock = it)) }
                         },
@@ -395,6 +412,7 @@ fun ProductVariantFields(
     priceIva: String?,
     onPriceChange: (String?, String?) -> Unit,
     availableStock: Int,
+    currentAvailableStock: Int? = null,
     onAvailableStockChange: (Int?) -> Unit,
     minOrderQty: Int,
     onMinOrderQtyChange: (Int?) -> Unit,
@@ -405,8 +423,10 @@ fun ProductVariantFields(
     onStatusChange: (SharedProductStatus) -> Unit = {},
 ) {
     val focus = LocalFocusManager.current
-    val saleVariantLabels = SharedProductSaleVariant.entries.associateWith { stringResource(it.toStringResource()) }
-    val productStatusLabels = SharedProductStatus.entries.associateWith { stringResource(it.toStringResource()) }
+    val saleVariantLabels =
+        SharedProductSaleVariant.entries.associateWith { stringResource(it.toStringResource()) }
+    val productStatusLabels =
+        SharedProductStatus.entries.associateWith { stringResource(it.toStringResource()) }
     var saleUnitEnabled by remember { mutableStateOf(true) }
 
     LaunchedEffect(selectedSaleVariant) {
@@ -443,7 +463,11 @@ fun ProductVariantFields(
                     SharedScannerButton(onProductCodeChange)
                 } else SharedCloseButton { onProductCodeChange("") }
             },
-            labelText = "${stringResource(SharedRes.string.product_code)} (${stringResource(SharedRes.string.field_required)})",
+            labelText = "${stringResource(SharedRes.string.product_code)} (${
+                stringResource(
+                    SharedRes.string.field_required
+                )
+            })",
             placeholderText = stringResource(EnterpriseRes.string.enter_product_code),
             error = productCodeError.asString(),
             keyBordType = KeyboardType.Uri,
@@ -471,8 +495,11 @@ fun ProductVariantFields(
                 },
                 config = SelectorConfig(
                     modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
-                    modifierFillMaxWidth = false,
-                    label = "${stringResource(EnterpriseRes.string.sale_unit)} (${stringResource(SharedRes.string.field_required)})",
+                    label = "${stringResource(EnterpriseRes.string.sale_unit)} (${
+                        stringResource(
+                            SharedRes.string.field_required
+                        )
+                    })",
                     leadingIcon = Icons.Outlined.Scale,
                     imeAction = ImeAction.Next,
                     onImeAction = { focus.moveFocus(FocusDirection.Next) }
@@ -498,7 +525,11 @@ fun ProductVariantFields(
                     Icon(icon, icon.name)
 
                 },
-                labelText = "${stringResource(EnterpriseRes.string.sale_unit_conversion)} (${stringResource(SharedRes.string.field_required)})",
+                labelText = "${stringResource(EnterpriseRes.string.sale_unit_conversion)} (${
+                    stringResource(
+                        SharedRes.string.field_required
+                    )
+                })",
                 imeAction = ImeAction.Next,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
@@ -523,9 +554,16 @@ fun ProductVariantFields(
                 },
                 leadingIcon = Icons.Outlined.PriceCheck,
                 leadingIconContentDescription = stringResource(SharedRes.string.product_price_with_vat),
-                labelText = "${stringResource(SharedRes.string.product_price_with_vat)} (${stringResource(SharedRes.string.field_required)})",
+                labelText = "${stringResource(SharedRes.string.product_price_with_vat)} (${
+                    stringResource(
+                        SharedRes.string.field_required
+                    )
+                })",
                 trailingIcon = {
-                    Icon(Icons.Outlined.EuroSymbol, contentDescription = Icons.Outlined.EuroSymbol.name)
+                    Icon(
+                        Icons.Outlined.EuroSymbol,
+                        contentDescription = Icons.Outlined.EuroSymbol.name
+                    )
                 },
                 max = 20000000.0,
                 imeAction = ImeAction.Next,
@@ -541,10 +579,17 @@ fun ProductVariantFields(
                 },
                 leadingIcon = Icons.Outlined.AttachMoney,
                 leadingIconContentDescription = stringResource(SharedRes.string.product_price),
-                labelText = "${stringResource(SharedRes.string.product_price_without_vat)} (${stringResource(SharedRes.string.field_required)})",
+                labelText = "${stringResource(SharedRes.string.product_price_without_vat)} (${
+                    stringResource(
+                        SharedRes.string.field_required
+                    )
+                })",
                 placeholderText = stringResource(SharedRes.string.product_price_without_vat),
                 trailingIcon = {
-                    Icon(Icons.Outlined.EuroSymbol, contentDescription = Icons.Outlined.EuroSymbol.name)
+                    Icon(
+                        Icons.Outlined.EuroSymbol,
+                        contentDescription = Icons.Outlined.EuroSymbol.name
+                    )
                 },
                 max = 10000000.0,
                 imeAction = ImeAction.Next,
@@ -556,6 +601,23 @@ fun ProductVariantFields(
             text = stringResource(EnterpriseRes.string.inventory_information),
             style = MaterialTheme.typography.titleSmall,
         )
+        if (currentAvailableStock != null) {
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                itemVerticalAlignment = Alignment.CenterVertically,
+            ) {
+                BusinessLabelValueRow(
+                    stringResource(EnterpriseRes.string.current_stock) + ": ",
+                    currentAvailableStock.toString(),
+                )
+                Spacer(Modifier.padding(8.dp))
+                BusinessLabelValueRow(
+                    stringResource(EnterpriseRes.string.adjusted_stock) + ": ",
+                    availableStock.toString(),
+                )
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = SharedRowLayout.arrangement,
@@ -570,22 +632,60 @@ fun ProductVariantFields(
                 onValueChange = onMinOrderQtyChange,
                 leadingIcon = Icons.Outlined.LooksOne,
                 leadingIconContentDescription = stringResource(SharedRes.string.product_min_order_qty),
-                labelText = "${stringResource(SharedRes.string.product_min_order_qty)} (${stringResource(SharedRes.string.field_required)})",
+                labelText = "${stringResource(SharedRes.string.product_min_order_qty)} (${
+                    stringResource(
+                        SharedRes.string.field_required
+                    )
+                })",
                 placeholderText = stringResource(SharedRes.string.product_min_order_qty),
                 imeAction = ImeAction.Next,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
+            val stockDelta = currentAvailableStock?.let { availableStock - it } ?: availableStock
+            val minStockDelta = currentAvailableStock?.let { -it } ?: 0
+            val maxStockDelta = currentAvailableStock?.let { Int.MAX_VALUE - it } ?: Int.MAX_VALUE
             MyOutlinedIntegerField(
                 modifier = Modifier.weight(0.5f).placeholderWithShimmer(isLoading),
                 modifierFillMaxWidth = false,
-                min = 0,
-                max = Int.MAX_VALUE,
-                value = availableStock.toString(),
-                onValueChange = onAvailableStockChange,
+                allowNegative = currentAvailableStock != null,
+                min = minStockDelta,
+                max = maxStockDelta,
+                value = stockDelta.toString(),
+                onValueChange = { value ->
+                    if (currentAvailableStock == null) {
+                        onAvailableStockChange(value ?: 0)
+                    } else {
+                        value?.let {
+                            val adjustedStock = currentAvailableStock.toLong() + it.toLong()
+                            onAvailableStockChange(adjustedStock.coerceIn(0L, Int.MAX_VALUE.toLong()).toInt())
+                        }
+                    }
+                },
                 leadingIcon = Icons.Outlined.Inventory2,
-                leadingIconContentDescription = stringResource(EnterpriseRes.string.available_stock),
-                labelText = "${stringResource(EnterpriseRes.string.available_stock)} (${stringResource(SharedRes.string.field_required)})",
-                placeholderText = stringResource(EnterpriseRes.string.enter_available_stock),
+                leadingIconContentDescription = stringResource(
+                    if (currentAvailableStock == null) EnterpriseRes.string.available_stock
+                    else EnterpriseRes.string.stock_adjustment
+                ),
+                labelText = if (currentAvailableStock == null) {
+                    "${stringResource(EnterpriseRes.string.available_stock)} (${
+                        stringResource(
+                            SharedRes.string.field_required
+                        )
+                    })"
+                } else {
+                    "${stringResource(EnterpriseRes.string.stock_adjustment)} (${
+                        stringResource(
+                            SharedRes.string.field_optional
+                        )
+                    })"
+                },
+                placeholderText = stringResource(
+                    if (currentAvailableStock == null) EnterpriseRes.string.enter_available_stock
+                    else EnterpriseRes.string.enter_stock_adjustment
+                ),
+                error = if (currentAvailableStock != null && availableStock < 0) {
+                    stringResource(EnterpriseRes.string.stock_adjustment_cannot_be_negative)
+                } else null,
                 imeAction = ImeAction.Next,
                 onImeAction = { focus.moveFocus(FocusDirection.Next) }
             )
@@ -605,7 +705,11 @@ fun ProductVariantFields(
                     }
                 }
             },
-            labelText = "${stringResource(EnterpriseRes.string.low_stock_threshold)} (${stringResource(SharedRes.string.field_optional)})",
+            labelText = "${stringResource(EnterpriseRes.string.low_stock_threshold)} (${
+                stringResource(
+                    SharedRes.string.field_optional
+                )
+            })",
             placeholderText = stringResource(EnterpriseRes.string.enter_low_stock_threshold),
             imeAction = ImeAction.Next,
             onImeAction = { focus.moveFocus(FocusDirection.Next) }
@@ -628,6 +732,3 @@ fun ProductVariantFields(
         )
     }
 }
-
-
-

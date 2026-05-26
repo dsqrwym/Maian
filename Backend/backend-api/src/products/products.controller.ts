@@ -36,6 +36,11 @@ import { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller()
+/**
+ * Controller for product catalog read and write operations.
+ *
+ * @class ProductsController
+ */
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 

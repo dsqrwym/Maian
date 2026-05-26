@@ -1,6 +1,11 @@
 package org.dsqrwym.shared.ui.components.input.outlinedfields
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -77,14 +82,38 @@ fun MyOutlinedIntegerField(
     onImeAction: () -> Unit = {},
     focusRequester: FocusRequester = FocusRequester.Default,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+    var textValue by remember { mutableStateOf(value) }
+
+    LaunchedEffect(value, isFocused) {
+        if (!isFocused) {
+            textValue = value
+        }
+    }
+
     MyOutlinedTextField(
-        modifier = modifier,
+        modifier = modifier.onFocusChanged {
+            isFocused = it.isFocused
+            if (!it.isFocused) {
+                val parsed = parseIntegerInput(textValue, allowNegative, min, max) ?: 0
+                textValue = parsed.toString()
+                onValueChange(parsed)
+            }
+        },
         modifierFillMaxWidth = modifierFillMaxWidth,
         readOnly = readOnly,
         enabled = enabled,
-        value = value,
+        value = textValue,
         onValueChange = { input ->
-            onValueChange(sanitizeIntInput(input, allowNegative, min, max) ?: min)
+            val normalized = normalizeIntegerInputText(input, allowNegative)
+            val parsed = parseIntegerInput(normalized, allowNegative, min, max)
+            textValue = when {
+                normalized == "-" && allowNegative -> normalized
+                normalized.isBlank() -> "0"
+                parsed != null -> parsed.toString()
+                else -> "0"
+            }
+            onValueChange(parsed ?: 0)
         },
         error = error,
         labelText = labelText,
@@ -98,4 +127,26 @@ fun MyOutlinedIntegerField(
         keyBordType = KeyboardType.Number,
         focusRequester = focusRequester
     )
+}
+
+private fun normalizeIntegerInputText(input: String, allowNegative: Boolean): String {
+    val digits = input.filter { it.isDigit() }
+    return when {
+        allowNegative && input.contains('-') -> {
+            if (digits.isBlank() || digits.all { it == '0' }) "-" else "-$digits"
+        }
+
+        else -> digits
+    }
+}
+
+private fun parseIntegerInput(
+    input: String,
+    allowNegative: Boolean,
+    min: Int?,
+    max: Int?,
+): Int? {
+    if (input.isBlank() || input == "-") return null
+    return sanitizeIntInput(input, allowNegative, min, max)
+        ?: if (input.startsWith("-")) min else max
 }

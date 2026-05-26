@@ -16,8 +16,9 @@ import { ADMIN_ROLES } from '#/admin/admin.constants.js';
 import { UserRole } from '#/generated/drizzle/enums.js';
 
 /**
- * Category Availability Check Controller
- * 类别名称可用性检查控制器
+ * Controller for checking category name availability.
+ *
+ * @class CheckCategoryController
  */
 @ApiTags('Category Management')
 @ApiBearerAuth()

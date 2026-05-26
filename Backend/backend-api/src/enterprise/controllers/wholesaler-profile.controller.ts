@@ -17,11 +17,23 @@ import { WholesalerProfileResponseDto } from '#/enterprise/dto/wholesaler-profil
 @UseGuards(JwtAuthGuard)
 @Throttle({ default: { limit: 2, ttl: seconds(1) } })
 @Controller('wholesaler-profile')
+/**
+ * Controller for wholesaler profile read and write operations.
+ *
+ * @class WholesalerProfileController
+ */
 export class WholesalerProfileController {
   constructor(
     private readonly wholesalerProfileService: WholesalerProfileService,
   ) {}
 
+  /**
+   * Update the profile for the authenticated wholesaler.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @param {IUpdateWholesalerProfileDto} body - Wholesaler profile update payload
+   * @returns {Promise<void>}
+   */
   @TypedRoute.Patch()
   async updateWholesalerProfile(
     @Req() req: FastifyRequest,
@@ -35,6 +47,12 @@ export class WholesalerProfileController {
     );
   }
 
+  /**
+   * Get the profile for the authenticated wholesaler.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns {Promise<WholesalerProfileResponseDto>} Wholesaler profile details
+   */
   @TypedRoute.Get()
   async getMyProfile(
     @Req() req: FastifyRequest,
@@ -45,6 +63,13 @@ export class WholesalerProfileController {
     );
   }
 
+  /**
+   * Get a wholesaler profile by ID.
+   *
+   * @param {string} id - Wholesaler ID
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<WholesalerProfileResponseDto>} Wholesaler profile details
+   */
   @TypedRoute.Get(':id')
   async getWholesalerProfileById(
     @TypedParam('id') id: string,

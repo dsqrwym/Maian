@@ -246,6 +246,7 @@ private fun ProductEditScreenContent(
                     ProductVariantsFields(
                         isLoading = isLoading,
                         variants = skuTabs.map { it.toDomain() },
+                        currentStockByVariantId = viewModel.initialVariantStocks,
                         onReorder = viewModel::reorder,
                         onDelete = viewModel::deleteVariant,
                         onAddClick = {

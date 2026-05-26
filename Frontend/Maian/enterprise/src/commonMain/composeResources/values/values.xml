@@ -46,6 +46,12 @@
     <string name="inventory_information">Inventory information</string>
     <string name="available_stock">Available stock</string>
     <string name="enter_available_stock">Enter current stock quantity</string>
+    <string name="current_stock">Current stock</string>
+    <string name="stock_adjustment">Stock adjustment</string>
+    <string name="enter_stock_adjustment">Enter stock change, for example +100 or -20</string>
+    <string name="adjusted_stock">Adjusted stock</string>
+    <string name="stock_adjustment_cannot_be_negative">Stock cannot be less than 0 after adjustment</string>
+    <string name="stock_changed_refresh_adjustment">Stock has changed. Please adjust again after refresh.</string>
     <string name="low_stock_threshold">Low stock alert</string>
     <string name="enter_low_stock_threshold">Enter the low stock alert quantity</string>
     <string name="select_main_product_category">Select main product category</string>

@@ -25,9 +25,21 @@ import {
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller()
+/**
+ * Controller for creating orders and changing order status.
+ *
+ * @class WriteOrderController
+ */
 export class WriteOrderController {
   constructor(private readonly writeOrderService: WriteOrderService) {}
 
+  /**
+   * Create a pending order from the current retailer cart.
+   *
+   * @param {ICreateOrderDto} dto - Order creation payload
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Order creation result
+   */
   @TypedRoute.Post('from-cart')
   @ApiOperation({
     summary: 'Create a pending order from the current retailer cart',
@@ -43,6 +55,14 @@ export class WriteOrderController {
     );
   }
 
+  /**
+   * Cancel a pending order by the authenticated retailer.
+   *
+   * @param {string} id - Order ID
+   * @param {ICancelOrderDto} dto - Cancel order payload
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Order status mutation result
+   */
   @TypedRoute.Post(':id/cancel')
   @ApiOperation({
     summary: 'Cancel a pending order by the current retailer',
@@ -60,6 +80,14 @@ export class WriteOrderController {
     );
   }
 
+  /**
+   * Reject a pending order by the authenticated wholesaler.
+   *
+   * @param {string} id - Order ID
+   * @param {IRejectOrderDto} dto - Reject order payload
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns Order status mutation result
+   */
   @TypedRoute.Post(':id/reject')
   @ApiOperation({
     summary: 'Reject a pending order by the current wholesaler',
@@ -78,6 +106,13 @@ export class WriteOrderController {
     );
   }
 
+  /**
+   * Accept a pending order by the authenticated wholesaler.
+   *
+   * @param {string} id - Order ID
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns Order status mutation result
+   */
   @TypedRoute.Post(':id/accept')
   @ApiOperation({
     summary: 'Accept a pending order by the current wholesaler',
@@ -94,6 +129,14 @@ export class WriteOrderController {
     );
   }
 
+  /**
+   * Update the estimated delivery date for an order.
+   *
+   * @param {string} id - Order ID
+   * @param {IUpdateOrderDto} dto - Delivery date update payload
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns Order update result
+   */
   @TypedRoute.Patch(':id/estimated-delivery-date')
   async updateDeliveryDate(
     @TypedParam('id') id: TagsIntegerString,

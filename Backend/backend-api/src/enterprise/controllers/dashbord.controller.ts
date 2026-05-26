@@ -15,9 +15,21 @@ import { DashboardService } from '#/enterprise/services/dashbord.service.js';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('dashboard')
+/**
+ * Controller for enterprise dashboard metrics.
+ *
+ * @class DashboardController
+ */
 export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
+  /**
+   * Get dashboard data for the authenticated enterprise user.
+   *
+   * @param {IDashboardQuery} query - Dashboard filter query
+   * @param {FastifyRequest} req - Request object containing the authenticated enterprise user
+   * @returns {Promise<IDashboardResponse>} Dashboard metrics and summaries
+   */
   @TypedRoute.Get()
   async getDashboard(
     @TypedQuery(validateDashboardQuery) query: IDashboardQuery,

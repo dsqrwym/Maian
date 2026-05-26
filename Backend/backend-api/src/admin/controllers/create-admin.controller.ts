@@ -15,6 +15,7 @@ import { TypedRoute } from '@nestia/core';
  * Controller for creating new admin users
  * Requires ADMIN role and valid JWT token
  *
+ * @class CreateAdminController
  * @endpoint POST /create-admin
  */
 @ApiTags('Admin Management')

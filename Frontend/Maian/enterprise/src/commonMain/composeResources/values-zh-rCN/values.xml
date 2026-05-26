@@ -44,6 +44,12 @@
     <string name="inventory_information">库存信息</string>
     <string name="available_stock">库存数量</string>
     <string name="enter_available_stock">请输入当前库存数量</string>
+    <string name="current_stock">当前库存</string>
+    <string name="stock_adjustment">库存调整</string>
+    <string name="enter_stock_adjustment">请输入库存变化，例如 +100 或 -20</string>
+    <string name="adjusted_stock">调整后库存</string>
+    <string name="stock_adjustment_cannot_be_negative">库存调整后不能小于 0</string>
+    <string name="stock_changed_refresh_adjustment">库存已变化，请刷新后重新调整</string>
     <string name="low_stock_threshold">低库存提醒</string>
     <string name="enter_low_stock_threshold">请输入低库存提醒数量</string>
     <string name="select_main_product_category">选择产品主类别</string>

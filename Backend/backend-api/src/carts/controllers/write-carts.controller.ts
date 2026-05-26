@@ -25,9 +25,21 @@ import { UserRole } from '#/generated/drizzle/enums.js';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @RolesAllowed(UserRole.RETAILER)
 @Controller()
+/**
+ * Controller for mutating the authenticated retailer cart.
+ *
+ * @class WriteCartsController
+ */
 export class WriteCartsController {
   constructor(private readonly writeCartsService: WriteCartsService) {}
 
+  /**
+   * Add an item to the current retailer cart.
+   *
+   * @param {ICreateCartItemDto} dto - Cart item creation payload
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Cart mutation result
+   */
   @TypedRoute.Post('items')
   @ApiOperation({
     summary: 'Add an item to the current retailer cart',
@@ -39,6 +51,14 @@ export class WriteCartsController {
     return this.writeCartsService.addCartItem(dto, req.user.userId);
   }
 
+  /**
+   * Update the quantity of a cart item.
+   *
+   * @param {IUpdateCartItem} dto - Quantity update payload
+   * @param {string} cartDetailId - Cart detail ID
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Cart mutation result
+   */
   @TypedRoute.Patch('items/:id')
   @ApiOperation({
     summary: 'Update quantity of a cart item',
@@ -55,6 +75,13 @@ export class WriteCartsController {
     );
   }
 
+  /**
+   * Delete one cart item from the current retailer cart.
+   *
+   * @param {string} cartDetailId - Cart detail ID
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Cart mutation result
+   */
   @TypedRoute.Delete('items/:id')
   @ApiOperation({
     summary: 'Delete a cart item',
@@ -66,6 +93,13 @@ export class WriteCartsController {
     return this.writeCartsService.deleteCartItem(cartDetailId, req.user.userId);
   }
 
+  /**
+   * Delete all cart items for a wholesaler from the current retailer cart.
+   *
+   * @param {string} wholesalerId - Wholesaler ID
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns Cart mutation result
+   */
   @TypedRoute.Delete('wholesalers/:id')
   @ApiOperation({
     summary: 'Delete all cart items for a wholesaler',

@@ -57,6 +57,12 @@
 
     <string name="available_stock">Stock disponible</string>
     <string name="enter_available_stock">Introduce la cantidad actual en stock</string>
+    <string name="current_stock">Stock actual</string>
+    <string name="stock_adjustment">Ajuste de stock</string>
+    <string name="enter_stock_adjustment">Introduce el cambio de stock, por ejemplo +100 o -20</string>
+    <string name="adjusted_stock">Stock ajustado</string>
+    <string name="stock_adjustment_cannot_be_negative">El stock no puede quedar por debajo de 0 tras el ajuste</string>
+    <string name="stock_changed_refresh_adjustment">El stock ha cambiado. Vuelve a ajustarlo después de actualizar.</string>
 
     <string name="low_stock_threshold">Alerta de stock bajo</string>
     <string name="enter_low_stock_threshold">Introduce la cantidad para la alerta de stock bajo</string>

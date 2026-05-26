@@ -24,9 +24,21 @@ import { WHOLESALER_ROLES } from '#/enterprise/enterprise.constants.js';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller()
+/**
+ * Controller for reading retailer and wholesaler orders.
+ *
+ * @class ReadOrderController
+ */
 export class ReadOrderController {
   constructor(private readonly readOrderService: ReadOrderService) {}
 
+  /**
+   * Get paginated orders for the authenticated retailer.
+   *
+   * @param {IOrderQuery} query - Order list query
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns {Promise<PaginatedDataWithT<IOrderResponse>>} Paginated order list
+   */
   @RolesAllowed(UserRole.RETAILER)
   @TypedRoute.Get('standard')
   async getMyOrdersByRetailer(
@@ -40,6 +52,13 @@ export class ReadOrderController {
     );
   }
 
+  /**
+   * Get paginated orders for the authenticated wholesaler.
+   *
+   * @param {IOrderQuery} query - Order list query
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns {Promise<PaginatedDataWithT<IOrderResponse>>} Paginated order list
+   */
   @RolesAllowed(...WHOLESALER_ROLES)
   @TypedRoute.Get('enterprise')
   async getMyOrdersByWholesaler(
@@ -54,6 +73,14 @@ export class ReadOrderController {
     );
   }
 
+  /**
+   * Get an order detail for the authenticated retailer.
+   *
+   * @param {string} id - Order ID
+   * @param {IOrderDetailQuery} query - Order detail query
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns {Promise<IOrderDetailResponse>} Order detail
+   */
   @RolesAllowed(UserRole.RETAILER)
   @TypedRoute.Get('standard/:id')
   async getMyOrderDetailByRetailer(
@@ -69,6 +96,14 @@ export class ReadOrderController {
     );
   }
 
+  /**
+   * Get an order detail for the authenticated wholesaler.
+   *
+   * @param {string} id - Order ID
+   * @param {IOrderDetailQuery} query - Order detail query
+   * @param {FastifyRequest} req - Request object containing the authenticated wholesaler
+   * @returns {Promise<IOrderDetailResponse>} Order detail
+   */
   @RolesAllowed(...WHOLESALER_ROLES)
   @TypedRoute.Get('enterprise/:id')
   async getMyOrderDetailByWholesaler(

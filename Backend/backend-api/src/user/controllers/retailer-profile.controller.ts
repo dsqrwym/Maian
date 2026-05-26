@@ -18,11 +18,23 @@ import { RetailerProfileService } from '#/user/services/retailer-profile.service
 @UseGuards(JwtAuthGuard)
 @Throttle({ default: { limit: 2, ttl: seconds(1) } })
 @Controller('retailer-profile')
+/**
+ * Controller for retailer profile read and write operations.
+ *
+ * @class RetailerProfileController
+ */
 export class RetailerProfileController {
   constructor(
     private readonly retailerProfileService: RetailerProfileService,
   ) {}
 
+  /**
+   * Update the profile for the authenticated retailer.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @param {IUpdateRetailerProfileDto} body - Retailer profile update payload
+   * @returns {Promise<void>}
+   */
   @TypedRoute.Patch()
   async updateRetailerProfile(
     @Req() req: FastifyRequest,
@@ -36,6 +48,12 @@ export class RetailerProfileController {
     );
   }
 
+  /**
+   * Get the profile for the authenticated retailer.
+   *
+   * @param {FastifyRequest} req - Request object containing the authenticated retailer
+   * @returns {Promise<RetailerProfileResponseDto>} Retailer profile details
+   */
   @TypedRoute.Get()
   async getMyProfile(
     @Req() req: FastifyRequest,
@@ -46,6 +64,13 @@ export class RetailerProfileController {
     );
   }
 
+  /**
+   * Get a retailer profile by ID.
+   *
+   * @param {string} id - Retailer ID
+   * @param {FastifyRequest} req - Request object containing user ability
+   * @returns {Promise<RetailerProfileResponseDto>} Retailer profile details
+   */
   @TypedRoute.Get(':id')
   async getRetailerProfileById(
     @TypedParam('id') id: string,
