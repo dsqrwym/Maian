@@ -3,6 +3,7 @@ string|add_employee|5re75Yqg5ZGY5bel
 string|add_media|5re75Yqg5aqS5L2T
 string|add_product_variant|5re75Yqg5Lqn5ZOB5Y+Y5L2T
 string|add_product|5re75Yqg5Lqn5ZOB
+string|adjusted_stock|6LCD5pW05ZCO5bqT5a2Y
 string|available_stock|5bqT5a2Y5pWw6YeP
 string|category_management_description|5p+l55yL5LiO5pCc57Si57G75Yir77yM5Yib5bu66Ieq5bex55qE5ZWG5ZOB57G75Yir77yM5bm2566h55CG5aSa6K+t6KiA5ZCN56ew44CCIArmlK/mjIHmnIDlpJrkuInlsYLltYzlpZfvvIgxIOKGkiAyIOKGkiAz77yJ44CC
 string|company_type_civil_company|5rCR5LqL5ZCI5LyZ5YWs5Y+4
@@ -11,6 +12,7 @@ string|company_type_limited_company|5pyJ6ZmQ6LSj5Lu75YWs5Y+477yIUy5MLu+8iQ==
 string|company_type_other|5YW25LuW
 string|company_type_public_limited_company|6IKh5Lu95pyJ6ZmQ5YWs5Y+477yIUy5BLu+8iQ==
 string|company_type_self_employed|5Liq5L2T57uP6JCl6ICF
+string|current_stock|5b2T5YmN5bqT5a2Y
 string|dashboard_accepted_orders|5bey5o6l5Y+X6K6i5Y2V
 string|dashboard_apply_filters|5bqU55So
 string|dashboard_average_order_value|5bmz5Z2H6K6i5Y2V6YeR6aKd
@@ -62,6 +64,7 @@ string|employee|5ZGY5bel
 string|enter_available_stock|6K+36L6T5YWl5b2T5YmN5bqT5a2Y5pWw6YeP
 string|enter_low_stock_threshold|6K+36L6T5YWl5L2O5bqT5a2Y5o+Q6YaS5pWw6YeP
 string|enter_product_code|6K+36L6T5YWl5Lqn5ZOB57yW56CB
+string|enter_stock_adjustment|6K+36L6T5YWl5bqT5a2Y5Y+Y5YyW77yM5L6L5aaCICsxMDAg5oiWIC0yMA==
 string|error_wholesaler_id_required|5L2/55So55So5oi35ZCN55m75b2V5pe25b+F6aG75aGr5YaZ5om55Y+R5ZWG57yW5Y+3
 string|field_company_name_label|5YWs5Y+45ZCN56ew
 string|field_company_name_placeholder|6K+36L6T5YWl5YWs5Y+45ZCN56ew
@@ -120,6 +123,9 @@ string|sales_information|6ZSA5ZSu5L+h5oGv
 string|select_auxiliary_product_category|5re75Yqg6L6F5Yqp57G75Yir
 string|select_employee_role|6YCJ5oup5ZGY5bel6KeS6Imy
 string|select_main_product_category|6YCJ5oup5Lqn5ZOB5Li757G75Yir
+string|stock_adjustment_cannot_be_negative|5bqT5a2Y6LCD5pW05ZCO5LiN6IO95bCP5LqOIDA=
+string|stock_adjustment|5bqT5a2Y6LCD5pW0
+string|stock_changed_refresh_adjustment|5bqT5a2Y5bey5Y+Y5YyW77yM6K+35Yi35paw5ZCO6YeN5paw6LCD5pW0
 string|stock_count|5bqT5a2Y77yaJTEkZA==
 string|upload_failed_retry|5LiK5Lyg5aSx6LSlCueCueWHu+mHjeivlQ==
 string|upload_media|5LiK5Lyg
