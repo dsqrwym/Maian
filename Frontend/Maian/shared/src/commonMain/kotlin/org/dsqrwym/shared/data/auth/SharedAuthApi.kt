@@ -80,7 +80,7 @@ class SharedAuthApi(private val client: HttpClient) {
         }
         return client.post(url) {
             contentType(ContentType.Application.Json)
-            setBody(req)
+            setBody(req.withBackendSafeDeviceFields())
         }.body()
     }
 

@@ -35,6 +35,30 @@ data class SharedLoginRequest(
     val userAgent: String
 )
 
+private const val LOGIN_DEVICE_NAME_MAX_LENGTH = 150
+private const val LOGIN_USER_AGENT_MAX_LENGTH = 255
+private const val DEFAULT_LOGIN_DEVICE_NAME = "UNKNOWN_DEVICE"
+private const val DEFAULT_LOGIN_USER_AGENT = "UNKNOWN_USER_AGENT"
+
+fun SharedLoginRequest.withBackendSafeDeviceFields(): SharedLoginRequest {
+    return copy(
+        deviceName = deviceName.fitRequiredLoginField(
+            maxLength = LOGIN_DEVICE_NAME_MAX_LENGTH,
+            fallback = DEFAULT_LOGIN_DEVICE_NAME
+        ),
+        userAgent = userAgent.fitRequiredLoginField(
+            maxLength = LOGIN_USER_AGENT_MAX_LENGTH,
+            fallback = DEFAULT_LOGIN_USER_AGENT
+        )
+    )
+}
+
+private fun String.fitRequiredLoginField(maxLength: Int, fallback: String): String {
+    return trim()
+        .ifBlank { fallback }
+        .take(maxLength)
+}
+
 /**
  * Data class representing a successful login response.
  * 表示成功登录响应的数据类。
