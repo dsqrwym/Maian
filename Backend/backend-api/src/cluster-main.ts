@@ -26,7 +26,7 @@ import cluster from 'node:cluster';
 import { bootstrap } from '#/bootstrap.js';
 
 const numWorkers =
-  Number(process.env.WORKERS) || Math.max(1, Math.floor(os.cpus().length / 2));
+  Number(process.env.CLUSTER_INSTANCES) || Math.max(1, os.cpus().length - 1);
 const mainName = 'Cluster Main';
 if (cluster.isPrimary) {
   console.log(
