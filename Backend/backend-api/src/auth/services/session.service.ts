@@ -16,7 +16,7 @@ import { ConfigService } from '@nestjs/config';
 import { HashService } from '#/common/hash/hash.service.js';
 import { DrizzleService } from '#/drizzle/drizzle.service.js';
 import { user_sessions } from '#/generated/drizzle/schema.js';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
 
 @Injectable()

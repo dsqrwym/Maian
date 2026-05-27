@@ -11,13 +11,13 @@ bignum = "0.3.10"
 coilCompose = "3.4.0" #3.3.0
 #composeMultiplatform = "1.9.3" #1.9.3
 composemediaplayer = "0.10.0" #0.9.0
-compose-multiplatform-adaptive = "1.3.0-alpha07" #1.3.0-alpha06
+compose-multiplatform-adaptive = "1.3.0-beta01" #1.3.0-alpha06
 compose-multiplatform-lifecycle = "2.10.0"
 composeMultiplatform = "1.11.0" #1.10.2
 composePipette = "2.0.0"
 composePlaceholderMaterial3 = "1.0.12"
 composeWebviewMultiplatform = "2.0.3" #2.0.2
-compottieLite = "2.2.0-beta01" #2.1.0
+compottieLite = "2.2.0" #2.1.0
 coreKtx = "1.18.0"
 filekitCore = "0.13.0" #0.13.0 不更新直到 composemediaplayer = "0.10.0" 0.10.1
 haze = "2.0.0-alpha02" #1.7.2
@@ -48,7 +48,7 @@ uiTooling = "1.11.0" #1.10.2
 vico = "3.1.0"
 webcam = "0.3.12"
 windowCore = "1.5.1"
-zoomable = "2.11.1" #2.9.0
+zoomable = "2.12.0" #2.9.0
 zxing = "3.5.4"
 zxingAndroid = "4.3.0"
 

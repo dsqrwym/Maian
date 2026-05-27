@@ -181,6 +181,7 @@ export class FileSyncService {
     file: typeof files.$inferSelect,
   ): Promise<'skipped' | 'downloaded'> {
     const localPath = this.localDriver.resolvePathKey(file.storage_key);
+    const tempPath = `${localPath}.${process.pid}.${Date.now()}.syncing`;
 
     // 检查本地文件是否已存在
     if (await this.checkLocalFileExists(localPath)) {
@@ -203,7 +204,6 @@ export class FileSyncService {
       });
 
       // 写入临时文件，完成后重命名
-      const tempPath = `${localPath}.${process.pid}.${Date.now()}.syncing`;
       const writeStream = fs.createWriteStream(tempPath);
 
       await new Promise<void>((resolve, reject) => {
@@ -223,7 +223,6 @@ export class FileSyncService {
       return 'downloaded';
     } catch (err) {
       // 清理临时文件
-      const tempPath = `${localPath}.syncing`;
       await fs.promises.unlink(tempPath).catch(() => {});
 
       this.logger.error(
