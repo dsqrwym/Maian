@@ -149,6 +149,7 @@ fun CategoryBrowseScreen(
                     modifier = Modifier.fillMaxWidth(),
                     categories = childCategories,
                     itemName = { it.localizedName(languageCode) },
+                    key = childCategories.itemKey { "retail-child-category-key${it.id}" },
                     onSelect = { category ->
                         onCategoryClick(
                             category.withBrowseContextFrom(

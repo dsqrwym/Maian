@@ -17,6 +17,7 @@ import org.dsqrwym.shared.ui.components.progressindicators.SharedLoadingDotsIndi
 object SharedLazyGridLayout {
     val arrangement = Arrangement.spacedBy(12.dp)
     val verticalItemSpacing = 12.dp
+    val horizontalItemSpacing = 8.dp
     val Padding = 16.dp
 
     fun LazyStaggeredGridScope.appendLoadingIndicator() {

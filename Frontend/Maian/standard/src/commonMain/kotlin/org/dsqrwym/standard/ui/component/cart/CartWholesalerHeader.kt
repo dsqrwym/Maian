@@ -35,6 +35,7 @@ internal fun CartWholesalerHeader(
     showStoreButton: Boolean,
     isSelectingScope: Boolean,
     isLoading: Boolean,
+    isAmountLoading: Boolean,
     onStoreClick: () -> Unit,
 ) {
     Row(
@@ -119,7 +120,7 @@ internal fun CartWholesalerHeader(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             CartSelectableText(
-                modifier = Modifier.placeholderWithShimmer(isLoading),
+                modifier = Modifier.placeholderWithShimmer(isLoading || isAmountLoading),
                 text = cartAmount(group.total),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,

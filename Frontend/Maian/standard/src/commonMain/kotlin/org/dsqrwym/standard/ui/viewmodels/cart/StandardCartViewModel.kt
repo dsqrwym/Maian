@@ -8,8 +8,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import maian.shared.generated.resources.*
-import maian.standard.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.delete_failed
+import maian.shared.generated.resources.delete_success
+import maian.shared.generated.resources.load_failed
+import maian.shared.generated.resources.update_failed
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.create_order_error_cart_empty
+import maian.standard.generated.resources.create_order_error_not_enough_stock
+import maian.standard.generated.resources.create_order_error_order_line_limit_exceeded
+import maian.standard.generated.resources.create_order_error_product_unavailable
+import maian.standard.generated.resources.create_order_error_quantity_below_min_order
+import maian.standard.generated.resources.create_order_error_shipping_address_missing
+import maian.standard.generated.resources.create_order_error_variant_unavailable
+import maian.standard.generated.resources.create_order_error_wholesaler_invalid
+import maian.standard.generated.resources.create_order_failed
+import maian.standard.generated.resources.create_order_success
 import org.dsqrwym.shared.data.profile.SharedWholesalerProfileRepository
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
@@ -18,12 +32,12 @@ import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.standard.data.cart.StandardCartRepository
 import org.dsqrwym.standard.data.order.StandardOrderRepository
+import org.dsqrwym.standard.domain.browse.toRetailWholesaler
 import org.dsqrwym.standard.domain.cart.Cart
 import org.dsqrwym.standard.domain.cart.CartGroup
 import org.dsqrwym.standard.domain.cart.CartGroupStatus
 import org.dsqrwym.standard.domain.cart.CartItem
 import org.dsqrwym.standard.domain.cart.CartWholesaler
-import org.dsqrwym.standard.domain.browse.toRetailWholesaler
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
 import org.jetbrains.compose.resources.getString
 
@@ -37,6 +51,9 @@ data class StandardCartUiState(
     val deletingWholesalerId: String? = null,
     val creatingOrderWholesalerId: String? = null,
     val selectingWholesalerId: String? = null,
+    val quantityAmountRefreshingCartDetailId: String? = null,
+    val quantityAmountRefreshingWholesalerId: String? = null,
+    val isAllAmountsRefreshing: Boolean = false,
     val activeWholesalerId: String? = null,
     val activeWholesalerName: String? = null,
 ) {
@@ -45,6 +62,12 @@ data class StandardCartUiState(
 
     val isContentRefreshing: Boolean
         get() = isRefreshing || isBackgroundRefreshing || (isLoading && cart != null)
+
+    val isAmountRefreshing: Boolean
+        get() = quantityAmountRefreshingCartDetailId != null || isAllAmountsRefreshing
+
+    val isGeneralContentRefreshing: Boolean
+        get() = isContentRefreshing && !isAmountRefreshing
 
     val isEmpty: Boolean
         get() = loadState == UiState.Success && (cart?.isEmpty ?: true)
@@ -115,10 +138,32 @@ class StandardCartViewModel(
             repository.updateEvents.collectLatest {
                 if (uiState.cart == null && uiState.loadState == UiState.Idle) return@collectLatest
                 if (uiState.isRefreshing) return@collectLatest
-                loadCartInternal(
-                    refreshing = false,
-                    backgroundRefreshing = uiState.cart != null,
-                )
+                val isQuantityAmountRefresh = uiState.quantityAmountRefreshingCartDetailId != null
+                val isDeleteRefresh = uiState.deletingCartDetailId != null ||
+                        uiState.deletingWholesalerId != null
+                if (isDeleteRefresh) {
+                    uiState = uiState.copy(
+                        quantityAmountRefreshingCartDetailId = null,
+                        quantityAmountRefreshingWholesalerId = null,
+                        isAllAmountsRefreshing = false,
+                    )
+                } else if (!isQuantityAmountRefresh && uiState.cart != null) {
+                    uiState = uiState.copy(isAllAmountsRefreshing = true)
+                }
+                try {
+                    loadCartInternal(
+                        refreshing = false,
+                        backgroundRefreshing = uiState.cart != null,
+                    )
+                } finally {
+                    if (!isDeleteRefresh && (isQuantityAmountRefresh || uiState.isAllAmountsRefreshing)) {
+                        uiState = uiState.copy(
+                            quantityAmountRefreshingCartDetailId = null,
+                            quantityAmountRefreshingWholesalerId = null,
+                            isAllAmountsRefreshing = false,
+                        )
+                    }
+                }
             }
         }
     }
@@ -156,16 +201,46 @@ class StandardCartViewModel(
         if (boundedQuantity == item.quantity) return
 
         viewModelScope.launch {
-            uiState = uiState.copy(updatingCartDetailId = item.cartDetailId)
-            when (val result = repository.updateCartItemQuantity(item.cartDetailId, boundedQuantity)) {
-                is SharedResponseResult.Success -> Unit
-                is SharedResponseResult.Error -> {
-                    mySnackbarViewModel.showError(
-                        result.message ?: getString(SharedRes.string.update_failed),
+            val cartDetailId = item.cartDetailId
+            val wholesalerId = uiState.cart
+                ?.groups
+                ?.firstOrNull { group ->
+                    group.items.any { item ->
+                        item.cartDetailId == cartDetailId
+                    }
+                }
+                ?.wholesaler
+                ?.id
+            uiState = uiState.copy(
+                updatingCartDetailId = cartDetailId,
+                quantityAmountRefreshingCartDetailId = cartDetailId,
+                quantityAmountRefreshingWholesalerId = wholesalerId,
+            )
+            var shouldKeepAmountRefresh = false
+            try {
+                when (val result =
+                    repository.updateCartItemQuantity(cartDetailId, boundedQuantity)) {
+                    is SharedResponseResult.Success -> {
+                        shouldKeepAmountRefresh = true
+                    }
+
+                    is SharedResponseResult.Error -> {
+                        mySnackbarViewModel.showError(
+                            result.message ?: getString(SharedRes.string.update_failed),
+                        )
+                    }
+                }
+            } finally {
+                uiState = if (shouldKeepAmountRefresh) {
+                    uiState.copy(updatingCartDetailId = null)
+                } else {
+                    uiState.copy(
+                        updatingCartDetailId = null,
+                        quantityAmountRefreshingCartDetailId = null,
+                        quantityAmountRefreshingWholesalerId = null,
                     )
                 }
             }
-            uiState = uiState.copy(updatingCartDetailId = null)
         }
     }
 
@@ -282,7 +357,8 @@ class StandardCartViewModel(
         )
 
         val wholesalerId = uiState.activeWholesalerId
-        when (val result = repository.getMyCart(langCode = languageCode, wholesalerId = wholesalerId)) {
+        when (val result =
+            repository.getMyCart(langCode = languageCode, wholesalerId = wholesalerId)) {
             is SharedResponseResult.Success -> {
                 uiState = uiState.copy(
                     loadState = UiState.Success,

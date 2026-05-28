@@ -22,6 +22,9 @@ internal fun CartGroupCard(
     deletingWholesalerId: String?,
     creatingOrderWholesalerId: String?,
     selectingWholesalerId: String?,
+    quantityAmountRefreshingCartDetailId: String?,
+    quantityAmountRefreshingWholesalerId: String?,
+    isAllAmountsRefreshing: Boolean,
     isLoading: Boolean,
     isWholesalerScoped: Boolean,
     onWholesalerImageClick: (CartWholesaler) -> Unit,
@@ -41,6 +44,8 @@ internal fun CartGroupCard(
         updatingCartDetailId == it.cartDetailId || deletingCartDetailId == it.cartDetailId
     }
     val isGroupMutating = isClearingWholesaler || isCreatingOrder || isSelectingScope || isGroupItemMutating
+    val isGroupAmountLoading =
+        isAllAmountsRefreshing || quantityAmountRefreshingWholesalerId == group.wholesaler.id
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
@@ -55,6 +60,7 @@ internal fun CartGroupCard(
                 showStoreButton = !isWholesalerScoped,
                 isSelectingScope = isSelectingScope,
                 isLoading = isLoading,
+                isAmountLoading = isGroupAmountLoading,
                 onStoreClick = { onWholesalerScopeClick(group.wholesaler) },
             )
 
@@ -68,6 +74,8 @@ internal fun CartGroupCard(
                     isUpdating = updatingCartDetailId == item.cartDetailId,
                     isDeleting = deletingCartDetailId == item.cartDetailId,
                     isLoading = isLoading,
+                    isAmountLoading = isAllAmountsRefreshing ||
+                            quantityAmountRefreshingCartDetailId == item.cartDetailId,
                     onImageClick = { onProductImageClick(item) },
                     onProductDetailClick = { onProductDetailClick(item.productId) },
                     onQuantityChange = { quantity -> onQuantityChange(item, quantity) },
@@ -75,7 +83,11 @@ internal fun CartGroupCard(
                 )
             }
 
-            CartGroupTotals(group = group, isLoading = isLoading)
+            CartGroupTotals(
+                group = group,
+                isLoading = isLoading,
+                isAmountLoading = isGroupAmountLoading,
+            )
 
             CartGroupActionRow(
                 modifier = Modifier.align(Alignment.End),
@@ -94,6 +106,8 @@ internal fun CartGroupCard(
 internal fun CartSingleWholesalerHeaderCard(
     group: CartGroup,
     selectingWholesalerId: String?,
+    quantityAmountRefreshingWholesalerId: String?,
+    isAllAmountsRefreshing: Boolean,
     isLoading: Boolean,
     isWholesalerScoped: Boolean,
     onWholesalerImageClick: (CartWholesaler) -> Unit,
@@ -113,6 +127,8 @@ internal fun CartSingleWholesalerHeaderCard(
                 showStoreButton = !isWholesalerScoped,
                 isSelectingScope = selectingWholesalerId == group.wholesaler.id,
                 isLoading = isLoading,
+                isAmountLoading = isAllAmountsRefreshing ||
+                        quantityAmountRefreshingWholesalerId == group.wholesaler.id,
                 onStoreClick = { onWholesalerScopeClick(group.wholesaler) },
             )
 
@@ -128,6 +144,8 @@ internal fun CartSingleWholesalerItemCard(
     item: CartItem,
     updatingCartDetailId: String?,
     deletingCartDetailId: String?,
+    quantityAmountRefreshingCartDetailId: String?,
+    isAllAmountsRefreshing: Boolean,
     isLoading: Boolean,
     onProductImageClick: (CartItem) -> Unit,
     onProductDetailClick: (String) -> Unit,
@@ -141,6 +159,7 @@ internal fun CartSingleWholesalerItemCard(
         isUpdating = updatingCartDetailId == item.cartDetailId,
         isDeleting = deletingCartDetailId == item.cartDetailId,
         isLoading = isLoading,
+        isAmountLoading = isAllAmountsRefreshing || quantityAmountRefreshingCartDetailId == item.cartDetailId,
         onImageClick = { onProductImageClick(item) },
         onProductDetailClick = { onProductDetailClick(item.productId) },
         onQuantityChange = { quantity -> onQuantityChange(item, quantity) },
@@ -156,6 +175,8 @@ internal fun CartSingleWholesalerFooterCard(
     deletingWholesalerId: String?,
     creatingOrderWholesalerId: String?,
     selectingWholesalerId: String?,
+    quantityAmountRefreshingWholesalerId: String?,
+    isAllAmountsRefreshing: Boolean,
     isLoading: Boolean,
     onClearWholesalerCart: (CartGroup) -> Unit,
     onCreateOrder: (CartGroup) -> Unit,
@@ -168,6 +189,8 @@ internal fun CartSingleWholesalerFooterCard(
         updatingCartDetailId == it.cartDetailId || deletingCartDetailId == it.cartDetailId
     }
     val isGroupMutating = isClearingWholesaler || isCreatingOrder || isSelectingScope || isGroupItemMutating
+    val isGroupAmountLoading =
+        isAllAmountsRefreshing || quantityAmountRefreshingWholesalerId == group.wholesaler.id
 
     OutlinedCard(
         modifier = modifier.fillMaxWidth(),
@@ -176,7 +199,11 @@ internal fun CartSingleWholesalerFooterCard(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            CartGroupTotals(group = group, isLoading = isLoading)
+            CartGroupTotals(
+                group = group,
+                isLoading = isLoading,
+                isAmountLoading = isGroupAmountLoading,
+            )
             CartGroupActionRow(
                 modifier = Modifier.align(Alignment.End),
                 group = group,

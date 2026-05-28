@@ -1,10 +1,18 @@
 package org.dsqrwym.shared.ui.components.category
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.ElevatedAssistChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.PermanentDrawerSheet
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,8 +26,11 @@ import androidx.paging.compose.itemKey
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.no_categories
 import maian.shared.generated.resources.path
-import org.dsqrwym.shared.paging.*
-import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
+import org.dsqrwym.shared.paging.hasLoadError
+import org.dsqrwym.shared.paging.isAppendingOrPrepending
+import org.dsqrwym.shared.paging.isEmptyResult
+import org.dsqrwym.shared.paging.isInitialLoading
+import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.placeholder.SharedPlainNotFoundPlaceholder
 import org.dsqrwym.shared.util.colum.SharedColumnLayout
 import org.dsqrwym.shared.util.colum.SharedLazyColumnLayout.appendErrorRetry
@@ -102,7 +113,7 @@ fun <T : Any> SharedCategoryRail(
                 } else {
                     items(
                         count = categories.itemCount,
-                        key = categories.itemKey { itemId(it) } ,
+                        key = categories.itemKey { itemId(it) },
                     ) { index ->
                         categories[index]?.let { category ->
                             NavigationDrawerItem(
@@ -137,33 +148,43 @@ fun <T : Any> SharedChildCategoryGrid(
     itemName: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
+    key: (index: Int) -> Any = { index -> index },
 ) {
     if (categories.isEmptyResult) return
     val isLoading = categories.isRefreshing
 
-    FlowRow(
+    LazyRow(
         modifier = modifier,
         horizontalArrangement = SharedRowLayout.arrangement,
-        verticalArrangement = SharedColumnLayout.arrangement,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        if (categories.hasLoadError) {
-            SharedRetryButton { categories.retry() }
+        if (categories.isInitialLoading) {
+            appendLoadingIndicator()
+        } else if (categories.hasLoadError) {
+            appendErrorRetry { categories.retry() }
         } else {
-            repeat(categories.itemCount) { index ->
+            items(
+                count = categories.itemCount,
+                key = key,
+            ) { index ->
                 categories[index]?.let { category ->
                     ElevatedAssistChip(
-                        modifier = Modifier.animateContentSize().placeholderWithShimmer(isLoading),
+                        modifier = Modifier.animateItem().placeholderWithShimmer(isLoading),
                         onClick = { onSelect(category) },
                         label = {
                             Text(
                                 itemName(category),
-                                maxLines = 3,
+                                maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
                             )
                         },
                     )
                 }
             }
+        }
+
+        if (categories.isAppendingOrPrepending) {
+            appendLoadingIndicator()
         }
     }
 }

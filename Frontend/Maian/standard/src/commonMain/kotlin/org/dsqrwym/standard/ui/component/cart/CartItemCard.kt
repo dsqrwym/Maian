@@ -27,6 +27,7 @@ internal fun CartItemRow(
     isUpdating: Boolean,
     isDeleting: Boolean,
     isLoading: Boolean,
+    isAmountLoading: Boolean,
     onImageClick: () -> Unit,
     onProductDetailClick: () -> Unit,
     onQuantityChange: (Int) -> Unit,
@@ -115,7 +116,7 @@ internal fun CartItemRow(
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        CartItemLineTotal(item = item, isLoading = isLoading)
+                        CartItemLineTotal(item = item, isLoading = isLoading || isAmountLoading)
                     }
                 }
 

@@ -85,7 +85,7 @@ fun StandardCartScreen(
                 activeWholesalerName = state.activeWholesalerName,
                 isWholesalerScoped = state.isWholesalerScoped,
                 isRefreshing = state.isRefreshing,
-                isLoading = state.isContentRefreshing,
+                isLoading = state.isGeneralContentRefreshing,
                 onRefresh = viewModel::refreshCart,
             )
         },
@@ -97,7 +97,10 @@ fun StandardCartScreen(
         bottomBar = {
             val cart = state.cart
             if (cart != null && !cart.isEmpty) {
-                CartSummaryBottomBar(summary = cart.summary, isLoading = state.isContentRefreshing)
+                CartSummaryBottomBar(
+                    summary = cart.summary,
+                    isLoading = state.isGeneralContentRefreshing || state.isAmountRefreshing,
+                )
             }
         },
     ) { padding, scrollBehavior ->
@@ -201,7 +204,7 @@ private fun CartContent(
                                 groups = cart.groups,
                                 updatingCartDetailId = state.updatingCartDetailId,
                                 deletingCartDetailId = state.deletingCartDetailId,
-                                isLoading = state.isContentRefreshing,
+                                isLoading = state.isGeneralContentRefreshing,
                                 onQuantityChange = onQuantityChange,
                                 onDeleteItem = onDeleteItem,
                             )
@@ -219,7 +222,9 @@ private fun CartContent(
                                 modifier = Modifier.animateItem(),
                                 group = group,
                                 selectingWholesalerId = state.selectingWholesalerId,
-                                isLoading = state.isContentRefreshing,
+                                quantityAmountRefreshingWholesalerId = state.quantityAmountRefreshingWholesalerId,
+                                isAllAmountsRefreshing = state.isAllAmountsRefreshing,
+                                isLoading = state.isGeneralContentRefreshing,
                                 isWholesalerScoped = state.isWholesalerScoped,
                                 onWholesalerImageClick = onWholesalerImageClick,
                                 onWholesalerScopeClick = onWholesalerScopeClick,
@@ -234,7 +239,9 @@ private fun CartContent(
                                 item = item,
                                 updatingCartDetailId = state.updatingCartDetailId,
                                 deletingCartDetailId = state.deletingCartDetailId,
-                                isLoading = state.isContentRefreshing,
+                                quantityAmountRefreshingCartDetailId = state.quantityAmountRefreshingCartDetailId,
+                                isAllAmountsRefreshing = state.isAllAmountsRefreshing,
+                                isLoading = state.isGeneralContentRefreshing,
                                 onProductImageClick = onProductImageClick,
                                 onProductDetailClick = onProductDetailClick,
                                 onQuantityChange = onQuantityChange,
@@ -253,7 +260,9 @@ private fun CartContent(
                                 deletingWholesalerId = state.deletingWholesalerId,
                                 creatingOrderWholesalerId = state.creatingOrderWholesalerId,
                                 selectingWholesalerId = state.selectingWholesalerId,
-                                isLoading = state.isContentRefreshing,
+                                quantityAmountRefreshingWholesalerId = state.quantityAmountRefreshingWholesalerId,
+                                isAllAmountsRefreshing = state.isAllAmountsRefreshing,
+                                isLoading = state.isGeneralContentRefreshing,
                                 onClearWholesalerCart = onClearWholesalerCart,
                                 onCreateOrder = onCreateOrder,
                             )
@@ -271,7 +280,10 @@ private fun CartContent(
                                 deletingWholesalerId = state.deletingWholesalerId,
                                 creatingOrderWholesalerId = state.creatingOrderWholesalerId,
                                 selectingWholesalerId = state.selectingWholesalerId,
-                                isLoading = state.isContentRefreshing,
+                                quantityAmountRefreshingCartDetailId = state.quantityAmountRefreshingCartDetailId,
+                                quantityAmountRefreshingWholesalerId = state.quantityAmountRefreshingWholesalerId,
+                                isAllAmountsRefreshing = state.isAllAmountsRefreshing,
+                                isLoading = state.isGeneralContentRefreshing,
                                 onWholesalerImageClick = onWholesalerImageClick,
                                 onProductImageClick = onProductImageClick,
                                 onQuantityChange = onQuantityChange,

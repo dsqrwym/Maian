@@ -8,7 +8,7 @@ object ApiConfig {
     const val CONNECT_TIMEOUT_MILLIS = 30_000L
     const val REQUEST_TIMEOUT_MILLIS = 60_000L
     const val SOCKET_TIMEOUT_MILLIS = REQUEST_TIMEOUT_MILLIS
-    const val ENABLE_LOGGING = true
+    const val ENABLE_LOGGING = false
 
     object AuthPath {
         const val AUTH = "${BASE_URL}/auth"

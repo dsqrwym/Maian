@@ -92,27 +92,26 @@ internal fun CartGroupActionRow(
 internal fun CartGroupTotals(
     group: CartGroup,
     isLoading: Boolean,
+    isAmountLoading: Boolean = false,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         HorizontalDivider()
-        MoneyRow(label = stringResource(StandardRes.string.cart_subtotal), value = group.subtotal, isLoading = isLoading)
-        MoneyRow(label = stringResource(StandardRes.string.cart_iva), value = group.ivaTotal, isLoading = isLoading)
+        MoneyRow(
+            label = stringResource(StandardRes.string.cart_subtotal),
+            value = group.subtotal,
+            isLoading = isLoading || isAmountLoading,
+        )
+        MoneyRow(
+            label = stringResource(StandardRes.string.cart_iva),
+            value = group.ivaTotal,
+            isLoading = isLoading || isAmountLoading,
+        )
         MoneyRow(
             label = stringResource(StandardRes.string.cart_total),
             value = group.total,
             emphasize = true,
-            isLoading = isLoading,
+            isLoading = isLoading || isAmountLoading,
         )
-        if (group.status == CartGroupStatus.BELOW_MINIMUM_ORDER_AMOUNT) {
-            group.wholesaler.minimumOrderAmount?.let {
-                CartSelectableText(
-                    modifier = Modifier.placeholderWithShimmer(isLoading),
-                    text = stringResource(StandardRes.string.cart_minimum_order_hint, cartAmount(it)),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.error,
-                )
-            }
-        }
     }
 }
 

@@ -12,11 +12,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.localization.customAppLocale
@@ -56,6 +68,8 @@ private data class CategoryProductsQuery(
     val wholesalerId: String?,
     val languageCode: String,
 )
+
+private const val MAX_CATEGORY_LEVEL = 3
 
 /**
  * 分类浏览视图模型
@@ -167,20 +181,11 @@ class CategoryBrowseViewModel(
     ) { search, selected, config, configured, _ ->
         // 第三级就直接给空子分类
         // 如果是第3级分类，则没有子分类
-        if (selected?.level == 3) {
-            return@combine CategoryPageQuery(
-                search = search,
-                parentId = null,
-                level = null,
-                wholesalerId = config.first,
-                languageCode = config.second,
-            ) to configured
-        }
         // 构建子分类查询参数
         CategoryPageQuery(
             search = search,
             parentId = selected?.id,  // 当前分类ID作为父分类ID
-            level = selected?.level?.plus(1)?.takeIf { it <= 3 },  // 下一层级，最大不超过3级
+            level = selected?.level?.plus(1),  // 下一层级，最大不超过3级
             wholesalerId = config.first,
             languageCode = config.second,
         ) to configured
@@ -188,8 +193,14 @@ class CategoryBrowseViewModel(
         .filter { it.second }
         .map { it.first }
         .flatMapLatest { query ->
-            if (query.parentId == null || query.level == null) {
-                return@flatMapLatest flowOf(PagingData.empty())
+            if (query.parentId == null || query.level == null || query.level > MAX_CATEGORY_LEVEL) {
+                return@flatMapLatest flowOf(PagingData.empty(
+                    sourceLoadStates = LoadStates(
+                        refresh = LoadState.NotLoading(endOfPaginationReached = true),
+                        prepend = LoadState.NotLoading(endOfPaginationReached = true),
+                        append = LoadState.NotLoading(endOfPaginationReached = true),
+                    )
+                ))
             }
             createPager(
                 query = query.search,
