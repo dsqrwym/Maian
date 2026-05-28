@@ -1,7 +1,7 @@
 package org.dsqrwym.business.ui.workspace
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation3.SupportingPaneSceneStrategy
@@ -31,7 +31,7 @@ actual fun BusinessAuxiliaryHost(
         workspaceState.currentSurface?.let { backStack.add(ProductWorkspaceAuxPane(it)) }
     }
 
-    val adaptiveInfo = currentWindowAdaptiveInfo()
+    val adaptiveInfo = currentWindowAdaptiveInfoV2()
     val directive = remember(adaptiveInfo) {
         calculatePaneScaffoldDirective(adaptiveInfo).copy(
             horizontalPartitionSpacerSize = 0.dp,
