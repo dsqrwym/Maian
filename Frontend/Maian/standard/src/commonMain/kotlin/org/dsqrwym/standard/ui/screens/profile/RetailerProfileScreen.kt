@@ -55,7 +55,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -94,6 +93,7 @@ import org.dsqrwym.shared.data.user.toStringResource
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.ui.components.dialog.SharedImageViewDialog
 import org.dsqrwym.shared.ui.components.progressindicators.SharedLoadingDotsIndicator
+import org.dsqrwym.shared.ui.components.row.SharedInfoRow
 import org.dsqrwym.shared.ui.components.scaffold.SharedTransparentScaffold
 import org.dsqrwym.shared.ui.media.SharedAsyncImage
 import org.dsqrwym.shared.util.lazygrid.SharedLazyGridLayout
@@ -304,7 +304,11 @@ private fun RetailerHeaderCard(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     FilledTonalButton(onClick = onEdit) {
-                        Icon(Icons.Outlined.Edit, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Icon(
+                            Icons.Outlined.Edit,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
                         Spacer(Modifier.width(4.dp))
                         Text(stringResource(SharedRes.string.edit))
                     }
@@ -315,7 +319,11 @@ private fun RetailerHeaderCard(
                             contentColor = MaterialTheme.colorScheme.error,
                         ),
                     ) {
-                        Icon(Icons.AutoMirrored.Outlined.Logout, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Icon(
+                            Icons.AutoMirrored.Outlined.Logout,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
                         Spacer(Modifier.width(4.dp))
                         Text(stringResource(SharedRes.string.logout))
                     }
@@ -340,22 +348,52 @@ private fun AccountInfoCard(
             )
             Spacer(Modifier.height(12.dp))
             profile?.email?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Email, stringResource(SharedRes.string.reset_email_label), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Email,
+                    stringResource(SharedRes.string.reset_email_label),
+                    it
+                )
             }
             profile?.username?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Rounded.Person, stringResource(SharedRes.string.field_username_label), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Rounded.Person,
+                    stringResource(SharedRes.string.field_username_label),
+                    it
+                )
             }
             profile?.firstName?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Badge, stringResource(SharedRes.string.first_name), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Badge,
+                    stringResource(SharedRes.string.first_name),
+                    it
+                )
             }
             profile?.lastName?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Badge, stringResource(SharedRes.string.last_name), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Badge,
+                    stringResource(SharedRes.string.last_name),
+                    it
+                )
             }
             profile?.telephone?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Phone, stringResource(SharedRes.string.field_telephone_label), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Phone,
+                    stringResource(SharedRes.string.field_telephone_label),
+                    it
+                )
             }
             profile?.taxId?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Numbers, stringResource(SharedRes.string.tax_id), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Numbers,
+                    stringResource(SharedRes.string.tax_id),
+                    it
+                )
             }
         }
     }
@@ -377,16 +415,36 @@ private fun CompanyInfoCard(
             )
             Spacer(Modifier.height(12.dp))
             profileData?.companyName?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Business, stringResource(SharedRes.string.company_name), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Business,
+                    stringResource(SharedRes.string.company_name),
+                    it
+                )
             }
             profileData?.displayName?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Storefront, stringResource(SharedRes.string.display_name), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Storefront,
+                    stringResource(SharedRes.string.display_name),
+                    it
+                )
             }
             profileData?.companyType?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Business, stringResource(SharedRes.string.company_type), stringResource(it.toStringResource()))
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Business,
+                    stringResource(SharedRes.string.company_type),
+                    stringResource(it.toStringResource())
+                )
             }
             profileData?.contactName?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Badge, stringResource(StandardRes.string.contact_name), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Badge,
+                    stringResource(StandardRes.string.contact_name),
+                    it
+                )
             }
         }
     }
@@ -429,19 +487,44 @@ private fun StoreDirectionCard(
             )
             Spacer(Modifier.height(12.dp))
             direction?.street?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Streetview, stringResource(SharedRes.string.address_street), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Streetview,
+                    stringResource(SharedRes.string.address_street),
+                    it
+                )
             }
             direction?.zipCode?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Pin, stringResource(SharedRes.string.address_postal_code), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Pin,
+                    stringResource(SharedRes.string.address_postal_code),
+                    it
+                )
             }
             cityName?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.LocationCity, stringResource(SharedRes.string.address_city), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.LocationCity,
+                    stringResource(SharedRes.string.address_city),
+                    it
+                )
             }
             provinceName?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Map, stringResource(SharedRes.string.address_state_or_province), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Map,
+                    stringResource(SharedRes.string.address_state_or_province),
+                    it
+                )
             }
             countryName?.let {
-                InfoRow(Modifier.placeholderWithShimmer(isLoading), Icons.Outlined.Public, stringResource(SharedRes.string.address_country), it)
+                SharedInfoRow(
+                    Modifier.placeholderWithShimmer(isLoading),
+                    Icons.Outlined.Public,
+                    stringResource(SharedRes.string.address_country),
+                    it
+                )
             }
         }
     }
@@ -461,7 +544,11 @@ private fun RetailerLogo(
             .size(size)
             .clip(RoundedCornerShape(cornerRadius))
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .border(0.5.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(cornerRadius)),
+            .border(
+                0.5.dp,
+                MaterialTheme.colorScheme.outlineVariant,
+                RoundedCornerShape(cornerRadius)
+            ),
         contentAlignment = Alignment.Center,
     ) {
         userId?.let {
@@ -495,29 +582,5 @@ private fun RetailerChip(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-    }
-}
-
-@Composable
-private fun InfoRow(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    label: String,
-    value: String,
-) {
-    Row(
-        modifier = modifier.padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Icon(icon, contentDescription = icon.name, tint = MaterialTheme.colorScheme.primary)
-        Column {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Text(text = value, style = MaterialTheme.typography.bodyMedium, overflow = TextOverflow.Ellipsis)
-        }
     }
 }

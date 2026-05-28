@@ -1,26 +1,65 @@
 package org.dsqrwym.shared.ui.components.wholesaler
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Badge
+import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material.icons.outlined.LocationCity
+import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Pin
+import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.Streetview
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.account_info
+import maian.shared.generated.resources.address_city
+import maian.shared.generated.resources.address_country
+import maian.shared.generated.resources.address_postal_code
+import maian.shared.generated.resources.address_state_or_province
+import maian.shared.generated.resources.address_street
+import maian.shared.generated.resources.amount_euro_value
+import maian.shared.generated.resources.business_settings
+import maian.shared.generated.resources.cancel
+import maian.shared.generated.resources.company_name
+import maian.shared.generated.resources.confirm
+import maian.shared.generated.resources.delivery_area
+import maian.shared.generated.resources.delivery_available
+import maian.shared.generated.resources.field_telephone_label
+import maian.shared.generated.resources.field_username_label
+import maian.shared.generated.resources.first_name
+import maian.shared.generated.resources.last_name
+import maian.shared.generated.resources.minimum_order_amount
+import maian.shared.generated.resources.not_set
+import maian.shared.generated.resources.pickup_available
+import maian.shared.generated.resources.reset_email_label
+import maian.shared.generated.resources.store_address
+import maian.shared.generated.resources.tax_id
 import org.dsqrwym.shared.data.profile.WholesalerProfileResponseDto
 import org.dsqrwym.shared.ui.components.buttons.SharedRetryButton
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.components.progressindicators.SharedLoadingDotsIndicator
+import org.dsqrwym.shared.ui.components.row.SharedInfoRow
 import org.dsqrwym.shared.util.modifier.placeholderWithShimmer
 import org.jetbrains.compose.resources.stringResource
 
@@ -73,7 +112,7 @@ private fun AccountInfoCard(
             Spacer(Modifier.height(12.dp))
 
             profile?.email?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Email,
                     stringResource(SharedRes.string.reset_email_label),
@@ -81,7 +120,7 @@ private fun AccountInfoCard(
                 )
             }
             profile?.username?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Rounded.Person,
                     stringResource(SharedRes.string.field_username_label),
@@ -89,7 +128,7 @@ private fun AccountInfoCard(
                 )
             }
             profile?.firstName?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Badge,
                     stringResource(SharedRes.string.first_name),
@@ -97,7 +136,7 @@ private fun AccountInfoCard(
                 )
             }
             profile?.lastName?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Badge,
                     stringResource(SharedRes.string.last_name),
@@ -105,7 +144,7 @@ private fun AccountInfoCard(
                 )
             }
             profile?.telephone?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Phone,
                     stringResource(SharedRes.string.field_telephone_label),
@@ -113,13 +152,13 @@ private fun AccountInfoCard(
                 )
             }
             profile?.taxId?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Numbers, stringResource(SharedRes.string.tax_id), it
                 )
             }
             profile?.profile?.companyName?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Business,
                     stringResource(SharedRes.string.company_name),
@@ -151,7 +190,7 @@ private fun StoreDirectionCard(
             Spacer(Modifier.height(12.dp))
 
             direction?.street?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Streetview,
                     stringResource(SharedRes.string.address_street),
@@ -159,7 +198,7 @@ private fun StoreDirectionCard(
                 )
             }
             direction?.zipCode?.let {
-                InfoRow(
+                SharedInfoRow(
                     modifier = Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Pin,
                     stringResource(SharedRes.string.address_postal_code),
@@ -167,7 +206,7 @@ private fun StoreDirectionCard(
                 )
             }
             cityName?.let {
-                InfoRow(
+                SharedInfoRow(
                     Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.LocationCity,
                     stringResource(SharedRes.string.address_city),
@@ -175,7 +214,7 @@ private fun StoreDirectionCard(
                 )
             }
             provinceName?.let {
-                InfoRow(
+                SharedInfoRow(
                     Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Map,
                     stringResource(SharedRes.string.address_state_or_province),
@@ -183,7 +222,7 @@ private fun StoreDirectionCard(
                 )
             }
             countryName?.let {
-                InfoRow(
+                SharedInfoRow(
                     Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Public,
                     stringResource(SharedRes.string.address_country),
@@ -212,7 +251,7 @@ private fun BusinessSettingsCard(
             Spacer(Modifier.height(12.dp))
 
             val moq = profileData?.minimumOrderAmount?.toDoubleOrNull() ?: 0.00
-            InfoRow(
+            SharedInfoRow(
                 Modifier.placeholderWithShimmer(isLoading),
 
                 Icons.Outlined.ShoppingCart,
@@ -221,14 +260,14 @@ private fun BusinessSettingsCard(
                 else stringResource(SharedRes.string.not_set)
             )
 
-            InfoRow(
+            SharedInfoRow(
                 Modifier.placeholderWithShimmer(isLoading),
                 Icons.Outlined.LocalShipping,
                 stringResource(SharedRes.string.delivery_available),
                 stringResource(if (profileData?.deliveryAvailable == true) SharedRes.string.confirm else SharedRes.string.cancel)
             )
 
-            InfoRow(
+            SharedInfoRow(
                 Modifier.placeholderWithShimmer(isLoading),
                 Icons.Outlined.Storefront,
                 stringResource(SharedRes.string.pickup_available),
@@ -236,39 +275,11 @@ private fun BusinessSettingsCard(
             )
 
             profileData?.deliveryAreaDescription?.takeIf { it.isNotBlank() }?.let {
-                InfoRow(
+                SharedInfoRow(
                     Modifier.placeholderWithShimmer(isLoading),
                     Icons.Outlined.Place, stringResource(SharedRes.string.delivery_area), it
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun InfoRow(modifier: Modifier = Modifier, icon: ImageVector, label: String, value: String) {
-    Row(
-        modifier = modifier
-            .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = icon.name,
-            tint = MaterialTheme.colorScheme.primary,
-        )
-        Column {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Text(
-                text = value,
-                style = MaterialTheme.typography.bodyMedium,
-                overflow = TextOverflow.Ellipsis,
-            )
         }
     }
 }
