@@ -7,13 +7,14 @@ import androidx.paging.PagingState
 
 class SharedPagingSource<T : Any>(
     private val query: String?,
+    private val pageSize: Int,
     private val fetchPage: suspend (page: Int, pageSize: Int, query: String?) -> List<T>
 ) :
     PagingSource<Int, T>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
         val page = params.key ?: 1
         return try {
-            val pageSize = params.loadSize
+            // Keep backend page/limit pagination on one stable coordinate system.
             val items = fetchPage(page, pageSize, query)
             LoadResult.Page(
                 data = items,
@@ -41,10 +42,11 @@ fun <T : Any> createPager(
     return Pager(
         config = PagingConfig(
             pageSize = pageSize,
+            initialLoadSize = pageSize,
             enablePlaceholders = enablePlaceholders
         ),
         pagingSourceFactory = {
-            SharedPagingSource(query, fetchPage)
+            SharedPagingSource(query, pageSize, fetchPage)
         }
     )
 }

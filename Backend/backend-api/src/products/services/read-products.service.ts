@@ -446,12 +446,12 @@ export class ReadProductsService {
 
     if (sortField) {
       const sortDirection = sort_order ?? (sortByBestSelling ? 'desc' : 'asc');
-      productQuery = sortByBestSelling
-        ? productQuery.orderBy(
-            sql`${sortField} ${sql.raw(sortDirection)}`,
-            asc(products.id),
-          )
-        : productQuery.orderBy(sql`${sortField} ${sql.raw(sortDirection)}`);
+      productQuery = productQuery.orderBy(
+        sql`${sortField} ${sql.raw(sortDirection)}`,
+        asc(products.id),
+      );
+    } else {
+      productQuery = productQuery.orderBy(asc(products.id));
     }
 
     const countQuery = this.drizzle.db

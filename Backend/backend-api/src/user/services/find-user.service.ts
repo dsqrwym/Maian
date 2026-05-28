@@ -7,6 +7,7 @@ import { PaginatedDataWithT } from '#/common/types-interfaces/response.interface
 import { UserPayload } from '#/auth/auth.types.js';
 import {
   and,
+  asc,
   count,
   eq,
   ilike,
@@ -207,6 +208,7 @@ export class FindUserService {
           sql.raw(
             `${query.orderBy ?? 'created_at'} ${query.orderDir ?? 'desc'}`,
           ),
+          asc(users.id),
         )
         .limit(limit)
         .offset((page - 1) * limit),

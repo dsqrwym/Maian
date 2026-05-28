@@ -128,6 +128,8 @@ export class ReadEmployeeService {
       employeeQuery = employeeQuery.orderBy(
         sql`${sortField} ${sql.raw(sortOrder ?? 'asc')}`,
       );
+    } else {
+      employeeQuery = employeeQuery.orderBy(sql`${users.id} ASC`);
     }
 
     const [items, [countResult]] = await Promise.all([
