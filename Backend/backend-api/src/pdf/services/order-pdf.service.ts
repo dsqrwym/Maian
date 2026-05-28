@@ -8,7 +8,7 @@ import type {
 import { OrderPdfDataService } from '#/pdf/services/order-pdf-data.service.js';
 import { OrderPdfLabelsService } from '#/pdf/services/order-pdf-labels.service.js';
 import { OrderPdfRendererService } from '#/pdf/services/order-pdf-renderer.service.js';
-import { sanitizeOrderPdfFilename } from '#/utils/order-pdf.utils.js';
+import { sanitizeOrderPdfFilename } from '#/utils/pdf/order.pdf.utils.js';
 
 @Injectable()
 export class OrderPdfService {

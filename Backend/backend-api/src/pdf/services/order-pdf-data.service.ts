@@ -15,7 +15,7 @@ import type {
   UserConfiguration,
 } from '#/pdf/pdf.type.js';
 import { getOrderPdfFontFamily } from '#/pdf/pdf-font.constants.js';
-import { localizeOrderDetailItems } from '#/utils/order-pdf.utils.js';
+import { localizeOrderDetailItems } from '#/utils/pdf/order.pdf.utils.js';
 
 @Injectable()
 export class OrderPdfDataService {

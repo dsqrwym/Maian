@@ -5,7 +5,7 @@ import { OrderPdfEmailType } from '#/mail/mail.types.js';
 import { OrderFilesService } from '#/files/services/order-files.service.js';
 import { OrderPdfService } from '#/pdf/services/order-pdf.service.js';
 import type { OrderPdfOrder } from '#/pdf/pdf.type.js';
-import { getPartyName } from '#/utils/order-pdf.utils.js';
+import { getPartyName } from '#/utils/pdf/order.pdf.utils.js';
 
 @Injectable()
 export class OrderPdfNotificationService {

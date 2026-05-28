@@ -8,7 +8,7 @@ import {
   getLocalizedAddressNames,
   getPartyName,
   safeText,
-} from '#/utils/order-pdf.utils.js';
+} from '#/utils/pdf/order.pdf.utils.js';
 
 const LOGO_BOX_WIDTH = 110;
 const LOGO_BOX_HEIGHT = 62;

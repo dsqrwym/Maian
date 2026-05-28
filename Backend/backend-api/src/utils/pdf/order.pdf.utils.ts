@@ -63,7 +63,7 @@ export const formatDate = (
       timeZone,
     }).format(new Date(value));
   } catch {
-    return new Intl.DateTimeFormat('en', {
+    return new Intl.DateTimeFormat('es', {
       dateStyle: 'medium',
       timeStyle: 'short',
       timeZone: 'UTC',
@@ -144,10 +144,14 @@ export const streamToBuffer = async (
   input: Readable | Promise<Readable>,
 ): Promise<Buffer> => {
   const stream = await input;
-  const chunks: Buffer[] = [];
+  const chunks: Buffer<ArrayBufferLike>[] = [];
 
   for await (const chunk of stream) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+    chunks.push(
+      Buffer.isBuffer(chunk)
+        ? chunk
+        : (Buffer.from(chunk) as Buffer<ArrayBufferLike>),
+    );
   }
 
   return Buffer.concat(chunks);

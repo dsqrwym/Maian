@@ -9,8 +9,9 @@ import { DrizzleDb, DrizzleService } from '#/drizzle/drizzle.service.js';
 import { files, user_uploads, users } from '#/generated/drizzle/schema.js';
 import { and, eq, isNotNull } from 'drizzle-orm';
 import { FILE_ERROR } from './constants/files.constants.js';
-import { streamToBuffer } from '#/utils/order-pdf.utils.js';
 import { SQL_NOW } from '#/drizzle/drizzle.constants.js';
+import { streamToBuffer } from '#/utils/pdf/order.pdf.utils.js';
+import { toPdfMakerCompatibleImageDataUrl } from '#/utils/pdf/file.pdf.utils.js';
 
 @Injectable()
 export class FilesService {
@@ -159,7 +160,7 @@ export class FilesService {
       this.createReadStreamByStorageKey(file.storage_key),
     );
 
-    return `data:${file.mime_type};base64,${buffer.toString('base64')}`;
+    return toPdfMakerCompatibleImageDataUrl(buffer, file.mime_type);
   }
 
   async getFileById(fileId: string | bigint) {
