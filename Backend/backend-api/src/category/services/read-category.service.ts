@@ -49,6 +49,7 @@ import { alias, unionAll } from 'drizzle-orm/pg-core';
 import { caslToDrizzle } from '#/casl/casl-to-drizzle.js';
 import { ReadProductsService } from '#/products/services/read-products.service.js';
 import { SQL_TRUE } from '#/drizzle/drizzle.constants.js';
+import { buildCategoryJsonFields } from '#/utils/category.utils.js';
 
 @Injectable()
 export class ReadCategoryService {
@@ -275,17 +276,6 @@ export class ReadCategoryService {
     const user_id = fields?.includes(CategorySelectField.USER_ID);
     const translations = fields?.includes(CategorySelectField.TRANSLATIONS);
     const relations = fields?.includes(CategorySelectField.RELATIONS);
-    // 构建 jsonb 对象的内部字段
-    const buildJsonFields = (alias: string) => {
-      const parts = [
-        sql`'id', ${sql.raw(alias)}.id`,
-        sql`'name', ${sql.raw(alias)}.name`,
-      ];
-      if (iva) parts.push(sql`'iva', ${sql.raw(alias)}.iva::text`);
-      if (level) parts.push(sql`'level', ${sql.raw(alias)}.level`);
-      if (user_id) parts.push(sql`'user_id', ${sql.raw(alias)}.user_id`);
-      return sql.join(parts, sql`, `);
-    };
 
     const offset = (page - 1) * limit;
 
@@ -429,9 +419,9 @@ export class ReadCategoryService {
         ...(relations && {
           parent: sql<ICategoryResponseRelation>`(
             SELECT jsonb_build_object(
-              ${buildJsonFields('p')},
+              ${buildCategoryJsonFields('p', langCode, iva, level, user_id)},
               'parent', (
-                SELECT jsonb_build_object(${buildJsonFields('pp')})
+                SELECT jsonb_build_object(${buildCategoryJsonFields('pp', langCode, iva, level, user_id)})
                 FROM categories pp
                 WHERE pp.id = p.parent_id
               )
@@ -440,7 +430,7 @@ export class ReadCategoryService {
             WHERE p.id = ${categories.parent_id}
           )`,
           children: sql<ICategoryResponseRelation[]>`COALESCE((
-            SELECT jsonb_agg(jsonb_build_object(${buildJsonFields('ch')}))
+            SELECT jsonb_agg(jsonb_build_object(${buildCategoryJsonFields('ch', langCode, iva, level, user_id)}))
             FROM categories ch WHERE ch.parent_id = ${categories.id}
             ${ownerId ? sql`AND ch.user_id = ${ownerId}` : sql``}
           ), '[]'::jsonb)`,
