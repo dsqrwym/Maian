@@ -16,6 +16,7 @@ data class SharedFindCategoryDto(
     val langCode: String? = null,        // 语言代码 (e.g. "en", "es")
     val userId: String? = null,          // 按 user_id 过滤
     val parentId: String? = null,        // 按 parent_id 过滤
+    val excludedIds: List<String>? = null, // 排除的 ID 列表
     val level: Int? = null,
     val maxLevel: Int? = null,           // 最大嵌套等级
     val withChildrenCount: Boolean? = null, // 放回计数

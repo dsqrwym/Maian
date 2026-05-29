@@ -105,7 +105,7 @@ internal fun DashboardContent(
                 TopSellingProductsChart(data.topSellingProducts)
             }
         }
-        item(StaggeredGridItemSpan.FullLine) {
+        item(span = StaggeredGridItemSpan.FullLine) {
             Spacer(Modifier.height(28.dp))
         }
     }

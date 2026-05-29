@@ -4,10 +4,26 @@ package org.dsqrwym.shared.ui.components.input.selector
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
@@ -19,11 +35,16 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.address_no_match
+import org.dsqrwym.shared.paging.isAppendingOrPrepending
+import org.dsqrwym.shared.paging.isEmptyResult
+import org.dsqrwym.shared.paging.isRefreshing
 import org.dsqrwym.shared.ui.components.input.outlinedfields.MyOutlinedTextField
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
+import org.dsqrwym.shared.ui.components.progressindicators.SharedLoadingDotsIndicator
 import org.dsqrwym.shared.ui.viewmodels.component.SearchableSelectorRemoteViewModel
 import org.dsqrwym.shared.util.timing.SharedUiTiming
 import org.jetbrains.compose.resources.stringResource
@@ -345,8 +366,35 @@ fun <T : Any> SearchableSelectorRemote(
             )
 
 
+            val scrollState = rememberScrollState()
+            val snapshotItems = pagingItems.itemSnapshotList.items
+            var lastTriggeredItemCount by remember { mutableStateOf(0) }
+            LaunchedEffect(scrollState, pagingItems) {
+                snapshotFlow {
+                    val nearBottom =
+                        scrollState.maxValue > 0 &&
+                                scrollState.value >= scrollState.maxValue - 120
+
+                    nearBottom to pagingItems.itemCount
+                }
+                    .distinctUntilChanged()
+                    .collect { (nearBottom, itemCount) ->
+                        val canTrigger =
+                            nearBottom &&
+                                    pagingItems.itemCount > 0 &&
+                                    pagingItems.itemCount != lastTriggeredItemCount &&
+                                    !pagingItems.isRefreshing
+
+                        if (canTrigger) {
+                            lastTriggeredItemCount = itemCount
+                            pagingItems[itemCount - 1]
+                        }
+                    }
+            }
+
             ExposedDropdownMenu(
                 expanded = expanded,
+                scrollState = scrollState,
                 onDismissRequest = {
                     if (suppressOnDismiss) {
                         // 忽略由按钮点击产生的那次 onDismiss
@@ -356,27 +404,37 @@ fun <T : Any> SearchableSelectorRemote(
                     expanded = false
                 }
             ) {
-                pagingItems.apply {
-                    if (pagingItems.itemCount == 0 && pagingItems.loadState.refresh !is LoadState.Loading) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(SharedRes.string.address_no_match)) },
-                            onClick = { /* no-op */ })
-                    } else if (loadState.isIdle) {
-                        this.itemSnapshotList.items.forEachIndexed { index, item ->
-                            DropdownMenuItem(
-                                text = { Text(config.itemToString(item)) },
-                                onClick = {
-                                    config.onSelectedItemChange(item)
-                                    suppressNextSearch = true
-                                    query = config.itemToString(item)
-                                    expanded = false
-                                }
-                            )
+                if (pagingItems.isEmptyResult) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(SharedRes.string.address_no_match)) },
+                        onClick = { /* no-op */ })
 
-                            if (index != this.itemSnapshotList.items.lastIndex) {
-                                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp))
+                } else {
+                    snapshotItems.forEachIndexed { index, item ->
+                        DropdownMenuItem(
+                            text = { Text(config.itemToString(item)) },
+                            onClick = {
+                                config.onSelectedItemChange(item)
+                                suppressNextSearch = true
+                                query = config.itemToString(item)
+                                expanded = false
                             }
+                        )
+
+                        if (index != snapshotItems.lastIndex) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 2.dp)
+                            )
                         }
+                    }
+
+                    if (pagingItems.isAppendingOrPrepending) {
+                        DropdownMenuItem(
+                            text = {
+                                SharedLoadingDotsIndicator()
+                            },
+                            onClick = {}
+                        )
                     }
                 }
             }

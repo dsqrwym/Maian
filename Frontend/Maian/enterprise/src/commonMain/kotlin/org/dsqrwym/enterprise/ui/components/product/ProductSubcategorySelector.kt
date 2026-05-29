@@ -103,7 +103,6 @@ fun ProductSubcategorySelector(
                     category?.let(onAddCategory)
                     selectedForSelector = category
                 },
-                pageSize = 5,
                 itemToString = {
                     "${it.name}${it.translationDisplayText()?.let { str -> " • $str" }.orEmpty()}"
                 },

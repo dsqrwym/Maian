@@ -81,6 +81,10 @@ fun App() {
                     startRoute = SharedDashboardScreen,
                     topLevelRoutes = menuConfig.getVisibleItems().map { it.item.route },
                     extraSerializersModule = AdminNavSerializersModule,
+                    persistenceKey = SharedUserPreferences.authenticatedNavigationStackKey(
+                        baseKey = "admin_authenticated",
+                        userId = user.userId,
+                    ),
                 )
 
                 BackgroundImage(SharedImages.background()) {

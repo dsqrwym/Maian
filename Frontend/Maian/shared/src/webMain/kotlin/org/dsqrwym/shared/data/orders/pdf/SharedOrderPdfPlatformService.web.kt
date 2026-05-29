@@ -13,11 +13,16 @@ private class WebOrderPdfPlatformService : SharedOrderPdfPlatformService {
         bytes: ByteArray,
         fileName: String,
     ): SharedOrderPdfPlatformResult = try {
+        /*
+        放回的结果不靠谱，只要不出错就算成功
         if (openPdfInBrowser(bytes.toJsArray(), sanitizeOrderPdfFileName(fileName))) {
             SharedOrderPdfPlatformResult.Completed
         } else {
             SharedOrderPdfPlatformResult.Failed()
         }
+        */
+        openPdfInBrowser(bytes.toJsArray(), sanitizeOrderPdfFileName(fileName))
+        SharedOrderPdfPlatformResult.Completed
     } catch (e: Exception) {
         SharedOrderPdfPlatformResult.Failed(e.message)
     }

@@ -151,7 +151,7 @@
     "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-prettier": "^5.5.6",
     "globals": "^16.5.0",
     "jest": "^30.4.2",
     "nestia": "^11.2.1",

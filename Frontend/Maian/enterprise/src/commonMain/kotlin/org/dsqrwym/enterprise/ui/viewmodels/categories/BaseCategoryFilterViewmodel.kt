@@ -20,7 +20,10 @@ abstract class BaseCategoryFilterViewmodel(
     /**
      * 获取父分类列表（带分页）
      */
-    open suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+    open suspend fun findCategories(
+        query: String?, page: Int, limit: Int,
+        excludedIds: List<String>? = null
+    ): List<CategorySummary> {
         // maxLevel 2 保证都是父元素
         // onlyWithOwnedChildren = true 保证父类别必须有用户的子类别
         when (val result =

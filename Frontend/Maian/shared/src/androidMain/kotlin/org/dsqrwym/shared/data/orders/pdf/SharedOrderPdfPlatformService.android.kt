@@ -53,11 +53,13 @@ private class AndroidOrderPdfPlatformService : SharedOrderPdfPlatformService {
         bytes: ByteArray,
         fileName: String,
     ): SharedOrderPdfPlatformResult = try {
-        val targetFile = FileKit.openFileSaver(
-            suggestedName = orderPdfSuggestedName(fileName),
-            extension = "pdf",
-            dialogSettings = FileKitDialogSettings(),
-        ) ?: return SharedOrderPdfPlatformResult.Canceled
+        val targetFile = withContext(Dispatchers.Main) {
+            FileKit.openFileSaver(
+                suggestedName = orderPdfSuggestedName(fileName),
+                extension = "pdf",
+                dialogSettings = FileKitDialogSettings(),
+            )
+        } ?: return SharedOrderPdfPlatformResult.Canceled
 
         withContext(Dispatchers.IO) {
             targetFile.write(bytes)

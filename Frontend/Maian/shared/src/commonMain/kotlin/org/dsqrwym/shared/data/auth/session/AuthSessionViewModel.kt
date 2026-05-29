@@ -93,6 +93,8 @@ class AuthSessionViewModel(
     }
 
     fun onLoggedOut() {
+        val userId = SharedUserPayloadStorage.get()?.userId
+        SharedUserPreferences.clearAuthenticatedNavigationStacks(userId)
         _state.value = AuthState.Unauthenticated
         SharedUserPayloadStorage.clear()
         SharedAuthScope.closeScope()

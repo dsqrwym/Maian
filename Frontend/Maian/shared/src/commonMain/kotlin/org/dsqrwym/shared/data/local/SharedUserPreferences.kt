@@ -9,25 +9,25 @@ import org.dsqrwym.shared.util.settings.SharedSettingsProvider
 object SharedUserPreferences {
     private val settings: Settings = SharedSettingsProvider.plain
 
-    // 用户协议 隐私政策
     private const val AGREEMENT_KEY = "user_agreement_polity_agreed"
-
-    // 用户语言
     private const val LANGUAGE_KEY = "user_language"
-
-    // 深色主题
     private const val IS_DARK_THEME_KEY = "user_is_dark_theme"
-
     private const val USER_LOGIN_PREFERENCES_KEY = "user_login_preferences"
-
     private const val NAVIGATION_STACK_KEY_PREFIX = "nav_stack_"
 
-    // 主题变更通知流（带重放，确保订阅者能拿到最新的状态）
+    private const val STANDARD_AUTH_NAVIGATION_KEY = "standard_authenticated"
+    private const val ADMIN_AUTH_NAVIGATION_KEY = "admin_authenticated"
+    private const val ENTERPRISE_AUTH_NAVIGATION_KEY = "enterprise_authenticated"
+    private val authenticatedNavigationKeys = listOf(
+        STANDARD_AUTH_NAVIGATION_KEY,
+        ADMIN_AUTH_NAVIGATION_KEY,
+        ENTERPRISE_AUTH_NAVIGATION_KEY,
+    )
+
     private val _isDarkThemeFlow = MutableSharedFlow<Boolean?>(replay = 1, extraBufferCapacity = 1)
     val isDarkThemeFlow: SharedFlow<Boolean?> = _isDarkThemeFlow
 
     init {
-        // 初始化时推送一次当前存储的主题状态
         _isDarkThemeFlow.tryEmit(getIsDarkTheme())
     }
 
@@ -54,7 +54,7 @@ object SharedUserPreferences {
     fun setIsDarkTheme(value: Boolean?) {
         if (value == null) {
             settings.remove(IS_DARK_THEME_KEY)
-        }else {
+        } else {
             settings.putBoolean(IS_DARK_THEME_KEY, value)
         }
         _isDarkThemeFlow.tryEmit(value)
@@ -82,5 +82,18 @@ object SharedUserPreferences {
 
     fun clearNavigationStack(key: String) {
         settings.remove(NAVIGATION_STACK_KEY_PREFIX + key)
+    }
+
+    fun authenticatedNavigationStackKey(baseKey: String, userId: String): String {
+        return "${baseKey}_$userId"
+    }
+
+    fun clearAuthenticatedNavigationStacks(userId: String?) {
+        authenticatedNavigationKeys.forEach { baseKey ->
+            clearNavigationStack(baseKey)
+            userId?.takeIf { it.isNotBlank() }?.let {
+                clearNavigationStack(authenticatedNavigationStackKey(baseKey, it))
+            }
+        }
     }
 }

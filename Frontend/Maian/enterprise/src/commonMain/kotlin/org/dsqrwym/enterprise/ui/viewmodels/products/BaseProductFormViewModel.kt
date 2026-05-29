@@ -1,6 +1,12 @@
 package org.dsqrwym.enterprise.ui.viewmodels.products
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.mohamedrejeb.richeditor.model.RichTextState
 import kotlinx.coroutines.launch
@@ -325,7 +331,8 @@ abstract class BaseProductFormViewModel(
         val sanitizedProductCode = sanitizeProductCode(productCode)
         val index = productVariants.indexOfFirst { it.id.getValOrNull() == id }
         // 最少一个 variant 是开启的
-        val hasStatusActives = productVariants.filter { it.status.getValOrNull() == SharedProductStatus.ACTIVE }
+        val hasStatusActives =
+            productVariants.filter { it.status.getValOrNull() == SharedProductStatus.ACTIVE }
 
         if (index != -1) {
             val existingSku = productVariants[index]
@@ -336,7 +343,10 @@ abstract class BaseProductFormViewModel(
 
             finalPrice?.let {
                 if (it != existingSku.price.getValOrNull()) {
-                    sanitizeProductPricesInput(price = it, iva = effectiveIva).let { (price, priceIva) ->
+                    sanitizeProductPricesInput(
+                        price = it,
+                        iva = effectiveIva
+                    ).let { (price, priceIva) ->
                         finalPrice = price
                         finalPriceIva = priceIva
                     }
@@ -345,7 +355,10 @@ abstract class BaseProductFormViewModel(
 
             finalPriceIva?.let {
                 if (it != existingSku.priceIva.getValOrNull()) {
-                    sanitizeProductPricesInput(priceIva = it, iva = effectiveIva).let { (price, priceIva) ->
+                    sanitizeProductPricesInput(
+                        priceIva = it,
+                        iva = effectiveIva
+                    ).let { (price, priceIva) ->
                         finalPriceIva = priceIva
                         finalPrice = price
                     }
@@ -414,7 +427,8 @@ abstract class BaseProductFormViewModel(
         }
         // 最少一个开启，之前的判断保证最少一个
         if (productVariants.size < 2) {
-            productVariants[0] = productVariants[0].copy(status = OptionalField.Value(SharedProductStatus.ACTIVE))
+            productVariants[0] =
+                productVariants[0].copy(status = OptionalField.Value(SharedProductStatus.ACTIVE))
         }
         checkProductVariant()
 
@@ -443,8 +457,17 @@ abstract class BaseProductFormViewModel(
         productVariants.add(to, productVariants.removeAt(from))
     }
 
-    override suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
-        when (val result = categoryRepository.getCategoriesByLevel(query, page, limit, true)) {
+    override suspend fun findCategories(
+        query: String?, page: Int, limit: Int,
+        excludedIds: List<String>?
+    ): List<CategorySummary> {
+        when (val result = categoryRepository.getCategoriesByLevel(
+            query,
+            page,
+            limit,
+            true,
+            excludedIds = excludedIds
+        )) {
             is SharedResponseResult.Success -> {
                 return result.data?.items ?: emptyList()
             }
@@ -458,11 +481,22 @@ abstract class BaseProductFormViewModel(
         return emptyList()
     }
 
-    suspend fun findProductSubcategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+    suspend fun findProductSubcategories(
+        query: String?,
+        page: Int,
+        limit: Int
+    ): List<CategorySummary> {
         val primaryCategoryId = filterCategory?.id
         val selectedCategoryIds = productSubcategories.map { it.id }.toSet()
-        return findCategories(query, page, limit)
-            .filter { it.id != primaryCategoryId && it.id !in selectedCategoryIds }
+        return findCategories(
+            query,
+            page,
+            limit,
+            excludedIds = buildSet {
+                primaryCategoryId?.let(::add)
+                addAll(selectedCategoryIds)
+            }.toList()
+        )
     }
 
     override fun updateFilterCategory(category: CategorySummary?) {

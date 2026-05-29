@@ -4,10 +4,10 @@ import org.dsqrwym.business.data.category.BusinessCategoryApi
 import org.dsqrwym.business.data.category.BusinessCategoryRepository
 import org.dsqrwym.business.data.category.dto.BusinessCreateCategoryDto
 import org.dsqrwym.business.data.category.dto.BusinessUpdateCategoryDto
-import org.dsqrwym.enterprise.data.enterpriseOwnerUserId
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
-import org.dsqrwym.shared.data.OrderDir
+import org.dsqrwym.enterprise.data.enterpriseOwnerUserId
 import org.dsqrwym.enterprise.domain.category.toDomain
+import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.category.SharedCategoryApi
 import org.dsqrwym.shared.data.category.SharedCategoryProductFilterMode
 import org.dsqrwym.shared.data.category.SharedCategorySelectField
@@ -76,12 +76,14 @@ class CategoryRepository(
         limit: Int = 100,
         needIva: Boolean = false,
         maxLevel: Int = 3,
+        excludedIds: List<String>? = null,
         productFilterMode: SharedCategoryProductFilterMode? = null,
         onlyWithOwnedChildren: Boolean? = null
     ): SharedResponseResult<ApiResponseList<CategorySummary>> {
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             maxLevel = maxLevel,
+            excludedIds = excludedIds,
             onlyWithOwnedChildren = onlyWithOwnedChildren,
             productFilterMode = productFilterMode,
             page = page,

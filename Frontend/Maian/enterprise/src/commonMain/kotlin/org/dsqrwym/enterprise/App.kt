@@ -1,12 +1,8 @@
 package org.dsqrwym.enterprise
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +17,8 @@ import org.dsqrwym.enterprise.navigation.naventry.categoryNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.employeeNavEntry
 import org.dsqrwym.enterprise.navigation.naventry.profileNavEntry
 import org.dsqrwym.enterprise.ui.screens.dashboard.DashboardScreen
+import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderDetailScreen
+import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderHistoryScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductCreateScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductEditScreen
 import org.dsqrwym.enterprise.ui.screens.products.ProductsListScreen
@@ -34,21 +32,9 @@ import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
-import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
-import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderDetailScreen
-import org.dsqrwym.enterprise.ui.screens.order.EnterpriseOrderHistoryScreen
 import org.koin.compose.currentKoinScope
 
-/**
- * App (Standard module)
- *
- * EN: Entry point for the app in the standard flavor. Creates a NavController, initializes
- * AppRoot, and wires the AuthNavHost. Optionally exposes navController via onNavHostReady.
- *
- * ZH: 标准模块的应用入口。创建 NavController，初始化 AppRoot，并接入 AuthNavHost。
- * 可通过 onNavHostReady 回调暴露 navController。
- */
 @Composable
 fun App() {
     AppRoot { authState ->
@@ -96,6 +82,10 @@ fun App() {
                     startRoute = SharedDashboardScreen,
                     topLevelRoutes = menuConfig.getVisibleItems().map { it.item.route },
                     extraSerializersModule = EnterpriseSerializersModule,
+                    persistenceKey = SharedUserPreferences.authenticatedNavigationStackKey(
+                        baseKey = "enterprise_authenticated",
+                        userId = user.userId,
+                    ),
                 )
 
                 BackgroundImage(SharedImages.background()) {
@@ -115,14 +105,15 @@ fun App() {
                                 ProductsListScreen(
                                     userRole = user.userRole,
                                     onNavigateToCreate = { navigationState.navigate(ProductCreate) },
-                                    onNavigateToEdit = { navigationState.navigate(ProductEdit(it)) }
+                                    onNavigateToEdit = { navigationState.navigate(ProductEdit(it)) },
                                 )
                             }
+
                             entry<ProductCreate> {
                                 ProductCreateScreen(
                                     onNavigateBack = {
                                         navigationState.pop()
-                                    }
+                                    },
                                 )
                             }
 
@@ -131,7 +122,7 @@ fun App() {
                                     id = it.id,
                                     onNavigateBack = {
                                         navigationState.pop()
-                                    }
+                                    },
                                 )
                             }
 
@@ -144,13 +135,13 @@ fun App() {
                                 )
                             }
 
-                          entry<OrderDetail> { route ->
-                              EnterpriseOrderDetailScreen(
-                                  orderId = route.orderId,
-                                  userRole = user.userRole,
-                                  onNavigateBack = { navigationState.pop() },
-                              )
-                          }
+                            entry<OrderDetail> { route ->
+                                EnterpriseOrderDetailScreen(
+                                    orderId = route.orderId,
+                                    userRole = user.userRole,
+                                    onNavigateBack = { navigationState.pop() },
+                                )
+                            }
 
                             profileNavEntry(navigationState, user.userRole)
                         }

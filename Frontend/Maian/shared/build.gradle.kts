@@ -154,6 +154,7 @@ kotlin {
             api(libs.ktor.client.logging)
             api(libs.ktor.client.auth)
             api(libs.ktor.serialization.kotlinx.json)
+            // Table core
             api(libs.table.core)
             api(libs.kotlinx.collections.immutable)
 

@@ -7,10 +7,16 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import maian.business.generated.resources.BusinessRes
 import maian.business.generated.resources.delete_category_conflict
@@ -132,9 +138,6 @@ class CategoriesListViewModel(
         showSortDialog = show
     }
 
-    fun updateSortBy(sortBy: SharedCategorySortField?) {
-        this.sortBy = sortBy
-    }
 
     fun updateSortDir(dir: OrderDir) {
         sortDir = dir
@@ -185,9 +188,20 @@ class CategoriesListViewModel(
         deleteCategory = null
     }
 
-    override suspend fun findCategories(query: String?, page: Int, limit: Int): List<CategorySummary> {
+    override suspend fun findCategories(
+        query: String?,
+        page: Int,
+        limit: Int,
+        excludedIds: List<String>?
+    ): List<CategorySummary> {
         when (val result =
-            categoryRepository.getCategoriesByLevel(query, page, limit, maxLevel = 2, onlyWithOwnedChildren = true)) {
+            categoryRepository.getCategoriesByLevel(
+                query,
+                page,
+                limit,
+                maxLevel = 2,
+                onlyWithOwnedChildren = true
+            )) {
             is SharedResponseResult.Success -> {
                 return result.data?.items ?: emptyList()
             }

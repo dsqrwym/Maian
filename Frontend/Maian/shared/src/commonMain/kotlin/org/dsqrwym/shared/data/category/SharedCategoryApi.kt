@@ -1,8 +1,9 @@
 package org.dsqrwym.shared.data.category
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import org.dsqrwym.shared.data.category.dto.SharedFindCategoryDto
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.ApiResponse
@@ -15,11 +16,17 @@ class SharedCategoryApi(val client: HttpClient) {
             query.langCode?.let { parameter("langCode", it) }
             query.userId?.let { parameter("userId", it) }
             query.parentId?.let { parameter("parentId", it) }
+            query.excludedIds?.forEach { parameter("excludedIds", it) }
             query.level?.let { parameter("level", it) }
             query.type?.let { parameter("type", it) }
             query.maxLevel?.let { parameter("maxLevel", it) }
             query.searchMatchMode?.let { parameter("searchMatchMode", it.toString().lowercase()) }
-            query.productFilterMode?.let { parameter("productFilterMode", it.toString().lowercase()) }
+            query.productFilterMode?.let {
+                parameter(
+                    "productFilterMode",
+                    it.toString().lowercase()
+                )
+            }
             query.fields?.forEach { parameter("fields", it.toString().lowercase()) }
             query.withChildrenCount?.let { parameter("withChildrenCount", it) }
             query.onlyWithOwnedChildren?.let { parameter("onlyWithOwnedChildren", it) }
