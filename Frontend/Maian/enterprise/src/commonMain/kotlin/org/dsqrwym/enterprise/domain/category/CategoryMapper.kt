@@ -1,7 +1,6 @@
 package org.dsqrwym.enterprise.domain.category
 
 import org.dsqrwym.enterprise.data.category.dto.CategoryResponse
-import org.dsqrwym.shared.data.category.mapper.toDomain
 import org.dsqrwym.shared.domain.category.CategoryNode
 
 fun CategoryResponse.toDomain(): CategoryNode =
@@ -12,5 +11,5 @@ fun CategoryResponse.toDomain(): CategoryNode =
         parent = parent?.toDomain(),
         children = children?.map { it.toDomain() },
         childrenCount = childrenCount,
-        translations = categoryTranslations?.map { it.toDomain() }.orEmpty()
+        translations = categoryTranslations.orEmpty()
     )

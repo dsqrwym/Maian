@@ -6,19 +6,18 @@ package org.dsqrwym.standard.domain.browse
  * 包括产品、分类、批发商等核心实体
  */
 
+import org.dsqrwym.shared.data.category.dto.SharedCategoryTranslation
 import org.dsqrwym.shared.data.location.dto.CityDto
 import org.dsqrwym.shared.data.location.dto.ProvinceDto
 import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.shared.data.user.SpanishCompanyType
-import org.dsqrwym.shared.domain.category.CategoryTranslation
 import org.dsqrwym.shared.localization.getLocalizedValue
 import org.dsqrwym.shared.network.ApiConfig
 
 enum class BrowseScope {
     GLOBAL,
     DISTRIBUTOR,
-    CATEGORY
 }
 
 data class RetailProductImage(
@@ -34,12 +33,6 @@ data class RetailProductDetailMedia(
     val mimeType: String,
     val sort: Int,
 ) {
-    val isImage: Boolean
-        get() = mimeType.startsWith("image/")
-
-    val isVideo: Boolean
-        get() = mimeType.startsWith("video/")
-
     fun url(productId: String): String =
         ApiConfig.FilePath.productFile(productId, fileId)
 }
@@ -70,7 +63,7 @@ data class RetailCategory(
     val ownerUserId: String?,
     val parentId: String?,
     val pathNames: List<String> = listOf(name),
-    val translations: List<CategoryTranslation>,
+    val translations: List<SharedCategoryTranslation>,
 ) {
     fun localizedName(languageCode: String): String =
         translations.firstOrNull { it.langCode == languageCode }?.name ?: name
@@ -85,7 +78,7 @@ data class RetailProductDetailCategory(
     val name: String,
     val iva: String?,
     val isPrimary: Boolean,
-    val translations: List<CategoryTranslation>,
+    val translations: List<SharedCategoryTranslation>,
 ) {
     fun localizedName(languageCode: String): String =
         getLocalizedValue(

@@ -1,17 +1,49 @@
 package org.dsqrwym.admin.ui.screens.categories
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,8 +58,26 @@ import maian.admin.generated.resources.AdminRes
 import maian.admin.generated.resources.platform_category
 import maian.admin.generated.resources.search_wholesaler_user
 import maian.admin.generated.resources.select_wholesaler
-import maian.business.generated.resources.*
-import maian.shared.generated.resources.*
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.base_category
+import maian.business.generated.resources.parent_category_with_name
+import maian.business.generated.resources.platform_category
+import maian.business.generated.resources.private_category
+import maian.business.generated.resources.select_parent_category
+import maian.business.generated.resources.subcategories_count
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.all
+import maian.shared.generated.resources.close
+import maian.shared.generated.resources.create
+import maian.shared.generated.resources.edit
+import maian.shared.generated.resources.error_no_permission
+import maian.shared.generated.resources.field_username_label
+import maian.shared.generated.resources.filter
+import maian.shared.generated.resources.not_set
+import maian.shared.generated.resources.search_category_name
+import maian.shared.generated.resources.search_parent_category_name
+import maian.shared.generated.resources.tax_rate
+import maian.shared.generated.resources.user
 import org.dsqrwym.admin.permissions.canDeleteAdminCategory
 import org.dsqrwym.admin.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.business.ui.components.button.BusinessOutlinedDeleteButton
@@ -38,6 +88,7 @@ import org.dsqrwym.shared.data.category.SharedCategoryType
 import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.domain.category.CategoryNode
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.paging.hasLoadError
 import org.dsqrwym.shared.paging.isAppendingOrPrepending
 import org.dsqrwym.shared.paging.isEmptyResult
@@ -228,6 +279,7 @@ fun CategoryListItem(
     onDelete: () -> Unit
 ) {
     val canDeleteCategory = userRole?.canDeleteAdminCategory() == true
+    val currentLanguageCode = LanguageManager.getCurrent().code
     OutlinedCard(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -273,7 +325,7 @@ fun CategoryListItem(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = category.parentName?.let {
+                                text = category.parentLocalizedName(currentLanguageCode)?.let {
                                     stringResource(BusinessRes.string.parent_category_with_name, it)
                                 } ?: stringResource(
                                     BusinessRes.string.base_category
@@ -316,7 +368,7 @@ fun CategoryListItem(
                 SelectionContainer(modifier = Modifier.weight(1f)) {
                     Column(verticalArrangement = SharedColumnLayout.arrangement) {
                         BusinessCategoryLanguages(category.translations.map { it.toDto() })
-                        BusinessCategoryPath(category.pathNames(), category.name)
+                        BusinessCategoryPath(category.pathNames(currentLanguageCode), category.name)
                     }
                 }
                 TooltipBox(

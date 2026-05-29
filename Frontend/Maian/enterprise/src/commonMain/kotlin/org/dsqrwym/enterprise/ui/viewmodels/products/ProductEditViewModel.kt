@@ -18,12 +18,11 @@ import maian.shared.generated.resources.update_success
 import org.dsqrwym.business.navigation.Categories
 import org.dsqrwym.business.ui.media.model.UploadedProductFile
 import org.dsqrwym.enterprise.data.category.CategoryRepository
-import org.dsqrwym.enterprise.data.product.dto.ProductCategoryResponse
 import org.dsqrwym.enterprise.data.product.ProductRepository
+import org.dsqrwym.enterprise.data.product.dto.ProductCategoryResponse
 import org.dsqrwym.enterprise.data.product.dto.ProductResponseForUpdate
 import org.dsqrwym.enterprise.data.product.dto.ProductUpdateDto
 import org.dsqrwym.enterprise.data.product.dto.ProductVariantDto
-import org.dsqrwym.shared.data.category.mapper.toDomain
 import org.dsqrwym.shared.data.file.SharedUploadRepository
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.shared.domain.category.CategorySummary
@@ -405,5 +404,5 @@ private fun ProductCategoryResponse.toCategorySummary(): CategorySummary =
         id = id,
         name = name,
         iva = iva,
-        translations = translation.map { it.toDomain() }
+        translations = translation
     )

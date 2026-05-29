@@ -31,7 +31,6 @@ class CategoryRepository(
     suspend fun getCategories(
         search: String? = null,
         type: SharedCategoryType? = null,
-        langCode: String? = null,
         parentId: String? = null,
         sortBy: SharedCategorySortField? = SharedCategorySortField.NAME,
         sortOrder: OrderDir = OrderDir.ASC,
@@ -42,7 +41,6 @@ class CategoryRepository(
         val query = SharedFindCategoryDto(
             search = search?.trim(),
             type = type,
-            langCode = langCode,
             userId = ownerUserId,
             parentId = parentId,
             sortBy = sortBy,

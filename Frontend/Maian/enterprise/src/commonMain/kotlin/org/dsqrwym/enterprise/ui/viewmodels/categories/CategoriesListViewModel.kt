@@ -41,7 +41,6 @@ private data class CategoryListQuery(
     val parentId: String?,
     val sortBy: SharedCategorySortField?,
     val sortDir: OrderDir,
-    val languageCode: String,
 )
 
 class CategoriesListViewModel(
@@ -66,9 +65,8 @@ class CategoriesListViewModel(
         snapshotFlow { filterCategory?.id },
         snapshotFlow { sortBy },
         snapshotFlow { sortDir },
-        snapshotFlow { languageCode },
-    ) { query, parentId, sortBy, sortDir, languageCode ->
-        CategoryListQuery(query, parentId, sortBy, sortDir, languageCode)
+    ) { query, parentId, sortBy, sortDir ->
+        CategoryListQuery(query, parentId, sortBy, sortDir)
     }
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -87,7 +85,6 @@ class CategoriesListViewModel(
                 when (val result = categoryRepository.getCategories(
                     search = q,
                     parentId = queryDto.parentId,
-                    langCode = queryDto.languageCode,
                     sortBy = queryDto.sortBy,
                     sortOrder = queryDto.sortDir,
                     page = page,

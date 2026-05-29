@@ -15,15 +15,14 @@ import org.dsqrwym.shared.data.products.SharedProductSaleVariant
 import org.dsqrwym.shared.data.products.dto.SharedProductFile
 import org.dsqrwym.shared.data.products.dto.SharedProductTranslation
 import org.dsqrwym.standard.domain.browse.RetailCategory
+import org.dsqrwym.standard.domain.browse.RetailProduct
 import org.dsqrwym.standard.domain.browse.RetailProductDetail
 import org.dsqrwym.standard.domain.browse.RetailProductDetailCategory
 import org.dsqrwym.standard.domain.browse.RetailProductDetailMedia
 import org.dsqrwym.standard.domain.browse.RetailProductDetailTranslation
-import org.dsqrwym.standard.domain.browse.RetailWholesaler
-import org.dsqrwym.standard.domain.browse.RetailProduct
 import org.dsqrwym.standard.domain.browse.RetailProductImage
 import org.dsqrwym.standard.domain.browse.RetailProductVariant
-import org.dsqrwym.shared.domain.category.CategoryTranslation
+import org.dsqrwym.standard.domain.browse.RetailWholesaler
 
 @Serializable
 data class RetailProductResponse(
@@ -87,7 +86,7 @@ fun RetailCategoryResponse.toDomain(): RetailCategory =
         ownerUserId = userId,
         parentId = parent?.id,
         pathNames = parent.pathNames() + name,
-        translations = translations.map { CategoryTranslation(it.langCode, it.name) },
+        translations = translations,
     )
 
 @Serializable
@@ -174,7 +173,7 @@ fun RetailProductDetailResponse.toDomain(): RetailProductDetail =
                 name = category.name,
                 iva = category.iva,
                 isPrimary = category.isPrimary,
-                translations = category.translations.map { CategoryTranslation(it.langCode, it.name) },
+                translations = category.translations,
             )
         },
         translations = productTranslations.map { translation ->

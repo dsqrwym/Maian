@@ -69,10 +69,10 @@ import org.dsqrwym.enterprise.permissions.canManageEnterpriseCategories
 import org.dsqrwym.enterprise.ui.viewmodels.categories.CategoriesListViewModel
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.category.displayName
-import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.category.sharedEnterpriseCategorySortFields
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.domain.category.CategoryNode
+import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.paging.hasLoadError
 import org.dsqrwym.shared.paging.isAppendingOrPrepending
 import org.dsqrwym.shared.paging.isEmptyResult
@@ -125,7 +125,7 @@ fun CategoriesListScreen(
         overlayContent = {
             deleteCategory?.let { category ->
                 BusinessConfirmDeleteCategories(
-                    category.name,
+                    category.localizedName(viewModel.languageCode),
                     category.childrenCount,
                     { viewModel.updateShowDeleteDialog(null) },
                     { viewModel.deleteCategory(category) }
@@ -266,6 +266,7 @@ fun CategoryListItem(
     onDelete: () -> Unit
 ) {
     val canManageCategory = userRole?.canManageEnterpriseCategories() == true
+    val currentLanguage = LanguageManager.getCurrent().code
     OutlinedCard(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -296,7 +297,7 @@ fun CategoryListItem(
                             horizontalArrangement = SharedRowLayout.arrangement
                         ) {
                             Text(
-                                text = category.parentName?.let {
+                                text = category.parentLocalizedName(currentLanguage)?.let {
                                     stringResource(BusinessRes.string.parent_category_with_name, it)
                                 } ?: stringResource(
                                     BusinessRes.string.base_category
@@ -338,8 +339,8 @@ fun CategoryListItem(
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
                     Column(verticalArrangement = SharedColumnLayout.arrangement) {
-                        BusinessCategoryLanguages(category.translations.map { it.toDto() })
-                        BusinessCategoryPath(category.pathNames(), category.name)
+                        BusinessCategoryLanguages(category.translations)
+                        BusinessCategoryPath(category.pathNames(currentLanguage), category.name)
                     }
                 }
                 Box(modifier = Modifier.align(Alignment.Bottom)) {
