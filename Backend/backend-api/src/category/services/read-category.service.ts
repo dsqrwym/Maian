@@ -30,6 +30,7 @@ import {
   isNotNull,
   isNull,
   lte,
+  notInArray,
   or,
   SQL,
   sql,
@@ -515,6 +516,10 @@ export class ReadCategoryService {
     }
     if (query.maxLevel != undefined) {
       whereConditions.push(lte(categories.level, query.maxLevel));
+    }
+    if (query.excludedIds != undefined && query.excludedIds.length > 0) {
+      const excludedIds = query.excludedIds.map((id) => BigInt(id));
+      whereConditions.push(notInArray(categories.id, excludedIds));
     }
 
     const finalWhere = and(...whereConditions);

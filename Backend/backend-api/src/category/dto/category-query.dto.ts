@@ -7,7 +7,7 @@ import type {
 import type { tags } from 'typia';
 import typia from 'typia';
 import type { TagsUuid } from '#/utils/typia/validators/auth.validator.js';
-import type { TagsNotBlank } from '#/utils/typia/tags/string.tag.js';
+import type { TagsIntegerString } from '#/utils/typia/tags/string.tag.js';
 import type { IRequestQueryValidator } from '#/utils/typia/typia-type.js';
 import { cleanString } from '#/utils/string.util.js';
 import type { TagsLanguage } from '#/utils/typia/validators/language.validator.js';
@@ -21,7 +21,9 @@ export interface ICategoryQueryDto extends IPaginationQueryDto {
 
   userId?: TagsUuid;
 
-  parentId?: TagsNotBlank;
+  parentId?: TagsIntegerString;
+
+  excludedIds?: TagsIntegerString[] & tags.UniqueItems;
 
   level?: number & tags.Minimum<1> & tags.Maximum<3> & tags.Example<1>;
 
