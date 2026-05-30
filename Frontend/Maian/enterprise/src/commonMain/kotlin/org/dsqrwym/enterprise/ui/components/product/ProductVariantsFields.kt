@@ -143,7 +143,7 @@ fun ProductVariantsFields(
         onReorder(from.index - 1, to.index - 1)
         hapticFeedback.performHapticFeedback(HapticFeedbackType.SegmentFrequentTick)
     }
-    val currentSKUId by remember { mutableStateOf(variants.firstOrNull()?.id) }
+    val currentSKUId by remember { mutableStateOf(variants.minByOrNull { it.sort }?.id) }
     val isisAnyItemDragging = reorderableState.isAnyItemDragging
 
     LazyVerticalStaggeredGrid(
@@ -186,7 +186,7 @@ fun ProductVariantsFields(
                 }
             }
         }
-        itemsIndexed(variants, key = { _, item -> item.id ?: Uuid.generateV4() }) { index, item ->
+        itemsIndexed(variants.sortedBy { it.sort }, key = { _, item -> item.id ?: Uuid.generateV4() }) { index, item ->
             ReorderableItem(
                 modifier = Modifier.animateItem(),
                 state = reorderableState,

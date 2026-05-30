@@ -1,10 +1,21 @@
 package org.dsqrwym.shared.data.orders
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import org.dsqrwym.shared.data.orders.dto.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import org.dsqrwym.shared.data.orders.dto.SharedFindOrderDto
+import org.dsqrwym.shared.data.orders.dto.SharedOrderActionReasonDto
+import org.dsqrwym.shared.data.orders.dto.SharedOrderDetail
+import org.dsqrwym.shared.data.orders.dto.SharedOrderEstimatedDeliveryDateDto
+import org.dsqrwym.shared.data.orders.dto.SharedOrderFilterMetadataDto
+import org.dsqrwym.shared.data.orders.dto.SharedOrderSummary
 import org.dsqrwym.shared.network.ApiConfig
 import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.model.ApiResponseList
@@ -49,7 +60,9 @@ class SharedOrderApi(private val client: HttpClient) {
         }.body()
 
     suspend fun acceptOrder(id: String): ApiResponse<Unit> =
-        client.post(ApiConfig.OrderPath.accept(id)).body()
+        client.post(ApiConfig.OrderPath.accept(id)){
+            contentType(ContentType.Text.Plain)
+        }.body()
 
     suspend fun updateEstimatedDeliveryDate(id: String, estimatedDeliveryDate: String?): ApiResponse<Unit> =
         client.patch(ApiConfig.OrderPath.estimatedDeliveryDate(id)) {

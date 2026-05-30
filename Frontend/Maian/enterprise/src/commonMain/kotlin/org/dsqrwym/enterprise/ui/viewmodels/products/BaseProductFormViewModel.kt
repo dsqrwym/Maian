@@ -455,6 +455,11 @@ abstract class BaseProductFormViewModel(
         if (from == to) return
         if (from !in productVariants.indices || to !in productVariants.indices) return
         productVariants.add(to, productVariants.removeAt(from))
+        
+        // 更新所有variant的sort值以反映新的顺序
+        productVariants.forEachIndexed { index, variant ->
+            productVariants[index] = variant.copy(sort = index.toOptionalField())
+        }
     }
 
     override suspend fun findCategories(
