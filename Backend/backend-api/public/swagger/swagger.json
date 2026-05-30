@@ -15,7 +15,7 @@
     "title": "backend-api",
     "description": "",
     "license": {
-      "name": "UNLICENSED"
+      "name": "Apache-2.0"
     }
   },
   "components": {
@@ -37,6 +37,21 @@
           }
         },
         "required": []
+      },
+      "IProductFilesQueryDto": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "file_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_id",
+          "file_id"
+        ]
       },
       "VerifyCodeResponseDto": {
         "type": "object",
@@ -622,6 +637,11 @@
       "ICheckUserUsernameQueryDto": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
           "username": {
             "type": "string",
             "minLength": 3,
@@ -641,6 +661,21 @@
           "username"
         ],
         "description": "DTO for checking username availability\n检查用户名可用性的数据传输对象"
+      },
+      "ICheckUserTaxIdQueryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "taxId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "taxId"
+        ],
+        "description": "检查当前用户的身份范围是否已经使用了"
       },
       "PaginatedDataWithTFindUserResponse": {
         "type": "object",
@@ -860,6 +895,9 @@
           "orderBy": {
             "oneOf": [
               {
+                "const": "email"
+              },
+              {
                 "const": "id"
               },
               {
@@ -873,9 +911,6 @@
               },
               {
                 "const": "username"
-              },
-              {
-                "const": "email"
               },
               {
                 "const": "telephone"
@@ -909,6 +944,753 @@
           "limit"
         ]
       },
+      "PaginatedDataWithT__type": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "profile_image_file_id": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "display_name": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "company_name": {
+                  "type": "string"
+                },
+                "company_type": {
+                  "type": "string"
+                },
+                "description": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "delivery_available": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ]
+                },
+                "pickup_available": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ]
+                },
+                "minimum_order_amount": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "delivery_area_description": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "city": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "name_local": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "name_local",
+                        "id"
+                      ]
+                    }
+                  ]
+                },
+                "province": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "name_local": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "name_local",
+                        "id"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "user_id",
+                "profile_image_file_id",
+                "company_name",
+                "company_type",
+                "city",
+                "province"
+              ]
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "items",
+          "pagination"
+        ]
+      },
+      "IFindWholesalerQueryDto": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string"
+          },
+          "delivery_available": {
+            "type": "boolean"
+          },
+          "pickup_available": {
+            "type": "boolean"
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "const": "S.L."
+              },
+              {
+                "const": "S.A."
+              },
+              {
+                "const": "Autónomo"
+              },
+              {
+                "const": "Cooperativa"
+              },
+              {
+                "const": "Sociedad Civil"
+              },
+              {
+                "const": "Otros"
+              }
+            ]
+          },
+          "orderBy": {
+            "oneOf": [
+              {
+                "const": "display_name"
+              },
+              {
+                "const": "company_name"
+              },
+              {
+                "const": "city"
+              },
+              {
+                "const": "province"
+              },
+              {
+                "const": "minimum_order_amount"
+              }
+            ]
+          },
+          "orderDir": {
+            "oneOf": [
+              {
+                "const": "asc"
+              },
+              {
+                "const": "desc"
+              }
+            ]
+          },
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "IUpdateRetailerProfileDto": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 50
+              }
+            ]
+          },
+          "last_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 60
+              }
+            ]
+          },
+          "profile_image_file_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "Company logo file id.\n商家 Logo 文件 ID。关联 files.id。"
+          },
+          "tax_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?:\\d{8}[A-Z]|[XYZ]\\d{7}[A-Z]|[ABCDEFGHJNPQRSUVW]\\d{7}[0-9A-J])$",
+                "minLength": 9,
+                "maxLength": 9,
+                "example": "B12345678"
+              }
+            ],
+            "description": "Spanish tax/person/business identifier basic format.\n西班牙税号/身份号基础格式。\n\n支持：\n- DNI/NIF: 12345678Z\n- NIE: X1234567L / Y1234567X / Z1234567R\n- CIF / business NIF: B12345678 / A12345678 / J1234567A / P1234567A\n\n适合兼容：\n- autónomo / 个体户：DNI 或 NIE\n- empresa / 大公司、小公司、协会等：CIF / business NIF\n\n仅做格式校验，不做控制码算法校验。"
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 30,
+                "example": "username"
+              }
+            ]
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 25,
+                "example": "+34 679 876 667"
+              }
+            ]
+          },
+          "address": {
+            "$ref": "#/components/schemas/PartialIDirectionDto"
+          },
+          "company_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 100
+              }
+            ]
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 60
+              }
+            ]
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "const": "S.L."
+              },
+              {
+                "const": "S.A."
+              },
+              {
+                "const": "Autónomo"
+              },
+              {
+                "const": "Cooperativa"
+              },
+              {
+                "const": "Sociedad Civil"
+              },
+              {
+                "const": "Otros"
+              }
+            ]
+          },
+          "contact_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 80
+              }
+            ]
+          }
+        },
+        "required": []
+      },
+      "PartialIDirectionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "const": "DELIVERY"
+              },
+              {
+                "const": "INVOICE"
+              },
+              {
+                "const": "STORE"
+              }
+            ],
+            "description": "地址类型"
+          },
+          "street": {
+            "type": "string",
+            "maxLength": 200,
+            "example": "123 Main St, Apt 4B",
+            "description": "街道地址"
+          },
+          "city": {
+            "type": "number",
+            "minimum": 1,
+            "example": 1,
+            "description": "城市ID"
+          },
+          "province": {
+            "type": "number",
+            "minimum": 1,
+            "example": 2,
+            "description": "省份ID"
+          },
+          "country": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 999,
+            "example": 724,
+            "description": "国家（ISO numeric）"
+          },
+          "zipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "description": "邮编"
+          },
+          "latitude": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90,
+                "example": "39.7128"
+              }
+            ],
+            "description": "纬度"
+          },
+          "longitude": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "example": "116.4074"
+              }
+            ],
+            "description": "经度"
+          }
+        },
+        "required": [],
+        "description": "Make all properties in T optional"
+      },
+      "RetailerProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "profile_image_file_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "first_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "last_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tax_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "profile": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IRetailerProfile"
+              }
+            ]
+          },
+          "store_directions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "street": {
+                    "type": "string"
+                  },
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      },
+                      "iso_numeric": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "name_local",
+                      "iso_numeric"
+                    ]
+                  },
+                  "province": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "name_local"
+                    ]
+                  },
+                  "city": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "name_local"
+                    ]
+                  }
+                },
+                "required": [
+                  "street",
+                  "zip_code",
+                  "country",
+                  "province",
+                  "city"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "user_id",
+          "profile_image_file_id",
+          "first_name",
+          "last_name",
+          "username",
+          "telephone",
+          "tax_id",
+          "profile",
+          "store_directions"
+        ]
+      },
+      "IRetailerProfile": {
+        "type": "object",
+        "properties": {
+          "company_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 100
+              }
+            ]
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 60
+              }
+            ]
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "const": "S.L."
+              },
+              {
+                "const": "S.A."
+              },
+              {
+                "const": "Autónomo"
+              },
+              {
+                "const": "Cooperativa"
+              },
+              {
+                "const": "Sociedad Civil"
+              },
+              {
+                "const": "Otros"
+              }
+            ]
+          },
+          "contact_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 80
+              }
+            ]
+          }
+        },
+        "required": []
+      },
+      "UserSettingsResponseDto": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "language",
+          "timezone"
+        ]
+      },
+      "IUpdateUserLanguageDto": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          }
+        },
+        "required": [
+          "language"
+        ]
+      },
       "ICreateEmployeeDto": {
         "type": "object",
         "properties": {
@@ -935,10 +1717,12 @@
             "example": "+34 679 876 667",
             "description": "联系电话"
           },
-          "cif": {
+          "tax_id": {
             "type": "string",
-            "maxLength": 20,
-            "pattern": "^[A-Z]?\\d{7,8}[A-Z]?$",
+            "pattern": "^(?:\\d{8}[A-Z]|[XYZ]\\d{7}[A-Z]|[ABCDEFGHJNPQRSUVW]\\d{7}[0-9A-J])$",
+            "minLength": 9,
+            "maxLength": 9,
+            "example": "B12345678",
             "description": "西班牙税务识别号 (CIF/NIF/NIE)"
           },
           "username": {
@@ -950,10 +1734,772 @@
           }
         },
         "required": [
-          "email",
-          "first_name"
+          "email"
         ],
         "description": "批发商系统创建新员工的数据传输对象\n包含注册员工账户所需的所有必要信息"
+      },
+      "PartialOmitICreateEmployeeDtoemail": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "员工的名字"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 60,
+            "description": "员工的姓氏"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "example": "username",
+            "description": "系统登录用的唯一用户名\n长度必须为3-30个字符，且不能包含'@'符号"
+          },
+          "telephone": {
+            "type": "string",
+            "maxLength": 25,
+            "example": "+34 679 876 667",
+            "description": "联系电话"
+          },
+          "tax_id": {
+            "type": "string",
+            "pattern": "^(?:\\d{8}[A-Z]|[XYZ]\\d{7}[A-Z]|[ABCDEFGHJNPQRSUVW]\\d{7}[0-9A-J])$",
+            "minLength": 9,
+            "maxLength": 9,
+            "example": "B12345678",
+            "description": "西班牙税务识别号 (CIF/NIF/NIE)"
+          }
+        },
+        "required": [],
+        "description": "Make all properties in T optional"
+      },
+      "IUpdateWholesalerProfileDto": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 50
+              }
+            ]
+          },
+          "last_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 60
+              }
+            ]
+          },
+          "profile_image_file_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "Company logo file id.\n商家 Logo 文件 ID。关联 files.id。"
+          },
+          "tax_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?:\\d{8}[A-Z]|[XYZ]\\d{7}[A-Z]|[ABCDEFGHJNPQRSUVW]\\d{7}[0-9A-J])$",
+                "minLength": 9,
+                "maxLength": 9,
+                "example": "B12345678"
+              }
+            ],
+            "description": "Spanish tax/person/business identifier basic format.\n西班牙税号/身份号基础格式。\n\n支持：\n- DNI/NIF: 12345678Z\n- NIE: X1234567L / Y1234567X / Z1234567R\n- CIF / business NIF: B12345678 / A12345678 / J1234567A / P1234567A\n\n适合兼容：\n- autónomo / 个体户：DNI 或 NIE\n- empresa / 大公司、小公司、协会等：CIF / business NIF\n\n仅做格式校验，不做控制码算法校验。"
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 30,
+                "example": "username"
+              }
+            ],
+            "description": "Username (optional)\n用户名（可选）"
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 25,
+                "example": "+34 679 876 667"
+              }
+            ],
+            "description": "Telephone number\n联系电话"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PartialIDirectionDto"
+          },
+          "company_name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Company's legal name.\n公司法定名称。用于审核、发票、合同等正式场景。\n注册时必填。"
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "const": "S.L."
+              },
+              {
+                "const": "S.A."
+              },
+              {
+                "const": "Autónomo"
+              },
+              {
+                "const": "Cooperativa"
+              },
+              {
+                "const": "Sociedad Civil"
+              },
+              {
+                "const": "Otros"
+              }
+            ],
+            "description": "Company legal type in Spain.\n西班牙公司类型，例如 Autónomo、S.L.、S.A.、Sociedad Civil 等。\n注册时必填"
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 60
+              }
+            ],
+            "description": "Public display name.\n对外展示名称/商家名称。用于零售商看到的店铺名。\ncompany_name = \"Comercial Zhang Alimentación S.L.\"\ndisplay_name = \"Zhang Alimentación\""
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 300
+              }
+            ],
+            "description": "Public short description.\n商家简介。用于告诉零售商这个批发商主要卖什么、有什么特点。\n\n例如：\n\"Mayorista de bebidas, alimentación y productos para hostelería.\""
+          },
+          "delivery_area_description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 200
+              }
+            ],
+            "description": "Delivery area description.\n配送范围说明。\n\n用于描述配送城市、区域或服务范围。\n\n示例：\n\"Reparto en Benidorm, Altea y La Nucía.\""
+          },
+          "minimum_order_amount": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "100.00"
+              }
+            ],
+            "description": "Minimum order amount.\n最低起订金额。用于订单创建时校验，不只是前端展示。"
+          },
+          "delivery_available": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "Whether delivery is available.\n是否支持配送。\n\ntrue = 支持配送\nfalse = 不支持配送\nnull/undefined = 未设置"
+          },
+          "pickup_available": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "Whether pickup is available.\n是否支持自提。\n\ntrue = 支持自提\nfalse = 不支持自提\nnull/undefined = 未设置"
+          }
+        },
+        "required": []
+      },
+      "WholesalerProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "profile_image_file_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "first_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "last_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "username": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tax_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "profile": {
+            "$ref": "#/components/schemas/IWholesalerProfile"
+          },
+          "store_directions": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "street": {
+                    "type": "string"
+                  },
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      },
+                      "iso_numeric": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "name_local",
+                      "iso_numeric"
+                    ]
+                  },
+                  "province": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "name_local"
+                    ]
+                  },
+                  "city": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "name_local": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "name_local"
+                    ]
+                  }
+                },
+                "required": [
+                  "street",
+                  "zip_code",
+                  "country",
+                  "province",
+                  "city"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "user_id",
+          "profile_image_file_id",
+          "first_name",
+          "last_name",
+          "username",
+          "telephone",
+          "tax_id",
+          "profile",
+          "store_directions"
+        ]
+      },
+      "IWholesalerProfile": {
+        "type": "object",
+        "properties": {
+          "company_name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Company's legal name.\n公司法定名称。用于审核、发票、合同等正式场景。\n注册时必填。"
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "const": "S.L."
+              },
+              {
+                "const": "S.A."
+              },
+              {
+                "const": "Autónomo"
+              },
+              {
+                "const": "Cooperativa"
+              },
+              {
+                "const": "Sociedad Civil"
+              },
+              {
+                "const": "Otros"
+              }
+            ],
+            "description": "Company legal type in Spain.\n西班牙公司类型，例如 Autónomo、S.L.、S.A.、Sociedad Civil 等。\n注册时必填"
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 60
+              }
+            ],
+            "description": "Public display name.\n对外展示名称/商家名称。用于零售商看到的店铺名。\ncompany_name = \"Comercial Zhang Alimentación S.L.\"\ndisplay_name = \"Zhang Alimentación\""
+          },
+          "description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 300
+              }
+            ],
+            "description": "Public short description.\n商家简介。用于告诉零售商这个批发商主要卖什么、有什么特点。\n\n例如：\n\"Mayorista de bebidas, alimentación y productos para hostelería.\""
+          },
+          "delivery_area_description": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 200
+              }
+            ],
+            "description": "Delivery area description.\n配送范围说明。\n\n用于描述配送城市、区域或服务范围。\n\n示例：\n\"Reparto en Benidorm, Altea y La Nucía.\""
+          },
+          "minimum_order_amount": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "example": "100.00"
+              }
+            ],
+            "description": "Minimum order amount.\n最低起订金额。用于订单创建时校验，不只是前端展示。"
+          },
+          "delivery_available": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "Whether delivery is available.\n是否支持配送。\n\ntrue = 支持配送\nfalse = 不支持配送\nnull/undefined = 未设置"
+          },
+          "pickup_available": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "Whether pickup is available.\n是否支持自提。\n\ntrue = 支持自提\nfalse = 不支持自提\nnull/undefined = 未设置"
+          }
+        },
+        "required": [
+          "company_name",
+          "company_type"
+        ]
+      },
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "page",
+          "limit"
+        ],
+        "description": "Pagination metadata for response"
+      },
+      "IFindEmployeeQuery": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "example": "Keywords for name search"
+          },
+          "role": {
+            "oneOf": [
+              {
+                "const": "SUPPORT"
+              },
+              {
+                "const": "DELIVERY"
+              },
+              {
+                "const": "WAREHOUSE"
+              }
+            ]
+          },
+          "sortBy": {
+            "oneOf": [
+              {
+                "const": "user_id"
+              },
+              {
+                "const": "first_name"
+              },
+              {
+                "const": "last_name"
+              },
+              {
+                "const": "email"
+              },
+              {
+                "const": "username"
+              },
+              {
+                "const": "telephone"
+              },
+              {
+                "const": "tax_id"
+              }
+            ]
+          },
+          "sortOrder": {
+            "oneOf": [
+              {
+                "const": "asc"
+              },
+              {
+                "const": "desc"
+              }
+            ]
+          },
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "IDashboardResponse": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "object",
+            "properties": {
+              "totalOrders": {
+                "type": "number"
+              },
+              "pendingOrders": {
+                "type": "number"
+              },
+              "acceptedOrders": {
+                "type": "number"
+              },
+              "totalRevenue": {
+                "type": "string"
+              },
+              "averageOrderValue": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "totalOrders",
+              "pendingOrders",
+              "acceptedOrders",
+              "totalRevenue",
+              "averageOrderValue"
+            ]
+          },
+          "orderStatus": {
+            "type": "object",
+            "properties": {
+              "pending": {
+                "type": "number"
+              },
+              "accepted": {
+                "type": "number"
+              },
+              "rejected": {
+                "type": "number"
+              },
+              "cancelled": {
+                "type": "number"
+              },
+              "total": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "pending",
+              "accepted",
+              "rejected",
+              "cancelled",
+              "total"
+            ]
+          },
+          "revenueTrend": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "orderCount": {
+                  "type": "number"
+                },
+                "acceptedCount": {
+                  "type": "number"
+                },
+                "revenue": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "date",
+                "orderCount",
+                "acceptedCount",
+                "revenue"
+              ]
+            }
+          },
+          "topSellingProducts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "productName": {
+                  "type": "string"
+                },
+                "productTranslation": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "lang_code": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "lang_code",
+                      "name"
+                    ]
+                  }
+                },
+                "soldQuantity": {
+                  "type": "number"
+                },
+                "revenue": {
+                  "type": "string"
+                },
+                "orderCount": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "productId",
+                "productName",
+                "productTranslation",
+                "soldQuantity",
+                "revenue",
+                "orderCount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "summary",
+          "orderStatus",
+          "revenueTrend",
+          "topSellingProducts"
+        ]
+      },
+      "IDashboardQuery": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-01-01"
+          },
+          "topLimit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "topLimit"
+        ]
       },
       "ICreateAdminDto": {
         "type": "object",
@@ -1118,22 +2664,29 @@
             "type": "number"
           },
           "category_translations": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "lang_code": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                }
+            "oneOf": [
+              {
+                "type": "null"
               },
-              "required": [
-                "lang_code",
-                "name"
-              ]
-            }
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "lang_code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "lang_code",
+                    "name"
+                  ]
+                }
+              }
+            ]
           },
           "user_id": {
             "oneOf": [
@@ -1211,6 +2764,31 @@
                 "$ref": "#/components/schemas/ICategoryResponseRelation"
               }
             ]
+          },
+          "category_translations": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "lang_code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "lang_code",
+                    "name"
+                  ]
+                }
+              }
+            ]
           }
         },
         "required": [
@@ -1228,7 +2806,7 @@
           "langCode": {
             "type": "string",
             "maxLength": 15,
-            "example": "zh-CH"
+            "example": "es-ES"
           },
           "userId": {
             "type": "string",
@@ -1238,6 +2816,19 @@
           "parentId": {
             "type": "string"
           },
+          "excludedIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "level": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 3,
+            "example": 1
+          },
           "maxLevel": {
             "type": "number",
             "minimum": 0,
@@ -1246,6 +2837,32 @@
           },
           "withChildrenCount": {
             "type": "boolean"
+          },
+          "includePublic": {
+            "type": "boolean"
+          },
+          "onlyWithOwnedChildren": {
+            "type": "boolean"
+          },
+          "searchMatchMode": {
+            "oneOf": [
+              {
+                "const": "self"
+              },
+              {
+                "const": "descendant"
+              }
+            ]
+          },
+          "productFilterMode": {
+            "oneOf": [
+              {
+                "const": "self"
+              },
+              {
+                "const": "descendant"
+              }
+            ]
           },
           "type": {
             "oneOf": [
@@ -1279,6 +2896,29 @@
               ]
             }
           },
+          "sort_by": {
+            "oneOf": [
+              {
+                "const": "name"
+              },
+              {
+                "const": "level"
+              },
+              {
+                "const": "iva"
+              }
+            ]
+          },
+          "sort_order": {
+            "oneOf": [
+              {
+                "const": "asc"
+              },
+              {
+                "const": "desc"
+              }
+            ]
+          },
           "page": {
             "type": "number",
             "minimum": 1
@@ -1289,6 +2929,7 @@
           }
         },
         "required": [
+          "searchMatchMode",
           "page",
           "limit"
         ]
@@ -1448,6 +3089,20 @@
           "primary_category_id": {
             "type": "string"
           },
+          "sub_category_ids": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ]
+          },
           "variants": {
             "type": "array",
             "items": {
@@ -1491,6 +3146,7 @@
           "product_code",
           "status",
           "primary_category_id",
+          "sub_category_ids",
           "variants",
           "translations",
           "files"
@@ -1558,7 +3214,7 @@
           "min_order_qty": {
             "type": "integer",
             "minimum": 1,
-            "maximum": 2147483647
+            "maximum": 1000000
           },
           "status": {
             "oneOf": [
@@ -1794,18 +3450,25 @@
             "type": "number"
           },
           "main_image": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
+            "oneOf": [
+              {
+                "type": "null"
               },
-              "mime_type": {
-                "type": "string"
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "mime_type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "mime_type"
+                ]
               }
-            },
-            "required": [
-              "id",
-              "mime_type"
             ]
           }
         },
@@ -1829,7 +3492,9 @@
             "type": "string"
           },
           "langCode": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
           },
           "category_id": {
             "type": "string"
@@ -1864,6 +3529,9 @@
               },
               {
                 "const": "price"
+              },
+              {
+                "const": "best_selling"
               }
             ]
           },
@@ -1916,9 +3584,21 @@
           }
         },
         "required": [
-          "sort_order",
           "page",
           "limit"
+        ]
+      },
+      "IProductDetailQueryDto": {
+        "type": "object",
+        "properties": {
+          "langCode": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          }
+        },
+        "required": [
+          "langCode"
         ]
       },
       "IUpdateProductDto": {
@@ -1982,6 +3662,10 @@
               }
             ]
           },
+          "iva": {
+            "type": "string",
+            "example": "21.00"
+          },
           "status": {
             "oneOf": [
               {
@@ -1991,15 +3675,6 @@
                 "const": "INACTIVE"
               }
             ]
-          },
-          "product_code": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
-            "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
-          },
-          "iva": {
-            "type": "string",
-            "example": "21.00"
           },
           "files": {
             "oneOf": [
@@ -2014,8 +3689,27 @@
               }
             ]
           },
+          "product_code": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
+            "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
+          },
           "primary_category_id": {
             "type": "string"
+          },
+          "sub_category_ids": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ]
           }
         },
         "required": []
@@ -2026,18 +3720,10 @@
           "id": {
             "type": "string"
           },
-          "type_sale": {
-            "oneOf": [
-              {
-                "const": "UNIT"
-              },
-              {
-                "const": "BOX"
-              },
-              {
-                "const": "PACK"
-              }
-            ]
+          "available_stock_delta": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
           },
           "sort": {
             "type": "integer",
@@ -2056,6 +3742,29 @@
               }
             ]
           },
+          "status": {
+            "oneOf": [
+              {
+                "const": "ACTIVE"
+              },
+              {
+                "const": "INACTIVE"
+              }
+            ]
+          },
+          "type_sale": {
+            "oneOf": [
+              {
+                "const": "UNIT"
+              },
+              {
+                "const": "BOX"
+              },
+              {
+                "const": "PACK"
+              }
+            ]
+          },
           "price_iva": {
             "oneOf": [
               {
@@ -2067,12 +3776,22 @@
               }
             ]
           },
+          "attributes": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "product_code": {
             "type": "string",
             "pattern": "^[A-Za-z0-9/_\\.-]{1,50}$",
             "example": "EAN-123, UPC-A, ITF-14, Code39, Code128, EAN/UCC-128"
           },
-          "available_stock": {
+          "low_stock_threshold": {
             "type": "integer",
             "minimum": 0,
             "maximum": 2147483647
@@ -2085,24 +3804,259 @@
           "min_order_qty": {
             "type": "integer",
             "minimum": 1,
-            "maximum": 2147483647
+            "maximum": 1000000
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "ICreateCartItemDto": {
+        "type": "object",
+        "properties": {
+          "variant_id": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+          }
+        },
+        "required": [
+          "variant_id",
+          "quantity"
+        ]
+      },
+      "IUpdateCartItem": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000
+          }
+        },
+        "required": [
+          "quantity"
+        ]
+      },
+      "ICartResponse": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICartGroupWithoutDecimal"
+            }
+          },
+          "summary": {
+            "$ref": "#/components/schemas/ICartSummary"
+          }
+        },
+        "required": [
+          "groups",
+          "summary"
+        ]
+      },
+      "ICartGroupWithoutDecimal": {
+        "type": "object",
+        "properties": {
+          "subtotal": {
+            "type": "string"
+          },
+          "iva_total": {
+            "type": "string"
+          },
+          "total": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "item_count": {
+            "type": "number"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICartItem"
+            }
+          },
+          "wholesaler": {
+            "$ref": "#/components/schemas/ICartWholesaler"
+          },
+          "total_quantity": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "subtotal",
+          "iva_total",
+          "total",
+          "status",
+          "item_count",
+          "items",
+          "wholesaler",
+          "total_quantity"
+        ]
+      },
+      "ICartItem": {
+        "type": "object",
+        "properties": {
+          "cart_detail_id": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "variant_id": {
+            "type": "string"
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "product_title": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "product_code": {
+            "type": "string"
+          },
+          "variant_code": {
+            "type": "string"
+          },
+          "main_image": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "mime_type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "mime_type"
+                ]
+              }
+            ]
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "sale_unit_qty": {
+            "type": "number"
+          },
+          "min_order_qty": {
+            "type": "number"
+          },
+          "max_order_quantity": {
+            "type": "number"
+          },
+          "price": {
+            "type": "string"
+          },
+          "price_iva": {
+            "type": "string"
+          },
+          "iva": {
+            "type": "string"
+          },
+          "line_subtotal": {
+            "type": "string"
+          },
+          "line_iva": {
+            "type": "string"
+          },
+          "line_total": {
+            "type": "string"
           },
           "status": {
             "oneOf": [
               {
-                "const": "ACTIVE"
+                "const": "AVAILABLE"
               },
               {
-                "const": "INACTIVE"
+                "const": "PRODUCT_INACTIVE"
+              },
+              {
+                "const": "VARIANT_INACTIVE"
+              },
+              {
+                "const": "BELOW_MIN_ORDER_QTY"
+              },
+              {
+                "const": "INSUFFICIENT_STOCK"
+              },
+              {
+                "const": "WHOLESALER_UNAVAILABLE"
+              }
+            ]
+          }
+        },
+        "required": [
+          "cart_detail_id",
+          "product_id",
+          "variant_id",
+          "product_name",
+          "product_code",
+          "variant_code",
+          "quantity",
+          "sale_unit_qty",
+          "min_order_qty",
+          "max_order_quantity",
+          "price",
+          "price_iva",
+          "iva",
+          "line_subtotal",
+          "line_iva",
+          "line_total",
+          "status"
+        ]
+      },
+      "ICartWholesaler": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "company_name": {
+            "type": "string"
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
               }
             ]
           },
-          "low_stock_threshold": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 2147483647
+          "profile_image_file_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
-          "attributes": {
+          "minimum_order_amount": {
             "oneOf": [
               {
                 "type": "null"
@@ -2114,7 +4068,938 @@
           }
         },
         "required": [
-          "id"
+          "id",
+          "company_name"
+        ]
+      },
+      "ICartSummary": {
+        "type": "object",
+        "properties": {
+          "wholesaler_count": {
+            "type": "number"
+          },
+          "item_count": {
+            "type": "number"
+          },
+          "total_quantity": {
+            "type": "number"
+          },
+          "subtotal": {
+            "type": "string"
+          },
+          "iva_total": {
+            "type": "string"
+          },
+          "total": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "wholesaler_count",
+          "item_count",
+          "total_quantity",
+          "subtotal",
+          "iva_total",
+          "total"
+        ]
+      },
+      "ICartsQueryDto": {
+        "type": "object",
+        "properties": {
+          "langCode": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          },
+          "wholesaler_id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          }
+        },
+        "required": []
+      },
+      "ICreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "wholesalerId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          }
+        },
+        "required": [
+          "wholesalerId"
+        ]
+      },
+      "ICancelOrderDto": {
+        "type": "object",
+        "properties": {
+          "actionReason": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "maxLength": 500
+              }
+            ]
+          }
+        },
+        "required": [
+          "actionReason"
+        ]
+      },
+      "IRejectOrderDto": {
+        "type": "object",
+        "properties": {
+          "actionReason": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "actionReason"
+        ]
+      },
+      "IUpdateOrderDto": {
+        "type": "object",
+        "properties": {
+          "estimatedDeliveryDate": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "format": "date",
+                "example": "2026-01-01"
+              }
+            ]
+          }
+        },
+        "required": [
+          "estimatedDeliveryDate"
+        ]
+      },
+      "PaginatedDataWithTIOrderResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IOrderResponse"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMeta"
+          }
+        },
+        "required": [
+          "items",
+          "pagination"
+        ]
+      },
+      "IOrderResponse": {
+        "type": "object",
+        "properties": {
+          "item_count": {
+            "type": "number"
+          },
+          "total_subtotal": {
+            "type": "string"
+          },
+          "total_iva": {
+            "type": "string"
+          },
+          "total_amount": {
+            "type": "string"
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "PENDING"
+              },
+              {
+                "const": "ACCEPTED"
+              },
+              {
+                "const": "REJECTED"
+              },
+              {
+                "const": "CANCELLED"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "accepted_at": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "rejected_at": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "rejected_reason": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "cancelled_at": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "cancelled_reason": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "estimated_delivery_date": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "wholesaler_snapshot": {
+            "$ref": "#/components/schemas/IWholesalerSnapshot"
+          },
+          "retailer_snapshot": {
+            "$ref": "#/components/schemas/IRetailerSnapshot"
+          },
+          "shipping_address_snapshot": {
+            "$ref": "#/components/schemas/IShippingAddressSnapshot"
+          },
+          "id": {
+            "type": "string"
+          },
+          "order_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_count",
+          "total_subtotal",
+          "total_iva",
+          "total_amount",
+          "status",
+          "created_at",
+          "accepted_at",
+          "rejected_at",
+          "rejected_reason",
+          "cancelled_at",
+          "cancelled_reason",
+          "estimated_delivery_date",
+          "id",
+          "order_number"
+        ]
+      },
+      "IWholesalerSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "company_name": {
+            "type": "string"
+          },
+          "company_type": {
+            "type": "string"
+          },
+          "tax_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "company_name",
+          "company_type",
+          "email"
+        ],
+        "description": "批发商快照"
+      },
+      "IRetailerSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "display_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "company_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "company_type": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "contact_name": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tax_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "telephone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "email"
+        ],
+        "description": "零售商快照"
+      },
+      "IShippingAddressSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "zip_code": {
+            "type": "string"
+          },
+          "city_id": {
+            "type": "number"
+          },
+          "city_name": {
+            "type": "string"
+          },
+          "city_name_local": {
+            "type": "string"
+          },
+          "province_id": {
+            "type": "number"
+          },
+          "province_name": {
+            "type": "string"
+          },
+          "province_name_local": {
+            "type": "string"
+          },
+          "country_iso": {
+            "type": "number"
+          },
+          "country_alpha2": {
+            "type": "string"
+          },
+          "country_alpha3": {
+            "type": "string"
+          },
+          "country_name": {
+            "type": "string"
+          },
+          "country_name_local": {
+            "type": "string"
+          },
+          "latitude": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "longitude": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "street",
+          "zip_code",
+          "city_id",
+          "city_name",
+          "city_name_local",
+          "province_id",
+          "province_name",
+          "province_name_local",
+          "country_iso",
+          "country_alpha2",
+          "country_alpha3",
+          "country_name",
+          "country_name_local"
+        ],
+        "description": "送货地址快照"
+      },
+      "IOrderQuery": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string"
+          },
+          "wholesalerId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "PENDING"
+              },
+              {
+                "const": "ACCEPTED"
+              },
+              {
+                "const": "REJECTED"
+              },
+              {
+                "const": "CANCELLED"
+              }
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-01-01"
+          },
+          "sortBy": {
+            "oneOf": [
+              {
+                "const": "ORDER_DATE"
+              },
+              {
+                "const": "ORDER_NUMBER"
+              },
+              {
+                "const": "ORDER_DELIVERY_DATE"
+              },
+              {
+                "const": "TOTAL_PRICE"
+              },
+              {
+                "const": "TOTAL_IVA"
+              },
+              {
+                "const": "TOTAL_SUBTOTAL"
+              },
+              {
+                "const": "TOTAL_ITEM"
+              }
+            ]
+          },
+          "orderBy": {
+            "oneOf": [
+              {
+                "const": "asc"
+              },
+              {
+                "const": "desc"
+              }
+            ]
+          },
+          "minTotalPrice": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxTotalPrice": {
+            "type": "number",
+            "minimum": 0
+          },
+          "minSubtotal": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxSubtotal": {
+            "type": "number",
+            "minimum": 0
+          },
+          "minTotalIva": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxTotalIva": {
+            "type": "number",
+            "minimum": 0
+          },
+          "minItemCount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxItemCount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "IOrderDetailResponse": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IOrderDetailItem"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "order_number": {
+            "type": "string"
+          },
+          "wholesaler_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "retailer_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "item_count": {
+            "type": "number"
+          },
+          "total_subtotal": {
+            "type": "string"
+          },
+          "total_iva": {
+            "type": "string"
+          },
+          "total_amount": {
+            "type": "string"
+          },
+          "status": {
+            "oneOf": [
+              {
+                "const": "PENDING"
+              },
+              {
+                "const": "ACCEPTED"
+              },
+              {
+                "const": "REJECTED"
+              },
+              {
+                "const": "CANCELLED"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "accepted_at": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "rejected_at": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "rejected_reason": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "cancelled_at": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "cancelled_reason": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "estimated_delivery_date": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "wholesaler_snapshot": {
+            "$ref": "#/components/schemas/IWholesalerSnapshot"
+          },
+          "retailer_snapshot": {
+            "$ref": "#/components/schemas/IRetailerSnapshot"
+          },
+          "shipping_address_snapshot": {
+            "$ref": "#/components/schemas/IShippingAddressSnapshot"
+          }
+        },
+        "required": [
+          "currency",
+          "items",
+          "id",
+          "order_number",
+          "wholesaler_id",
+          "retailer_id",
+          "item_count",
+          "total_subtotal",
+          "total_iva",
+          "total_amount",
+          "status",
+          "created_at",
+          "accepted_at",
+          "rejected_at",
+          "rejected_reason",
+          "cancelled_at",
+          "cancelled_reason",
+          "estimated_delivery_date"
+        ]
+      },
+      "IOrderDetailItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "product_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "variant_product_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "product_name": {
+            "type": "string"
+          },
+          "product_title": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "product_code": {
+            "type": "string"
+          },
+          "variant_product_code": {
+            "type": "string"
+          },
+          "product_translations_snapshot": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "lang_code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "title": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "lang_code",
+                    "name",
+                    "title"
+                  ]
+                }
+              }
+            ]
+          },
+          "variant_attributes_snapshot": {},
+          "type_sale": {
+            "oneOf": [
+              {
+                "const": "UNIT"
+              },
+              {
+                "const": "BOX"
+              },
+              {
+                "const": "PACK"
+              }
+            ]
+          },
+          "sale_unit_qty": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "unit_price": {
+            "type": "string"
+          },
+          "unit_price_iva": {
+            "type": "string"
+          },
+          "iva": {
+            "type": "string"
+          },
+          "subtotal": {
+            "type": "string"
+          },
+          "iva_total": {
+            "type": "string"
+          },
+          "total": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "product_id",
+          "variant_product_id",
+          "product_name",
+          "product_title",
+          "product_code",
+          "variant_product_code",
+          "product_translations_snapshot",
+          "variant_attributes_snapshot",
+          "type_sale",
+          "sale_unit_qty",
+          "quantity",
+          "unit_price",
+          "unit_price_iva",
+          "iva",
+          "subtotal",
+          "iva_total",
+          "total"
+        ]
+      },
+      "IOrderDetailQuery": {
+        "type": "object",
+        "properties": {
+          "langCode": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "es-ES"
+          }
+        },
+        "required": [
+          "langCode"
         ]
       }
     }
@@ -2236,6 +5121,65 @@
           "files",
           "upload_raw",
           "uploadRawFile"
+        ],
+        "x-samchon-controller": "FilesController"
+      }
+    },
+    "/maian/files/video/play-token": {
+      "get": {
+        "description": "获取产品视频临时播放 Token\n需要用户已登录，校验权限后返回 playToken",
+        "tags": [
+          "File Management"
+        ],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "file_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "playToken": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "playToken"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "files",
+          "video",
+          "play_token",
+          "getVideoPlayToken"
         ],
         "x-samchon-controller": "FilesController"
       }
@@ -3312,6 +6256,16 @@
         ],
         "parameters": [
           {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          },
+          {
             "name": "username",
             "in": "query",
             "schema": {
@@ -3359,6 +6313,58 @@
           "check",
           "username",
           "checkUsernameUsed"
+        ],
+        "x-samchon-controller": "CheckUserController"
+      }
+    },
+    "/maian/user/check/tax_id": {
+      "get": {
+        "summary": "Check if an tax id is already registered",
+        "description": "Check if an tax id is already registered.\n\nReturns true if the tax id is already in use, false otherwise.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "taxId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the tax id is already registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "check",
+          "tax_id",
+          "checkUserTaxIdUsed"
         ],
         "x-samchon-controller": "CheckUserController"
       }
@@ -3522,6 +6528,9 @@
             "schema": {
               "oneOf": [
                 {
+                  "const": "email"
+                },
+                {
                   "const": "id"
                 },
                 {
@@ -3535,9 +6544,6 @@
                 },
                 {
                   "const": "username"
-                },
-                {
-                  "const": "email"
                 },
                 {
                   "const": "telephone"
@@ -3608,7 +6614,343 @@
         "x-samchon-controller": "FindUserController"
       }
     },
-    "/maian/enterprise/create-employee/support": {
+    "/maian/user/wholesalers": {
+      "get": {
+        "summary": "Search wholesalers visible to the authenticated user",
+        "description": "Search wholesalers visible to the authenticated user.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "delivery_available",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "pickup_available",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "company_type",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "S.L."
+                },
+                {
+                  "const": "S.A."
+                },
+                {
+                  "const": "Autónomo"
+                },
+                {
+                  "const": "Cooperativa"
+                },
+                {
+                  "const": "Sociedad Civil"
+                },
+                {
+                  "const": "Otros"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "display_name"
+                },
+                {
+                  "const": "company_name"
+                },
+                {
+                  "const": "city"
+                },
+                {
+                  "const": "province"
+                },
+                {
+                  "const": "minimum_order_amount"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "orderDir",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated wholesaler list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataWithT__type"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "wholesalers",
+          "findUser"
+        ],
+        "x-samchon-controller": "ReadWholesalerController"
+      }
+    },
+    "/maian/user/retailer-profile": {
+      "patch": {
+        "summary": "Update the profile for the authenticated retailer",
+        "description": "Update the profile for the authenticated retailer.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Retailer profile update payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateRetailerProfileDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "retailer_profile",
+          "updateRetailerProfile"
+        ],
+        "x-samchon-controller": "RetailerProfileController"
+      },
+      "get": {
+        "summary": "Get the profile for the authenticated retailer",
+        "description": "Get the profile for the authenticated retailer.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Retailer profile details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetailerProfileResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "retailer_profile",
+          "getMyProfile"
+        ],
+        "x-samchon-controller": "RetailerProfileController"
+      }
+    },
+    "/maian/user/retailer-profile/{id}": {
+      "get": {
+        "summary": "Get a retailer profile by ID",
+        "description": "Get a retailer profile by ID.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Retailer ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retailer profile details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetailerProfileResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "retailer_profile",
+          "getRetailerProfileById"
+        ],
+        "x-samchon-controller": "RetailerProfileController"
+      }
+    },
+    "/maian/user/settings": {
+      "get": {
+        "summary": "Get settings for the authenticated user",
+        "description": "Get settings for the authenticated user.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current user settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSettingsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "settings",
+          "getSettings"
+        ],
+        "x-samchon-controller": "UserSettingsController"
+      }
+    },
+    "/maian/user/settings/language": {
+      "patch": {
+        "summary": "Update the language setting for the authenticated user",
+        "description": "Update the language setting for the authenticated user.",
+        "tags": [
+          "User"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Language update payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateUserLanguageDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "user",
+          "settings",
+          "language",
+          "updateLanguage"
+        ],
+        "x-samchon-controller": "UserSettingsController"
+      }
+    },
+    "/maian/enterprise/employees/support": {
       "post": {
         "description": "Create a new support employee\n\nCreates a support employee account with PENDING_VERIFICATION status.\nThe employee will receive a verification email with a link to activate their account.\nThe username is automatically generated as: {wholesaler_user_id}@{random_uuid}",
         "tags": [
@@ -3642,14 +6984,14 @@
         "x-samchon-accessor": [
           "maian",
           "enterprise",
-          "create_employee",
+          "employees",
           "support",
           "createEmployee"
         ],
-        "x-samchon-controller": "CreateEmployeeController"
+        "x-samchon-controller": "WriteEmployeeController"
       }
     },
-    "/maian/enterprise/create-employee/delivery": {
+    "/maian/enterprise/employees/delivery": {
       "post": {
         "description": "Create a new delivery employee\n\nCreates a delivery employee account with PENDING_VERIFICATION status.\nThe employee will receive a verification email with a link to activate their account.\nThe username is automatically generated as: {wholesaler_user_id}@{random_uuid}",
         "tags": [
@@ -3683,14 +7025,14 @@
         "x-samchon-accessor": [
           "maian",
           "enterprise",
-          "create_employee",
+          "employees",
           "delivery",
           "createDeliveryEmployee"
         ],
-        "x-samchon-controller": "CreateEmployeeController"
+        "x-samchon-controller": "WriteEmployeeController"
       }
     },
-    "/maian/enterprise/create-employee/warehouse": {
+    "/maian/enterprise/employees/warehouse": {
       "post": {
         "description": "Create a new warehouse employee\n\nCreates a warehouse employee account with PENDING_VERIFICATION status.\nThe employee will receive a verification email with a link to activate their account.\nThe username is automatically generated as: {wholesaler_user_id}@{random_uuid}",
         "tags": [
@@ -3724,14 +7066,695 @@
         "x-samchon-accessor": [
           "maian",
           "enterprise",
-          "create_employee",
+          "employees",
           "warehouse",
           "createWarehouseEmployee"
         ],
-        "x-samchon-controller": "CreateEmployeeController"
+        "x-samchon-controller": "WriteEmployeeController"
       }
     },
-    "/maian/create-admin": {
+    "/maian/enterprise/employees/{id}/resend-activation-email": {
+      "post": {
+        "summary": "Resend the activation email for an employee pending verification",
+        "description": "Resend the activation email for an employee pending verification.",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "employees",
+          "resend_activation_email",
+          "resendActivationEmail"
+        ],
+        "x-samchon-controller": "WriteEmployeeController"
+      }
+    },
+    "/maian/enterprise/employees/{id}": {
+      "patch": {
+        "description": "Update an existing employee account\n\nAllows a wholesaler to update basic employee profile information.\n\nOnly employees belonging to the authenticated wholesaler can be updated.\nEmail address cannot be changed through this endpoint.\n\nUpdatable fields:\n- first_name\n- last_name\n- username\n- telephone\n- tax_id",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": true,
+            "description": "- Employee user ID"
+          }
+        ],
+        "requestBody": {
+          "description": "- Partial employee update data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartialOmitICreateEmployeeDtoemail"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Empty response with 200 status code on success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "employees",
+          "updateEmployee"
+        ],
+        "x-samchon-controller": "WriteEmployeeController"
+      },
+      "delete": {
+        "description": "Delete an existing employee account\n\nAllows a wholesaler to delete an employee account.\n\nOnly employees belonging to the authenticated wholesaler can be deleted.",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": true,
+            "description": "- Employee user ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Empty response with 200 status code on success",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "employees",
+          "deleteEmployee"
+        ],
+        "x-samchon-controller": "WriteEmployeeController"
+      },
+      "get": {
+        "description": "Get employee information for update form\n\nReturns editable employee fields.\nOnly employees belonging to the authenticated wholesaler can be accessed.",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": true,
+            "description": "- Employee user ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee editable information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "first_name": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "last_name": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "username": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "telephone": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "tax_id": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "first_name",
+                    "last_name",
+                    "username",
+                    "telephone",
+                    "tax_id"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "employees",
+          "getEmployeeForUpdate"
+        ],
+        "x-samchon-controller": "ReadEmployeeController"
+      }
+    },
+    "/maian/enterprise/wholesaler-profile": {
+      "patch": {
+        "summary": "Update the profile for the authenticated wholesaler",
+        "description": "Update the profile for the authenticated wholesaler.",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Wholesaler profile update payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateWholesalerProfileDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "wholesaler_profile",
+          "updateWholesalerProfile"
+        ],
+        "x-samchon-controller": "WholesalerProfileController"
+      },
+      "get": {
+        "summary": "Get the profile for the authenticated wholesaler",
+        "description": "Get the profile for the authenticated wholesaler.",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Wholesaler profile details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WholesalerProfileResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "wholesaler_profile",
+          "getMyProfile"
+        ],
+        "x-samchon-controller": "WholesalerProfileController"
+      }
+    },
+    "/maian/enterprise/wholesaler-profile/{id}": {
+      "get": {
+        "summary": "Get a wholesaler profile by ID",
+        "description": "Get a wholesaler profile by ID.",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Wholesaler ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wholesaler profile details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WholesalerProfileResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "wholesaler_profile",
+          "getWholesalerProfileById"
+        ],
+        "x-samchon-controller": "WholesalerProfileController"
+      }
+    },
+    "/maian/enterprise/employees": {
+      "get": {
+        "description": "Get wholesaler employees list\n\nReturns paginated employees belonging to the authenticated wholesaler.\n\nSupports:\n- pagination\n- search\n- sorting\n- role filtering",
+        "tags": [
+          "Employee Management"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "Keywords for name search"
+            },
+            "required": false
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "SUPPORT"
+                },
+                {
+                  "const": "DELIVERY"
+                },
+                {
+                  "const": "WAREHOUSE"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "user_id"
+                },
+                {
+                  "const": "first_name"
+                },
+                {
+                  "const": "last_name"
+                },
+                {
+                  "const": "email"
+                },
+                {
+                  "const": "username"
+                },
+                {
+                  "const": "telephone"
+                },
+                {
+                  "const": "tax_id"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated employee list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "user_id": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "first_name": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "last_name": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "telephone": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "tax_id": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "role": {
+                            "oneOf": [
+                              {
+                                "const": "WHOLESALER"
+                              },
+                              {
+                                "const": "RETAILER"
+                              },
+                              {
+                                "const": "SUPPORT"
+                              },
+                              {
+                                "const": "DELIVERY"
+                              },
+                              {
+                                "const": "WAREHOUSE"
+                              },
+                              {
+                                "const": "ADMIN"
+                              },
+                              {
+                                "const": "SUPERADMIN"
+                              }
+                            ]
+                          },
+                          "status": {
+                            "oneOf": [
+                              {
+                                "const": "ACTIVE"
+                              },
+                              {
+                                "const": "INACTIVE"
+                              },
+                              {
+                                "const": "PENDING_VERIFICATION"
+                              },
+                              {
+                                "const": "PENDING_REVIEW"
+                              },
+                              {
+                                "const": "APPROVED"
+                              },
+                              {
+                                "const": "BANNED"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "user_id",
+                          "first_name",
+                          "last_name",
+                          "email",
+                          "username",
+                          "telephone",
+                          "tax_id",
+                          "role",
+                          "status"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/PaginationMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "employees",
+          "findAllEmployees"
+        ],
+        "x-samchon-controller": "ReadEmployeeController"
+      }
+    },
+    "/maian/enterprise/dashboard": {
+      "get": {
+        "summary": "Get dashboard data for the authenticated enterprise user",
+        "description": "Get dashboard data for the authenticated enterprise user.",
+        "tags": [
+          "Enterprise Dashboard"
+        ],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            },
+            "required": false
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            },
+            "required": false
+          },
+          {
+            "name": "topLimit",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard metrics and summaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IDashboardResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "enterprise",
+          "dashboard",
+          "getDashboard"
+        ],
+        "x-samchon-controller": "DashboardController"
+      }
+    },
+    "/maian/admin/create": {
       "post": {
         "description": "Create a new admin user\n\nThis endpoint creates a new admin user with PENDING_VERIFICATION status.\nAn email with verification link will be sent to the provided email address.\nThe verification link is valid for 7 days.",
         "tags": [
@@ -3764,7 +7787,8 @@
         ],
         "x-samchon-accessor": [
           "maian",
-          "create_admin",
+          "admin",
+          "create",
           "createAdmin"
         ],
         "x-samchon-controller": "CreateAdminController"
@@ -3831,7 +7855,7 @@
             "schema": {
               "type": "string",
               "maxLength": 15,
-              "example": "zh-CH"
+              "example": "es-ES"
             },
             "required": false
           },
@@ -3854,6 +7878,29 @@
             "required": false
           },
           {
+            "name": "excludedIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            "required": false
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 3,
+              "example": 1
+            },
+            "required": false
+          },
+          {
             "name": "maxLevel",
             "in": "query",
             "schema": {
@@ -3869,6 +7916,52 @@
             "in": "query",
             "schema": {
               "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "includePublic",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "onlyWithOwnedChildren",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "name": "searchMatchMode",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "self"
+                },
+                {
+                  "const": "descendant"
+                }
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "productFilterMode",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "self"
+                },
+                {
+                  "const": "descendant"
+                }
+              ]
             },
             "required": false
           },
@@ -3911,6 +8004,39 @@
                   }
                 ]
               }
+            },
+            "required": false
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "name"
+                },
+                {
+                  "const": "level"
+                },
+                {
+                  "const": "iva"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
             },
             "required": false
           },
@@ -4310,7 +8436,9 @@
             "name": "langCode",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "maxLength": 15,
+              "example": "es-ES"
             },
             "required": false
           },
@@ -4360,6 +8488,9 @@
                 },
                 {
                   "const": "price"
+                },
+                {
+                  "const": "best_selling"
                 }
               ]
             },
@@ -4378,7 +8509,7 @@
                 }
               ]
             },
-            "required": true
+            "required": false
           },
           {
             "name": "status",
@@ -4499,11 +8630,15 @@
                           },
                           "file_id": {
                             "type": "string"
+                          },
+                          "mime_type": {
+                            "type": "string"
                           }
                         },
                         "required": [
                           "sort",
-                          "file_id"
+                          "file_id",
+                          "mime_type"
                         ]
                       }
                     },
@@ -4684,6 +8819,9 @@
                           "available_stock": {
                             "type": "number"
                           },
+                          "sale_unit_qty": {
+                            "type": "number"
+                          },
                           "sort": {
                             "type": "number"
                           },
@@ -4702,6 +8840,7 @@
                           "price",
                           "price_iva",
                           "available_stock",
+                          "sale_unit_qty",
                           "sort",
                           "low_stock_threshold",
                           "min_order_qty"
@@ -4742,6 +8881,273 @@
       }
     },
     "/maian/product/{id}": {
+      "get": {
+        "summary": "Get product data required for the details form",
+        "description": "Get product data required for the details form.\n\nReturns the current product state including variants, translations,\nfiles, and categories. The response can be directly used to populate\nan details form.",
+        "tags": [
+          "Product Management"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Product ID"
+          },
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "example": "es-ES"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products_files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sort": {
+                            "type": "number"
+                          },
+                          "file_id": {
+                            "type": "string"
+                          },
+                          "mime_type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "sort",
+                          "file_id",
+                          "mime_type"
+                        ]
+                      }
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "description": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "iva": {
+                      "type": "string"
+                    },
+                    "product_code": {
+                      "type": "string"
+                    },
+                    "product_categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "iva": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "category_translations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "lang_code": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "lang_code"
+                              ]
+                            }
+                          },
+                          "is_primary": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "id",
+                          "iva",
+                          "category_translations",
+                          "is_primary"
+                        ]
+                      }
+                    },
+                    "product_translations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "description": {
+                            "oneOf": [
+                              {
+                                "type": "null"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "lang_code": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "title",
+                          "description",
+                          "lang_code"
+                        ]
+                      }
+                    },
+                    "variant_products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "product_code": {
+                            "type": "string"
+                          },
+                          "type_sale": {
+                            "oneOf": [
+                              {
+                                "const": "UNIT"
+                              },
+                              {
+                                "const": "BOX"
+                              },
+                              {
+                                "const": "PACK"
+                              }
+                            ]
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "price_iva": {
+                            "type": "string"
+                          },
+                          "available_stock": {
+                            "type": "number"
+                          },
+                          "sale_unit_qty": {
+                            "type": "number"
+                          },
+                          "sort": {
+                            "type": "number"
+                          },
+                          "min_order_qty": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "product_code",
+                          "type_sale",
+                          "price",
+                          "price_iva",
+                          "available_stock",
+                          "sale_unit_qty",
+                          "sort",
+                          "min_order_qty"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "products_files",
+                    "name",
+                    "id",
+                    "title",
+                    "description",
+                    "iva",
+                    "product_code",
+                    "product_categories",
+                    "product_translations",
+                    "variant_products"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "product",
+          "getProductDetail"
+        ],
+        "x-samchon-controller": "ProductsController"
+      },
       "patch": {
         "summary": "Update a product (partial / PATCH)",
         "description": "Update a product (partial / PATCH).\n\n**Concurrency control:** This endpoint uses **pessimistic locking** (`SELECT ... FOR UPDATE`).\nThe request does not require a `version` field; the row‑level lock ensures\nconsistency of variant count limits.",
@@ -4827,6 +9233,1302 @@
         ],
         "x-samchon-controller": "ProductsController"
       }
+    },
+    "/maian/carts/items": {
+      "post": {
+        "summary": "Add an item to the current retailer cart",
+        "description": "Add an item to the current retailer cart.",
+        "tags": [
+          "Carts"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Cart item creation payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateCartItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Cart mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "carts",
+          "items",
+          "addCartItem"
+        ],
+        "x-samchon-controller": "WriteCartsController"
+      }
+    },
+    "/maian/carts/items/{id}": {
+      "patch": {
+        "summary": "Update the quantity of a cart item",
+        "description": "Update the quantity of a cart item.",
+        "tags": [
+          "Carts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Cart detail ID"
+          }
+        ],
+        "requestBody": {
+          "description": "- Quantity update payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateCartItem"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Cart mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "carts",
+          "items",
+          "updateCartItem"
+        ],
+        "x-samchon-controller": "WriteCartsController"
+      },
+      "delete": {
+        "summary": "Delete one cart item from the current retailer cart",
+        "description": "Delete one cart item from the current retailer cart.",
+        "tags": [
+          "Carts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Cart detail ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "carts",
+          "items",
+          "deleteCartItem"
+        ],
+        "x-samchon-controller": "WriteCartsController"
+      }
+    },
+    "/maian/carts/wholesalers/{id}": {
+      "delete": {
+        "summary": "Delete all cart items for a wholesaler from the current retailer cart",
+        "description": "Delete all cart items for a wholesaler from the current retailer cart.",
+        "tags": [
+          "Carts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": true,
+            "description": "- Wholesaler ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "carts",
+          "wholesalers",
+          "deleteWholesalerCart"
+        ],
+        "x-samchon-controller": "WriteCartsController"
+      }
+    },
+    "/maian/carts": {
+      "get": {
+        "summary": "Get the current retailer cart",
+        "description": "Get the current retailer cart.",
+        "tags": [
+          "Carts"
+        ],
+        "parameters": [
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "example": "es-ES"
+            },
+            "required": false
+          },
+          {
+            "name": "wholesaler_id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current cart details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ICartResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "carts",
+          "getMyCartInfo"
+        ],
+        "x-samchon-controller": "ReadCartsController"
+      }
+    },
+    "/maian/orders/from-cart": {
+      "post": {
+        "summary": "Create a pending order from the current retailer cart",
+        "description": "Create a pending order from the current retailer cart.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "- Order creation payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICreateOrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Order creation result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "order_number": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "order_number"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "from_cart",
+          "createFromCart"
+        ],
+        "x-samchon-controller": "WriteOrderController"
+      }
+    },
+    "/maian/orders/{id}/cancel": {
+      "post": {
+        "summary": "Cancel a pending order by the authenticated retailer",
+        "description": "Cancel a pending order by the authenticated retailer.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Order ID"
+          }
+        ],
+        "requestBody": {
+          "description": "- Cancel order payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICancelOrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Order status mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "cancel",
+          "cancelByRetailer"
+        ],
+        "x-samchon-controller": "WriteOrderController"
+      }
+    },
+    "/maian/orders/{id}/reject": {
+      "post": {
+        "summary": "Reject a pending order by the authenticated wholesaler",
+        "description": "Reject a pending order by the authenticated wholesaler.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Order ID"
+          }
+        ],
+        "requestBody": {
+          "description": "- Reject order payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IRejectOrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Order status mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "reject",
+          "rejectByWholesaler"
+        ],
+        "x-samchon-controller": "WriteOrderController"
+      }
+    },
+    "/maian/orders/{id}/accept": {
+      "post": {
+        "summary": "Accept a pending order by the authenticated wholesaler",
+        "description": "Accept a pending order by the authenticated wholesaler.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Order ID"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Order status mutation result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "accept",
+          "acceptByWholesaler"
+        ],
+        "x-samchon-controller": "WriteOrderController"
+      }
+    },
+    "/maian/orders/{id}/estimated-delivery-date": {
+      "patch": {
+        "summary": "Update the estimated delivery date for an order",
+        "description": "Update the estimated delivery date for an order.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Order ID"
+          }
+        ],
+        "requestBody": {
+          "description": "- Delivery date update payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUpdateOrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Order update result",
+            "content": {
+              "application/json": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "estimated_delivery_date",
+          "updateDeliveryDate"
+        ],
+        "x-samchon-controller": "WriteOrderController"
+      }
+    },
+    "/maian/orders/standard": {
+      "get": {
+        "summary": "Get paginated orders for the authenticated retailer",
+        "description": "Get paginated orders for the authenticated retailer.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "wholesalerId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "PENDING"
+                },
+                {
+                  "const": "ACCEPTED"
+                },
+                {
+                  "const": "REJECTED"
+                },
+                {
+                  "const": "CANCELLED"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            },
+            "required": false
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            },
+            "required": false
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "ORDER_DATE"
+                },
+                {
+                  "const": "ORDER_NUMBER"
+                },
+                {
+                  "const": "ORDER_DELIVERY_DATE"
+                },
+                {
+                  "const": "TOTAL_PRICE"
+                },
+                {
+                  "const": "TOTAL_IVA"
+                },
+                {
+                  "const": "TOTAL_SUBTOTAL"
+                },
+                {
+                  "const": "TOTAL_ITEM"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "minTotalPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxTotalPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "minSubtotal",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxSubtotal",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "minTotalIva",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxTotalIva",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "minItemCount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxItemCount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated order list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataWithTIOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "standard",
+          "getMyOrdersByRetailer"
+        ],
+        "x-samchon-controller": "ReadOrderController"
+      }
+    },
+    "/maian/orders/enterprise": {
+      "get": {
+        "summary": "Get paginated orders for the authenticated wholesaler",
+        "description": "Get paginated orders for the authenticated wholesaler.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "wholesalerId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "1e2d3c4b-5a6f-7890-abcd-ef1234567890"
+            },
+            "required": false
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "PENDING"
+                },
+                {
+                  "const": "ACCEPTED"
+                },
+                {
+                  "const": "REJECTED"
+                },
+                {
+                  "const": "CANCELLED"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            },
+            "required": false
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            },
+            "required": false
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "ORDER_DATE"
+                },
+                {
+                  "const": "ORDER_NUMBER"
+                },
+                {
+                  "const": "ORDER_DELIVERY_DATE"
+                },
+                {
+                  "const": "TOTAL_PRICE"
+                },
+                {
+                  "const": "TOTAL_IVA"
+                },
+                {
+                  "const": "TOTAL_SUBTOTAL"
+                },
+                {
+                  "const": "TOTAL_ITEM"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "schema": {
+              "oneOf": [
+                {
+                  "const": "asc"
+                },
+                {
+                  "const": "desc"
+                }
+              ]
+            },
+            "required": false
+          },
+          {
+            "name": "minTotalPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxTotalPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "minSubtotal",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxSubtotal",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "minTotalIva",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxTotalIva",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "minItemCount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "maxItemCount",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated order list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDataWithTIOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "enterprise",
+          "getMyOrdersByWholesaler"
+        ],
+        "x-samchon-controller": "ReadOrderController"
+      }
+    },
+    "/maian/orders/standard/{id}": {
+      "get": {
+        "summary": "Get an order detail for the authenticated retailer",
+        "description": "Get an order detail for the authenticated retailer.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Order ID"
+          },
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "example": "es-ES"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IOrderDetailResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "standard",
+          "getMyOrderDetailByRetailer"
+        ],
+        "x-samchon-controller": "ReadOrderController"
+      }
+    },
+    "/maian/orders/enterprise/{id}": {
+      "get": {
+        "summary": "Get an order detail for the authenticated wholesaler",
+        "description": "Get an order detail for the authenticated wholesaler.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "- Order ID"
+          },
+          {
+            "name": "langCode",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "example": "es-ES"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IOrderDetailResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "enterprise",
+          "getMyOrderDetailByWholesaler"
+        ],
+        "x-samchon-controller": "ReadOrderController"
+      }
+    },
+    "/maian/orders/filter-metadata/standard": {
+      "get": {
+        "summary": "Get order filter metadata for the authenticated retailer",
+        "description": "Get order filter metadata for the authenticated retailer.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Order totals and item count boundaries for retailer filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "max_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "min_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "max_subtotal": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "min_subtotal": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "max_iva_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "min_iva_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "max_item_count": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "min_item_count": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "max_total",
+                    "min_total",
+                    "max_subtotal",
+                    "min_subtotal",
+                    "max_iva_total",
+                    "min_iva_total",
+                    "max_item_count",
+                    "min_item_count"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "filter_metadata",
+          "standard",
+          "getFilterOrderMetadataByRetailer"
+        ],
+        "x-samchon-controller": "FilterOrderMetadataController"
+      }
+    },
+    "/maian/orders/filter-metadata/enterprise": {
+      "get": {
+        "summary": "Get order filter metadata for the authenticated wholesaler",
+        "description": "Get order filter metadata for the authenticated wholesaler.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Order totals and item count boundaries for wholesaler filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "max_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "min_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "max_subtotal": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "min_subtotal": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "max_iva_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "min_iva_total": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "max_item_count": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "min_item_count": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "max_total",
+                    "min_total",
+                    "max_subtotal",
+                    "min_subtotal",
+                    "max_iva_total",
+                    "min_iva_total",
+                    "max_item_count",
+                    "min_item_count"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-samchon-accessor": [
+          "maian",
+          "orders",
+          "filter_metadata",
+          "enterprise",
+          "getFilterOrderMetadataByWholesaler"
+        ],
+        "x-samchon-controller": "FilterOrderMetadataController"
+      }
     }
   },
   "tags": [
@@ -4864,6 +10566,9 @@
       "name": "Employee Management"
     },
     {
+      "name": "Enterprise Dashboard"
+    },
+    {
       "name": "Admin Management"
     },
     {
@@ -4871,6 +10576,12 @@
     },
     {
       "name": "Product Management"
+    },
+    {
+      "name": "Carts"
+    },
+    {
+      "name": "Orders"
     }
   ]
 }
