@@ -45,6 +45,7 @@ export const ORDER_RETAILER_SNAPSHOT = orders.retailer_snapshot;
 export const ORDER_WHOLESALER_SNAPSHOT = orders.wholesaler_snapshot;
 export const SHOPPING_ADDRESS_SNAPSHOT = orders.shipping_address_snapshot;
 export const ORDER_RETAILER_SNAPSHOT_INFO = {
+  retailerEmail: sql<string>`${ORDER_RETAILER_SNAPSHOT}->>'email'`,
   retailerUserId: sql<string>`${ORDER_RETAILER_SNAPSHOT}->>'user_id'`,
   companyNameExpr: sql<
     string | null | undefined
@@ -63,6 +64,7 @@ export const ORDER_RETAILER_SNAPSHOT_COLUMNS = Object.values(
   ORDER_RETAILER_SNAPSHOT_INFO,
 );
 export const ORDER_WHOLESALER_SNAPSHOT_INFO = {
+  wholesalerEmail: sql<string>`${ORDER_WHOLESALER_SNAPSHOT}->>'email'`,
   wholesalerUserId: sql<string>`${ORDER_WHOLESALER_SNAPSHOT}->>'user_id'`,
   companyNameExpr: sql<string>`${ORDER_WHOLESALER_SNAPSHOT}->>'company_name'`,
   displayNameExpr: sql<
