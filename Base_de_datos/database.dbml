@@ -50,29 +50,22 @@ Enum "UserStatus" {
 Table "categories" {
   "id" int8 [pk, not null, increment]
   "user_id" uuid [note: '如果未空则代表为公共']
-  "name" varchar(50) [unique, not null, note: '名字']
+  "name" varchar(50) [not null, note: '名字']
   "iva" numeric(5,2) [check: `(iva >= (0)::numeric) AND (iva <= (100)::numeric)`]
   "parent_id" int8
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "level" int2 [not null, check: `(level >= 1) AND (level <= 3)`, note: '嵌套层级，最多三层即1->2->3']
   "name_unaccent" text
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamptz [default: `now()`]
   "created_by" uuid
   "updated_by" uuid
   "version" int8 [not null, default: 1]
-  "deleted_at" timestamp
+  "deleted_at" timestamptz
 
   Indexes {
-    (user_id, name) [type: btree, unique, name: "categories_user_name_unique_private"]
     (level, id) [type: btree, name: "idx_categories_level_id"]
-    name_unaccent [type: gin, name: "idx_categories_name_unaccent_trgm"]
-    parent_id [type: btree, name: "idx_categories_parent_id"]
     (parent_id, id) [type: btree, name: "idx_categories_parent_id_id"]
-    (user_id, level, name) [type: btree, name: "idx_categories_private_user_level_name"]
-    (user_id, parent_id, name) [type: btree, name: "idx_categories_private_user_parent_name"]
-    (level, name) [type: btree, name: "idx_categories_public_level_name"]
     (parent_id, level, name) [type: btree, name: "idx_categories_public_parent_level_name_all"]
-    (parent_id, name) [type: btree, name: "idx_categories_public_parent_name"]
     (user_id, parent_id, level, name) [type: btree, name: "idx_categories_user_parent_level_name"]
   }
   Note: '类别分为公共和私人 / categorías son públicos o privados'
@@ -81,14 +74,14 @@ Table "categories" {
 Table "chat_panels" {
   "id" int8 [pk, not null, increment]
   "name" varchar(50) [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   Note: '聊天界面或会话 / Sesión de Chat'
 }
 
 Table "chat_participants" {
   "user_id" uuid [not null]
   "chat_panel_id" int8 [not null]
-  "created_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [default: `now()`]
 
   Indexes {
     (chat_panel_id, user_id) [pk, type: btree, name: "chat_participants_pkey"]
@@ -107,11 +100,11 @@ Table "deliveries" {
   "order_id" int8 [not null]
   "delivery_person" uuid
   "status" DeliveryStatus [not null, default: 'PENDING', note: '0=等待配送， 1=正在配送， 2=配送完成']
-  "start_time" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`, note: '开始时间']
-  "end_time" timestamp [note: '结束时间']
+  "start_time" timestamptz [not null, default: `now()`, note: '开始时间']
+  "end_time" timestamptz [default: `now()`, note: '结束时间']
   "notes" text [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
   "latitude" float8 [not null]
   "longitude" float8 [not null]
   Note: '送货表'
@@ -122,7 +115,7 @@ Table "delivery_timeline" {
   "delivery_id" int8
   "status" DeliveryStatus [not null, note: '0=等待配送， 1=正在配送， 2=配送完成']
   "notes" text
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "latitude" float8 [not null]
   "longitude" float8 [not null]
   Note: '配送时间线'
@@ -137,7 +130,7 @@ Table "discounts" {
   "start_date" date [not null]
   "end_date" date [not null]
   "status" int2 [not null, default: '1']
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   Note: '折扣'
 }
 
@@ -148,12 +141,15 @@ Table "files" {
   "mime_type" varchar(128) [not null]
   "file_size" int8 [not null]
   "storage_key" text [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "to_delete" bool [not null, default: false]
   "cloud_synced" bool [not null, default: true]
 
   Indexes {
+    (to_delete, created_at, id) [type: btree, name: "idx_files_cleanup_mark"]
     created_at [type: btree, name: "idx_files_created_at"]
+    id [type: btree, name: "idx_files_sync_cloud_false"]
+    id [type: btree, name: "idx_files_sync_cloud_true"]
   }
   Note: '保存文件url (储存在云端) / guardar url de los archivos'
 }
@@ -176,7 +172,7 @@ Table "messages" {
   "sender_id" uuid [default: '00000000-0000-0000-0000-000000000000', note: '0代表发送者被删除都是还有人看消息所以保留消息']
   "reply_to" int8 [default: '-1', note: '-1代表引用的消息被删除']
   "content" text
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "is_read" bool [not null, default: false]
   Note: '聊天信息 / mensajes de chat'
 }
@@ -189,7 +185,7 @@ Table "notifications" {
   "type" int2 [not null, note: '还不确定，应该有多种比如消息通知，减价，库存。。。']
   "is_read" bool [not null, default: false]
   "click_action" varchar(255) [not null, note: '导航到位置']
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
 }
 
 Table "products" {
@@ -200,18 +196,21 @@ Table "products" {
   "description" text
   "iva" numeric(5,2) [not null, check: `(iva >= (0)::numeric) AND (iva <= (100)::numeric)`]
   "status" ProductStatus [not null, default: 'ACTIVE', note: '1=activo, 0=desactivo']
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "product_code" varchar(50) [not null]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamptz [default: `now()`]
   "created_by" uuid
   "updated_by" uuid
   "name_unaccent" text
   "title_unaccent" text
   "version" int8 [not null, default: 1]
-  "deleted_at" timestamp
+  "deleted_at" timestamptz
 
   Indexes {
+    name_unaccent [type: gin, name: "idx_products_name_unaccent_trgm_new"]
+    product_code [type: gin, name: "idx_products_product_code_trgm"]
     (status, id) [type: btree, name: "idx_products_status_id"]
+    title_unaccent [type: gin, name: "idx_products_title_unaccent_trgm_new"]
     (user_id, id) [type: btree, name: "idx_products_user_id_id"]
     (user_id, status, id) [type: btree, name: "idx_products_user_status_id"]
   }
@@ -226,7 +225,7 @@ Table "products_files" {
 
   Indexes {
     file_id [type: btree, name: "idx_products_files_file_id"]
-    product_id [type: btree, name: "idx_products_files_product_id"]
+    (product_id, sort, file_id) [type: btree, name: "idx_products_files_product_sort_file"]
   }
   Note: '产品的宣传图什么的'
 }
@@ -240,11 +239,14 @@ Table "user_sessions" {
   "revoked" bool [not null, default: false]
   "last_ip" varchar(50) [not null]
   "refresh_token" text
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "last_active" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
+  "last_active" timestamptz [not null, default: `now()`]
 
   Indexes {
     (user_id, device_finger) [type: btree, unique, name: "unique_device_finger_user"]
+    user_id [type: btree, name: "idx_user_sessions_active_user"]
+    last_active [type: btree, name: "idx_user_sessions_last_active"]
+    (user_id, last_active) [type: btree, name: "idx_user_sessions_user_last_active"]
   }
 }
 
@@ -259,22 +261,26 @@ Table "users" {
   "telephone" varchar(25)
   "status" UserStatus [not null, default: 'PENDING_VERIFICATION']
   "profile" jsonb
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
   "role" UserRole [not null, note: '0 → wholesaler  批发商即本平台的商店，1 → retailer  零售商 2 → support  客服  3 → 送货员  5 → 货物管理员']
   "tax_id" varchar(20) [note: '税号']
   "updated_by" uuid
   "profile_image_file_id" int8
 
   Indexes {
+    profile_image_file_id [type: btree, name: "idx_users_profile_image_file_id"]
+    (role, status, created_at, id) [type: btree, name: "idx_users_role_status_created_at"]
+    (role, tax_id) [type: btree, name: "idx_users_role_tax_id"]
     id [type: btree, name: "idx_users_wholesaler_active_id"]
+    (id, `lower(COALESCE((profile ->> 'display_name'::text)`, ` (profile ->> 'company_name'::text)))`) [type: btree, name: "idx_users_wholesaler_visible_sort"]
   }
   Note: '用户表'
 }
 
 Table "variant_products" {
   "id" int8 [pk, not null, increment]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "product_id" int8 [not null]
   "type_sale" SaleVariant [not null, note: '销售变体类型，分别为散卖，按包，按箱。']
   "price" numeric(14,6) [not null, check: `(price >= (0)::numeric) AND (price <= 10000000.00)`]
@@ -288,12 +294,14 @@ Table "variant_products" {
   "low_stock_threshold" int4 [not null, check: `low_stock_threshold >= 0`, default: 0, note: '触发低库存预警的阈值。当可用库存低于此值时，向分销商发送通知。']
   "sale_unit_qty" int4 [not null, check: `(sale_unit_qty >= 1) AND (sale_unit_qty <= 1000000)`, default: 1, note: '一个销售单位（如：一箱、一包）所包含的最小库存单位数量。']
   "min_order_qty" int4 [not null, check: `(min_order_qty >= 1) AND (min_order_qty <= 1000000)`, default: 1, note: '最小订购数量（以销售单位计）。']
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "updated_at" timestamptz [default: `now()`]
   "created_by" uuid
   "updated_by" uuid
 
   Indexes {
+    product_code [type: gin, name: "idx_variant_products_product_code_trgm"]
     (product_id, price_iva) [type: btree, name: "idx_variant_products_product_id_price_iva"]
+    (product_id, status, id) [type: btree, name: "idx_variant_products_product_status"]
   }
   Note: '变体销售配置'
 }
@@ -302,14 +310,16 @@ Table "verification_tokens" {
   "id" uuid [pk, not null, default: `uuid_generate_v4()`]
   "user_id" uuid [not null]
   "token" varchar(255) [not null]
-  "expires_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "expires_at" timestamptz [not null, default: `now()`]
   "is_used" bool [not null, default: false]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
   "attempts" int2 [not null, default: 0]
 
   Indexes {
-    token [type: btree, name: "password_reset_tokens_token_idx"]
-    user_id [type: btree, name: "password_reset_tokens_user_id_idx"]
+    expires_at [type: btree, name: "idx_verification_tokens_cleanup_expired"]
+    id [type: btree, name: "idx_verification_tokens_cleanup_used"]
+    (user_id, expires_at, created_at) [type: btree, name: "idx_verification_tokens_user_unused_expires_created"]
+    (user_id, created_at) [type: btree, name: "idx_verification_tokens_user_unused_recent"]
     (user_id, token) [type: btree, name: "verification_tokens_user_id_token_idx"]
   }
 }
@@ -328,6 +338,11 @@ Table "provinces" {
   "country_iso" int2 [not null, note: '所属国家 iso numeric，外键关联 countries 表']
   "name" varchar(100) [not null, note: '省份/州的英文名称']
   "name_local" varchar(100) [not null, note: '省份/州的本地名称']
+
+  Indexes {
+    (id, country_iso) [type: btree, unique, name: "provinces_id_country_unique"]
+    (country_iso, name) [type: btree, name: "idx_provinces_country_iso_name"]
+  }
 }
 
 Table "cities" {
@@ -335,6 +350,11 @@ Table "cities" {
   "province_id" int4 [not null, note: '所属省份 ID，外键关联 provinces 表']
   "name" varchar(100) [not null, note: '城市英文名称']
   "name_local" varchar(100) [not null, note: '城市本地名称']
+
+  Indexes {
+    (id, province_id) [type: btree, unique, name: "cities_id_province_unique"]
+    (province_id, name) [type: btree, name: "idx_cities_province_id_name"]
+  }
 }
 
 Table "directions" {
@@ -348,8 +368,12 @@ Table "directions" {
   "zip_code" varchar(10) [not null]
   "latitude" float8
   "longitude" float8
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
+
+  Indexes {
+    (user_id, type, id) [type: btree, name: "idx_directions_user_type_id"]
+  }
 }
 
 Table "currencies" {
@@ -360,13 +384,12 @@ Table "currencies" {
 }
 
 Table "product_categories" {
-  "product_id" int8 [not null]
+  "product_id" int8 [unique, not null]
   "category_id" int8 [not null]
   "is_primary" bool [not null, default: false, note: '标记该关联是否为产品的主分类。']
 
   Indexes {
     (product_id, category_id) [pk, type: btree, name: "product_categories_pkey"]
-    category_id [type: btree, name: "idx_product_categories_category_id"]
     (category_id, product_id) [type: btree, name: "idx_product_categories_category_product"]
     product_id [type: btree, name: "idx_product_categories_product_id"]
   }
@@ -378,13 +401,12 @@ Table "category_translations" {
   "lang_code" varchar(10) [not null]
   "name" varchar(50) [not null]
   "name_unaccent" text
-  "created_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
   "updated_by" uuid
 
   Indexes {
     (category_id, lang_code) [pk, type: btree, name: "pk_category_translations"]
-    (category_id, lang_code) [type: btree, name: "idx_category_translations_category_lang"]
     lang_code [type: btree, name: "idx_category_translations_lang_code"]
     name_unaccent [type: gin, name: "idx_category_translations_name_unaccent_trgm"]
   }
@@ -398,22 +420,25 @@ Table "product_translations" {
   "description" text
   "name_unaccent" text
   "title_unaccent" text
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
   "updated_by" uuid
 
   Indexes {
     (product_id, lang_code) [pk, type: btree, name: "pk_product_translations"]
+    name_unaccent [type: gin, name: "idx_product_translations_name_unaccent_trgm"]
+    title_unaccent [type: gin, name: "idx_product_translations_title_unaccent_trgm"]
   }
 }
 
 Table "user_uploads" {
   "user_id" uuid [not null]
   "file_id" int8 [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
 
   Indexes {
     (user_id, file_id) [pk, type: btree, name: "user_uploads_pkey"]
+    (file_id, user_id) [type: btree, name: "idx_user_uploads_file_user"]
   }
 }
 
@@ -421,8 +446,8 @@ Table "carts" {
   "id" int8 [pk, not null, increment]
   "retailer_id" uuid [not null]
   "wholesaler_id" uuid [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
 
   Checks {
     `retailer_id <> wholesaler_id` [name: 'carts_user_wholesaler_different']
@@ -430,6 +455,7 @@ Table "carts" {
 
   Indexes {
     (retailer_id, wholesaler_id) [type: btree, unique, name: "carts_user_wholesaler_unique"]
+    (retailer_id, updated_at, id) [type: btree, name: "idx_carts_retailer_updated_at"]
     wholesaler_id [type: btree, name: "idx_carts_wholesaler_id"]
   }
 }
@@ -439,12 +465,12 @@ Table "cart_details" {
   "cart_id" int8 [not null]
   "variant_products_id" int8 [not null]
   "quantity" int4 [not null, check: `(quantity >= 1) AND (quantity <= 1000000)`]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
 
   Indexes {
     (cart_id, variant_products_id) [type: btree, unique, name: "cart_details_cart_variant_unique"]
-    cart_id [type: btree, name: "idx_cart_details_cart_id"]
+    (cart_id, updated_at, id) [type: btree, name: "idx_cart_details_cart_updated_at"]
     variant_products_id [type: btree, name: "idx_cart_details_variant_products_id"]
   }
 }
@@ -478,15 +504,15 @@ Table "orders" {
   "shipping_address_snapshot" jsonb [not null]
   "retailer_snapshot" jsonb [not null]
   "wholesaler_snapshot" jsonb [not null]
-  "accepted_at" timestamp
+  "accepted_at" timestamptz
   "accepted_by" uuid
-  "rejected_at" timestamp
+  "rejected_at" timestamptz
   "rejected_by" uuid
   "rejected_reason" varchar(500)
-  "cancelled_at" timestamp
-  "estimated_delivery_date" timestamp
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "cancelled_at" timestamptz
+  "estimated_delivery_date" timestamptz
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
   "cancelled_by" uuid
   "cancelled_reason" varchar(500)
 
@@ -499,8 +525,12 @@ Table "orders" {
   Indexes {
     (wholesaler_id, order_number) [type: btree, unique, name: "orders_wholesaler_order_number_unique"]
     (wholesaler_id, order_series, order_year, order_sequence) [type: btree, unique, name: "orders_wholesaler_series_year_sequence_unique"]
-    order_number [type: btree, name: "idx_orders_order_number"]
+    id [type: btree, name: "idx_orders_accepted_id"]
+    order_number [type: gin, name: "idx_orders_order_number_trgm"]
     (retailer_id, created_at) [type: btree, name: "idx_orders_retailer_created_at"]
+    (retailer_id, status, created_at) [type: btree, name: "idx_orders_retailer_status_created_at"]
+    (retailer_id, wholesaler_id, created_at) [type: btree, name: "idx_orders_retailer_wholesaler_created_at"]
+    (wholesaler_id, created_at) [type: btree, name: "idx_orders_wholesaler_accepted_created_at"]
     (wholesaler_id, created_at) [type: btree, name: "idx_orders_wholesaler_created_at"]
     (wholesaler_id, status, created_at) [type: btree, name: "idx_orders_wholesaler_status_created_at"]
   }
@@ -526,7 +556,7 @@ Table "order_details" {
   "subtotal" numeric(20,2) [not null]
   "iva_total" numeric(20,2) [not null]
   "total" numeric(20,2) [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
 
   Checks {
     `(unit_price >= (0)::numeric) AND (unit_price_iva >= (0)::numeric) AND (iva >= (0)::numeric) AND (iva <= (100)::numeric) AND (subtotal >= (0)::numeric) AND (iva_total >= (0)::numeric) AND (total >= (0)::numeric)` [name: 'order_details_amounts_check']
@@ -534,6 +564,9 @@ Table "order_details" {
 
   Indexes {
     order_id [type: btree, name: "idx_order_details_order_id"]
+    (order_id, product_id, quantity) [type: btree, name: "idx_order_details_order_product_qty_not_null"]
+    product_id [type: btree, name: "idx_order_details_product_id"]
+    variant_product_id [type: btree, name: "idx_order_details_variant_product_id"]
   }
 }
 
@@ -541,13 +574,12 @@ Table "order_pdf_files" {
   "order_id" int8 [not null]
   "lang_code" varchar(10) [not null]
   "file_id" int8 [not null]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
 
   Indexes {
     (order_id, file_id) [pk, type: btree, name: "order_pdf_files_pkey"]
     (order_id, lang_code) [type: btree, unique, name: "order_pdf_files_order_lang_unique"]
     file_id [type: btree, name: "idx_order_pdf_files_file_id"]
-    order_id [type: btree, name: "idx_order_pdf_files_order_id"]
   }
 }
 
@@ -556,8 +588,8 @@ Table "wholesaler_staffs" {
   "wholesaler_id" uuid [not null]
   "staff_user_id" uuid [not null]
   "role" UserRole [not null, check: `role = ANY (ARRAY['SUPPORT'::"UserRole", 'DELIVERY'::"UserRole", 'WAREHOUSE'::"UserRole"])`]
-  "created_at" timestamp [not null, default: `(now() AT TIME ZONE 'utc'::text)`]
-  "updated_at" timestamp [default: `(now() AT TIME ZONE 'utc'::text)`]
+  "created_at" timestamptz [not null, default: `now()`]
+  "updated_at" timestamptz [default: `now()`]
   "created_by" uuid
   "updated_by" uuid
 
@@ -607,11 +639,11 @@ Ref "deliveries_delivery_person_fkey":"users"."id" < "deliveries"."delivery_pers
 
 Ref "delivery_timeline_delivery_id_fkey":"deliveries"."id" < "delivery_timeline"."delivery_id" [delete: cascade]
 
-Ref "directions_city_id_fkey":"cities"."id" < "directions"."city_id" [delete: restrict]
+Ref "directions_city_province_fkey":"cities".("id", "province_id") < "directions".("city_id", "province_id") [delete: restrict]
 
 Ref "directions_country_iso_fkey":"countries"."iso_numeric" < "directions"."country_iso" [update: cascade, delete: restrict]
 
-Ref "directions_province_id_fkey":"provinces"."id" < "directions"."province_id" [delete: restrict]
+Ref "directions_province_country_fkey":"provinces".("country_iso", "id") < "directions".("country_iso", "province_id") [delete: restrict]
 
 Ref "directions_user_id_fkey":"users"."id" < "directions"."user_id" [delete: cascade]
 

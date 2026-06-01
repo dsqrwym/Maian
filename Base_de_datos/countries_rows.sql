@@ -1,0 +1,1 @@
+INSERT INTO "public"."countries" ("iso_alpha2", "iso_alpha3", "iso_numeric", "name", "name_local", "currency_id") VALUES ('ES', 'ESP', 724, 'Spain', 'España', 978);

@@ -1,0 +1,1 @@
+INSERT INTO "public"."currencies" ("iso_numeric", "iso_alpha3", "symbol", "decimal_digits") VALUES (156, 'CNY', '¥', 2), (826, 'GBP', '£', 2), (840, 'USD', '$', 2), (978, 'EUR', '€', 2);
