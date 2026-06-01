@@ -1,4 +1,3 @@
-import { NestiaSwaggerComposer } from '@nestia/sdk';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { join } from 'path';
@@ -10,6 +9,7 @@ export async function useSwagger(
   swaggerPath: string = './public/swagger/swagger.json',
 ) {
   if (toGenerateSwagger) {
+    const { NestiaSwaggerComposer } = await import('@nestia/sdk');
     const nestiaDocument = await NestiaSwaggerComposer.document(app, {
       openapi: '3.1',
       tags: [{ name: 'nestjs' }, { name: 'Authentication' }, { name: 'App' }],

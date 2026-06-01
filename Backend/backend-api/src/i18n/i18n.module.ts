@@ -16,13 +16,15 @@ import { join } from 'path';
         path: join(process.cwd(), 'src', 'i18n', 'locales'), // i18n JSON 文件夹
         watch: false,
       },
-      typesOutputPath: join(
-        process.cwd(),
-        'src',
-        'i18n',
-        'generated',
-        'i18n.generated.ts',
-      ), // i18n JSON 文件夹
+      ...(process.env.NODE_ENV !== 'production' && {
+        typesOutputPath: join(
+          process.cwd(),
+          'src',
+          'i18n',
+          'generated',
+          'i18n.generated.ts',
+        ),
+      }),
       resolvers: [
         { use: QueryResolver, options: ['lang'] }, // ?lang=zh-CH
         AcceptLanguageResolver,

@@ -3,3 +3,9 @@ dist
 .git
 .env
 test
+.idea
+coverage
+*.log
+docker-compose*.yml
+Dockerfile
+.dockerignore

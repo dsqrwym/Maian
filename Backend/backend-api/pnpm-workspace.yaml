@@ -5,6 +5,7 @@ allowBuilds:
   bcrypt: true
   esbuild: true
   msgpackr-extract: true
+  sharp: true
   unrs-resolver: true
 overrides:
   "html-minifier": "npm:html-minifier-terser@^6.1.0"
@@ -13,13 +14,17 @@ overrides:
   "picomatch": "^4.0.4"
   "typescript": "$typescript"
 onlyBuiltDependencies:
+  - '@apollo/protobufjs'
   - '@nestjs/core'
   - '@prisma/client'
   - '@prisma/engines'
   - '@scarf/scarf'
   - '@swc/core'
   - bcrypt
+  - esbuild
+  - libpq
   - msgpackr-extract
   - nestjs-pino
   - prisma
+  - sharp
   - unrs-resolver

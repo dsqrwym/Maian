@@ -6,32 +6,9 @@
   "private": true,
   "license": "Apache-2.0",
   "type": "module",
+  "packageManager": "pnpm@11.5.0",
   "imports": {
     "#/*": "./dist/src/*"
-  },
-  "pnpm": {
-    "overrides": {
-      "html-minifier": "npm:html-minifier-terser@^6.1.0",
-      "hono": "^4.11.4",
-      "diff": "^8.0.3",
-      "picomatch": "^4.0.4",
-      "typescript": "$typescript"
-    },
-    "onlyBuiltDependencies": [
-      "@apollo/protobufjs",
-      "@nestjs/core",
-      "@prisma/client",
-      "@prisma/engines",
-      "@scarf/scarf",
-      "@swc/core",
-      "bcrypt",
-      "esbuild",
-      "libpq",
-      "msgpackr-extract",
-      "nestjs-pino",
-      "prisma",
-      "unrs-resolver"
-    ]
   },
   "scripts": {
     "build": "nest build",
@@ -97,7 +74,7 @@
     "class-validator": "^0.14.4",
     "cross-env": "^10.1.0",
     "decimal.js": "^10.6.0",
-    "drizzle-kit": "^0.31.10",
+
     "drizzle-orm": "^0.45.2",
     "fastify": "^5.8.5",
     "file-type": "^22.0.1",
@@ -122,7 +99,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "sharp": "^0.34.5",
-    "swagger-ui-dist": "^5.32.6",
+
     "typia": "^12.1.1"
   },
   "devDependencies": {
@@ -148,6 +125,7 @@
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
+    "drizzle-kit": "^0.31.10",
     "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",

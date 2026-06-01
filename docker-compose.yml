@@ -1,12 +1,140 @@
+name: maian
+
 services:
+  backend:
+    build:
+      context: ./Backend/backend-api
+      dockerfile: Dockerfile
+    image: ${MAIAN_BACKEND_IMAGE:-maian-backend:local}
+    restart: unless-stopped
+    env_file:
+      - ./Backend/backend-api/.env
+    environment:
+      APP_MODE: ${MAIAN_BACKEND_MODE:-single}
+      NODE_ENV: ${MAIAN_NODE_ENV:-production}
+      PORT: ${MAIAN_API_CONTAINER_PORT:-3000}
+      PM2_INSTANCES: ${MAIAN_PM2_INSTANCES:-max}
+      CLUSTER_INSTANCES: ${MAIAN_CLUSTER_INSTANCES:-3}
+      FILE_UPLOAD_DIR: ${MAIAN_FILE_UPLOAD_DIR:-uploads}
+      DATABASE_URL: "${MAIAN_DATABASE_URL:-postgresql://${MAIAN_POSTGRES_USER:-maian}:${MAIAN_POSTGRES_PASSWORD:-maian_dev_password}@postgres:5432/${MAIAN_POSTGRES_DB:-maian}?schema=public}"
+      DIRECT_URL: "${MAIAN_DIRECT_URL:-${MAIAN_DATABASE_URL:-postgresql://${MAIAN_POSTGRES_USER:-maian}:${MAIAN_POSTGRES_PASSWORD:-maian_dev_password}@postgres:5432/${MAIAN_POSTGRES_DB:-maian}?schema=public}}"
+      REDIS_CACHE_URL: ${MAIAN_REDIS_CACHE_URL:-redis://redis-cache:6379}
+      REDIS_BULL_URL: ${MAIAN_REDIS_BULL_URL:-redis://redis-bull:6379}
+    ports:
+      - "${MAIAN_API_HOST_PORT:-${MAIAN_API_PORT:-3000}}:${MAIAN_API_CONTAINER_PORT:-3000}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false
+      redis-cache:
+        condition: service_healthy
+        required: false
+      redis-bull:
+        condition: service_healthy
+        required: false
+    volumes:
+      - backend-uploads:/app/uploads
+      - backend-logs:/app/logs
+    networks:
+      - maian-network
+
+  postgres:
+    image: postgres:17
+    profiles:
+      - postgres
+      - local-infra
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${MAIAN_POSTGRES_DB:-maian}
+      POSTGRES_USER: ${MAIAN_POSTGRES_USER:-maian}
+      POSTGRES_PASSWORD: ${MAIAN_POSTGRES_PASSWORD:-maian_dev_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${MAIAN_POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./Base_de_datos/schema.sql:/docker-entrypoint-initdb.d/00-schema.sql:ro
+      - ./Base_de_datos/currencies_rows.sql:/docker-entrypoint-initdb.d/10-currencies_rows.sql:ro
+      - ./Base_de_datos/countries_rows.sql:/docker-entrypoint-initdb.d/20-countries_rows.sql:ro
+      - ./Base_de_datos/provinces_rows.sql:/docker-entrypoint-initdb.d/30-provinces_rows.sql:ro
+      - ./Base_de_datos/cities_rows.sql:/docker-entrypoint-initdb.d/40-cities_rows.sql:ro
+      - ./Base_de_datos/categories_rows.sql:/docker-entrypoint-initdb.d/50-categories_rows.sql:ro
+      - ./Base_de_datos/category_translations_rows.sql:/docker-entrypoint-initdb.d/60-category_translations_rows.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    networks:
+      - maian-network
+
+  redis-cache:
+    image: redis:7-alpine
+    profiles:
+      - redis
+      - local-infra
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${MAIAN_REDIS_CACHE_HOST_PORT:-6379}:6379"
+    volumes:
+      - redis-cache-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - maian-network
+
+  redis-bull:
+    image: redis:7-alpine
+    profiles:
+      - redis
+      - local-infra
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${MAIAN_REDIS_BULL_HOST_PORT:-6380}:6379"
+    volumes:
+      - redis-bull-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - maian-network
+
   cloudflared:
     image: cloudflare/cloudflared:latest
+    profiles:
+      - cloudflared
     restart: unless-stopped
-    command: tunnel --no-autoupdate run ${TUNNEL_ID}
+    command: tunnel --no-autoupdate run ${TUNNEL_ID:-}
     env_file:
       - ./.env
     volumes:
-      - ./cloudflared/config.yml:/etc/cloudflared/config.yml
-      - ./cloudflared/${TUNNEL_ID}.json:/etc/cloudflared/${TUNNEL_ID}.json:ro
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/${TUNNEL_ID:-missing-tunnel-id}.json:/etc/cloudflared/${TUNNEL_ID:-missing-tunnel-id}.json:ro
     ports:
-      - "2000:2000"  # 将容器的 2000 端口映射到宿主机的 2000
+      - "${MAIAN_CLOUDFLARED_METRICS_PORT:-${METRICS_PORT:-2000}}:2000"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - maian-network
+
+networks:
+  maian-network:
+    driver: bridge
+
+volumes:
+  backend-logs:
+  backend-uploads:
+  postgres-data:
+  redis-bull-data:
+  redis-cache-data:
