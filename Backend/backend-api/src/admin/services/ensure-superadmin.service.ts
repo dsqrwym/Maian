@@ -62,7 +62,7 @@ export class EnsureSuperAdminService {
         status: 'APPROVED',
       })
       .onConflictDoUpdate({
-        target: [users.email, users.username],
+        target: users.email,
         set: {
           email: superAdminMail,
           username: superAdminUsername,
