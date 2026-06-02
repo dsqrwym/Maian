@@ -16,18 +16,31 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
     <script>
-        const currentLanguagesImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
-        const newLanguagesImplementation = Object.assign({}, currentLanguagesImplementation, {
+        const currentLanguageImplementation = Object.getOwnPropertyDescriptor(Navigator.prototype, "language");
+        const newLanguageImplementation = Object.assign({}, currentLanguageImplementation, {
+            get: function () {
+                if (window.__customLocale) {
+                    return window.__customLocale;
+                } else {
+                    return currentLanguageImplementation.get.apply(this);
+                }
+            }
+        });
+        /*
+        const currentLanguagesImplementations = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
+        const newLanguagesImplementations = Object.assign({}, currentLanguagesImplementations, {
             get: function () {
                 if (window.__customLocale) {
                     return [window.__customLocale];
                 } else {
-                    return currentLanguagesImplementation.get.apply(this);
+                    return currentLanguagesImplementations.get.apply(this);
                 }
             }
         });
+        */
 
-        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementation)
+        Object.defineProperty(Navigator.prototype, "language", newLanguageImplementation)
+        //Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementations)
     </script>
     <script src="admin.js"></script>
 </head>
