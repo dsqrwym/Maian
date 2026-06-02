@@ -26,7 +26,14 @@
 # ---------- AndroidX Security Crypto / Tink ----------
 -keep class com.google.crypto.tink.** { *; }
 -dontwarn org.conscrypt.**
+-dontwarn org.joda.time.**
 
 # ---------- FileKit ----------
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }
+
+# ---------- Compose Multiplatform generated resources ----------
+-keep class maian.shared.generated.resources.** { *; }
+
+# ---------- Android components ----------
+-keep class org.dsqrwym.shared.ui.components.buttons.AutoTorchCaptureActivity { *; }

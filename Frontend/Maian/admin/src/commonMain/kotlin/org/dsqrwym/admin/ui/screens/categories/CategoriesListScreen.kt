@@ -85,7 +85,6 @@ import org.dsqrwym.business.ui.components.category.BusinessCategoryLanguages
 import org.dsqrwym.business.ui.components.category.BusinessCategoryPath
 import org.dsqrwym.business.ui.components.category.BusinessConfirmDeleteCategories
 import org.dsqrwym.shared.data.category.SharedCategoryType
-import org.dsqrwym.shared.data.category.mapper.toDto
 import org.dsqrwym.shared.data.user.UserRole
 import org.dsqrwym.shared.domain.category.CategoryNode
 import org.dsqrwym.shared.localization.LanguageManager
@@ -367,7 +366,7 @@ fun CategoryListItem(
             Row(Modifier.fillMaxWidth().placeholderWithShimmer(isLoading)) {
                 SelectionContainer(modifier = Modifier.weight(1f)) {
                     Column(verticalArrangement = SharedColumnLayout.arrangement) {
-                        BusinessCategoryLanguages(category.translations.map { it.toDto() })
+                        BusinessCategoryLanguages(category.translations)
                         BusinessCategoryPath(category.pathNames(currentLanguageCode), category.name)
                     }
                 }

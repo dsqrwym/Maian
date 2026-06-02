@@ -85,7 +85,6 @@ extensions.configure<ApplicationExtension>("android") {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-        proguardFiles("proguard-rules.pro")
     }
     packaging {
         resources {
@@ -96,6 +95,10 @@ extensions.configure<ApplicationExtension>("android") {
         getByName("release") {
             isMinifyEnabled = true   // 同时触发 Shrinking + Optimization + Obfuscation
             isShrinkResources = true   // 移除未用资源
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -107,6 +110,13 @@ extensions.configure<ApplicationExtension>("android") {
 dependencies {
     //debugImplementation(compose.uiTooling)
     debugImplementation(libs.ui.tooling)
+}
+android {
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
 }
 
 compose.resources {
@@ -124,6 +134,12 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.dsqrwym.pgdm.enterprise"
             packageVersion = "1.0.0"
+        }
+
+        buildTypes.release.proguard {
+            obfuscate.set(true)
+            optimize.set(true)
+            configurationFiles.from(rootProject.file("desktop-proguard-rules.pro"))
         }
     }
 }

@@ -25,6 +25,10 @@
 # ---------- AndroidX Security Crypto / Tink ----------
 -keep class com.google.crypto.tink.** { *; }
 -dontwarn org.conscrypt.**
+-dontwarn com.google.api.client.http.**
+
+# ---------- Compose Multiplatform generated resources ----------
+-keep class maian.shared.generated.resources.** { *; }
 
 # ---------- FileKit ----------
 -keep class com.sun.jna.** { *; }

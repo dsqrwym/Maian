@@ -115,7 +115,7 @@ extensions.configure<LibraryExtension>("android") {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()     // 最低支持版本
         testOptions.targetSdk = libs.versions.android.targetSdk.get().toInt()   // 测试目标版本
-        proguardFile("consumer-rules.pro")
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     // 资源打包配置
@@ -129,7 +129,12 @@ extensions.configure<LibraryExtension>("android") {
     // 构建类型配置
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false   // 同时触发 Shrinking + Optimization + Obfuscation
+            isMinifyEnabled = true   // 同时触发 Shrinking + Optimization + Obfuscation
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+                "consumer-rules.pro"
+            )
         }
     }
 
