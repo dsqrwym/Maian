@@ -125,5 +125,27 @@
 -dontwarn org.tukaani.xz.**
 -dontwarn com.github.luben.zstd.**
 -dontwarn org.brotli.dec.**
+-dontwarn okhttp3.internal.platform.android.**
+-dontwarn dalvik.system.**
+-dontwarn sun.lwawt.**
+-dontwarn org.slf4j.reload4j.**
+-dontwarn org.freedesktop.dbus.**
 
+# Coroutines - 禁止混淆（CMP-7577）
+-keep class kotlinx.coroutines.** { *; }
+# -dontobfuscate class kotlinx.coroutines.**
 
+# 其他不应混淆的 Compose/Skiko 栈
+-keep class org.jetbrains.compose.** { *; }
+-keep class androidx.compose.** { *; }
+
+# 日志里已提示 descriptor 缺失的库
+-keep class dev.chrisbanes.haze.** { *; }
+-keep class io.github.alexzhirkevich.compottie.** { *; }
+-keep class io.github.vinceglb.filekit.** { *; }
+-keep class coil3.** { *; }
+-keep class net.engawapg.lib.zoomable.** { *; }
+-keep class ua.wwind.table.** { *; }
+-keep class com.dokar.sonner.** { *; }
+-keep class com.russhwolf.settings.** { *; }
+-keep class io.michaelrocks.libphonenumber.kotlin.** { *; }
