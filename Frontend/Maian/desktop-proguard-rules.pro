@@ -149,3 +149,6 @@
 -keep class com.dokar.sonner.** { *; }
 -keep class com.russhwolf.settings.** { *; }
 -keep class io.michaelrocks.libphonenumber.kotlin.** { *; }
+
+
+-keep class com.patrykandpatrick.vico.** { *; }
