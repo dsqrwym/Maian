@@ -26,7 +26,7 @@
                 }
             }
         });
-        /*
+        
         const currentLanguagesImplementations = Object.getOwnPropertyDescriptor(Navigator.prototype, "languages");
         const newLanguagesImplementations = Object.assign({}, currentLanguagesImplementations, {
             get: function () {
@@ -37,10 +37,9 @@
                 }
             }
         });
-        */
 
         Object.defineProperty(Navigator.prototype, "language", newLanguageImplementation)
-        //Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementations)
+        Object.defineProperty(Navigator.prototype, "languages", newLanguagesImplementations)
     </script>
     <script src="./adminComposeApp.js"></script>
 </head>
