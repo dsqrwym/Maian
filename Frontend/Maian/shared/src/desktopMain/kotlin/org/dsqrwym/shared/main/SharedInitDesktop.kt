@@ -1,29 +1,31 @@
 package org.dsqrwym.shared.main
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
-import dev.datlag.kcef.KCEF
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.ui.components.buttons.DesktopScannerWindow
-import org.dsqrwym.shared.util.log.SharedLog
 import java.awt.Dimension
-import java.io.File
-import kotlin.math.max
 
 @Composable
 fun SharedInitDesktop(frameWindowScope: FrameWindowScope, app: @Composable () -> Unit) {
     DesktopScannerWindow()
     frameWindowScope.window.minimumSize = Dimension(320, 600)
+    app()
+    /*
+    // WEB浏览器出问题，先临时不用
     var downloadProgress by remember { mutableStateOf(-1F) }
     var initialized by remember { mutableStateOf(false) } // if true, KCEF can be used to create clients, browsers etc
     var restartRequired by remember { mutableStateOf(false) }
@@ -65,8 +67,6 @@ fun SharedInitDesktop(frameWindowScope: FrameWindowScope, app: @Composable () ->
             KCEF.disposeBlocking()
         }
     }
-    app()
-    // WEB浏览器出问题，先临时不用
 //    when {
 //        restartRequired -> {
 //            RestartRequiredScreen()
@@ -80,6 +80,7 @@ fun SharedInitDesktop(frameWindowScope: FrameWindowScope, app: @Composable () ->
 //            RunApp(downloadProgress)
 //        }
 //    }
+     */
 }
 
 @Composable

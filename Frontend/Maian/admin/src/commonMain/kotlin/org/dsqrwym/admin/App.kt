@@ -35,7 +35,7 @@ import org.koin.compose.currentKoinScope
 
 @Composable
 fun App() {
-    AppRoot { authState ->
+    AppRoot("MaiAn_Admin") { authState ->
         when (authState) {
             is AuthState.Checking -> {
                 Box(
@@ -115,12 +115,19 @@ fun App() {
                                             )
                                         }
                                     ) {
-                                        Text("Dashboard ${menuViewModel.getBadgeCount(SharedDashboardScreen)}")
+                                        Text(
+                                            "Dashboard ${
+                                                menuViewModel.getBadgeCount(
+                                                    SharedDashboardScreen
+                                                )
+                                            }"
+                                        )
                                     }
                                 }
                             }
                             entry<SharedProfileScreen> {
-                                val authSessionViewModel: AuthSessionViewModel = currentKoinScope().get()
+                                val authSessionViewModel: AuthSessionViewModel =
+                                    currentKoinScope().get()
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center,

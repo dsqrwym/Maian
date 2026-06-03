@@ -72,7 +72,7 @@ extensions.configure<ApplicationExtension>("android") {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.dsqrwym.pgdm.standard"
+        applicationId = "org.dsqrwym.maian.standard"
         minSdk = libs.versions.android.minSdk.get().toInt()
         //noinspection OldTargetApi
         targetSdk = libs.versions.android.targetSdk.get().toInt()
@@ -104,13 +104,6 @@ extensions.configure<ApplicationExtension>("android") {
 dependencies {
     debugImplementation(libs.ui.tooling)
 }
-android {
-    buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-}
 
 compose.resources {
     publicResClass = true
@@ -124,8 +117,10 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.dsqrwym.pgdm.standard"
+            packageName = "MaiAn.Standard"
             packageVersion = "1.0.0"
+            vendor = "DSQRWYM"
+            copyright = "© 2025 DSQRWYM. All rights reserved."
 
             windows {
                 iconFile.set(project.file("src/desktopMain/resources/icons/windows/StoreLogo.ico"))
@@ -148,8 +143,32 @@ compose.desktop {
 
         buildTypes.release.proguard {
             obfuscate.set(true)
-            optimize.set(true)
-            configurationFiles.from(rootProject.file("desktop-proguard-rules.pro"))
+            optimize.set(false)
+            configurationFiles.from(
+                rootProject.file("desktop-proguard-rules.pro"),
+                project.file("proguard-rules.pro")
+            )
+        }
+    }
+}
+
+// Exclude kotlinx-coroutines-test from desktop runtime to prevent
+// ExceptionCollectorAsService ServiceLoader error in release builds.
+configurations.configureEach {
+    if (name.contains("desktopRuntime") || name.contains("desktopCompile")) {
+        exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-test")
+    }
+}
+
+afterEvaluate {
+    tasks.withType<JavaExec> {
+        jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
+        jvmArgs("--add-opens", "java.desktop/java.awt.peer=ALL-UNNAMED")
+
+        if (System.getProperty("os.name").contains("Mac")) {
+            jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
+            jvmArgs("--add-opens", "java.desktop/sun.lwawt=ALL-UNNAMED")
+            jvmArgs("--add-opens", "java.desktop/sun.lwawt.macosx=ALL-UNNAMED")
         }
     }
 }

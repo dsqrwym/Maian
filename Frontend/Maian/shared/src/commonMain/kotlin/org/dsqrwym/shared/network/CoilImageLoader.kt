@@ -8,7 +8,7 @@ import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.request.CachePolicy
 import coil3.request.crossfade
 import io.github.vinceglb.filekit.coil.addPlatformFileSupport
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 
 
 @OptIn(ExperimentalCoilApi::class)

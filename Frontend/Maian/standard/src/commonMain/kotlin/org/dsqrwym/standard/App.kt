@@ -23,7 +23,13 @@ import maian.shared.generated.resources.categories
 import maian.shared.generated.resources.orders
 import maian.shared.generated.resources.products
 import maian.shared.generated.resources.wholesalers
-import maian.standard.generated.resources.*
+import maian.standard.generated.resources.StandardRes
+import maian.standard.generated.resources.cart_route_description
+import maian.standard.generated.resources.categories_route_description
+import maian.standard.generated.resources.order_history_route_description
+import maian.standard.generated.resources.products_route_description
+import maian.standard.generated.resources.shopping_cart
+import maian.standard.generated.resources.wholesalers_route_description
 import org.dsqrwym.shared.AppRoot
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
@@ -33,12 +39,26 @@ import org.dsqrwym.shared.drawable.SharedImages
 import org.dsqrwym.shared.navigation.SharedInitialScreen
 import org.dsqrwym.shared.navigation.SharedLoginScreen
 import org.dsqrwym.shared.navigation.SharedNavigationRoot
-import org.dsqrwym.shared.navigation.menu.*
+import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
+import org.dsqrwym.shared.navigation.menu.SharedMenuActions
+import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
+import org.dsqrwym.shared.navigation.menu.SharedMenuItem
+import org.dsqrwym.shared.navigation.menu.SharedMenuItemState
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
 import org.dsqrwym.shared.ui.components.containers.BackgroundImage
 import org.dsqrwym.shared.ui.viewmodels.menu.SharedMenuViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.rememberSharedNavigationState
-import org.dsqrwym.standard.navigation.*
+import org.dsqrwym.standard.navigation.CartScreen
+import org.dsqrwym.standard.navigation.CategoriesScreen
+import org.dsqrwym.standard.navigation.CategoryBrowseRoute
+import org.dsqrwym.standard.navigation.OrderDetailScreen
+import org.dsqrwym.standard.navigation.OrderHistoryScreen
+import org.dsqrwym.standard.navigation.ProductDetailScreen
+import org.dsqrwym.standard.navigation.ProductsScreen
+import org.dsqrwym.standard.navigation.RegisterScreen
+import org.dsqrwym.standard.navigation.RetailerProfileEdit
+import org.dsqrwym.standard.navigation.WholesalerProfileRoute
+import org.dsqrwym.standard.navigation.WholesalersScreen
 import org.dsqrwym.standard.navigation.naventry.authNavEntry
 import org.dsqrwym.standard.navigation.naventry.menuNavEntry
 import org.dsqrwym.standard.ui.viewmodels.browse.BrowseScopeStore
@@ -64,7 +84,7 @@ fun App() {
         }
     }
 
-    AppRoot { authState ->
+    AppRoot("MaiAn_Standard") { authState ->
         when (authState) {
             is AuthState.Checking -> {
                 Box(

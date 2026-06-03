@@ -118,6 +118,15 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
                     }
 
                     else -> {
+                        // Guard: skip the refresh request entirely when refresh token is missing
+                        // 前置检查：refresh token 为空时直接清理本地状态，不发送无效请求
+                        val currentRefresh = SharedTokenStorage.getRefresh()
+                        if (currentRefresh.isNullOrBlank()) {
+                            SharedTokenStorage.clear()
+                            AuthEvents.emit(AuthEvent.SessionExpired)
+                            return@refreshTokens null
+                        }
+
                         val resp = safeApiCall {
                             api.refreshToken {
                                 // Mark this call to bypass auth interceptors if necessary

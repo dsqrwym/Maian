@@ -1,37 +1,129 @@
-# Shared Compose Desktop ProGuard rules for release distributions.
+# Shared ProGuard rules for Compose Desktop release distributions.
+# These mirror the Android rules that are already known to work, plus
+# desktop-only libraries that rely on reflection, ServiceLoader, JNI or JNA.
 
+# ---------- Kotlin / serialization / navigation ----------
 -keepattributes *Annotation*, InnerClasses, EnclosingMethod, Signature
 
-# Compose Desktop keeps its own runtime rules through the plugin. These rules
-# cover project code and libraries that rely on generated serializers or service
-# discovery across the desktop JVM build.
-
-# kotlinx.serialization generated serializers for DTOs and navigation state.
 -keep class **$$serializer { *; }
 -keepclassmembers class **$$serializer { *; }
+
+-keepclassmembers class ** {
+    @kotlinx.serialization.SerialName *;
+    @kotlinx.serialization.Serializable *;
+}
+
 -keepclasseswithmembers class ** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 
-# Keep serialization internals stable for polymorphic navigation snapshots.
--keepnames class kotlinx.serialization.modules.SerializersModule
 -keep class kotlinx.serialization.** { *; }
+-dontnote kotlinx.serialization.**
+-dontwarn kotlinx.serialization.**
 
-# Koin definitions use KClass-based metadata in several shared modules.
+# ---------- Project classes and generated Compose resources ----------
+# Desktop ProGuard processes all JVM jars together. Keeping project packages
+# avoids stripping code that Compose navigation, serialization and DI reach
+# indirectly at runtime.
+-keep class org.dsqrwym.** { *; }
+
+-keep class maian.admin.generated.resources.** { *; }
+-keep class maian.business.generated.resources.** { *; }
+-keep class maian.enterprise.generated.resources.** { *; }
+-keep class maian.shared.generated.resources.** { *; }
+-keep class maian.standard.generated.resources.** { *; }
+-keep class org.jetbrains.compose.resources.** { *; }
+
+# ---------- Koin ----------
 -dontwarn org.koin.**
 -keep class org.koin.** { *; }
 
-# Ktor engines and logging adapters are resolved differently per platform.
+# ---------- Ktor / HTTP client ----------
+# Desktop requests use Ktor CIO plus shared Auth/ContentNegotiation plugins.
+# Keep the HTTP stack intact because engines and plugin internals use generated
+# names, service metadata and reflection-like lookup paths at runtime.
+-keep class io.ktor.** { *; }
+-keep class kotlinx.io.** { *; }
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+-keep class coil3.network.** { *; }
+-keepnames class * implements io.ktor.client.HttpClientEngineContainer
+-keep class * implements io.ktor.client.HttpClientEngineContainer { *; }
 -dontwarn io.ktor.**
--dontwarn kotlinx.coroutines.slf4j.**
--dontwarn org.slf4j.**
+-dontwarn kotlinx.io.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
 
-# FileKit desktop integrations may pull JNA-backed file dialogs.
--dontwarn com.sun.jna.**
--keep class com.sun.jna.** { *; }
--keep class * implements com.sun.jna.** { *; }
+# ---------- libphonenumber ----------
+-dontwarn com.google.i18n.phonenumbers.**
+-keep class com.google.i18n.phonenumbers.** { *; }
 
-# Desktop-only native/browser integrations are optional by platform.
+# ---------- AndroidX Security Crypto / Tink optional references ----------
+-keep class com.google.crypto.tink.** { *; }
+-dontwarn android.**
+-dontwarn androidx.security.**
+-dontwarn com.google.android.**
+-dontwarn com.google.api.client.http.**
+-dontwarn org.conscrypt.**
+-dontwarn org.joda.time.**
+
+# ---------- ServiceLoader providers ----------
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler
+-keep class kotlinx.coroutines.swing.SwingDispatcherFactory { *; }
+-keep class org.slf4j.** { *; }
+-dontwarn org.apache.log4j.**
+-dontwarn javax.jms.**
+-dontwarn javax.mail.**
+
+# ---------- Optional TLS providers used by OkHttp ----------
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
+
+# ---------- WebView / KCEF / JCEF ----------
+-keep class com.multiplatform.webview.** { *; }
+-keep class dev.datlag.kcef.** { *; }
+-keep class com.jetbrains.cef.** { *; }
+-keep class org.cef.** { *; }
+-keep class me.friwi.jcefmaven.** { *; }
+-dontwarn com.multiplatform.webview.**
+-dontwarn dev.datlag.kcef.**
+-dontwarn com.jetbrains.cef.**
 -dontwarn org.cef.**
 -dontwarn me.friwi.jcefmaven.**
--dontwarn com.multiplatform.webview.**
+-dontwarn org.apache.thrift.**
+
+# ---------- FileKit / JNA / native interop ----------
+-keep class com.sun.jna.** { *; }
+-keep class * implements com.sun.jna.Library { *; }
+-keep class * implements com.sun.jna.Callback { *; }
+-keep class * extends com.sun.jna.Structure { *; }
+-keepclassmembers class * extends com.sun.jna.Structure {
+    <fields>;
+}
+-dontwarn com.sun.jna.**
+
+# ---------- Camera, media and image/native stacks ----------
+-keep class com.github.sarxos.webcam.** { *; }
+-keep class com.google.zxing.** { *; }
+-keep class org.bridj.** { *; }
+-keep class com.jogamp.** { *; }
+-keep class jogamp.** { *; }
+-keep class io.github.kdroidfilter.** { *; }
+-keep class uk.co.caprica.** { *; }
+-dontwarn com.github.sarxos.webcam.**
+-dontwarn com.google.zxing.**
+-dontwarn org.bridj.**
+-dontwarn com.jogamp.**
+-dontwarn jogamp.**
+-dontwarn io.github.kdroidfilter.**
+-dontwarn uk.co.caprica.**
+
+# ---------- Optional compression codecs used by Commons Compress ----------
+-dontwarn org.apache.commons.compress.harmony.pack200.**
+-dontwarn org.objectweb.asm.**
+-dontwarn org.tukaani.xz.**
+-dontwarn com.github.luben.zstd.**
+-dontwarn org.brotli.dec.**
+
+

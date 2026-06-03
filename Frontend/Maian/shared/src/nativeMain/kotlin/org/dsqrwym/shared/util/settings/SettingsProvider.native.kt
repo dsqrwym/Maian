@@ -7,7 +7,7 @@ import platform.Foundation.NSUserDefaults
 
 
 @OptIn(ExperimentalSettingsImplementation::class)
-actual fun initSharedSettingsProvider() {
+actual fun initSharedSettingsProvider(appId: String) {
     SharedSettingsProvider.plain = NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
     SharedSettingsProvider.secure = KeychainSettings()
 }

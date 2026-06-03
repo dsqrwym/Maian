@@ -27,7 +27,10 @@ import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.drawable.SharedImages
-import org.dsqrwym.shared.navigation.*
+import org.dsqrwym.shared.navigation.SharedDashboardScreen
+import org.dsqrwym.shared.navigation.SharedInitialScreen
+import org.dsqrwym.shared.navigation.SharedLoginScreen
+import org.dsqrwym.shared.navigation.SharedNavigationRoot
 import org.dsqrwym.shared.navigation.menu.SharedAdaptiveNavigation
 import org.dsqrwym.shared.navigation.menu.SharedMenuConfiguration
 import org.dsqrwym.shared.ui.components.containers.AuthContainer
@@ -37,7 +40,7 @@ import org.koin.compose.currentKoinScope
 
 @Composable
 fun App() {
-    AppRoot { authState ->
+    AppRoot("MaiAn_Enterprise") { authState ->
         when (authState) {
             is AuthState.Checking -> {
                 Box(

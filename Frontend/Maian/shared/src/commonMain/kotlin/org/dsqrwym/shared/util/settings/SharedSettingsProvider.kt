@@ -8,4 +8,4 @@ object SharedSettingsProvider {
     lateinit var secure: Settings
 }
 
-expect fun initSharedSettingsProvider()
+expect fun initSharedSettingsProvider(appId: String)

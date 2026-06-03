@@ -79,7 +79,7 @@ extensions.configure<ApplicationExtension>("android") {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.dsqrwym.pgdm.enterprise"
+        applicationId = "org.dsqrwym.maian.enterprise"
         minSdk = libs.versions.android.minSdk.get().toInt()
         //noinspection OldTargetApi
         targetSdk = libs.versions.android.targetSdk.get().toInt()
@@ -111,13 +111,6 @@ dependencies {
     //debugImplementation(compose.uiTooling)
     debugImplementation(libs.ui.tooling)
 }
-android {
-    buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
-}
 
 compose.resources {
     publicResClass = true
@@ -132,14 +125,35 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.dsqrwym.pgdm.enterprise"
+            packageName = "MaiAn.Enterprise"
             packageVersion = "1.0.0"
+            vendor = "DSQRWYM"
+            copyright = "© 2025 DSQRWYM. All rights reserved."
+        }
+
+        jvmArgs("--add-opens", "java.desktop/sun.awt=ALL-UNNAMED")
+        jvmArgs("--add-opens", "java.desktop/java.awt.peer=ALL-UNNAMED") // recommended but not necessary
+
+        if (System.getProperty("os.name").contains("Mac")) {
+            jvmArgs("--add-opens", "java.desktop/sun.lwawt=ALL-UNNAMED")
+            jvmArgs("--add-opens", "java.desktop/sun.lwawt.macosx=ALL-UNNAMED")
         }
 
         buildTypes.release.proguard {
             obfuscate.set(true)
-            optimize.set(true)
-            configurationFiles.from(rootProject.file("desktop-proguard-rules.pro"))
+            optimize.set(false)
+            configurationFiles.from(
+                rootProject.file("desktop-proguard-rules.pro"),
+                project.file("proguard-rules.pro")
+            )
         }
+    }
+}
+
+// Exclude kotlinx-coroutines-test from desktop runtime to prevent
+// ExceptionCollectorAsService ServiceLoader error in release builds.
+configurations.configureEach {
+    if (name.contains("desktopRuntime") || name.contains("desktopCompile")) {
+        exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-coroutines-test")
     }
 }

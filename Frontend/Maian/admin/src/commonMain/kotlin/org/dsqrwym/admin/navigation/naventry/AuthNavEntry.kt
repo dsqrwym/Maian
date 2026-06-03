@@ -13,7 +13,11 @@ import org.dsqrwym.admin.ui.screens.auth.LoginScreen
 import org.dsqrwym.admin.ui.viewmodels.auth.LoginViewModel
 import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.di.auth.SharedAuthScope
-import org.dsqrwym.shared.navigation.*
+import org.dsqrwym.shared.navigation.SharedInitialScreen
+import org.dsqrwym.shared.navigation.SharedLoginScreen
+import org.dsqrwym.shared.navigation.SharedPrivacyPolicy
+import org.dsqrwym.shared.navigation.SharedResetPasswordScreen
+import org.dsqrwym.shared.navigation.SharedUserAgreement
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultEnterTransition
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.DefaultExitTransition
 import org.dsqrwym.shared.ui.animations.SharedAuthAnimation.WebEnterTransition
@@ -26,6 +30,8 @@ import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
 import org.dsqrwym.shared.ui.viewmodels.auth.SharedResetPasswordViewModel
 import org.dsqrwym.shared.ui.viewmodels.navigation.SharedNavigationState
 import org.dsqrwym.shared.util.log.SharedLog
+import org.dsqrwym.shared.util.platform.PlatformType
+import org.dsqrwym.shared.util.platform.getPlatform
 import org.jetbrains.compose.resources.getString
 import org.koin.compose.currentKoinScope
 
@@ -41,8 +47,16 @@ fun EntryProviderScope<NavKey>.authNavEntry(navViewModel: SharedNavigationState)
             }
     ) {
         InitialScreen(
-            onPrivacyPolicyClick = { navViewModel.navigate(SharedPrivacyPolicy) },
-            onUserAgreementClick = { navViewModel.navigate(SharedUserAgreement) },
+            onPrivacyPolicyClick = {
+                if (getPlatform().type != PlatformType.Desktop) {
+                    navViewModel.navigate(SharedPrivacyPolicy)
+                }
+            },
+            onUserAgreementClick = {
+                if (getPlatform().type != PlatformType.Desktop) {
+                    navViewModel.navigate(SharedUserAgreement)
+                }
+            },
             onLoginClick = { navViewModel.navigate(SharedLoginScreen()) },
         )
     }

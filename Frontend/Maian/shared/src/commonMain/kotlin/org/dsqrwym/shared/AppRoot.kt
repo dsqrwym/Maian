@@ -2,13 +2,29 @@ package org.dsqrwym.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.csrf_invalid
+import maian.shared.generated.resources.session_expired
+import maian.shared.generated.resources.session_not_found
+import maian.shared.generated.resources.session_revoked
 import org.dsqrwym.shared.data.auth.session.AuthEvent
 import org.dsqrwym.shared.data.auth.session.AuthSessionViewModel
 import org.dsqrwym.shared.data.auth.session.AuthState
@@ -17,7 +33,11 @@ import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
 import org.dsqrwym.shared.network.InitCoil
-import org.dsqrwym.shared.theme.*
+import org.dsqrwym.shared.theme.AppExtraColors
+import org.dsqrwym.shared.theme.DarkExtraColorScheme
+import org.dsqrwym.shared.theme.LightExtraColorScheme
+import org.dsqrwym.shared.theme.MyMaterialTheme
+import org.dsqrwym.shared.theme.miSansNormalTypography
 import org.dsqrwym.shared.ui.components.containers.SnackbarScaffold
 import org.dsqrwym.shared.ui.overlay.OverlayHost
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
@@ -58,10 +78,11 @@ val LocalWindowSizeClass = staticCompositionLocalOf<WindowSizeClass> {
  */
 @Composable
 fun AppRoot(
+    appId: String = "",
     content: @Composable (state: AuthState) -> Unit
 ) {
     InitCoil()
-    initSharedSettingsProvider()
+    initSharedSettingsProvider(appId)
 
     val mySnackbarViewModel: MySnackbarViewModel = koinViewModel()
     val authSessionViewModel: AuthSessionViewModel = koinViewModel()

@@ -7,6 +7,6 @@ object SharedUiTiming {
     val searchDebounce: Duration = 600.milliseconds
     val localSearchDelay: Duration = 500.milliseconds
     val formStateResetDelay: Duration = 500.milliseconds
-    val loginStateHoldDelay: Duration = 1300.milliseconds
+    val loginStateHoldDelay: Duration = 300.milliseconds
     val availabilityCheckDelay: Duration = 500.milliseconds
 }

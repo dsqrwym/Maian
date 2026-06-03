@@ -196,8 +196,8 @@ private class EncryptedPreferencesSettings(
 }
 
 
-actual fun initSharedSettingsProvider() {
-    SharedSettingsProvider.plain = PreferencesSettings(Preferences.userRoot().node("plain_settings"))
+actual fun initSharedSettingsProvider(appId: String) {
+    SharedSettingsProvider.plain = PreferencesSettings(Preferences.userRoot().node("plain_settings_$appId"))
 
-    SharedSettingsProvider.secure = PreferencesSettings(Preferences.userRoot().node("secure_settings"))
+    SharedSettingsProvider.secure = PreferencesSettings(Preferences.userRoot().node("secure_settings_$appId"))
 }

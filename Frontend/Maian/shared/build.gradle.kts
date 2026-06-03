@@ -192,7 +192,7 @@ kotlin {
 
         // 公共测试源码集
         commonTest.dependencies {
-            api(libs.kotlin.test)    // 单元测试框架
+            implementation(libs.kotlin.test)    // 单元测试框架
         }
 
         // 桌面平台依赖

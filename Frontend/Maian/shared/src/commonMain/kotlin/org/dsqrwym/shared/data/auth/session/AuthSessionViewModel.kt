@@ -119,6 +119,7 @@ class AuthSessionViewModel(
                     if (SharedResponseResult.shouldShowToUser(result.type)) {
                         result.message?.let { mySnackbarViewModel.showError(it) }
                     }
+                    onLoggedOut()
                 }
             }
         }
