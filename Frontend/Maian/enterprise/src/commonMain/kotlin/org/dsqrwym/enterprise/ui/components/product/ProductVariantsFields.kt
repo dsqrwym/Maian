@@ -118,7 +118,6 @@ import org.jetbrains.compose.resources.stringResource
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyStaggeredGridState
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 
 @OptIn(ExperimentalUuidApi::class)
@@ -186,11 +185,11 @@ fun ProductVariantsFields(
                 }
             }
         }
-        itemsIndexed(variants.sortedBy { it.sort }, key = { _, item -> item.id ?: Uuid.generateV4() }) { index, item ->
+        itemsIndexed(variants.sortedBy { it.sort }, key = { index, item -> item.id ?: "variant-$index" }) { index, item ->
             ReorderableItem(
                 modifier = Modifier.animateItem(),
                 state = reorderableState,
-                key = item.id ?: Uuid.generateV4(),
+                key = item.id ?: "variant-$index",
             ) { isSelfDragging ->
                 VariantCard(
                     isLoading = isLoading,

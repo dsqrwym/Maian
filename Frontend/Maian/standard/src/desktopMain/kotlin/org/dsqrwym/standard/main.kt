@@ -4,8 +4,8 @@ import androidx.compose.foundation.ComposeFoundationFlags
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.multiplatform.webview.util.addTempDirectoryRemovalHook
-import dev.datlag.kcef.KCEF
+// import com.multiplatform.webview.util.addTempDirectoryRemovalHook
+// import dev.datlag.kcef.KCEF
 import io.github.vinceglb.filekit.FileKit
 import org.dsqrwym.shared.localization.getAppDisplayName
 import org.dsqrwym.shared.main.SharedInitDesktop
@@ -19,11 +19,11 @@ fun main() {
         FileKit.init(appId = "MaiAn")
         application {
             ComposeFoundationFlags.isNewContextMenuEnabled = true
-            addTempDirectoryRemovalHook()
+            // addTempDirectoryRemovalHook()
             standardInitKoin()
             Window(
                 onCloseRequest = {
-                    KCEF.disposeBlocking()
+                    // KCEF.disposeBlocking()
                     exitApplication()
                 },
                 title = getAppDisplayName(),

@@ -2,14 +2,27 @@ package org.dsqrwym.enterprise.ui.components.product
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -17,19 +30,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemKey
 import kotlinx.collections.immutable.toPersistentList
 import maian.enterprise.generated.resources.EnterpriseRes
 import maian.enterprise.generated.resources.product_preview
 import maian.enterprise.generated.resources.product_preview_tooltip
-import maian.shared.generated.resources.*
+import maian.shared.generated.resources.SharedRes
+import maian.shared.generated.resources.edit
+import maian.shared.generated.resources.product_actions
+import maian.shared.generated.resources.product_category
+import maian.shared.generated.resources.product_code
+import maian.shared.generated.resources.product_image
+import maian.shared.generated.resources.product_min_order_qty
+import maian.shared.generated.resources.product_name
+import maian.shared.generated.resources.product_price_with_vat
+import maian.shared.generated.resources.product_price_without_vat
+import maian.shared.generated.resources.product_title
+import maian.shared.generated.resources.product_total_stock
+import maian.shared.generated.resources.status
 import org.dsqrwym.business.ui.components.button.BusinessDeleteIconButton
 import org.dsqrwym.business.ui.components.tooltip.PermissionTooltip
 import org.dsqrwym.enterprise.domain.product.Product
 import org.dsqrwym.enterprise.util.uawwindtablekmp.cellWithModifier
 import org.dsqrwym.shared.data.OrderDir
 import org.dsqrwym.shared.data.products.SharedProductSortField
-import org.dsqrwym.shared.data.products.SharedProductSortField.*
+import org.dsqrwym.shared.data.products.SharedProductSortField.AVAILABLE_STOCK
+import org.dsqrwym.shared.data.products.SharedProductSortField.BEST_SELLING
+import org.dsqrwym.shared.data.products.SharedProductSortField.CATEGORY
+import org.dsqrwym.shared.data.products.SharedProductSortField.MIN_ORDER_QTY
+import org.dsqrwym.shared.data.products.SharedProductSortField.NAME
+import org.dsqrwym.shared.data.products.SharedProductSortField.PRICE
+import org.dsqrwym.shared.data.products.SharedProductSortField.PRICE_IVA
+import org.dsqrwym.shared.data.products.SharedProductSortField.PRODUCT_CODE
+import org.dsqrwym.shared.data.products.SharedProductSortField.TITLE
 import org.dsqrwym.shared.data.products.displayName
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.paging.hasLoadError
@@ -110,11 +142,16 @@ fun ProductTableView(
                 align(Alignment.Center)
                 cellWithModifier(
                     { product ->
-                        Modifier.size(60.dp).clickable { product.mainImage?.let { updateCurrentProduct(product) } }
+                        Modifier.size(60.dp)
+                            .clickable { product.mainImage?.let { updateCurrentProduct(product) } }
                     }
                 ) { product ->
                     if (isRefreshing) {
-                        Image(SharedIcons.MaianLogo, SharedIcons.MaianLogo.name, Modifier.placeholderWithShimmer(true))
+                        Image(
+                            SharedIcons.MaianLogo,
+                            SharedIcons.MaianLogo.name,
+                            Modifier.placeholderWithShimmer(true)
+                        )
                     } else {
                         val model = product.mainImage?.url(product.id) ?: SharedIcons.MaianLogo
                         SharedAsyncImage(
@@ -158,7 +195,9 @@ fun ProductTableView(
                                     SelectionContainer {
                                         Text(
                                             nameLang,
-                                            modifier = Modifier.copyOnInteraction(SharedClipboardData.Text(nameLang))
+                                            modifier = Modifier.copyOnInteraction(
+                                                SharedClipboardData.Text(nameLang)
+                                            )
                                         )
                                     }
                                 }
@@ -197,7 +236,11 @@ fun ProductTableView(
                                     SelectionContainer {
                                         Text(
                                             titleLang,
-                                            Modifier.copyOnInteraction(SharedClipboardData.Text(titleLang))
+                                            Modifier.copyOnInteraction(
+                                                SharedClipboardData.Text(
+                                                    titleLang
+                                                )
+                                            )
                                         )
                                     }
                                 }
@@ -251,7 +294,11 @@ fun ProductTableView(
                                     SelectionContainer {
                                         Text(
                                             categoryLang,
-                                            Modifier.copyOnInteraction(SharedClipboardData.Text(categoryLang))
+                                            Modifier.copyOnInteraction(
+                                                SharedClipboardData.Text(
+                                                    categoryLang
+                                                )
+                                            )
                                         )
                                     }
                                 }
@@ -268,7 +315,8 @@ fun ProductTableView(
                 sortable()
                 cellWithModifier(
                     {
-                        Modifier.fillMaxSize().copyOnInteraction(SharedClipboardData.Text(it.totalStock.toString()))
+                        Modifier.fillMaxSize()
+                            .copyOnInteraction(SharedClipboardData.Text(it.totalStock.toString()))
                     },
                     Alignment.CenterEnd
                 ) {
@@ -285,7 +333,10 @@ fun ProductTableView(
                 autoWidth()
                 sortable()
                 cellWithModifier(
-                    { Modifier.fillMaxSize().copyOnInteraction(SharedClipboardData.Text(it.minPrice)) },
+                    {
+                        Modifier.fillMaxSize()
+                            .copyOnInteraction(SharedClipboardData.Text(it.minPrice))
+                    },
                     Alignment.CenterEnd
                 ) {
                     Text(
@@ -301,7 +352,10 @@ fun ProductTableView(
                 autoWidth()
                 sortable()
                 cellWithModifier(
-                    { Modifier.fillMaxSize().copyOnInteraction(SharedClipboardData.Text(it.minPriceIva)) },
+                    {
+                        Modifier.fillMaxSize()
+                            .copyOnInteraction(SharedClipboardData.Text(it.minPriceIva))
+                    },
                     Alignment.CenterEnd
                 ) {
                     Text(
@@ -335,7 +389,10 @@ fun ProductTableView(
                 header(statusText)
                 autoWidth()
                 cellWithModifier(
-                    { Modifier.fillMaxSize().copyOnInteraction(SharedClipboardData.Text(it.status.name)) }
+                    {
+                        Modifier.fillMaxSize()
+                            .copyOnInteraction(SharedClipboardData.Text(it.status.name))
+                    }
                 ) {
                     Text(
                         it.status.displayName(), Modifier.padding(horizontal = 6.dp)
@@ -382,7 +439,10 @@ fun ProductTableView(
                             }
 
                             PermissionTooltip(canDelete, noPermissionText, positionProvider) {
-                                BusinessDeleteIconButton(enabled = canDelete, iconSize = null) { onDelete(product) }
+                                BusinessDeleteIconButton(
+                                    enabled = canDelete,
+                                    iconSize = null
+                                ) { onDelete(product) }
                             }
                         }
                     }
@@ -394,7 +454,10 @@ fun ProductTableView(
     val tableState = rememberTableState(
         columns = columns.map { it.key }.toPersistentList(),
         initialSort = sortBy?.toProductColumn()?.let { column ->
-            SortState(column, if (sortDir == OrderDir.ASC) SortOrder.ASCENDING else SortOrder.DESCENDING)
+            SortState(
+                column,
+                if (sortDir == OrderDir.ASC) SortOrder.ASCENDING else SortOrder.DESCENDING
+            )
         },
         settings = TableSettings(
             enableTextSelection = true,
@@ -450,9 +513,17 @@ fun ProductTableView(
             Table(
                 modifier = modifier.padding(padding).fillMaxSize().padding(16.dp),
                 itemsCount = paginatedProducts.itemCount,
-                itemAt = { index -> paginatedProducts[index] },
+                itemAt = { index ->
+                    if (index >= 0 && index < paginatedProducts.itemCount) {
+                        paginatedProducts[index]
+                    } else {
+                        null
+                    }
+                },
                 columns = columns,
-                rowKey = { _, index -> paginatedProducts.peek(index)?.id ?: "product-key-$index" },
+                rowKey = { product, index ->
+                    product?.id?.let { "product-key-$it-$index" } ?: "product-placeholder-$index"
+                },
                 state = tableState,
                 placeholderRow = {
                     SharedLoadingDotsIndicator()

@@ -36,7 +36,7 @@ class SharedPagingSource<T : Any>(
 fun <T : Any> createPager(
     query: String?,
     pageSize: Int = 20,
-    enablePlaceholders: Boolean = true,
+    enablePlaceholders: Boolean = false,
     fetchPage: suspend (page: Int, pageSize: Int, query: String?) -> List<T>
 ): Pager<Int, T> {
     return Pager(
