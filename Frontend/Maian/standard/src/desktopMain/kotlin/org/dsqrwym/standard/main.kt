@@ -14,21 +14,26 @@ import org.dsqrwym.standard.di.standardInitKoin
 
 @OptIn(ExperimentalFoundationApi::class)
 fun main() {
-    FileKit.init(appId = "MaiAn")
-    application {
-        ComposeFoundationFlags.isNewContextMenuEnabled = true
-        addTempDirectoryRemovalHook()
-        standardInitKoin()
-        Window(
-            onCloseRequest = {
-                KCEF.disposeBlocking()
-                exitApplication()
-            },
-            title = getAppDisplayName(),
-        ) {
-            SharedInitDesktop(this) {
-                App()
+    Thread.setDefaultUncaughtExceptionHandler { _, e -> e.printStackTrace() }
+    try {
+        FileKit.init(appId = "MaiAn")
+        application {
+            ComposeFoundationFlags.isNewContextMenuEnabled = true
+            addTempDirectoryRemovalHook()
+            standardInitKoin()
+            Window(
+                onCloseRequest = {
+                    KCEF.disposeBlocking()
+                    exitApplication()
+                },
+                title = getAppDisplayName(),
+            ) {
+                SharedInitDesktop(this) {
+                    App()
+                }
             }
         }
+    } catch (e: Throwable) {
+        e.printStackTrace()
     }
 }
