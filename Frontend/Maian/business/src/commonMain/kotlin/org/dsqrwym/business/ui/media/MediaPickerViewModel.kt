@@ -1,6 +1,10 @@
 ﻿package org.dsqrwym.business.ui.media
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,17 +13,23 @@ import io.github.vinceglb.filekit.mimeType
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.size
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import maian.business.generated.resources.*
-import org.dsqrwym.business.ui.media.model.MediaType.*
+import kotlinx.coroutines.withContext
+import maian.business.generated.resources.BusinessRes
+import maian.business.generated.resources.media_file_too_large_mb
 import org.dsqrwym.business.ui.media.model.MediaSource
-import org.dsqrwym.business.ui.media.model.UploadedProductFile
+import org.dsqrwym.business.ui.media.model.MediaType.DOCUMENT
+import org.dsqrwym.business.ui.media.model.MediaType.IMAGE
+import org.dsqrwym.business.ui.media.model.MediaType.VIDEO
 import org.dsqrwym.business.ui.media.model.UploadMediaItem
 import org.dsqrwym.business.ui.media.model.UploadState
+import org.dsqrwym.business.ui.media.model.UploadedProductFile
 import org.dsqrwym.shared.data.file.SharedUploadEvent
 import org.dsqrwym.shared.data.file.SharedUploadRepository
 import org.dsqrwym.shared.ui.components.containers.UiState
 import org.dsqrwym.shared.ui.viewmodels.MySnackbarViewModel
+import org.dsqrwym.shared.util.dispatcher.AppDispatchers
 import org.jetbrains.compose.resources.getString
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -65,50 +75,56 @@ class MediaPickerViewModel(
      * ----------------------------- */
 
     fun addLocalFiles(files: List<PlatformFile>) {
-        files.forEach { file ->
-            if (_mediaItems.size >= maxItemCount) return
+        // 使用自定义的 AppDispatchers.IO。
+        // 在 Windows 上，这会映射到真正的 Dispatchers.IO（针对阻塞 I/O 优化的线程池），
+        // 专门用于处理阻塞式的 mimeType() 和 size() 读取，彻底解决 UI 卡死。
+        scope.launch(AppDispatchers.IO) {
+            files.forEach { file ->
+                if (_mediaItems.size >= maxItemCount) return@forEach
 
-            if (file.size() > maxItemSize) {
-                scope.launch {
+                val fileSize = file.size()
+                if (fileSize > maxItemSize) {
                     snackbarViewModel?.showInfo(
                         getString(
                             BusinessRes.string.media_file_too_large_mb,
                             file.name,
-                            file.size() / 1024 / 1024
+                            fileSize / 1024 / 1024
                         )
                     )
+                    return@forEach
                 }
-                return@forEach
+
+                val type = if (file.mimeType()?.primaryType == "video")
+                    VIDEO
+                else
+                    IMAGE
+
+                when (type) {
+                    VIDEO -> {
+                        if (maxVideo != null && _videoCount >= maxVideo) return@forEach
+                    }
+
+                    IMAGE -> {
+                        if (maxImage != null && _imageCount >= maxImage) return@forEach
+                    }
+
+                    DOCUMENT -> Unit
+                }
+
+                val item = UploadMediaItem(
+                    localId = generateLocalId(),
+                    source = MediaSource.Local(file),
+                    type = type,
+                    uploadState = UploadState.Idle
+                )
+
+                // 状态更新必须回到主线程
+                withContext(Dispatchers.Main) {
+                    if (type == VIDEO) _videoCount++ else _imageCount++
+                    _mediaItems.add(item)
+                    startUpload(item)
+                }
             }
-
-            val type = if (file.mimeType()?.primaryType == "video")
-                VIDEO
-            else
-                IMAGE
-
-            when (type) {
-                VIDEO -> {
-                    if (maxVideo != null && _videoCount >= maxVideo) return@forEach
-                }
-
-                IMAGE -> {
-                    if (maxImage != null && _imageCount >= maxImage) return@forEach
-                }
-
-                DOCUMENT -> Unit
-            }
-
-            val item = UploadMediaItem(
-                localId = generateLocalId(),
-                source = MediaSource.Local(file),
-                type = type,
-                uploadState = UploadState.Idle
-            )
-
-            if (type == VIDEO) _videoCount++ else _imageCount++
-
-            _mediaItems.add(item)
-            startUpload(item)
         }
     }
 
@@ -252,7 +268,18 @@ class MediaPickerViewModel(
     }
 
     private fun onUploadProgress(localId: String, progress: Float) {
-        updateItem(localId) { it.copy(progress = progress, uploadState = UploadState.Uploading) }
+        // 降低 UI 更新频率。如果上传非常快，高频更新 mutableStateListOf 会导致 Desktop UI 线程负载过重。
+        val index = _mediaItems.indexOfFirst { it.localId == localId }
+        if (index != -1) {
+            val currentItem = _mediaItems[index]
+            // 只有进度变化超过 1% 或者已经完成时才更新 UI
+            if (kotlin.math.abs(currentItem.progress - progress) >= 0.01f || progress >= 1f) {
+                _mediaItems[index] = currentItem.copy(
+                    progress = progress,
+                    uploadState = UploadState.Uploading
+                )
+            }
+        }
     }
 
     private fun onUploadSuccess(localId: String, serverId: String) {
@@ -284,5 +311,3 @@ class MediaPickerViewModel(
     private fun generateLocalId(): String =
         Uuid.generateV7().toString()
 }
-
-

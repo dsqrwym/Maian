@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,13 @@ import java.awt.Dimension
 @Composable
 fun SharedInitDesktop(frameWindowScope: FrameWindowScope, app: @Composable () -> Unit) {
     DesktopScannerWindow()
-    frameWindowScope.window.minimumSize = Dimension(320, 600)
+    
+    // 使用 LaunchedEffect 确保这些窗口属性只在初始化时设置一次
+    // 避免每次重组都操作 Swing 窗口对象，这在 Windows 上可能导致 UI 闪烁或卡顿
+    LaunchedEffect(frameWindowScope.window) {
+        frameWindowScope.window.minimumSize = Dimension(320, 600)
+    }
+
     app()
     /*
     // WEB浏览器出问题，先临时不用

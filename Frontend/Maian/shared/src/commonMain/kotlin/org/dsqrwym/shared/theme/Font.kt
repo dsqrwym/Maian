@@ -3,32 +3,39 @@ package org.dsqrwym.shared.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.text.font.FontFamily
 import maian.shared.generated.resources.MiSansVF
 import maian.shared.generated.resources.SharedRes
 
 
 @Composable
-fun miSansNormalTypography() : Typography {
-    val miSans = FontFamily(
-        org.jetbrains.compose.resources.Font(resource = SharedRes.font.MiSansVF)
-    )
+fun miSansNormalTypography(): Typography {
+    // Font 是 Composable，直接调用
+    val miSansFont = org.jetbrains.compose.resources.Font(resource = SharedRes.font.MiSansVF)
+    
+    // 缓存 FontFamily
+    val miSans = remember(miSansFont) { FontFamily(miSansFont) }
 
-    return Typography(
-        displaySmall = MaterialTheme.typography.displaySmall.copy(fontFamily = miSans),
-        displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = miSans),
-        displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = miSans),
-        headlineSmall = MaterialTheme.typography.headlineSmall.copy(fontFamily = miSans),
-        headlineMedium = MaterialTheme.typography.headlineMedium.copy(fontFamily = miSans),
-        headlineLarge = MaterialTheme.typography.headlineLarge.copy(fontFamily = miSans),
-        titleSmall = MaterialTheme.typography.titleSmall.copy(fontFamily = miSans),
-        titleMedium = MaterialTheme.typography.titleMedium.copy(fontFamily = miSans),
-        titleLarge = MaterialTheme.typography.titleLarge.copy(fontFamily = miSans),
-        bodySmall = MaterialTheme.typography.bodySmall.copy(fontFamily = miSans),
-        bodyMedium = MaterialTheme.typography.bodyMedium.copy(fontFamily = miSans),
-        bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = miSans),
-        labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = miSans),
-        labelMedium = MaterialTheme.typography.labelMedium.copy(fontFamily = miSans),
-        labelLarge = MaterialTheme.typography.labelLarge.copy(fontFamily = miSans)
-    )
+    val defaultTypography = MaterialTheme.typography
+    // 缓存 Typography 对象本身
+    return remember(miSans, defaultTypography) {
+        Typography(
+            displaySmall = defaultTypography.displaySmall.copy(fontFamily = miSans),
+            displayMedium = defaultTypography.displayMedium.copy(fontFamily = miSans),
+            displayLarge = defaultTypography.displayLarge.copy(fontFamily = miSans),
+            headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = miSans),
+            headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = miSans),
+            headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = miSans),
+            titleSmall = defaultTypography.titleSmall.copy(fontFamily = miSans),
+            titleMedium = defaultTypography.titleMedium.copy(fontFamily = miSans),
+            titleLarge = defaultTypography.titleLarge.copy(fontFamily = miSans),
+            bodySmall = defaultTypography.bodySmall.copy(fontFamily = miSans),
+            bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = miSans),
+            bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = miSans),
+            labelSmall = defaultTypography.labelSmall.copy(fontFamily = miSans),
+            labelMedium = defaultTypography.labelMedium.copy(fontFamily = miSans),
+            labelLarge = defaultTypography.labelLarge.copy(fontFamily = miSans)
+        )
+    }
 }

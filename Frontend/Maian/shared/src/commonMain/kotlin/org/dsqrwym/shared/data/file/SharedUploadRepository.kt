@@ -15,6 +15,7 @@ import maian.shared.generated.resources.reset_unknown_error
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.network.withAuthOrError
+import org.dsqrwym.shared.util.dispatcher.AppDispatchers
 import org.jetbrains.compose.resources.getString
 
 class SharedUploadRepository(
@@ -42,7 +43,7 @@ class SharedUploadRepository(
             )
 
             // scope.launch 会立即返回一个 Job 实例
-            val job = scope.launch(Dispatchers.Default) {
+            val job = scope.launch(AppDispatchers.IO) {
                 try {
                     val result =
                         withAuthOrError { user ->
