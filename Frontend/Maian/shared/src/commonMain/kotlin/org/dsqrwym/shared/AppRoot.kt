@@ -22,6 +22,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import kotlinx.coroutines.withContext
 import maian.shared.generated.resources.SharedRes
@@ -36,7 +37,6 @@ import org.dsqrwym.shared.data.local.SharedUserPreferences
 import org.dsqrwym.shared.data.user.SharedUserSettingsRepository
 import org.dsqrwym.shared.localization.AppEnvironment
 import org.dsqrwym.shared.localization.LanguageManager
-import org.dsqrwym.shared.network.HttpClientProvider
 import org.dsqrwym.shared.network.InitCoil
 import org.dsqrwym.shared.theme.AppExtraColors
 import org.dsqrwym.shared.theme.DarkExtraColorScheme
@@ -87,43 +87,34 @@ fun AppRoot(
     appId: String = "",
     content: @Composable (state: AuthState) -> Unit
 ) {
-    // 使用状态记录初始化是否完成，避免在初始化期间访问 lateinit 变量
+    // 门禁：严禁在初始化完成前访问任何 object
     var isInitialized by remember { mutableStateOf(false) }
 
     // 核心初始化逻辑移至后台线程
     LaunchedEffect(appId) {
         withContext(AppDispatchers.IO) {
-            // 初始化设置提供者 (Windows 下访问注册表可能较慢)
             initSharedSettingsProvider(appId)
-            
-            // 提前触发 HttpClient 初始化 (避免在主线程首次使用时卡顿)
-            // 访问一下变量即可触发 lazy 初始化
-            @Suppress("UNUSED_VARIABLE")
-            val client = HttpClientProvider.client
-            
-            // 语言管理器初始化
             LanguageManager.setLocaleLanguage(SharedUserPreferences.getUserLanguage())
         }
         isInitialized = true
     }
 
     if (!isInitialized) {
-        // 显示加载态或空白，防止访问未初始化的 lateinit 设置
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.White), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
         return
     }
 
-    // Coil 初始化。确保只执行一次。
+    // --- 门禁后 ---
     remember(appId) { true }.let { InitCoil() }
 
     val mySnackbarViewModel: MySnackbarViewModel = koinViewModel()
     val authSessionViewModel: AuthSessionViewModel = koinViewModel()
     val userSettingsRepository: SharedUserSettingsRepository = currentKoinScope().get()
 
-    val init = remember { SharedUserPreferences.getIsDarkTheme() }
-    val userIsDarkTheme by SharedUserPreferences.isDarkThemeFlow.collectAsState(initial = init)
+    val initDark = remember { SharedUserPreferences.getIsDarkTheme() }
+    val userIsDarkTheme by SharedUserPreferences.isDarkThemeFlow.collectAsState(initial = initDark)
     val systemIsDarkTheme = isSystemInDarkTheme()
     val isDarkTheme by derivedStateOf { userIsDarkTheme ?: systemIsDarkTheme }
 
@@ -133,7 +124,8 @@ fun AppRoot(
     }
 
     val state by authSessionViewModel.state.collectAsState()
-    val windowSizeClass = calculateWindowSizeClass()
+    val rawSizeClass = calculateWindowSizeClass()
+    val windowSizeClass = remember(rawSizeClass.widthSizeClass) { rawSizeClass }
     val typography = miSansNormalTypography()
 
     LaunchedEffect(state) {

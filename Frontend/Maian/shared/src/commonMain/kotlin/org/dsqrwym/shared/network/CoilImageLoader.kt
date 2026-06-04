@@ -8,16 +8,17 @@ import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.request.CachePolicy
 import coil3.request.crossfade
 import io.github.vinceglb.filekit.coil.addPlatformFileSupport
-import io.ktor.client.HttpClient
 
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun InitCoil(httpClient: HttpClient = HttpClientProvider.client) {
+fun InitCoil() {
+    // 关键：不要在参数里访问 HttpClientProvider.client
+    // 只有在工厂真正执行时（后台线程）才去获取客户端
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .components {
-                add(KtorNetworkFetcherFactory(httpClient))
+                add(KtorNetworkFetcherFactory(HttpClientProvider.client))
                 addPlatformFileSupport()
             }
             .crossfade(true)

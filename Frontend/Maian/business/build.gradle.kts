@@ -24,7 +24,7 @@ kotlin {
     // Android目标配置
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)     // 强制使用Java 11字节码， 官方推荐
+            jvmTarget.set(JvmTarget.JVM_21)     // 强制使用Java 21字节码
         }
     }
 
@@ -140,8 +140,8 @@ extensions.configure<LibraryExtension>("android") {
 
     // Java版本兼容性
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 
