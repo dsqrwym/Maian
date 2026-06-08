@@ -1,10 +1,11 @@
 import type { INestApplication } from '@nestjs/common';
 import { HttpExceptionFilter } from '#/common/filters/http-exception.filter.js';
 import { JwtExceptionFilter } from '#/common/filters/jwt-exception.filter.js';
+import { DrizzleExceptionFilter } from '#/common/filters/drizzle-exception.filter.js';
 
 export function useGlobalFilters(app: INestApplication) {
   app.useGlobalFilters(
-    // app.get(PrismaExceptionFilter), // 全局异常过滤器，处理数据库相关异常 已去除prisma
+    app.get(DrizzleExceptionFilter), // 全局异常过滤器，处理 Drizzle 数据库相关异常
     app.get(HttpExceptionFilter), // 全局异常过滤器，处理 HTTP 异常
     app.get(JwtExceptionFilter), // 全局异常过滤器，统一处理 JWT 相关异常（401）
   );

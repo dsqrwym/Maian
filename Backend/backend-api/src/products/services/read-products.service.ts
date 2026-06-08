@@ -387,6 +387,7 @@ export class ReadProductsService {
                 .where(
                   and(
                     eq(product_categories.product_id, products.id),
+                    ilike(categories.name_unaccent, likeSearch),
                     ilike(category_translations.name_unaccent, likeSearch),
                   ),
                 ),

@@ -18,6 +18,7 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor.j
 import { Reflector, RouterModule } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter.js';
 import { JwtExceptionFilter } from './common/filters/jwt-exception.filter.js';
+import { DrizzleExceptionFilter } from './common/filters/drizzle-exception.filter.js';
 import { ScheduleTaskModule } from './schedule-tasks/schedule-task.module.js';
 import { MyI18nModule } from './i18n/i18n.module.js';
 import { MyThrottlerModule } from './common/rate-limit/rate-limit.module.js';
@@ -142,6 +143,7 @@ import { OrderModule } from '#/orders/order.module.js';
     AppService,
     HttpExceptionFilter, // 全局异常过滤器，处理 HTTP 异常
     JwtExceptionFilter, // 全局异常过滤器，处理 JWT 异常
+    DrizzleExceptionFilter, // 全局异常过滤器，处理 Drizzle 数据库相关异常
   ], // 可以注入的服务
 })
 export class AppModule {}
