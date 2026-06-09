@@ -1,3 +1,4 @@
+/*
 import type { ValidationOptions } from 'class-validator';
 import { registerDecorator } from 'class-validator';
 import { IanaTimezoneValidator } from '../is-iana.validator.js'; // 引入自定义验证器类
@@ -13,3 +14,4 @@ export function IsIANA(validationOptions?: ValidationOptions) {
     });
   };
 }
+*/

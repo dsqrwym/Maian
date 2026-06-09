@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { DateFormatService } from './formatter/date-format.service.js';
 import { HashService } from './hash/hash.service.js';
-import { Bcp47LanguageValidator } from './validators/is-bcp47-language.validator.js';
-import { IanaTimezoneValidator } from './validators/is-iana.validator.js';
+//import { Bcp47LanguageValidator } from './validators/is-bcp47-language.validator.js';
+//import { IanaTimezoneValidator } from './validators/is-iana.validator.js';
 import { HashWorkerPoolProvider } from './hash/hash-worker-pool.provider.js';
 import { MyI18nModule } from '#/i18n/i18n.module.js';
 import { RoleI18nService } from './i18n/role.i18n.js';
@@ -11,8 +11,8 @@ import { RoleI18nService } from './i18n/role.i18n.js';
   providers: [
     DateFormatService,
     HashService,
-    Bcp47LanguageValidator,
-    IanaTimezoneValidator,
+    //Bcp47LanguageValidator,
+    //IanaTimezoneValidator,
     HashWorkerPoolProvider,
     MyI18nModule,
     RoleI18nService,
@@ -20,8 +20,8 @@ import { RoleI18nService } from './i18n/role.i18n.js';
   exports: [
     DateFormatService,
     HashService,
-    Bcp47LanguageValidator,
-    IanaTimezoneValidator,
+    // Bcp47LanguageValidator,
+    //IanaTimezoneValidator,
     RoleI18nService,
   ], // 导出提供者，以便其他模块可以使用
 })

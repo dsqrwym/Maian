@@ -1,12 +1,15 @@
 package org.dsqrwym.shared.network
 
-import io.ktor.client.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.dsqrwym.shared.data.auth.SharedAuthApi
 import org.dsqrwym.shared.data.auth.SharedTokenStorage
@@ -74,6 +77,13 @@ internal fun HttpClientConfig<*>.installCommonPlugins() {
             // Automatic refresh flow invoked by Ktor when 401/invalid token etc.
             // 当遇到 401/令牌无效等情况时，Ktor 会调用该刷新流程
             refreshTokens {
+                // Skip auth events for login requests to avoid showing "Session Expired"
+                // along with "Login Failed" messages.
+                // 登录请求不触发认证事件，避免同时弹出“登录失败”与“会话过期”。
+                if (response.call.request.url.encodedPath.contains("/auth/login")) {
+                    return@refreshTokens null
+                }
+
                 /*
                 We directly create SharedAuthApi here instead of using Koin.
                 Reason: this is a low-level cross-cutting concern (HttpClient plugin).

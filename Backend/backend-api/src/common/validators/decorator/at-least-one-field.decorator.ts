@@ -1,3 +1,4 @@
+/*
 import {
   registerDecorator,
   ValidationArguments,
@@ -29,12 +30,12 @@ export class AtLeastOneOfConstraint implements ValidatorConstraintInterface {
     )}`;
   }
 }
-/**
+/!**
  * 验证目标类中指定的字段列表中至少有一个字段不为空 (undefined/null/'')
  *
  * @param properties 要检查的字段名数组
  * @param validationOptions 验证选项
- */
+ *!/
 export function AtLeastOneOf(
   properties: string[],
   validationOptions?: ValidationOptions,
@@ -49,3 +50,4 @@ export function AtLeastOneOf(
     });
   };
 }
+*/
