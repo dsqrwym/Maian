@@ -64,7 +64,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 **B2B 多平台项目*
 
 ### `AppModule` 中已接入的模块
 
-`AuthModule` · `LocationsModule` · `CaslModule` · `UserModule` · `EnterpriseModule` · `AdminModule` · `CategoryModule` · `ProductsModule` · `FilesModule` · `MailModule` · `PrismaModule` · `CacheRedisModule` · `ScheduleTaskModule` · `MyI18nModule` · `MyThrottlerModule`
+`AuthModule` · `LocationsModule` · `CaslModule` · `UserModule` · `EnterpriseModule` · `AdminModule` · `CategoryModule` · `ProductsModule` · `FilesModule` · `MailModule` · `CacheRedisModule` · `ScheduleTaskModule` · `MyI18nModule` · `MyThrottlerModule`
 
 此外还有全局异常过滤器、统一响应拦截器、Pino 结构化日志和 JWT 统一配置。支持三种进程模式：`single`、Node 原生 `cluster`、`pm2`。
 
@@ -113,8 +113,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 **B2B 多平台项目*
 |---|---|
 | NestJS 11 | 应用框架 |
 | Fastify 5 | 高性能 HTTP 适配器 |
-| Prisma 7 | 主 ORM 与数据库迁移 |
-| Drizzle ORM | 备用 ORM（部分模块使用） |
+| Drizzle ORM | 主 ORM 与数据库迁移 |
 | PostgreSQL 17 | 主数据库 |
 | Redis 7 | 缓存、会话、限流、BullMQ 队列 |
 | JWT / Passport | 认证 |
@@ -141,7 +140,7 @@ MaiAn 是一个面向批发商与零售商关系管理的 **B2B 多平台项目*
 
 ## 数据库
 
-主要通过 **Prisma 7**（ORM + 迁移）管理，部分模块引入 **Drizzle ORM**。完整 SQL 架构位于 `Base_de_datos/schema.sql`，Docker Compose 启动 PostgreSQL 容器时会自动导入。
+主要通过 **Drizzle ORM** 管理。完整 SQL 架构位于 `Base_de_datos/schema.sql`，Docker Compose 启动 PostgreSQL 容器时会自动导入。
 
 ### 主要实体
 
@@ -278,9 +277,6 @@ COMPOSE_PROFILES=postgres,redis docker compose up -d
 | `@nestjs/schedule` | `^6.1.3` |
 | `@nestjs/swagger` | `^11.4.4` |
 | `@nestjs/throttler` | `^6.5.0` |
-| `@prisma/adapter-pg` | `^7.8.0` |
-| `@prisma/client` | `^7.8.0` |
-| `@prisma/client-runtime-utils` | `^7.8.0` |
 | `bcrypt` | `^6.0.0` |
 | `bullmq` | `^5.78.0` |
 | `cache-manager` | `^7.2.8` |
@@ -346,7 +342,6 @@ COMPOSE_PROFILES=postgres,redis docker compose up -d
 | `jest` | `^30.4.2` |
 | `nestia` | `^11.2.1` |
 | `prettier` | `^3.8.3` |
-| `prisma` | `^7.8.0` |
 | `source-map-support` | `^0.5.21` |
 | `supertest` | `^7.2.2` |
 | `ts-jest` | `^29.4.11` |

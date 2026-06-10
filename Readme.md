@@ -64,7 +64,7 @@ Located at `Backend/backend-api`. Uses a modular NestJS architecture with Fastif
 
 ### Active modules in `AppModule`
 
-`AuthModule` · `LocationsModule` · `CaslModule` · `UserModule` · `EnterpriseModule` · `AdminModule` · `CategoryModule` · `ProductsModule` · `FilesModule` · `MailModule` · `PrismaModule` · `CacheRedisModule` · `ScheduleTaskModule` · `MyI18nModule` · `MyThrottlerModule`
+`AuthModule` · `LocationsModule` · `CaslModule` · `UserModule` · `EnterpriseModule` · `AdminModule` · `CategoryModule` · `ProductsModule` · `FilesModule` · `MailModule` · `CacheRedisModule` · `ScheduleTaskModule` · `MyI18nModule` · `MyThrottlerModule`
 
 The backend also includes global exception filters, a unified response interceptor, structured logging with Pino, and centralized JWT configuration. Supports three process modes: `single`, native Node `cluster`, and `pm2`.
 
@@ -112,8 +112,7 @@ The backend also includes global exception filters, a unified response intercept
 |---|---|
 | NestJS 11 | Application framework |
 | Fastify 5 | High-performance HTTP adapter |
-| Prisma 7 | Primary ORM and migrations |
-| Drizzle ORM | Alternative ORM (partially in use) |
+| Drizzle ORM | Primary ORM and migrations |
 | PostgreSQL 17 | Primary database |
 | Redis 7 | Cache, sessions, rate-limit, BullMQ queues |
 | JWT / Passport | Authentication |
@@ -140,7 +139,7 @@ A malformed value must never break business logic, persistence, or authorisation
 
 ## Database
 
-Managed primarily via **Prisma 7** (ORM + migrations) with **Drizzle ORM** in some modules. The full SQL schema is in `Base_de_datos/schema.sql` and is automatically imported by Docker Compose when the PostgreSQL container starts.
+Managed via **Drizzle ORM**. The full SQL schema is in `Base_de_datos/schema.sql` and is automatically imported by Docker Compose when the PostgreSQL container starts.
 
 ### Entities
 
@@ -277,9 +276,6 @@ Use the corresponding `.env.example` files as templates.
 | `@nestjs/schedule` | `^6.1.3` |
 | `@nestjs/swagger` | `^11.4.4` |
 | `@nestjs/throttler` | `^6.5.0` |
-| `@prisma/adapter-pg` | `^7.8.0` |
-| `@prisma/client` | `^7.8.0` |
-| `@prisma/client-runtime-utils` | `^7.8.0` |
 | `bcrypt` | `^6.0.0` |
 | `bullmq` | `^5.78.0` |
 | `cache-manager` | `^7.2.8` |
@@ -345,7 +341,6 @@ Use the corresponding `.env.example` files as templates.
 | `jest` | `^30.4.2` |
 | `nestia` | `^11.2.1` |
 | `prettier` | `^3.8.3` |
-| `prisma` | `^7.8.0` |
 | `source-map-support` | `^0.5.21` |
 | `supertest` | `^7.2.2` |
 | `ts-jest` | `^29.4.11` |

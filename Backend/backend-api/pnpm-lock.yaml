@@ -96,15 +96,6 @@ importers:
       '@nestjs/throttler':
         specifier: ^6.5.0
         version: 6.5.0(@nestjs/common@11.1.26(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.26)(reflect-metadata@0.2.2)
-      '@prisma/adapter-pg':
-        specifier: ^7.8.0
-        version: 7.8.0
-      '@prisma/client':
-        specifier: ^7.8.0
-        version: 7.8.0(typescript@6.0.3)
-      '@prisma/client-runtime-utils':
-        specifier: ^7.8.0
-        version: 7.8.0
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -125,7 +116,7 @@ importers:
         version: 10.6.0
       drizzle-orm:
         specifier: ^0.45.2
-        version: 0.45.2(@prisma/client@7.8.0(typescript@6.0.3))(@types/pg@8.20.0)(pg@8.21.0)(postgres@3.4.9)
+        version: 0.45.2(@types/pg@8.20.0)(pg@8.21.0)(postgres@3.4.9)
       fastify:
         specifier: ^5.8.5
         version: 5.8.5
@@ -212,11 +203,11 @@ importers:
         specifier: ^11.2.1
         version: 11.2.1(@nestia/core@11.2.1(@nestia/fetcher@11.2.1)(@nestjs/common@11.1.26(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.26)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typia@12.1.1(@types/node@24.13.1)(typescript@6.0.3)))(@swc/core@1.15.40(@swc/helpers@0.5.23))(@types/node@24.13.1)(typescript@6.0.3)
       '@nestjs/cli':
-        specifier: ^11.0.22
-        version: 11.0.22(@swc/cli@0.7.10(@swc/core@1.15.40(@swc/helpers@0.5.23))(chokidar@4.0.3))(@swc/core@1.15.40(@swc/helpers@0.5.23))(@types/node@24.13.1)(cssnano@7.1.9(postcss@8.5.15))(postcss@8.5.15)(prettier@3.8.3)
+        specifier: ^11.0.23
+        version: 11.0.23(@swc/cli@0.7.10(@swc/core@1.15.40(@swc/helpers@0.5.23))(chokidar@4.0.3))(@swc/core@1.15.40(@swc/helpers@0.5.23))(@types/node@24.13.1)(cssnano@7.1.9(postcss@8.5.15))(postcss@8.5.15)(prettier@3.8.4)
       '@nestjs/schematics':
         specifier: ^11.1.0
-        version: 11.1.0(chokidar@4.0.3)(prettier@3.8.3)(typescript@6.0.3)
+        version: 11.1.0(chokidar@4.0.3)(prettier@3.8.4)(typescript@6.0.3)
       '@nestjs/testing':
         specifier: ^11.1.26
         version: 11.1.26(@nestjs/common@11.1.26(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.26)(@nestjs/platform-express@11.1.26)
@@ -279,7 +270,7 @@ importers:
         version: 10.1.8(eslint@9.39.4)
       eslint-plugin-prettier:
         specifier: ^5.5.6
-        version: 5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint@9.39.4)(prettier@3.8.3)
+        version: 5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint@9.39.4)(prettier@3.8.4)
       globals:
         specifier: ^16.5.0
         version: 16.5.0
@@ -290,8 +281,8 @@ importers:
         specifier: ^11.2.1
         version: 11.2.1(@types/node@24.13.1)
       prettier:
-        specifier: ^3.8.3
-        version: 3.8.3
+        specifier: ^3.8.4
+        version: 3.8.4
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -1990,8 +1981,8 @@ packages:
       keyv: '>=5'
       rxjs: ^7.8.1
 
-  '@nestjs/cli@11.0.22':
-    resolution: {integrity: sha512-KuMosDSsMM0qlfYiBBRbIvCavYh77kFXDJVXqvd2rJOuhsAS+sYaujXPl/KTIiVlS7WCUvcGeQl6Ek2nY17org==}
+  '@nestjs/cli@11.0.23':
+    resolution: {integrity: sha512-2V0Bf5jz0KXhUZk3eJi9GljIyqH04otwsE/mYLbqJR+X0iiYx+6bkNJ2Qz28uHNFj1cpHgimf9xDzHkqarie0g==}
     engines: {node: '>= 20.11'}
     hasBin: true
     peerDependencies:
@@ -2174,30 +2165,6 @@ packages:
   '@pkgr/core@0.3.6':
     resolution: {integrity: sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==}
     engines: {node: ^14.18.0 || >=16.0.0}
-
-  '@prisma/adapter-pg@7.8.0':
-    resolution: {integrity: sha512-ygb3UkerK3v8MDpXVgCISdRNDozpxh6+JVJgiIGbSr5KBgz10LLf5ejUskPGoXlsIjxsOu6nuy1JVQr2EKGSlg==}
-
-  '@prisma/client-runtime-utils@7.8.0':
-    resolution: {integrity: sha512-5NQZztQ0oY/ADFkmd9gPuweH5A1/CCY8YQPorLLO0Mu6a87mY5gsnDkzmFmIHs9NFaLnZojzgddFVN4RpKYrdw==}
-
-  '@prisma/client@7.8.0':
-    resolution: {integrity: sha512-HFp3Dawv/3sU3JtlPha90IB+48lS7zHiH4LKZPjmcE8YH5P9DOXGPvo8dqOtO7MqLDd1p2hOWMcFlRT1DMblHw==}
-    engines: {node: ^20.19 || ^22.12 || >=24.0}
-    peerDependencies:
-      prisma: '*'
-      typescript: ~6.0.3
-    peerDependenciesMeta:
-      prisma:
-        optional: true
-      typescript:
-        optional: true
-
-  '@prisma/debug@7.8.0':
-    resolution: {integrity: sha512-p+QZReysDUqXC+mk17q9a+Y/qzh4c2KYliDK30buYUyfrGeTGSyfmc0AIrJRhZJrLHhRiJa9Au/J72h3C+szvA==}
-
-  '@prisma/driver-adapter-utils@7.8.0':
-    resolution: {integrity: sha512-/Q13o0ZT0rjc1Xk0Q9KhZYwuq2EW/vSbWUBKfgEKkaCuB/Sg6bqnjmTZqC5cD4d6y1vfFAEwBRzfzoSMIVJ55A==}
 
   '@redis/bloom@1.2.0':
     resolution: {integrity: sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==}
@@ -3871,8 +3838,8 @@ packages:
     engines: {node: '>=0.12.18'}
     hasBin: true
 
-  electron-to-chromium@1.5.368:
-    resolution: {integrity: sha512-7RckJJK4uESJF9PxvfMWd3TGqIiieUTG4HxnKaKuIpGbcr+r2ZEB3g2gAhCP3Fqm42vJSzLfgab9eva/C4/XVw==}
+  electron-to-chromium@1.5.370:
+    resolution: {integrity: sha512-D5tSHJReAb/Kf3Hu9F/GO4lJuSWzEWHwvQ/kKSUP7pimNgvxkSKj+gUQhHpKKACwrin7rS3byU7IxreF56rl5g==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -5798,8 +5765,8 @@ packages:
     peerDependencies:
       postcss: ^8.5.13
 
-  postcss-selector-parser@7.1.1:
-    resolution: {integrity: sha512-orRsuYpJVw8LdAwqqLykBj9ecS5/cRHlI5+nvTo8LcCKmzDmqVORXtOIYEEQuL9D4BxtA1lm5isAqzQZCoQ6Eg==}
+  postcss-selector-parser@7.1.2:
+    resolution: {integrity: sha512-Wjvt4scRFouioIInHf51IFNP4ltJ2EngJM+cZPGiqbKetBfmP3vpdPV8ID2S6JS6/jdo74N8+aEYH9lQr2C6sA==}
     engines: {node: '>=4'}
 
   postcss-svgo@7.1.3:
@@ -5824,10 +5791,6 @@ packages:
   postgres-array@2.0.0:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
     engines: {node: '>=4'}
-
-  postgres-array@3.0.4:
-    resolution: {integrity: sha512-nAUSGfSDGOaOAEGwqsRY27GPOea7CNipJPOA7lPbdEpx5Kg3qzdP0AaWC5MlhTWV9s4hFX39nomVZ+C4tnGOJQ==}
-    engines: {node: '>=12'}
 
   postgres-bytea@1.0.1:
     resolution: {integrity: sha512-5+5HqXnsZPE65IJZSMkZtURARZelel2oXUEO8rH83VS/hxH5vv1uHquPg5wZs8yMAfdv971IU+kcPUczi7NVBQ==}
@@ -5865,8 +5828,8 @@ packages:
     resolution: {integrity: sha512-SxToR7P8Y2lWmv/kTzVLC1t/GDI2WGjMwNhLLE9qtH8Q13C+aEmuRlzDst4Up4s0Wc8sF2M+J57iB3cMLqftfg==}
     engines: {node: '>=6.0.0'}
 
-  prettier@3.8.3:
-    resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
+  prettier@3.8.4:
+    resolution: {integrity: sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -8499,7 +8462,7 @@ snapshots:
       get-function-location: 2.0.0
       glob: 11.1.0
       path-to-regexp: 6.3.0
-      prettier: 3.8.3
+      prettier: 3.8.4
       ts-node: 10.9.2(@swc/core@1.15.40(@swc/helpers@0.5.23))(@types/node@24.13.1)(typescript@6.0.3)
       tsconfck: 2.1.2(typescript@6.0.3)
       tsconfig-paths: 4.2.0
@@ -8563,13 +8526,13 @@ snapshots:
       keyv: 5.6.0
       rxjs: 7.8.2
 
-  '@nestjs/cli@11.0.22(@swc/cli@0.7.10(@swc/core@1.15.40(@swc/helpers@0.5.23))(chokidar@4.0.3))(@swc/core@1.15.40(@swc/helpers@0.5.23))(@types/node@24.13.1)(cssnano@7.1.9(postcss@8.5.15))(postcss@8.5.15)(prettier@3.8.3)':
+  '@nestjs/cli@11.0.23(@swc/cli@0.7.10(@swc/core@1.15.40(@swc/helpers@0.5.23))(chokidar@4.0.3))(@swc/core@1.15.40(@swc/helpers@0.5.23))(@types/node@24.13.1)(cssnano@7.1.9(postcss@8.5.15))(postcss@8.5.15)(prettier@3.8.4)':
     dependencies:
       '@angular-devkit/core': 19.2.27(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.27(chokidar@4.0.3)
       '@angular-devkit/schematics-cli': 19.2.27(@types/node@24.13.1)(chokidar@4.0.3)
       '@inquirer/prompts': 7.10.1(@types/node@24.13.1)
-      '@nestjs/schematics': 11.1.0(chokidar@4.0.3)(prettier@3.8.3)(typescript@6.0.3)
+      '@nestjs/schematics': 11.1.0(chokidar@4.0.3)(prettier@3.8.4)(typescript@6.0.3)
       ansis: 4.2.0
       chokidar: 4.0.3
       cli-table3: 0.6.5
@@ -8686,7 +8649,7 @@ snapshots:
       '@nestjs/core': 11.1.26(@nestjs/common@11.1.26(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.26)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       cron: 4.4.0
 
-  '@nestjs/schematics@11.1.0(chokidar@4.0.3)(prettier@3.8.3)(typescript@6.0.3)':
+  '@nestjs/schematics@11.1.0(chokidar@4.0.3)(prettier@3.8.4)(typescript@6.0.3)':
     dependencies:
       '@angular-devkit/core': 19.2.24(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.24(chokidar@4.0.3)
@@ -8695,7 +8658,7 @@ snapshots:
       pluralize: 8.0.0
       typescript: 6.0.3
     optionalDependencies:
-      prettier: 3.8.3
+      prettier: 3.8.4
     transitivePeerDependencies:
       - chokidar
 
@@ -8758,29 +8721,6 @@ snapshots:
     optional: true
 
   '@pkgr/core@0.3.6': {}
-
-  '@prisma/adapter-pg@7.8.0':
-    dependencies:
-      '@prisma/driver-adapter-utils': 7.8.0
-      '@types/pg': 8.20.0
-      pg: 8.21.0
-      postgres-array: 3.0.4
-    transitivePeerDependencies:
-      - pg-native
-
-  '@prisma/client-runtime-utils@7.8.0': {}
-
-  '@prisma/client@7.8.0(typescript@6.0.3)':
-    dependencies:
-      '@prisma/client-runtime-utils': 7.8.0
-    optionalDependencies:
-      typescript: 6.0.3
-
-  '@prisma/debug@7.8.0': {}
-
-  '@prisma/driver-adapter-utils@7.8.0':
-    dependencies:
-      '@prisma/debug': 7.8.0
 
   '@redis/bloom@1.2.0(@redis/client@1.6.1)':
     dependencies:
@@ -9912,7 +9852,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.10.34
       caniuse-lite: 1.0.30001797
-      electron-to-chromium: 1.5.368
+      electron-to-chromium: 1.5.370
       node-releases: 2.0.47
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -10473,9 +10413,8 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.22.4
 
-  drizzle-orm@0.45.2(@prisma/client@7.8.0(typescript@6.0.3))(@types/pg@8.20.0)(pg@8.21.0)(postgres@3.4.9):
+  drizzle-orm@0.45.2(@types/pg@8.20.0)(pg@8.21.0)(postgres@3.4.9):
     optionalDependencies:
-      '@prisma/client': 7.8.0(typescript@6.0.3)
       '@types/pg': 8.20.0
       pg: 8.21.0
       postgres: 3.4.9
@@ -10505,7 +10444,7 @@ snapshots:
   ejs@5.0.2:
     optional: true
 
-  electron-to-chromium@1.5.368: {}
+  electron-to-chromium@1.5.370: {}
 
   emittery@0.13.1: {}
 
@@ -10675,10 +10614,10 @@ snapshots:
     dependencies:
       eslint: 9.39.4
 
-  eslint-plugin-prettier@5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint@9.39.4)(prettier@3.8.3):
+  eslint-plugin-prettier@5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.4))(eslint@9.39.4)(prettier@3.8.4):
     dependencies:
       eslint: 9.39.4
-      prettier: 3.8.3
+      prettier: 3.8.4
       prettier-linter-helpers: 1.0.1
       synckit: 0.11.13
     optionalDependencies:
@@ -13077,7 +13016,7 @@ snapshots:
   postcss-calc@10.1.1(postcss@8.5.15):
     dependencies:
       postcss: 8.5.15
-      postcss-selector-parser: 7.1.1
+      postcss-selector-parser: 7.1.2
       postcss-value-parser: 4.2.0
     optional: true
 
@@ -13100,7 +13039,7 @@ snapshots:
   postcss-discard-comments@7.0.8(postcss@8.5.15):
     dependencies:
       postcss: 8.5.15
-      postcss-selector-parser: 7.1.1
+      postcss-selector-parser: 7.1.2
     optional: true
 
   postcss-discard-duplicates@7.0.4(postcss@8.5.15):
@@ -13131,7 +13070,7 @@ snapshots:
       caniuse-api: 3.0.0
       cssnano-utils: 5.0.3(postcss@8.5.15)
       postcss: 8.5.15
-      postcss-selector-parser: 7.1.1
+      postcss-selector-parser: 7.1.2
     optional: true
 
   postcss-minify-font-values@7.0.3(postcss@8.5.15):
@@ -13162,7 +13101,7 @@ snapshots:
       caniuse-api: 3.0.0
       cssesc: 3.0.0
       postcss: 8.5.15
-      postcss-selector-parser: 7.1.1
+      postcss-selector-parser: 7.1.2
     optional: true
 
   postcss-normalize-charset@7.0.3(postcss@8.5.15):
@@ -13239,7 +13178,7 @@ snapshots:
       postcss-value-parser: 4.2.0
     optional: true
 
-  postcss-selector-parser@7.1.1:
+  postcss-selector-parser@7.1.2:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
@@ -13255,7 +13194,7 @@ snapshots:
   postcss-unique-selectors@7.0.7(postcss@8.5.15):
     dependencies:
       postcss: 8.5.15
-      postcss-selector-parser: 7.1.1
+      postcss-selector-parser: 7.1.2
     optional: true
 
   postcss-value-parser@4.2.0:
@@ -13269,8 +13208,6 @@ snapshots:
     optional: true
 
   postgres-array@2.0.0: {}
-
-  postgres-array@3.0.4: {}
 
   postgres-bytea@1.0.1: {}
 
@@ -13304,7 +13241,7 @@ snapshots:
     dependencies:
       fast-diff: 1.3.0
 
-  prettier@3.8.3: {}
+  prettier@3.8.4: {}
 
   pretty-format@30.4.1:
     dependencies:
@@ -13872,7 +13809,7 @@ snapshots:
     dependencies:
       browserslist: 4.28.2
       postcss: 8.5.15
-      postcss-selector-parser: 7.1.1
+      postcss-selector-parser: 7.1.2
     optional: true
 
   superagent@10.3.0:

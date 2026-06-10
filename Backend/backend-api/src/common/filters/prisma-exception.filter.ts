@@ -1,3 +1,4 @@
+/*
 import {
   ExceptionFilter,
   Catch,
@@ -87,3 +88,4 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     response.status(status).send(errorResponse);
   }
 }
+*/

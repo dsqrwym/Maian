@@ -64,7 +64,7 @@ Ubicado en `Backend/backend-api`. Usa una arquitectura modular NestJS con Fastif
 
 ### Módulos activos en `AppModule`
 
-`AuthModule` · `LocationsModule` · `CaslModule` · `UserModule` · `EnterpriseModule` · `AdminModule` · `CategoryModule` · `ProductsModule` · `FilesModule` · `MailModule` · `PrismaModule` · `CacheRedisModule` · `ScheduleTaskModule` · `MyI18nModule` · `MyThrottlerModule`
+`AuthModule` · `LocationsModule` · `CaslModule` · `UserModule` · `EnterpriseModule` · `AdminModule` · `CategoryModule` · `ProductsModule` · `FilesModule` · `MailModule` · `CacheRedisModule` · `ScheduleTaskModule` · `MyI18nModule` · `MyThrottlerModule`
 
 El backend incluye además filtros globales de excepciones, interceptor de respuesta unificado, logger estructurado con Pino y configuración JWT centralizada. Soporta tres modos de proceso: `single`, `cluster` nativo de Node y `pm2`.
 
@@ -113,8 +113,7 @@ El backend incluye además filtros globales de excepciones, interceptor de respu
 |---|---|
 | NestJS 11 | Framework de aplicación |
 | Fastify 5 | Adaptador HTTP de alto rendimiento |
-| Prisma 7 | ORM principal y migraciones |
-| Drizzle ORM | ORM alternativo (en uso parcial) |
+| Drizzle ORM | ORM principal y migraciones |
 | PostgreSQL 17 | Base de datos principal |
 | Redis 7 | Caché, sesiones, rate-limit, colas BullMQ |
 | JWT / Passport | Autenticación |
@@ -141,7 +140,7 @@ Un dato mal formado nunca debe romper la lógica de negocio, la persistencia ni 
 
 ## Base de datos
 
-Gestionada principalmente con **Prisma 7** (ORM + migraciones) y **Drizzle ORM** en algunos módulos. El esquema SQL completo está en `Base_de_datos/schema.sql` y Docker Compose lo importa automáticamente al arrancar el contenedor de PostgreSQL.
+Gestionada con **Drizzle ORM**. El esquema SQL completo está en `Base_de_datos/schema.sql` y Docker Compose lo importa automáticamente al arrancar el contenedor de PostgreSQL.
 
 ### Entidades
 
@@ -278,9 +277,6 @@ Usa los ficheros `.env.example` correspondientes como plantilla.
 | `@nestjs/schedule` | `^6.1.3` |
 | `@nestjs/swagger` | `^11.4.4` |
 | `@nestjs/throttler` | `^6.5.0` |
-| `@prisma/adapter-pg` | `^7.8.0` |
-| `@prisma/client` | `^7.8.0` |
-| `@prisma/client-runtime-utils` | `^7.8.0` |
 | `bcrypt` | `^6.0.0` |
 | `bullmq` | `^5.78.0` |
 | `cache-manager` | `^7.2.8` |
@@ -346,7 +342,6 @@ Usa los ficheros `.env.example` correspondientes como plantilla.
 | `jest` | `^30.4.2` |
 | `nestia` | `^11.2.1` |
 | `prettier` | `^3.8.3` |
-| `prisma` | `^7.8.0` |
 | `source-map-support` | `^0.5.21` |
 | `supertest` | `^7.2.2` |
 | `ts-jest` | `^29.4.11` |
