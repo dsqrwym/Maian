@@ -1,6 +1,6 @@
 # MaiAn
 
-> *由 **Antigravity**（Google DeepMind AI）根据仓库分析与项目报告自动生成。*
+> *本 README 由 **Antigravity**（Google DeepMind AI）根据仓库分析和项目文档生成。*
 
 **切换语言：** [English](./Readme.md) · [Español](./Readme.es.md)
 
@@ -9,6 +9,19 @@
 MaiAn 是一个面向批发商与零售商关系管理的 **B2B 多平台项目**，将针对不同用户角色的原生客户端应用与统一的、安全可扩展的后台服务相结合，设计为可持续增长的业务平台。
 
 项目由 **dsqrwym**（技术标识）/ **MaiAn**（品牌名）开发。
+
+---
+
+## 在线演示
+
+可使用以下测试账号体验 Web 客户端：
+
+| 客户端 | 演示地址 | 邮箱 | 用户名 | 密码 |
+|---|---|---|---|---|
+| 零售商端（`standard`） | [打开 Standard](https://maian.dsqrwym.es/standard/) | `standard@maian.com` | `standard` | `Standard123` |
+| 批发商端（`enterprise`） | [打开 Enterprise](https://maian.dsqrwym.es/enterprise/) | `enterprise@maian.com` | `enterprise` | `Enterprise123` |
+
+> 这些共享账号仅用于演示。请勿修改其凭据或删除共享演示数据。
 
 ---
 

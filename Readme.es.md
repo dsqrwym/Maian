@@ -1,6 +1,6 @@
 # MaiAn
 
-> *Generado por **Antigravity** (Google DeepMind AI), basado en el análisis del repositorio y la memoria del proyecto.*
+> *Este README se ha generado con **Antigravity** (Google DeepMind AI) a partir del análisis del repositorio y de la documentación del proyecto.*
 
 **Leer en otro idioma:** [English](./Readme.md) · [中文](./Readme.zh.md)
 
@@ -9,6 +9,19 @@
 MaiAn es una **plataforma B2B multiplataforma** que conecta distribuidores mayoristas con minoristas. Combina aplicaciones cliente nativas para distintos perfiles de usuario con un backend centralizado, seguro y escalable, diseñado para crecer con nuevas funciones de negocio.
 
 El proyecto está desarrollado por **dsqrwym** (identificador técnico) / **MaiAn** (nombre de marca).
+
+---
+
+## Demos en línea
+
+Puedes probar los clientes web con las siguientes cuentas de demostración:
+
+| Cliente | Demo | Correo electrónico | Usuario | Contraseña |
+|---|---|---|---|---|
+| Minorista (`standard`) | [Abrir Standard](https://maian.dsqrwym.es/standard/) | `standard@maian.com` | `standard` | `Standard123` |
+| Mayorista (`enterprise`) | [Abrir Enterprise](https://maian.dsqrwym.es/enterprise/) | `enterprise@maian.com` | `enterprise` | `Enterprise123` |
+
+> Estas cuentas compartidas son solo para demostración. No modifiques sus credenciales ni elimines datos de demostración compartidos.
 
 ---
 
