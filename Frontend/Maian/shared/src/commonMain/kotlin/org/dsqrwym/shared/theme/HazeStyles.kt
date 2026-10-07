@@ -5,11 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.blur.HazeBlurStyle
 import dev.chrisbanes.haze.blur.HazeColorEffect
-import dev.chrisbanes.haze.blur.HazeTint
 
 /**
  * Haze 模糊样式
  * 为亮色和暗色主题提供明显的模糊效果
+ *
+ * Haze 2.0 起 [HazeBlurStyle] 不再是可读可 copy 的数据类，而是「可复用的写入程序」：
+ * 用 `HazeBlurStyle { ... }` 构建，属性由赋值改为函数调用（blurRadius(...)、noiseFactor(...)）；
+ * 需要在既有样式上叠加时用 `then { ... }`，不再使用 `Unspecified` / `copy`。
  */
 object MyHazeStyles {
 
@@ -21,26 +24,28 @@ object MyHazeStyles {
     fun standard(): HazeBlurStyle {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
-        return HazeBlurStyle(
+        return HazeBlurStyle {
             // 模糊半径 - 较大的值提供更明显的模糊
-            blurRadius = 28.dp,
+            blurRadius(28.dp)
 
             // 色调 - 使用主题的 Surface 颜色，增加不透明度以确保可见性
-            colorEffects = listOf(
-                HazeColorEffect.tint(
-                    color = if (isLight) {
-                        // 亮色模式：使用 Surface 颜色 + 85% 不透明度
-                        SurfaceLight.copy(alpha = 0.85f)
-                    } else {
-                        // 暗色模式：使用 Surface 颜色 + 90% 不透明度
-                        SurfaceDark.copy(alpha = 0.90f)
-                    }, blendMode = HazeColorEffect.DefaultBlendMode
+            colorEffects(
+                listOf(
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            // 亮色模式：使用 Surface 颜色 + 85% 不透明度
+                            SurfaceLight.copy(alpha = 0.85f)
+                        } else {
+                            // 暗色模式：使用 Surface 颜色 + 90% 不透明度
+                            SurfaceDark.copy(alpha = 0.90f)
+                        }
+                    )
                 )
-            ),
+            )
 
             // 噪点因子 - 添加质感，使模糊更自然
-            noiseFactor = 0.18f
-        )
+            noiseFactor(0.18f)
+        }
     }
 
     /**
@@ -51,21 +56,23 @@ object MyHazeStyles {
     fun thick(): HazeBlurStyle {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
-        return HazeBlurStyle(
-            blurRadius = 35.dp,
-            colorEffects = listOf(
-                HazeColorEffect.tint(
-                    color = if (isLight) {
-                        // 亮色模式：使用 SurfaceContainer 增强层次感
-                        SurfaceContainerLight.copy(alpha = 0.92f)
-                    } else {
-                        // 暗色模式：使用 SurfaceContainer
-                        SurfaceContainerDark.copy(alpha = 0.95f)
-                    }, blendMode = HazeColorEffect.DefaultBlendMode
+        return HazeBlurStyle {
+            blurRadius(35.dp)
+            colorEffects(
+                listOf(
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            // 亮色模式：使用 SurfaceContainer 增强层次感
+                            SurfaceContainerLight.copy(alpha = 0.92f)
+                        } else {
+                            // 暗色模式：使用 SurfaceContainer
+                            SurfaceContainerDark.copy(alpha = 0.95f)
+                        }
+                    )
                 )
-            ),
-            noiseFactor = 0.20f
-        )
+            )
+            noiseFactor(0.20f)
+        }
     }
 
     /**
@@ -76,19 +83,21 @@ object MyHazeStyles {
     fun thin(): HazeBlurStyle {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
-        return HazeBlurStyle(
-            blurRadius = 24.dp,
-            colorEffects = listOf(
-                HazeColorEffect.tint(
-                    color = if (isLight) {
-                        SurfaceLight.copy(alpha = 0.70f)
-                    } else {
-                        SurfaceDark.copy(alpha = 0.70f)
-                    }, blendMode = HazeColorEffect.DefaultBlendMode
+        return HazeBlurStyle {
+            blurRadius(24.dp)
+            colorEffects(
+                listOf(
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            SurfaceLight.copy(alpha = 0.70f)
+                        } else {
+                            SurfaceDark.copy(alpha = 0.70f)
+                        }
+                    )
                 )
-            ),
-            noiseFactor = 0.05f
-        )
+            )
+            noiseFactor(0.05f)
+        }
     }
 
     /**
@@ -99,29 +108,31 @@ object MyHazeStyles {
     fun glass(): HazeBlurStyle {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
-        return HazeBlurStyle(
-            blurRadius = 30.dp,
-            colorEffects = listOf(
-                HazeColorEffect.tint(
-                    color = if (isLight) {
-                        // 亮色模式：使用 SurfaceVariant 创建蓝色玻璃感
-                        SurfaceVariantLight.copy(alpha = 0.80f)
-                    } else {
-                        // 暗色模式：使用 SurfaceVariant 创建深蓝玻璃感
-                        SurfaceVariantDark.copy(alpha = 0.85f)
-                    }, blendMode = HazeColorEffect.DefaultBlendMode
-                ),
-                // 叠加轻微的 Primary 色调增加品牌感
-                HazeTint(
-                    color = if (isLight) {
-                        PrimaryLight.copy(alpha = 0.05f)
-                    } else {
-                        PrimaryDark.copy(alpha = 0.08f)
-                    }
+        return HazeBlurStyle {
+            blurRadius(30.dp)
+            colorEffects(
+                listOf(
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            // 亮色模式：使用 SurfaceVariant 创建蓝色玻璃感
+                            SurfaceVariantLight.copy(alpha = 0.80f)
+                        } else {
+                            // 暗色模式：使用 SurfaceVariant 创建深蓝玻璃感
+                            SurfaceVariantDark.copy(alpha = 0.85f)
+                        }
+                    ),
+                    // 叠加轻微的 Primary 色调增加品牌感（Haze 2 中 HazeTint 已并入 HazeColorEffect.tint）
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            PrimaryLight.copy(alpha = 0.05f)
+                        } else {
+                            PrimaryDark.copy(alpha = 0.08f)
+                        }
+                    )
                 )
-            ),
-            noiseFactor = 0.16f
-        )
+            )
+            noiseFactor(0.16f)
+        }
     }
 
     /**
@@ -132,29 +143,31 @@ object MyHazeStyles {
     fun topBar(): HazeBlurStyle {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
-        return HazeBlurStyle(
-            blurRadius = 26.dp,
-            colorEffects = listOf(
-                HazeColorEffect.tint(
-                    color = if (isLight) {
-                        // 亮色模式：使用 SurfaceContainerLow 保持清爽
-                        SurfaceContainerLowLight.copy(alpha = 0.88f)
-                    } else {
-                        // 暗色模式：使用 SurfaceContainerHigh 提供深度
-                        SurfaceContainerHighDark.copy(alpha = 0.92f)
-                    }, blendMode = HazeColorEffect.DefaultBlendMode
-                ),
-                // 添加轻微的表面色调强化分层
-                HazeTint(
-                    color = if (isLight) {
-                        SurfaceLight.copy(alpha = 0.15f)
-                    } else {
-                        SurfaceDark.copy(alpha = 0.20f)
-                    }
+        return HazeBlurStyle {
+            blurRadius(26.dp)
+            colorEffects(
+                listOf(
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            // 亮色模式：使用 SurfaceContainerLow 保持清爽
+                            SurfaceContainerLowLight.copy(alpha = 0.88f)
+                        } else {
+                            // 暗色模式：使用 SurfaceContainerHigh 提供深度
+                            SurfaceContainerHighDark.copy(alpha = 0.92f)
+                        }
+                    ),
+                    // 添加轻微的表面色调强化分层
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            SurfaceLight.copy(alpha = 0.15f)
+                        } else {
+                            SurfaceDark.copy(alpha = 0.20f)
+                        }
+                    )
                 )
-            ),
-            noiseFactor = 0.17f
-        )
+            )
+            noiseFactor(0.17f)
+        }
     }
 
     /**
@@ -165,18 +178,20 @@ object MyHazeStyles {
     fun highContrast(): HazeBlurStyle {
         val isLight = MaterialTheme.colorScheme.surface == SurfaceLight
 
-        return HazeBlurStyle(
-            blurRadius = 32.dp,
-            colorEffects = listOf(
-                HazeColorEffect.tint(
-                    color = if (isLight) {
-                        SurfaceContainerHighestLight.copy(alpha = 0.95f)
-                    } else {
-                        SurfaceContainerHighestDark.copy(alpha = 0.97f)
-                    }, blendMode = HazeColorEffect.DefaultBlendMode
+        return HazeBlurStyle {
+            blurRadius(32.dp)
+            colorEffects(
+                listOf(
+                    HazeColorEffect.tint(
+                        color = if (isLight) {
+                            SurfaceContainerHighestLight.copy(alpha = 0.95f)
+                        } else {
+                            SurfaceContainerHighestDark.copy(alpha = 0.97f)
+                        }
+                    )
                 )
-            ),
-            noiseFactor = 0.22f
-        )
+            )
+            noiseFactor(0.22f)
+        }
     }
 }

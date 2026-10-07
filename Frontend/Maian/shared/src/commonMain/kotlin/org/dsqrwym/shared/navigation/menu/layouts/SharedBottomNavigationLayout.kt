@@ -15,8 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import dev.chrisbanes.haze.blur.blurEffect
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazePerformanceMode
+import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.launch
@@ -74,16 +75,18 @@ fun SharedBottomNavigationLayout(
         drawerContent = {
             if (drawerItems.isNotEmpty()) {
                 ModalDrawerSheet(
-                    modifier = Modifier.fillMaxWidth(0.58f).hazeEffect(state = drawerHazeState) {
-                        blurEffect {
-                            style = drawerHazeStyle
-                            alpha = 1f
-                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.horizontalGradient(
-                                startIntensity = 0.6f,
-                                endIntensity = 0f
+                    modifier = Modifier.fillMaxWidth(0.58f).hazeBlur(
+                        input = HazeInput.Sources(drawerHazeState),
+                        style = drawerHazeStyle.then {
+                            alpha(1f)
+                            progressive(
+                                dev.chrisbanes.haze.HazeProgressive.horizontalGradient(
+                                    startIntensity = 0.6f,
+                                    endIntensity = 0f
+                                )
                             )
                         }
-                    },
+                    ),
                     drawerContainerColor = Color.Transparent.copy(alpha = 0.5f),
                 ) {
                     Column(
@@ -167,27 +170,33 @@ fun SharedBottomNavigationLayout(
                             action.content(TooltipAnchorPosition.Below)
                         }
                     },
-                    modifier = Modifier.hazeEffect(state = topBarHazeState) {
-                        blurEffect {
-                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.verticalGradient(
-                                startIntensity = 2f,
-                                endIntensity = 0.05f,
-                                preferPerformance = false // 设为 true 可提升性能但降低质量
+                    modifier = Modifier.hazeBlur(
+                        input = HazeInput.Sources(topBarHazeState),
+                        style = topBarHazeStyle.then {
+                            progressive(
+                                dev.chrisbanes.haze.HazeProgressive.verticalGradient(
+                                    // Haze 2 会校验强度必须落在 0f..1f，原来的 2f 会直接抛异常
+                                    startIntensity = 1f,
+                                    endIntensity = 0.05f
+                                )
                             )
-                            style = topBarHazeStyle
-                            alpha = when {
-                                scrollBehavior.state.collapsedFraction > 0f -> {
-                                    // 滚动时：根据折叠程度增加到 1.0
-                                    0.38f + (scrollBehavior.state.collapsedFraction * 0.6f)
-                                }
+                            alpha(
+                                when {
+                                    scrollBehavior.state.collapsedFraction > 0f -> {
+                                        // 滚动时：根据折叠程度增加到 1.0
+                                        0.38f + (scrollBehavior.state.collapsedFraction * 0.6f)
+                                    }
 
-                                else -> {
-                                    // 顶部时：保持 40% 透明度，让内容若隐若现
-                                    0.38f
+                                    else -> {
+                                        // 顶部时：保持 40% 透明度，让内容若隐若现
+                                        0.38f
+                                    }
                                 }
-                            }
-                        }
-                    }
+                            )
+                        },
+                        // 原来的 preferPerformance = false（全分辨率）对应 Quality
+                        performanceMode = HazePerformanceMode.Quality,
+                    )
                 )
             },
             bottomBar = {

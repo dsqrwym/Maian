@@ -21,8 +21,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.haze.blur.blurEffect
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.rememberHazeState
 import io.github.vinceglb.filekit.PlatformFile
 import io.github.vinceglb.filekit.dialogs.FileKitMode
@@ -460,14 +460,16 @@ private fun LogoPickerContent(
                     modifier = Modifier
                         .matchParentSize()
                         .pointerInput(Unit) {} // 阻止点击穿透
-                        .hazeEffect(hazeState) {
-                            blurEffect {
-                                style = hazeStyle
-                                progressive = dev.chrisbanes.haze.blur.HazeProgressive.RadialGradient(
-                                    radiusIntensity = 0.6f
+                        .hazeBlur(
+                            input = HazeInput.Sources(hazeState),
+                            style = hazeStyle.then {
+                                progressive(
+                                    dev.chrisbanes.haze.HazeProgressive.RadialGradient(
+                                        radiusIntensity = 0.6f
+                                    )
                                 )
                             }
-                        }
+                        )
                 ) {
                     when (loadImageUiState) {
                         UiState.Loading -> {

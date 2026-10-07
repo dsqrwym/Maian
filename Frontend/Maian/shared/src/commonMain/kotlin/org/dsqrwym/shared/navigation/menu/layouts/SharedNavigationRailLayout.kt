@@ -13,8 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import dev.chrisbanes.haze.blur.blurEffect
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazePerformanceMode
+import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import maian.shared.generated.resources.*
@@ -82,17 +83,20 @@ fun SharedNavigationRailLayout(
                         it.content(TooltipAnchorPosition.Below)
                     }
                 },
-                modifier = Modifier.fillMaxWidth().hazeEffect(state = topBarHazeState) {
-                    blurEffect {
-                        progressive = dev.chrisbanes.haze.blur.HazeProgressive.verticalGradient(
-                            startIntensity = 0.8f,
-                            endIntensity = 0f,
-                            preferPerformance = false // 设为 true 可提升性能但降低质量
+                modifier = Modifier.fillMaxWidth().hazeBlur(
+                    input = HazeInput.Sources(topBarHazeState),
+                    style = topBarHazeStyle.then {
+                        progressive(
+                            dev.chrisbanes.haze.HazeProgressive.verticalGradient(
+                                startIntensity = 0.8f,
+                                endIntensity = 0f
+                            )
                         )
-                        style = topBarHazeStyle
-                        alpha = 0.85f
-                    }
-                }
+                        alpha(0.85f)
+                    },
+                    // 原来的 preferPerformance = false（全分辨率）对应 Quality
+                    performanceMode = HazePerformanceMode.Quality,
+                )
             )
         },
         containerColor = Color.Transparent,
@@ -118,17 +122,20 @@ fun SharedNavigationRailLayout(
             ) {
                 NavigationRail(
                     containerColor = Color.Transparent.copy(alpha = 0.5f),
-                    modifier = Modifier.hazeEffect(state = railHazeState) {
-                        blurEffect {
-                            progressive = dev.chrisbanes.haze.blur.HazeProgressive.horizontalGradient(
-                                startIntensity = 0.8f,
-                                endIntensity = 0f,
-                                preferPerformance = false // 设为 true 可提升性能但降低质量
+                    modifier = Modifier.hazeBlur(
+                        input = HazeInput.Sources(railHazeState),
+                        style = topBarHazeStyle.then {
+                            progressive(
+                                dev.chrisbanes.haze.HazeProgressive.horizontalGradient(
+                                    startIntensity = 0.8f,
+                                    endIntensity = 0f
+                                )
                             )
-                            style = topBarHazeStyle
-                            alpha = 1f
-                        }
-                    }
+                            alpha(1f)
+                        },
+                        // 原来的 preferPerformance = false（全分辨率）对应 Quality
+                        performanceMode = HazePerformanceMode.Quality,
+                    )
                 ) {
                     Spacer(Modifier.height(paddingValues.calculateTopPadding()))
 

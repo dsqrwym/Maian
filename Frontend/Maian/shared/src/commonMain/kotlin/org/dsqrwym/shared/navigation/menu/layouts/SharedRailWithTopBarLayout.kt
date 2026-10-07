@@ -21,9 +21,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import dev.chrisbanes.haze.blur.HazeProgressive
-import dev.chrisbanes.haze.blur.blurEffect
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import org.dsqrwym.shared.drawable.SharedIcons
@@ -146,16 +146,18 @@ fun SharedRailWithTopBarLayout(
                     }.coerceAtLeast(-1)
                 }
                 PrimaryTabRow(
-                    modifier = Modifier.hazeEffect(topNavigationHaze) {
-                        blurEffect {
-                            style = topNavigationHazeStyle
-                            alpha = 0.76f
-                            progressive = HazeProgressive.verticalGradient(
-                                startIntensity = 0.9f,
-                                endIntensity = 0.18f
+                    modifier = Modifier.hazeBlur(
+                        input = HazeInput.Sources(topNavigationHaze),
+                        style = topNavigationHazeStyle.then {
+                            alpha(0.76f)
+                            progressive(
+                                HazeProgressive.verticalGradient(
+                                    startIntensity = 0.9f,
+                                    endIntensity = 0.18f
+                                )
                             )
                         }
-                    },
+                    ),
                     selectedTabIndex = selectedTabIndex,
                     containerColor = Color.Transparent,
                     indicator = {

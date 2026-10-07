@@ -23,10 +23,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.blur.HazeBlurStyle
-import dev.chrisbanes.haze.blur.blurEffect
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.hazeSource
 import maian.shared.generated.resources.SharedRes
 import maian.shared.generated.resources.login_background_content_description
@@ -94,16 +94,13 @@ fun BackgroundImage(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .hazeEffect( // 应用 hazeChild 到这个 Box
-                        state = hazeState
-                    ) {
-                        blurEffect {
-                            style = HazeBlurStyle.Unspecified.copy(
-                                blurRadius = blurRadius,
-                                backgroundColor = glassTintColor
-                            )
+                    .hazeBlur( // Haze 2：类型化的 hazeBlur + 可复用 Style
+                        input = HazeInput.Sources(hazeState),
+                        style = HazeBlurStyle {
+                            blurRadius(blurRadius)
+                            backgroundColor(glassTintColor)
                         }
-                    }
+                    )
             )
         }
         // 前景内容

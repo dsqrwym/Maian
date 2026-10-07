@@ -1,5 +1,6 @@
 allowBuilds:
   '@nestjs/core': true
+  '@parcel/watcher': true
   '@scarf/scarf': true
   '@swc/core': true
   bcrypt: true
@@ -8,6 +9,8 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 overrides:
+  # 必须与 @nestjs/platform-fastify 精确锁定的版本一致，否则会装上两份 fastify，导致类型增强失效
+  "fastify": "5.11.3"
   "html-minifier": "npm:html-minifier-terser@^6.1.0"
   "hono": "^4.11.4"
   "diff": "^8.0.3"

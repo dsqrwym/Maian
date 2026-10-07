@@ -86,24 +86,24 @@ kotlin {
 
         commonMain.dependencies {
             // Compose基础库
-            api("org.jetbrains.compose.runtime:runtime:1.11.0") // 运行时核心
+            api("org.jetbrains.compose.runtime:runtime:1.12.1") // 运行时核心
             //api(compose.runtime)         // 运行时核心
             //api("org.jetbrains.compose.runtime:runtime:1.11.0-alpha01")         // 运行时核心
-            api("org.jetbrains.compose.foundation:foundation:1.11.0")      // 基础布局组件
+            api("org.jetbrains.compose.foundation:foundation:1.12.1")      // 基础布局组件
             //api(compose.foundation)      // 基础布局组件
             //api("org.jetbrains.compose.foundation:foundation:1.11.0-alpha01")      // 基础布局组件
             api("org.jetbrains.compose.material3:material3:1.9.0")       // Material3设计
-            //api(compose.material3)       // Material3设计
+            api(compose.material3)       // Material3设计
             //api("org.jetbrains.compose.material3:material3:1.9.0") // Material3设计.
-            api("org.jetbrains.compose.ui:ui:1.11.0")              // UI组件工具集
+            api("org.jetbrains.compose.ui:ui:1.12.1")              // UI组件工具集
             //api(compose.ui)              // UI组件工具集
             //api("org.jetbrains.compose.ui:ui:1.11.0-alpha01")              // UI组件工具集
 
             // 资源管理
-            api("org.jetbrains.compose.components:components-resources:1.11.0")        // 跨平台资源支持
+            //api("org.jetbrains.compose.components:components-resources:1.12.1")        // 跨平台资源支持
             //api(compose.components.resources)        // 跨平台资源支持
             //api("org.jetbrains.compose.components:components-resources:1.11.0-alpha01")        // 跨平台资源支持
-            api("org.jetbrains.compose.components:components-resources:1.11.0") // 预览工具
+            api("org.jetbrains.compose.components:components-resources:1.12.1") // 预览工具
             //api(compose.components.uiToolingPreview) // 预览工具
             //api("org.jetbrains.compose.ui:ui-tooling-preview:1.11.0-alpha01") // 预览工具
 

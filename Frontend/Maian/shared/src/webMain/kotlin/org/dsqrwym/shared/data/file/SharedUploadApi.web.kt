@@ -1,9 +1,11 @@
 package org.dsqrwym.shared.data.file
 
+import io.github.vinceglb.filekit.BrowserFile
 import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.WebFile
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.size
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import org.dsqrwym.shared.data.auth.SharedAuthApi
@@ -16,7 +18,6 @@ import org.dsqrwym.shared.network.model.ApiResponse
 import org.dsqrwym.shared.network.model.SharedResponseResult
 import org.dsqrwym.shared.network.safeApiCall
 import org.dsqrwym.shared.util.platform.PlatformType
-import org.w3c.files.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -29,8 +30,8 @@ private external fun createFormData(): JsAny
 private external fun appendFileToFormData(
     formData: JsAny,
     name: String,
-    //file: BrowserFile,
-    file: File,
+    file: BrowserFile,
+    //file: File,
     fileName: String
 )
 
@@ -140,9 +141,9 @@ actual class SharedUploadApi actual constructor(
     ): XhrUploadResult {
         val totalSize = file.size()
 
-        //val wrapper = file.webFile as WebFile.FileWrapper
-        //val browserFile: BrowserFile = wrapper.file
-        val browserFile = file.file
+        val wrapper = file.webFile as WebFile.FileWrapper
+        val browserFile: BrowserFile = wrapper.file
+        //val browserFile = file
 
         val formData = createFormData()
 

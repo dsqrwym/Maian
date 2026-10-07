@@ -1,5 +1,9 @@
 # MaiAn
 
+<p align="center">
+  <img src="docs/demo/brand-logo.png" width="110" alt="MaiAn">
+</p>
+
 > *Este README se ha generado con **Antigravity** (Google DeepMind AI) a partir del análisis del repositorio y de la documentación del proyecto.*
 
 **Leer en otro idioma:** [English](./Readme.md) · [中文](./Readme.zh.md)
@@ -9,6 +13,19 @@
 MaiAn es una **plataforma B2B multiplataforma** que conecta distribuidores mayoristas con minoristas. Combina aplicaciones cliente nativas para distintos perfiles de usuario con un backend centralizado, seguro y escalable, diseñado para crecer con nuevas funciones de negocio.
 
 El proyecto está desarrollado por **dsqrwym** (identificador técnico) / **MaiAn** (nombre de marca).
+
+---
+
+## Índice
+
+- [Capturas de pantalla](#capturas-de-pantalla)
+- [Estado actual](#estado-actual)
+- [Backend](#backend)
+- [Base de datos](#base-de-datos)
+- [Frontend](#frontend)
+- [Infraestructura y despliegue](#infraestructura-y-despliegue)
+- [Referencia de dependencias — Backend](#referencia-de-dependencias--backend)
+- [Referencia de dependencias — Frontend](#referencia-de-dependencias--frontend)
 
 ---
 
@@ -25,15 +42,65 @@ Puedes probar los clientes web con las siguientes cuentas de demostración:
 
 ---
 
-## Índice
+## Capturas de pantalla
 
-- [Estado actual](#estado-actual)
-- [Backend](#backend)
-- [Base de datos](#base-de-datos)
-- [Frontend](#frontend)
-- [Infraestructura y despliegue](#infraestructura-y-despliegue)
-- [Referencia de dependencias — Backend](#referencia-de-dependencias--backend)
-- [Referencia de dependencias — Frontend](#referencia-de-dependencias--frontend)
+> Las capturas siguientes proceden del documento de entrega **MaiAn_Memoria_YU** (capítulo 5 «Implementación y pruebas», capítulo 6 «Despliegue») y muestran la aplicación en ejecución real, no maquetas.
+> Para que este README cargue con fluidez, todas las imágenes están escaladas a 1400 px de ancho (34 imágenes, ~3,8 MB en total); los originales a resolución completa están en el documento de entrega.
+
+### Visión general
+
+![Pantalla principal de MaiAn (tema claro)](docs/demo/hero-app-light.png)
+
+<p align="center"><sub>Fig. 5.96 Pantalla principal: catálogo global, filtros por categoría, búsqueda y ordenación, modo tienda de un mayorista, selector de tema e idioma</sub></p>
+
+### Minorista (`standard`) — catálogo, carrito y pedidos
+
+| | | | |
+|---|---|---|---|
+| ![Catálogo global](docs/demo/retailer-catalog-mobile.png)<br><sub>Fig. 5.5 Catálogo global</sub> | ![Modo tienda](docs/demo/retailer-store-mode.png)<br><sub>Fig. 5.6 Modo tienda específico de un mayorista</sub> | ![Navegación por categorías](docs/demo/retailer-category-nav.png)<br><sub>Fig. 5.7 Navegación basada en categorías</sub> | ![Detalle de producto](docs/demo/retailer-product-detail.png)<br><sub>Fig. 5.8 Vista detallada de producto con selección de variantes</sub> |
+| ![Carrito agrupado](docs/demo/retailer-cart-grouped.png)<br><sub>Fig. 5.9 Carrito agrupado automáticamente por mayorista</sub> | ![Historial de pedidos](docs/demo/retailer-order-history.png)<br><sub>Fig. 5.10 Historial de pedidos para minoristas</sub> | ![Seguimiento del pedido](docs/demo/retailer-order-tracking.png)<br><sub>Fig. 5.70 Historial del pedido y sus acciones (cancelar, descargar PDF)</sub> | |
+
+### Mayorista (`enterprise`) — gestión del catálogo y de los pedidos
+
+![Panel del mayorista](docs/demo/enterprise-dashboard.png)
+
+<p align="center"><sub>Fig. 5.23 Dashboard general: estado de los pedidos, tendencia de ingresos, productos más vendidos y pedidos diarios</sub></p>
+
+| | |
+|---|---|
+| ![Gestión de categorías](docs/demo/enterprise-category-management.png)<br><sub>Fig. 5.11 Gestión de categorías (jerarquía, IVA, traducciones)</sub> | ![Tabla de productos](docs/demo/enterprise-product-table.png)<br><sub>Fig. 5.14 Gestión de productos mediante tabla en escritorio</sub> |
+| ![Formulario de producto](docs/demo/enterprise-product-form.png)<br><sub>Fig. 5.79 Formulario de creación de producto</sub> | ![Variantes y stock](docs/demo/enterprise-product-variants.png)<br><sub>Fig. 5.80 Variantes de venta, precios y stock</sub> |
+| <img src="docs/demo/enterprise-rich-editor.png" width="340" alt="Editor de texto enriquecido"><br><sub>Fig. 5.81 Editor de contenido enriquecido</sub> | ![Vista previa del producto](docs/demo/enterprise-product-preview.png)<br><sub>Fig. 5.16 Vista previa del detalle de producto antes de guardar</sub> |
+| ![Gestión de pedidos](docs/demo/enterprise-order-management.png)<br><sub>Fig. 5.18 Gestión de pedidos recibidos</sub> | ![Filtros de pedido](docs/demo/enterprise-order-filters.png)<br><sub>Fig. 5.21 Herramientas de filtrado de pedidos</sub> |
+| ![Rechazo de pedido](docs/demo/enterprise-order-reject.png)<br><sub>Fig. 5.93 El rechazo del pedido exige un motivo</sub> | ![Gestión de empleados](docs/demo/enterprise-employee-management.png)<br><sub>Fig. 5.22 Gestión de empleados (soporte, reparto, almacén)</sub> |
+
+### Autenticación y cuenta
+
+| | |
+|---|---|
+| ![Inicio de sesión del mayorista](docs/demo/auth-login-wholesaler.png)<br><sub>Fig. 5.31 Inicio de sesión para mayorista</sub> | ![Inicio de sesión del empleado](docs/demo/auth-login-employee.png)<br><sub>Fig. 5.32 Inicio de sesión para empleado (el empleado debe activar la cuenta por correo)</sub> |
+| ![Inicio de sesión del minorista](docs/demo/auth-login-retailer.png)<br><sub>Fig. 5.30 Inicio de sesión para minorista</sub> | ![Registro](docs/demo/auth-register.png)<br><sub>Fig. 5.34 Registro (minorista / mayorista)</sub> |
+| ![Recuperación de contraseña](docs/demo/auth-password-recovery.png)<br><sub>Fig. 5.33 Recuperación de contraseña</sub> | **Cuenta y seguridad de sesión**<br><br>· Verificación por código enviado al correo; la cuenta no puede iniciar sesión hasta activarse<br>· Inicio de sesión por rol: `standard` / `enterprise` / `admin`<br>· En la web el refresh token se guarda en una cookie httpOnly y se rota; la consulta y el cierre de sesiones por dispositivo los ofrece la API del backend, todavía sin interfaz en el frontend<br>· Los frontends de minorista y mayorista están aislados: el acceso cruzado se rechaza |
+
+### Temas, idioma y accesibilidad
+
+| | |
+|---|---|
+| ![Tema claro](docs/demo/theme-light.png)<br><sub>Fig. 5.2 Tema claro (paleta Material Design 3)</sub> | ![Tema oscuro](docs/demo/theme-dark.png)<br><sub>Fig. 5.3 Tema oscuro</sub> |
+| ![Catálogo en modo oscuro](docs/demo/app-dark-mode.png)<br><sub>Fig. 5.97 Catálogo en modo oscuro</sub> | ![Selector de idioma](docs/demo/i18n-language-switch.png)<br><sub>Fig. 5.99 Selector de idioma (ca-ES / en / es-ES / fr-FR / pt-PT / zh-CN / zh-TW)</sub> |
+| <img src="docs/demo/a11y-large-font.png" width="230" alt="Tamaño de letra máximo"><br><sub>Fig. 5.98 Vistas con el tamaño de letra del sistema al máximo</sub> | **Accesibilidad y adaptación**<br><br>· Con el tamaño de letra del sistema al máximo, las tablas y los formularios se reorganizan sin cortes de texto ni solapamientos<br>· Móvil, tablet y escritorio usan navegación inferior, lateral y superior respectivamente (figs. 5.24–5.26)<br>· Ambos temas siguen las recomendaciones de contraste de Material Design |
+
+### Notificaciones automáticas
+
+| | |
+|---|---|
+| ![Correo de cancelación](docs/demo/notify-order-cancelled.png)<br><sub>Fig. 5.72 Correo enviado automáticamente al mayorista tras la cancelación</sub> | ![Correo de stock bajo](docs/demo/notify-low-stock.png)<br><sub>Fig. 5.86 Correo de advertencia cuando el stock baja del umbral</sub> |
+
+### Despliegue y operación
+
+| | |
+|---|---|
+| ![Swagger UI](docs/demo/ops-swagger.png)<br><sub>Fig. 6.5 Documentación interactiva OpenAPI / Swagger de la API</sub> | ![Clonar el repositorio](docs/demo/ops-git-clone.png)<br><sub>Fig. 6.1 Clonar el repositorio e instalar dependencias</sub> |
 
 ---
 
@@ -202,18 +269,18 @@ Ubicado en `Frontend/Maian`. Construido con **Kotlin Multiplatform** y **Compose
 
 | Dependencia | Versión |
 |---|---|
-| Kotlin | `2.3.21` |
-| Compose Multiplatform | `1.11.0` |
+| Kotlin | `2.4.20` |
+| Compose Multiplatform | `1.12.1` |
 | Android Gradle Plugin | `9.2.1` |
 | Android compileSdk | `37` |
 | Android minSdk | `24` |
-| Ktor | `3.5.0` |
-| Koin | `4.2.1` |
+| Ktor | `3.6.0` |
+| Koin | `4.2.2` |
 | Kotlinx Coroutines | `1.11.0` |
 | Kotlinx Serialization JSON | `1.11.0` |
 | Kotlinx DateTime | `0.8.0` |
-| Coil 3 | `3.4.0` |
-| Haze | `2.0.0-alpha02` |
+| Coil 3 | `3.6.3` |
+| Haze | `2.0.1` |
 
 ---
 
@@ -263,109 +330,109 @@ Usa los ficheros `.env.example` correspondientes como plantilla.
 
 | Paquete | Versión |
 |---|---|
-| `@aws-sdk/client-s3` | `^3.1063.0` |
-| `@aws-sdk/lib-storage` | `^3.1063.0` |
+| `@aws-sdk/client-s3` | `^3.1146.0` |
+| `@aws-sdk/lib-storage` | `^3.1146.0` |
 | `@casl/ability` | `^6.8.1` |
-| `@fastify/cookie` | `^11.0.2` |
-| `@fastify/helmet` | `^13.0.2` |
-| `@fastify/multipart` | `^9.4.0` |
+| `@fastify/cookie` | `^11.1.2` |
+| `@fastify/helmet` | `^13.1.1` |
+| `@fastify/multipart` | `^10.1.2` |
 | `@fastify/secure-session` | `8.2.0` |
-| `@fastify/static` | `^9.1.3` |
+| `@fastify/static` | `^10.1.5` |
 | `@keyv/redis` | `^5.1.6` |
 | `@nest-lab/throttler-storage-redis` | `^1.2.0` |
-| `@nestia/core` | `^11.2.1` |
-| `@nestia/e2e` | `^11.2.1` |
-| `@nestia/fetcher` | `^11.2.1` |
-| `@nestjs-modules/mailer` | `^2.3.6` |
-| `@nestjs/bullmq` | `^11.0.4` |
-| `@nestjs/cache-manager` | `^3.1.2` |
-| `@nestjs/common` | `^11.1.24` |
+| `@nestia/core` | `^11.3.4` |
+| `@nestia/e2e` | `^11.3.4` |
+| `@nestia/fetcher` | `^11.3.4` |
+| `@nestjs-modules/mailer` | `^2.3.10` |
+| `@nestjs/bullmq` | `^11.0.5` |
+| `@nestjs/cache-manager` | `^3.1.3` |
+| `@nestjs/common` | `^11.2.7` |
 | `@nestjs/config` | `^4.0.4` |
-| `@nestjs/core` | `^11.1.24` |
+| `@nestjs/core` | `^11.2.7` |
 | `@nestjs/jwt` | `^11.0.2` |
 | `@nestjs/mapped-types` | `^2.1.1` |
 | `@nestjs/passport` | `^11.0.5` |
-| `@nestjs/platform-express` | `^11.1.24` |
-| `@nestjs/platform-fastify` | `^11.1.24` |
+| `@nestjs/platform-express` | `^11.2.7` |
+| `@nestjs/platform-fastify` | `^11.2.7` |
 | `@nestjs/schedule` | `^6.1.3` |
-| `@nestjs/swagger` | `^11.4.4` |
-| `@nestjs/throttler` | `^6.5.0` |
+| `@nestjs/swagger` | `^11.4.7` |
+| `@nestjs/throttler` | `^6.7.1` |
 | `bcrypt` | `^6.0.0` |
-| `bullmq` | `^5.78.0` |
-| `cache-manager` | `^7.2.8` |
+| `bullmq` | `^5.81.5` |
+| `cache-manager` | `^7.2.9` |
 | `cache-manager-redis-store` | `^3.0.1` |
 | `cross-env` | `^10.1.0` |
 | `decimal.js` | `^10.6.0` |
-| `drizzle-orm` | `^0.45.2` |
-| `fastify` | `^5.8.5` |
-| `file-type` | `^22.0.1` |
-| `handlebars` | `^4.7.9` |
+| `drizzle-orm` | `^0.45.3` |
+| `fastify` | `5.11.3` |
+| `file-type` | `^22.1.1` |
+| `handlebars` | `^4.7.10` |
 | `ioredis` | `^5.11.1` |
 | `keyv` | `^5.6.0` |
-| `libphonenumber-js` | `^1.13.6` |
-| `lru-cache` | `^11.5.1` |
+| `libphonenumber-js` | `^1.13.14` |
+| `lru-cache` | `^11.5.3` |
 | `mime-types` | `^3.0.2` |
-| `nestjs-i18n` | `^10.8.4` |
+| `nestjs-i18n` | `^10.8.5` |
 | `nestjs-pino` | `^4.6.1` |
-| `nodemailer` | `^8.0.10` |
+| `nodemailer` | `10.0.9` |
 | `passport` | `0.7.0` |
-| `passport-custom` | `^1.1.1` |
+| `passport-custom` | `^1.2.1` |
 | `passport-jwt` | `^4.0.1` |
-| `pdfmake` | `^0.3.10` |
-| `pg` | `^8.21.0` |
+| `pdfmake` | `^0.3.11` |
+| `pg` | `^8.23.1` |
 | `pino` | `^9.14.0` |
-| `pino-pretty` | `^13.1.3` |
-| `piscina` | `^5.1.4` |
+| `pino-pretty` | `^13.2.0` |
+| `piscina` | `^5.3.2` |
 | `postgres` | `^3.4.9` |
 | `reflect-metadata` | `^0.2.2` |
 | `rxjs` | `^7.8.2` |
-| `sharp` | `^0.34.5` |
-| `typia` | `^12.1.1` |
+| `sharp` | `0.35.4` |
+| `typia` | `^12.2.1` |
 
 ### Dependencias de desarrollo
 
 | Paquete | Versión |
 |---|---|
-| `@nestia/benchmark` | `^11.2.1` |
-| `@nestia/sdk` | `^11.2.1` |
-| `@nestjs/cli` | `^11.0.21` |
+| `@nestia/benchmark` | `^11.3.4` |
+| `@nestia/sdk` | `^11.3.4` |
+| `@nestjs/cli` | `^11.0.24` |
 | `@nestjs/schematics` | `^11.1.0` |
-| `@nestjs/testing` | `^11.1.24` |
+| `@nestjs/testing` | `^11.2.7` |
 | `@swc/cli` | `^0.7.10` |
-| `@swc/core` | `^1.15.40` |
+| `@swc/core` | `^1.16.13` |
 | `@types/bcrypt` | `^6.0.0` |
 | `@types/express` | `^5.0.6` |
 | `@types/jest` | `^30.0.0` |
 | `@types/mime-types` | `^3.0.1` |
-| `@types/node` | `^24.13.1` |
-| `@types/nodemailer` | `^7.0.11` |
+| `@types/node` | `^24.19.1` |
+| `@types/nodemailer` | `^7.0.12` |
 | `@types/passport` | `^1.0.17` |
 | `@types/passport-jwt` | `^4.0.1` |
 | `@types/pdfmake` | `^0.3.3` |
-| `@types/pg` | `^8.20.0` |
+| `@types/pg` | `^8.23.1` |
 | `@types/supertest` | `^6.0.3` |
-| `@typescript-eslint/eslint-plugin` | `^8.60.1` |
-| `@typescript-eslint/parser` | `^8.60.1` |
+| `@typescript-eslint/eslint-plugin` | `^8.71.1` |
+| `@typescript-eslint/parser` | `^8.71.1` |
 | `dotenv` | `^17.4.2` |
-| `drizzle-kit` | `^0.31.10` |
-| `eslint` | `^9.39.4` |
+| `drizzle-kit` | `^0.31.11` |
+| `eslint` | `^9.39.5` |
 | `eslint-config-prettier` | `^10.1.8` |
 | `eslint-plugin-prettier` | `^5.5.6` |
 | `globals` | `^16.5.0` |
-| `jest` | `^30.4.2` |
-| `nestia` | `^11.2.1` |
-| `prettier` | `^3.8.3` |
+| `jest` | `^30.5.2` |
+| `nestia` | `^11.3.4` |
+| `prettier` | `^3.9.9` |
 | `source-map-support` | `^0.5.21` |
-| `supertest` | `^7.2.2` |
-| `ts-jest` | `^29.4.11` |
-| `ts-loader` | `^9.6.0` |
+| `supertest` | `^7.3.1` |
+| `ts-jest` | `^29.4.14` |
+| `ts-loader` | `^9.6.2` |
 | `ts-node` | `^10.9.2` |
 | `ts-patch` | `^3.3.0` |
-| `tsc-alias` | `^1.8.17` |
+| `tsc-alias` | `^1.9.7` |
 | `tsconfig-paths` | `^4.2.0` |
-| `tsx` | `^4.22.4` |
+| `tsx` | `^4.23.15` |
 | `typescript` | `~6.0.3` |
-| `typescript-eslint` | `^8.60.1` |
+| `typescript-eslint` | `^8.71.1` |
 
 ---
 
@@ -378,21 +445,21 @@ Todas las versiones proceden de `Frontend/Maian/gradle/libs.versions.toml`.
 | Alias | Plugin ID | Versión |
 |---|---|---|
 | `androidApplication` / `androidLibrary` | `com.android.application` / `com.android.library` | `9.2.1` |
-| `composeMultiplatform` | `org.jetbrains.compose` | `1.11.0` |
-| `composeCompiler` | `org.jetbrains.kotlin.plugin.compose` | `2.3.21` |
-| `kotlinMultiplatform` | `org.jetbrains.kotlin.multiplatform` | `2.3.21` |
-| `kotlinxSerialization` | `org.jetbrains.kotlin.plugin.serialization` | `2.3.21` |
+| `composeMultiplatform` | `org.jetbrains.compose` | `1.12.1` |
+| `composeCompiler` | `org.jetbrains.kotlin.plugin.compose` | `2.4.20` |
+| `kotlinMultiplatform` | `org.jetbrains.kotlin.multiplatform` | `2.4.20` |
+| `kotlinxSerialization` | `org.jetbrains.kotlin.plugin.serialization` | `2.4.20` |
 
 ### Android y ciclo de vida
 
 | Paquete | Versión |
 |---|---|
 | `androidx.activity:activity-compose` | `1.13.0` |
-| `androidx.core:core-ktx` | `1.18.0` |
+| `androidx.core:core-ktx` | `1.19.1` |
 | `androidx.security:security-crypto` | `1.1.0` |
-| `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel` | `2.10.0` |
-| `org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose` | `2.10.0` |
-| `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3` | `2.10.0` |
+| `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel` | `2.11.0` |
+| `org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose` | `2.11.0` |
+| `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3` | `2.11.0` |
 | `org.jetbrains.androidx.savedstate:savedstate` | `1.4.0` |
 | `org.jetbrains.androidx.window:window-core` | `1.5.1` |
 
@@ -400,22 +467,22 @@ Todas las versiones proceden de `Frontend/Maian/gradle/libs.versions.toml`.
 
 | Paquete | Versión |
 |---|---|
-| `io.ktor:ktor-client-core` | `3.5.0` |
-| `io.ktor:ktor-client-content-negotiation` | `3.5.0` |
-| `io.ktor:ktor-serialization-kotlinx-json` | `3.5.0` |
-| `io.ktor:ktor-client-auth` | `3.5.0` |
-| `io.ktor:ktor-client-logging` | `3.5.0` |
-| `io.ktor:ktor-client-okhttp` (Android) | `3.5.0` |
-| `io.ktor:ktor-client-darwin` (iOS) | `3.5.0` |
-| `io.ktor:ktor-client-cio` (Desktop) | `3.5.0` |
-| `io.ktor:ktor-client-js` (Web) | `3.5.0` |
+| `io.ktor:ktor-client-core` | `3.6.0` |
+| `io.ktor:ktor-client-content-negotiation` | `3.6.0` |
+| `io.ktor:ktor-serialization-kotlinx-json` | `3.6.0` |
+| `io.ktor:ktor-client-auth` | `3.6.0` |
+| `io.ktor:ktor-client-logging` | `3.6.0` |
+| `io.ktor:ktor-client-okhttp` (Android) | `3.6.0` |
+| `io.ktor:ktor-client-darwin` (iOS) | `3.6.0` |
+| `io.ktor:ktor-client-cio` (Desktop) | `3.6.0` |
+| `io.ktor:ktor-client-js` (Web) | `3.6.0` |
 
 ### Inyección de dependencias — Koin
 
 | Paquete | Versión |
 |---|---|
-| `io.insert-koin:koin-core` | `4.2.1` |
-| `io.insert-koin:koin-compose-viewmodel` | `4.2.1` |
+| `io.insert-koin:koin-core` | `4.2.2` |
+| `io.insert-koin:koin-compose-viewmodel` | `4.2.2` |
 
 ### Kotlinx
 
@@ -424,60 +491,60 @@ Todas las versiones proceden de `Frontend/Maian/gradle/libs.versions.toml`.
 | `org.jetbrains.kotlinx:kotlinx-coroutines-swing` | `1.11.0` |
 | `org.jetbrains.kotlinx:kotlinx-serialization-json` | `1.11.0` |
 | `org.jetbrains.kotlinx:kotlinx-datetime` | `0.8.0` |
-| `org.jetbrains.kotlinx:kotlinx-collections-immutable` | `0.4.0` |
+| `org.jetbrains.kotlinx:kotlinx-collections-immutable` | `0.5.2` |
 
 ### Imagen, medios y ficheros
 
 | Paquete | Versión |
 |---|---|
-| `io.coil-kt.coil3:coil-compose` | `3.4.0` |
-| `io.coil-kt.coil3:coil-network-ktor3` | `3.4.0` |
-| `io.github.vinceglb:filekit-core` | `0.13.0` |
-| `io.github.vinceglb:filekit-dialogs-compose` | `0.13.0` |
-| `io.github.vinceglb:filekit-coil` | `0.13.0` |
-| `io.github.kdroidfilter:composemediaplayer` | `0.10.0` |
-| `io.github.alexzhirkevich:compottie-lite` | `2.2.0` |
+| `io.coil-kt.coil3:coil-compose` | `3.6.3` |
+| `io.coil-kt.coil3:coil-network-ktor3` | `3.6.3` |
+| `io.github.vinceglb:filekit-core` | `0.16.0` |
+| `io.github.vinceglb:filekit-dialogs-compose` | `0.16.0` |
+| `io.github.vinceglb:filekit-coil` | `0.16.0` |
+| `io.github.kdroidfilter:composemediaplayer` | `0.11.4` |
+| `io.github.alexzhirkevich:compottie-lite` | `2.3.3` |
 
 ### Componentes UI y experiencia
 
 | Paquete | Versión |
 |---|---|
-| `dev.chrisbanes.haze:haze` | `2.0.0-alpha02` |
-| `dev.chrisbanes.haze:haze-blur` | `2.0.0-alpha02` |
+| `dev.chrisbanes.haze:haze` | `2.0.1` |
+| `dev.chrisbanes.haze:haze-blur` | `2.0.1` |
 | `com.eygraber:compose-placeholder-material3` | `1.0.12` |
 | `dev.zt64.compose.pipette:compose-pipette` | `2.0.0` |
 | `sh.calvin.reorderable:reorderable` | `3.1.0` |
-| `io.github.dokar3:sonner` | `0.3.9` |
-| `net.engawapg.lib:zoomable` | `2.12.0` |
+| `io.github.dokar3:sonner` | `0.4.0` |
+| `net.engawapg.lib:zoomable` | `2.16.0` |
 | `io.github.khubaibkhan4:alert-kmp` | `2.0.0` |
-| `com.patrykandpatrick.vico:compose` | `3.2.1` |
-| `com.patrykandpatrick.vico:compose-m3` | `3.2.1` |
+| `com.patrykandpatrick.vico:compose` | `3.3.1` |
+| `com.patrykandpatrick.vico:compose-m3` | `3.3.1` |
 | `org.jetbrains.compose.material:material-icons-core` | `1.7.3` |
 | `org.jetbrains.compose.material:material-icons-extended` | `1.7.3` |
-| `org.jetbrains.compose.ui:ui-tooling` | `1.11.0` |
-| `org.slf4j:slf4j-simple` | `2.0.18` |
+| `org.jetbrains.compose.ui:ui-tooling` | `1.12.1` |
+| `org.slf4j:slf4j-simple` | `2.0.20` |
 
 ### Navegación
 
 | Paquete | Versión |
 |---|---|
 | `org.jetbrains.androidx.navigation:navigation-compose` | `2.9.2` |
-| `androidx.navigation3:navigation3-runtime` | `1.1.2` |
-| `org.jetbrains.androidx.navigation3:navigation3-ui` | `1.1.1` |
-| `org.jetbrains.compose.material3.adaptive:adaptive-navigation3` | `1.3.0-beta01` |
+| `androidx.navigation3:navigation3-runtime` | `1.2.0` |
+| `org.jetbrains.androidx.navigation3:navigation3-ui` | `1.1.2` |
+| `org.jetbrains.compose.material3.adaptive:adaptive-navigation3` | `1.3.0` |
 
 ### Paginación
 
 | Paquete | Versión |
 |---|---|
-| `androidx.paging:paging-common` | `3.4.0-rc01` |
-| `androidx.paging:paging-compose` | `3.4.0-rc01` |
+| `androidx.paging:paging-common` | `3.5.1` |
+| `androidx.paging:paging-compose` | `3.5.1` |
 
 ### Tablas
 
 | Paquete | Versión |
 |---|---|
-| `ua.wwind.table-kmp:table-core` | `1.9.0` |
+| `ua.wwind.table-kmp:table-core` | `2.4.1` |
 
 ### Utilidades y dominio
 
@@ -485,14 +552,14 @@ Todas las versiones proceden de `Frontend/Maian/gradle/libs.versions.toml`.
 |---|---|
 | `com.russhwolf:multiplatform-settings` | `1.3.0` |
 | `io.github.luca992.libphonenumber-kotlin:libphonenumber` | `0.1.9` |
-| `com.sanctionco.jmail:jmail` | `2.1.0` |
+| `com.sanctionco.jmail:jmail` | `2.2.2` |
 | `com.ionspin.kotlin:bignum` | `0.3.10` |
 
 ### Escáner y código de barras
 
 | Paquete | Versión |
 |---|---|
-| `io.github.ismai117:KScan` | `0.9.1` |
+| `io.github.ismai117:KScan` | `0.10.0` |
 | `com.google.zxing:core` | `3.5.4` |
 | `com.google.zxing:javase` | `3.5.4` |
 | `com.journeyapps:zxing-android-embedded` | `4.3.0` |
@@ -508,4 +575,4 @@ Todas las versiones proceden de `Frontend/Maian/gradle/libs.versions.toml`.
 
 | Paquete | Versión |
 |---|---|
-| `com.mohamedrejeb.richeditor:richeditor-compose` | `1.0.0-rc14` |
+| `com.mohamedrejeb.richeditor:richeditor-compose` | `1.2.1` |

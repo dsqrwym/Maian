@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.blur.HazeBlurStyle
-import dev.chrisbanes.haze.blur.blurEffect
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.hazeSource
 import org.dsqrwym.shared.ui.components.progressindicators.SharedCircularProgressIndicator
 
@@ -57,17 +57,13 @@ fun ProgressIndicatorScaffold(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .hazeEffect(
-                        state = hazeState,
-                    ) {
-                        blurEffect {
-                            style = HazeBlurStyle.Unspecified.copy(
-                                blurRadius = 238.dp,
-                                backgroundColor = glassTintColor,
-                            )
-
+                    .hazeBlur(
+                        input = HazeInput.Sources(hazeState),
+                        style = HazeBlurStyle {
+                            blurRadius(238.dp)
+                            backgroundColor(glassTintColor)
                         }
-                    },
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 // Centered loading indicator, ensures it's above the blur layer
