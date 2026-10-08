@@ -273,4 +273,14 @@ compose.resources {
     publicResClass = true
     nameOfResClass = "SharedRes"
     generateResClass = always
+
+    // 字体（MiSans / Roboto）物理上只保留一份：shared/nonWebFontResources/font/
+    // 只挂在「除 Web 以外」的源集上；wasmJs 不注册这个目录，
+    // 因此 Web 产物里不包含任何字体文件（Web 端由 Font.web.kt 返回 null 使用默认字体）。
+    listOf("androidMain", "desktopMain", "nativeMain").forEach { sourceSetName ->
+        customDirectory(
+            sourceSetName = sourceSetName,
+            directoryProvider = provider { layout.projectDirectory.dir("nonWebFontResources") }
+        )
+    }
 }

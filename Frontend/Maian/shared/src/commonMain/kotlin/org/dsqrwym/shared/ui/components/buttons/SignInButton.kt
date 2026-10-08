@@ -15,15 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.dsqrwym.shared.drawable.brands.GoogleLogo
 import org.dsqrwym.shared.drawable.brands.WechatLogo
+import org.dsqrwym.shared.theme.appSignInFontFamilyOrNull
 import org.dsqrwym.shared.util.platform.PlatformType
 import org.dsqrwym.shared.util.platform.getPlatform
-import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.stringResource
 import maian.shared.generated.resources.*
 
@@ -73,10 +72,7 @@ fun GoogleSignInButton(
                 text = text,
                 maxLines = 1,
                 fontSize = fontSize,
-                fontFamily = FontFamily(
-                    Font(resource = SharedRes.font.Roboto_Regular),
-                    Font(resource = SharedRes.font.MiSansVF)
-                )
+                fontFamily = appSignInFontFamilyOrNull()
             )
         }
 
@@ -181,10 +177,7 @@ fun WechatSignInButton(
                 text = text,
                 maxLines = 1,
                 fontSize = fontSize,
-                fontFamily = FontFamily(
-                    Font(resource = SharedRes.font.Roboto_Regular),
-                    Font(resource = SharedRes.font.MiSansVF)
-                )
+                fontFamily = appSignInFontFamilyOrNull()
             )
         }
     }

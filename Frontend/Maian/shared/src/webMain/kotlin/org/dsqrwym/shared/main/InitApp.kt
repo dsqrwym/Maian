@@ -1,6 +1,5 @@
 package org.dsqrwym.shared.main
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,9 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.browser.document
-import maian.shared.generated.resources.MiSansVF
-import maian.shared.generated.resources.Roboto_Regular
-import maian.shared.generated.resources.SharedRes
 import org.dsqrwym.shared.drawable.SharedIcons
 import org.dsqrwym.shared.localization.getAppDisplayName
 import org.dsqrwym.shared.localization.getLocaleLanguage
@@ -22,29 +18,16 @@ import org.dsqrwym.shared.theme.MyMaterialTheme
 import org.dsqrwym.shared.ui.components.containers.FloatingBreathingBox
 import org.dsqrwym.shared.ui.components.graphics.AnimatedImgVector
 import org.dsqrwym.shared.util.log.SharedLog
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.preloadFont
 
-@OptIn(ExperimentalResourceApi::class)
+/**
+ * Web 端启动包装。
+ *
+ * Web 产物不再包含自带字体（MiSans / Roboto），因此这里不再预加载字体，
+ * 也不再阻塞首屏等待字体就绪：直接渲染，排版使用平台默认字体。
+ */
 @Composable
 fun SharedInitWasmJs(app: @Composable () -> Unit) {
-    val miSans by preloadFont(SharedRes.font.MiSansVF)
-    val roboto by preloadFont(SharedRes.font.Roboto_Regular)
-    var fontsLoaded by remember { mutableStateOf(false) }
-
-    LaunchedEffect(miSans, roboto) {
-        if (miSans != null && roboto != null) {
-            fontsLoaded = true
-        }
-    }
-
-    AnimatedContent(fontsLoaded) {
-        if (it) {
-            app()
-        } else {
-            LoadingOverlay()
-        }
-    }
+    app()
 }
 
 
